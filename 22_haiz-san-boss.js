@@ -565,7 +565,7 @@ if (targetsoloboss.length == 0 )
 	}
 }	
 	
-// game_log("checkk boss !!!!!!"+targetsoloboss11x.length);	
+game_log("checkk boss !!!!!!"+targetsoloboss11x.length);	
 	
 	
 	
