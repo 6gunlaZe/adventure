@@ -11,10 +11,10 @@ let run = 1
 let datahero
 
 
-map_key("Z", "snippet", "datahero = 'reset'");
-map_key("S", "snippet", "datahero = 'mode1'");
-map_key("D", "snippet", "datahero = 'mode2'");
-map_key("F", "snippet", "datahero = 'mode3'");
+map_key("Z", "snippet", "datahero = 1");
+map_key("S", "snippet", "datahero = 2");
+map_key("D", "snippet", "datahero = 3");
+map_key("F", "snippet", "datahero = 4");
 
 
 game_log(" press 'Z' to reload hero")
@@ -28,10 +28,10 @@ game_log(" press 'F' 6gunlaZe ");
 //////////// move gan leader
 setInterval(function() {
 ////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
-if (datahero == 'reset')send_cm("MuaBan","reset")
-if (datahero == 'mode1')send_cm("MuaBan","mode1")
-if (datahero == 'mode2')send_cm("MuaBan","mode2")
-if (datahero == 'mode3')send_cm("MuaBan","mode3")
+if (datahero == 1)send_cm("MuaBan","reset")
+if (datahero == 2)send_cm("MuaBan","mode1")
+if (datahero == 3)send_cm("MuaBan","mode2")
+if (datahero == 4)send_cm("MuaBan","mode3")
 	
 
 /////////////////////////
