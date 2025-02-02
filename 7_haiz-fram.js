@@ -128,7 +128,15 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
 
 setInterval(function() {
 	if (host == 0 ) return
-
+	
+if (character.ping > 400 )
+{
+	delayThreshold = character.ping
+}
+	else
+{
+	delayThreshold = 220
+}
 	
 if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
 {
