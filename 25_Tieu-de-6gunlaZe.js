@@ -13,7 +13,7 @@ let started
 let numHP = 0
 let numMP = 0
 var idmap
-
+let receivedData
 
 
 map_key("A", "toggle_run_code");
@@ -59,16 +59,30 @@ setInterval(function() {
 
 function on_cm(name, data) {
 
-    if(name == "haiz"){
+
+	
+	
+	    if(name == "haiz"){
 
 		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
-		if (data != "goo"){
-			idmap = data;
-			send_cm("angioseal", data)
-		}
 
 	}
+	
+	 if(name == "haiz" && data != "goo" && typeof data === 'string' ){
+     idmap = data
+
+	}
+	
+	 if(name == "haiz" && data != "goo" ){
+     receivedData = data
+
+	}
+	
+	
+	
+	
 }
+
 
 
 
