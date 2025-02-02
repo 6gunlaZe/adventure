@@ -28,9 +28,11 @@ game_log(" press 'F' 6gunlaZe ");
 //////////// move gan leader
 setInterval(function() {
 ////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
+if (datahero == 'reset')send_cm("MuaBan","reset")
+if (datahero == 'mode1')send_cm("MuaBan","mode1")
+if (datahero == 'mode2')send_cm("MuaBan","mode2")
+if (datahero == 'mode3')send_cm("MuaBan","mode3")
 	
-send_cm("MuaBan",datahero)
-game_log(+datahero)
 
 /////////////////////////
 	
