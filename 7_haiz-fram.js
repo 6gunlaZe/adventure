@@ -129,9 +129,9 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
 setInterval(function() {
 	if (host == 0 ) return
 	
-if (character.ping > 400 )
+if (character.ping > 600 )
 {
-	delayThreshold = character.ping
+	delayThreshold = character.ping / 2
 }
 	else
 {
