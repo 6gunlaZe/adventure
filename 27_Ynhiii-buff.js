@@ -11,6 +11,8 @@ let delayitem
 let stopgiudo = 0  // 1 = stop
 var crepp = ""
 let receivedData
+let delayaoe  = Date.now()
+
 
 if (delayboss == undefined) delayboss = Date.now()
 
@@ -482,9 +484,12 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 	
     if (lowest_health1 != null && lowest_health1.health_ratio < 0.6) {
+	    if ( Date.now() > delayaoe + 260)
+	    {
                 use_skill("partyheal");
+		    delayaoe  = Date.now()
 				 game_log("hoi mau ALL !!!!!");
-
+	    }
 	}
 
 	
