@@ -891,7 +891,7 @@ targets = getBestTargets({ max_range: character.range, type: triancrep, subtype 
 // if (safeframm == 1 && character.targets <= 3)targets =getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , fire:1, number : 3  }) 
  if ( character.targets <=1 && safeframm == 1 ) //thu hut quai vat toi thieu từ bên ngoài ma khong giam dame
  {
-	 			   game_log("thu hut quai vat");
+	 			////   game_log("thu hut quai vat");
 
 	var target11 = get_nearest_monster1({type: triancrep, NO_target: 1});
 	change_target(target11)
