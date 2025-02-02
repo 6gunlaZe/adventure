@@ -1136,7 +1136,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
-if (Date.now() < delayBug +5000 ) return	
+if (Date.now() < delayBug +15000 ) return	
 /////////////////	
 	let pings = Math.min(...parent.pings)
 					// game_log("ping!!! = " +pings);
