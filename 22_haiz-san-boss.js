@@ -8,7 +8,7 @@ var idmap
 let delayitem
 let skillbua = 0
 let run = 1
-var datahero
+let datahero
 
 
 map_key("Z", "snippet", "datahero = 'reset'");
@@ -29,7 +29,7 @@ game_log(" press 'F' 6gunlaZe ");
 setInterval(function() {
 ////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
 	
-send_cm("MuaBan","datahero")
+send_cm("MuaBan",datahero)
 game_log(+datahero)
 
 /////////////////////////
