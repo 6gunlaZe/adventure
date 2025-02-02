@@ -11,7 +11,7 @@ let run = 1
 
 
 
-map_key("Z", "snippet", "send_cm("MuaBan","reset");");
+map_key("Z", "snippet", 'send_cm("MuaBan","reset")');
 map_key("S", "snippet", 'send_cm("MuaBan","mode1")');
 map_key("D", "snippet", 'send_cm("MuaBan","mode2")');
 map_key("F", "snippet", 'send_cm("MuaBan","mode3")');
