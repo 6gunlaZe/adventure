@@ -33,21 +33,47 @@ if(!parent.party_list.includes("angioseal")) start_character("angioseal", 24);
 setInterval(function() {
 
 	    let leader = get_player("haiz");
-	if (leader && distance(character, leader) < 10  &&  is_moving(character) ){
-		stop()
-	}
 	
-	if (leader && distance(character, leader) < 50  && smart.moving ){
-		stop()
-	move(leader.x,leader.y)
-	}
-	
-	if (leader && distance(character, leader) > 100 && !is_moving(character)  ){
-	xmove(leader.x,leader.y)
-	}
-	
-    if (!leader && !smart.moving)smart_move(parent.party["haiz"]); 
 
+	
+	if (!character.party) {
+    send_party_request("haiz");
+	}
+
+	if (character.party && character.party != "haiz" ) {
+    leave_party();
+	}
+	
+
+	
+	if (leader && distance(character, leader) < 100) return
+    // Nếu nhân vật đang di chuyển, không làm gì thêm
+    if (smart.moving) return;
+
+	
+	
+    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;  // Lấy tên bản đồ
+        const targetX = receivedData.x;      // Lấy tọa độ X
+        const targetY = receivedData.y;      // Lấy tọa độ Y
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+        if (character.map !== targetMap && character.map != "crypt") {
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: targetMap,
+                x: targetX,
+                y: targetY
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== targetX || character.y !== targetY) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+                xmove(targetX, targetY);
+            }
+        }
+    }
 
 	
 	
