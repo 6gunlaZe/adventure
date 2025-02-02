@@ -25,7 +25,7 @@ stop_character("6gunlaZe")
 	
 if (modeboss = 0) return
 	
-if(!parent.party_list.includes("Ynhi") && modehero == 1 ) start_character("Ynhi", 28);
+if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
  if(!parent.party_list.includes("haiz1") && modehero == 2) start_character("haiz1", 32);
 //if(!parent.party_list.includes("angioseal") && modehero == 1) start_character("angioseal", 28);
 if(!parent.party_list.includes("6gunlaZe") && modehero == 3 ) start_character("6gunlaZe", 25);
