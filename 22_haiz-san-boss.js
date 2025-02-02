@@ -8,7 +8,7 @@ var idmap
 let delayitem
 let skillbua = 0
 let run = 1
-let datahero
+var datahero
 
 
 map_key("Z", "snippet", "datahero = 'reset'");
