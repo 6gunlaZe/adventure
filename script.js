@@ -1,7 +1,7 @@
 
 
 
-ad
+adxcxcs
 // Hey there!
 // This is CODE, lets you control your character with code.
 // If you don't know how to code, don't worry, It's easy.
