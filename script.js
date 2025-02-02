@@ -1119,6 +1119,9 @@ setInterval(function() {
 looting()	
 }, 500);
 function looting() {
+
+
+	
     if(Object.keys(parent.chests).length >= 2) 
 	{
      shift(0, 'goldbooster');
