@@ -210,6 +210,16 @@ setInterval(function() {
 
 setInterval(() => {
 	skill_scare()
+	
+	if (character.ping > 600 )
+{
+	delayThreshold = character.ping / 2
+}
+	else
+{
+	delayThreshold = 220
+}
+	
 	if (started == undefined) started = Date.now()
     if ( Date.now() < started + 1000) return
 	if(is_on_cooldown("use_hp")) return 
@@ -237,7 +247,7 @@ else if (character.mp/character.max_mp < 0.9) {
 	  return
   }
 	
-}, 150);
+}, 200);
 
 
 
