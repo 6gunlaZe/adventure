@@ -11,10 +11,10 @@ let run = 1
 let datahero
 
 
-map_key("Z", "snippet", "datahero = 1");
-map_key("S", "snippet", "datahero = 2");
-map_key("D", "snippet", "datahero = 3");
-map_key("F", "snippet", "datahero = 4");
+map_key("0", "snippet", "datahero = 1");
+map_key("7", "snippet", "datahero = 2");
+map_key("8", "snippet", "datahero = 3");
+map_key("9", "snippet", "datahero = 4");
 
 
 game_log(" press 'Z' to reload hero")
