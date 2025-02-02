@@ -242,6 +242,16 @@ setInterval(function() {
 //////
 
 setInterval(() => {
+
+if (character.ping > 600 )
+{
+	delayThreshold = character.ping / 2
+}
+	else
+{
+	delayThreshold = 220
+}
+	
     if(character.q.exchange) {
         return;
     }
