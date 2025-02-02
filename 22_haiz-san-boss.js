@@ -8,9 +8,31 @@ var idmap
 let delayitem
 let skillbua = 0
 let run = 1
+
+
+
+map_key("Z", "snippet", "send_cm("MuaBan","reset");");
+map_key("S", "snippet", 'send_cm("MuaBan","mode1")');
+map_key("D", "snippet", 'send_cm("MuaBan","mode2")');
+map_key("F", "snippet", 'send_cm("MuaBan","mode3")');
+
+
+game_log(" press 'Z' to reload hero")
+
+game_log(" press 'S' Ynhi ");
+game_log(" press 'D' haiz1 ");
+game_log(" press 'F' 6gunlaZe ");
+
+
+
 //////////// move gan leader
 setInterval(function() {
 ////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
+
+
+
+/////////////////////////
+	
 if (character.map == "crypt")	
 {
 	idmap = character.in
@@ -159,31 +181,6 @@ for (let char in parent.party) {
 }
 }, 1300);
 
-
-
-
-
-//////////// move gan leader
-setInterval(function() {
-////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
-
-	///////////////////////////ke 
-	
-	////////// moi paty - de nhan dien leader
-//let leader = character.party;
-//if (leader===undefined) 
-	if (!character.party) {
-    send_party_request("6gunlaZe");
-
-}
-
-	//////////////
-		
-
-	
-}, 2000);
-
-///////////
 
 
 
