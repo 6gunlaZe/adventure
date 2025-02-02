@@ -29,6 +29,7 @@ let timekillboss
 let skillbua = 0
 let skillriu = 0
 let delayriu  = Date.now()
+let delayBug  = Date.now()
 let run = 1
 let notefrankyYnhi = 0
 
@@ -1135,6 +1136,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
+if (Date.now() < delayBug +5000 ) return	
 /////////////////	
 	let pings = Math.min(...parent.pings)
 					// game_log("ping!!! = " +pings);
