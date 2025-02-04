@@ -733,26 +733,19 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 	
 	
-////////////	/
-	 var  targetsoloboss11x = soloboss({ max_range: 800}) 
- var  targetsoloboss = soloboss({ max_range: 800, number : 1 })  //ham bo dem quai vat
-// targetsoloboss.length == 0		
 	
-if (targetsoloboss.length == 0 )
-{
+///////////////////////////////////////////////	
 	if(!currentTarget)
 	{
-		var currentTarget= get_nearest_monster({type: "vbat"});
-		if(currentTarget && targetsoloboss.length == 0) {
+		var currentTarget= = solobosskill({ max_range: 400}) 
+		if(currentTarget) {
 			change_target(currentTarget);
 		}
-	}
-}	
-	
-game_log("checkk boss !!!!!!"+targetsoloboss11x.length);	
-	
-	
-	
+	}	
+
+
+
+
 	
 ////////////////////////////////
 chuyendoithongminh(currentTarget)	
