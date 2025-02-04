@@ -1107,6 +1107,8 @@ var upgradeWhitelistmoi1 = /// list moi
 		ecape: 6,
 		wingedboots: 5,
 		pmace:5,
+		crossbow:5,
+		wingedboots: 5,
 
 		//fireblade: 7,
 		coat: 9,
@@ -1130,7 +1132,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		mcape: 8,
 		oozingterror: 7,
 		basher: 6 ,
-        hboots: 6,
+                hboots: 6,
 		starkillers: 5,
 		sshield:8,
 		hgloves: 7,
@@ -1140,6 +1142,8 @@ var upgradeWhitelistmoi2 = /// list moi
 		ecape: 8,
 		wingedboots: 7,
 		pmace:7,
+		crossbow:8,
+		wingedboots: 7,
 
 		//fireblade: 8,
 
@@ -1173,6 +1177,8 @@ var upgradeWhitelist = /// list moi
 		stinger: 6,
 		wingedboots: 4,
 		pmace:4,
+		crossbow:3,
+		wingedboots: 3,
 		
         coat: 9,
 	};
