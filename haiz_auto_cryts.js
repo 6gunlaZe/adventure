@@ -11,9 +11,123 @@ let run = 1
 let datahero
 
 
+setInterval(function() {
+
+if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
+if(!parent.party_list.includes("haiz1") && modehero == 2) start_character("haiz1", 32);	
+}, 40000);
+
+
+//////////////////////////////////////////
+
+
+let z = 1;  
+let bat = 0
+let bossA = 0
+
+/// auto ham nguc cryt
+setInterval(function() {
+
+
+let toado = [
+  { x: 34, y: 87, z: 1 },
+  { x: 15, y: 42, z: 2 },
+  { x: 68, y: 29, z: 3 },
+  { x: 92, y: 51, z: 4 },
+  { x: 47, y: 63, z: 5 },
+  { x: 29, y: 75, z: 6 },
+  { x: 53, y: 18, z: 7 },
+  { x: 81, y: 64, z: 8 },
+  { x: 56, y: 39, z: 9 },
+  { x: 72, y: 58, z: 10 }
+];
+
+
+ var  targetkill = soloboss({ max_range: 800}) 
+ var  targetNO = soloboss({ max_range: 800}) 
+let z = 1;    
+game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
+game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 
 
 
+    if (targetkill === 1 && targetNO.length == 0 ) {
+      // Lệnh riêng của bạn khi targetkill = 1
+
+
+	/////////////////////////////////    
+    } else if (targetkill === 0 && targetNO.length == 0) {
+      // Lấy đối tượng có z tương ứng
+      let result = toado.find(item => item.z === z);
+
+      if (result) {
+        move(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }
+
+      // Tăng z khi targetkill = 0
+      if (z < 10) {
+        z++;
+      }
+    } else if (targetkill >= 2 || && targetNO.length > 0) {
+      // Quay lại z - 1 khi targetkill = 2
+      if (z > 1) {
+        z--;
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+}, 5000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////
 //////////// move gan leader
 setInterval(function() {
 
