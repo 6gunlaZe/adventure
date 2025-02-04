@@ -28,7 +28,8 @@ let bossA = 0
 /// auto ham nguc cryt
 setInterval(function() {
 
-
+ if (smart.moving) return;
+	
 let toado = [
   { x: 34, y: 87, z: 1 },
   { x: 15, y: 42, z: 2 },
@@ -43,8 +44,8 @@ let toado = [
 ];
 
 
- var  targetkill = soloboss({ max_range: 800}) 
- var  targetNO = soloboss({ max_range: 800}) 
+ var  targetkill = solobosskill({ max_range: 800}) 
+ var  targetNO = solobossNO({ max_range: 800}) 
 let z = 1;    
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
@@ -53,7 +54,8 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 
     if (targetkill === 1 && targetNO.length == 0 ) {
       // Lệnh riêng của bạn khi targetkill = 1
-
+	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
+             use_skill("taunt", targetkill);
 
 	/////////////////////////////////    
     } else if (targetkill === 0 && targetNO.length == 0) {
@@ -61,7 +63,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
       let result = toado.find(item => item.z === z);
 
       if (result) {
-        move(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
       }
 
       // Tăng z khi targetkill = 0
@@ -69,10 +71,18 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
         z++;
       }
     } else if (targetkill >= 2 || && targetNO.length > 0) {
-      // Quay lại z - 1 khi targetkill = 2
+      // Quay lại 
       if (z > 1) {
         z--;
       }
+      // Lấy đối tượng có z tương ứng
+      let result = toado.find(item => item.z === z);
+
+      if (result) {
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }
+
+	    
     }
 
 
@@ -97,13 +107,79 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 
 
 
+function solobosskill(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "bat"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
 
 
 
 
 
+function solobossNO(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "bat"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
 
 
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
 
 
 
