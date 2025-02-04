@@ -914,7 +914,57 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 }
 
 
+function soloTANK(taget)
+{
+ 
 
+		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
+            {
+				   const dist1 = distance(character, taget);
+    if (dist1 >  character.range)
+	{
+		                use_skill("charge");
+		 game_log("toc do kite !!!!!!");
+	}
+
+            }	
+ //////
+	////
+
+		    if (taget.target && taget.target == "haiz" &&  !is_on_cooldown("hardshell") && character.mp > 600 && distance(character, taget) < character.range )
+	{
+
+		use_skill("hardshell");
+				 game_log("war hardshell !!!!!!");
+
+	}	
+
+      //////////////
+	
+	if (character.mp > 1300 &&  !is_on_cooldown("warcry") && !character.s["warcry"] )
+	{
+		use_skill("warcry");
+				 game_log("war kite !!!!!!");
+	}	
+	
+	
+	 //////////////////////////////////
+ 	////
+
+ //////
+
+if ( taget.target && taget.target == "haiz" && !character.s["hardshell"] && character.mp > 200 && !is_on_cooldown("stomp") && distance(character, taget) < (taget.range + 7) && is_on_cooldown("hardshell") )skillbua = 1
+	
+if (character.mp > 900  && !is_on_cooldown("stomp")  && taget.target && taget.target != "haiz"  )skillbua = 1
+	
+if ( character.mp > 1200 && !is_on_cooldown("stomp") && taget.target ) skillbua = 1	
+
+
+
+
+	
+}
+////////////////////////
 
 
 
