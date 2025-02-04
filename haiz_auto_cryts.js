@@ -63,13 +63,13 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 
 
 
-    if (targetkill === 1 && targetNO.length == 0 ) {
+    if (targetkill.length === 1 && targetNO.length == 0 ) {
       // Lệnh riêng của bạn khi targetkill = 1
 	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
              use_skill("taunt", targetkill);
 
 	/////////////////////////////////    
-    } else if (targetkill === 0 && targetNO.length == 0) {
+    } else if (targetkill.length === 0 && targetNO.length == 0) {
       // Lấy đối tượng có z tương ứng
       let result = toado.find(item => item.z === z);
 
@@ -81,7 +81,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
       if (z < 10) {
         z++;
       }
-    } else if (targetkill >= 2 || && targetNO.length > 0) {
+    } else if (targetkill.length >= 2 || && targetNO.length > 0) {
       // Quay lại 
       if (z > 1) {
         z--;
@@ -737,7 +737,7 @@ if (checkTimeBetweenCalls() === 1) return;
 ///////////////////////////////////////////////	
 	if(!currentTarget)
 	{
-		var currentTarget= = solobosskill({ max_range: 400, number : 1}) 
+		var currentTarget= = solobosskill({ max_range: 120, number : 1}) 
 		if(currentTarget) {
 			change_target(currentTarget);
 		}
@@ -952,8 +952,7 @@ if (character.mp > 900  && !is_on_cooldown("stomp")  && taget.target && taget.ta
 	
 if ( character.mp > 1200 && !is_on_cooldown("stomp") && taget.target ) skillbua = 1	
 
-
-
+if ( taget.target && taget.target != "haiz" && !is_on_cooldown("taunt") && !taget.s["stunned"] && character.mp > 400 )use_skill("taunt", taget);
 
 	
 }
