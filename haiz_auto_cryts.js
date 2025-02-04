@@ -55,8 +55,8 @@ let toado = [
 ];
 
 
- var  targetkill = solobosskill({ max_range: 800}) 
- var  targetNO = solobossNO({ max_range: 800}) 
+ var  targetkill = solobosskill({ max_range: 400}) 
+ var  targetNO = solobossNO({ max_range: 400}) 
 let z = 1;    
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
@@ -121,7 +121,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 function solobosskill(options = {}) {
     const entities = []
      let number = 0
-	var bossarmy=["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "bat"]; 
+	var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
 	
     for (const id in parent.entities) {
         const entity = parent.entities[id]
@@ -160,7 +160,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 function solobossNO(options = {}) {
     const entities = []
      let number = 0
-	var bossarmy=["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "bat"]; 
+	var bossarmy=["a0", "a1", "a4", "a5" , "a6" , "a8"]; 
 	
     for (const id in parent.entities) {
         const entity = parent.entities[id]
