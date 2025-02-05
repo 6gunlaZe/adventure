@@ -740,7 +740,7 @@ if (checkTimeBetweenCalls() === 1) return;
 ///////////////////////////////////////////////	
 	if(!currentTarget)
 	{
-		var currentTarget= = solobosskill({ max_range: 120, number : 1}) 
+		var currentTarget = solobosskill({ max_range: 120, number : 1}) 
 		if(currentTarget) {
 			change_target(currentTarget);
 		}
