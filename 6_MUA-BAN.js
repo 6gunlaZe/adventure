@@ -1182,6 +1182,7 @@ var upgradeWhitelist = /// list moi
 		crossbow:3,
 		wingedboots: 3,
 		froststaff: 4,
+		cupid: 5,
 		
         coat: 9,
 	};
@@ -1739,7 +1740,7 @@ var combineWhitelist =
 setInterval(function() {
 	
 if(1>0) for(const slot in character.items)
-if(["hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver" ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	
 
 }, 1000);
