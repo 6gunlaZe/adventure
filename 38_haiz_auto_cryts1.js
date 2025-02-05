@@ -67,7 +67,7 @@ let toado = [
 let z = 1;    
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
-
+game_log("ZZZ = !!!!!!  "+ z  );	
 
 
     if (targetkill.length === 1 && targetNO.length == 0 ) {
@@ -499,7 +499,7 @@ function changeitem(options = {}) {
 function chuyendoithongminh(taget)
 {
 ///////////////////////////////////////// dang dame
-				 game_log("test 3 !!!!!!");
+				// game_log("test 3 !!!!!!");
 
 let rate = 1
 
