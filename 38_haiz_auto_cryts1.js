@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.0");
+game_log("Game vs 1.1");
 
 setInterval(function() {
 
@@ -32,6 +32,9 @@ let bossA = 0
 /// auto ham nguc cryt
 setInterval(function() {
 
+if (character.map != "crypt") return;
+
+	
  if (smart.moving) return;
 	
 let toado = [
