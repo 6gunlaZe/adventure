@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.0");
+game_log("Game vs 1.1");
 
 setInterval(function() {
 
@@ -85,7 +85,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 10) {
+      if (z < 20) {
         z++;
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
