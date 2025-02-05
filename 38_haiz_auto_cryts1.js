@@ -755,7 +755,7 @@ if (checkTimeBetweenCalls() === 1) return;
 
 	
 ////////////////////////////////
-chuyendoithongminh(currentTarget)	
+if(currentTarget)chuyendoithongminh(currentTarget)	
 //kiteSP(currentTarget)	
 var f00 = get_player("haiz1")
 let rateskill
@@ -799,19 +799,7 @@ if (skillbua == 1) return
 		attack(currentTarget);
 	}
 	
-	
-	
 
-	
-	
-	
-	
-	////////////////////////////////////////////////////// moi paty
-	if (!character.party) {
-    send_party_request("6gunlaZe");
-
-}
-	//////////////////////////////////////////////
 		
 	
 	
