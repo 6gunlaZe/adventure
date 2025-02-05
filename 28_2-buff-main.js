@@ -318,33 +318,6 @@ function lowest_health_partymember1() {
 
 
 
-setInterval(function() {
-    let lootMule = get_player("haiz");
-
-		 //giui vang when in range
-    var merch = get_player("haiz"); // replace this with your merchants name
-    if (merch && distance(character, merch) <= 400) {
-        send_gold(merch,character.gold)
-    }
-	//
-	
-    if (lootMule == null || stopgiudo == 1) {
-        //game_log("Nobody to transfer to");
-        loot_transfer = false;
-        return;
-    }
-
-    let itemsToExclude = ["hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","orbg","froststaff","firestaff"];
-
-    for (let i = 0; i < 42; i++) {
-        const item = character.items[i];
-
-        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
-        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
-            send_item(lootMule.id, i, item.q ?? 1);
-        }
-    }
-}, 1000);
 
 
 

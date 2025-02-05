@@ -29,6 +29,7 @@ let timekillboss
 let skillbua = 0
 let skillriu = 0
 let delayriu  = Date.now()
+let delayBug  = Date.now()
 let run = 1
 let notefrankyYnhi = 0
 
@@ -127,7 +128,15 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
 
 setInterval(function() {
 	if (host == 0 ) return
-
+	
+if (character.ping > 600 )
+{
+	delayThreshold = character.ping / 2
+}
+	else
+{
+	delayThreshold = 220
+}
 	
 if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
 {
@@ -1135,6 +1144,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
+if (Date.now() < delayBug +15000 ) return	
 /////////////////	
 	let pings = Math.min(...parent.pings)
 					// game_log("ping!!! = " +pings);
@@ -1179,7 +1189,7 @@ if (icemode == 0 && evenbossmode == 0)
 	
 	if(!target)
 	{
-		var target= get_nearest_monster({type: "greenjr"});
+		var target= get_nearest_monster({type: "greenjr1"});
 		if(target) {
 			change_target(target);
 						//////////// dung skill

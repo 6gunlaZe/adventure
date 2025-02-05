@@ -11,28 +11,215 @@ let run = 1
 let datahero
 
 
-map_key("0", "snippet", "datahero = 1");
-map_key("7", "snippet", "datahero = 2");
-map_key("8", "snippet", "datahero = 3");
-map_key("9", "snippet", "datahero = 4");
+setInterval(function() {
+
+	
+if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
+//if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
+if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
+
+}, 40000);
 
 
-game_log(" press 'Z' to reload hero")
-
-game_log(" press 'S' Ynhi ");
-game_log(" press 'D' haiz1 ");
-game_log(" press 'F' 6gunlaZe ");
+//////////////////////////////////////////
 
 
+let z = 1;  
+let bat = 0
+let bossA = 0
 
+/// auto ham nguc cryt
+setInterval(function() {
+
+ if (smart.moving) return;
+	
+let toado = [
+  { x: 0, y: -250, z: 1 },
+  { x: 0, y: -475, z: 2 },
+  { x: -200, y: -500, z: 3 },
+  { x: -200, y: -800, z: 4 },
+  { x: -200, y: -1075, z: 5 },
+  { x: 70, y: -1090, z: 6 },
+  { x: 360, y: -1090, z: 7 },
+  { x: 720, y: -1090, z: 8 },
+  { x: 720, y: -860, z: 9 },
+  { x: 720, y: -625, z: 10 },
+	{ x: 930, y: -600, z: 11 },
+	{ x: 970, y: -400, z: 12 },
+	{ x: 380, y: -1470, z: 13 },
+	{ x: 720, y: -1470, z: 14 },
+	{ x: 1050, y: -1470, z: 15 },
+	{ x: 1410, y: -1470, z: 16 },
+	{ x: 1760, y: -1470, z: 17 },
+	{ x: 1790, y: -1740, z: 18 },
+	{ x: 2090, y: -1740, z: 19 },
+	{ x: 2320, y: -1740, z: 20 },
+
+];
+
+
+ var  targetkill = solobosskill({ max_range: 400}) 
+ var  targetNO = solobossNO({ max_range: 400}) 
+let z = 1;    
+game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
+game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
+
+
+
+    if (targetkill.length === 1 && targetNO.length == 0 ) {
+      // Lệnh riêng của bạn khi targetkill = 1
+	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
+             use_skill("taunt", targetkill);
+
+	/////////////////////////////////    
+    } else if (targetkill.length === 0 && targetNO.length == 0) {
+      // Lấy đối tượng có z tương ứng
+      let result = toado.find(item => item.z === z);
+
+      if (result) {
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }
+
+      // Tăng z khi targetkill = 0
+      if (z < 10) {
+        z++;
+      }
+    } else if (targetkill.length >= 2 || targetNO.length > 0) {
+      // Quay lại 
+      if (z > 1) {
+        z--;
+      }
+      // Lấy đối tượng có z tương ứng
+      let result = toado.find(item => item.z === z);
+
+      if (result) {
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }
+
+	    
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+}, 5000);
+
+
+
+
+function solobosskill(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
+
+
+
+
+
+function solobossNO(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["a0", "a1", "a4", "a5" , "a6" , "a8"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////
 //////////// move gan leader
 setInterval(function() {
-////////////chen ke vi 2 mon do giong nhau nen bi nhan nham vi tri
-if (datahero == 1)send_cm("MuaBan","reset")
-if (datahero == 2)send_cm("MuaBan","mode1")
-if (datahero == 3)send_cm("MuaBan","mode2")
-if (datahero == 4)send_cm("MuaBan","mode3")
-	
 
 /////////////////////////
 	
@@ -549,26 +736,19 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 	
 	
-////////////	/
-	 var  targetsoloboss11x = soloboss({ max_range: 800}) 
- var  targetsoloboss = soloboss({ max_range: 800, number : 1 })  //ham bo dem quai vat
-// targetsoloboss.length == 0		
 	
-if (targetsoloboss.length == 0 )
-{
+///////////////////////////////////////////////	
 	if(!currentTarget)
 	{
-		var currentTarget= get_nearest_monster({type: "vbat"});
-		if(currentTarget && targetsoloboss.length == 0) {
+		var currentTarget= = solobosskill({ max_range: 120, number : 1}) 
+		if(currentTarget) {
 			change_target(currentTarget);
 		}
-	}
-}	
-	
-game_log("checkk boss !!!!!!"+targetsoloboss11x.length);	
-	
-	
-	
+	}	
+
+
+
+
 	
 ////////////////////////////////
 chuyendoithongminh(currentTarget)	
@@ -584,7 +764,8 @@ else
 	rateskill = 0.85
 }
 
-if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)		
+if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)
+if (currentTarget && !f00 ) soloTANK(target)
 if (run == 1 && currentTarget && currentTarget.attack >8000 ) return //quai manh qua thi ne ra	
 if (skillbua == 1) return	
 //	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
@@ -729,7 +910,56 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 }
 
 
+function soloTANK(taget)
+{
+ 
 
+		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
+            {
+				   const dist1 = distance(character, taget);
+    if (dist1 >  character.range)
+	{
+		                use_skill("charge");
+		 game_log("toc do kite !!!!!!");
+	}
+
+            }	
+ //////
+	////
+
+		    if (taget.target && taget.target == "haiz" &&  !is_on_cooldown("hardshell") && character.mp > 600 && distance(character, taget) < character.range )
+	{
+
+		use_skill("hardshell");
+				 game_log("war hardshell !!!!!!");
+
+	}	
+
+      //////////////
+	
+	if (character.mp > 1300 &&  !is_on_cooldown("warcry") && !character.s["warcry"] )
+	{
+		use_skill("warcry");
+				 game_log("war kite !!!!!!");
+	}	
+	
+	
+	 //////////////////////////////////
+ 	////
+
+ //////
+
+if ( taget.target && taget.target == "haiz" && !character.s["hardshell"] && character.mp > 200 && !is_on_cooldown("stomp") && distance(character, taget) < (taget.range + 7) && is_on_cooldown("hardshell") )skillbua = 1
+	
+if (character.mp > 900  && !is_on_cooldown("stomp")  && taget.target && taget.target != "haiz"  )skillbua = 1
+	
+if ( character.mp > 1200 && !is_on_cooldown("stomp") && taget.target ) skillbua = 1	
+
+if ( taget.target && taget.target != "haiz" && !is_on_cooldown("taunt") && !taget.s["stunned"] && character.mp > 400 )use_skill("taunt", taget);
+
+	
+}
+////////////////////////
 
 
 

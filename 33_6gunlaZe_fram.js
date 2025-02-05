@@ -242,6 +242,16 @@ setInterval(function() {
 //////
 
 setInterval(() => {
+
+if (character.ping > 600 )
+{
+	delayThreshold = character.ping / 2
+}
+	else
+{
+	delayThreshold = 220
+}
+	
     if(character.q.exchange) {
         return;
     }
@@ -889,9 +899,9 @@ else if ( (frammode == 1 || frammode == 3 || frammode == 6 ) && character.target
 	{
 targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , havetarget: 1, fire:1 })  //ham bo dem quai vat
 // if (safeframm == 1 && character.targets <= 3)targets =getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , fire:1, number : 3  }) 
- if ( character.targets <=1 && safeframm == 1 ) //thu hut quai vat toi thieu từ bên ngoài ma khong giam dame
+ if ( character.targets <=0 && safeframm == 1 ) //thu hut quai vat toi thieu từ bên ngoài ma khong giam dame
  {
-	 			   game_log("thu hut quai vat");
+	 			////   game_log("thu hut quai vat");
 
 	var target11 = get_nearest_monster1({type: triancrep, NO_target: 1});
 	change_target(target11)

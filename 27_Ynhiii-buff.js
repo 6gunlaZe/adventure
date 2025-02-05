@@ -11,6 +11,8 @@ let delayitem
 let stopgiudo = 0  // 1 = stop
 var crepp = ""
 let receivedData
+let delayaoe  = Date.now()
+
 
 if (delayboss == undefined) delayboss = Date.now()
 
@@ -208,6 +210,16 @@ setInterval(function() {
 
 setInterval(() => {
 	skill_scare()
+	
+	if (character.ping > 600 )
+{
+	delayThreshold = character.ping / 2
+}
+	else
+{
+	delayThreshold = 220
+}
+	
 	if (started == undefined) started = Date.now()
     if ( Date.now() < started + 1000) return
 	if(is_on_cooldown("use_hp")) return 
@@ -235,7 +247,7 @@ else if (character.mp/character.max_mp < 0.9) {
 	  return
   }
 	
-}, 150);
+}, 200);
 
 
 
@@ -482,9 +494,12 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 	
     if (lowest_health1 != null && lowest_health1.health_ratio < 0.6) {
+	    if ( Date.now() > delayaoe + 260)
+	    {
                 use_skill("partyheal");
+		    delayaoe  = Date.now()
 				 game_log("hoi mau ALL !!!!!");
-
+	    }
 	}
 
 	
