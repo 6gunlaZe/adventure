@@ -523,7 +523,7 @@ else
 /////////////////////////////////////////////////// hut mauuuu
 	if(character.s["hardshell"] )
 	{
-	changeitem({ slot: "chest", name : "mcape", level : 7 });	
+	changeitem({ slot: "chest", name : "mcape", level : 8 });	
 	}
 else
 {
