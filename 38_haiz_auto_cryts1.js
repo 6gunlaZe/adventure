@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.1");
+game_log("Game vs 1.2");
 
 setInterval(function() {
 
@@ -774,7 +774,7 @@ if (run == 1 && currentTarget && currentTarget.attack >8000 ) return //quai manh
 if (skillbua == 1) return	
 //	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
 //////////////////////////////////////////////	
-
+return
 	if( currentTarget && !is_in_range(currentTarget))
 	{
 		move(
