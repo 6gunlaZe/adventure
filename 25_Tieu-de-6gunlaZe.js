@@ -16,15 +16,6 @@ var idmap
 let receivedData
 
 
-map_key("A", "toggle_run_code");
-stop_character("haiz"); 
-
-
-setInterval(function() {
-if(parent.party_list.includes("nhiY")) stop_character("nhiY");  
-//if(!parent.party_list.includes("haiz")) start_character("haiz", 11);
-if(!parent.party_list.includes("angioseal")) start_character("angioseal", 24);
-}, 40000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
 
 
 
@@ -201,7 +192,7 @@ if (character.hp/character.max_hp< 0.8 && character.mp > 50) {
    use_skill("use_hp");
 	numHP += 1
 } 
-else if (character.mp/character.max_mp < 0.5) {
+else if (character.mp/character.max_mp < 0.7) {
 	use_skill("use_mp");
 	numMP += 1
 }
@@ -272,26 +263,25 @@ if (dist1 > 260)
 	
 ////////////	
 
+
+
 	if(!currentTarget)
 	{
-		var currentTarget = solobosskill({ max_range: 450, number : 1}) 
-		if(currentTarget) {
+		var currentTarget1 = get_nearest_monster_solobosskill() 
+		if(currentTarget1) {
 
- if (is_in_range(currentTarget, "supershot") && character.mp > 500 && currentTarget.hp >10000  && !is_on_cooldown("supershot")  ) {
-   
+ if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot")  ) {
 
-                use_skill("supershot", currentTarget);
+                use_skill("supershot", currentTarget1);
                 game_log("Supershot!!");
-           }
-
-
+           }			
 
 			
 		}
 	}	
 
-	
-	
+
+
 	
     /// su dung skill supershot lên quai trong và ngoai tam ban
 
@@ -375,6 +365,39 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
+function get_nearest_monster_solobosskill(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=450 ,target=null;
+        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
 
 
 
