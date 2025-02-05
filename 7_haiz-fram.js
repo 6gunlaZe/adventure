@@ -2044,16 +2044,21 @@ else
 }
 else
 {
-	changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
-  if (character.hp/character.max_hp >= 0.3)changeitem({ slot: "offhand", name : "ololipop", level : 8 });
+  if (character.hp/character.max_hp >= 0.3)
+  {
+     changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
+     changeitem({ slot: "offhand", name : "ololipop", level : 8 });
+  }
   else
 {
 if (magic = 0)
 {
+	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
 }
 else
 {
+	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "sshield", level : 7 });		
 }
 }
