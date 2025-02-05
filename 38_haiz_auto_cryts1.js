@@ -10,13 +10,14 @@ let skillbua = 0
 let run = 1
 let datahero
 
+game_log("Game vs 1.1");
 
 setInterval(function() {
 
 	
 if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
-//if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
-if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
+if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
+// if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
 
 }, 40000);
 
@@ -31,6 +32,9 @@ let bossA = 0
 /// auto ham nguc cryt
 setInterval(function() {
 
+if (character.map != "crypt") return;
+
+	
  if (smart.moving) return;
 	
 let toado = [
@@ -58,12 +62,12 @@ let toado = [
 ];
 
 
- var  targetkill = solobosskill({ max_range: 400}) 
- var  targetNO = solobossNO({ max_range: 400}) 
-let z = 1;    
+ var  targetkill = solobosskill({ max_range: 320}) 
+ var  targetNO = solobossNO({ max_range: 330}) 
+   
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
-
+game_log("ZZZ = !!!!!!  "+ z  );	
 
 
     if (targetkill.length === 1 && targetNO.length == 0 ) {
@@ -81,10 +85,10 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 10) {
+      if (z < 20) {
         z++;
       }
-    } else if (targetkill.length >= 2 || targetNO.length > 0) {
+    } else if (targetkill.length >= 2  || targetNO.length > 0) {
       // Quay lại 
       if (z > 1) {
         z--;
@@ -117,6 +121,56 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 
 	
 }, 5000);
+
+
+
+
+
+
+
+
+function get_nearest_monster_solobosskill(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=character.range + 155,target=null;
+        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -228,9 +282,13 @@ if (character.map == "crypt")
 	idmap = character.in
 send_cm("haiz1","goo")
 send_cm("Ynhi","goo")
+	send_cm("6gunlaZe","goo")
+
 
 send_cm("haiz1",idmap)
 send_cm("Ynhi",idmap)
+	send_cm("6gunlaZe",idmap)
+
  //game_log(idmap)
 
 }
@@ -324,7 +382,7 @@ for (let char in parent.party) {
             map: map
 
         });
-					 game_log("map" + map)
+					// game_log("map" + map)
 
 		        continue;
 	}	
@@ -348,7 +406,7 @@ for (let char in parent.party) {
             map: character.map
 
         });
-								 game_log("mapcharacter")
+								// game_log("mapcharacter")
 
 		        continue;
 
@@ -362,7 +420,7 @@ for (let char in parent.party) {
             map: character.map
 
         });
-									 game_log("mapcharacter")
+									// game_log("mapcharacter")
 
         continue;
     }
@@ -441,6 +499,8 @@ function changeitem(options = {}) {
 function chuyendoithongminh(taget)
 {
 ///////////////////////////////////////// dang dame
+				// game_log("test 3 !!!!!!");
+
 let rate = 1
 
 if (taget && taget.mtype == "a2" )
@@ -452,7 +512,7 @@ if (taget && taget.mtype == "a2" )
 		rate = 0.75
 	}
 
-if(character.hp/character.max_hp< rate)
+if(character.hp/character.max_hp< rate )
 {
 	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
 		changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
@@ -467,14 +527,19 @@ else
 /////////////////////////////////////////////////// hut mauuuu
 	if(character.s["hardshell"] )
 	{
-	changeitem({ slot: "chest", name : "mcape", level : 7 });	
+	changeitem({ slot: "chest", name : "mcape", level : 8 });	
 	}
 else
 {
 changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 }
 ///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
+if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a2" )
+{	
+changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
+changeitem({ slot: "offhand", name : "sshield", level : 7 });	
+}	
+else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
 changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
@@ -740,9 +805,10 @@ if (checkTimeBetweenCalls() === 1) return;
 ///////////////////////////////////////////////	
 	if(!currentTarget)
 	{
-		var currentTarget= = solobosskill({ max_range: 120, number : 1}) 
+		var currentTarget = get_nearest_monster_solobosskill() 
 		if(currentTarget) {
 			change_target(currentTarget);
+			 game_log("test 1 !!!!!!");
 		}
 	}	
 
@@ -765,7 +831,7 @@ else
 }
 
 if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)
-if (currentTarget && !f00 ) soloTANK(target)
+if (currentTarget && !f00 ) soloTANK(currentTarget)
 if (run == 1 && currentTarget && currentTarget.attack >8000 ) return //quai manh qua thi ne ra	
 if (skillbua == 1) return	
 //	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
@@ -795,19 +861,7 @@ if (skillbua == 1) return
 		attack(currentTarget);
 	}
 	
-	
-	
 
-	
-	
-	
-	
-	////////////////////////////////////////////////////// moi paty
-	if (!character.party) {
-    send_party_request("6gunlaZe");
-
-}
-	//////////////////////////////////////////////
 		
 	
 	
@@ -913,6 +967,7 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 function soloTANK(taget)
 {
  
+			 game_log("test 2 !!!!!!");
 
 		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
             {

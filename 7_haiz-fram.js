@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-
+game_log("Game vs 1.1");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -2044,16 +2044,21 @@ else
 }
 else
 {
-	changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
-  if (character.hp/character.max_hp >= 0.3)changeitem({ slot: "offhand", name : "ololipop", level : 8 });
+  if (character.hp/character.max_hp >= 0.3)
+  {
+     changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
+     changeitem({ slot: "offhand", name : "ololipop", level : 8 });
+  }
   else
 {
 if (magic = 0)
 {
+	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
 }
 else
 {
+	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "sshield", level : 7 });		
 }
 }
