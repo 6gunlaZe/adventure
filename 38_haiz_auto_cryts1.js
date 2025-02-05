@@ -187,7 +187,7 @@ if ( z > 37 && z < 56) z -= 1;
 if ( z > 68 ) z -= 1;
 			game_log("ZZZ = !!!!!!  "+ z  );	
 	return
-		{
+		}
 			
 
 game_log("ZZZ = !!!!!!  "+ z  );	
