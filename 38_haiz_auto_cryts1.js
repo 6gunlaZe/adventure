@@ -174,9 +174,22 @@ let toado = [
 
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
-   
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
+
+	
+	        var  targetNOsafe = solobossNO({ max_range: 180}) 
+		var currentTarget = get_nearest_monster_solobosskill() 
+		if(currentTarget && currentTarget.target && targetNOsafe.length == 0) 
+		{
+			
+if ( z > 37 && z < 56) z -= 1;
+if ( z > 68 ) z -= 1;
+			game_log("ZZZ = !!!!!!  "+ z  );	
+	return
+		{
+			
+
 game_log("ZZZ = !!!!!!  "+ z  );	
 
 
