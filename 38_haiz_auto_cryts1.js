@@ -808,7 +808,7 @@ if (checkTimeBetweenCalls() === 1) return;
 
 	
 ////////////////////////////////
-if(currentTarget)chuyendoithongminh(currentTarget)	
+chuyendoithongminh(currentTarget)	
 //kiteSP(currentTarget)	
 var f00 = get_player("haiz1")
 let rateskill
