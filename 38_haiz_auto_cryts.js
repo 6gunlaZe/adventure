@@ -765,7 +765,7 @@ else
 }
 
 if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)
-if (currentTarget && !f00 ) soloTANK(target)
+if (currentTarget && !f00 ) soloTANK(currentTarget)
 if (run == 1 && currentTarget && currentTarget.attack >8000 ) return //quai manh qua thi ne ra	
 if (skillbua == 1) return	
 //	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
