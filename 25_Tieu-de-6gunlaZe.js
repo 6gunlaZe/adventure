@@ -274,7 +274,7 @@ if (dist1 > 260)
 
 	if(!currentTarget)
 	{
-		var currentTarget= = solobosskill({ max_range: 450, number : 1}) 
+		var currentTarget = solobosskill({ max_range: 450, number : 1}) 
 		if(currentTarget) {
 
  if (is_in_range(currentTarget, "supershot") && character.mp > 500 && currentTarget.hp >10000  && !is_on_cooldown("supershot")  ) {
