@@ -10,6 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
+game_log("Game vs 1.0");
 
 setInterval(function() {
 
