@@ -208,7 +208,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 20) {
+      if (z < 92) {
         z++;
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
@@ -243,7 +243,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 
 	
-}, 5000);
+}, 3000);
 
 
 
