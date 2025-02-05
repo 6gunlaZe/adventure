@@ -46,7 +46,7 @@ setInterval(function() {
 	
 
 	
-	if (leader && distance(character, leader) < 100) return
+	if (leader && distance(character, leader) < 50) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 
@@ -270,21 +270,31 @@ if (dist1 > 260)
         currentTarget = get_targeted_monster();
     }
 	
-	
+////////////	
 
+	if(!currentTarget)
+	{
+		var currentTarget= = solobosskill({ max_range: 450, number : 1}) 
+		if(currentTarget) {
 
-	
-	
-	
-    /// su dung skill supershot lên quai trong và ngoai tam ban
-		
  if (is_in_range(currentTarget, "supershot") && character.mp > 500 && currentTarget.hp >10000  && !is_on_cooldown("supershot")  ) {
    
 
                 use_skill("supershot", currentTarget);
                 game_log("Supershot!!");
            }
+
+
+
+			
+		}
+	}	
+
 	
+	
+	
+    /// su dung skill supershot lên quai trong và ngoai tam ban
+
 	
 	
 if(currentTarget && (character.mp > G.skills.huntersmark.mp) && is_in_range(currentTarget, "huntersmark") && !is_on_cooldown("huntersmark") && !currentTarget.s.marked && (currentTarget.hp > (character.attack * 10)) )
@@ -327,6 +337,47 @@ var kcconthieu =  (distance(character, {x: currentTarget.real_x, y: currentTarge
 	
 	
 },1000/8); // Loops every 1/4 seconds.
+
+
+
+
+
+function solobosskill(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+
+
+
+
+
 
 // Learn Javascript: https://www.codecademy.com/learn/introduction-to-javascript
 // Write your own CODE: https://github.com/kaansoral/adventureland
