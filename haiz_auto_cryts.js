@@ -84,7 +84,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
       if (z < 10) {
         z++;
       }
-    } else if (targetkill.length >= 2 || && targetNO.length > 0) {
+    } else if (targetkill.length >= 2 || targetNO.length > 0) {
       // Quay lại 
       if (z > 1) {
         z--;
