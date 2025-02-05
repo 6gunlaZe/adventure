@@ -1816,7 +1816,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "lostearring", "mittens", "glolipop" , "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs", "basher"  , "crossbow" , "harbringer",  "mcape" , "hgloves" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "lostearring", "mittens", "glolipop" , "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs", "basher"  , "crossbow" , "harbringer",  "mcape" , "hgloves" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell", "cupid"  ];
 
 
 function secondhands_handler(event) {
