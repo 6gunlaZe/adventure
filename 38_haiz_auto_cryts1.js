@@ -16,8 +16,8 @@ setInterval(function() {
 
 	
 if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
-//if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
-if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
+if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
+// if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
 
 }, 40000);
 
