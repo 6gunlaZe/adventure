@@ -445,6 +445,8 @@ function changeitem(options = {}) {
 function chuyendoithongminh(taget)
 {
 ///////////////////////////////////////// dang dame
+				 game_log("test 3 !!!!!!");
+
 let rate = 1
 
 if (taget && taget.mtype == "a2" )
@@ -747,6 +749,7 @@ if (checkTimeBetweenCalls() === 1) return;
 		var currentTarget = solobosskill({ max_range: 120, number : 1}) 
 		if(currentTarget) {
 			change_target(currentTarget);
+			 game_log("test 1 !!!!!!");
 		}
 	}	
 
@@ -905,6 +908,7 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 function soloTANK(taget)
 {
  
+			 game_log("test 2 !!!!!!");
 
 		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
             {
