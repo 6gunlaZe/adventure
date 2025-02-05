@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.4");
+game_log("Game vs 1.5");
 
 setInterval(function() {
 
@@ -747,7 +747,7 @@ if (checkTimeBetweenCalls() === 1) return;
 	if(!currentTarget)
 	{
 		var currentTarget = solobosskill({ max_range: 120, number : 1}) 
-		if(currentTarget) {
+		if(currentTarget.length == ) {
 			change_target(currentTarget);
 			 game_log("test 1 !!!!!!");
 		}
