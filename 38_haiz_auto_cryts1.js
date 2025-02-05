@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.8");
+game_log("Game vs 1.9");
 
 setInterval(function() {
 
@@ -64,7 +64,7 @@ let toado = [
 
  var  targetkill = solobosskill({ max_range: 400}) 
  var  targetNO = solobossNO({ max_range: 400}) 
-let z = 1;    
+   
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 game_log("ZZZ = !!!!!!  "+ z  );	
