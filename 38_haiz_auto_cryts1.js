@@ -382,7 +382,7 @@ for (let char in parent.party) {
             map: map
 
         });
-					 game_log("map" + map)
+					// game_log("map" + map)
 
 		        continue;
 	}	
@@ -406,7 +406,7 @@ for (let char in parent.party) {
             map: character.map
 
         });
-								 game_log("mapcharacter")
+								// game_log("mapcharacter")
 
 		        continue;
 
@@ -420,7 +420,7 @@ for (let char in parent.party) {
             map: character.map
 
         });
-									 game_log("mapcharacter")
+									// game_log("mapcharacter")
 
         continue;
     }
