@@ -508,7 +508,7 @@ if (taget && taget.mtype == "a2" )
 		rate = 0.75
 	}
 
-if(character.hp/character.max_hp< rate)
+if(character.hp/character.max_hp< rate )
 {
 	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
 		changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
@@ -530,7 +530,12 @@ else
 changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 }
 ///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
+if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a2" )
+{	
+changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
+changeitem({ slot: "offhand", name : "sshield", level : 7 });	
+}	
+else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
 changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
