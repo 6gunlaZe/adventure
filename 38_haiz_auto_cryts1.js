@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.7");
+game_log("Game vs 1.8");
 
 setInterval(function() {
 
@@ -282,9 +282,13 @@ if (character.map == "crypt")
 	idmap = character.in
 send_cm("haiz1","goo")
 send_cm("Ynhi","goo")
+	send_cm("6gunlaZe","goo")
+
 
 send_cm("haiz1",idmap)
 send_cm("Ynhi",idmap)
+	send_cm("6gunlaZe",idmap)
+
  //game_log(idmap)
 
 }
