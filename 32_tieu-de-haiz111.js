@@ -485,6 +485,40 @@ if (skillbua == 1) return
 ////////////////////
 
 //	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
+
+////////////	
+
+
+
+	if(!currentTarget)
+	{
+		var currentTarget1 = get_nearest_monster_solobosskill() 
+		if(currentTarget1) {
+
+ var  targetkill = solobosskill({ max_range: 330}) 
+ var  targetNO = solobossNO({ max_range: 330}) 
+if ( targetkill.length >= 2 || targetNO.length >= 1 ) return
+			
+ if (is_in_range(currentTarget1, "agitate") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("agitate") && Date.now() > delayboss + 5000 ) {
+                delayboss = Date.now()
+                use_skill("agitate");
+           }			
+
+			
+		}
+	}	
+
+
+
+	
+    /// su dung skill supershot lên quai trong và ngoai tam ban
+
+
+
+
+
+
+
 	
 
 	if( currentTarget && !is_in_range(currentTarget))
@@ -620,6 +654,125 @@ if( character.mp > 840 && !is_on_cooldown("warcry") && taget &&  !character.s["w
 
 ///////////////////
 }
+
+
+
+
+
+function get_nearest_monster_solobosskill(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=315 ,target=null;
+        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
+
+function solobosskill(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
+
+
+
+
+
+function solobossNO(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["a0", "a1", "a4", "a5" , "a6" , "a8"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
+
+
+
+
+
 
 
 
