@@ -139,7 +139,14 @@ let toado = [
 
 ];
 
+ let member1 = get_player("haiz1");
+ let member2 = get_player("Ynhi");
+	
+if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
+{}
+else return
 
+	
 
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
