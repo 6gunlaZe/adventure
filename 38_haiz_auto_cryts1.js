@@ -28,7 +28,7 @@ if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);
 let z = 1;  
 let bat = 0
 let bossA = 0
-
+let nguyhiem = 0
 /// auto ham nguc cryt
 setInterval(function() {
 
@@ -173,12 +173,12 @@ game_log("ZZZ = !!!!!!  "+ z  );
       // Lệnh riêng của bạn khi targetkill = 1
 	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
              use_skill("taunt", targetkill);
-
+          nguyhiem = 0
 	/////////////////////////////////    
     } else if (targetkill.length === 0 && targetNO.length == 0) {
       // Lấy đối tượng có z tương ứng
       let result = toado.find(item => item.z === z);
-
+      nguyhiem = 0
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
       }
@@ -189,6 +189,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
       // Quay lại 
+	    nguyhiem = 1
       if (z > 1) {
         z--;
       }
@@ -889,7 +890,7 @@ setInterval(function(){
 	if(!attack_mode || character.rip ||  is_moving(character)) return;
 	
 if (checkTimeBetweenCalls() === 1) return;
-
+if (nguyhiem == 1)return
 
 	const entity1 = get_entity(character.target) // co the doi taget thu cong
 	
