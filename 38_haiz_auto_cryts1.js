@@ -158,7 +158,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 		var currentTarget = get_nearest_monster_solobosskill() 
 		if(currentTarget && currentTarget.target && targetNOsafe.length == 0) 
 		{
-			
+			nguyhiem = 0
 if ( z > 30 && z < 45) z -= 1;
 if ( z > 54 ) z -= 1;
 			game_log("ZZZ = !!!!!!  "+ z  );	
@@ -634,7 +634,7 @@ else
 changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 }
 ///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a2" )
+if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a222" )
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
 changeitem({ slot: "offhand", name : "sshield", level : 7 });	
