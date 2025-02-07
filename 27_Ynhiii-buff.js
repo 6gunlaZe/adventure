@@ -9,7 +9,7 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = ""
+var crepp = "ghost"
 let receivedData
 let delayaoe  = Date.now()
 
