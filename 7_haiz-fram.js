@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.9");
+game_log("Game vs 1.7");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1173,39 +1173,8 @@ function ms_to_next_skill(skill) {
     return ms < 0 ? 0 : ms;
 }
 
-/////skill loop
-setInterval(function() {
 
-if (skillbua == 1 || skillriu == 1)
-{
-	if ( skillriu == 1 ){
-		if (character.esize == 0){
-		 skillriu = 0
-			 game_log("fulll tui do !!!!!!");
-			return
-			
-		}
-		
 
-		if (character.slots["offhand"])unequip( "offhand");
-
-        changeitem({ slot: "mainhand", name : "bataxe", level : 4 });
-		
-			if (character.slots["mainhand"] && character.slots["mainhand"].name == "bataxe")use_skill("cleave");
-				       
-	}
-	
-	
-		if ( skillriu == 1 &&  is_on_cooldown("cleave")){
-		          skillriu = 0
-	      }
-	
-	
-}	
-
-	
-	
-}, 50);
 
 
 
@@ -1215,6 +1184,7 @@ var attack_mode= true
 
 setInterval(function(){
   delay = ms_to_next_skill("attack"); 
+	delay = delay/2
 	//use_hp_or_mp();
 	use_hp_or_mp1();
 if (Date.now() < delayBug +30000 ) return	
@@ -1375,7 +1345,34 @@ if (icemode == 0 && evenbossmode == 0)
  }
 ////////////////////////////////////////
 //game_log("!!!!!! =   "+ skillriu);
+
+if (skillbua == 1 || skillriu == 1)
+{
+	if ( skillriu == 1 ){
+		if (character.esize == 0){
+		 skillriu = 0
+			 game_log("fulll tui do !!!!!!");
+			return
+			
+		}
+		
+
+		if (character.slots["offhand"])unequip( "offhand");
+
+        changeitem({ slot: "mainhand", name : "bataxe", level : 4 });
+		
+			if (character.slots["mainhand"] && character.slots["mainhand"].name == "bataxe")use_skill("cleave");
+				       
+	}
 	
+	
+		if ( skillriu == 1 &&  is_on_cooldown("cleave")){
+		          skillriu = 0
+	      }
+	
+	
+}	
+if (skillbua == 1 || skillriu == 1)	return		
 	
 	//////////////////// ne dung aoe len boss
 var targets11 = getBestTargets({ max_range: 80 , type: "crabxx" , number : 1 }) 
@@ -1537,7 +1534,6 @@ if (boss_even_fight ==1)
 		  delay = ms_to_next_skill("attack"); 
 	}
  game_log("time = !!!!!! "+delay);
-	if(delay >500)delay = delay/2;
 
 },delay); // Loops every 1/4 seconds.	
 	
@@ -1790,7 +1786,7 @@ function skillwarboss(taget)
 		{
  var targetsabc = getBestTargets({ max_range: 165, type: taget.mtype , target : "haiz" }) 
   var targetsabcd = getBestTargets({ max_range: 165, type: taget.mtype , Nohavetarget : 1 }) //ham bo dem quai vatv
-	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0 && ms_to_next_skill("attack") > 125	
+	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0 && ms_to_next_skill("attack") > 95	
  )
 	{
 		skillriu = 1	
