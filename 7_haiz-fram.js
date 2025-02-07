@@ -202,7 +202,7 @@ if ( region == "ASIA" && serverIden == "I" )
 }	
 
 if(bosstime == 0 && parent.party_list.includes("angioseal") && killangioseal == 1)stop_character("angioseal")
-if(bosstime == 0 && parent.party_list.includes("nhiY") && killangioseal == 1 && foxmode == 1)stop_character("nhiY")
+if(bosstime == 0 && parent.party_list.includes("nhiY") && killangioseal == 1 && foxmode == 1 && !smart.moving )stop_character("nhiY")
 	
 if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 	
