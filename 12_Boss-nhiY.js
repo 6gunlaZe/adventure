@@ -12,6 +12,58 @@ let numHP = 0
 let numMP = 0
 let stopgiudo = 0  // 1 = stop
 let back = 0
+let receivedData
+
+//////////////////////////
+let foxmode = 0
+//FRAM FOXNIX
+setInterval(function() {
+if (foxmode = 0 ) return
+
+superMOVE()
+
+
+
+
+
+
+
+	
+}, 500);
+////////////////////////
+
+
+function superMOVE() {
+
+let checkdichuyen = JSON.parse(JSON.stringify(smart));	
+let lastMain = null;
+let SM = 0;
+if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
+  SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
+}
+
+if (SM === 1) {
+	
+for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
+    if (checkdichuyen.plot[i].map == character.map) {
+        lastMain = checkdichuyen.plot[i];
+        break;
+    }
+}
+	
+
+if (lastMain && character.mp > 1700 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
+	use_skill("blink", [lastMain.x, lastMain.y])
+}
+
+}
+
+	
+	
+}
+
+
+
 
 
 
@@ -42,7 +94,7 @@ if (back == 1)
         join('icegolem');
 	}
 ////////////////////////////////////////////	
-if(parent.S.icegolem)
+if(parent.S.icegolem && foxmode == 0)
 	{
 	  var target2= get_nearest_monster({type: "icegolem",});	
 		
@@ -55,7 +107,7 @@ if(parent.S.icegolem)
 	
 	
 	}
-	if(parent.S.icegolem) return //su kien ice thi se tu hoat dong không có di theo lederr
+	if(parent.S.icegolem && foxmode == 0) return //su kien ice thi se tu hoat dong không có di theo lederr
 	
 ////////////////////////////////////////////////	
 	
@@ -65,6 +117,10 @@ if(parent.S.icegolem)
     if (!character.party) return // No party
 
 	    let leader = get_player("haiz");
+	if (character.party && character.party != "haiz" ) {
+    leave_party();
+	}
+	
 	if (leader && distance(character, leader) < 10  &&  is_moving(character) ){
 		stop()
 	}
@@ -74,11 +130,34 @@ if(parent.S.icegolem)
 	move(leader.x,leader.y)
 	}
 	
-	if (leader && distance(character, leader) > character.range && !is_moving(character) && !character.target ){
-	xmove(leader.x,leader.y)
-	}
+	if (leader && distance(character, leader) < 70) return
+    // Nếu nhân vật đang di chuyển, không làm gì thêm
+    if (smart.moving) return;
+
 	
-    if (!leader && !smart.moving && character.map != "crypt")smart_move(parent.party["haiz"]); 
+	
+    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;  // Lấy tên bản đồ
+        const targetX = receivedData.x;      // Lấy tọa độ X
+        const targetY = receivedData.y;      // Lấy tọa độ Y
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+        if (character.map !== targetMap && character.map != "crypt") {
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: targetMap,
+                x: targetX,
+                y: targetY
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== targetX || character.y !== targetY) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+                xmove(targetX, targetY);
+            }
+        }
+    }
 
 
 }, 2000);
@@ -122,6 +201,17 @@ function on_cm(name, data) {
     back = 1
 		
 	}
+
+	 if(name == "haiz" && data != "goo" && data != "back" ){
+     receivedData = data
+
+	}
+
+
+	if(name == "haiz" && data == "foxmode" ){
+           foxmode = 1
+	}
+	
 	
 	
 }

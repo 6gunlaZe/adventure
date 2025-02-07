@@ -36,6 +36,43 @@ setInterval(function() {
 
 
 
+setInterval(function() {
+
+
+
+
+		var currentTarget1 = get_nearest_monster_solobosskill() 
+		if(currentTarget1) {
+
+ var  targetkill = solobosskill({ max_range: 330}) 
+ var  targetNO = solobossNO({ max_range: 330}) 
+if ( targetkill.length >= 2 || targetNO.length >= 1 ) return
+			
+ if (is_in_range(currentTarget1, "agitate") && character.mp > 500 && currentTarget1.hp >10000 && !currentTarget1.target && !is_on_cooldown("agitate") && Date.now() > delayboss + 5000 ) {
+                delayboss = Date.now()
+                use_skill("agitate");
+           }			
+
+			
+		}
+
+
+
+}, 300);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 setInterval(function() {
 	    let leader = get_player("haiz");
@@ -60,7 +97,7 @@ setInterval(function() {
 	
 
 	
-	if (leader && distance(character, leader) < 70) return
+	if (leader && distance(character, leader) < 50) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 

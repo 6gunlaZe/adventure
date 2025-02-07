@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.1");
+game_log("Game vs 1.2");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -916,10 +916,15 @@ setInterval(function() {
 
 
 //////////////////////////////////////////////
-
+let started1
 function kite(taget, kite_range)
 {
 
+if (is_disabled(character) ) return
+	
+if (started1 == undefined) started1 = Date.now()
+if (Date.now() < started1 + 330) return;
+	
 	const radius = kite_range ;
 const  angle = Math.PI / 5.5 ;
     if (can_move_to(taget.real_x, taget.real_y)) {

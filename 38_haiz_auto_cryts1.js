@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.1");
+game_log("Game vs 1.2");
 
 setInterval(function() {
 
@@ -28,7 +28,7 @@ if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);
 let z = 1;  
 let bat = 0
 let bossA = 0
-
+let nguyhiem = 0
 /// auto ham nguc cryt
 setInterval(function() {
 
@@ -38,35 +38,134 @@ if (character.map != "crypt") return;
  if (smart.moving) return;
 	
 let toado = [
-  { x: 0, y: -250, z: 1 },
-  { x: 0, y: -475, z: 2 },
-  { x: -200, y: -500, z: 3 },
-  { x: -200, y: -800, z: 4 },
-  { x: -200, y: -1075, z: 5 },
-  { x: 70, y: -1090, z: 6 },
-  { x: 360, y: -1090, z: 7 },
-  { x: 720, y: -1090, z: 8 },
-  { x: 720, y: -860, z: 9 },
-  { x: 720, y: -625, z: 10 },
-	{ x: 930, y: -600, z: 11 },
-	{ x: 970, y: -400, z: 12 },
-	{ x: 380, y: -1470, z: 13 },
-	{ x: 720, y: -1470, z: 14 },
-	{ x: 1050, y: -1470, z: 15 },
-	{ x: 1410, y: -1470, z: 16 },
-	{ x: 1760, y: -1470, z: 17 },
-	{ x: 1790, y: -1740, z: 18 },
-	{ x: 2090, y: -1740, z: 19 },
-	{ x: 2320, y: -1740, z: 20 },
+
+// Mốc 1 đến mốc 2
+{ x: 0, y: -250, z: 1 },
+{ x: 0, y: -306.25, z: 2 },
+{ x: 0, y: -362.5, z: 3 },
+{ x: 0, y: -418.75, z: 4 },
+{ x: 0, y: -475, z: 5 },
+
+{ x: -50, y: -481.25, z: 6 },
+{ x: -100, y: -487.5, z: 7 },
+{ x: -150, y: -493.75, z: 8 },
+{ x: -200, y: -500, z: 9 },
+
+{ x: -200, y: -575, z: 10 },
+{ x: -200, y: -650, z: 11 },
+{ x: -200, y: -725, z: 12 },
+{ x: -200, y: -800, z: 13 },
+
+{ x: -200, y: -868.75, z: 14 },
+{ x: -200, y: -937.5, z: 15 },
+{ x: -200, y: -1006.25, z: 16 },
+{ x: -200, y: -1075, z: 17 },
+
+{ x: -132.5, y: -1078.75, z: 18 },
+{ x: -65, y: -1082.5, z: 19 },
+{ x: 2.5, y: -1086.25, z: 20 },
+{ x: 70, y: -1090, z: 21 },
+
+{ x: 142.5, y: -1090, z: 22 },
+{ x: 215, y: -1090, z: 23 },
+{ x: 287.5, y: -1090, z: 24 },
+{ x: 360, y: -1090, z: 25 },
+
+{ x: 450, y: -1090, z: 26 },
+{ x: 540, y: -1090, z: 27 },
+{ x: 630, y: -1090, z: 28 },
+{ x: 720, y: -1090, z: 29 },
+
+// Mốc 8 đến mốc 9 ////VIP1 = 30
+{ x: 720, y: -1000, z: 30 },  
+{ x: 720, y: -930, z: 31 },
+{ x: 720, y: -860, z: 32 },
+{ x: 720, y: -860, z: 33 },
+
+{ x: 720, y: -742.5, z: 34 },
+{ x: 720, y: -682.5, z: 35 },
+{ x: 720, y: -625, z: 36 },
+{ x: 720, y: -625, z: 37 },
+
+{ x: 825, y: -612.5, z: 38 },
+{ x: 825, y: -606.25, z: 39 },
+{ x: 930, y: -600, z: 40 },
+{ x: 930, y: -600, z: 41 },
+
+{ x: 950, y: -500, z: 42 },
+{ x: 950, y: -450, z: 43 },
+
+// Mốc 12 đến mốc 13 ----------------------
+{ x: 970, y: -400, z: 44 },
+
+{ x: 380, y: -1470, z: 45 },
+
+{ x: 550, y: -1470, z: 46 },
+{ x: 550, y: -1470, z: 47 },
+{ x: 720, y: -1470, z: 48 },
+{ x: 720, y: -1470, z: 49 },
+
+{ x: 885, y: -1470, z: 50 },
+{ x: 885, y: -1470, z: 51 },
+{ x: 1050, y: -1470, z: 52 },
+{ x: 1050, y: -1470, z: 53 },
+
+// Mốc 15 đến mốc 16    VIP 2 == 54
+{ x: 1180, y: -1470, z: 54 },
+
+{ x: 1410, y: -1470, z: 55 },
+
+// Mốc 16 đến mốc 17
+{ x: 1585, y: -1470, z: 56 },
+
+{ x: 1760, y: -1470, z: 57 },
+
+// Mốc 17 đến mốc 18
+{ x: 1775, y: -1605, z: 58 },
+
+{ x: 1790, y: -1740, z: 59 },
+
+// Mốc 18 đến mốc 19
+{ x: 1940, y: -1740, z: 60 },
+
+{ x: 2090, y: -1740, z: 61 },
+
+// Mốc 19 đến mốc 20
+{ x: 2090, y: -1740, z: 62 },
+{ x: 2205, y: -1740, z: 63 },
+{ x: 2205, y: -1740, z: 64 },
+
+{ x: 2320, y: -1740, z: 65 }
 
 ];
 
+ let member1 = get_player("haiz1");
+ let member2 = get_player("Ynhi");
+	
+if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
+{}
+else return
+
+	
 
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
-   
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
+
+	
+	        var  targetNOsafe = solobossNO({ max_range: 180}) 
+		var currentTarget = get_nearest_monster_solobosskill() 
+		if(currentTarget && currentTarget.target && targetNOsafe.length == 0) 
+		{
+			nguyhiem = 0
+if ( z > 30 && z < 45) z -= 1;
+if ( z > 54 ) z -= 1;
+			game_log("ZZZ = !!!!!!  "+ z  );	
+	return
+		}
+			
+
 game_log("ZZZ = !!!!!!  "+ z  );	
 
 
@@ -74,22 +173,23 @@ game_log("ZZZ = !!!!!!  "+ z  );
       // Lệnh riêng của bạn khi targetkill = 1
 	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
              use_skill("taunt", targetkill);
-
+          nguyhiem = 0
 	/////////////////////////////////    
     } else if (targetkill.length === 0 && targetNO.length == 0) {
       // Lấy đối tượng có z tương ứng
       let result = toado.find(item => item.z === z);
-
+      nguyhiem = 0
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 20) {
+      if (z < 92) {
         z++;
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
       // Quay lại 
+	    nguyhiem = 1
       if (z > 1) {
         z--;
       }
@@ -120,7 +220,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 
 	
-}, 5000);
+}, 3000);
 
 
 
@@ -534,7 +634,7 @@ else
 changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 }
 ///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a2" )
+if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a222" )
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
 changeitem({ slot: "offhand", name : "sshield", level : 7 });	
@@ -790,7 +890,7 @@ setInterval(function(){
 	if(!attack_mode || character.rip ||  is_moving(character)) return;
 	
 if (checkTimeBetweenCalls() === 1) return;
-
+if (nguyhiem == 1)return
 
 	const entity1 = get_entity(character.target) // co the doi taget thu cong
 	
