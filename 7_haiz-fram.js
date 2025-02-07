@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.8");
+game_log("Game vs 1.9");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1537,6 +1537,7 @@ if (boss_even_fight ==1)
 		  delay = ms_to_next_skill("attack"); 
 	}
  game_log("time = !!!!!! "+delay);
+	if(delay >500)delay = delay/2;
 
 },delay); // Loops every 1/4 seconds.	
 	
