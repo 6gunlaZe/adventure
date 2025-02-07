@@ -21,10 +21,10 @@ setInterval(function() {
 if (foxmode = 0 ) return
 
 superMOVE()
-
-
-
-
+	
+ if (character.moving || smart.moving) return
+	let leader = get_player("haiz");
+if ( distance(character, leader) > 250  || !leader)mageMagiPort()
 
 
 
