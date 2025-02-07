@@ -15,7 +15,7 @@ let back = 0
 let receivedData
 
 //////////////////////////
-let foxmode = 1
+let foxmode = 0
 //FRAM FOXNIX
 setInterval(function() {
 if (foxmode = 0 ) return
@@ -52,7 +52,7 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 }
 	
 
-if (lastMain && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
+if (lastMain && character.mp > 1700 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	use_skill("blink", [lastMain.x, lastMain.y])
 }
 
@@ -94,7 +94,7 @@ if (back == 1)
         join('icegolem');
 	}
 ////////////////////////////////////////////	
-if(parent.S.icegolem)
+if(parent.S.icegolem && foxmode == 0)
 	{
 	  var target2= get_nearest_monster({type: "icegolem",});	
 		
@@ -107,7 +107,7 @@ if(parent.S.icegolem)
 	
 	
 	}
-	if(parent.S.icegolem) return //su kien ice thi se tu hoat dong không có di theo lederr
+	if(parent.S.icegolem && foxmode == 0) return //su kien ice thi se tu hoat dong không có di theo lederr
 	
 ////////////////////////////////////////////////	
 	
@@ -208,6 +208,9 @@ function on_cm(name, data) {
 	}
 
 
+	if(name == "haiz" && data == "foxmode" ){
+           foxmode = 1
+	}
 	
 	
 	
