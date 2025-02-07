@@ -9,7 +9,7 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = ""
+var crepp = "ghost"
 let receivedData
 let delayaoe  = Date.now()
 
@@ -74,8 +74,22 @@ setInterval(function() {
     leave_party();
 	}
 	
+if (!character.party)return	
+
+if (smart.moving && receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const Map = receivedData.map;  // Lấy tên bản đồ
+        const X = receivedData.x;      // Lấy tọa độ X
+        const Y = receivedData.y;      // Lấy tọa độ Y	
+     if ( character.map == Map && distance(character, {x: X, y: Y}) < 150 )stop()  ////dưng lai khi duoc dich chuyen
+	    
+ }
+
 	
-	if (leader && distance(character, leader) < 130) return
+if (leader && distance(character, leader) < 130) return
+
+
+
+	
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 
@@ -116,6 +130,7 @@ setInterval(function() {
 function on_magiport(name){
     if(name == "nhiY"){
         accept_magiport(name);
+	    stop() 
     }
 }
 

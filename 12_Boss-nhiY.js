@@ -21,15 +21,15 @@ setInterval(function() {
 if (foxmode = 0 ) return
 
 superMOVE()
-
-
-
-
+	
+ if (character.moving || smart.moving) return
+	
+mageMagiPort()
 
 
 
 	
-}, 500);
+}, 2500);
 ////////////////////////
 
 
@@ -43,6 +43,11 @@ if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y 
 }
 
 if (SM === 1) {
+
+  let x = checkdichuyen.x;
+  let y = checkdichuyen.y;
+  let map = checkdichuyen.map;
+	
 	
 for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
     if (checkdichuyen.plot[i].map == character.map) {
@@ -52,10 +57,14 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 }
 	
 
-if (lastMain && character.mp > 1700 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
+if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	use_skill("blink", [lastMain.x, lastMain.y])
+if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
+	
 }
 
+
+	
 }
 
 	
@@ -283,14 +292,18 @@ function mageMagiPort() {
         && character.mp > G?.skills?.magiport?.mp
         && ((character.mp - G.skills.blink.mp) > 100)) {
 
-        for (let char in parent.party) {
-            if (char !== character.name //Don't magiport self
-                && char !== "MuaBan" //Don't magiport the Merchant
-                && (!get_player(char))) {
-                use_skill("magiport", char);
-                return;
-		}
-        }
+let keys = Object.keys(parent.party).reverse();
+for (let char of keys) {
+    // Kiểm tra các điều kiện và không thực hiện magiport với một số nhân vật nhất định
+    if (char !== character.name  // Không magiport chính mình
+        && char !== "MuaBan"     // Không magiport người bán hàng
+        && (!get_player(char))) { // Nếu không phải là người chơi
+        use_skill("magiport", char);
+        return;
+    }
+}
+
+	    
     }
 }
 

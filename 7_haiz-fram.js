@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.2");
+game_log("Game vs 1.3");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -14,7 +14,7 @@ game_log("tên nhân vât!! = " +character.id);
 game_log("host = " +host);
 
 let looop = 8
-
+let foxmode = 1 //1 la nhiY 0 la angioseal
 
 const TenMinutesInMs = 10 * 60 * 1000
 const Ten7MinutesInMs = 7 * 60 * 1000
@@ -201,7 +201,9 @@ if ( region == "ASIA" && serverIden == "I" )
 	}
 }	
 
-if(bosstime == 0 && parent.party_list.includes("angioseal") && killangioseal == 1)stop_character("angioseal")	
+if(bosstime == 0 && parent.party_list.includes("angioseal") && killangioseal == 1)stop_character("angioseal")
+if(bosstime == 0 && parent.party_list.includes("nhiY") && killangioseal == 1 && foxmode == 1 && !smart.moving )stop_character("nhiY")
+	
 if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 	
 /////////////////	
@@ -460,12 +462,22 @@ function on_cm(name, data) {
 	  }
 	  else
 	  {
+		  if (foxmode == 0){
 		parent.api_call("disconnect_character", {name: "Ynhi"});
 		stop_character("Ynhi");  
+		  }
+		  else 
+		  {
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    
+		  }
+
+			  
 	  }
 		  bosstime = 1
 	    timekillboss = Date.now()
-		start_character("angioseal", 21);
+	  if (foxmode == 1)start_character("nhiY", 12);
+	  if (foxmode == 0)start_character("angioseal", 21);	  
 }
 	
 		
@@ -716,45 +728,50 @@ setInterval(function() {
 	}
 ////////////////////////////////////
 	const mast11 = (parent.party_list ?? []).some(c => c === 'angioseal');
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
 	const nearA = get_player("angioseal");
+	const nearB = get_player("nhiY");
+
+if (framboss > 0  && foxmode11 && foxmode == 1 )send_cm("nhiY", "foxmode");
 	
-if (framboss == 1 && !smart.moving && mast11 && framboss1  <5 ){
+	
+if (framboss == 1 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1  <5   ){
 	send_cm("angioseal", "boss1");
 	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
 framboss1 += 1
     });
 }
-if (framboss == 2 && !smart.moving && mast11 && framboss1  <5 ){
+if (framboss == 2 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1  <5 ){
 	send_cm("angioseal", "boss2");
 	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 3 && !smart.moving && mast11 && framboss1  <5 ){
+if (framboss == 3 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1  <5 ){
 	send_cm("angioseal", "boss3");
 	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
 framboss1 += 1
     });
 }		
-if (framboss == 4 && !smart.moving && mast11 && framboss1 <5  ){
+if (framboss == 4 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1 <5  ){
 	send_cm("angioseal", "boss4");
 	smart_move({ map: "main", x: 1312, y: -200 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 5 && !smart.moving && mast11 && framboss1 <5  ){
+if (framboss == 5 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1 <5  ){
 	send_cm("angioseal", "boss5");
 	smart_move({ map: "main", x: 700, y: 1800 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 6 && !smart.moving && mast11 && framboss1 <5  ){
+if (framboss == 6 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1 <5  ){
 	send_cm("angioseal", "boss6");
 	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 7 && !smart.moving && mast11 && framboss1 <5  ){
+if (framboss == 7 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1 <5  ){
 	send_cm("angioseal", "boss7");
 	smart_move({ map: "main", x: -1137, y: 455 }, () => {
 framboss1 += 1
@@ -771,16 +788,20 @@ framboss1 += 1
 	
 	
 	
-if ( nearA && framboss1 > 0 && !smart.moving ){	
+if ( (  (nearA && foxmode == 0) ||  (nearB && foxmode == 1)  ) && framboss1 > 0 && !smart.moving ){	
 var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 if (targetsoloboss.length == 0) //danh xong
 	{
 		framboss1 = 0
-		         stop_character("angioseal")
+		     if(foxmode == 0)stop_character("angioseal")
 		framboss = 0
 		 bosstime = 0
 		smart_move({ map: maptrain, x: farmX, y: farmY }, () => {
 		framboss = 0
+		 if(foxmode == 1){
+			 stop_character("nhiY")
+			 if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+		 }
 		 bosstime = 0
 
     });	
@@ -1149,7 +1170,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
-if (Date.now() < delayBug +15000 ) return	
+if (Date.now() < delayBug +30000 ) return	
 /////////////////	
 	let pings = Math.min(...parent.pings)
 					// game_log("ping!!! = " +pings);
