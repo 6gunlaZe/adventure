@@ -292,14 +292,18 @@ function mageMagiPort() {
         && character.mp > G?.skills?.magiport?.mp
         && ((character.mp - G.skills.blink.mp) > 100)) {
 
-        for (let char in parent.party) {
-            if (char !== character.name //Don't magiport self
-                && char !== "MuaBan" //Don't magiport the Merchant
-                && (!get_player(char))) {
-                use_skill("magiport", char);
-                return;
-		}
-        }
+let keys = Object.keys(parent.party).reverse();
+for (let char of keys) {
+    // Kiểm tra các điều kiện và không thực hiện magiport với một số nhân vật nhất định
+    if (char !== character.name  // Không magiport chính mình
+        && char !== "MuaBan"     // Không magiport người bán hàng
+        && (!get_player(char))) { // Nếu không phải là người chơi
+        use_skill("magiport", char);
+        return;
+    }
+}
+
+	    
     }
 }
 
