@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.3");
+game_log("Game vs 1.6");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1163,11 +1163,27 @@ function shifting() {
     shift(0, 'xpbooster');
 }
 
+
+//////////////
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
+
+
+
+
+
+
+let delay = 200
 //////////////////////////////////////////////////////////////////////////
 var attack_mode= true
 
 setInterval(function(){
-
+  delay = ms_to_next_skill("attack"); 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
 if (Date.now() < delayBug +30000 ) return	
@@ -1514,12 +1530,13 @@ if (boss_even_fight ==1)
 		
 		set_message("Attacking");
 		attack(target);
+		  delay = ms_to_next_skill("attack"); 
 	}
 
 
+},delay); // Loops every 1/4 seconds.	
 	
-	
-},1000/looop); // Loops every 1/4 seconds.
+///  },1000/looop); // Loops every 1/4 seconds.
 
 
 ///////////
