@@ -1532,7 +1532,7 @@ if (boss_even_fight ==1)
 		attack(target);
 		  delay = ms_to_next_skill("attack"); 
 	}
-
+ game_log("time = !!!!!! "+delay);
 
 },delay); // Loops every 1/4 seconds.	
 	
@@ -1785,7 +1785,7 @@ function skillwarboss(taget)
 		{
  var targetsabc = getBestTargets({ max_range: 165, type: taget.mtype , target : "haiz" }) 
   var targetsabcd = getBestTargets({ max_range: 165, type: taget.mtype , Nohavetarget : 1 }) //ham bo dem quai vatv
-	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0	
+	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0 && ms_to_next_skill("attack") > 95	
  )
 	{
 		skillriu = 1	
