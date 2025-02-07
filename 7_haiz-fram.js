@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.5");
+game_log("Game vs 1.3");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1166,14 +1166,8 @@ function shifting() {
 //////////////////////////////////////////////////////////////////////////
 var attack_mode= true
 
-///////////////////////
+setInterval(function(){
 
-
-let delay = 200; // Thời gian trễ giữa mỗi vòng lặp (1 giây)
-
-async function eventer() {
-    try {
-	    
 	//use_hp_or_mp();
 	use_hp_or_mp1();
 if (Date.now() < delayBug +30000 ) return	
@@ -1184,12 +1178,10 @@ if (Date.now() < delayBug +30000 ) return
 if (is_disabled(character) || pings >500)
 {
 	looop = 4
-	delay = 300
 }
 else
 {
 	looop = 8
-	delay = 100
 }	
 
 if (checkTimeBetweenCalls() === 1) return;
@@ -1527,17 +1519,7 @@ if (boss_even_fight ==1)
 
 	
 	
-    } catch (e) {
-        // Bắt lỗi và xử lý khi có lỗi xảy ra
-        console.error("Lỗi xảy ra:", e);
-    }
-
-    // Tiếp tục gọi lại eventer sau khoảng thời gian delay
-    setTimeout(eventer, delay);
-}
-
-// Bắt đầu vòng lặp
-eventer();
+},1000/looop); // Loops every 1/4 seconds.
 
 
 ///////////
@@ -2795,7 +2777,3 @@ setInterval(() => {
 
 
 ///////////
-
-
-
-
