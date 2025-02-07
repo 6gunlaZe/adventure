@@ -74,6 +74,7 @@ setInterval(function() {
     leave_party();
 	}
 	
+if (!character.party)return	
 
 if (smart.moving && receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
         const Map = receivedData.map;  // Lấy tên bản đồ
