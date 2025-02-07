@@ -96,8 +96,8 @@ farmY = -1217
    // let farmX = 372 //character.real_x;
    // let  farmY = -723 //character.real_y;
 
-var bossss = "phoenix"; 
-var bossss1 = "greenjr"; 
+var bossss = "phoenix1"; 
+var bossss1 = "greenjr1"; 
 let bossHP = 165000  // gioi han hp cua boss - canh theo lv1
 var bossarmy=[ "aaa", "bbb", "cccc"];  
 
@@ -822,12 +822,12 @@ if (frankymode == 1)
 		{
 		
 		
-		var target= get_nearest_monster({type: "greenjr"});
+		var target= get_nearest_monster({type: "greenjr1"});
 		if(target) change_target(target);
 		else
 		{
 			
-		var target= get_nearest_monster({type: "jr"});
+		var target= get_nearest_monster({type: "jr1"});
 		  if(target) change_target(target);
 		else
 		{
@@ -838,7 +838,7 @@ if (frankymode == 1)
 		{
 		
 		
-		var target= get_nearest_monster({type: "greenjr"});
+		var target= get_nearest_monster({type: "greenjr1"});
 		if(target) change_target(target);
 		else
 		{
