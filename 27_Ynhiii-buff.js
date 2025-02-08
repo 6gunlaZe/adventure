@@ -603,7 +603,7 @@ if ( currentTarget && cung && kitefram == 1) {
  if(currentTarget)chuyendoithongminh(currentTarget)	
 ////////////////////////
 var target11= get_nearest_monster1({type: crepp,  NO_target: 1});	
-if (!target1 && character.targets <= 6 && target11)
+if (!target1 && character.targets <= 8 && target11 && character.hp > 3000)
 {
 	change_target(target11)
       if(can_attack(target11))attack(target11);
