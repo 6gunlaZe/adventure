@@ -764,8 +764,31 @@ setInterval(() => {
 	timbosskill()
 	}
 ///////////////////////////////////////////	
+if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >= 1) && character.map == "main" )
+{
+
+	if(character.q.exchange) {
+        return;
+    }	
+		
+		
+    let first_index = -1;
+    for(let i = 0; i < 42; i++) {
+        if(character.items[i]?.name == "greenenvelope") {
+            if(character.items[i].q >= 1) {
+                exchange(i);
+                break;
+            } else if(first_index == -1) {
+                first_index = i;
+            } else {
+                swap(first_index, i);
+                break;
+            }
+        }
+    }
 	
-	
+}
+/////////////////////////////////////////////////////////////////////////////////	
 	if(character.map == "winter_inn")
 	{
 	if(character.q.exchange) {
