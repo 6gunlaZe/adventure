@@ -1409,7 +1409,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	/////////////// chay vong vong gom quai lai
  chuyendoithongminhFRAM(target)  
 	
-	 kiteSP(target,soluongquai)
+	if (framfocus == 0 ) kiteSP(target,soluongquai)
                  var cungf = get_player(nhanvatfram); 
 	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
