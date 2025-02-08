@@ -558,20 +558,6 @@ else if ( (character.max_mp - character.mp) > 400) {
 ///////////
 	
 
-//
-function on_party_request(name) {
-if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" ) {
-            accept_party_request(name);
-        }
-        if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
-            accept_party_request(name);
-        }	
-	
-	
-    }
-
-
-
 
 ////////////////////////////////////////////////////////
 setInterval(function() {
