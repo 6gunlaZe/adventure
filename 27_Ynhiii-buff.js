@@ -13,6 +13,7 @@ var crepp = "ghost"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
+var nhanvatfram = "6gunlaZe"
 let kitefram
 
 if (delayboss == undefined) delayboss = Date.now()
@@ -93,7 +94,7 @@ if (leader && distance(character, leader) < 130) return
 	
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
-let leaderfram = get_player("6gunlaZe");
+let leaderfram = get_player(nhanvatfram);
 if (framfocus == 1 && leaderfram && distance(character, leaderfram) < 230 && distance(character, leader) < 230 && get_nearest_monster({type:crepp}))
 {
 	kitefram = 1
@@ -556,12 +557,12 @@ if(!attack_mode || character.rip ) return;
     
 		///////////
 		var cung1 = get_player("haiz"); 
-	var cung = get_player("6gunlaZe"); 
+	var cung = get_player(nhanvatfram); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )kite(cung1,50);
    }
 if ( currentTarget && cung && kitefram == 1) {
-	if(!can_attack(currentTarget) )kite(cung,20);
+	if(!can_attack(currentTarget) )kite(cung,15);
    }
 	
 	////////////
