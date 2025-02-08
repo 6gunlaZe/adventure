@@ -15,7 +15,8 @@ game_log("host = " +host);
 
 let looop = 8
 let foxmode = 1 //1 la nhiY 0 la angioseal
-
+let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
+var nhanvatfram = "6gunlaZe"
 const TenMinutesInMs = 10 * 60 * 1000
 const Ten7MinutesInMs = 7 * 60 * 1000
 let bankk = 0
@@ -1409,15 +1410,15 @@ if(( targets12.length > 0 ) && framboss == 0 )
  chuyendoithongminhFRAM(target)  
 	
 	 kiteSP(target,soluongquai)
-
+                 var cungf = get_player(nhanvatfram); 
 	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
 		if(targets1 ) {
 			change_target(targets1);  
 	               //  target = targets1
 					  }
-	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]    )kite(target,character.range + 3);
-	
+	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 0  )kite(target,character.range + 3);
+	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 1 && cungf &&  distance(character,cungf)  < 200  )kite(cungf,character.range + 3);
 
 
      skillwarboss(target)
