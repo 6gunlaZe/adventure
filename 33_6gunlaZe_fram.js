@@ -880,13 +880,24 @@ if (character.targets == 0 || character.hp > 4000) {
 	return;
 }
 
-if (character.targets >= 1 && character.hp < 4000 && !is_on_cooldown("scare") ) 
+if (character.targets >= 1 && character.hp < 3000 && !is_on_cooldown("scare") ) 
 {
 	changeitem({ slot: "orb", name : "jacko", level : 1 });
 	use_skill("scare");
 	game_log("skill scare");
 
 }
+	
+if (character.targets >= 3 && !is_on_cooldown("scare") ) 
+{
+	changeitem({ slot: "orb", name : "jacko", level : 1 });
+	use_skill("scare");
+	game_log("skill scare");
+}
+
+
+
+	
 }
 
 
