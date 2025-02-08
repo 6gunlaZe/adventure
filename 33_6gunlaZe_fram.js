@@ -266,43 +266,7 @@ if (character.ping > 600 )
 }, 1000);
 
 
-////
-setInterval(function() {
-	if (host == 0 ) return
-	
-	
-if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
-{
-	bankk = 0
-    start_character("MuaBan", 6);	
-}	
-//////////////////////////	Cho 10p danh boss
-if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
-{	
-	bosstime = 0
-}	
-//////////////////////	
-  if (trieuhoi == 0)
-  {
-	  trieuhoi = 1
-if(!parent.party_list.includes("haiz")) start_character("haiz", 7);
-if (modeYnhi == 0)	 
-{
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
-}
-else if  (modeYnhi == 1)
-{
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
-}
-else if  (modeYnhi == 2)
-{
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
-}
-	  
-  }
 
-}, 1000); //trieu hoi 1 lan dau
-///////////////////////////
 
 setInterval(function() {
 	
@@ -349,69 +313,7 @@ setInterval(function() {
 /////////////		
 
 	
- ///////////////////////// 
-	
-if (host == 0 ) return	
-	
-if(!parent.party_list.includes("haiz") && bosstime == 0) start_character("haiz", 7);
-	
-if(!parent.party_list.includes("haiz") && parent.party_list.includes("angioseal") && killangioseal == 1)stop_character("angioseal")	
-/////////////////	
-if (modeYnhi == 0 && frankymode == 0)	 
-{
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
-}
-else if  (modeYnhi == 1 && frankymode == 0)
-{
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
-}
-else if  (modeYnhi == 2 && frankymode == 0)
-{
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
-}
-//nhiY 14 = fram rieng
-//	nhiY 2 = binh mana di dong
-//	
 
-		
-	
-	
-}, 40000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
-
-
-
-///// chuyen doi mode khi co boss
-setInterval(function() {
-  
-if (host == 0 ) return	
-	
- if (checkboss == 1 && parent.party_list.includes("haiz") && parent.party_list.includes("nhiY") && bossmode == 0 ) {
-
-	 stop_character("nhiY")
-	 stop_character("haiz")
-	 bossmode = 1
- }
-	
-	
-	
-  
-if(!parent.party_list.includes("haiz") && checkboss == 1 && bossmode == 1 ) start_character("haiz", 11);
-	 
-if(!parent.party_list.includes("nhiY") && checkboss == 1 && bossmode == 1) start_character("nhiY", 12);
-
-
-	
- if (checkboss == 0 && parent.party_list.includes("haiz") && parent.party_list.includes("nhiY") && bossmode == 1 ) {
-
-	 stop_character("nhiY")
-	 stop_character("haiz")
-	 bossmode = 0
- }	
-	
-	
-//nhiY 14 = fram rieng
-//	nhiY 2 = binh mana di dong
-//	
 	
 }, 40000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
 
@@ -421,50 +323,7 @@ if(!parent.party_list.includes("nhiY") && checkboss == 1 && bossmode == 1) start
 
 
 
-/////////////
 
-setInterval(function() {
-	
-if (host == 0 ) return	
-	
-    if (character.esize < 17) {
-       
-	
-	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
-		
-    if (!MuaBan) {
-      start_character("MuaBan", 6);
-		game_log("trieu hoi MuaBan!!");
-	}
-	}
-	
-	
-}, 160000); // move to crabs every 60s
-
-/////
-
-
-/////////////
-
-setInterval(function() {
-	
-if (host == 0 ) return	
-	
-    if (character.esize > 25) {
-       
-	
-	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
-		
-    if (MuaBan) {
-    //  parent.api_call("disconnect_character", {name: "MuaBan"});
-	//	stop_character("MuaBan")
-	start_character("MuaBan", 6);	
-		game_log(" MuaBan da xong nhiem vu!!");
-	}
-	}
-	
-
-}, 9900000); // auto re connet mua ban moi 3h
 
 /////
 function get_nearest_monster1(args) ///mod
@@ -568,55 +427,6 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
     // We will return all entities, so that this function can be used with skills that target multiple entities in the future
     return entities
 }
-
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-
-var draw_debug = true;
-
-function on_draw(){
-  if(draw_debug){
-      clear_drawings();
-/////////
-	   draw_circle(farmX, farmY, 50,  9, 0xf39c12);
-///////////
-	  
-	  
-	  
-	  
-      draw_circle(character.real_x, character.real_y, character.range);
-
-      var target = get_target(character);
-      if(target){
-          draw_line(character.real_x, character.real_y, target.x, target.y);
-      }
-      if(is_moving(character)){
-          draw_line(character.from_x, character.from_y, character.going_x, character.going_y, 1, 0x33FF42);
-      }
-    }
-
-    for(id in parent.entities){
-      var entity = parent.entities[id];
-      var entity_targ = get_target_of(entity);
-      if(entity_targ && entity_targ.name === character.name && entity.moving){
-        draw_line(entity.from_x, entity.from_y, entity.going_x, entity.going_y, 1, 0xda0b04);
-        draw_circle(entity.x, entity.y, entity.range, 1, 0xda0b04);
-      }
-    }
-}
-
-
-
-////////////////////////////////////
 
 
 
