@@ -151,7 +151,7 @@ else return
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 7 && targetkill.length == 0){
+if (get_NUMber_kill() >= 8 && targetkill.length == 0){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
 	smart_move({ map: "cave", x: -194, y: -1281 })
