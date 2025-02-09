@@ -167,12 +167,40 @@ function storeItems()
 					/////
 					if (is_bank_pack_full_real(storeDef.bank) )
 					{
+						if (!is_bank_pack_full_real("items0") )
+						{
 								parent.socket.emit("bank", {
 										operation: "swap",
 										inv: id,
 										str: -1,
 										pack: "items0"
-									});					
+									});	
+						}
+						else if (!is_bank_pack_full_real("items6") )
+						{
+								parent.socket.emit("bank", {
+										operation: "swap",
+										inv: id,
+										str: -1,
+										pack: "items6"
+									});	
+						}
+						else if (!is_bank_pack_full_real("items7") )
+						{
+								parent.socket.emit("bank", {
+										operation: "swap",
+										inv: id,
+										str: -1,
+										pack: "items7"
+									});	
+						}
+                                                  else
+						{
+				                  \\\khẩn cấp full bank
+                                                  \\\
+						}
+						
+						
 					}
 					else
 					{
