@@ -425,7 +425,7 @@ if (checkTimeBetweenCalls() === 1) return;
 const leader1 = get_player('haiz');
 const range1 = character.range; // This may need tuning
 const dist1 = distance(character, leader1);
-if (dist1 > range1 * 2)
+if (dist1 > 200)
   return false;	
 /////////////////	
 
