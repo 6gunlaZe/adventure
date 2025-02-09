@@ -1206,6 +1206,7 @@ var upgradeWhitelist = /// list moi
 		wingedboots: 3,
 		froststaff: 4,
 		cupid: 5,
+		oozingterror: 5,
 		
         coat: 9,
 	};
