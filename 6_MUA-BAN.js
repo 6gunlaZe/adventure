@@ -4,6 +4,8 @@
 ///// start_character("MuaBan", 6); 
 // "gem0" , "ornament" , "candycane" , "mistletoe" , "xgloves" , "frankypants" , "starkillers" , "wbookhs"
 /// send_mail('Plutus', '10 keys', 'nice', true)
+game_log("game 1.0")
+
 map_key("A", "toggle_run_code");
 
 map_key("Z", "snippet", "parent.stop_runner();");
