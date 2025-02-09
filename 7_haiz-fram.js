@@ -1856,7 +1856,7 @@ let SOLUONG = 3  ///so nguoi choi xung quanh de kich hoat
 		var f2 = get_player("6gunlaZe"); 
 
 //////////////bo chay khi moi nguoi chay het
-if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && f1 && f2 && character.hp < 6000)
+if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 9000)
 {
 
 smart_move({ map: maptrain, x: farmX, y: farmY })
