@@ -39,7 +39,7 @@ if (character.map != "crypt") return;
 	
 let toado = [
 
-[
+
     { x: 0, y: -250, z: 1 },
     { x: 0, y: -306.25, z: 2 },
     { x: 0, y: -362.5, z: 3 },
