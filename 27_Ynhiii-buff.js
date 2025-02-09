@@ -86,6 +86,14 @@ if (smart.moving && receivedData && typeof receivedData === 'object' && received
 	    
  }
 
+
+let leaderfram = get_player(nhanvatfram);
+if (framfocus == 1 && leaderfram && distance(character, leaderfram) < 230 && distance(character, leader) < 230 && get_nearest_monster({type:crepp}))
+{
+	kitefram = 1
+	return
+}else kitefram = 0	
+
 	
 if (leader && distance(character, leader) < 130) return
 
@@ -94,12 +102,7 @@ if (leader && distance(character, leader) < 130) return
 	
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
-let leaderfram = get_player(nhanvatfram);
-if (framfocus == 1 && leaderfram && distance(character, leaderfram) < 230 && distance(character, leader) < 230 && get_nearest_monster({type:crepp}))
-{
-	kitefram = 1
-	return
-}else kitefram = 0
+
 	
     // Đảm bảo rằng nhận được thông tin hợp lệ
     if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
