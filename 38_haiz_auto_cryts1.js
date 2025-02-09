@@ -146,14 +146,18 @@ if (member2 && member1 && distance(character, member2) < 150  && distance(charac
 {}
 else return
 
+
+	
+ var  targetkill = solobosskill({ max_range: 320}) 
+ var  targetNO = solobossNO({ max_range: 330}) 
+
 if (get_NUMber_kill() >= 7 && targetkill.length == 0){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
 	smart_move({ map: "cave", x: -194, y: -1281 })
 }
+
 	
- var  targetkill = solobosskill({ max_range: 320}) 
- var  targetNO = solobossNO({ max_range: 330}) 
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 
