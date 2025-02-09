@@ -694,6 +694,10 @@ targets = getBestTargets({ max_range: character.range, type: triancrep, subtype 
 else if ( (frammode == 1 || frammode == 3 || frammode == 6 ) && character.targets <=3 && b2 && distance(character, b2) < 350 ) //fram bat
 	{
 	if (safeframm == 1)targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , havetarget: 1, fire:1 })  //ham bo dem quai vat
+		else
+            {
+                targets = get_nearest_monster1({type: triancrep});
+            }
 // if (safeframm == 1 && character.targets <= 3)targets =getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , fire:1, number : 3  }) 
  if ( character.targets <=0 && safeframm == 1 ) //thu hut quai vat toi thieu từ bên ngoài ma khong giam dame
  {
