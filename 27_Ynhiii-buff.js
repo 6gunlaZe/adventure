@@ -82,7 +82,7 @@ if (smart.moving && receivedData && typeof receivedData === 'object' && received
         const Map = receivedData.map;  // Lấy tên bản đồ
         const X = receivedData.x;      // Lấy tọa độ X
         const Y = receivedData.y;      // Lấy tọa độ Y	
-     if ( character.map == Map && distance(character, {x: X, y: Y}) < 150 )stop()  ////dưng lai khi duoc dich chuyen
+     if ( character.map == Map && distance(character, {x: X, y: Y}) < 150 ) xmove(X, Y); ////dưng lai khi duoc dich chuyen
 	    
  }
 
