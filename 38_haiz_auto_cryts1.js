@@ -31,7 +31,11 @@ let bossA = 0
 let nguyhiem = 0
 /// auto ham nguc cryt
 setInterval(function() {
-if (character.map != "crypt" && z > 100)z = 1
+if (character.map != "crypt" && z > 100){
+	z = 1
+	stop_character("Ynhi")	
+	stop_character("haiz1")	
+}
 if (character.map != "crypt") return;
 
 
