@@ -562,7 +562,7 @@ if(!attack_mode || character.rip ) return;
     
 		///////////
 		var cung1 = get_player("haiz"); 
-	var cung = get_player(nhanvatfram); 
+	let cung = get_player(nhanvatfram); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(ms_to_next_skill("attack") > 200 )kite(cung1,50);
    }
