@@ -13,7 +13,7 @@ var crepp = "ghost"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
-let nhanvatfram = "6gunlaZe"
+var nhanvatfram = "6gunlaZe"
 let kitefram
 
 if (delayboss == undefined) delayboss = Date.now()
