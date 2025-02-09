@@ -34,8 +34,8 @@ setInterval(function() {
 
 if (character.map != "crypt") return;
 
-	
- if (smart.moving) return;
+
+ if (smart.moving || is_moving(character) ) return;
 	
 let toado = [
 
@@ -154,7 +154,7 @@ game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 
 	
-	        var  targetNOsafe = solobossNO({ max_range: 180}) 
+	        var  targetNOsafe = solobossNO({ max_range: 280}) 
 		var currentTarget = get_nearest_monster_solobosskill() 
 		if(currentTarget && currentTarget.target && targetNOsafe.length == 0) 
 		{
@@ -220,7 +220,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 
 	
-}, 3000);
+}, 500);
 
 
 let monsterIds = [];
