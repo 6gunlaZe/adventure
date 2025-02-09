@@ -35,8 +35,8 @@ setInterval(function() {
 if (character.map != "crypt") return;
 
 
- if (smart.moving || is_moving(character) ) return;
-	
+if (smart.moving || is_moving(character) ) return;
+if (z > 100)smart_move({ map: "cave", x: -194, y: -1281 })	
 let toado = [
 
 
@@ -149,6 +149,7 @@ else return
 if (get_NUMber_kill() >= 10 && targetkill.length == 0){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
+	z = 1000
 	smart_move({ map: "cave", x: -194, y: -1281 })
 }
 
