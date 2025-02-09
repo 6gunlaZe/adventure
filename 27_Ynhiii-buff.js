@@ -564,10 +564,10 @@ if(!attack_mode || character.rip ) return;
 		var cung1 = get_player("haiz"); 
 	var cung = get_player(nhanvatfram); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
-	if(!can_attack(currentTarget) )kite(cung1,50);
+	if(ms_to_next_skill("attack") > 200 )kite(cung1,50);
    }
 if ( currentTarget && cung && kitefram == 1) {
-	if(!can_attack(currentTarget) )kite(cung,15);
+	if(ms_to_next_skill("attack") > 200)kite(cung,15);
    }
 	
 	////////////
@@ -639,7 +639,12 @@ if (!target1 && character.targets <= 8 && target11 && character.hp > 3000)
 
 
 
-
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
 
 
 
