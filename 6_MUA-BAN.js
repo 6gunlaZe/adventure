@@ -196,8 +196,6 @@ function storeItems()
 						}
                                                   else
 						{
-				                  \\\khẩn cấp full bank
-                                                  \\\
 						}
 						
 						
