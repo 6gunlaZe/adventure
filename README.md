@@ -9,3 +9,4 @@ stop_character("MuaBan")
 
 stop_character("Ynhi")
 
+enter("crypt","");
