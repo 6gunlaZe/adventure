@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.5");
+game_log("Game vs 1.1");
 
 setInterval(function() {
 
@@ -156,10 +156,10 @@ if (get_NUMber_kill() >= 10 && targetkill.length == 0){
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 
-	
+	        var  targetNOsafe1 = solobossNO1({ max_range: 280}) 	///có a2
 	        var  targetNOsafe = solobossNO({ max_range: 280}) 
 		var currentTarget = get_nearest_monster_solobosskill() 
-		if(currentTarget && currentTarget.target && targetNOsafe.length == 0) 
+		if(currentTarget && currentTarget.target && targetNOsafe1.length == 0 && currentTarget.mtype != "a2") 
 		{
 			nguyhiem = 0
 if ( z > 30 && z < 45) z -= 1;
@@ -167,6 +167,17 @@ if ( z > 52 ) z -= 1;
 			game_log("ZZZ = !!!!!!  "+ z  );	
 	return
 		}
+
+		if(currentTarget && currentTarget.target && targetNOsafe.length == 0 && currentTarget.mtype == "a2") 
+		{
+			nguyhiem = 0
+if ( z > 30 && z < 45) z -= 1;
+if ( z > 52 ) z -= 1;
+			game_log("ZZZ = !!!!!!  "+ z  );	
+	return
+		}
+
+	
 			
 
 game_log("ZZZ = !!!!!!  "+ z  );	
@@ -395,6 +406,40 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
+function solobossNO1(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["a0", "a2", "a1", "a4", "a5" , "a6" , "a8"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+	//////////check cac loai boss
+//  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
+// targetsoloboss.length == 0	
 
 
 
