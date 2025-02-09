@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.3");
+game_log("Game vs 1.5");
 
 setInterval(function() {
 
@@ -146,7 +146,7 @@ else return
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 9 && targetkill.length == 0){
+if (get_NUMber_kill() >= 10 && targetkill.length == 0){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
 	smart_move({ map: "cave", x: -194, y: -1281 })
