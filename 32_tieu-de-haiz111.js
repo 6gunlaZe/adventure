@@ -480,7 +480,7 @@ setInterval(function(){
 ////	khong move gan leader se khong tim muc tieu tan cong	
 const leader1 = get_player('haiz');
 const dist1 = distance(character, leader1);
-if (dist1 > 320)
+if (dist1 > 180)
   return false;	
 /////////////////	
 
