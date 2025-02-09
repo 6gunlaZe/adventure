@@ -314,10 +314,13 @@ const  angle = Math.PI / 9.5 ;
 
 
 
-
+	let delayitem2 = Date.now()
+	let delayitem1 = Date.now()
 
 
 function lowest_health_partymember() {
+	if (Date.now() < 300 + delayitem2) return 
+	delayitem2 = Date.now()
     var party = [];
     if (parent.party_list.length > 0) {
 		for(id in parent.party_list)
@@ -372,6 +375,8 @@ function lowest_health_partymember() {
 
 
 function lowest_health_partymember1() {
+	if (Date.now() < 300 + delayitem1) return 
+	delayitem1 = Date.now()
     var party = [];
     if (parent.party_list.length > 0) {
 		for(id in parent.party_list)
