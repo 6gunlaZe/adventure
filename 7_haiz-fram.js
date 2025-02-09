@@ -1517,7 +1517,8 @@ if (boss_even_fight ==1)
                 use_skill("taunt", target);
 				 game_log("phan no !!!!!!");
             }
- if(character.mp > 100 && !is_on_cooldown("taunt") && (target.target == "Ynhi" || target.target == "nhiY" || target.target == "6gunlaZe" ))
+var f02 = get_player("Ynhi")		
+ if(f02 && target.attack >700 && character.mp > 100 && !is_on_cooldown("taunt") && (target.target == "Ynhi" || target.target == "nhiY" || target.target == "6gunlaZe" ))
             {
                 use_skill("taunt", target);
 				 game_log("phan no !!!!!!");
