@@ -142,9 +142,7 @@ let toado = [
  let member1 = get_player("haiz1");
  let member2 = get_player("Ynhi");
 	
-if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
-{}
-else return
+
 
 
 	
@@ -199,6 +197,11 @@ game_log("ZZZ = !!!!!!  "+ z  );
       // Lấy đối tượng có z tương ứng
       let result = toado.find(item => item.z === z);
       nguyhiem = 0
+	    
+	if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
+              {}
+        else return
+	    
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
       }
