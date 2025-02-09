@@ -146,7 +146,7 @@ if (member2 && member1 && distance(character, member2) < 150  && distance(charac
 {}
 else return
 
-	
+get_NUMber_kill()	
 
  var  targetkill = solobosskill({ max_range: 320}) 
  var  targetNO = solobossNO({ max_range: 330}) 
@@ -223,8 +223,48 @@ game_log("ZZZ = !!!!!!  "+ z  );
 }, 3000);
 
 
+let monsterIds = [];
+function get_NUMber_kill(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=character.range + 150,target=null;
+        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
 
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if (current.hp > 15000)continue
+                if (monsterIds.includes(current.id)) continue
+	
+		if(current.type!="monster" || !current.visible ) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist>min_d) continue
+                 monsterIds.push(current.id)
+		
+	}
+	
+	game_log("Số lượng quái vật kill: " + monsterIds.length)
 
+	return monsterIds.length;
+}
 
 
 
