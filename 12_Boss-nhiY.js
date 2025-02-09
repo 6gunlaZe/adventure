@@ -18,7 +18,7 @@ let receivedData
 let foxmode = 0
 //FRAM FOXNIX
 setInterval(function() {
-if (foxmode = 0 ) return
+if (foxmode == 0 ) return
 
 superMOVE()
 	
@@ -139,7 +139,7 @@ if(parent.S.icegolem && foxmode == 0)
 	move(leader.x,leader.y)
 	}
 	
-	if (leader && distance(character, leader) < 70) return
+	if (leader && distance(character, leader) < 70 & foxmode == 0) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 
