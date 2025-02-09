@@ -609,7 +609,7 @@ if (SM === 1) {
 for (let char in parent.party) {
     // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
     if (char !== character.name && char !== "MuaBan" ) {
-		      if (char == "Ynhi" && framboss !== 0) continue
+		   
         send_cm(char, {
             message: "location",
             x: x,
@@ -631,7 +631,7 @@ else
 for (let char in parent.party) {
     // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
     if (char !== character.name && char !== "MuaBan" && !is_moving(character) ) {
-		      if (char == "Ynhi" && framboss !== 0) continue
+		      
         send_cm(char, {
             message: "location",
             x: character.x,
@@ -643,7 +643,7 @@ for (let char in parent.party) {
 		
 	}
 	    if (char !== character.name && char !== "MuaBan" && is_moving(character) ) {
-			      if (char == "Ynhi" && framboss !== 0) continue
+			     
         send_cm(char, {
             message: "location",
             x: character.going_x,
@@ -656,7 +656,7 @@ for (let char in parent.party) {
 }
 	//////////////////////////////////
 }
-}, 1300);
+}, 1000);
 
 
 
