@@ -211,7 +211,7 @@ function on_cm(name, data) {
 		
 	}
 
-	 if(name == "haiz" && data != "goo" && data != "back" ){
+	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode"){
      receivedData = data
 
 	}
