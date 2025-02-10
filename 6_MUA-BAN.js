@@ -65,6 +65,7 @@ var item2
 let yeucaulevelmoi
 let fixmoi2
 
+let autoupgrapmoi = 1  // ngưng au tu up moi, 0 = auto up moi item 1
 item1 = "coat"
 item2 = "coat"
 yeucaulevelmoi = 6	
