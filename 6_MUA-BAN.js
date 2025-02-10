@@ -1244,6 +1244,41 @@ var upgradeWhitelist = /// list moi
 
 
 
+
+
+var upgradeWhitelistmodebinhthuong = /// list moi
+	{
+		//ItemName, Max Level
+      
+		
+		
+		ololipop: 7,
+		glolipop:7,
+		frankypants: 6,
+		hboots: 6,
+		mittens: 7,
+		ecape: 4,
+		mcape: 4,
+		cape: 4,
+		sshield:7,
+		hgloves: 6,
+		cclaw: 8,
+		dagger: 6,
+		stinger: 6,
+		wingedboots: 6,
+		pmace:6,
+		crossbow:6,
+		wingedboots: 6,
+		froststaff: 7,
+		//cupid: 5,
+		oozingterror: 6,
+		
+	};
+
+
+
+
+
 function scanSLitemUP_2_line()
 {
 	let sl = 0
