@@ -1417,7 +1417,7 @@ var itemSearch1 = character.esize
 let a1 = scanSLmoi(item1)
 let a3 = scanSLmoiVIP(item1)
 
-	if ( a1 < 4  && a3 <=1 )
+	if ( a1 < 4  && a3 <=1 && autoupgrapmoi != 1 )
 	{
 	if (itemSearch1 > 3 &&  moi == 0)	
 	{
