@@ -1471,7 +1471,7 @@ if (character.esize > esize && lvmoi >= yeucaulevelmoi && realup == 1) {
 
 	realup =0
 
-	
+if (autoupgrapmoi ==1) moi = 0; //mode up do binh thuong	
 	
 	for (let i = 0; i < character.items.length; i++) 
 	{
@@ -1681,7 +1681,11 @@ if (d.name == item1 && (moi == 3  || moi == 4 || moi == 5 || moi == 7)   ) conti
 		if (d) {
 		////////////////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////
-			var level = upgradeWhitelist[d.name]; //tim trong danh sach trung ten thi co duoc level cua item
+			var level 
+			if (autoupgrapmoi !=1) level = upgradeWhitelist[d.name];
+			if (autoupgrapmoi ==1) level = upgradeWhitelistmodebinhthuong[d.name];
+
+				
 			if(level && d.level < level)
 			{
 				let i = scan_minlevel(d.name)
