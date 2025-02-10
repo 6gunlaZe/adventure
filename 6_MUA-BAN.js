@@ -1251,7 +1251,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		//ItemName, Max Level
       
 		
-		
+		vgloves:6,
 		ololipop: 7,
 		glolipop:7,
 		frankypants: 6,
