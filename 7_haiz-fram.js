@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.1");
+game_log("Game vs 1.7");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1408,8 +1408,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	
 	/////////////// chay vong vong gom quai lai
  chuyendoithongminhFRAM(target)  
-	game_log("test2")
-
+	
 	if (framfocus == 0 ) kiteSP(target,soluongquai)
                  var cungf = get_player(nhanvatfram); 
 	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
@@ -2063,19 +2062,16 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 
 function chuyendoithongminhFRAM(taget)
 {
-game_log("test1")
+
 if (skillbua == 1 || skillriu == 1)return
 let arr = ["phoenix", "mvampire", "jr","greenjr", "grinch", "fvampire","stompy", "mvampire", "jr"]; ///các boss dùng kiếm lửa
 let magic = 0
 var targetstype = getBestTargets({ max_range: character.range , type: taget.mtype , target : "haiz" , number : 1}) 
 var targetsabc = getBestTargets({ max_range: character.range + 5, type: taget.mtype }) 
 if (targetstype.damage_type == "magical")magic = 1;
-game_log("test3")
 
 if (arr.includes(taget.mtype))
 {
-	game_log("test4")
-
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   if (character.hp/character.max_hp >= 0.3)changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
 else
@@ -2089,7 +2085,6 @@ else
   changeitem({ slot: "offhand", name : "sshield", level : 7 });		
 }
 }
-game_log("test5")
 
 
 }
@@ -2099,20 +2094,16 @@ else
   {
      changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
      changeitem({ slot: "offhand", name : "ololipop", level : 8 });
-	  game_log("test7")
   }
   else
 {
 if (magic = 0)
 {
-	game_log("test6")
-
 	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
 }
 else
 {
-	game_log("test8")
 	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "sshield", level : 7 });		
 }
@@ -2126,13 +2117,11 @@ if(character.hp/character.max_hp< 0.6  )
 {
 	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
 	changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
-	game_log("test9")
 
 }
 
 else 
 	{
-		game_log("test10")
 		changeitem({ slot: "gloves", name : "mittens", level : 9 });
 		changeitem({ slot: "helmet", name : "helmet1", level : 8 });
 	}
