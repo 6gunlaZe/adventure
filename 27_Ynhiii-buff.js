@@ -244,12 +244,12 @@ setInterval(() => {
 }
 	
 	
-if ((character.max_mp-character.mp) <300)use_skill("partyheal");
 
 	
 	if (started == undefined) started = Date.now()
     if ( Date.now() < started + 1000) return
 	if(is_on_cooldown("use_hp")) return 
+if ((character.max_mp-character.mp) <300)use_skill("partyheal");
 
 if (character.hp < 2100 && character.mp > 100) {
      if(can_use("use_hp"))use_skill("use_hp");
