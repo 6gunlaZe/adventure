@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.7");
+game_log("Game vs 1.8");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1463,6 +1463,8 @@ if(( targets12.length > 0 ) && framboss == 0 )
 		if(targets1 ) {
 			change_target(targets1);  
 	               //  target = targets1
+			game_log("testtt");
+
 					  }
 	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 0  )kite(target,character.range + 3);
 	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 1 && cungf &&  distance(character,cungf)  < 200  )kite(cungf,character.range - 8);
