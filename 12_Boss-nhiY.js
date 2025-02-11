@@ -22,20 +22,15 @@ if (foxmode == 0 ) return
 
 superMOVE()
 	
- if (character.moving || smart.moving) return
-	
-mageMagiPort()
-
-
 
 	
 }, 2500);
 ////////////////////////
 
-
+let datasmart
 function superMOVE() {
 
-let checkdichuyen = JSON.parse(JSON.stringify(smart));	
+let checkdichuyen = datasmart
 let lastMain = null;
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
@@ -64,12 +59,54 @@ if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
 }
 
 
+///////smarrtmove
+const congdichuyen = findcongdichchuyen(checkdichuyen);
+if(!smart.moving)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
+ if (character.moving || smart.moving) return
+if (character.mp > 2800)mageMagiPort()
+	
+////////
+	
 	
 }
 
 	
 	
 }
+
+
+
+
+
+// Hàm tìm đối tượng cuối cùng có map là "mtunnel"
+function findcongdichchuyen(data) {
+  // Tìm đối tượng cuối cùng có "map": "mtunnel"
+  let lastMtunnelIndex = -1;
+  for (let i = data.plot.length - 1; i >= 0; i--) {
+    if (data.plot[i].map === character.map) {
+      lastMtunnelIndex = i;
+      break;
+    }
+  }
+  
+  // Nếu không tìm thấy "mtunnel", trả về đối tượng đầu tiên
+  if (lastMtunnelIndex === -1) {
+    return data.plot[0];
+  }
+
+  // Kiểm tra đối tượng tiếp theo sau "mtunnel"
+  if (lastMtunnelIndex + 1 < data.plot.length) {
+    // Trả về đối tượng tiếp theo nếu có
+    return data.plot[lastMtunnelIndex + 1];
+  } else {
+    // Nếu không có đối tượng nào sau "mtunnel", trả về 1
+    return 1;
+  }
+}
+
+// Gọi hàm và lưu kết quả vào biến mới
+//const nextValue = findcongdichchuyen(data);
+
 
 
 
@@ -212,7 +249,8 @@ function on_cm(name, data) {
 	}
 
 	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode"){
-     receivedData = data
+		 if (data.message === "location")receivedData = data
+		 if (data.message === "all_location")datasmart = data
 
 	}
 
