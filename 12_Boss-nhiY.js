@@ -61,7 +61,7 @@ if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
 
 ///////smarrtmove
 const congdichuyen = findcongdichchuyen(checkdichuyen);
-if(!smart.moving)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
+if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
 if (character.mp > 2800)mageMagiPort()
 	
