@@ -491,7 +491,7 @@ setInterval(function() {
 
 
 
-
+let delayBug = Date.now() 	
 var attack_mode=true
 
 setInterval(function(){
@@ -544,7 +544,7 @@ if (dist1 > range1 * 2)
 /////////////////	
 
 if(!attack_mode || character.rip ) return;
-
+if (Date.now() < delayBug +50000 ) return	
 
 //	if (leader1 && dist1 < 200 && leader1.hp > 5000  && character.mp > 300 && character.targets >= 1 && !is_on_cooldown("absorb")   )use_skill("absorb", "haiz");
 
