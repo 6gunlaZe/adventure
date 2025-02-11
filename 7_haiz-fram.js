@@ -989,7 +989,49 @@ if(character.mp > 100 &&  can_use("taunt") && targets && numboss == 0 && charact
 
 //////
 
-    
+
+
+/////
+function get_nearest_monster1(args) ///mod
+{
+	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
+
+	var min_d=character.range ,target=null;
+		let hpp = 1000000000
+
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if (c_dist>min_d) continue;
+		if(args.cus && !current.s["cursed"]  )continue;//co debuff thi chon
+		if(args.nhonhat && current.hp > hpp)continue;//lua chon hp nho nhat
+		hpp = current.hp
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
+
+
+
+
+
+
   
 
 
@@ -1374,7 +1416,12 @@ if (skillbua == 1 || skillriu == 1)
 	
 }	
 if (skillbua == 1 || skillriu == 1)	return		
-	
+
+
+var target1xc= get_nearest_monster1({type: triancrep,  cus: 1});
+if (target1xc){
+	target=target1xc
+	change_target(target); }
 	//////////////////// ne dung aoe len boss
 var targets11 = getBestTargets({ max_range: 80 , type: "crabxx" , number : 1 }) 
 var targets12 = getBestTargets({ max_range: 380 , type: "phoenix" , number : 1 }) 
