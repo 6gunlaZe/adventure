@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.2");
+game_log("Game vs 1.3");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1462,7 +1462,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	
 	if (framfocus == 0 ) kiteSP(target,soluongquai)
                  var cungf = get_player(nhanvatfram); 
-	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: triancrep, number:1 })  //ham bo dem quai vat
+	   	 var targets1 = get_nearest_monster1({type: triancrep, });
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
 		if(!target1xc && targets1 ) {
 			
