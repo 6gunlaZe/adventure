@@ -188,6 +188,8 @@ function changeitem(options = {}) {
 	if (delayitem == undefined) delayitem = Date.now()
 	if (Date.now() < 300 + delayitem) return 
 	delayitem = Date.now()
+		checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
+
 //////////		
 	
 	
@@ -225,6 +227,39 @@ function changeitem(options = {}) {
 
 
 
+
+let lastCallTime = 0; // Biến lưu trữ thời gian mốc
+let delayThreshold = 200; // Ngưỡng thời gian 200ms
+
+function checkTimeBetweenCalls(setMoc = 0) {
+    const currentTime = Date.now(); // Lấy thời gian hiện tại
+
+    // Nếu setMoc === 1, thì lưu thời gian hiện tại làm thời gian mốc
+    if (setMoc === 1) {
+        lastCallTime = currentTime;
+       // console.log("Thời gian mốc đã được thiết lập: ", currentTime);
+        return;
+    }
+
+    // Nếu không phải gọi để thiết lập thời gian mốc, kiểm tra thời gian giữa các lần gọi
+    if (lastCallTime === 0) {
+        // Lần đầu tiên gọi hàm, không có thời gian mốc
+        lastCallTime = currentTime;
+        return 0; // Lần đầu tiên, không cần kiểm tra
+    }
+
+    const timeDiff = currentTime - lastCallTime; // Tính thời gian giữa các lần gọi
+
+    // Nếu thời gian giữa các lần gọi dưới delayThreshold (500ms), trả về 1 để bỏ qua
+    if (timeDiff < delayThreshold) {
+       // console.log(`Thời gian giữa các lần gọi quá ngắn: ${timeDiff}ms, bỏ qua.`);
+        return 1; // Thời gian quá ngắn, bỏ qua
+    }
+
+    // Nếu thời gian đủ lâu, trả về 0
+   // console.log(`Thời gian giữa các lần gọi là: ${timeDiff}ms, tiếp tục.`);
+    return 0;
+}
 
 
 
@@ -471,7 +506,7 @@ setInterval(function(){
 	
 	if(!attack_mode || character.rip ||  is_moving(character)) return;
 
-
+if (checkTimeBetweenCalls() === 1) return;	
 	
 	
 
