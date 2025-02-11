@@ -24,7 +24,7 @@ if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);
 
 //////////////////////////////////////////
 
-
+let nhay = 1
 let z = 1;  
 let bat = 0
 let bossA = 0
@@ -153,6 +153,7 @@ if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
 	z = 1000
+	monsterIds = [];
 	smart_move({ map: "cave", x: -194, y: -1281 })
 }
 
@@ -182,8 +183,11 @@ if ( z > 52 ) z -= 1;
 		}
 
 	
-			
-
+if (z >= 37 && z<47 && get_NUMber_kill() >= 9 && targetNOsafe.length > 0 && nhay == 1)	{
+nhay = 0
+z = 47;	
+}
+	
 game_log("ZZZ = !!!!!!  "+ z  );	
 
 
