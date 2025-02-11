@@ -1250,7 +1250,7 @@ else
 
 if (checkTimeBetweenCalls() === 1) return;
 ////////////////////
-	 if(Object.keys(parent.chests).length >= 5)loot();
+	 if(Object.keys(parent.chests).length >= 30)loot();
 /////////////////////////	
 
 	if(!attack_mode || character.rip || smart.moving) return;
