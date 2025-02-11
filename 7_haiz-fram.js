@@ -596,6 +596,7 @@ function on_cm(name, data) {
 setInterval(function() {
 ////////////giui vi tri moi 2s
 let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
 if (framboss > 0  && foxmode11 && foxmode == 1 )send_cm("nhiY",checkdichuyen)	
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
