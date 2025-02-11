@@ -949,7 +949,7 @@ if (started1 == undefined) started1 = Date.now()
 if (Date.now() < started1 + 330) return;
 	
 	const radius = kite_range ;
-const  angle = Math.PI / 5.5 ;
+const  angle = Math.PI / 4 ;
     if (can_move_to(taget.real_x, taget.real_y)) {
         const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
         const endGoalAngle = angleFromCenterToCurrent + angle
@@ -1471,7 +1471,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
 
 					  }
 	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 0  )kite(target,character.range + 3);
-	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 1 && cungf &&  distance(character,cungf)  < 200  )kite(cungf,character.range - 8);
+	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 1 && cungf &&  distance(character,cungf)  < 200  )kite(cungf,character.range - 4);
 
 
      skillwarboss(target)
@@ -1841,7 +1841,7 @@ function skillwarboss(taget)
 		{
  var targetsabc = getBestTargets({ max_range: 165, type: taget.mtype , target : "haiz" }) 
   var targetsabcd = getBestTargets({ max_range: 165, type: taget.mtype , Nohavetarget : 1 }) //ham bo dem quai vatv
-	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0 && ms_to_next_skill("attack") > 95	
+	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0 && ms_to_next_skill("attack") > 85	
  )
 	{
 		skillriu = 1	
