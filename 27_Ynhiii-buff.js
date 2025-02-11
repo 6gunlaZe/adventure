@@ -787,13 +787,8 @@ if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "harbringer", l
 /////
 function get_nearest_monster1(args) ///mod
 {
-	//args:
-	// max_att - max attack
-	// min_xp - min XP
-	// target: Only return monsters that target this "name" or player object
-	// no_target: Only pick monsters that don't have any target
-	// path_check: Checks if the character can move to the target
-	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
+
 	var min_d=character.range ,target=null;
 
 	if(!args) args={};
@@ -814,15 +809,13 @@ function get_nearest_monster1(args) ///mod
 		if(args.NO_target && current.target) continue;
 		if(args.path_check && !can_move_to(current)) continue;
 		var c_dist=parent.distance(character,current);
+		if(args.cus && !current.s["cursed"]  )continue;//co debuff thi chon
 		if(args.nhonhat && current.hp > hpp)continue;//lua chon hp nho nhat
 		hpp = current.hp
 		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
 	}
 	return target;
 }
-
-
-
 
 
 
