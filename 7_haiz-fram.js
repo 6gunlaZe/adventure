@@ -2099,6 +2099,7 @@ else
   {
      changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
      changeitem({ slot: "offhand", name : "ololipop", level : 8 });
+	  game_log("test7")
   }
   else
 {
@@ -2111,6 +2112,7 @@ if (magic = 0)
 }
 else
 {
+	game_log("test8")
 	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
   changeitem({ slot: "offhand", name : "sshield", level : 7 });		
 }
@@ -2124,11 +2126,13 @@ if(character.hp/character.max_hp< 0.6  )
 {
 	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
 	changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
+	game_log("test9")
 
 }
 
 else 
 	{
+		game_log("test10")
 		changeitem({ slot: "gloves", name : "mittens", level : 9 });
 		changeitem({ slot: "helmet", name : "helmet1", level : 8 });
 	}
