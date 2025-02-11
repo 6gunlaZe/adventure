@@ -597,7 +597,6 @@ setInterval(function() {
 ////////////giui vi tri moi 2s
 let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
 	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
-if (framboss > 0  && foxmode11 && foxmode == 1 )send_cm("nhiY",checkdichuyen)	
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
   SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
@@ -607,10 +606,10 @@ if (SM === 1) {
   let x = checkdichuyen.x;
   let y = checkdichuyen.y;
   let map = checkdichuyen.map;
-
+if (foxmode11)send_cm("nhiY",checkdichuyen)  // đặc cach cho nhiY
 for (let char in parent.party) {
     // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
-    if (char !== character.name && char !== "MuaBan" ) {
+    if (char !== character.name && char !== "MuaBan" && char !== "nhiY" ) {
 		   
         send_cm(char, {
             message: "location",
