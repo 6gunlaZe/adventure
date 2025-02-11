@@ -197,7 +197,7 @@ function changeitem(options = {}) {
 	if ( !options.slot ||  !options.name || !options.level ) return 
 	if (character.slots[options.slot])
 	{
-	if (character.slots[options.slot].name == options.name) return 
+	if (character.slots[options.slot].name == options.name && character.slots[options.slot].level == options.level) return 
 	}	
 ////////	
 	if (delayitem == undefined) delayitem = Date.now()
