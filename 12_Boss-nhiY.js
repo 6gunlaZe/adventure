@@ -18,8 +18,9 @@ let receivedData
 let foxmode = 0
 //FRAM FOXNIX
 setInterval(function() {
-if (foxmode == 0 ) return
 
+if(parent.S.icegolem && foxmode == 0) return
+	
 superMOVE()
 	
 
@@ -63,7 +64,7 @@ if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
 const congdichuyen = findcongdichchuyen(checkdichuyen);
 if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
-if (character.mp > 2800)mageMagiPort()
+if (character.mp > 2800 && foxmode == 1)mageMagiPort()
 	
 ////////
 	
@@ -190,12 +191,7 @@ if(parent.S.icegolem && foxmode == 0)
 
         // Kiểm tra nếu nhân vật đang ở đúng bản đồ
         if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
+
         } else {
             // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
             if (character.x !== targetX || character.y !== targetY) {
