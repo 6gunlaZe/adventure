@@ -1914,6 +1914,8 @@ frankymode = 0
 frankyfight = 0
 frankysafe = 0
  stop_character("6gunlaZe")  
+stop_character("MuaBan")  
+
 }
 
 
