@@ -1149,7 +1149,10 @@ checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
 				
 			}
 				
-	if (vitri == 100 ) return ///ko co mon do dung yeu cau
+	if (vitri == 100 ) {
+            started -= 400  // trả lại delay khi không có đồ phù hợp
+		return ///ko co mon do dung yeu cau
+	}
 	
 	
 	
