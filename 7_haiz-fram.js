@@ -1085,7 +1085,7 @@ function changeitem(options = {}) {
 	
 	if (character.slots[options.slot])
 	{
-	if (character.slots[options.slot].name == options.name) return 
+	if (character.slots[options.slot].name == options.name && character.slots[options.slot].level == options.level) return 
 	}
 	
 	started = Date.now()
