@@ -1461,9 +1461,9 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
 		if(targets1 ) {
-			change_target(targets1);  
+			//change_target(targets1);  
 	               //  target = targets1
-			game_log("testtt");
+			//game_log("testtt");
 
 					  }
 	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]  && framfocus == 0  )kite(target,character.range + 3);
