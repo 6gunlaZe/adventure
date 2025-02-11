@@ -303,7 +303,7 @@ function kite(taget, kite_range)
 {
 
 	const radius = kite_range ;
-const  angle = Math.PI / 9.5 ;
+const  angle = Math.PI / 3.5 ;
     if (can_move_to(taget.real_x, taget.real_y)) {
         const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
         const endGoalAngle = angleFromCenterToCurrent + angle
@@ -573,7 +573,7 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 	if(!can_attack(currentTarget) )kite(cung1,50);
    }
 if ( currentTarget && cung && kitefram == 1) {
-	if(!can_attack(currentTarget) )kite(cung,15);
+	if(!can_attack(currentTarget) )kite(cung,25);
    }
 	
 	////////////
