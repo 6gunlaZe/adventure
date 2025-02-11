@@ -31,7 +31,8 @@ superMOVE()
 let datasmart
 function superMOVE() {
 
-let checkdichuyen = datasmart
+let checkdichuyen
+if (Object.keys(datasmart).length > 0)checkdichuyen = datasmart
 let lastMain = null;
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
@@ -64,8 +65,10 @@ if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
 const congdichuyen = findcongdichchuyen(checkdichuyen);
 if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
-if (character.mp > 2800 && foxmode == 1)mageMagiPort()
-	
+if (character.mp > 2800 && foxmode == 1){
+	mageMagiPort()
+	datasmart = {};
+}
 ////////
 	
 	
