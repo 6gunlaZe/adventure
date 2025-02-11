@@ -130,7 +130,13 @@ setInterval(function() {
 
 
 
+setInterval(function() {
 
+ if (character.rip) { ///////auto hoi sinh
+    respawn();
+  }
+
+}, 420000);
 
 
 
