@@ -250,7 +250,7 @@ function on_cm(name, data) {
 
 	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode"){
 		 if (data.message === "location")receivedData = data
-		 if (data.message === "all_location")datasmart = data
+		else datasmart = data
 
 	}
 
