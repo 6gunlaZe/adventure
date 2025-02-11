@@ -482,11 +482,26 @@ setInterval(function() {
 
 
 
+setInterval(function() {
+lootAllChests()
+}, 4000);
 
+function shifting() {
+    shift(0, 'xpbooster');
+}
 
+function lootAllChests() {
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
 
-
-
+    if (chestIds.length > 10) {
+	  shift(0, 'goldbooster');   
+        for (let id of chestIds) {
+            loot(id);
+        }
+	     setTimeout(shifting, 350);
+    }
+}
 
 
 
@@ -500,7 +515,7 @@ var attack_mode=true
 
 setInterval(function(){
 
-	loot();
+	// loot();
 if (checkTimeBetweenCalls() === 1) return;
 
 ///////////////////////////////////////////////	hoi mau
