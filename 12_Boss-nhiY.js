@@ -178,7 +178,7 @@ if(parent.S.icegolem && foxmode == 0)
 	
 	if (leader && distance(character, leader) < 70 & foxmode == 0) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
+    if (smart.moving || foxmode == 1) return;
 
 	
 	
