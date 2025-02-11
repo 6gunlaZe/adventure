@@ -1462,7 +1462,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	
 	if (framfocus == 0 ) kiteSP(target,soluongquai)
                  var cungf = get_player(nhanvatfram); 
-	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, number:1 })  //ham bo dem quai vat
+	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: triancrep, number:1 })  //ham bo dem quai vat
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
 		if(!target1xc && targets1 ) {
 			
