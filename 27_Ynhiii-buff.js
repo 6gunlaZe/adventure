@@ -790,6 +790,7 @@ function get_nearest_monster1(args) ///mod
 	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
 
 	var min_d=character.range ,target=null;
+		let hpp = 1000000000
 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
@@ -798,7 +799,6 @@ function get_nearest_monster1(args) ///mod
 
 	for(id in parent.entities)
 	{
-		let hpp = 1000000000
 		var current=parent.entities[id];
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
