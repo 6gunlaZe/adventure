@@ -30,9 +30,9 @@ superMOVE()
 
 let datasmart
 function superMOVE() {
+if (Object.keys(datasmart).length = 0) return
 
-let checkdichuyen
-if (Object.keys(datasmart).length > 0)checkdichuyen = datasmart
+let checkdichuyen = datasmart
 let lastMain = null;
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
