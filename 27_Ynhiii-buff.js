@@ -603,7 +603,13 @@ if ( currentTarget && cung && kitefram == 1) {
             }		
 	
 	
-	
+	var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
+		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] )
+            {
+                use_skill("curse", target1xc);
+				 game_log("curse - low!!!!!!");
+            }
+
 	
 		    if(currentTarget&& character.mp > 500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] )
             {
@@ -797,6 +803,7 @@ function get_nearest_monster1(args) ///mod
 
 	for(id in parent.entities)
 	{
+		let hpp = 1000000000
 		var current=parent.entities[id];
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
@@ -807,6 +814,8 @@ function get_nearest_monster1(args) ///mod
 		if(args.NO_target && current.target) continue;
 		if(args.path_check && !can_move_to(current)) continue;
 		var c_dist=parent.distance(character,current);
+		if(args.nhonhat && current.hp > hpp)continue;//lua chon hp nho nhat
+		hpp = current.hp
 		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
 	}
 	return target;
