@@ -817,15 +817,7 @@ targets = get_nearest_monster1({type: triancrep});
 	
 	
 	//////////
-if(targetsoloboss.length > 0){
-	send_cm("haiz", "help");
-}
-	else
-	{
-		send_cm("haiz", "no");
-	}
-	
-	
+
 if(character.hp < 2500)
 	{
 		send_cm("angioseal", "bosshelp");
