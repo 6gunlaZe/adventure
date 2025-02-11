@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.7");
+game_log("Game vs 1.8");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1408,7 +1408,8 @@ if(( targets12.length > 0 ) && framboss == 0 )
 	
 	/////////////// chay vong vong gom quai lai
  chuyendoithongminhFRAM(target)  
-	
+	game_log("test2")
+
 	if (framfocus == 0 ) kiteSP(target,soluongquai)
                  var cungf = get_player(nhanvatfram); 
 	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
@@ -2062,7 +2063,7 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 
 function chuyendoithongminhFRAM(taget)
 {
-
+game_log("test1")
 if (skillbua == 1 || skillriu == 1)return
 let arr = ["phoenix", "mvampire", "jr","greenjr", "grinch", "fvampire","stompy", "mvampire", "jr"]; ///các boss dùng kiếm lửa
 let magic = 0
