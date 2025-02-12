@@ -1157,7 +1157,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		sshield: 5,
 		cclaw: 7,
 		dagger: 7,
-		stinger: 7,
+		//stinger: 7,
 		ecape: 6,
 		wingedboots: 5,
 		pmace:5,
@@ -1193,7 +1193,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		hgloves: 7,
 		cclaw: 8,
 		dagger: 8,
-		stinger: 8,
+		//stinger: 8,
 		ecape: 8,
 		wingedboots: 7,
 		pmace:7,
@@ -1230,7 +1230,7 @@ var upgradeWhitelist = /// list moi
 		hgloves: 4,
 		cclaw: 6,
 		dagger: 6,
-		stinger: 6,
+		//stinger: 6,
 		wingedboots: 4,
 		pmace:4,
 		crossbow:3,
@@ -1264,7 +1264,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		hgloves: 6,
 		cclaw: 8,
 		dagger: 6,
-		stinger: 6,
+		//stinger: 6,
 		wingedboots: 6,
 		pmace:6,
 		crossbow:6,
@@ -1834,7 +1834,7 @@ var combineWhitelist =
 setInterval(function() {
 	
 if(1>0) for(const slot in character.items)
-if(["hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	
 
 }, 1000);
