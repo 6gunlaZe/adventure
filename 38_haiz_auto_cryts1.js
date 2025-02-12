@@ -143,7 +143,7 @@ let toado = [
  let member2 = get_player("Ynhi");
 	
 
-
+if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
 
 	
  var  targetkill = solobosskill({ max_range: 300}) 
@@ -178,6 +178,8 @@ if ( z > 51 ) z -= 1;
 			nguyhiem = 0
 if ( z > 30 && z < 45) z -= 1;
 if ( z > 52 ) z -= 1;
+			if (!member1 || !member2) parent.api_call("disconnect_character", {name: "haiz"});
+
 			game_log("ZZZ = !!!!!!  "+ z  );	
 	return
 		}
@@ -453,6 +455,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 	//////////check cac loai boss
 //  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
 // targetsoloboss.length == 0	
+
 
 
 
