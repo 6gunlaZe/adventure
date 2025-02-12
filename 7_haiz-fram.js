@@ -206,6 +206,7 @@ if(bosstime == 0 && parent.party_list.includes("angioseal") && killangioseal == 
 if(bosstime == 0 && parent.party_list.includes("nhiY") && killangioseal == 1 && foxmode == 1 && !smart.moving )stop_character("nhiY")
 	
 if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	
 /////////////////	
 if (modeYnhi == 0 && frankymode == 0)	 
