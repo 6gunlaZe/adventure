@@ -2306,7 +2306,7 @@ function icegolem()
 	
 	
 	////////////////////////////////tro ve sau khi san icegolem
-if (!is_moving(character) && backfram == 1 && Date.now() > (delayfram +9000) && && distance(character, {x: 0, y: 0}) < 250 )
+if (!is_moving(character) && backfram == 1 && Date.now() > (delayfram +9000) && distance(character, {x: 0, y: 0}) < 250 )
 {
 	smart_move({ map: maptrain, x: farmX, y: farmY })
 				backfram = 0
