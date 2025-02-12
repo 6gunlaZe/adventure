@@ -132,8 +132,8 @@ setInterval(function() {
 	
 if (back == 1)
 	{
-	use_skill("blink", [0, 0])
-	mageMagiPort()
+	if (character.map == "winterland" && distance(character, {x: 0, y: 0}) > 250)use_skill("blink", [0, 0])
+	if (character.mp > 2000) mageMagiPort()
 	}
 	
 	
