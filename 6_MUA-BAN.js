@@ -805,7 +805,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 		
     let first_index = -1;
     for(let i = 0; i < 42; i++) {
-        if(character.items[i]?.name == "greenenvelope") {
+        if(character.items[i]?.name == "gem0") {
             if(character.items[i].q >= 1) {
                 exchange(i);
                 break;
