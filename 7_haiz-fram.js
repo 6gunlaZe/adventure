@@ -69,15 +69,16 @@ let frankysafe = 0
 
 
 let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
-let frammode = 3
-let soluongquai = 2
+let frammode = 0
+let soluongquai = 8
 
 if ( frammode == 0)
 {
- triancrep = "snake"; 
- maptrain = "halloween"; 
-farmX = 316
-farmY = -720
+
+    triancrep = "poisio"; 
+   farmX = -76 //character.real_x;
+  farmY = 1390 //character.real_y;
+ maptrain = "main"; 	
 
 }
 else if ( frammode == 1 )
