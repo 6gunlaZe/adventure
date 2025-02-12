@@ -1159,11 +1159,16 @@ checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
 	
 	
 	
-	if (!character.slots[options.slot] || character.slots[options.slot].name != options.name) { 
+	if ((character.slots[options.slot].name == options.name && character.slots[options.slot].level == options.level  )) { 
+		started -= 400
+		return
+	}
+	else
+	{
         unequip(options.slot);
         equip(vitri, options.slot); 
-		 game_log("change: " + options.name)
-    }
+	game_log("change: " + options.name)
+        }
 	
 
 //	changeitem({ slot: "mainhand", name : "firebow", level : 6 });
