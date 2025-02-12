@@ -146,7 +146,7 @@ let toado = [
 
 
 	
- var  targetkill = solobosskill({ max_range: 320}) 
+ var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
 if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67){
