@@ -1009,7 +1009,7 @@ if (nguyhiem == 1)return
 		var currentTarget = get_nearest_monster_solobosskill() 
 		if(currentTarget) {
 			change_target(currentTarget);
-			 game_log("test 1 !!!!!!");
+			// game_log("test 1 !!!!!!");
 		}
 	}	
 
@@ -1168,7 +1168,7 @@ if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["
 function soloTANK(taget)
 {
  
-			 game_log("test 2 !!!!!!");
+			// game_log("test 2 !!!!!!");
 
 		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
             {
