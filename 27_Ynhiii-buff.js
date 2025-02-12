@@ -58,15 +58,11 @@ function checkTimeBetweenCalls(setMoc = 0) {
 setInterval(function() {
 	    let leader = get_player("haiz");
 	
-	if(parent.S.icegolem && !leader && !get_nearest_monster({type:'icegolem'}))
-	{
-        join('icegolem');
+
+	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250  ){
+	use_skill("town")
+	 return	
 	}
-	
-	
-	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250 && !smart.moving && !parent.S.icegolem  )use_skill("town")
-	
-	
 	
 	if (!character.party) {
     send_party_request("haiz");
