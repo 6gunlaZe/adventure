@@ -550,7 +550,7 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 
 	
-if( character.rip || character.moving || smart.moving) return;
+if( character.rip || smart.moving) return;
 	
 	
 ///////////////////////////	
@@ -558,7 +558,7 @@ if( character.rip || character.moving || smart.moving) return;
 const leader1 = get_player('haiz');
 const range1 = character.range; // This may need tuning
 const dist1 = distance(character, leader1);
-if (dist1 > range1 * 2)
+if (dist1 > range1 )
   return false;	
 /////////////////	
 
