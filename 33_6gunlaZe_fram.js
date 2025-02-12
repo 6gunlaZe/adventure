@@ -695,7 +695,14 @@ if (frankymode == 1)
 var targets	
 if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5)
 {
+if (character.hp > 3300){	
 targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "bee" , number : 5 })  //ham bo dem quai vat	
+}
+else
+{
+targets = get_nearest_monster1({type: triancrep});
+}
+	
 }
 else if ( (frammode == 1 || frammode == 3 || frammode == 6 ) && character.targets <=3 && b2 && distance(character, b2) < 350 ) //fram bat
 	{
