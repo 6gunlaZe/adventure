@@ -1163,7 +1163,7 @@ checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
 		started -= 400
 		return
 	}
-	if else (!character.slots[options.slot])
+	else if (!character.slots[options.slot])
 	{
 	equip(vitri, options.slot); 
 	game_log("change: " + options.name)	
