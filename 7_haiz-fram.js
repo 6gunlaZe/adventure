@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.3");
+game_log("Game vs 1.5");
 let host
 if (character.id == "haiz") host = 1
 else host =0
