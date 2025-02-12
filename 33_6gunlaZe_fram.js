@@ -37,7 +37,7 @@ let frankyKILL = 0
 	var maptrain  
     var triancrep 
 
-let frammode = 6
+let frammode = 0
 let modeYnhi = 2 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
 let killangioseal = 1
 let safeframm = 0
@@ -45,10 +45,10 @@ let safeframm = 0
 
 if ( frammode == 0)
 {
-    triancrep = "snake"; 
-   farmX = -575 //character.real_x;
-  farmY = -579 //character.real_y;
- maptrain = "halloween"; 
+    triancrep = "poisio"; 
+   farmX = -76 //character.real_x;
+  farmY = 1390 //character.real_y;
+ maptrain = "main"; 
 
 }
 else if ( frammode == 1 )
@@ -695,7 +695,7 @@ if (frankymode == 1)
 var targets	
 if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5)
 {
-targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "squigtoad" , number : 3 })  //ham bo dem quai vat	
+targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "bee" , number : 5 })  //ham bo dem quai vat	
 }
 else if ( (frammode == 1 || frammode == 3 || frammode == 6 ) && character.targets <=3 && b2 && distance(character, b2) < 350 ) //fram bat
 	{
