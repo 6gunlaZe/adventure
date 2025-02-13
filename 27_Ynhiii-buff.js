@@ -449,7 +449,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","orbg","froststaff","firestaff","wbook1"];
+    let itemsToExclude = ["handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","orbg","froststaff","firestaff","wbook1"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
@@ -484,6 +484,7 @@ lootAllChests()
 
 function shifting() {
     shift(0, 'xpbooster');
+changeitem({ slot: "gloves", name : "mittens", level : 8 });
 }
 
 function lootAllChests() {
@@ -491,12 +492,17 @@ function lootAllChests() {
     let chestIds = Object.keys(chests);
 
     if (chestIds.length > 10) {
+	changeitem({ slot: "gloves", name : "handofmidas", level : 7 });
+	    if (character.slots["gloves"] && character.slots["gloves"].name == "handofmidas"){
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);
         }
-	     setTimeout(shifting, 350);
+	 setTimeout(shifting, 550);  
+	    }
+	 
     }
+    
 }
 
 
