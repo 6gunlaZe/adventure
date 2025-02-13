@@ -1418,7 +1418,7 @@ if (skillbua == 1 || skillriu == 1)
 
 		if (character.slots["offhand"])unequip( "offhand");
 
-        changeitem({ slot: "mainhand", name : "bataxe", level : 4 });
+        changeitem({ slot: "mainhand", name : "bataxe", level : 5 });
 		
 			if (character.slots["mainhand"] && character.slots["mainhand"].name == "bataxe")use_skill("cleave");
 				       
@@ -2263,7 +2263,7 @@ changeitem({ slot: "offhand", name : "exoarm", level : 1 });
 		}
 		if (character.slots["offhand"])unequip( "offhand");
 
-        changeitem({ slot: "mainhand", name : "basher", level : 5 });
+        changeitem({ slot: "mainhand", name : "basher", level : 7 });
 		
 			if (character.slots["mainhand"] && character.slots["mainhand"].name == "basher")use_skill("stomp");
 				       
