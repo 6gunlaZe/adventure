@@ -1258,7 +1258,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		hboots: 6,
 		mittens: 7,
 		ecape: 4,
-		mcape: 4,
+		mcape: 6,
 		cape: 4,
 		sshield:7,
 		hgloves: 6,
