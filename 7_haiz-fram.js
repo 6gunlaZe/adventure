@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-game_log("Game vs 1.5");
+game_log("Game vs 1.6");
 let host
 if (character.id == "haiz") host = 1
 else host =0
@@ -1112,6 +1112,71 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 
 
+setInterval(() => {
+	
+	RecheckFullslot()
+
+}, 80000); // 600s check 1lan
+
+function RecheckFullslot() //kiemtrado
+{
+let data = {
+   "ring1": "strring",
+   "ring2": "strring",
+   "earring1": "cearring",
+   "earring2": "cearring",
+   "belt": "strbelt",
+   "amulet": "stramulet",
+   "orb": "tigerstone"
+};
+if (character.hp > 9500)
+{
+
+
+for (let key in data) {
+   if (data.hasOwnProperty(key)) {
+       let value = data[key];
+       console.log(key + ": " + value);
+changeitem({ slot: key, name : value, level : scan_maxlevel(value,100) });
+	   
+   }
+}
+
+	
+}
+}
+
+
+
+
+//////////////////////////////////////////////////
+function scan_maxlevel(item,lvmax)
+{
+	// Biến để lưu cấp độ lớn nhất và chỉ số kho của món đồ có cấp độ lớn nhất
+	let maxLevel = -Infinity; // Khởi tạo maxLevel với giá trị vô cùng nhỏ (-Infinity), để khi so sánh, bất kỳ món đồ nào cũng sẽ có cấp độ lớn hơn giá trị này.
+	let maxIndex = -1;
+
+	// Duyệt qua tất cả các ô kho
+	for(var i = 0; i <= 41; i++)
+	{
+		var curSlot = character.items[i];
+		
+		// Kiểm tra xem ô kho có chứa món đồ không và tên món đồ có trùng không
+		if(curSlot != null && curSlot.name == item)
+		{
+			// Kiểm tra cấp độ món đồ lớn nhất nhưng không vượt quá 7
+			if(curSlot.level > maxLevel && curSlot.level <= lvmax)
+			{
+				// Cập nhật maxLevel và chỉ số kho
+				maxLevel = curSlot.level;
+				maxIndex = i;
+			}
+		}
+	}
+
+	// Trả về level lơn nhat, hoặc -1 nếu không tìm thấy
+	return maxLevel;
+}
 
 
 /////////////////////////////////////////////////
