@@ -1116,7 +1116,7 @@ setInterval(() => {
 	
 	RecheckFullslot()
 
-}, 80000); // 600s check 1lan
+}, 8000); // 600s check 1lan
 
 function RecheckFullslot() //kiemtrado
 {
