@@ -769,7 +769,7 @@ changeitem({ slot: "offhand", name : "exoarm", level : 1 });
 		}
 		if (character.slots["offhand"])unequip( "offhand");
 
-        changeitem({ slot: "mainhand", name : "basher", level : 5 });
+        changeitem({ slot: "mainhand", name : "basher", level : 7 });
 		
 			if (character.slots["mainhand"] && character.slots["mainhand"].name == "basher")use_skill("stomp");
 				       
