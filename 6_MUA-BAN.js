@@ -1272,6 +1272,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		froststaff: 7,
 		//cupid: 5,
 		oozingterror: 6,
+		firebow: 7,
 		
 	};
 
