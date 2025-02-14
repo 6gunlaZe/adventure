@@ -37,7 +37,7 @@ let frankyKILL = 0
 	var maptrain  
     var triancrep 
 
-let frammode = 0
+let frammode = 5
 let modeYnhi = 2 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
 let killangioseal = 1
 let safeframm = 0
@@ -696,7 +696,7 @@ var targets
 if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5)
 {
 if (character.hp > 3300){	
-targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "bee" , number : 5 })  //ham bo dem quai vat	
+targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "bee" , number : 3 })  //ham bo dem quai vat	
 }
 else
 {
