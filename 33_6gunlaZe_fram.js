@@ -568,14 +568,17 @@ else if ( (character.max_mp - character.mp) > 400) {
 ////////////////////////////////////////////////////////
 setInterval(function() {
 looting()	
-}, 500);
+}, 4000);
 function looting() {
-    if(Object.keys(parent.chests).length >= 20) 
-	{
-     shift(0, 'goldbooster');
-    loot();
-    setTimeout(shifting, 250);
-	}
+    let chestIds = Object.keys(chests);
+    if (chestIds.length > 20) {
+	  shift(0, 'goldbooster');   
+        for (let id of chestIds) {
+            loot(id);   
+	    }
+    }
+    setTimeout(shifting, 550);
+
 }
 function shifting() {
     shift(0, 'xpbooster');
