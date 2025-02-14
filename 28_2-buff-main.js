@@ -204,6 +204,8 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 setInterval(function() {
 
+changeitem({ slot: "gloves", name : "mittens", level : 8 });
+	
  if (character.rip) { ///////auto hoi sinh
     respawn();
   }
