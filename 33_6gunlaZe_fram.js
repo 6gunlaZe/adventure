@@ -570,6 +570,7 @@ setInterval(function() {
 looting()	
 }, 4000);
 function looting() {
+	    let chests = get_chests();
     let chestIds = Object.keys(chests);
     if (chestIds.length > 20) {
 	  shift(0, 'goldbooster');   
