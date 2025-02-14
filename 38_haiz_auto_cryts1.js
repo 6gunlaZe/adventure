@@ -161,7 +161,7 @@ if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67){
 game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
 game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
 
-	        var  targetNOsafe1 = solobossNO1({ max_range: 280}) 	///có a2
+	        var  targetNOsafe1 = solobossNO1({ max_range: 330}) 	///có a2
 	        var  targetNOsafe = solobossNO({ max_range: 280}) 
 		var currentTarget = get_nearest_monster_solobosskill() 
 		if(currentTarget && currentTarget.target && targetNOsafe1.length == 0 && currentTarget.mtype != "a2") 
