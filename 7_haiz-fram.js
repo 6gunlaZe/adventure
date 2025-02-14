@@ -2427,10 +2427,10 @@ stop_character("6gunlaZe")
 stop_character("angioseal") 
 stop_character("haiz1") 
 stop_character("nhiY") 
-stop_character("Ynhi") 
+//stop_character("Ynhi") 
 firtice = 1
 partychecktime = Date.now()
-start_character("Ynhi", 28);
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 28);
 start_character("nhiY", 12);		
 	}
 
