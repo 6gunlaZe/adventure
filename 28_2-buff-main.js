@@ -46,7 +46,7 @@ setInterval(function() {
 	move(leader.x,leader.y)
 	}
 	
-	if (leader && distance(character, leader) < 70) return
+	if (leader && distance(character, leader) < 40) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 
