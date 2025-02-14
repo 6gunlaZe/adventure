@@ -1031,7 +1031,7 @@ if (currentTarget && currentTarget.attack >8000 )
 }
 else
 {
-	rateskill = 0.85
+	rateskill = 0.9
 }
 
 if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)
