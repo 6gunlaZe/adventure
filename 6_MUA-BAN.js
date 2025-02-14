@@ -5,7 +5,7 @@
 // "gem0" , "ornament" , "candycane" , "mistletoe" , "xgloves" , "frankypants" , "starkillers" , "wbookhs"
 /// send_mail('Plutus', '10 keys', 'nice', true)
 game_log("game 1.0")
-
+var itemautotrans=[ "candy1" , "gem0", "a7", "vbat"]; 
 map_key("A", "toggle_run_code");
 
 map_key("Z", "snippet", "parent.stop_runner();");
@@ -806,7 +806,8 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 		
     let first_index = -1;
     for(let i = 0; i < 42; i++) {
-        if(character.items[i]?.name == "candy1") {
+      //  if(character.items[i]?.name == "candy1") {
+	    if(itemautotrans.indexOf(character.items[i]?.name) != -1) {
             if(character.items[i].q >= 1) {
                 exchange(i);
                 break;
