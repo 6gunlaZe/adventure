@@ -95,9 +95,8 @@ setInterval(function() {
     leave_party();
 	}
 	
-var currentTarget1 = check_solobosskill() //khoang canh cho 150
 		
-if (currentTarget1 && leader && distance(character, leader) < 50) return
+if ( leader && distance(character, leader) < 50) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
     if (smart.moving) return;
 
@@ -515,7 +514,7 @@ if (checkTimeBetweenCalls() === 1) return;
 ////	khong move gan leader se khong tim muc tieu tan cong	
 const leader1 = get_player('haiz');
 const dist1 = distance(character, leader1);
-if (dist1 > 180)
+if (dist1 > 80)
   return false;	
 /////////////////	
 
