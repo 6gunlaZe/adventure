@@ -11,7 +11,7 @@ let run = 1
 let datahero
 let keyauto
 
-game_log("Game vs 1.7");
+game_log("Game vs 1.8");
 
 setInterval(function() {
 
@@ -267,15 +267,15 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 
 
-function ghichu(title, mess,key_auto) {
-  const token = key_auto;  // Thay bằng token của bạn
+function ghichu(title, mess,key_auto1) {
+  const token = key_auto1;  // Thay bằng token của bạn
   const repoOwner = '6gunlaZe';  // Tên người sở hữu repo
   const repoName = 'game';  // Tên repository
   const issueTitle = title;
   const newLine = mess;  // Nội dung dòng mới cần thêm vào
 
-  // Tìm kiếm các issue có tiêu đề trùng với title
-  fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?q=${encodeURIComponent(issueTitle)}+in:title`, {
+  // Tìm kiếm các issue có tiêu đề trùng với title trong repository cụ thể
+  fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(issueTitle)}+repo:${repoOwner}/${repoName}`, {
     method: 'GET',
     headers: {
       'Authorization': `token ${token}`,
@@ -284,7 +284,7 @@ function ghichu(title, mess,key_auto) {
   })
   .then(response => response.json())
   .then(data => {
-    if (data.length === 0) {
+    if (data.items.length === 0) {
       // Nếu không tìm thấy issue với tiêu đề này, tạo mới issue
       fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
         method: 'POST',
@@ -306,7 +306,7 @@ function ghichu(title, mess,key_auto) {
       });
     } else {
       // Nếu đã tồn tại issue, thêm dòng mới vào body của issue đầu tiên tìm được
-      const issueNumber = data[0].number;  // Lấy số của issue đầu tiên
+      const issueNumber = data.items[0].number;  // Lấy số của issue đầu tiên
       const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
 
       // Lấy nội dung hiện tại của issue
@@ -350,6 +350,7 @@ function ghichu(title, mess,key_auto) {
     console.error('Lỗi khi tìm kiếm issue:', error);
   });
 }
+
 
 
 
