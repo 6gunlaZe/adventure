@@ -192,7 +192,7 @@ z = 47;
 //////////////
 if ( checkkill != numberkilll )
 {
-const token = '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';  // Thay bằng token của bạn
+const token = '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';  // Thay bằng token của bạn
 const repoOwner = '6gunlaZe';  // Tên người sở hữu repo (ví dụ: 'octocat')
 const repoName = 'game';  // Tên repository (ví dụ: 'my-project')
 const issueTitle = character.in;
