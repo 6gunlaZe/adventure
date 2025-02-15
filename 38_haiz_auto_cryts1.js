@@ -221,12 +221,16 @@ game_log("ZZZ = !!!!!!  "+ z  );
 	if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
               {}
         else {
+		if (!member2 || !member1)
+		{
 		if (z=0)z = 1
 		else if (z=1)z = 2
 		else if (z=2)z = 1
                    if (result && z <3) {
                   xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
                  }
+	          }
+		
 		return
 	      }
 	    
