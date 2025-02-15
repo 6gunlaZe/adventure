@@ -710,7 +710,7 @@ var targets
 if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5 || frammode == 7)
 {
 if (character.hp > 3300){	
-targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "frog" , number : 3 })  //ham bo dem quai vat	
+targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "frog11" , number : 3 })  //ham bo dem quai vat	
 }
 else
 {
