@@ -97,8 +97,8 @@ else if ( frammode == 7 )
 {
  triancrep = "tortoise"; 
  maptrain = "main"; 
-farmX = -1039
-farmY = 1175
+farmX = -1068
+farmY = 1135
 }
 
 
