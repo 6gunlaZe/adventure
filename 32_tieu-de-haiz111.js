@@ -703,7 +703,7 @@ if (targetboss.target && targetboss.target == "haiz" && !f0.s["hardshell"] && di
 
 if (targetboss.target && targetboss.target == "haiz" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") &&  character.s["hardshell"] && character.mp > 600 && character.hp > 7500 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);		
 	
-if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"] && character.hp/character.max_hp < ratehp && focusA2safe0 == 0 ) use_skill("hardshell");
+if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"] && character.hp/character.max_hp < ratehp && focusA2safe0() == 0 ) use_skill("hardshell");
 	
 if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && is_on_cooldown("hardshell") && targetboss.range <120) 
 {
