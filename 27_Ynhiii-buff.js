@@ -59,7 +59,7 @@ setInterval(function() {
 	    let leader = get_player("haiz");
 	
 
-	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250  ){
+	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250 && !leader  ){
 	use_skill("town")
 	 return	
 	}
