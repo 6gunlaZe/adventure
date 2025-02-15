@@ -2920,11 +2920,56 @@ setInterval(() => {
 // NOTE: Use the performance_trick() function as a workaround
 
 
-
+// Run bot telegram
 ////////////
 //////////
+setInterval(function() {
+if (telegram == 0) return	
+gamerpg()
+}, 3000); // ra bai quai lan dau
 
 
+function gamerpg()
+{
+sendMessageToTelegram('Chào từ JavaScript!');
+	
+}
+
+// Hàm gửi tin nhắn đến Telegram Bot
+function sendMessageToTelegram(message) {
+  const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPgc';  // Thay thế bằng API Token của bot
+  const chatId = -4645389079;  // Thay thế bằng chat ID của người nhận hoặc nhóm
+
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  // Tạo đối tượng dữ liệu cần gửi
+  const data = {
+    chat_id: chatId,
+    text: message
+  };
+
+  // Gửi yêu cầu POST đến Telegram API
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.ok) {
+      console.log('Tin nhắn đã được gửi thành công!');
+    } else {
+      console.log('Lỗi:', data.description);
+    }
+  })
+  .catch(error => {
+    console.error('Có lỗi xảy ra:', error);
+  });
+}
+
+// Gọi hàm với tin nhắn bạn muốn gửi
 
 
 
