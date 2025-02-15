@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 
-game_log("Game vs 1.3");
+game_log("Game vs 1.4");
 
 setInterval(function() {
 
@@ -23,7 +23,7 @@ if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);
 
 
 //////////////////////////////////////////
-let checkkill = 0
+let checkkill = -1
 let nhay = 1
 let z = 1;  
 let bat = 0
