@@ -170,7 +170,37 @@ function on_cm(name, data) {
 }
 
 
+// number 0 la an toan
+function focusA2safe0(options = {}) { 
+    const entities = []
+     let number = 0
+	var bossarmy=[ "a2" ]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
 
+ if ( distance(character, entity) > 360) continue
+if ( distance(character, entity) < 180) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return number
+}
 
 
 
@@ -673,7 +703,7 @@ if (targetboss.target && targetboss.target == "haiz" && !f0.s["hardshell"] && di
 
 if (targetboss.target && targetboss.target == "haiz" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") &&  character.s["hardshell"] && character.mp > 600 && character.hp > 7500 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);		
 	
-if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"] && character.hp/character.max_hp < ratehp ) use_skill("hardshell");
+if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"] && character.hp/character.max_hp < ratehp && focusA2safe0 == 0 ) use_skill("hardshell");
 	
 if (targetboss.target && targetboss.target == "haiz1" && !character.s["hardshell"] && is_on_cooldown("hardshell") && targetboss.range <120) 
 {
