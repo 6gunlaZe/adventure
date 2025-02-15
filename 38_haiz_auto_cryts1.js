@@ -11,7 +11,7 @@ let run = 1
 let datahero
 let keyauto
 
-game_log("Game vs 1.6");
+game_log("Game vs 1.7");
 
 setInterval(function() {
 
@@ -196,31 +196,9 @@ z = 47;
 if ( checkkill != numberkilll )
 {
 const token = key_auto;  // Thay bằng token của bạn
-const repoOwner = '6gunlaZe';  // Tên người sở hữu repo (ví dụ: 'octocat')
-const repoName = 'game';  // Tên repository (ví dụ: 'my-project')
-const issueTitle = character.in;
 const issueBody = `kill = ${numberkilll}`;
 
-
-// Gửi yêu cầu tạo Issue đến GitHub API
-fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `token ${token}`,  // Xác thực bằng token
-  },
-  body: JSON.stringify({
-    title: issueTitle,
-    body: issueBody,
-  }),
-})
-.then(response => response.json())
-.then(data => {
-  console.log('Issue đã được tạo:', data);
-})
-.catch(error => {
-  console.error('Lỗi khi tạo Issue:', error);
-});
+ghichu(character.in, issueBody,token)
 
 checkkill = numberkilll
 }
@@ -286,6 +264,101 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 	
 }, 500);
+
+
+
+function ghichu(title, mess,key_auto) {
+  const token = key_auto;  // Thay bằng token của bạn
+  const repoOwner = '6gunlaZe';  // Tên người sở hữu repo
+  const repoName = 'game';  // Tên repository
+  const issueTitle = title;
+  const newLine = mess;  // Nội dung dòng mới cần thêm vào
+
+  // Tìm kiếm các issue có tiêu đề trùng với title
+  fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?q=${encodeURIComponent(issueTitle)}+in:title`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.length === 0) {
+      // Nếu không tìm thấy issue với tiêu đề này, tạo mới issue
+      fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `token ${token}`,
+        },
+        body: JSON.stringify({
+          title: issueTitle,
+          body: newLine,  // Thêm nội dung dòng mới vào body
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Issue mới đã được tạo:', data);
+      })
+      .catch(error => {
+        console.error('Lỗi khi tạo Issue:', error);
+      });
+    } else {
+      // Nếu đã tồn tại issue, thêm dòng mới vào body của issue đầu tiên tìm được
+      const issueNumber = data[0].number;  // Lấy số của issue đầu tiên
+      const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
+
+      // Lấy nội dung hiện tại của issue
+      fetch(issueUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      })
+      .then(response => response.json())
+      .then(issueData => {
+        const updatedBody = issueData.body + '\n' + newLine; // Thêm dòng mới vào cuối body
+
+        // Cập nhật lại nội dung của issue
+        fetch(issueUrl, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+          },
+          body: JSON.stringify({
+            title: issueData.title, // Giữ nguyên tiêu đề
+            body: updatedBody,  // Cập nhật nội dung của issue
+          }),
+        })
+        .then(response => response.json())
+        .then(updatedData => {
+          console.log('Issue đã được cập nhật:', updatedData);
+        })
+        .catch(error => {
+          console.error('Lỗi khi cập nhật Issue:', error);
+        });
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy nội dung issue:', error);
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Lỗi khi tìm kiếm issue:', error);
+  });
+}
+
+
+
+
+
+
+
+
+
 
 
 let monsterIds = [];
