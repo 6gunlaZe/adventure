@@ -93,6 +93,16 @@ else if ( frammode == 6 )
 farmX = 239
 farmY = -1217
 }
+else if ( frammode == 7 )
+{
+ triancrep = "tortoise"; 
+ maptrain = "main"; 
+farmX = -1039
+farmY = 1175
+}
+
+
+
    // let farmX = 372 //character.real_x;
    // let  farmY = -723 //character.real_y;
 
@@ -697,10 +707,10 @@ if (frankymode == 1)
 	//////////check cac loai boss
   var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
 var targets	
-if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5)
+if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5 || frammode == 7)
 {
 if (character.hp > 3300){	
-targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "bee" , number : 3 })  //ham bo dem quai vat	
+targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "frog" , number : 3 })  //ham bo dem quai vat	
 }
 else
 {
