@@ -11,7 +11,7 @@ let run = 1
 let datahero
 let keyauto
 
-game_log("Game vs 1.8");
+game_log("Game vs 1.1");
 
 setInterval(function() {
 
@@ -267,7 +267,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 
 
-function ghichu(title, mess,key_auto1) {
+function ghichu(title, mess, key_auto1) {
   const token = key_auto1;  // Thay bằng token của bạn
   const repoOwner = '6gunlaZe';  // Tên người sở hữu repo
   const repoName = 'game';  // Tên repository
@@ -319,7 +319,8 @@ function ghichu(title, mess,key_auto1) {
       })
       .then(response => response.json())
       .then(issueData => {
-        const updatedBody = issueData.body + '\n' + newLine; // Thêm dòng mới vào cuối body
+        // Kiểm tra nếu issueData.body có giá trị, nếu không thì khởi tạo giá trị mới
+        const updatedBody = (issueData.body || '') + '\n' + newLine; // Thêm dòng mới vào cuối body
 
         // Cập nhật lại nội dung của issue
         fetch(issueUrl, {
@@ -350,7 +351,6 @@ function ghichu(title, mess,key_auto1) {
     console.error('Lỗi khi tìm kiếm issue:', error);
   });
 }
-
 
 
 
