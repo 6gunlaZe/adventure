@@ -312,9 +312,9 @@ function chuyendoithongminh(taget)
 		}
 		if (character.slots["offhand"])unequip( "offhand");
 
-        changeitem({ slot: "mainhand", name : "wbasher", level : 1 });
+        changeitem({ slot: "mainhand", name : "basher", level : 6 });
 		
-			if (character.slots["mainhand"] && character.slots["mainhand"].name == "wbasher")use_skill("stomp");
+			if (character.slots["mainhand"] && character.slots["mainhand"].name == "basher")use_skill("stomp");
 				       
 	}
 	
