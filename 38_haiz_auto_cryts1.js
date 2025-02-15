@@ -23,7 +23,7 @@ if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);
 
 
 //////////////////////////////////////////
-
+let checkkill = 0
 let nhay = 1
 let z = 1;  
 let bat = 0
@@ -184,11 +184,44 @@ if ( z > 52 ) z -= 1;
 	return
 		}
 
-	
-if (z >= 37 && z<47 && get_NUMber_kill() >= 9 && targetNOsafe.length > 0 && nhay == 1)	{
+let numberkilll = get_NUMber_kill()	
+if (z >= 37 && z<47 && numberkilll >= 9 && targetNOsafe.length > 0 && nhay == 1)	{
 nhay = 0
 z = 47;	
 }
+//////////////
+if ( checkkill != numberkilll )
+{
+const token = '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';  // Thay bằng token của bạn
+const repoOwner = '6gunlaZe';  // Tên người sở hữu repo (ví dụ: 'octocat')
+const repoName = 'game';  // Tên repository (ví dụ: 'my-project')
+const issueTitle = character.in;
+const issueBody = `kill = ${numberkilll}`;
+
+
+// Gửi yêu cầu tạo Issue đến GitHub API
+fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `token ${token}`,  // Xác thực bằng token
+  },
+  body: JSON.stringify({
+    title: issueTitle,
+    body: issueBody,
+  }),
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Issue đã được tạo:', data);
+})
+.catch(error => {
+  console.error('Lỗi khi tạo Issue:', error);
+});
+
+checkkill = numberkilll
+}
+/////////////
 	
 game_log("ZZZ = !!!!!!  "+ z  );	
 
