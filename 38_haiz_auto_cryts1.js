@@ -188,7 +188,7 @@ if ( z > 52 ) z -= 1;
 		}
 
 let numberkilll = get_NUMber_kill()	
-if (z >= 37 && z<47 && numberkilll >= 9 && targetNOsafe.length > 0 && nhay == 1)	{
+if (z >= 37 && z<47 && numberkilll >= 9 && targetNOsafe.length > 0 && targetkill.length === 0 &&nhay == 1)	{
 nhay = 0
 z = 47;	
 }
