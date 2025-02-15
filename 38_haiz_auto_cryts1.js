@@ -9,6 +9,7 @@ let delayitem
 let skillbua = 0
 let run = 1
 let datahero
+let keyauto
 
 game_log("Game vs 1.5");
 
@@ -19,6 +20,22 @@ if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
 if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
 // if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
 
+//////////////////////lay key
+            const recentMail = await AL.Game.getMail()
+            recentMail.reverse() // Order oldest to newest, so if they sent two auth mails, the newer one will get set
+            for (const mail of recentMail) {
+                if (mail.subject.toLowerCase() !== "key_auto") continue
+
+                const name = mail.fro
+                const aldata_auth = mail.message
+                if (name =="MuaBan"){
+			keyauto = aldata_auth
+			return
+		}
+	    }
+
+
+	
 }, 40000);
 
 
@@ -192,7 +209,7 @@ z = 47;
 //////////////
 if ( checkkill != numberkilll )
 {
-const token = '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';  // Thay bằng token của bạn
+const token = keyauto;  // Thay bằng token của bạn
 const repoOwner = '6gunlaZe';  // Tên người sở hữu repo (ví dụ: 'octocat')
 const repoName = 'game';  // Tên repository (ví dụ: 'my-project')
 const issueTitle = character.in;
