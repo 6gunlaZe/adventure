@@ -1,14 +1,11 @@
-const botToken = 'YOUR_BOT_TOKEN'; // Thay YOUR_BOT_TOKEN bằng token của bạn
+const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPgc'; // Thay YOUR_BOT_TOKEN bằng token của bạn
 
-// Khai báo các biến để lưu trữ key và data
-let key = '';
-let data = '';
-
-// Các mẫu cú pháp
+// Các mẫu cú pháp (dễ dàng thay đổi tại đây)
 const syntaxExamples = [
-  '(name, John)',  // Mẫu 1
-  '(age, 25)',     // Mẫu 2
-  '(city, Hanoi)'  // Mẫu 3
+  { key: 'reset', value: '1' },
+  { key: 'fram', value: '1' },
+  { key: 'bank', value: '1' },
+  { key: 'crypt', value: '1' }
 ];
 
 // Hàm lấy các bản cập nhật từ Telegram
@@ -45,13 +42,16 @@ function analyzeMessage(text, chatId) {
     const match = text.match(regex);
 
     if (match) {
-      key = match[1].trim();   // Lấy key từ tin nhắn
-      data = match[2].trim();  // Lấy data từ tin nhắn
+      const key = match[1].trim();   // Lấy key từ tin nhắn
+      let data = match[2].trim();    // Lấy data từ tin nhắn
 
       // Kiểm tra xem data có phải là số hay không
       if (!isNaN(data)) {
         data = parseFloat(data);  // Nếu là số, chuyển thành kiểu số
       }
+
+      // Thực hiện một nhiệm vụ khi người dùng nhập đúng định dạng
+      performTask(key, data, chatId);  // Gọi hàm để thực hiện nhiệm vụ
 
       // Phản hồi lại người dùng sau khi lưu key và data
       sendMessage(chatId, `Data received: ${key} = ${data}`);
@@ -64,24 +64,20 @@ function analyzeMessage(text, chatId) {
 
 // Hàm trả về các cú pháp mẫu
 function getSyntaxExamples() {
-  return syntaxExamples.join('\n'); // Dùng \n để nối các mẫu cú pháp thành 1 chuỗi
+  return syntaxExamples.map(example => `(${example.key}, ${example.value})`).join('\n'); // Dùng \n để nối các mẫu cú pháp thành 1 chuỗi
 }
 
 // Hàm gửi các ví dụ cú pháp đúng cho người dùng
 function sendSyntaxExamples(chatId) {
   const text = `Bạn đã nhập sai cú pháp. Hãy thử một trong các cú pháp sau:\n\n` + getSyntaxExamples();
 
-  // Gửi tin nhắn với các nút chọn
+  // Tạo các nút inline keyboard từ mảng syntaxExamples
   const reply_markup = {
-    inline_keyboard: [
-      [
-        { text: 'Gửi (name, John)', callback_data: '(name, John)' },
-        { text: 'Gửi (age, 25)', callback_data: '(age, 25)' },
-      ],
-      [
-        { text: 'Gửi (city, Hanoi)', callback_data: '(city, Hanoi)' }
-      ]
-    ]
+    inline_keyboard: syntaxExamples.map(example => {
+      return [
+        { text: `Gửi (${example.key}, ${example.value})`, callback_data: `(${example.key}, ${example.value})` }
+      ];
+    })
   };
 
   // Gửi tin nhắn cho người dùng với các nút bấm
@@ -136,6 +132,30 @@ function handleCallbackQuery(callbackQuery) {
 
   // Gửi lại tin nhắn người dùng đã chọn
   sendMessage(chatId, `Bạn đã chọn cú pháp: ${text}`);
+}
+
+// Hàm thực hiện nhiệm vụ (ví dụ: ghi lại dữ liệu hoặc thực hiện hành động khác)
+function performTask(key, data, chatId) {
+  // Giả sử nhiệm vụ là ghi lại key và data vào một hệ thống nào đó
+  // (Ví dụ: lưu vào cơ sở dữ liệu, gọi API khác, hoặc thực hiện tính toán)
+  console.log(`Nhiệm vụ thực hiện: key = ${key}, data = ${data}`);
+
+  // Cập nhật thêm logic ở đây tùy theo nhiệm vụ bạn muốn thực hiện
+  // Ví dụ: Nếu key là 'reset', thực hiện thao tác reset:
+  if (key === 'reset') {
+    // Giả sử bạn muốn reset một giá trị nào đó hoặc thực hiện hành động đặc biệt
+    console.log('Thực hiện reset!');
+    sendMessage(chatId, 'Nhiệm vụ reset đã hoàn thành!');
+  } 
+  // Thực hiện các nhiệm vụ khác tùy theo key
+  else if (key === 'fram') {
+    console.log('Thực hiện fram!');
+    sendMessage(chatId, 'Nhiệm vụ fram đã hoàn thành!');
+  } 
+  // Có thể thêm các điều kiện khác cho các key khác như 'bank', 'crypt'
+  else {
+    sendMessage(chatId, `Không có nhiệm vụ xác định cho key: ${key}`);
+  }
 }
 
 // Gọi hàm getUpdates để nhận và phân tích tin nhắn
