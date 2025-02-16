@@ -1,3 +1,4 @@
+
 const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPgc'; // Thay YOUR_BOT_TOKEN bằng token của bạn
 
 // Các mẫu cú pháp (dễ dàng thay đổi tại đây)
@@ -120,7 +121,23 @@ function handleCallbackQuery(callbackQuery) {
 
   console.log('Handling callback query:', text);  // Debug log: Xử lý callback query
 
-  sendMessage(chatId, `Bạn đã chọn cú pháp: ${text}`);
+  // Gọi hàm performTask giống như khi người dùng nhập cú pháp
+  const regex = /^\(([^,]+),\s*(.+)\)$/;  // Kiểm tra định dạng (key, data)
+  const match = text.match(regex);
+
+  if (match) {
+    const key = match[1].trim();
+    let data = match[2].trim();
+    if (!isNaN(data)) {
+      data = parseFloat(data);  // Nếu là số, chuyển thành số
+    }
+
+    // Xử lý nhiệm vụ với key và data
+    performTask(key, data, chatId);
+    sendMessage(chatId, `Data received: ${key} = ${data}`);
+  } else {
+    sendMessage(chatId, 'Dữ liệu không hợp lệ!');
+  }
 }
 
 // Hàm thực hiện nhiệm vụ (ví dụ: ghi lại dữ liệu hoặc thực hiện hành động khác)
@@ -133,6 +150,12 @@ function performTask(key, data, chatId) {
   } else if (key === 'fram') {
     console.log('Thực hiện fram!');
     sendMessage(chatId, 'Nhiệm vụ fram đã hoàn thành!');
+  } else if (key === 'bank') {
+    console.log('Thực hiện bank!');
+    sendMessage(chatId, 'Nhiệm vụ bank đã hoàn thành!');
+  } else if (key === 'crypt') {
+    console.log('Thực hiện crypt!');
+    sendMessage(chatId, 'Nhiệm vụ crypt đã hoàn thành!');
   } else {
     console.log('Không có nhiệm vụ xác định cho key:', key);  // Debug log: Kiểm tra trường hợp không có nhiệm vụ
     sendMessage(chatId, `Không có nhiệm vụ xác định cho key: ${key}`);
@@ -141,3 +164,6 @@ function performTask(key, data, chatId) {
 
 // Gọi hàm getUpdates lần đầu tiên
 getUpdates();
+
+
+
