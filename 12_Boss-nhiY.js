@@ -28,7 +28,7 @@ superMOVE()
 }, 2000);
 ////////////////////////
 
-let datasmart
+let datasmart = {};
 function superMOVE() {
 if (Object.keys(datasmart).length = 0) return
 
