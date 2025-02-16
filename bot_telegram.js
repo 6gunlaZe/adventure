@@ -1,4 +1,4 @@
-
+///////////////
 const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPgc'; // Thay YOUR_BOT_TOKEN bằng token của bạn
 
 // Các mẫu cú pháp (dễ dàng thay đổi tại đây)
@@ -10,6 +10,11 @@ const syntaxExamples = [
 ];
 
 let lastUpdateId = 0;  // Biến để lưu trữ ID của bản cập nhật cuối cùng
+const messageTimeout = 10 * 1000; // 10 giây (tính bằng milliseconds)
+const initialDelay = 30 * 1000;  // 30 giây (tính bằng milliseconds)
+const callbackTimeout = 10 * 1000; // 10 giây cho thời gian nhấn nút
+
+let callbackQueryTimes = new Map();  // Lưu trữ thời gian nút callback query
 
 // Hàm lấy các bản cập nhật từ Telegram
 async function getUpdates() {
@@ -29,8 +34,17 @@ async function getUpdates() {
         const message = update.message;
 
         if (message) {
-          console.log('Processing message:', message);  // Debug log: Xử lý tin nhắn
-          analyzeMessage(message.text, message.chat.id);
+          const messageTime = new Date(message.date * 1000);  // Convert timestamp to Date object
+          const currentTime = new Date();
+          const timeDiff = currentTime - messageTime;  // Tính sự chênh lệch thời gian (milliseconds)
+
+          // Chỉ xử lý tin nhắn nếu nó được gửi trong vòng 10 giây
+          if (timeDiff <= messageTimeout) {
+            console.log('Processing message:', message);  // Debug log: Xử lý tin nhắn
+            analyzeMessage(message.text, message.chat.id);
+          } else {
+            console.log('Message is too old. Skipping...');
+          }
         } else if (update.callback_query) {
           console.log('Processing callback query:', update.callback_query);  // Debug log: Xử lý callback query
           handleCallbackQuery(update.callback_query);
@@ -121,7 +135,18 @@ function handleCallbackQuery(callbackQuery) {
 
   console.log('Handling callback query:', text);  // Debug log: Xử lý callback query
 
-  // Gọi hàm performTask giống như khi người dùng nhập cú pháp
+  // Kiểm tra thời gian của callback query
+  const currentTime = new Date().getTime();
+  const timestamp = callbackQuery.message.date * 1000;  // Lấy thời gian tạo của message chứa callback query
+  const timeDiff = currentTime - timestamp;
+
+  // Nếu thời gian quá lâu (10 giây), bỏ qua xử lý
+  if (timeDiff > callbackTimeout) {
+    console.log('Callback query expired. Skipping...');
+    return;  // Bỏ qua callback query nếu thời gian quá lâu
+  }
+
+  // Nếu không quá lâu, thực hiện xử lý bình thường
   const regex = /^\(([^,]+),\s*(.+)\)$/;  // Kiểm tra định dạng (key, data)
   const match = text.match(regex);
 
@@ -162,8 +187,8 @@ function performTask(key, data, chatId) {
   }
 }
 
-// Gọi hàm getUpdates lần đầu tiên
-getUpdates();
-
-
-
+// Khởi động bot sau khi chờ 30 giây
+setTimeout(() => {
+  console.log('Bot is now starting...');
+  getUpdates(); // Gọi hàm getUpdates lần đầu tiên
+}, initialDelay);
