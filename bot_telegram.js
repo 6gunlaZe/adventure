@@ -26,7 +26,7 @@ async function getUpdates() {
       for (let update of data.result) {
         lastUpdateId = update.update_id;
         const message = update.message;
-        
+
         if (message) {
           console.log('Processing message:', message);  // Debug log: Xử lý tin nhắn
           analyzeMessage(message.text, message.chat.id);
@@ -113,6 +113,15 @@ function sendMessage(chatId, text, reply_markup = {}) {
   .catch(error => console.error('Error sending message:', error));
 }
 
+// Hàm xử lý khi người dùng nhấn vào nút trong inline keyboard
+function handleCallbackQuery(callbackQuery) {
+  const chatId = callbackQuery.message.chat.id;
+  const text = callbackQuery.data;
+
+  console.log('Handling callback query:', text);  // Debug log: Xử lý callback query
+
+  sendMessage(chatId, `Bạn đã chọn cú pháp: ${text}`);
+}
 
 // Hàm thực hiện nhiệm vụ (ví dụ: ghi lại dữ liệu hoặc thực hiện hành động khác)
 function performTask(key, data, chatId) {
