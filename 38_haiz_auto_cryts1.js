@@ -13,6 +13,8 @@ let keyauto
 
 game_log("Game vs 1.1");
 
+smart_move({ map: "cave", x: -194, y: -1281 })
+
 setInterval(function() {
 
 	
