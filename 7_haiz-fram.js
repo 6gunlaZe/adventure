@@ -385,7 +385,7 @@ function on_draw(){
   if(draw_debug){
       clear_drawings();
 /////////
-	  if(character.s["sugarrush"] || delay == 0 )
+	  if(character.s["sugarrush"] )
 	  {
 	  
 		  loop = 20
