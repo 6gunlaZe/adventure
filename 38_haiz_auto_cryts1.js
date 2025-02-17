@@ -10,7 +10,7 @@ let skillbua = 0
 let run = 1
 let datahero
 let keyauto
-
+let checkback = 0
 game_log("Game vs 1.1");
 
 smart_move({ map: "cave", x: -194, y: -1281 })
@@ -40,6 +40,7 @@ if (character.map != "crypt" && z > 100){
 	z = 1
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
+	checkback = 0
 }
 if (character.map != "crypt") return;
 
@@ -154,7 +155,7 @@ if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"})
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67){
+if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67 || (checkback + z) > 120 ){
 	stop_character("Ynhi")	
 	stop_character("haiz1")	
 	z = 1000
@@ -247,6 +248,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
       // Quay lại 
 	    nguyhiem = 1
+	    if (targetNO.length > 0)checkback++
       if (z > 1) {
         z--;
       }
