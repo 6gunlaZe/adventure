@@ -137,7 +137,7 @@ if (character.ping > 600 )
 }
 	else
 {
-	delayThreshold = 220
+	delayThreshold = 120
 }
 	
 if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
