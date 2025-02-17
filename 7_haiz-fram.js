@@ -1349,6 +1349,7 @@ if (frankymode == 1)
 	
 	if (entity1) {
 		target = entity1
+	if(can_attack(target) && delay <10 )attack(target);	
 	}
 
 if (icemode == 0 && evenbossmode == 0)
