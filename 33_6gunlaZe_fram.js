@@ -115,9 +115,11 @@ var bossarmy=[ "aaa", "bbb", "cccc"];
 
 
 
-
-	if (frankymode == 0)smart_move({ map: maptrain, x: farmX, y: farmY })
-
+setTimeout(function() {
+    if (frankymode == 0) {
+        smart_move({ map: maptrain, x: farmX, y: farmY });
+    }
+}, 10000);  // 10000 mili giây = 10 giây
 
 
 
