@@ -193,13 +193,14 @@ let serverIden = server.id
 
 if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
 {
-if ( region == "ASIA" && serverIden == "I" ) 
+if ( region == "EU" && serverIden == "II" ) 
 {
 	game_log ("  SV  >>>>" + region + serverIden )
 }
 	else
 	{
-	change_server("ASIA", "I");	
+         change_server("EU", "II");
+	//change_server("ASIA", "I");	
 	}
 }	
 
