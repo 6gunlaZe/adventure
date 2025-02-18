@@ -260,13 +260,15 @@ if (randomNumber < 40) {
 } else if (randomNumber > 80) {
     change_server("EU", "I");
 } else if (randomNumber > 40 && randomNumber < 55) {
-    change_server("EU", "II");
+   // change_server("EU", "II");
+       change_server("ASIA", "I");
 } else if (randomNumber > 55 && randomNumber < 70) {
     change_server("US", "III");
 } else if (randomNumber > 70 && randomNumber < 80) {
     change_server("US", "II");
 } else {
-    change_server("ASIA", "I");
+    //change_server("ASIA", "I");
+      change_server("EU", "II");
 }	
 	
 }	
