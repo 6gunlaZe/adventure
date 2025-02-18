@@ -180,6 +180,18 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 ///////////////////////////
 
 
+setTimeout(function() {
+stop_character("6gunlaZe")
+start_character("nhiY", 12);	
+}, 10000); // 10000 milliseconds = 10 giây
+
+setTimeout(function() {
+if(parent.party_list.includes("nhiY"))send_cm("nhiY","jr")
+}, 40000); // 10000 milliseconds = 10 giây
+
+setTimeout(function() {
+stop_character("nhiY")
+}, 95000); // 10000 milliseconds = 10 giây
 
  ///////////////////////// 
 setInterval(function() {	
