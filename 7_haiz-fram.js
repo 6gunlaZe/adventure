@@ -193,6 +193,10 @@ setTimeout(function() {
 stop_character("nhiY")
 }, 95000); // 10000 milliseconds = 10 giây
 
+setTimeout(function() {
+smart_move({ map: maptrain, x: farmX, y: farmY })	
+}, 120000); // 10000 milliseconds = 10 giây
+
  ///////////////////////// 
 setInterval(function() {	
 if (host == 0 ) return	
