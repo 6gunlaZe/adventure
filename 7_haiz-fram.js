@@ -196,7 +196,7 @@ stop_character("nhiY")
 setTimeout(function() {
 if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
 	
-smart_move({ map: maptrain, x: farmX, y: farmY })	
+if (character.map == "spookytown")smart_move({ map: maptrain, x: farmX, y: farmY })	
 }, 120000); // 10000 milliseconds = 10 giây
 
  ///////////////////////// 
