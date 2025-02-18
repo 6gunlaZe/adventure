@@ -267,16 +267,16 @@ let serverIden = server.id
 if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
 {
 	
-if (randomNumber < 40) {
+if (randomNumber < 20) {
     change_server("US", "I");
 } else if (randomNumber > 80) {
     change_server("EU", "I");
-} else if (randomNumber > 40 && randomNumber < 55) {
+} else if (randomNumber > 20 && randomNumber < 30) {
    // change_server("EU", "II");
        change_server("ASIA", "I");
-} else if (randomNumber > 55 && randomNumber < 70) {
+} else if (randomNumber > 30 && randomNumber < 60) {
     change_server("US", "III");
-} else if (randomNumber > 70 && randomNumber < 80) {
+} else if (randomNumber > 60 && randomNumber < 80) {
     change_server("US", "II");
 } else {
     //change_server("ASIA", "I");
