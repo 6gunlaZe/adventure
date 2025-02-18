@@ -194,6 +194,8 @@ stop_character("nhiY")
 }, 95000); // 10000 milliseconds = 10 giây
 
 setTimeout(function() {
+if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
+	
 smart_move({ map: maptrain, x: farmX, y: farmY })	
 }, 120000); // 10000 milliseconds = 10 giây
 
