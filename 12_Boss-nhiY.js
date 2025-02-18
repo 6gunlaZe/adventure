@@ -25,7 +25,7 @@ setInterval(function() {
 if (Object.keys(datasmart).length == 0 && Object.keys(Savedatasmart).length > 0) datasmart = Savedatasmart;
 if(parent.S.icegolem && foxmode == 0) return	
 if (jrmode == 0) return
-if (smart.moving && jrmode = 1){
+if (smart.moving && jrmode == 1){
 	datasmart =smart;
 	Savedatasmart = =smart;
         foxmode = 1
