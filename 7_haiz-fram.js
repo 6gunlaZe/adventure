@@ -69,7 +69,7 @@ let frankysafe = 0
 
 
 let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
-let frammode = 0
+let frammode = 1
 let soluongquai = 8
 
 if ( frammode == 0)
