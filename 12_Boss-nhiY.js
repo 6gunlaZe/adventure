@@ -36,7 +36,7 @@ smart_move({ map: "spookytown", x: -728, y: -123 })
 	
 
 	
-}, 500);
+}, 1000);
 
 
 
@@ -91,7 +91,7 @@ if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
 const congdichuyen = findcongdichchuyen(checkdichuyen);
 if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
-if (character.mp > 2800 && foxmode == 1){
+if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 0){
 	mageMagiPort()
 	datasmart = {};
 }
