@@ -15,7 +15,33 @@ let back = 0
 let receivedData
 
 //////////////////////////
+let jrmode = 0
 let foxmode = 0
+
+
+
+let Savedatasmart = {};
+setInterval(function() {
+if (Object.keys(datasmart).length == 0 && Object.keys(Savedatasmart).length > 0) datasmart = Savedatasmart;
+if(parent.S.icegolem && foxmode == 0) return	
+if (jrmode == 0) return
+if (smart.moving && jrmode = 1){
+	datasmart =smart;
+	Savedatasmart = =smart;
+        foxmode = 1
+	jrmode = 0
+}
+if (smart.moving || foxmode == 1) return;
+smart_move({ map: "spookytown", x: -728, y: -123 })
+	
+
+	
+}, 500);
+
+
+
+
+
 //FRAM FOXNIX
 setInterval(function() {
 
@@ -69,6 +95,13 @@ if (character.mp > 2800 && foxmode == 1){
 	mageMagiPort()
 	datasmart = {};
 }
+
+if (character.mp > 2800 && get_nearest_monster({type: "jr"}))
+	{
+	mageMagiPort()
+	datasmart = {};
+        }
+	
 ////////
 	
 	
@@ -247,7 +280,7 @@ function on_cm(name, data) {
 		
 	}
 
-	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode"){
+	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode" && data != "jr"){
 		 if (data.message === "location")receivedData = data
 		else datasmart = data
 
@@ -257,7 +290,9 @@ function on_cm(name, data) {
 	if(name == "haiz" && data == "foxmode" ){
            foxmode = 1
 	}
-	
+	if(name == "haiz" && data == "jr" ){
+           jrmode = 1
+	}
 	
 	
 }
