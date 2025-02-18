@@ -230,7 +230,7 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 		
 	
 	
-}, 80000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
+}, 100000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
 
 
 
