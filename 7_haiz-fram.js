@@ -47,7 +47,7 @@ let lastCallTime = 0; // Biến lưu trữ thời gian mốc
 let delayThreshold = 200; // Ngưỡng thời gian 200ms
 let killangioseal = 1
 let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
-const delayy = 300 
+const delayy = 100 
 let started
 let loop = 9
 let numfram = 0
