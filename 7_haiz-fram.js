@@ -463,6 +463,14 @@ function on_magiport(name){
 
 
 function on_cm(name, data) {
+
+
+////////////////////
+ if(name == "nhiY" && data == "boss1"){
+		  bosstime = 1
+	    timekillboss = Date.now()
+	  framboss = 1
+ }
 /////////////////
     if(name == "MuaBan"){
 
