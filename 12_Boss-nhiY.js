@@ -18,10 +18,21 @@ let receivedData
 let jrmode = 0
 let foxmode = 0
 
-
-
+let notejr = 0
+let done = 0
 let Savedatasmart = {};
 setInterval(function() {
+if (done == 1) return
+if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
+send_cm("haiz","boss1") 
+Savedatasmart = {};	
+done = 1
+}
+else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && notejr == 1 )	{
+parent.api_call("disconnect_character", {name: "nhiY"});
+stop_character("nhiY")	
+}
+	
 if (Object.keys(datasmart).length == 0 && Object.keys(Savedatasmart).length > 0) datasmart = Savedatasmart;
 if(parent.S.icegolem && foxmode == 0) return	
 if (jrmode == 0) return
@@ -30,6 +41,7 @@ if (smart.moving && jrmode == 1){
 	Savedatasmart = smart;
         foxmode = 1
 	jrmode = 0
+	notejr = 1
 }
 if (smart.moving || foxmode == 1) return;
 smart_move({ map: "spookytown", x: -728, y: -123 })
@@ -96,12 +108,6 @@ if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 
 	datasmart = {};
 }
 
-if (character.mp > 2800 && get_nearest_monster({type: "jr"}))
-	{
-	mageMagiPort()
-	datasmart = {};
-        }
-	
 ////////
 	
 	
