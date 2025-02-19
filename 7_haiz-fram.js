@@ -187,11 +187,8 @@ start_character("nhiY", 12);
 
 setTimeout(function() {
 if(parent.party_list.includes("nhiY"))send_cm("nhiY","jr")
-}, 40000); // 10000 milliseconds = 10 giây
+}, 35000); // 10000 milliseconds = 10 giây
 
-setTimeout(function() {
-stop_character("nhiY")
-}, 95000); // 10000 milliseconds = 10 giây
 
 setTimeout(function() {
 if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
