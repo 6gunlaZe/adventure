@@ -1380,7 +1380,7 @@ if (icemode == 0 && evenbossmode == 0)
 	
 	if(!target)
 	{
-		var target= get_nearest_monster({type: "greenjr1"});
+		var target= get_nearest_monster({type: "goldenbat"});
 		if(target) {
 			change_target(target);
 						//////////// dung skill
