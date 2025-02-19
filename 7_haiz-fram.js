@@ -187,14 +187,8 @@ start_character("nhiY", 12);
 
 setTimeout(function() {
 if(parent.party_list.includes("nhiY"))send_cm("nhiY","jr")
-}, 35000); // 10000 milliseconds = 10 giây
+}, 30000); // 10000 milliseconds = 10 giây
 
-
-setTimeout(function() {
-if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
-	
-if (character.map == "spookytown")smart_move({ map: maptrain, x: farmX, y: farmY })	
-}, 120000); // 10000 milliseconds = 10 giây
 
  ///////////////////////// 
 setInterval(function() {	
