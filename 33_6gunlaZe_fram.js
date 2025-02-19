@@ -37,7 +37,7 @@ let frankyKILL = 0
 	var maptrain  
     var triancrep 
 
-let frammode = 7
+let frammode = 4
 let modeYnhi = 2 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
 let killangioseal = 1
 let safeframm = 0
