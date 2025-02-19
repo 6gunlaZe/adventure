@@ -462,6 +462,9 @@ function on_cm(name, data) {
 	    timekillboss = Date.now()
 	  framboss = 1
  }
+ if(name == "nhiY" && data == "stop"){
+stop_character("nhiY") 
+ }	
 /////////////////
     if(name == "MuaBan"){
 
