@@ -95,8 +95,12 @@ let timeupdelay
 setInterval(function() {
 	
 if(1>0) for(const slot in character.items)
+	{
+var item = character.items[slot];
+if (item.level && item.level >= 1)continue
+		
 if(["pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
-	
+	}
 
 }, 1000);
 //////
