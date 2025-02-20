@@ -44,10 +44,10 @@ let check_ice = 0
 	
 	
 let lastCallTime = 0; // Biến lưu trữ thời gian mốc
-let delayThreshold = 100; // Ngưỡng thời gian 200ms
+let delayThreshold = 150; // Ngưỡng thời gian 200ms
 let killangioseal = 1
 let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
-const delayy = 100 
+const delayy = 150 
 let started
 let loop = 9
 let numfram = 0
