@@ -1127,6 +1127,12 @@ frankyKILL = 1
 
 	
 }
+	else
+	{
+		if( check5shot == 1 )use_skill("5shot", targets);
+	    if(check3shot == 1 && check5shot ==0 )use_skill("3shot", targets);
+		
+	}
 
 	
 }
