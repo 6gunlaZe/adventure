@@ -5,7 +5,7 @@
 // "gem0" , "ornament" , "candycane" , "mistletoe" , "xgloves" , "frankypants" , "starkillers" , "wbookhs"
 /// send_mail('Plutus', '10 keys', 'nice', true)
 game_log("game 1.0")
-var itemautotrans=[ "candy1" , "gem0", "a7", "vbat"]; 
+var itemautotrans=[ "candy1" , "gem0", "candy0", "vbat"]; 
 map_key("A", "toggle_run_code");
 
 map_key("Z", "snippet", "parent.stop_runner();");
