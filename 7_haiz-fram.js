@@ -2136,6 +2136,17 @@ if (frankysafe == 0)skill_scare();
 		attack(targetfk);
 	}
 }
+	else if (targetfk && can_attack(targetfk) && targetfk.target)
+	{
+		set_message("Attacking");
+		attack(targetfk);
+
+if(targetfk  && character.hp < 4500)
+{
+parent.api_call("disconnect_character", {name: "haiz"});
+}
+	
+	}
 
 	
 }
