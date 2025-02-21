@@ -1849,6 +1849,7 @@ var combineWhitelist =
 		wbookhs: 2,
 		cring: 2,
 		cearring: 2,
+		jacko: 3,
 	}
 
 
