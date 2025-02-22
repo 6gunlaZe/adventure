@@ -1283,6 +1283,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		cape: 4,
 		sshield:7,
 		hgloves: 6,
+		hhelmet:6,
 		cclaw: 8,
 		dagger: 6,
 		//stinger: 6,
