@@ -202,13 +202,13 @@ let serverIden = server.id
 
 if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
 {
-if ( region == "EU" && serverIden == "II" ) 
+if ( region == "EU" && serverIden == "I" ) 
 {
 	game_log ("  SV  >>>>" + region + serverIden )
 }
 	else
 	{
-         change_server("EU", "II");
+         change_server("EU", "I");
 	//change_server("ASIA", "I");	
 	}
 }	
@@ -267,7 +267,7 @@ if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
 if (randomNumber < 20) {
     change_server("US", "I");
 } else if (randomNumber > 80) {
-    change_server("EU", "I");
+    change_server("EU", "II");
 } else if (randomNumber > 20 && randomNumber < 30) {
    // change_server("EU", "II");
        change_server("ASIA", "I");
@@ -277,7 +277,7 @@ if (randomNumber < 20) {
     change_server("US", "II");
 } else {
     //change_server("ASIA", "I");
-      change_server("EU", "II");
+      change_server("EU", "I");
 }	
 	
 }	
