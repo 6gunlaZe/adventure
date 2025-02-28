@@ -165,6 +165,7 @@ if (godenbat == 0 || foxmode == 1)return
 if (smart.moving ){
 	datasmart = smart;
 	Savedatasmart = smart;
+	runb = 0
 }
 	
 if (smart.moving || foxmode == 1) return;
@@ -177,7 +178,7 @@ return
 }
 	
 ////////
-runb = 0
+
 if (step >= 4) {
     godenbat = 0;
 }	
