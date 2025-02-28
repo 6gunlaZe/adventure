@@ -185,9 +185,13 @@ stop_character("6gunlaZe")
 start_character("nhiY", 12);	
 }, 10000); // 10000 milliseconds = 10 giây
 
-setTimeout(function() {
-if(parent.party_list.includes("nhiY"))send_cm("nhiY","jr")
-}, 30000); // 10000 milliseconds = 10 giây
+
+let intervalId = setInterval(function() {
+    if (parent.party_list.includes("nhiY")) {
+        send_cm("nhiY", "jr");
+        clearInterval(intervalId);  // Dừng lại khi điều kiện đúng
+    }
+}, 5000); // Chạy mỗi 5 giây
 
 
  ///////////////////////// 
