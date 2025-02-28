@@ -96,7 +96,7 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	use_skill("blink", [lastMain.x, lastMain.y])
 if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
-if (lastMain && distance(character, {x: x, y: y}) < 30)stop()	
+if (lastMain &&  character.map == map && distance(character, {x: x, y: y}) < 30)stop()	
 }
 
 
