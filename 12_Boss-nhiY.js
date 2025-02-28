@@ -96,7 +96,7 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	use_skill("blink", [lastMain.x, lastMain.y])
 if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
-if (lastMain && distance(character, {x: lastMain.x, y: lastMain.y}) < 30)stop()	
+if (lastMain && distance(character, {x: x, y: y}) < 30)stop()	
 }
 
 
@@ -186,7 +186,7 @@ if (step >= 4) {
 		datasmart ={};
 	Savedatasmart = {};
 }
-	game_log("v2")
+	game_log("v3")
 game_log(step)	
 	game_log(runb)	
 if (step == 1 && runb == 0){
@@ -205,7 +205,7 @@ if (step == 3 && runb == 0){
 runb = 1
 	     }	
 	
-}, 2000);
+}, 200);
 ////////////////////////
 
 
