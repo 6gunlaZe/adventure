@@ -162,7 +162,7 @@ let runb = 0
 let checkbat = 0
 setInterval(function() {
 if (godenbat == 0 || foxmode == 1)return
-if (smart.moving ){
+if (smart.moving && runb == 1){
 	datasmart = smart;
 	Savedatasmart = smart;
 	runb = 0
@@ -186,7 +186,7 @@ if (step >= 4) {
 		datasmart ={};
 	Savedatasmart = {};
 }
-	game_log("v4")
+	game_log("v5")
 game_log(step)	
 	game_log(runb)	
 if (step == 1 && runb == 0){
