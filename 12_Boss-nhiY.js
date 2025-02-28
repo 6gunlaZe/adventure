@@ -17,11 +17,12 @@ let receivedData
 //////////////////////////
 let jrmode = 0
 let foxmode = 0
-
+let moveJR = 0
 let notejr = 0
 let done = 0
 let Savedatasmart = {};
 setInterval(function() {
+game_log("JR= " + jrmode)	
 if (done == 1 || godenbat == 1) return
 if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
 send_cm("haiz","boss1") 
@@ -37,7 +38,7 @@ stop_character("nhiY")
 if (Object.keys(datasmart).length == 0 && Object.keys(Savedatasmart).length > 0) datasmart = Savedatasmart;
 if(parent.S.icegolem && foxmode == 0) return	
 if (jrmode == 0) return
-if (smart.moving && jrmode == 1){
+if (smart.moving && jrmode == 1 && moveJR == 1){
 	datasmart = smart;
 	Savedatasmart = smart;
         foxmode = 1
@@ -46,7 +47,7 @@ if (smart.moving && jrmode == 1){
 }
 if (smart.moving || foxmode == 1) return;
 smart_move({ map: "spookytown", x: -728, y: -123 })
-	
+moveJR = 1	
 
 	
 }, 1000);
@@ -274,7 +275,7 @@ if(parent.S.icegolem && foxmode == 0)
 	
 	if (leader && distance(character, leader) < 70 & foxmode == 0) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving || foxmode == 1 || godenbat == 1) return;
+    if (smart.moving || foxmode == 1 || godenbat == 1 || jrmode == 1) return;
 
 	
 	
