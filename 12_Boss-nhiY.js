@@ -28,7 +28,7 @@ send_cm("haiz","boss1")
 Savedatasmart = {};	
 done = 1
 }
-else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 )	{
+else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 ))	{
 	send_cm("haiz","stop")
 parent.api_call("disconnect_character", {name: "nhiY"});
 stop_character("nhiY")	
