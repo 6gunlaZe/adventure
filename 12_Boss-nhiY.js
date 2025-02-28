@@ -417,7 +417,7 @@ for (let char of keys) {
         && char !== "MuaBan"     // Không magiport người bán hàng
         && (!get_player(char))) { // Nếu không phải là người chơi
         use_skill("magiport", char);
-        return;
+       // return;
     }
 }
 
