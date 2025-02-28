@@ -810,8 +810,15 @@ framboss1 += 1
 }	
 	
 	
-	
+if (framboss == 10 && !smart.moving && (  (mast11 && foxmode == 0)  || (foxmode11 && foxmode == 1)  ) && framboss1 <5  ){
+	//send_cm("angioseal", "boss7");
 
+	if (currentBossLocation) {
+	smart_move({ map: currentBossLocation.map, x: currentBossLocation.x, y: currentBossLocation.y }, () => {
+framboss1 += 1
+    });
+}	
+}
 
 	
 	
@@ -2945,6 +2952,139 @@ setInterval(() => {
 	checkServersForBosseven(["dragold"] );
 
 }, 30000); // 60s check 1lan
+
+
+
+
+
+
+async function BosscheckHPMYSv11(monsters, HP) {
+  // Safety Checks
+  if (!Array.isArray(monsters) || monsters.length === 0) {
+    game_log("Không có quái vật nào trong danh sách");
+    return;
+  }
+
+  // Lấy thông tin region và serverIden
+  const region = server.region;
+  const serverIden = server.id;
+
+  // URL API để lấy thông tin quái vật
+  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+
+  try {
+    // Gửi request đến API
+    const response = await fetch(url);
+
+    // Kiểm tra nếu response trả về mã trạng thái 200
+    if (response.status === 200) {
+      const data = await response.json();
+
+      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn
+      const validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < HP && obj.serverRegion === region && obj.serverIdentifier === serverIden);
+
+      // Nếu tìm thấy các đối tượng hợp lệ
+      if (validObjects.length > 0) {
+        game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
+
+        // Tìm boss có HP thấp nhất
+        const minHpBoss = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+
+        // Trả về tọa độ của boss có HP thấp nhất
+        return { x: minHpBoss.x, y: minHpBoss.y, map: minHpBoss.map };
+      } else {
+        game_log("Không tìm thấy boss nào có HP thấp hơn yêu cầu trong server của bạn");
+        return null; // Nếu không tìm thấy boss nào
+      }
+    } else {
+      game_log(`Lỗi khi lấy dữ liệu từ API: ${response.status}`);
+      return null; // Nếu có lỗi khi gọi API
+    }
+  } catch (error) {
+    // Xử lý lỗi nếu fetch không thành công
+    game_log(`Lỗi kết nối: ${error}`);
+    return null; // Nếu có lỗi kết nối
+  }
+}
+
+
+
+async function moveToBossIfFound(monsters, HP) {
+  const bossLocation = await BosscheckHPMYSv11(monsters, HP);
+
+  // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
+  if (bossLocation && framboss == 0) {
+    framboss = 10;
+	  	  if (modeYnhi == 0)
+	  {
+		parent.api_call("disconnect_character", {name: "nhiY"});
+		stop_character("nhiY");
+	  }
+	  else if (modeYnhi == 2)
+	  {
+	  	parent.api_call("disconnect_character", {name: "haiz1"});
+		stop_character("haiz1");
+	  }
+	  else
+	  {
+		  if (foxmode == 0){
+		parent.api_call("disconnect_character", {name: "Ynhi"});
+		stop_character("Ynhi");  
+		  }
+		  else 
+		  {
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    
+		  }
+
+			  
+	  }
+	    bosstime = 1
+	    timekillboss = Date.now()
+	  if (foxmode == 1)start_character("nhiY", 12);
+	  if (foxmode == 0)start_character("angioseal", 21);  
+    currentBossLocation = bossLocation
+   // smart_move({ map: bossLocation.map, x: bossLocation.x, y: bossLocation.y });
+  } else {
+    game_log("Không tìm thấy boss để di chuyển đến.");
+  }
+}
+
+
+
+const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
+moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
+
+let currentBossLocation = null;
+// Đặt vòng lặp mỗi 10 giây
+setInterval(() => {
+moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
+}, 10000);  // 10000ms = 10 giây
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
