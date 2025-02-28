@@ -184,13 +184,16 @@ if (checkbat == 1){step+=1
 		  }
 if (step >= 4)godenbat = 0	
 game_log(step)	
-if (step = 1 && checkbat == 0 && runb == 0){smart_move({ map: "cave", x: 1154, y: 55 })	
+if (step = 1 && checkbat == 0 && runb == 0){
+	smart_move({ map: "cave", x: 1154, y: 55 })	
 runb = 1    
 	     }
-if (step = 2 && checkbat == 0 && runb == 0){smart_move({ map: "cave", x: -261, y: -454 })	
+if (step = 2 && checkbat == 0 && runb == 0){
+	smart_move({ map: "cave", x: -261, y: -454 })	
 runb = 1
 	     }
-if (step = 3 && checkbat == 0 && runb == 0){smart_move({ map: "cave", x: 325, y: -1118 })	
+if (step = 3 && checkbat == 0 && runb == 0){
+	smart_move({ map: "cave", x: 325, y: -1118 })	
 runb = 1
 	     }	
 	
