@@ -37,7 +37,7 @@ let frankyKILL = 0
 	var maptrain  
     var triancrep 
 
-let frammode = 4
+let frammode = 3
 let modeYnhi = 2 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
 let killangioseal = 1
 let safeframm = 0
@@ -709,7 +709,7 @@ if (frankymode == 1)
 	//////////check cac loai boss
   var  targetsoloboss = soloboss({ max_range: character.range, number : 1 })  //ham bo dem quai vat
 var targets	
-if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5 || frammode == 7)
+if (frammode == 0 || frammode == 2 || frammode == 4 || frammode == 5 || frammode == 7 || frammode == 3)
 {
 if (character.hp > 3300){	
 targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "frog11" , number : 3 })  //ham bo dem quai vat	
@@ -720,7 +720,7 @@ targets = get_nearest_monster1({type: triancrep});
 }
 	
 }
-else if ( (frammode == 1 || frammode == 3 || frammode == 6 ) && character.targets <=3 && b2 && distance(character, b2) < 350 ) //fram bat
+else if ( (frammode == 1 || frammode == 30 || frammode == 6 ) && character.targets <=3 && b2 && distance(character, b2) < 350 ) //fram bat
 	{
 	if (safeframm == 1)targets = getBestTargets({ max_range: character.range, type: triancrep, subtype : "croc" , havetarget: 1, fire:1 })  //ham bo dem quai vat
 		else
