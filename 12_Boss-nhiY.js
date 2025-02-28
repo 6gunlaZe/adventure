@@ -158,63 +158,71 @@ function findcongdichchuyen(data) {
 
 
 
-//trinh sat
+// Trình sát
 var tsname = "goldenbat"
 let godenbat = 1
 let step = 1
 let runb = 0
 let checkbat = 0
-setInterval(function() {
-if (godenbat == 0 || foxmode == 1)return
-if(parent.S.icegolem ){
-	godenbat = 0
-	return	
-}
-if (smart.moving && runb == 1){
-	datasmart = smart;
-	Savedatasmart = smart;
-	runb = 0
-}
-	
-if (smart.moving || is_moving(character) || foxmode == 1) return;
-////////
-if (get_nearest_monster({type:tsname})){
-if (character.mp > 2800) {mageMagiPort()
-			  godenbat = 0
-	datasmart ={};
-	Savedatasmart = {};
-			 }
-return	
-}
-	
-////////
-if (!is_moving(character))runb = 0
-if (step >= 4) {
-    godenbat = 0;
-		datasmart ={};
-	Savedatasmart = {};
-}
-	game_log("v7")
-game_log(step)	
-	game_log(runb)	
-if (step == 1 && runb == 0){
-	smart_move({ map: "cave", x: 1154, y: 55 })	
-	step = 2
-runb = 1    
-	     }
-if (step == 2 && runb == 0){
-	smart_move({ map: "cave", x: -261, y: -454 })	
-	step = 3
-runb = 1
-	     }
-if (step == 3 && runb == 0){
-	smart_move({ map: "cave", x: 325, y: -1118 })	
-	step =4
-runb = 1
-	     }	
-	
-}, 2000);
-////////////////////////
+
+// Delay 4 giây trước khi bắt đầu
+setTimeout(function() {
+    setInterval(function() {
+        if (godenbat == 0 || foxmode == 1) return;
+        if (parent.S.icegolem) {
+            godenbat = 0;
+            return;
+        }
+
+        if (smart.moving && runb == 1) {
+            datasmart = smart;
+            Savedatasmart = smart;
+            runb = 0;
+        }
+
+        if (smart.moving || is_moving(character) || foxmode == 1) return;
+
+        //////////
+        if (get_nearest_monster({type: tsname})) {
+            if (character.mp > 2800) {
+                mageMagiPort();
+                godenbat = 0;
+                datasmart = {};
+                Savedatasmart = {};
+            }
+            return;
+        }
+
+        //////////
+        if (!is_moving(character)) runb = 0;
+        if (step >= 4) {
+            godenbat = 0;
+            datasmart = {};
+            Savedatasmart = {};
+        }
+
+        game_log("v7");
+        game_log(step);
+        game_log(runb);
+
+        if (step == 1 && runb == 0) {
+            smart_move({ map: "cave", x: 1154, y: 55 });
+            step = 2;
+            runb = 1;
+        }
+        if (step == 2 && runb == 0) {
+            smart_move({ map: "cave", x: -261, y: -454 });
+            step = 3;
+            runb = 1;
+        }
+        if (step == 3 && runb == 0) {
+            smart_move({ map: "cave", x: 325, y: -1118 });
+            step = 4;
+            runb = 1;
+        }
+    }, 2000);  // Tiếp tục với setInterval sau 4 giây delay
+}, 4000);  // Đặt delay 4 giây (4000 milliseconds) trước khi bắt đầu
+
 
 
 
