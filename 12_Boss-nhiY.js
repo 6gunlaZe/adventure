@@ -160,7 +160,7 @@ let step = 1
 let runb = 0
 let checkbat = 0
 setInterval(function() {
-if (godenbat == 0)return
+if (godenbat == 0 || foxmode == 1)return
 if (smart.moving && runb == 1){
 	datasmart = smart;
 	Savedatasmart = smart;
