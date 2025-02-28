@@ -186,7 +186,7 @@ if (step >= 4) {
 		datasmart ={};
 	Savedatasmart = {};
 }
-	game_log("v3")
+	game_log("v4")
 game_log(step)	
 	game_log(runb)	
 if (step == 1 && runb == 0){
@@ -205,7 +205,7 @@ if (step == 3 && runb == 0){
 runb = 1
 	     }	
 	
-}, 200);
+}, 2000);
 ////////////////////////
 
 
