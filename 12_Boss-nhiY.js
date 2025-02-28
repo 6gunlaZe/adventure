@@ -180,13 +180,13 @@ return
 }
 	
 ////////
-
+if (!is_moving(character))runb = 0
 if (step >= 4) {
     godenbat = 0;
 		datasmart ={};
 	Savedatasmart = {};
 }
-	game_log("v6")
+	game_log("v7")
 game_log(step)	
 	game_log(runb)	
 if (step == 1 && runb == 0){
@@ -205,7 +205,7 @@ if (step == 3 && runb == 0){
 runb = 1
 	     }	
 	
-}, 200);
+}, 2000);
 ////////////////////////
 
 
