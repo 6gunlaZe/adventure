@@ -155,6 +155,7 @@ function findcongdichchuyen(data) {
 
 
 //trinh sat
+var tsname = "goldenbat"
 let godenbat = 1
 let step = 1
 let runb = 0
@@ -170,7 +171,7 @@ if (smart.moving && runb == 1){
 	
 if (smart.moving || foxmode == 1) return;
 ////////
-if (get_nearest_monster({type:'bat'})){
+if (get_nearest_monster({type:tsname})){
 if (character.mp > 2800) {mageMagiPort()
 			  godenbat = 0
 			 }
