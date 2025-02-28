@@ -183,6 +183,7 @@ if (checkbat == 1){step+=1
 		   checkbat = 0
 		  }
 if (step >= 4)godenbat = 0	
+game_log(step)	
 if (step = 1 && checkbat == 0 && runb == 0){smart_move({ map: "cave", x: 1154, y: 55 })	
 runb = 1    
 	     }
