@@ -1528,7 +1528,7 @@ if (skillbua == 1 || skillriu == 1)	return
 
 
 var target1xc= get_nearest_monster1({type: triancrep,  cus: 1});
-if (target1xc){
+if (target1xc && framboss == 0){
 	target=target1xc
 	change_target(target); }
 	//////////////////// ne dung aoe len boss
@@ -1569,7 +1569,7 @@ if(( targets12.length > 0 ) && framboss == 0 )
                  var cungf = get_player(nhanvatfram); 
 	   	 var targets1 = get_nearest_monster1({type: triancrep, });
 		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
-		if(!target1xc && targets1 ) {
+		if(!target1xc && targets1 && framboss == 0 ) {
 			
 	                target = targets1
 			change_target(targets1);  
