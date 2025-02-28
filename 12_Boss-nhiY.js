@@ -22,13 +22,13 @@ let notejr = 0
 let done = 0
 let Savedatasmart = {};
 setInterval(function() {
-if (done == 1) return
+if (done == 1 || godenbat == 1) return
 if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
 send_cm("haiz","boss1") 
 Savedatasmart = {};	
 done = 1
 }
-else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && notejr == 1 )	{
+else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 )	{
 	send_cm("haiz","stop")
 parent.api_call("disconnect_character", {name: "nhiY"});
 stop_character("nhiY")	
@@ -154,7 +154,46 @@ function findcongdichchuyen(data) {
 
 
 
-
+//trinh sat
+let godenbat = 1
+let step = 1
+let runb = 0
+let checkbat = 0
+setInterval(function() {
+if (godenbat == 0)return
+if (smart.moving && runb == 1){
+	datasmart = smart;
+	Savedatasmart = smart;
+	runb = 0
+	checkbat = 1
+}
+	
+if (smart.moving || foxmode == 1) return;
+////////
+if (get_nearest_monster({type:'bat'})){
+if (character.mp > 2800) {mageMagiPort()
+			  godenbat = 0
+			 }
+return	
+}
+	
+////////
+if (checkbat == 1){step+=1
+		   checkbat = 0
+		  }
+if (step >= 4)godenbat = 0	
+if (step = 1 && checkbat == 0){smart_move({ map: "spookytown", x: -728, y: -123 })	
+runb = 1    
+	     }
+if (step = 2 && checkbat == 0){smart_move({ map: "spookytown", x: -728, y: -123 })	
+runb = 1
+	     }
+if (step = 3 && checkbat == 0){smart_move({ map: "spookytown", x: -728, y: -123 })	
+runb = 1
+	     }	
+	
+}, 2000);
+////////////////////////
 
 
 
@@ -222,7 +261,7 @@ if(parent.S.icegolem && foxmode == 0)
 	
 	if (leader && distance(character, leader) < 70 & foxmode == 0) return
     // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving || foxmode == 1) return;
+    if (smart.moving || foxmode == 1 || godenbat == 1) return;
 
 	
 	
