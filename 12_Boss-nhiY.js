@@ -173,6 +173,8 @@ if (smart.moving || foxmode == 1) return;
 if (get_nearest_monster({type:tsname})){
 if (character.mp > 2800) {mageMagiPort()
 			  godenbat = 0
+	datasmart ={};
+	Savedatasmart = {};
 			 }
 return	
 }
@@ -181,6 +183,8 @@ return
 
 if (step >= 4) {
     godenbat = 0;
+		datasmart ={};
+	Savedatasmart = {};
 }	
 game_log(step)	
 if (step == 1 && runb == 0){
