@@ -3053,9 +3053,9 @@ async function moveToBossIfFound(monsters, HP) {
 
 
 const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
-moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
-
 let currentBossLocation = null;
+
+
 // Đặt vòng lặp mỗi 10 giây
 setInterval(() => {
 moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
