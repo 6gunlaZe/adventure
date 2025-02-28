@@ -168,7 +168,7 @@ if (smart.moving ){
 	runb = 0
 }
 	
-if (smart.moving || foxmode == 1) return;
+if (smart.moving || is_moving(character) || foxmode == 1) return;
 ////////
 if (get_nearest_monster({type:tsname})){
 if (character.mp > 2800) {mageMagiPort()
