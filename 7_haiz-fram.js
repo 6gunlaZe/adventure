@@ -2957,7 +2957,6 @@ setInterval(() => {
 
 
 
-
 async function BosscheckHPMYSv11(monsters, HP) {
   // Safety Checks
   if (!Array.isArray(monsters) || monsters.length === 0) {
@@ -2980,8 +2979,14 @@ async function BosscheckHPMYSv11(monsters, HP) {
     if (response.status === 200) {
       const data = await response.json();
 
-      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn
-      const validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < HP && obj.serverRegion === region && obj.serverIdentifier === serverIden);
+      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn, đồng thời target không phải là "haiz", "ynhi", "nhiY"
+      const validObjects = data.filter(obj => 
+        obj.hp !== undefined && 
+        obj.hp < HP && 
+        obj.serverRegion === region && 
+        obj.serverIdentifier === serverIden &&
+        obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
+      );
 
       // Nếu tìm thấy các đối tượng hợp lệ
       if (validObjects.length > 0) {
