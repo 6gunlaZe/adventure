@@ -185,7 +185,8 @@ if (step >= 4) {
     godenbat = 0;
 		datasmart ={};
 	Savedatasmart = {};
-}	
+}
+	game_log("v1")
 game_log(step)	
 if (step == 1 && runb == 0){
 	smart_move({ map: "cave", x: 1154, y: 55 })	
