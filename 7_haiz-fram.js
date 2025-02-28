@@ -3019,6 +3019,7 @@ async function moveToBossIfFound(monsters, HP) {
 
   // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
   if (bossLocation && framboss == 0) {
+	  if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
     framboss = 10;
 	  	  if (modeYnhi == 0)
 	  {
