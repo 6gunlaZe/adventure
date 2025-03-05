@@ -1161,7 +1161,8 @@ let data = {
    "earring2": "cearring",
    "belt": "strbelt",
    "amulet": "stramulet",
-   "orb": "tigerstone"
+   "orb": "tigerstone",
+   "shoes": "hboots"
 };
 if (character.hp > 9500)
 {
