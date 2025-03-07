@@ -2758,7 +2758,7 @@ return evencheckmap = 0
 /////////////////////////////////
 ///////////
 setInterval(function() {
-	evenboss("dragold",24000000)
+	// evenboss("dragold",24000000)
 }, 7000);
 
 let evenfram = 0
