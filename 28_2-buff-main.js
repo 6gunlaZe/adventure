@@ -647,7 +647,7 @@ changeitem({ slot: "mainhand", name : "froststaff", level : 8 });
 	else
 	{
 //if (character.id == "angioseal")changeitem({ slot: "mainhand", name : "firestaff", level : 9 });
-if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "harbringer", level : 8 });		
+if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "oozingterror", level : 8 });		
 	}
 
 //////////////////////////////
