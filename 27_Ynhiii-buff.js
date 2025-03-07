@@ -784,7 +784,7 @@ function changeitem(options = {}) {
 function chuyendoithongminh(taget)
 {
 
-if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "harbringer", level : 8 });		
+if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "oozingterror", level : 8 });		
 	
 
 //////////////////////////////
