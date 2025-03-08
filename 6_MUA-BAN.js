@@ -553,6 +553,10 @@ function on_cm(name, data) {
 		   }
 		 }
 
+
+
+        if(data == "phoenix1")send_cm(hostname,"boss5") 
+		
 	}
 	
 	if(name == "6gunlaZe")
