@@ -23,7 +23,7 @@ let done = 0
 let Savedatasmart = {};
 setInterval(function() {
 //game_log("JR= " + jrmode)	
-if (done == 1 || godenbat == 1) return
+if (done == 1 || (godenbat == 1 && foxmode == 0) ) return
 if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
 send_cm("haiz","boss1") 
 Savedatasmart = {};	
