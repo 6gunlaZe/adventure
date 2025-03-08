@@ -115,6 +115,14 @@ var bossarmy=[ "aaa", "bbb", "cccc"];
 
 
 
+
+setTimeout(function() {
+    if (get_nearest_monster({type: "phoenix"})  && distance(character, {x: 500, y: 1800}) < 350  && character.map == "main" ) {
+ send_cm("MuaBan", "phoenix1");
+    }
+}, 10000);  // 10000 mili giây = 10 giây
+
+
 setTimeout(function() {
     if (frankymode == 0) {
         smart_move({ map: maptrain, x: farmX, y: farmY });
