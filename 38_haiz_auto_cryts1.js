@@ -896,7 +896,7 @@ changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a222" )
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "sshield", level : 7 });	
+changeitem({ slot: "offhand", name : "sshield", level : 8 });	
 }	
 else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
 {	
