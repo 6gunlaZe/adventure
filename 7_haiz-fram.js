@@ -1519,7 +1519,7 @@ if (skillbua == 1 || skillriu == 1)
 
 		if (character.slots["offhand"])unequip( "offhand");
 
-        changeitem({ slot: "mainhand", name : "bataxe", level : 5 });
+        changeitem({ slot: "mainhand", name : "bataxe", level : 6 });
 		
 			if (character.slots["mainhand"] && character.slots["mainhand"].name == "bataxe")use_skill("cleave");
 				       
@@ -2262,7 +2262,7 @@ if (magic = 0)
 }
 else
 {
-  changeitem({ slot: "offhand", name : "sshield", level : 7 });		
+  changeitem({ slot: "offhand", name : "sshield", level : 8 });		
 }
 }
 
@@ -2285,7 +2285,7 @@ if (magic = 0)
 else
 {
 	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-  changeitem({ slot: "offhand", name : "sshield", level : 7 });		
+  changeitem({ slot: "offhand", name : "sshield", level : 8 });		
 }
 }
 
