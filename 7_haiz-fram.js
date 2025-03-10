@@ -1220,8 +1220,8 @@ function scan_maxlevel(item,lvmax)
 function changeitem(options = {}) {
 	//them delay tranh lag
 	
-    //var merch = get_player("MuaBan"); // replace this with your merchants name
-    //if (merch && distance(character, merch) <= 400) return
+    var merch = get_player("MuaBan"); // replace this with your merchants name
+    if (merch && distance(character, merch) <= 400) return
 	
 	if (started == undefined) started = Date.now()
     if (Date.now() < started + delayy) return;
