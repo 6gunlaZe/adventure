@@ -314,7 +314,7 @@ var kcconthieu =  (distance(character, {x: currentTarget.real_x, y: currentTarge
 	}
 ///////////////	
 	
-	else if(can_attack(currentTarget))
+	else if(can_attack(currentTarget) && currentTarget.target)
 	{
 		set_message("Attacking");
 		attack(currentTarget);
@@ -399,6 +399,51 @@ function get_nearest_monster_solobosskill(args) ///mod
 	}
 	return target;
 }
+
+
+
+
+
+setInterval(function() {
+skill_scare()
+}, 500);
+
+function skill_scare() {
+	
+if (is_on_cooldown("scare")) 
+{
+	changeitem({ slot: "orb", name : "orbg", level : 3 });
+}
+	
+if (character.targets == 0 || character.hp > 4000) {
+	return;
+}
+
+if (character.targets >= 1 && character.hp < 3000 && !is_on_cooldown("scare") ) 
+{
+	changeitem({ slot: "orb", name : "jacko", level : 1 });
+	use_skill("scare");
+	game_log("skill scare");
+
+}
+	
+if (character.targets >= 3 && !is_on_cooldown("scare") ) 
+{
+	changeitem({ slot: "orb", name : "jacko", level : 1 });
+	use_skill("scare");
+	game_log("skill scare");
+}
+
+
+
+	
+}
+
+
+
+
+
+
 
 
 
