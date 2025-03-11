@@ -906,7 +906,7 @@ function skill_scare() {
 	
 if (is_on_cooldown("scare")) 
 {
-	changeitem({ slot: "orb", name : "orbg", level : 2 });
+	changeitem({ slot: "orb", name : "orbg", level : 3 });
 }
 	
 if (character.targets == 0 || character.hp > 4000) {
