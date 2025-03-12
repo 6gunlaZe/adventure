@@ -1673,6 +1673,136 @@ async function BosscheckHPMYSv11(monsters, HP) {
 
 
 
+// Check now, and every 10p
+setInterval(() => {
+	checkServersForMonsters(["franky"] ,["icegolem"] );
+
+}, 80000); // 60s check 1lan
+
+
+
+async function checkServersForMonsters(monsters,monsters1) {
+  // Safety Checks
+  if (!Array.isArray(monsters)) return;
+  if (monsters.length == 0) return;
+  if (!Array.isArray(monsters1)) return;
+  if (monsters1.length == 0) return;
+   if (prolive == 1 || events ) return	
+
+	
+	
+let validObjects0
+let validObjects
+let validObjects1
+	 let hpcheck =120000000
+	 let hpcheck1 =14000000
+
+  // Query API
+  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+
+  const response = await fetch(url);
+  if (response.status == 200) {
+    const data = await response.json();
+  //  parent.S2 = data;
+validObjects0 = data.filter(obj => obj.hp !== undefined  && obj.serverIdentifier != "PVP" );	
+validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000 )    && obj.serverIdentifier != "PVP" );	  	  
+  }
+  // Query API1
+  const url1 = "https://aldata.earthiverse.ca/monsters/" + monsters1.join(",");
+
+  const response1 = await fetch(url1);
+  if (response1.status == 200) {
+    const data1 = await response1.json();
+  //  parent.S3 = data1;
+
+validObjects1 = data1.filter(obj => obj.hp !== undefined && obj.hp < hpcheck1  && obj.serverIdentifier != "PVP");
+
+  }
+///////////////////////////////////////////////////////	  
+if (validObjects.length > 0) // co nguoi dang kill franky
+{
+  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+	
+let sR =minHpObject.serverRegion;
+let sI =minHpObject.serverIdentifier;
+game_log ("chuyen fr  SV  >>>>" + sR + sI )
+
+let region = server.region;
+let serverIden = server.id	
+	
+	
+if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
+{
+change_server(sR, sI);
+}
+
+}
+	
+else if (validObjects1.length > 0)	///co nguoi dang kill icegolem
+{
+
+let minHpObject = validObjects1.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+	
+let sR =minHpObject.serverRegion;
+let sI =minHpObject.serverIdentifier;
+game_log ("chuyen ice  SV  >>>>" + sR + sI )
+
+let region = server.region;
+let serverIden = server.id	
+	
+	
+if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
+{
+change_server(sR, sI);
+}
+		
+}
+	
+else if (validObjects0.length > 0)	///cho doi nguoi qua kill frannky
+{	  
+
+let minHpObject = validObjects0.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+	
+let sR =minHpObject.serverRegion;
+let sI =minHpObject.serverIdentifier;
+game_log ("chuyen wait SV  >>>>" + sR + sI )
+
+let region = server.region;
+let serverIden = server.id	
+	
+	
+if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
+{
+change_server(sR, sI);
+}		
+
+	
+}
+	  else
+	  {
+	  	  game_log ("khong tim thay doi tuong")
+	  }
+	  
+	  
+/////////////////////////////////  
+ 
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
