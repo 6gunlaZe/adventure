@@ -71,10 +71,10 @@ async function eventer() {
     const delay = 25;
     try {
         if (events) {
-          //  handleEvents();
+            handleEvents();
         } else if (stompyActive || skeletorActive) {
             //handleBosses();
-        } else if (!get_nearest_monster({ type: home })) {
+        } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) < 200  ) {
             handleHome();
         } else {
            // walkInCircle();
@@ -85,6 +85,94 @@ async function eventer() {
 
     setTimeout(eventer, delay);
 }
+
+
+
+function handleEvents() {
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!smart.moving) {
+            smart_move({ to: "town" }, () => {
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            });
+        }
+    } else {
+        // Handle standard events
+        //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
+        //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
+        //handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 50000);
+        //handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 100000);
+        //handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
+        //handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
+    }
+}
+
+
+
+
+function handleHome() {
+    if (character.cc < 100) {
+        //homeSet();
+    }
+    if (!smart.moving) {
+        smart_move(destination);
+        game_log(`Moving to ${home}`);
+    }
+}
+
+
+//hpThreshold = ngưỡng sắp chết đổi item luck
+function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
+    if (parent?.S?.[eventType]?.live) {
+        if (character.map !== mapName && !smart.moving) {
+            smart_move({ x, y, map: mapName });
+        }
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+            if (monster.hp > hpThreshold ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+    }
+}
+
+function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
+    if (parent?.S?.[eventType]) {
+        if (character.map !== mapName) {
+            parent.socket.emit('join', { name: eventType });
+        } else if (!smart.moving) {
+            smart_move({ x, y, map: mapName });
+        }
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+            if (monster.hp > hpThreshold) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
