@@ -88,7 +88,7 @@ async function eventer() {
 
 
 
-const targetNames = ["6gunlaZe", "Ynhi","haiz"];
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 
 
 async function attackLoop() {
