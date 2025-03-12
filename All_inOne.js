@@ -1260,7 +1260,7 @@ let partychecktime
 function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
         if (character.map !== mapName) {
-            parent.socket.emit('join', { name: eventType });
+          //  parent.socket.emit('join', { name: eventType });
         } else if (!smart.moving) {
             smart_move({ x, y, map: mapName });
         }
