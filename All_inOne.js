@@ -75,7 +75,7 @@ async function eventer() {
         } else if (stompyActive || skeletorActive) {
             //handleBosses();
         } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
-            handleHome();
+           if(framboss == 0)handleHome();
         } else {
            // walkInCircle();
         }
