@@ -2,6 +2,7 @@
 
 
 
+
 const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
@@ -73,7 +74,7 @@ async function eventer() {
             handleEvents();
         } else if (stompyActive || skeletorActive) {
             //handleBosses();
-        } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) < 200  ) {
+        } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
             handleHome();
         } else {
            // walkInCircle();
@@ -591,9 +592,7 @@ const equipmentSets = {
         { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
     ],
     luck: [
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
-        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" },
+        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
