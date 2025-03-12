@@ -1525,7 +1525,7 @@ if (targetsoloboss.length == 0) //danh xong
     setTimeout(moveLoop, delay);
 }
 
-
+moveLoop();
 
 
 const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
