@@ -61,8 +61,8 @@ const [topLeftX, topLeftY, bottomRightX, bottomRightY] = boundaryOur;
 const centerX = (topLeftX + bottomRightX) / 2;
 const centerY = (topLeftY + bottomRightY) / 2;
 
-
-
+let bosscantank = 0
+let prolive = 0
 
 
 
@@ -88,6 +88,70 @@ async function eventer() {
 
 
 
+// Hàm kiểm tra các sự kiện trong game
+function checkGameEvents() {
+  let checkeven = 0;
+  let pro = 0;
+    // Danh sách các sự kiện bạn muốn kiểm tra
+    const events1 = [
+        { eventType: 'snowman', type: 'withJoin' },
+        { eventType: 'goobrawl', type: 'specific' },
+        { eventType: 'crabxx', type: 'pro' },
+        { eventType: 'franky', type: 'pro' },
+        { eventType: 'icegolem', type: 'pro' },
+    ];
+
+    // Kiểm tra tất cả các sự kiện
+    for (let event of events1) {
+        let isEventValid = false;
+	            let procheck = false;
+        // Kiểm tra sự kiện theo loại
+        if (event.type === 'specific') {
+            // Kiểm tra sự kiện chỉ cần tồn tại
+            isEventValid = !!parent?.S?.[event.eventType];
+        } else if (event.type === 'withJoin') {
+            // Kiểm tra sự kiện phải tồn tại và có thuộc tính live
+            isEventValid = !!parent?.S?.[event.eventType]?.live;
+        } else if (event.type === 'pro') {
+            procheck = !!parent?.S?.[event.eventType];
+        }
+       if (procheck) pro += 1
+        // In ra kết quả kiểm tra sự kiện
+        if (isEventValid) {
+            console.log(`Event ${event.eventType} đã có event.`);
+             checkeven += 1           
+        } else {
+            console.log(`Event ${event.eventType} không có event.`);
+        }
+    }
+
+	
+if (checkeven>0){
+	 events = true;
+}
+	else {
+	events = false;
+	}
+if (pro>0){
+	 prolive = 1;
+}
+	else {
+	prolive = 0;
+	}	
+
+if ( pro > 0 &&  bosscantank == 1  )events = true;	
+	
+}
+
+// Tạo vòng lặp 1s để gọi checkGameEvents()
+const intervalId = setInterval(() => {
+    checkGameEvents();   
+}, 1000);  // 1000 ms = 1 giây
+
+
+
+
+
 function handleEvents() {
     if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
         if (!smart.moving) {
@@ -98,11 +162,11 @@ function handleEvents() {
     } else {
         // Handle standard events
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
-        //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
-        //handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 50000);
-        //handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 100000);
-        //handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
-        //handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
+        handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
+        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
+       // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
+       // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
+       // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
     }
 }
 
@@ -679,4 +743,359 @@ if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
 setInterval(function() {
 use_hp_or_mp1()
 }, 200);
+
+
+
+
+
+
+//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+function on_party_request(name) {
+if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal") {
+            accept_party_request(name);
+        }
+        if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
+            accept_party_request(name);
+        }	
+	
+	
+    }
+
+
+
+
+
+
+let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
+let banktime 
+let bosstime = 0 
+let timekillboss
+const TenMinutesInMs = 10 * 60 * 1000
+const Ten7MinutesInMs = 7 * 60 * 1000
+let bankk = 0
+let trieuhoi = 0
+
+
+
+setInterval(function() {
+	
+	
+if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
+{
+	bankk = 0
+    start_character("MuaBan", 6);	
+}	
+//////////////////////////	Cho 10p danh boss
+if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
+{	
+	bosstime = 0
+}	
+//////////////////////	
+	
+	
+  if (trieuhoi == 0)
+  {
+	  trieuhoi = 1
+if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
+	  
+	  
+if (modeYnhi == 0)	 
+{
+if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
+}
+else if  (modeYnhi == 1)
+{
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
+}
+else if  (modeYnhi == 2)
+{
+if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
+}
+	  
+  }
+
+}, 1000); //trieu hoi 1 lan dau
+///////////////////////////
+
+
+
+setTimeout(function() {
+stop_character("6gunlaZe")
+start_character("nhiY", 12);	
+}, 10000); // 10000 milliseconds = 10 giây
+
+
+let intervalId = setInterval(function() {
+    if (parent.party_list.includes("nhiY")) {
+        send_cm("nhiY", "jr");
+        clearInterval(intervalId);  // Dừng lại khi điều kiện đúng
+    }
+}, 5000); // Chạy mỗi 5 giây
+
+
+
+
+
+
+
+
+
+
+
+ ///////////////////////// 
+setInterval(function() {	
+if (prolive == 1 || events ) return	
+		
+let region = server.region;
+let serverIden = server.id
+
+if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv trở về nhà
+{
+if ( region == "EU" && serverIden == "I" ) 
+{
+	game_log ("  SV  >>>>" + region + serverIden )
+}
+	else
+	{
+         change_server("EU", "I");
+	//change_server("ASIA", "I");	
+	}
+}	
+
+if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
+	
+if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
+	
+/////////////////	
+if (modeYnhi == 0 && prolive == 0)	 
+{
+if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
+}
+else if  (modeYnhi == 1 && prolive == 0)
+{
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
+}
+else if  (modeYnhi == 2 && prolive == 0)
+{
+if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
+}
+
+
+}, 100000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
+
+
+
+
+let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
+
+setInterval(function() {	
+	
+if (prolive == 1 || events ) return	
+
+if (autobuyPonty != 1) return
+	
+	///////////
+let randomNumber = getRandom(1, 100);	
+let region = server.region;
+let serverIden = server.id
+		game_log("svvvvvvvv ! ! ==   " +randomNumber);
+
+
+if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
+{
+	
+if (randomNumber < 20) {
+    change_server("US", "I");
+} else if (randomNumber > 80) {
+    change_server("EU", "II");
+} else if (randomNumber > 20 && randomNumber < 30) {
+   // change_server("EU", "II");
+       change_server("ASIA", "I");
+} else if (randomNumber > 30 && randomNumber < 60) {
+    change_server("US", "III");
+} else if (randomNumber > 60 && randomNumber < 80) {
+    change_server("US", "II");
+} else {
+    //change_server("ASIA", "I");
+      change_server("EU", "I");
+}	
+	
+}	
+	
+}, 2000000); //30p chuyen sv 1 lan
+
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+setInterval(function() {
+    if (character.esize < 17) {
+	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
+    if (!MuaBan) {
+      start_character("MuaBan", 6);
+		game_log("trieu hoi MuaBan!!");
+	}
+	}
+}, 160000); //
+
+setInterval(function() {	
+    if (character.esize > 25) {
+       	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
+    if (MuaBan) {
+	start_character("MuaBan", 6);	
+		game_log(" MuaBan da xong nhiem vu!!");
+	}
+	}
+}, 9900000); // auto re connet mua ban moi 3h
+
+
+setInterval(function() {
+ if (character.rip) { ///////auto hoi sinh
+    respawn();
+  }
+}, 420000);
+
+function on_magiport(name){
+    if(name == "nhiY"){
+        accept_magiport(name);
+    }
+}
+
+
+
+
+let framboss = 0
+let framboss1 = 0
+
+function on_cm(name, data) {
+
+
+////////////////////
+ if(name == "nhiY" && data == "boss1"){
+		  bosstime = 1
+	    timekillboss = Date.now()
+	  framboss = 1
+ }
+ if(name == "nhiY" && data == "stop"){
+stop_character("nhiY") 
+ }	
+/////////////////
+    if(name == "MuaBan"){
+
+			
+	   if(data == "bank") {
+        start_character("MuaBan", 10);	
+		 banktime = Date.now()  
+		   bankk = 1
+	   }	
+		
+  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7") {
+	  if (modeYnhi == 0)
+	  {
+		parent.api_call("disconnect_character", {name: "nhiY"});
+		stop_character("nhiY");
+	  }
+	  else if (modeYnhi == 2)
+	  {
+	  	parent.api_call("disconnect_character", {name: "haiz1"});
+		stop_character("haiz1");
+	  }
+	  else
+	  {
+
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    	  
+	  }
+		  bosstime = 1
+	    timekillboss = Date.now()
+	  start_character("nhiY", 12);
+}
+	
+		
+	 if(data == "boss1") {
+	  framboss = 1
+	   }
+	 if(data == "boss2") {
+	  framboss = 2
+	   }
+	 if(data == "boss3") {
+	  framboss = 3
+	   }	 
+	 if(data == "boss4") {
+	  framboss = 4
+	   }
+	 if(data == "boss5") {
+	  framboss = 5
+	   }	 
+	 if(data == "boss6") {
+	  framboss = 6
+	 }
+	 if(data == "boss7") {
+	  framboss = 7
+	   }		
+		
+
+       if(data == "franky")
+	   {
+		   frankymode = 1	
+	stop_character("angioseal")	
+	stop_character("nhiY")	
+	stop_character("haiz1")	
+
+       if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
+	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 28);
+		   //cũ 31
+	   }		
+			
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
