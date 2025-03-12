@@ -1066,7 +1066,7 @@ stop_character("nhiY")
 
        if(data == "franky")
 	   {
-		   frankymode = 1	
+		    bosscantank = 0 = 1	
 	stop_character("angioseal")	
 	stop_character("nhiY")	
 	stop_character("haiz1")	
