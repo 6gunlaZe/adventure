@@ -1,7 +1,5 @@
-
-
-
-
+let lastSwapTime = 0;
+const swapCooldown = 500;
 
 const locations = {
     bat: [{ x: 1200, y: -782 }],
@@ -456,6 +454,7 @@ function basherSet() {
 
 //l: "l"  == L lock
 async function equipBatch(data) {
+	
     if (!Array.isArray(data)) {
         game_log("Can't equipBatch non-array");
         return handleEquipBatchError("Invalid input: not an array");
@@ -1241,12 +1240,21 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
 
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
+
+const now = Date.now();
+
             if (monster.hp > hpThreshold) {
                 if (character.cc < 100) {
+if (now - lastSwapTime > swapCooldown) {
                     equipSet('single');
+lastSwapTime = now;
+}
                 }
             } else if (character.cc < 100) {
+if (now - lastSwapTime > swapCooldown) {
                 equipSet('luck');
+lastSwapTime = now;
+}  
             }
         }
 	  else
