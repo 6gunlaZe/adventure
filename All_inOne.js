@@ -437,7 +437,7 @@ async function handleWarriorSkills(tank) {
     const untargetedCrabs = crabsInRange.filter(monster => !monster.target);
 
     if (!is_on_cooldown("agitate") && crabsInRange.length >= 5 && untargetedCrabs.length === 5 && tank) {
-        await use_skill("agitate");
+       // await use_skill("agitate");
     }
 
     const mobTypes = ["bat", "bigbird"];
@@ -448,7 +448,7 @@ async function handleWarriorSkills(tank) {
     if (!is_on_cooldown("agitate") && mobsInRange.length >= 3 && untargetedMobs.length >= 3 && !smart.moving && tank) {
         let porc = get_nearest_monster({ type: "porcupine" });
         if (!is_in_range(porc, "agitate")) {
-            await use_skill("agitate");
+         //   await use_skill("agitate");
         }
     }
 
