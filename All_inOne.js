@@ -138,7 +138,8 @@ if (pro>0){
 	prolive = 0;
 	}	
 
-if ( pro > 0 &&  bosscantank == 1  )events = true;	
+//if ( pro > 0 &&  bosscantank == 1  )events = true;	
+if ( bosscantank == 1  )events = true;	
 	
 }
 
@@ -1343,7 +1344,7 @@ function NOTsoloboss(options = {}) {
     const entities = []
      let number = 0
      let checkkill = 0
-	var bossarmy=["icegolem", "franky" , "crabxx" ]; 
+	var bossarmy=["icegolem", "franky" , "crabxx", "oneeye" ]; 
 	
     for (const id in parent.entities) {
         const entity = parent.entities[id]
