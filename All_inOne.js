@@ -1,7 +1,6 @@
 
 
 
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
 
 const locations = {
     bat: [{ x: 1200, y: -782 }],
