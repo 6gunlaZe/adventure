@@ -53,7 +53,6 @@ let farmX
 let farmY 
 let help = 0
 
-let frankymode = 0
 let frankyfight = 0
 let frankysafe = 0
 
@@ -65,142 +64,14 @@ let soluongquai = 8
 
 
 
-setInterval(function() {
-////////////giui vi tri moi 2s
-let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
-	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
-let SM = 0;
-if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
-  SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
-}
-
-if (SM === 1) {
-  let x = checkdichuyen.x;
-  let y = checkdichuyen.y;
-  let map = checkdichuyen.map;
-if (foxmode11)send_cm("nhiY",checkdichuyen)  // đặc cach cho nhiY
-for (let char in parent.party) {
-    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
-    if (char !== character.name && char !== "MuaBan" && char !== "nhiY" ) {
-		   
-        send_cm(char, {
-            message: "location",
-            x: x,
-            y: y,
-            map: map
-        });
-		        continue;
-	}	
-	
-}
-	
-
-	
-}	
-else
-{
-
-/////////////////////	
-for (let char in parent.party) {
-    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
-    if (char !== character.name && char !== "MuaBan" && !is_moving(character) ) {
-		      
-        send_cm(char, {
-            message: "location",
-            x: character.x,
-            y: character.y,
-            map: character.map
-        });
-		        continue;
-
-		
-	}
-	    if (char !== character.name && char !== "MuaBan" && is_moving(character) ) {
-			     
-        send_cm(char, {
-            message: "location",
-            x: character.going_x,
-            y: character.going_y,
-            map: character.map
-        });
-			
-        continue;
-    }
-}
-	//////////////////////////////////
-}
-}, 1000);
 
 
 
-
-/// 
-setInterval(function() {
-
-	if(character.esize < 7)
-	{
-		send_cm("MuaBan", "full");
-		game_log("lay do !!!!!!");
-	}
-
-	
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
-
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
-
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
-
-            }				
-			}
-	/////////		
-	
-	if( (soluonghp < 7000 ) )
-	{
-		send_cm("MuaBan", "hp");
-		game_log("re filll !!!!!!");
-	}
-		if( ( soluongmp < 7000) )
-	{
-		send_cm("MuaBan", "mp");
-		game_log("re filll !!!!!!");
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}, 20000);
-
-///////////
 
 
 setInterval(function() {
 	
-   const mast = get_player("6gunlaZe");
-	if (help == 1 && !smart.moving && !mast ){
-		
-    smart_move(parent.party["6gunlaZe"]);  	
- use_skill("charge")
-	use_skill("warcry")
-	
-	}
-////////////////////////////////////
+
 	const mast11 = (parent.party_list ?? []).some(c => c === 'angioseal');
 	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
 	const nearA = get_player("angioseal");
@@ -294,28 +165,22 @@ if (targetsoloboss.length == 0) //danh xong
 	}
 		
 }
-///////////////	check giui da giet boss lan nua
-if (framboss ==  0 && framboss1 ==  0 && mast11 && Kil_angioseal == 1 && host ==0 )send_cm("6gunlaZe", "killboss");
-	///>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>ham nay tu dong không cho Angioseal choi
-//////////////	
-//////////////////////////////////// /  kiem soat khoang cach tanker khi san boss
-   //Get the master from parent.entities
-   const masternhiY = get_player("nhiY");
-  //If the master is close, follow him
-if(masternhiY && numgo == 1){
-	  
-   const kc = distance(character, masternhiY)
 
-   if ( kc > 150 && kc <351){
-    xmove(
-      character.x+(masternhiY.x-character.x)/3,
-      character.y+(masternhiY.y-character.y)/3
-    );
-   }  
-}
-/////////////////////////
-	
+
 }, 1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -359,23 +224,6 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-setInterval(function() {
-
-	const gunn = (parent.party_list ?? []).some(c => c === '6gunlaZe');
-
-	if (!character.party && framboss == 0 && host == 0) {
-    send_party_request("6gunlaZe");
-
-}
-	if(framboss > 0&& gunn && frankymode == 0 && host == 0 )leave_party();
-	
-	if (!character.party && frankymode == 0 && host == 0) {
-    send_party_request("6gunlaZe");
-
-}
-
-}, 500);
 
 
 
@@ -383,91 +231,9 @@ setInterval(function() {
 
 
 
-////////////////////////////////chuyen do tu dong cho nhan vat muaban
-
-setInterval(function() {
-    let lootMule = get_player("MuaBan");
-
-		 //giui vang when in range
-    var merch = get_player("MuaBan"); // replace this with your merchants name
-    if (merch && distance(character, merch) <= 400) {
-		        send_gold(merch,character.gold)
-
-    }
-	//
-	
-	
-    if (lootMule == null) {
-        //game_log("Nobody to transfer to");
-        loot_transfer = false;
-        return;
-    }
-
-    let itemsToExclude = ["hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","mcape","helmet1","wbasher", "basher","bataxe","sweaterhs","tigerstone","sshield"];
-
-    for (let i = 0; i < 42; i++) {
-        const item = character.items[i];
-
-        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
-        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
-            send_item(lootMule.id, i, item.q ?? 1);
-        }
-    }
-}, 1000);
 
 
 
-//////////////////////////////////////////////
-let started1
-function kite(taget, kite_range)
-{
-
-if (is_disabled(character) ) return
-	
-if (started1 == undefined) started1 = Date.now()
-if (Date.now() < started1 + 330) return;
-	
-	const radius = kite_range ;
-const  angle = Math.PI / 4 ;
-    if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-        move(endGoal.x, endGoal.y)
-
-	
-	}
- 
-	
-
-}
-
-
-
-
-function kiteSP(taget,sluong)
-{
-	
-if (sluong <= 3) return
- var targets11 = getBestTargets({ max_range: 200, type: taget.mtype, havetarget: 1 })  //ham bo dem quai vat	
-	
- var targets = getBestTargets({ max_range: 200,min_range: character.range - 20 , type: taget.mtype, minHP: 0.99 , fullHP:1 , number : 1 })  //ham bo dem quai vat
-	  
-		//////////// dung skill
-if(character.mp > 100 &&  can_use("taunt") && targets && numboss == 0 && character.targets < 4 &&  (character.hp/character.max_hp > 0.67) && character.attack > 1000 && targets11.length <= sluong)
-            {
-				stop("moving")
-				stop("smart")
-
-                use_skill("taunt", targets);
-
-            }	
-
-
-
-}
-
-//////
 
 
 
@@ -749,24 +515,7 @@ if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
 
 
 
-////////////////////////////////////////////////////////
-setInterval(function() {
-looting()	
-}, 500);
-function looting() {
-    if(Object.keys(parent.chests).length >= 20) 
-	{
-     shift(0, 'goldbooster');
-    loot();
-    setTimeout(shifting, 250);
-	}
-}
-function shifting() {
-    shift(0, 'xpbooster');
-}
 
-
-//////////////
 
 function ms_to_next_skill(skill) {
     const next_skill = parent.next_skill[skill]
@@ -1412,21 +1161,7 @@ function skillwarboss(taget)
 }
 
 
-function get_nearest_playerV_noMyparty(currentTarget)
-{
-	// Just as an example
-	var min_d=2000,target=0;
 
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
-		if(current.target == currentTarget.id) target +=1;
-	}
-	game_log("so luong nguoi choi kill boss la: " + target)
-	return target;
-}
 
 
 
@@ -1989,129 +1724,6 @@ if(!parent.S.icegolem  &&  !is_moving(character) && character.hp/character.max_h
 
 
 
-/////////////////////////////////////auto chuyen sv tim boss - lua chon boss
-
-
-async function checkServersForMonsters(monsters,monsters1) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
-  if (!Array.isArray(monsters1)) return;
-  if (monsters1.length == 0) return;
-		if (frankymode == 1)  return;
-        if (check_ice == 1) return;
-	    if (icemode == 1) return;
-        if (boss_even_fight == 1) return;
-
-	
-	
-let validObjects0
-let validObjects
-let validObjects1
-	 let hpcheck =120000000
-	 let hpcheck1 =14000000
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects0 = data.filter(obj => obj.hp !== undefined  && obj.serverIdentifier != "PVP" );	
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000 )    && obj.serverIdentifier != "PVP" );	  	  
-  }
-  // Query API1
-  const url1 = "https://aldata.earthiverse.ca/monsters/" + monsters1.join(",");
-
-  const response1 = await fetch(url1);
-  if (response1.status == 200) {
-    const data1 = await response1.json();
-  //  parent.S3 = data1;
-
-validObjects1 = data1.filter(obj => obj.hp !== undefined && obj.hp < hpcheck1  && obj.serverIdentifier != "PVP");
-
-  }
-///////////////////////////////////////////////////////	  
-if (validObjects.length > 0) // co nguoi dang kill franky
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen fr  SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-
-}
-	
-else if (validObjects1.length > 0)	///co nguoi dang kill icegolem
-{
-
-let minHpObject = validObjects1.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen ice  SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-		
-}
-	
-else if (validObjects0.length > 0)	///cho doi nguoi qua kill frannky
-{	  
-
-let minHpObject = validObjects0.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen wait SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}		
-
-	
-}
-	  else
-	  {
-	  	  game_log ("khong tim thay doi tuong")
-	  }
-	  
-	  
-/////////////////////////////////  
- 
- 
-}
-
-
-// Check now, and every 10p
-setInterval(() => {
-	checkServersForMonsters(["franky"] ,["icegolem"] );
-
-}, 80000); // 60s check 1lan
-
-
-////////////////////////////////////
 
 
 
@@ -2398,118 +2010,6 @@ setInterval(() => {
 }, 30000); // 60s check 1lan
 
 
-
-
-
-async function BosscheckHPMYSv11(monsters, HP) {
-  // Safety Checks
-  if (!Array.isArray(monsters) || monsters.length === 0) {
-    game_log("Không có quái vật nào trong danh sách");
-    return;
-  }
-
-  // Lấy thông tin region và serverIden
-  const region = server.region;
-  const serverIden = server.id;
-
-  // URL API để lấy thông tin quái vật
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  try {
-    // Gửi request đến API
-    const response = await fetch(url);
-
-    // Kiểm tra nếu response trả về mã trạng thái 200
-    if (response.status === 200) {
-      const data = await response.json();
-
-      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn, đồng thời target không phải là "haiz", "ynhi", "nhiY"
-      const validObjects = data.filter(obj => 
-        obj.hp !== undefined && 
-        obj.hp < HP && 
-        obj.serverRegion === region && 
-        obj.serverIdentifier === serverIden &&
-        obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
-      );
-
-      // Nếu tìm thấy các đối tượng hợp lệ
-      if (validObjects.length > 0) {
-        game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
-
-        // Tìm boss có HP thấp nhất
-        const minHpBoss = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-
-        // Trả về tọa độ của boss có HP thấp nhất
-        return { x: minHpBoss.x, y: minHpBoss.y, map: minHpBoss.map };
-      } else {
-        game_log("Không tìm thấy boss nào có HP thấp hơn yêu cầu trong server của bạn");
-        return null; // Nếu không tìm thấy boss nào
-      }
-    } else {
-      game_log(`Lỗi khi lấy dữ liệu từ API: ${response.status}`);
-      return null; // Nếu có lỗi khi gọi API
-    }
-  } catch (error) {
-    // Xử lý lỗi nếu fetch không thành công
-    game_log(`Lỗi kết nối: ${error}`);
-    return null; // Nếu có lỗi kết nối
-  }
-}
-
-
-
-async function moveToBossIfFound(monsters, HP) {
-  const bossLocation = await BosscheckHPMYSv11(monsters, HP);
-
-  // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
-  if (bossLocation && framboss == 0) {
-	  if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
-    framboss = 10;
-	  	  if (modeYnhi == 0)
-	  {
-		parent.api_call("disconnect_character", {name: "nhiY"});
-		stop_character("nhiY");
-	  }
-	  else if (modeYnhi == 2)
-	  {
-	  	parent.api_call("disconnect_character", {name: "haiz1"});
-		stop_character("haiz1");
-	  }
-	  else
-	  {
-		  if (foxmode == 0){
-		parent.api_call("disconnect_character", {name: "Ynhi"});
-		stop_character("Ynhi");  
-		  }
-		  else 
-		  {
-		parent.api_call("disconnect_character", {name: "6gunlaZe"});
-		stop_character("6gunlaZe");    
-		  }
-
-			  
-	  }
-	    bosstime = 1
-	    timekillboss = Date.now()
-	  if (foxmode == 1)start_character("nhiY", 12);
-	  if (foxmode == 0)start_character("angioseal", 21);  
-    currentBossLocation = bossLocation
-   // smart_move({ map: bossLocation.map, x: bossLocation.x, y: bossLocation.y });
-  } else {
-    game_log("Không tìm thấy boss để di chuyển đến.");
-  }
-}
-
-
-
-const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
-let currentBossLocation = null;
-
-
-// Đặt vòng lặp mỗi 10 giây
-setInterval(() => {
-moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
-}, 10000);  // 10000ms = 10 giây
 
 
 
