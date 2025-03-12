@@ -1,3 +1,8 @@
+
+
+
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
+
 const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
@@ -29,8 +34,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'plantoid';
-const mobMap = 'desertland';
+const home = 'bat';
+const mobMap = 'cave';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -531,7 +536,32 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
 
+    for (id in parent.entities) {
+        var current = parent.entities[id];
+        if (current.mtype === home && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 1000); // 1000 milliseconds = 1 second
+        }
+    }
+}
 
 
 
