@@ -1,29 +1,798 @@
+
+
+
+
+const locations = {
+    bat: [{ x: 1200, y: -782 }],
+    bigbird: [{ x: 1343, y: 248 }],
+    bscorpion: [{ x: -408, y: -1241 }],
+    boar: [{ x: 19, y: -1109 }],
+    cgoo: [{ x: -221, y: -274 }],
+    crab: [{ x: -11840, y: -37 }],
+    ent: [{ x: -420, y: -1960 }],
+    fireroamer: [{ x: 222, y: -827 }],
+    ghost: [{ x: -405, y: -1642 }],
+    gscorpion: [{ x: 390, y: -1422 }],
+    iceroamer: [{ x: 823, y: -45 }],
+    mechagnome: [{ x: 0, y: 0 }],
+    mole: [{ x: 14, y: -1072 }],
+    mummy: [{ x: 256, y: -1417 }],
+    oneeye: [{ x: -270, y: 160 }],
+    pinkgoblin: [{ x: 366, y: 377 }],
+    poisio: [{ x: -121, y: 1360 }],
+    prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
+    pppompom: [{ x: 292, y: -189 }],
+    plantoid: [{ x: -780, y: -387 }], // [{ x: -840, y: -340 }]
+    rat: [{ x: 6, y: 430 }],
+    scorpion: [{ x: -495, y: 685 }],
+    stoneworm: [{ x: 830, y: 7 }],
+    spider: [{ x: 1247, y: -91 }],
+    squig: [{ x: -1175, y: 422 }],
+    wolf: [{ x: 433, y: -2745 }],
+    wolfie: [{ x: 113, y: -2014 }],
+    xscorpion: [{ x: -495, y: 685 }]
+};
+
+const home = 'bat';
+const mobMap = 'cave';
+const destination = {
+    map: mobMap,
+    x: locations[home][0].x,
+    y: locations[home][0].y
+};
+let angle = 0;
+const speed = 3; // normal 2 or .65
+let events = false;
+
+const harpyRespawnTime = 410000; //400 seconds
+let harpyActive = false;
+const skeletorRespawnTime = 1151954; // Example time, adjust as needed
+let skeletorActive = false;
+const stompyRespawnTime = 400000; //400 seconds
+let stompyActive = false;
+const mvampireRespawnTime = 1151954; // Example time, adjust as needed
+let mvampireActive = false;
+const fvampireRespawnTime = 1151954; // Example time, adjust as needed
+let fvampireActive = false;
+
+const boundaryOur = Object.values(G.maps[mobMap].monsters).find(e => e.type === home).boundary;
+const [topLeftX, topLeftY, bottomRightX, bottomRightY] = boundaryOur;
+const centerX = (topLeftX + bottomRightX) / 2;
+const centerY = (topLeftY + bottomRightY) / 2;
+
+let bosscantank = 0
+let prolive = 0
+
+
+
+
+async function eventer() {
+    const delay = 25;
+    try {
+        if (events) {
+            handleEvents();
+        } else if (stompyActive || skeletorActive) {
+            //handleBosses();
+        } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) < 200  ) {
+            handleHome();
+        } else {
+           // walkInCircle();
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    setTimeout(eventer, delay);
+}
+eventer();
+
+
+// Hàm kiểm tra các sự kiện trong game
+function checkGameEvents() {
+  let checkeven = 0;
+  let pro = 0;
+    // Danh sách các sự kiện bạn muốn kiểm tra
+    const events1 = [
+        { eventType: 'snowman', type: 'withJoin' },
+        { eventType: 'goobrawl', type: 'specific' },
+        { eventType: 'crabxx', type: 'pro' },
+        { eventType: 'franky', type: 'pro' },
+        { eventType: 'icegolem', type: 'pro' },
+    ];
+
+    // Kiểm tra tất cả các sự kiện
+    for (let event of events1) {
+        let isEventValid = false;
+	            let procheck = false;
+        // Kiểm tra sự kiện theo loại
+        if (event.type === 'specific') {
+            // Kiểm tra sự kiện chỉ cần tồn tại
+            isEventValid = !!parent?.S?.[event.eventType];
+        } else if (event.type === 'withJoin') {
+            // Kiểm tra sự kiện phải tồn tại và có thuộc tính live
+            isEventValid = !!parent?.S?.[event.eventType]?.live;
+        } else if (event.type === 'pro') {
+            procheck = !!parent?.S?.[event.eventType];
+        }
+       if (procheck) pro += 1
+        // In ra kết quả kiểm tra sự kiện
+        if (isEventValid) {
+            console.log(`Event ${event.eventType} đã có event.`);
+             checkeven += 1           
+        } else {
+            console.log(`Event ${event.eventType} không có event.`);
+        }
+    }
+
+				
+
+if (checkeven>0){
+	 events = true;
+}
+	else {
+	events = false;
+	}
+if (pro>0){
+	 prolive = 1;
+}
+	else {
+	prolive = 0;
+	}	
+
+if ( pro > 0 &&  bosscantank == 1  )events = true;	
+	
+}
+
+// Tạo vòng lặp 1s để gọi checkGameEvents()
+const intervalId1 = setInterval(() => {
+    checkGameEvents();   
+}, 10000);  // 1000 ms = 1 giây
+
+
+
+
+
+function handleEvents() {
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!smart.moving) {
+            smart_move({ to: "town" }, () => {
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            });
+        }
+    } else {
+        // Handle standard events
+        //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
+        handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
+        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
+	    handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
+	    handlebossPro('franky', 'level2w', 23, 38, 50000, "Ynhi","6gunlaZe")
+	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
+       // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
+       // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
+       // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
+    }
+}
+
+
+
+
+function handleHome() {
+    if (character.cc < 100) {
+        //homeSet();
+    }
+    if (!smart.moving) {
+        smart_move(destination);
+        game_log(`Moving to ${home}`);
+    }
+}
+
+
+//hpThreshold = ngưỡng sắp chết đổi item luck
+function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
+    if (parent?.S?.[eventType]?.live) {
+        const monster = get_nearest_monster({ type: eventType }); 
+        if (monster) {
+            if (monster.hp > hpThreshold ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+	    else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}
+    }
+}
+
+function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
+    if (parent?.S?.[eventType]) {
+        if (character.map !== mapName) {
+            parent.socket.emit('join', { name: eventType });
+        } else if (!smart.moving) {
+            smart_move({ x, y, map: mapName });
+        }
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+            if (monster.hp > hpThreshold) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+	 else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}   
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
+
+
+async function attackLoop() {
+    let delay = null; // Default delay
+    const X = locations[home][0].x; // X coordinate of home location
+    const Y = locations[home][0].y; // Y coordinate of home location
+    const now = performance.now();
+    try {
+        let nearest = null;
+
+        // Find the nearest monster based on the targetNames
+        for (let i = 0; i < targetNames.length; i++) {
+            nearest = get_nearest_monster_v2({
+                target: targetNames[i],
+                check_min_hp: true,  // Checking for monster with minimum HP
+                max_distance: 50,  // Consider monsters within 50 units
+                statusEffects: ["cursed"], // Check for these debuffs
+            });
+            if (nearest) break;
+        }
+
+	    
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+                    max_distance: character.range,
+                    check_min_hp: true,
+                });
+                if (nearest) break;
+            }
+        }
+
+    var  targetsoloboss = NOTsoloboss({ max_range: 200, number : 1 }) 
+    if ( !nearest && events && targetsoloboss.length == 1)nearest = targetsoloboss;
+	    
+    var  targetsoloboss1 = soloboss({ max_range: 300, number : 1 }) 
+    if ( !nearest && events && targetsoloboss1.length == 1)nearest = targetsoloboss1;
+
+	if ( nearest && !is_in_range(nearest))
+	{
+		move(
+			character.x+(nearest.x-character.x)/2,
+			character.y+(nearest.y-character.y)/2
+			);
+		// Walk half the distance
+	}
+	    
+	    
+        // If a monster is found and is in range, execute the attack
+        if (nearest && is_in_range(nearest)) {
+            await attack(nearest); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+    } catch (e) {
+        //console.error(e);
+    }
+    setTimeout(attackLoop, delay);
+}
+
+attackLoop();
+
+
+
+////////////////////////////////////////////////////////////////
+let scythe = 0;
+let eTime = 0;
+let basher = 0;
+async function skillLoop() {
+    let delay = 10;
+    try {
+        let zap = false;
+        const dead = character.rip;
+        const Mainhand = character.slots?.mainhand?.name;
+        const offhand = character.slots?.offhand?.name;
+        const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 320;
+        const cc = character.cc < 135;
+        const zapperMobs = ["plantoid"];
+        const stMaps = ["", "winter_cove", "arena", "",];
+        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
+        let tank = get_entity("Ynhi");
+
+        if (character.ctype === "warrior") {
+            try {
+				
+
+                if (tank && tank.hp < tank.max_hp * 0.4 && character.name === "haiz") {
+                    //console.log("Calling handleStomp");
+					//game_log("1")
+
+                    handleStomp(Mainhand, stMaps, aoeMaps, tank);
+                }
+                if (character.ctype === "warrior") {
+                    //console.log("Calling handleCleave");
+                    handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
+                    //console.log("Calling handleWarriorSkills");
+                    handleWarriorSkills(tank);
+                }
+            } catch (e) {
+                //console.error("Error in warrior section:", e);
+            }
+        }
+
+
+    } catch (e) {
+        //console.error("Error in skillLoop:", e);
+    }
+    setTimeout(skillLoop, delay);
+}
+skillLoop()
+
+async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
+    if (!is_on_cooldown("stomp")) {
+        if (Mainhand !== "basher" && performance.now() - basher > 5000) {
+            basher = performance.now();
+            basherSet();
+        }
+        use_skill("stomp");
+        game_log("Using STOMP", "#B900FF");
+    } else {
+        handleWeaponSwap(stMaps, aoeMaps);
+    }
+}
+
+function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+    const currentTime = performance.now();
+    if (stMaps.includes(character.map) && currentTime - eTime > 50) {
+        eTime = currentTime;
+        equipSet('single');
+    } else if (aoeMaps.includes(character.map) && currentTime - eTime > 50) {
+        eTime = currentTime;
+        equipSet('aoe');
+    }
+}
+
+let lastCleaveTime = 0;
+const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
+
+function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
+    const currentTime = performance.now();
+    const timeSinceLastCleave = currentTime - lastCleaveTime;
+    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n"];
+    const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
+        type === "monster" &&
+        visible &&
+        !dead &&
+        distance(character, { x, y }) <= G.skills.cleave.range
+    );
+
+    const untargetedMonsters = monstersInRange.filter(({ target }) => !target)
+
+    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters)) {
+        if (Mainhand !== "bataxe") {
+            scytheSet(); // Equip the bataxe
+        }
+        use_skill("cleave"); // Use the cleave skill
+        reduce_cooldown("cleave", character.ping * 0.95);
+        lastCleaveTime = currentTime; // Update the last cleave time
+    }
+
+    // Handle weapon swapping outside of cleave logic to keep it separate
+    handleWeaponSwap(stMaps, aoeMaps);
+}
+
+function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters) {
+    return (
+        !smart.moving // Don't cleave if moving smartly
+        && cc // CC check: Ensure you have CC up
+        && aoe // Mana check: Ensure AOE is available
+        && timeSinceLastCleave >= CLEAVE_THRESHOLD // Prevent cleave spamming
+        && monstersInRange.length > 0 // Ensure there are monsters in range
+        && untargetedMonsters.length === 0 // Only cleave if no untargeted monsters (no aggro)
+        && mapsToInclude.includes(character.map) // Map check (optional, clarify if needed)
+        && tank // Ensure tank (priest) is around
+        && !is_on_cooldown("cleave") // Ensure cleave is not on cooldown
+        && ms_to_next_skill("attack") > 75 // Ensure attack isn't about to be ready
+    );
+}
+
+async function handleWarriorSkills(tank) {
+    if (!is_on_cooldown("warcry") && !character.s.warcry && character.s.darkblessing) {
+        await use_skill("warcry");
+    }
+
+    const crabsInRange = Object.values(parent.entities)
+        .filter(entity => entity.mtype === "crabx" && entity.visible && !entity.dead && distance(character, entity) <= G.skills.agitate.range);
+    const untargetedCrabs = crabsInRange.filter(monster => !monster.target);
+
+    if (!is_on_cooldown("agitate") && crabsInRange.length >= 5 && untargetedCrabs.length === 5 && tank) {
+        await use_skill("agitate");
+    }
+
+    const mobTypes = ["bat", "bigbird"];
+    const mobsInRange = Object.values(parent.entities)
+        .filter(entity => mobTypes.includes(entity.mtype) && entity.visible && !entity.dead && distance(character, entity) <= G.skills.agitate.range);
+    const untargetedMobs = mobsInRange.filter(monster => !monster.target);
+
+    if (!is_on_cooldown("agitate") && mobsInRange.length >= 3 && untargetedMobs.length >= 3 && !smart.moving && tank) {
+        let porc = get_nearest_monster({ type: "porcupine" });
+        if (!is_in_range(porc, "agitate")) {
+            await use_skill("agitate");
+        }
+    }
+
+    if (!is_on_cooldown("charge")) {
+        await use_skill("charge");
+    }
+
+    if (!is_on_cooldown("hardshell") && character.hp < 12000) {
+        await use_skill("hardshell");
+    }
+
+    for (let id in parent.entities) {
+        let current = parent.entities[id];
+        if (current.mtype === "ent" && current.target !== character.name) {
+            if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
+                await use_skill("taunt", current.id);
+                game_log("Taunting " + current.name, "#FFA600");
+            }
+        }
+    }
+}
+
+
+
+function scytheSet() {
+    unequip("offhand");
+    equipBatch([
+        { itemName: "bataxe", slot: "mainhand", level: 6, l: "l" },
+    ]);
+}
+
+function basherSet() {
+    unequip("offhand");
+    equipBatch([
+        { itemName: "basher", slot: "mainhand", level: 7 }
+    ]);
+}
+
+//l: "l"  == L lock
+async function equipBatch(data) {
+    if (!Array.isArray(data)) {
+        game_log("Can't equipBatch non-array");
+        return handleEquipBatchError("Invalid input: not an array");
+    }
+    if (data.length > 15) {
+        game_log("Can't equipBatch more than 15 items");
+        return handleEquipBatchError("Too many items");
+    }
+
+    let validItems = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let itemName = data[i].itemName;
+        let slot = data[i].slot;
+        let level = data[i].level;
+        let l = data[i].l;
+
+        if (!itemName) {
+            game_log("Item name not provided. Skipping.");
+            continue;
+        }
+
+        let found = false;
+        if (parent.character.slots[slot]) {
+            let slotItem = parent.character.items[parent.character.slots[slot]];
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            game_log("Item " + itemName + " is already equipped in " + slot + " slot. Skipping.");
+            continue;
+        }
+
+        for (let j = 0; j < parent.character.items.length; j++) {
+            const item = parent.character.items[j];
+            if (item && item.name === itemName && item.level === level && item.l === l) {
+                validItems.push({ num: j, slot: slot });
+                break;
+            }
+        }
+    }
+
+    if (validItems.length === 0) {
+        return //handleEquipBatchError("No valid items to equip");
+    }
+
+    try {
+        parent.socket.emit("equip_batch", validItems);
+        parent.push_deferred("equip_batch");
+    } catch (error) {
+        console.error('Error in equipBatch:', error);
+        return handleEquipBatchError("Failed to equip items");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const equipmentSets = {
+
+    dps: [
+        //{ itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
+        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
+        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
+    ],
+    luck: [
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" },
+        //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
+    ],
+    single: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
+    ],
+    aoe: [
+        { itemName: "ololipop", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "ololipop", slot: "offhand", level: 8, l: "l" },
+    ],
+    stealth: [
+        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+    ],
+    cape: [
+        { itemName: "vcape", slot: "cape", level: 4, l: "l" },
+    ],
+    xp: [
+        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
+        //{ itemName: "northstar", slot: "amulet", level: 0, l: "l" },
+    ],
+    orb: [
+        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+    ],
+    mana: [
+        { itemName: "tshirt9", slot: "chest", level: 6, l: "l" }
+    ],
+    stat: [
+        { itemName: "coat", slot: "chest", level: 13, l: "l" }
+    ],
+};
+
+
+
+
+
+function equipSet(setName) {
+    const set = equipmentSets[setName];
+    if (set) {
+        equipBatch(set);
+    } else {
+        console.error(`Set "${setName}" not found.`);
+    }
+}
+
+
+
+// Helper function to handle errors
+function handleEquipBatchError(message) {
+    game_log(message);
+    // You may decide to implement a delay or other error handling mechanism here
+    return Promise.reject({ reason: "invalid", message });
+}
+
+
+
+
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
+
+
+
+function get_nearest_monster_v2(args = {}) {
+    let min_d = 999999, target = null;
+    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
+
+    for (let id in parent.entities) {
+        let current = parent.entities[id];
+        if (current.type != "monster" || !current.visible || current.dead) continue;
+        if (args.type && current.mtype != args.type) continue;
+        if (args.min_level !== undefined && current.level < args.min_level) continue;
+        if (args.max_level !== undefined && current.level > args.max_level) continue;
+        if (args.target && !args.target.includes(current.target)) continue;
+        if (args.no_target && current.target && current.target != character.name) continue;
+
+        // Status effects (debuffs/buffs) check
+        if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
+
+        // Min/max XP check
+        if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
+        if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
+
+        // Attack power limit
+        if (args.max_att !== undefined && current.attack > args.max_att) continue;
+
+        // Path check
+        if (args.path_check && !can_move_to(current)) continue;
+
+        // Distance calculation
+        let c_dist = args.point_for_distance_check
+            ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
+            : parent.distance(character, current);
+
+        if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
+
+        // Generalized HP check (min or max)
+        if (args.check_min_hp || args.check_max_hp) {
+            let c_hp = current.hp;
+            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
+                optimal_hp = c_hp;
+                target = current;
+            }
+            continue;
+        }
+
+        // If no specific HP check, choose the closest monster
+        if (c_dist < min_d) {
+            min_d = c_dist;
+            target = current;
+        }
+    }
+    return target;
+}
+
+
+
+
+
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
+
+    for (id in parent.entities) {
+        var current = parent.entities[id];
+        if (current.mtype === home && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 1000); // 1000 milliseconds = 1 second
+        }
+    }
+}
+
+
+
+
+function use_hp_or_mp1()
+{
+	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
+	var used=true;
+	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
+	
+	
+if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
+  else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
+  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
+
+	
+	else used=false;
+	if(used)
+		last_potion=new Date();
+	else
+		return resolving_promise({reason:"full",success:false,used:false});
+}
+
+setInterval(function() {
+use_hp_or_mp1()
 }, 200);
-​
-​
-​
-​
-​
-​
+
+
+
+
+
+
 //////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
-​
+
 function on_party_request(name) {
 if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal") {
             accept_party_request(name);
         }
         if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
             accept_party_request(name);
-        }   
-    
-    
+        }	
+	
+	
     }
-​
-​
-​
-​
-​
-​
+
+
+
+
+
+
 let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
 let banktime 
 let bosstime = 0 
@@ -32,45 +801,939 @@ const TenMinutesInMs = 10 * 60 * 1000
 const Ten7MinutesInMs = 7 * 60 * 1000
 let bankk = 0
 let trieuhoi = 0
-​
-​
-​
+
+
+
 setInterval(function() {
-    
-    
+	
+	
 if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
 {
-    bankk = 0
-    start_character("MuaBan", 6);   
-}   
-//////////////////////////  Cho 10p danh boss
+	bankk = 0
+    start_character("MuaBan", 6);	
+}	
+//////////////////////////	Cho 10p danh boss
 if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
-{   
-    bosstime = 0
-}   
-//////////////////////  
-    
-    
+{	
+	bosstime = 0
+}	
+//////////////////////	
+	
+	
   if (trieuhoi == 0)
   {
-      trieuhoi = 1
+	  trieuhoi = 1
 if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
-      
-      
-if (modeYnhi == 0)   
+	  
+	  
+if (modeYnhi == 0)	 
 {
 if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
 }
 else if  (modeYnhi == 1)
 {
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);    
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
 }
 else if  (modeYnhi == 2)
 {
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);  
+if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
 }
-Beta
-0 / 0
-used queries
-1
+	  
+  }
+
+}, 1000); //trieu hoi 1 lan dau
+///////////////////////////
+
+
+
+setTimeout(function() {
+stop_character("6gunlaZe")
+start_character("nhiY", 12);	
+}, 10000); // 10000 milliseconds = 10 giây
+
+
+let intervalId = setInterval(function() {
+    if (parent.party_list.includes("nhiY")) {
+        send_cm("nhiY", "jr");
+        clearInterval(intervalId);  // Dừng lại khi điều kiện đúng
+    }
+}, 5000); // Chạy mỗi 5 giây
+
+
+
+
+
+
+
+
+
+
+
+ ///////////////////////// 
+setInterval(function() {	
+if (prolive == 1 || events ) return	
+		
+let region = server.region;
+let serverIden = server.id
+
+if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv trở về nhà
+{
+if ( region == "EU" && serverIden == "I" ) 
+{
+	game_log ("  SV  >>>>" + region + serverIden )
+}
+	else
+	{
+         change_server("EU", "I");
+	//change_server("ASIA", "I");	
+	}
+}	
+
+if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
+	
+if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
+	
+/////////////////	
+if (modeYnhi == 0 && prolive == 0)	 
+{
+if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
+}
+else if  (modeYnhi == 1 && prolive == 0)
+{
+if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
+}
+else if  (modeYnhi == 2 && prolive == 0)
+{
+if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
+}
+
+
+}, 100000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
+
+
+
+
+let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
+
+setInterval(function() {	
+	
+if (prolive == 1 || events ) return	
+
+if (autobuyPonty != 1) return
+	
+	///////////
+let randomNumber = getRandom(1, 100);	
+let region = server.region;
+let serverIden = server.id
+		game_log("svvvvvvvv ! ! ==   " +randomNumber);
+
+
+if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
+{
+	
+if (randomNumber < 20) {
+    change_server("US", "I");
+} else if (randomNumber > 80) {
+    change_server("EU", "II");
+} else if (randomNumber > 20 && randomNumber < 30) {
+   // change_server("EU", "II");
+       change_server("ASIA", "I");
+} else if (randomNumber > 30 && randomNumber < 60) {
+    change_server("US", "III");
+} else if (randomNumber > 60 && randomNumber < 80) {
+    change_server("US", "II");
+} else {
+    //change_server("ASIA", "I");
+      change_server("EU", "I");
+}	
+	
+}	
+	
+}, 2000000); //30p chuyen sv 1 lan
+
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+setInterval(function() {
+    if (character.esize < 17) {
+	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
+    if (!MuaBan) {
+      start_character("MuaBan", 6);
+		game_log("trieu hoi MuaBan!!");
+	}
+	}
+}, 160000); //
+
+setInterval(function() {	
+    if (character.esize > 25) {
+       	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
+    if (MuaBan) {
+	start_character("MuaBan", 6);	
+		game_log(" MuaBan da xong nhiem vu!!");
+	}
+	}
+}, 9900000); // auto re connet mua ban moi 3h
+
+
+setInterval(function() {
+ if (character.rip) { ///////auto hoi sinh
+    respawn();
+  }
+}, 420000);
+
+function on_magiport(name){
+    if(name == "nhiY"){
+        accept_magiport(name);
+    }
+}
+
+
+
+let frankymode = 0
+let framboss = 0
+let framboss1 = 0
+
+function on_cm(name, data) {
+
+
+////////////////////
+ if(name == "nhiY" && data == "boss1"){
+		  bosstime = 1
+	    timekillboss = Date.now()
+	  framboss = 1
+ }
+ if(name == "nhiY" && data == "stop"){
+stop_character("nhiY") 
+ }	
+/////////////////
+    if(name == "MuaBan"){
+
+			
+	   if(data == "bank") {
+        start_character("MuaBan", 10);	
+		 banktime = Date.now()  
+		   bankk = 1
+	   }	
+		
+  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7") {
+	  if (modeYnhi == 0)
+	  {
+		parent.api_call("disconnect_character", {name: "nhiY"});
+		stop_character("nhiY");
+	  }
+	  else if (modeYnhi == 2)
+	  {
+	  	parent.api_call("disconnect_character", {name: "haiz1"});
+		stop_character("haiz1");
+	  }
+	  else
+	  {
+
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    	  
+	  }
+		  bosstime = 1
+	    timekillboss = Date.now()
+	  start_character("nhiY", 12);
+}
+	
+		
+	 if(data == "boss1") {
+	  framboss = 1
+	   }
+	 if(data == "boss2") {
+	  framboss = 2
+	   }
+	 if(data == "boss3") {
+	  framboss = 3
+	   }	 
+	 if(data == "boss4") {
+	  framboss = 4
+	   }
+	 if(data == "boss5") {
+	  framboss = 5
+	   }	 
+	 if(data == "boss6") {
+	  framboss = 6
+	 }
+	 if(data == "boss7") {
+	  framboss = 7
+	   }		
+		
+
+       if(data == "franky")
+	   {
+		   frankymode = 1	
+	stop_character("angioseal")	
+	stop_character("nhiY")	
+	stop_character("haiz1")	
+
+       if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
+	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 28);
+		   //cũ 31
+	   }		
+			
+}
+}
+
+
+
+
+
+
+setInterval(function() {
+////////////giui vi tri moi 2s
+let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+let SM = 0;
+if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
+  SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
+}
+
+if (SM === 1) {
+  let x = checkdichuyen.x;
+  let y = checkdichuyen.y;
+  let map = checkdichuyen.map;
+if (foxmode11)send_cm("nhiY",checkdichuyen)  // đặc cach cho nhiY
+for (let char in parent.party) {
+    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
+    if (char !== character.name && char !== "MuaBan" && char !== "nhiY" ) {
+		   
+        send_cm(char, {
+            message: "location",
+            x: x,
+            y: y,
+            map: map
+        });
+		        continue;
+	}	
+	
+}
+	
+
+	
+}	
+else
+{
+
+/////////////////////	
+for (let char in parent.party) {
+    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
+    if (char !== character.name && char !== "MuaBan" && !is_moving(character) ) {
+		      
+        send_cm(char, {
+            message: "location",
+            x: character.x,
+            y: character.y,
+            map: character.map
+        });
+		        continue;
+
+		
+	}
+	    if (char !== character.name && char !== "MuaBan" && is_moving(character) ) {
+			     
+        send_cm(char, {
+            message: "location",
+            x: character.going_x,
+            y: character.going_y,
+            map: character.map
+        });
+			
+        continue;
+    }
+}
+	//////////////////////////////////
+}
+}, 1000);
+
+
+
+
+/// 
+setInterval(function() {
+
+	if(character.esize < 7)
+	{
+		send_cm("MuaBan", "full");
+		game_log("lay do !!!!!!");
+	}
+	let soluonghp = 0
+	let soluongmp = 0
+   /////////
+	        for (let i = 0; i < character.isize; i++) {
+            const item = character.items[i]
+            if (!item) continue // No item in this slot
+
+            if (item.name == "mpot1" ) {
+                // This is an item we want to use!
+                    soluongmp += item.q//tim ra vi tri mon do
+						game_log("so luong  la "+soluongmp);
+
+            }
+            if (item.name == "hpot1" ) {
+                // This is an item we want to use!
+                    soluonghp += item.q//tim ra vi tri mon do
+						game_log("so luong  la "+soluonghp);
+
+            }				
+			}
+	/////////		
+	
+	if( (soluonghp < 7000 ) )
+	{
+		send_cm("MuaBan", "hp");
+		game_log("re filll !!!!!!");
+	}
+		if( ( soluongmp < 7000) )
+	{
+		send_cm("MuaBan", "mp");
+		game_log("re filll !!!!!!");
+	}
+	
+}, 20000);
+
+///////////
+
+
+
+////////////////////////////////chuyen do tu dong cho nhan vat muaban
+
+setInterval(function() {
+    let lootMule = get_player("MuaBan");
+
+		 //giui vang when in range
+    var merch = get_player("MuaBan"); // replace this with your merchants name
+    if (merch && distance(character, merch) <= 400) {
+		        send_gold(merch,character.gold)
+
+    }
+	//
+	
+	
+    if (lootMule == null) {
+        //game_log("Nobody to transfer to");
+        loot_transfer = false;
+        return;
+    }
+
+    let itemsToExclude = ["hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","mcape","helmet1","wbasher", "basher","bataxe","sweaterhs","tigerstone","sshield"];
+
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
+
+        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
+        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
+            send_item(lootMule.id, i, item.q ?? 1);
+        }
+    }
+}, 1000);
+
+
+
+
+////////////////////////////////////////////////////////
+setInterval(function() {
+looting()	
+}, 500);
+function looting() {
+    if(Object.keys(parent.chests).length >= 20) 
+	{
+     shift(0, 'goldbooster');
+    loot();
+    setTimeout(shifting, 250);
+	}
+}
+function shifting() {
+    shift(0, 'xpbooster');
+}
+
+
+//////////////
+
+
+let checktimeparty = 0
+let partychecktime
+function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
+    if (parent?.S?.[eventType]) {
+        if (character.map !== mapName) {
+            parent.socket.emit('join', { name: eventType });
+        } else if (!smart.moving) {
+            smart_move({ x, y, map: mapName });
+        }
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+            if (monster.hp > hpThreshold) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+	  else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}
+
+
+var BOSS = eventType
+
+	var targetfk
+	targetfk= get_nearest_monster({type: BOSS});
+
+	///gioi han vong tron fight + check member
+		var f1 = get_player(f1name); 
+		var f2 = get_player(f2name); 
+
+	    
+//////////////bo chay khi moi nguoi chay het
+if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 9000)
+{
+events = false;
+bosscantank = 0;
+stop_character(f2name)  	
+stop_character(f1name)  
+stop_character("MuaBan")  
+}
+//////////////////////////
+if(targetfk  && character.hp < 4500)
+{
+parent.api_call("disconnect_character", {name: "haiz"});
+}
+	    
+////////////////////////////////
+if ( checktimeparty == 0)
+{
+partychecktime = Date.now()
+checktimeparty = 1	
+}
+
+if (Date.now() > partychecktime + 60000){
+partychecktime = Date.now()
+const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe'];
+// Duyệt mảng và kiểm tra tên
+playerNames.forEach(name => {
+    if (name !== f1name && name !== f2name) {
+        stop_character(name);
+    }
+	});
+
+checktimeparty = 0
+
+const characterData = [
+    ["6gunlaZe", 33],
+    ["Ynhi", 28],
+    ["nhiY", 12],
+];
+
+// Duyệt qua mảng characterData và kiểm tra nếu tên không có trong party_list
+characterData.forEach(([name, level]) => {
+	 if (name == f1name || name == f2name){
+    if (!parent.party_list.includes(name)) {
+        start_character(name, level);
+    }
+	 }
+});
+	
+}
+//////////hút quái nếu đồng minh bị dí
+
+var targetf1	
+var targetf2 
+
+if (f1)
+{
+targetf1 = getBestTargets({ max_range: 180 , target: f1name , number : 1 }) 
+skillwarboss(targetf1)	
+if(targetf1 && (f1.hp/f1.max_hp) < 0.75 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
+
+}        
+		
+if (f2)
+{
+targetf2 = getBestTargets({ max_range: 180 , target: f2name , number : 1 }) 
+skillwarboss(targetf2)	
+if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
+	
+}  
+//////////
+    }
+}
+
+
+
+
+
+
+
+
+function NOTsoloboss(options = {}) {
+    const entities = []
+     let number = 0
+     let checkkill = 0
+	var bossarmy=["icegolem", "franky" , "crabxx" ]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+
+	    checkkill = get_nearest_playerV_noMyparty(entity)
+	    if (checkkill < 3)continue
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+
+
+
+
+function get_nearest_playerV_noMyparty(currentTarget)
+{
+	// Just as an example
+	var min_d=2000,target=0;
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if(!current.player) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
+		if(current.target == currentTarget.id) target +=1;
+	}
+	game_log("so luong nguoi choi kill boss la: " + target)
+	return target;
+}
+
+
+
+
+async function moveLoop() {
+    let delay = 2500;
+    try {
+if (!events){
+
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+	const nearB = get_player("nhiY");
+
+if (framboss > 0  && foxmode11 )send_cm("nhiY", "foxmode");
+	
+	
+if (framboss == 1 && !smart.moving && foxmode11  && framboss1  <5   ){
+	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
+framboss1 += 1
+    });
+}
+if (framboss == 2 && !smart.moving && foxmode11  && framboss1  <5 ){
+	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 3 && !smart.moving&& foxmode11  && framboss1  <5 ){
+	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
+framboss1 += 1
+    });
+}		
+if (framboss == 4 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "main", x: 1312, y: -200 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 5 && !smart.moving && foxmode11  &&framboss1 <5  ){
+	smart_move({ map: "main", x: 700, y: 1800 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 6 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "main", x: -1137, y: 455 }, () => {
+framboss1 += 1
+    });
+}	
+	
+	
+if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <5  ){
+	//send_cm("angioseal", "boss7");
+
+	if (currentBossLocation) {
+	smart_move({ map: currentBossLocation.map, x: currentBossLocation.x, y: currentBossLocation.y }, () => {
+framboss1 += 1
+    });
+}	
+}
+
+
+if ( nearB  && framboss1 > 0 && !smart.moving ){	
+var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
+if (targetsoloboss.length == 0) //danh xong
+	{
+		framboss1 = 0
+		framboss = 0
+		bosstime = 0
+		smart_move({ map: maptrain, x: farmX, y: farmY }, () => {
+		framboss = 0
+		 stop_character("nhiY")
+		if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+                 bosstime = 0
+
+    });	
+		
+		loot();
+		        loot();
+		        loot();
+
+	}
+		
+}
+
+
+
+
+
+
+	    
+}
+    } catch (e) {
+        console.error(e);
+    }
+    setTimeout(moveLoop, delay);
+}
+
+
+
+
+const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
+let currentBossLocation = null;
+
+
+// Đặt vòng lặp mỗi 10 giây
+setInterval(() => {
+moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
+}, 20000);  // 20 giây
+
+
+
+
+
+function soloboss(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["phoenix", "greenjr" , "jr" , "mvampire"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+
+
+
+
+
+async function moveToBossIfFound(monsters, HP) {
+
+if (prolive == 1 || events ) return	
+	
+  const bossLocation = await BosscheckHPMYSv11(monsters, HP);
+
+  // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
+  if (bossLocation && framboss == 0) {
+    framboss = 10;
+	  	  if (modeYnhi == 0)
+	  {
+		parent.api_call("disconnect_character", {name: "nhiY"});
+		stop_character("nhiY");
+	  }
+	  else if (modeYnhi == 2)
+	  {
+	  	parent.api_call("disconnect_character", {name: "haiz1"});
+		stop_character("haiz1");
+	  }
+	  else
+	  {
+		
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    
+  
+	  }
+	    bosstime = 1
+	    timekillboss = Date.now()
+	  start_character("nhiY", 12);
+    currentBossLocation = bossLocation
+   // smart_move({ map: bossLocation.map, x: bossLocation.x, y: bossLocation.y });
+  } else {
+    game_log("Không tìm thấy boss để di chuyển đến.");
+  }
+}
+
+
+
+
+async function BosscheckHPMYSv11(monsters, HP) {
+  // Safety Checks
+  if (!Array.isArray(monsters) || monsters.length === 0) {
+    game_log("Không có quái vật nào trong danh sách");
+    return;
+  }
+
+  // Lấy thông tin region và serverIden
+  const region = server.region;
+  const serverIden = server.id;
+
+  // URL API để lấy thông tin quái vật
+  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+
+  try {
+    // Gửi request đến API
+    const response = await fetch(url);
+
+    // Kiểm tra nếu response trả về mã trạng thái 200
+    if (response.status === 200) {
+      const data = await response.json();
+
+      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn, đồng thời target không phải là "haiz", "ynhi", "nhiY"
+      const validObjects = data.filter(obj => 
+        obj.hp !== undefined && 
+        obj.hp < HP && 
+        obj.serverRegion === region && 
+        obj.serverIdentifier === serverIden &&
+        obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
+      );
+
+      // Nếu tìm thấy các đối tượng hợp lệ
+      if (validObjects.length > 0) {
+        game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
+
+        // Tìm boss có HP thấp nhất
+        const minHpBoss = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+
+        // Trả về tọa độ của boss có HP thấp nhất
+        return { x: minHpBoss.x, y: minHpBoss.y, map: minHpBoss.map };
+      } else {
+        game_log("Không tìm thấy boss nào có HP thấp hơn yêu cầu trong server của bạn");
+        return null; // Nếu không tìm thấy boss nào
+      }
+    } else {
+      game_log(`Lỗi khi lấy dữ liệu từ API: ${response.status}`);
+      return null; // Nếu có lỗi khi gọi API
+    }
+  } catch (error) {
+    // Xử lý lỗi nếu fetch không thành công
+    game_log(`Lỗi kết nối: ${error}`);
+    return null; // Nếu có lỗi kết nối
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////
+function getBestTargets(options = {}) {
+    const entities = []
+     let number = 0
+	  var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+		
+if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
+if (!options.subtype && options.type &&entity.mtype != options.type   ) continue		
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		if (options.havetarget && !entity.target) continue
+		if (options.Nohavetarget && entity.target) continue
+		if (options.target && entity.target != options.target) continue
+		if (options.targetNO && entity.target == options.targetNO) continue
+		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		///
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+////////////////////////////////////////////
