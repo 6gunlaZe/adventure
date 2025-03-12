@@ -268,6 +268,8 @@ async function attackLoop() {
             });
             if (nearest) break;
         }
+
+	    
         if (!nearest) {
             for (let i = 0; i < targetNames.length; i++) {
                 nearest = get_nearest_monster_v2({
@@ -279,6 +281,22 @@ async function attackLoop() {
             }
         }
 
+    var  targetsoloboss = NOTsoloboss({ max_range: 200, number : 1 }) 
+    if ( !nearest && events && targetsoloboss.length == 1)nearest = targetsoloboss;
+	    
+    var  targetsoloboss1 = soloboss({ max_range: 300, number : 1 }) 
+    if ( !nearest && events && targetsoloboss1.length == 1)nearest = targetsoloboss1;
+
+	if ( nearest && !is_in_range(nearest))
+	{
+		move(
+			character.x+(nearest.x-character.x)/2,
+			character.y+(nearest.y-character.y)/2
+			);
+		// Walk half the distance
+	}
+	    
+	    
         // If a monster is found and is in range, execute the attack
         if (nearest && is_in_range(nearest)) {
             await attack(nearest); // Initiate attack
@@ -1355,24 +1373,304 @@ if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown
 
 
 
+function NOTsoloboss(options = {}) {
+    const entities = []
+     let number = 0
+     let checkkill = 0
+	var bossarmy=["icegolem", "franky" , "crabxx" ]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+
+	    checkkill = get_nearest_playerV_noMyparty(entity)
+	    if (checkkill < 3)continue
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+
+
+
+
+function get_nearest_playerV_noMyparty(currentTarget)
+{
+	// Just as an example
+	var min_d=2000,target=0;
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if(!current.player) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
+		if(current.target == currentTarget.id) target +=1;
+	}
+	game_log("so luong nguoi choi kill boss la: " + target)
+	return target;
+}
+
+
+
+
+async function moveLoop() {
+    let delay = 2500;
+    try {
+if (!events){
+
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+	const nearB = get_player("nhiY");
+
+if (framboss > 0  && foxmode11 )send_cm("nhiY", "foxmode");
+	
+	
+if (framboss == 1 && !smart.moving && foxmode11  && framboss1  <5   ){
+	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
+framboss1 += 1
+    });
+}
+if (framboss == 2 && !smart.moving && foxmode11  && framboss1  <5 ){
+	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 3 && !smart.moving&& foxmode11  && framboss1  <5 ){
+	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
+framboss1 += 1
+    });
+}		
+if (framboss == 4 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "main", x: 1312, y: -200 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 5 && !smart.moving && foxmode11  &&framboss1 <5  ){
+	smart_move({ map: "main", x: 700, y: 1800 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 6 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
+framboss1 += 1
+    });
+}	
+if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "main", x: -1137, y: 455 }, () => {
+framboss1 += 1
+    });
+}	
+	
+	
+if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <5  ){
+	//send_cm("angioseal", "boss7");
+
+	if (currentBossLocation) {
+	smart_move({ map: currentBossLocation.map, x: currentBossLocation.x, y: currentBossLocation.y }, () => {
+framboss1 += 1
+    });
+}	
+}
+
+
+if ( nearB  && framboss1 > 0 && !smart.moving ){	
+var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
+if (targetsoloboss.length == 0) //danh xong
+	{
+		framboss1 = 0
+		framboss = 0
+		bosstime = 0
+		smart_move({ map: maptrain, x: farmX, y: farmY }, () => {
+		framboss = 0
+		 stop_character("nhiY")
+		if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+                 bosstime = 0
+
+    });	
+		
+		loot();
+		        loot();
+		        loot();
+
+	}
+		
+}
 
 
 
 
 
 
+	    
+}
+    } catch (e) {
+        console.error(e);
+    }
+    setTimeout(moveLoop, delay);
+}
+
+
+
+
+const monstersfarm = ["phoenix", "jr","greenjr", "mvampire"]; // Danh sách các boss ID
+let currentBossLocation = null;
+
+
+// Đặt vòng lặp mỗi 10 giây
+setInterval(() => {
+moveToBossIfFound(monstersfarm, 100000000);  // Hàm sẽ tìm boss có HP thấp nhất và di chuyển đến vị trí của boss đó
+}, 20000);  // 20 giây
+
+
+
+
+
+function soloboss(options = {}) {
+    const entities = []
+     let number = 0
+	var bossarmy=["phoenix", "greenjr" , "jr" , "mvampire"]; 
+	
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		
+		if ( (bossarmy.indexOf(entity.mtype) == -1)   ) continue
+		////khong co trong list thi bo qua
+		// game_log(entity.mtype + distance(character, entity));
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
 
 
 
 
 
 
+async function moveToBossIfFound(monsters, HP) {
+
+if (prolive == 1 || events ) return	
+	
+  const bossLocation = await BosscheckHPMYSv11(monsters, HP);
+
+  // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
+  if (bossLocation && framboss == 0) {
+    framboss = 10;
+	  	  if (modeYnhi == 0)
+	  {
+		parent.api_call("disconnect_character", {name: "nhiY"});
+		stop_character("nhiY");
+	  }
+	  else if (modeYnhi == 2)
+	  {
+	  	parent.api_call("disconnect_character", {name: "haiz1"});
+		stop_character("haiz1");
+	  }
+	  else
+	  {
+		
+		parent.api_call("disconnect_character", {name: "6gunlaZe"});
+		stop_character("6gunlaZe");    
+  
+	  }
+	    bosstime = 1
+	    timekillboss = Date.now()
+	  start_character("nhiY", 12);
+    currentBossLocation = bossLocation
+   // smart_move({ map: bossLocation.map, x: bossLocation.x, y: bossLocation.y });
+  } else {
+    game_log("Không tìm thấy boss để di chuyển đến.");
+  }
+}
 
 
 
 
+async function BosscheckHPMYSv11(monsters, HP) {
+  // Safety Checks
+  if (!Array.isArray(monsters) || monsters.length === 0) {
+    game_log("Không có quái vật nào trong danh sách");
+    return;
+  }
 
+  // Lấy thông tin region và serverIden
+  const region = server.region;
+  const serverIden = server.id;
 
+  // URL API để lấy thông tin quái vật
+  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+
+  try {
+    // Gửi request đến API
+    const response = await fetch(url);
+
+    // Kiểm tra nếu response trả về mã trạng thái 200
+    if (response.status === 200) {
+      const data = await response.json();
+
+      // Lọc các đối tượng hợp lệ có HP thấp hơn và thuộc server của bạn, đồng thời target không phải là "haiz", "ynhi", "nhiY"
+      const validObjects = data.filter(obj => 
+        obj.hp !== undefined && 
+        obj.hp < HP && 
+        obj.serverRegion === region && 
+        obj.serverIdentifier === serverIden &&
+        obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
+      );
+
+      // Nếu tìm thấy các đối tượng hợp lệ
+      if (validObjects.length > 0) {
+        game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
+
+        // Tìm boss có HP thấp nhất
+        const minHpBoss = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+
+        // Trả về tọa độ của boss có HP thấp nhất
+        return { x: minHpBoss.x, y: minHpBoss.y, map: minHpBoss.map };
+      } else {
+        game_log("Không tìm thấy boss nào có HP thấp hơn yêu cầu trong server của bạn");
+        return null; // Nếu không tìm thấy boss nào
+      }
+    } else {
+      game_log(`Lỗi khi lấy dữ liệu từ API: ${response.status}`);
+      return null; // Nếu có lỗi khi gọi API
+    }
+  } catch (error) {
+    // Xử lý lỗi nếu fetch không thành công
+    game_log(`Lỗi kết nối: ${error}`);
+    return null; // Nếu có lỗi kết nối
+  }
+}
 
 
 
