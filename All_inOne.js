@@ -283,7 +283,7 @@ async function attackLoop() {
         }
 
     var  targetsoloboss = NOTsoloboss1({nhonhat: 1});
-    if ( !nearest && events && targetsoloboss.length == 1)nearest = targetsoloboss;
+    if ( !nearest && events && targetsoloboss)nearest = targetsoloboss;
 	    
     var  targetsoloboss1 = soloboss({ max_range: 300, number : 1 }) 
     if ( !nearest && events && targetsoloboss1.length == 1)nearest = targetsoloboss1;
