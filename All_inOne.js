@@ -163,9 +163,9 @@ function handleEvents() {
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
-	    handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
-	    handlebossPro('franky', 'level2w', 23, 38, 50000, "Ynhi","6gunlaZe")
-	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
+	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
+	    handlebossPro('oneeye', 'level2w', 23, 38, 50000, "Ynhi","6gunlaZe")
+	  //  handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
        // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
        // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
        // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
@@ -493,20 +493,7 @@ async function equipBatch(data) {
         for (let j = 0; j < parent.character.items.length; j++) {
             const item = parent.character.items[j];
             if (item && item.name === itemName && item.level === level && item.l === l) {
-
-
-        if (!character.slots[slot])
-	{
-	equip(j, slot); 
-	}
-	else
-	{
-        unequip(slot);
-        equip(j, slot); 
-        }
-
-		    
-                //validItems.push({ num: j, slot: slot });
+                validItems.push({ num: j, slot: slot });
                 break;
             }
         }
@@ -1236,7 +1223,7 @@ function shifting() {
 let checktimeparty = 0
 let partychecktime
 function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
-    if (parent?.S?.[eventType]) {
+    if (!parent?.S?.[eventType]) {
 
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
