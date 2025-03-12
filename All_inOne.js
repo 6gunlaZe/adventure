@@ -164,6 +164,9 @@ function handleEvents() {
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
+	    handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
+	    handlebossPro('franky', 'level2w', 23, 38, 50000, "Ynhi","6gunlaZe")
+	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
        // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
        // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
        // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
@@ -187,11 +190,7 @@ function handleHome() {
 //hpThreshold = ngưỡng sắp chết đổi item luck
 function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
     if (parent?.S?.[eventType]?.live) {
-        if (character.map !== mapName && !smart.moving) {
-            smart_move({ x, y, map: mapName });
-        }
-
-        const monster = get_nearest_monster({ type: eventType });
+        const monster = get_nearest_monster({ type: eventType }); 
         if (monster) {
             if (monster.hp > hpThreshold ) {
                 if (character.cc < 100) {
@@ -201,6 +200,10 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 equipSet('luck');
             }
         }
+	    else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}
     }
 }
 
@@ -222,6 +225,10 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
                 equipSet('luck');
             }
         }
+	 else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}   
     }
 }
 
@@ -968,7 +975,7 @@ function on_magiport(name){
 
 
 
-
+let frankymode = 0
 let framboss = 0
 let framboss1 = 0
 
@@ -1060,6 +1067,286 @@ stop_character("nhiY")
 
 
 
+setInterval(function() {
+////////////giui vi tri moi 2s
+let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
+	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+let SM = 0;
+if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
+  SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
+}
+
+if (SM === 1) {
+  let x = checkdichuyen.x;
+  let y = checkdichuyen.y;
+  let map = checkdichuyen.map;
+if (foxmode11)send_cm("nhiY",checkdichuyen)  // đặc cach cho nhiY
+for (let char in parent.party) {
+    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
+    if (char !== character.name && char !== "MuaBan" && char !== "nhiY" ) {
+		   
+        send_cm(char, {
+            message: "location",
+            x: x,
+            y: y,
+            map: map
+        });
+		        continue;
+	}	
+	
+}
+	
+
+	
+}	
+else
+{
+
+/////////////////////	
+for (let char in parent.party) {
+    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
+    if (char !== character.name && char !== "MuaBan" && !is_moving(character) ) {
+		      
+        send_cm(char, {
+            message: "location",
+            x: character.x,
+            y: character.y,
+            map: character.map
+        });
+		        continue;
+
+		
+	}
+	    if (char !== character.name && char !== "MuaBan" && is_moving(character) ) {
+			     
+        send_cm(char, {
+            message: "location",
+            x: character.going_x,
+            y: character.going_y,
+            map: character.map
+        });
+			
+        continue;
+    }
+}
+	//////////////////////////////////
+}
+}, 1000);
+
+
+
+
+/// 
+setInterval(function() {
+
+	if(character.esize < 7)
+	{
+		send_cm("MuaBan", "full");
+		game_log("lay do !!!!!!");
+	}
+	let soluonghp = 0
+	let soluongmp = 0
+   /////////
+	        for (let i = 0; i < character.isize; i++) {
+            const item = character.items[i]
+            if (!item) continue // No item in this slot
+
+            if (item.name == "mpot1" ) {
+                // This is an item we want to use!
+                    soluongmp += item.q//tim ra vi tri mon do
+						game_log("so luong  la "+soluongmp);
+
+            }
+            if (item.name == "hpot1" ) {
+                // This is an item we want to use!
+                    soluonghp += item.q//tim ra vi tri mon do
+						game_log("so luong  la "+soluonghp);
+
+            }				
+			}
+	/////////		
+	
+	if( (soluonghp < 7000 ) )
+	{
+		send_cm("MuaBan", "hp");
+		game_log("re filll !!!!!!");
+	}
+		if( ( soluongmp < 7000) )
+	{
+		send_cm("MuaBan", "mp");
+		game_log("re filll !!!!!!");
+	}
+	
+}, 20000);
+
+///////////
+
+
+
+////////////////////////////////chuyen do tu dong cho nhan vat muaban
+
+setInterval(function() {
+    let lootMule = get_player("MuaBan");
+
+		 //giui vang when in range
+    var merch = get_player("MuaBan"); // replace this with your merchants name
+    if (merch && distance(character, merch) <= 400) {
+		        send_gold(merch,character.gold)
+
+    }
+	//
+	
+	
+    if (lootMule == null) {
+        //game_log("Nobody to transfer to");
+        loot_transfer = false;
+        return;
+    }
+
+    let itemsToExclude = ["hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","mcape","helmet1","wbasher", "basher","bataxe","sweaterhs","tigerstone","sshield"];
+
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
+
+        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
+        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
+            send_item(lootMule.id, i, item.q ?? 1);
+        }
+    }
+}, 1000);
+
+
+
+
+////////////////////////////////////////////////////////
+setInterval(function() {
+looting()	
+}, 500);
+function looting() {
+    if(Object.keys(parent.chests).length >= 20) 
+	{
+     shift(0, 'goldbooster');
+    loot();
+    setTimeout(shifting, 250);
+	}
+}
+function shifting() {
+    shift(0, 'xpbooster');
+}
+
+
+//////////////
+
+
+let checktimeparty = 0
+let partychecktime
+function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
+    if (parent?.S?.[eventType]) {
+        if (character.map !== mapName) {
+            parent.socket.emit('join', { name: eventType });
+        } else if (!smart.moving) {
+            smart_move({ x, y, map: mapName });
+        }
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+            if (monster.hp > hpThreshold) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+	  else
+	{
+	 if (!smart.moving) smart_move({ x, y, map: mapName });
+	}
+
+
+var BOSS = eventType
+
+	var targetfk
+	targetfk= get_nearest_monster({type: BOSS});
+
+	///gioi han vong tron fight + check member
+		var f1 = get_player(f1name); 
+		var f2 = get_player(f2name); 
+
+	    
+//////////////bo chay khi moi nguoi chay het
+if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 9000)
+{
+events = false;
+bosscantank = 0;
+stop_character(f2name)  	
+stop_character(f1name)  
+stop_character("MuaBan")  
+}
+//////////////////////////
+if(targetfk  && character.hp < 4500)
+{
+parent.api_call("disconnect_character", {name: "haiz"});
+}
+	    
+////////////////////////////////
+if ( checktimeparty == 0)
+{
+partychecktime = Date.now()
+checktimeparty = 1	
+}
+
+if (Date.now() > partychecktime + 60000){
+partychecktime = Date.now()
+const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe'];
+// Duyệt mảng và kiểm tra tên
+playerNames.forEach(name => {
+    if (name !== f1name && name !== f2name) {
+        stop_character(name);
+    }
+	});
+
+checktimeparty = 0
+
+const characterData = [
+    ["6gunlaZe", 33],
+    ["Ynhi", 28],
+    ["nhiY", 12],
+];
+
+// Duyệt qua mảng characterData và kiểm tra nếu tên không có trong party_list
+characterData.forEach(([name, level]) => {
+	 if (name == f1name || name == f2name){
+    if (!parent.party_list.includes(name)) {
+        start_character(name, level);
+    }
+	 }
+});
+	
+}
+//////////hút quái nếu đồng minh bị dí
+
+var targetf1	
+var targetf2 
+
+if (f1)
+{
+targetf1 = getBestTargets({ max_range: 180 , target: f1name , number : 1 }) 
+skillwarboss(targetf1)	
+if(targetf1 && (f1.hp/f1.max_hp) < 0.75 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
+
+}        
+		
+if (f2)
+{
+targetf2 = getBestTargets({ max_range: 180 , target: f2name , number : 1 }) 
+skillwarboss(targetf2)	
+if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
+	
+}  
+//////////
+    }
+}
 
 
 
@@ -1098,4 +1385,58 @@ stop_character("nhiY")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////
+function getBestTargets(options = {}) {
+    const entities = []
+     let number = 0
+	  var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+if (options.min_range && distance(character, entity) < options.min_range) continue
+		
+if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
+if (!options.subtype && options.type &&entity.mtype != options.type   ) continue		
+ if (options.type && entity.mtype !== options.type) continue
+		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		 if (options.fullHP && entity.hp < entity.max_hp) continue
+		if (options.havetarget && !entity.target) continue
+		if (options.Nohavetarget && entity.target) continue
+		if (options.target && entity.target != options.target) continue
+		if (options.targetNO && entity.target == options.targetNO) continue
+		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
+		///
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		///
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+
+////////////////////////////////////////////
 
