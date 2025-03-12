@@ -435,43 +435,7 @@ async function handleWarriorSkills(tank) {
         await use_skill("warcry");
     }
 
-    const crabsInRange = Object.values(parent.entities)
-        .filter(entity => entity.mtype === "crabx" && entity.visible && !entity.dead && distance(character, entity) <= G.skills.agitate.range);
-    const untargetedCrabs = crabsInRange.filter(monster => !monster.target);
 
-    if (!is_on_cooldown("agitate") && crabsInRange.length >= 5 && untargetedCrabs.length === 5 && tank) {
-       // await use_skill("agitate");
-    }
-
-    const mobTypes = ["bat", "bigbird"];
-    const mobsInRange = Object.values(parent.entities)
-        .filter(entity => mobTypes.includes(entity.mtype) && entity.visible && !entity.dead && distance(character, entity) <= G.skills.agitate.range);
-    const untargetedMobs = mobsInRange.filter(monster => !monster.target);
-
-    if (!is_on_cooldown("agitate") && mobsInRange.length >= 3 && untargetedMobs.length >= 3 && !smart.moving && tank) {
-        let porc = get_nearest_monster({ type: "porcupine" });
-        if (!is_in_range(porc, "agitate")) {
-         //   await use_skill("agitate");
-        }
-    }
-
-    if (!is_on_cooldown("charge")) {
-        //await use_skill("charge");
-    }
-
-    if (!is_on_cooldown("hardshell") && character.hp < 12000) {
-        await use_skill("hardshell");
-    }
-
-    for (let id in parent.entities) {
-        let current = parent.entities[id];
-        if (current.mtype === "ent" && current.target !== character.name) {
-            if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
-                await use_skill("taunt", current.id);
-                game_log("Taunting " + current.name, "#FFA600");
-            }
-        }
-    }
 }
 
 
@@ -598,7 +562,7 @@ const equipmentSets = {
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
-        { itemName: "fireblade", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
     ],
     aoe: [
@@ -1401,6 +1365,54 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
     // We will return all entities, so that this function can be used with skills that target multiple entities in the future
     return entities
 }
+
+
+
+
+function NOTsoloboss1(options = {}) {
+	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
+        let checkkill = 0
+	var min_d=character.range ,target=null;
+		let hpp = 10000000000000
+        var bossarmy=["icegolem", "franky" , "crabxx" ]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		checkkill = get_nearest_playerV_noMyparty(entity)
+	        if (checkkill < 3)continue
+		var c_dist=parent.distance(character,current);
+		if (c_dist>min_d) continue;
+		if(args.cus && !current.s["cursed"]  )continue;//co debuff thi chon
+		if(args.nhonhat && current.hp > hpp)continue;//lua chon hp nho nhat
+		hpp = current.hp
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
