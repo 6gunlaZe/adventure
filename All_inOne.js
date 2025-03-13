@@ -1491,7 +1491,7 @@ async function moveLoop() {
     let delay = 2500;
     try {
 
-if(gobaltaget && !is_in_range(gobaltaget) && !smart.moving)
+if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
 {
 		move(
 			character.x+(gobaltaget.x-character.x)/2,
