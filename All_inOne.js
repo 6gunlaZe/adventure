@@ -66,7 +66,7 @@ let prolive = 0
 
 
 async function eventer() {
-    const delay = 25;
+    const delay = 500;
     try {
         if (events) {
             handleEvents();
