@@ -165,7 +165,7 @@ function handleEvents() {
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
 	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
-	    handlebossPro('oneeye', 'level2w', 23, 38, 50000, "Ynhi","6gunlaZe")
+	    handlebossPro('oneeye', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
 	  //  handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
        // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
        // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
@@ -251,6 +251,7 @@ const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 
 
 async function attackLoop() {
+	if (smart.moving)return
     let delay = null; // Default delay
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
@@ -281,14 +282,62 @@ async function attackLoop() {
             }
         }
 
-    var  targetsoloboss = NOTsoloboss({ max_range: 300, number : 1 }) 
-    if ( !nearest && events && targetsoloboss.length == 1){nearest = targetsoloboss;
-	    change_target(nearest)}
-    var  targetsoloboss1 = soloboss({ max_range: 300, number : 1 }) 
-    if ( !nearest && events && targetsoloboss1.length == 1){nearest = targetsoloboss1;
- change_target(nearest)}
-		
-		
+	            let target = null;
+	    let target1 = null;
+	    var bossarmy=["icegolem", "franky" , "crabxx", "oneeye" ]; 
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire"];
+
+// Kiểm tra xem target có thuộc trong bossarmy không
+if (!nearest){	    
+for (var i = 0; i < bossarmy.length; i++) {
+     target= get_nearest_monster1({type: bossarmy[i]});
+
+		  if(target) change_target(target);
+	if ( target && !is_in_range(target))
+	{
+		move(
+			character.x+(target.x-character.x)/2,
+			character.y+(target.y-character.y)/2
+			);
+		// Walk half the distance
+	}
+	    
+	    
+        // If a monster is found and is in range, execute the attack
+        if (target && is_in_range(target)) {
+            await attack(target); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+
+        break;  // Nếu tìm thấy thì thoát vòng lặp
+}
+}
+
+if (!target){	    
+for (var i = 0; i < mob.length; i++) {
+     target1= get_nearest_monster({type: mob[i]});
+
+		  if(target1) change_target(target1);
+	if ( target1 && !is_in_range(target1))
+	{
+		move(
+			character.x+(target1.x-character.x)/2,
+			character.y+(target1.y-character.y)/2
+			);
+		// Walk half the distance
+	}
+	    
+	    
+        // If a monster is found and is in range, execute the attack
+        if (target1 && is_in_range(target1)) {
+            await attack(target1); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+
+        break;  // Nếu tìm thấy thì thoát vòng lặp
+}
+}
+	    		
 	if ( nearest && !is_in_range(nearest))
 	{
 		move(
@@ -1374,6 +1423,50 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
     // We will return all entities, so that this function can be used with skills that target multiple entities in the future
     return entities
 }
+
+
+
+
+function get_nearest_monster1(args) ///mod
+{
+ let checkkill = 0
+	var min_d=character.range + 125,target=null;
+
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+
+	    checkkill = get_nearest_playerV_noMyparty(entity)
+	    if (checkkill < 0)continue
+
+
+		
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
+
+
+
+
+
+
 
 
 
