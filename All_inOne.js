@@ -253,7 +253,7 @@ const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 
 
 async function attackLoop() {
-	if (smart.moving)return
+	if (character.moving)return
     let delay = null; // Default delay
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
