@@ -61,7 +61,7 @@ const centerY = (topLeftY + bottomRightY) / 2;
 
 let bosscantank = 0
 let prolive = 0
-
+let framhaiz = 0
 
 
 
@@ -72,6 +72,8 @@ async function eventer() {
             handleEvents();
         } else if (stompyActive || skeletorActive) {
             //handleBosses();
+	} else if (framboss > 0 || framhaiz > 0) {
+		
         } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
            if(framboss == 0)handleHome();
         } else {
@@ -288,7 +290,7 @@ async function attackLoop() {
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
-if (!nearest){	  
+if (!nearest && events){	  
 
 for (var i = 0; i < bossarmy.length; i++) {
      target= get_nearest_monster1({type: bossarmy[i]});
@@ -324,7 +326,14 @@ if (!target){
 for (var i = 0; i < mob.length; i++) {
      target1= get_nearest_monster({type: mob[i]});
 
-		  if(target1) change_target(target1);
+		  if(target1) {change_target(target1);
+                     framhaiz = 1
+			      }
+                   else
+		  {
+			framhaiz = 0  
+		  }
+	
 	if ( target1 && !is_in_range(target1))
 	{
 		move(
