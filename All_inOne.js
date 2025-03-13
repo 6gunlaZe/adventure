@@ -285,7 +285,7 @@ async function attackLoop() {
 	            let target = null;
 	    let target1 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx", "oneeye" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire"];
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest){	    
@@ -508,15 +508,23 @@ function basherSet() {
 }
 
 //l: "l"  == L lock
+let lastEquipTime = 0;
 let isEquipping = false;
 
 async function equipBatch(data) {
+    const now = Date.now();
+    if (now - lastEquipTime < 100) {
+        game_log("equipBatch called too soon. Skipping.");
+        return;
+    }
+    lastEquipTime = now;
+
     if (isEquipping) {
         game_log("equipBatch is already running. Skipping.");
         return;
     }
 
-    isEquipping = true; // Đánh dấu bắt đầu chạy
+    isEquipping = true;
 
     if (!Array.isArray(data)) {
         game_log("Can't equipBatch non-array");
@@ -552,7 +560,7 @@ async function equipBatch(data) {
         }
 
         if (found) {
-            game_log("Item " + itemName + " is already equipped in " + slot + " slot. Skipping.");
+            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
             continue;
         }
 
@@ -580,9 +588,8 @@ async function equipBatch(data) {
         handleEquipBatchError("Failed to equip items");
     }
 
-    isEquipping = false; // Đánh dấu đã hoàn thành
+    isEquipping = false;
 }
-
 
 
 
