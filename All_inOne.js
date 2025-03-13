@@ -120,6 +120,8 @@ async function checkGameEvents() {
         }
     }
 
+   if (check_ice == 1)bosscantank = 1;
+	
     if (checkeven > 0) {
         events = true;
     } else {
@@ -128,6 +130,8 @@ async function checkGameEvents() {
 
     if (pro > 0) {
         prolive = 1;
+	ICEcheckHPMYSv(["icegolem"] , 15000000)
+
     } else {
         prolive = 0; // khi boss đã chết
         if (pro == 0 && checkeven == 0) {
@@ -140,8 +144,11 @@ async function checkGameEvents() {
                     events = false;
                     stop_character("Ynhi");
                     stop_character("nhiY");
+                bosscantank = 0;
+                check_ice = 0;
+
+			
                 }
-                bosscantank == 0;
             }
         }
     }
@@ -1864,8 +1871,46 @@ change_server(sR, sI);
 
 
 
+let check_ice = 0
+async function ICEcheckHPMYSv(monsters,HP) {
+  // Safety Checks
+  if (!Array.isArray(monsters)) return;
+  if (monsters.length == 0) return;
+ // if (!parent.S.icegolem) return;
+	
+	
+	
+let check	
+let region = server.region;
+let serverIden = server.id	
+	let validObjects
 
+  // Query API
+  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
 
+  const response = await fetch(url);
+  if (response.status == 200) {
+    const data = await response.json();
+  //  parent.S2 = data;
+validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < HP && obj.serverRegion ==region  && obj.serverIdentifier == serverIden);	  	  
+  }
+/////////////	
+if (validObjects.length > 0) // 
+{
+  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+	
+let sR =minHpObject.serverRegion;
+let sI =minHpObject.serverIdentifier;
+game_log ("tim thay  >>>>" + sR + sI )
+check_ice = 1
+}
+	else {
+		game_log ("khong tim thay doi tuong")
+      check_ice = 0
+	     }
+////////////	
+	
+}
 
 
 
