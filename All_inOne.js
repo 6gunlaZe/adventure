@@ -88,11 +88,11 @@ async function eventer() {
 eventer();
 
 
-// Hàm kiểm tra các sự kiện trong game
-function checkGameEvents() {
-  let checkeven = 0;
-  let pro = 0;
-    // Danh sách các sự kiện bạn muốn kiểm tra
+
+
+async function checkGameEvents() {
+    let checkeven = 0;
+    let pro = 0;
     const events1 = [
         { eventType: 'snowman', type: 'withJoin' },
         { eventType: 'goobrawl', type: 'specific' },
@@ -101,72 +101,58 @@ function checkGameEvents() {
         { eventType: 'icegolem', type: 'pro' },
     ];
 
-    // Kiểm tra tất cả các sự kiện
     for (let event of events1) {
         let isEventValid = false;
-	            let procheck = false;
-        // Kiểm tra sự kiện theo loại
+        let procheck = false;
         if (event.type === 'specific') {
-            // Kiểm tra sự kiện chỉ cần tồn tại
             isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
-            // Kiểm tra sự kiện phải tồn tại và có thuộc tính live
             isEventValid = !!parent?.S?.[event.eventType]?.live;
         } else if (event.type === 'pro') {
             procheck = !!parent?.S?.[event.eventType];
         }
-       if (procheck) pro += 1
-        // In ra kết quả kiểm tra sự kiện
+        if (procheck) pro += 1;
         if (isEventValid) {
             console.log(`Event ${event.eventType} đã có event.`);
-             checkeven += 1           
+            checkeven += 1;
         } else {
             console.log(`Event ${event.eventType} không có event.`);
         }
     }
 
-				
+    if (checkeven > 0) {
+        events = true;
+    } else {
+		if (bosscantank == 0)events = false;
+    }
 
-if (checkeven>0){
-	 events = true;
-}
-	else {
-	events = false;
-	}
-if (pro>0){
-	 prolive = 1;
-}
-	else {
-	prolive = 0; ///khi boss đã chết
-		if (pro == 0 && checkeven == 0)
-		{
-			if (events){
-				send_cm("nhiY","back")
-				use_skill("town")
+    if (pro > 0) {
+        prolive = 1;
+    } else {
+        prolive = 0; // khi boss đã chết
+        if (pro == 0 && checkeven == 0) {
+            if (events) {
+                 await use_skill('town');// Chờ skill town thực hiện xong
+                send_cm("nhiY", "back");
 
-                    if ( character.map == "winterland" && distance(character,  {x: 800, y: 400}) < 250 )
-		    {}
-			else 
-		    {
-			    events = false;
-			    stop_character("Ynhi")
-		            stop_character("nhiY") 
-		    } 
-			bosscantank == 0
+                if (character.map == "winterland" && distance(character, { x: 800, y: 400 }) < 250) {
+                } else {
+                    events = false;
+                    stop_character("Ynhi");
+                    stop_character("nhiY");
+                }
+                bosscantank == 0;
+            }
+        }
+    }
 
-			}
-
-		}
-	}	
-
-if ( pro > 0 &&  bosscantank == 1  )events = true;	
-	
+    if (pro > 0 && bosscantank == 1) events = true;
 }
 
-// Tạo vòng lặp 1s để gọi checkGameEvents()
+// Tạo vòng lặp 10s để gọi checkGameEvents()
 const intervalId1 = setInterval(() => {
-    checkGameEvents();   
-}, 10000);  // 1000 ms = 1 giây
+    checkGameEvents();
+}, 10000); // 1000 ms = 1 giây
 
 
 
