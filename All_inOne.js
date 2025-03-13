@@ -1565,26 +1565,19 @@ if (targetsoloboss.length == 0) //danh xong
 		framboss1 = 0
 		framboss = 0
 		bosstime = 0
-		smart_move({ map: maptrain, x: farmX, y: farmY }, () => {
+		loot();
+		loot();
+		smart_move(destination, () => {
 		framboss = 0
 		 stop_character("nhiY")
 		if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
                  bosstime = 0
 
     });	
-		
-		loot();
-		        loot();
-		        loot();
 
 	}
 		
 }
-
-
-
-
-
 
 	    
 }
