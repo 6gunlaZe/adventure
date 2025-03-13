@@ -423,12 +423,14 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
     }
 }
 
+
+////hàm tùy chỉnh trang bị chính thức
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
-    if (stMaps.includes(character.map) && currentTime - eTime > 50) {
+    if ((events || framboss >0 ) && currentTime - eTime > 50) {
         eTime = currentTime;
         equipSet('single');
-    } else if (aoeMaps.includes(character.map) && currentTime - eTime > 50) {
+    } else if ( currentTime - eTime > 50) {
         eTime = currentTime;
         equipSet('aoe');
     }
@@ -1278,21 +1280,6 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
 
-const now = Date.now();
-
-            if (monster.hp > hpThreshold) {
-                if (character.cc < 100) {
-if (now - lastSwapTime > swapCooldown) {
-                    equipSet('single');
-lastSwapTime = now;
-}
-                }
-            } else if (character.cc < 100) {
-if (now - lastSwapTime > swapCooldown) {
-                equipSet('luck');
-lastSwapTime = now;
-}  
-            }
         }
 	  else
 	{
