@@ -288,13 +288,17 @@ async function attackLoop() {
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
-if (!nearest){	    
+if (!nearest){	  
+
 for (var i = 0; i < bossarmy.length; i++) {
      target= get_nearest_monster1({type: bossarmy[i]});
+			game_log("00" + bossarmy[i])
 
 		  if(target) change_target(target);
 	if ( target && !is_in_range(target))
 	{
+			game_log("11")
+
 		move(
 			character.x+(target.x-character.x)/2,
 			character.y+(target.y-character.y)/2
@@ -305,11 +309,14 @@ for (var i = 0; i < bossarmy.length; i++) {
 	    
         // If a monster is found and is in range, execute the attack
         if (target && is_in_range(target)) {
+						game_log("121")
+
             await attack(target); // Initiate attack
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack      
+			break;  // Nếu tìm thấy thì thoát vòng lặp
+
         }
 
-        break;  // Nếu tìm thấy thì thoát vòng lặp
 }
 }
 
@@ -332,9 +339,10 @@ for (var i = 0; i < mob.length; i++) {
         if (target1 && is_in_range(target1)) {
             await attack(target1); // Initiate attack
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+			        break;  // Nếu tìm thấy thì thoát vòng lặp
+
         }
 
-        break;  // Nếu tìm thấy thì thoát vòng lặp
 }
 }
 	    		
