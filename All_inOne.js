@@ -1294,9 +1294,15 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
 
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
-
+            if (monster.hp > hpThreshold ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
         }
-	  else
+	    else
 	{
 	 if (!smart.moving) smart_move({ x, y, map: mapName });
 	}
@@ -1450,7 +1456,7 @@ function get_nearest_monster1(args) ///mod
 		if(args.no_target && current.target && current.target!=character.name) continue;
 		if(args.NO_target && current.target) continue;
 
-	    checkkill = get_nearest_playerV_noMyparty(entity)
+	    checkkill = get_nearest_playerV_noMyparty(current)
 	    if (checkkill < 0)continue
 
 
