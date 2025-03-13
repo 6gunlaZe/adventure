@@ -508,14 +508,25 @@ function basherSet() {
 }
 
 //l: "l"  == L lock
+let isEquipping = false;
+
 async function equipBatch(data) {
-	
+    if (isEquipping) {
+        game_log("equipBatch is already running. Skipping.");
+        return;
+    }
+
+    isEquipping = true; // Đánh dấu bắt đầu chạy
+
     if (!Array.isArray(data)) {
         game_log("Can't equipBatch non-array");
+        isEquipping = false;
         return handleEquipBatchError("Invalid input: not an array");
     }
+
     if (data.length > 15) {
         game_log("Can't equipBatch more than 15 items");
+        isEquipping = false;
         return handleEquipBatchError("Too many items");
     }
 
@@ -553,23 +564,23 @@ async function equipBatch(data) {
             }
         }
 
-     if (validItems.length > 0)break;
-
-
-	    
+        if (validItems.length > 0) break;
     }
 
     if (validItems.length === 0) {
-        return //handleEquipBatchError("No valid items to equip");
+        isEquipping = false;
+        return;
     }
 
     try {
         parent.socket.emit("equip_batch", validItems);
         parent.push_deferred("equip_batch");
     } catch (error) {
-        console.error('Error in equipBatch:', error);
-        return handleEquipBatchError("Failed to equip items");
+        console.error("Error in equipBatch:", error);
+        handleEquipBatchError("Failed to equip items");
     }
+
+    isEquipping = false; // Đánh dấu đã hoàn thành
 }
 
 
