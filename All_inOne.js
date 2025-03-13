@@ -552,6 +552,11 @@ async function equipBatch(data) {
                 break;
             }
         }
+
+     if (validItems.length > 0)break;
+
+
+	    
     }
 
     if (validItems.length === 0) {
