@@ -1305,13 +1305,14 @@ var BOSS = eventType
 
 	    
 //////////////bo chay khi moi nguoi chay het
-if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 9000)
+if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 7000)
 {
 events = false;
 bosscantank = 0;
 stop_character(f2name)  	
 stop_character(f1name)  
-stop_character("MuaBan")  
+stop_character("MuaBan")
+smart_move(destination)
 }
 //////////////////////////
 if(targetfk  && character.hp < 4500)
@@ -1421,11 +1422,12 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
-function get_nearest_monster1(args) ///mod
+function get_nearest_monster1(args) ///săn boss franky, ice
 {
  let checkkill = 0
+	var heal = get_player("Ynhi"); 
 	var min_d=character.range + 225,target=null;
-
+  if(!heal) return target;
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
