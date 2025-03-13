@@ -869,12 +869,14 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 
 
 setTimeout(function() {
+	if (parent.S.icegolem)return
 stop_character("6gunlaZe")
 start_character("nhiY", 12);	
 }, 10000); // 10000 milliseconds = 10 giây
 
 
 let intervalId = setInterval(function() {
+	if (parent.S.icegolem)return
     if (parent.party_list.includes("nhiY")) {
         send_cm("nhiY", "jr");
         clearInterval(intervalId);  // Dừng lại khi điều kiện đúng
@@ -893,7 +895,7 @@ let intervalId = setInterval(function() {
 
  ///////////////////////// 
 setInterval(function() {	
-if (prolive == 1 || events ) return	
+if ( events ) return	
 		
 let region = server.region;
 let serverIden = server.id
@@ -1094,7 +1096,7 @@ stop_character("nhiY")
 	stop_character("haiz1")	
 
        if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
-	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 28);
+	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 27);
 		   //cũ 31
 	   }		
 			
@@ -1345,7 +1347,7 @@ checktimeparty = 0
 
 const characterData = [
     ["6gunlaZe", 33],
-    ["Ynhi", 28],
+    ["Ynhi", 27],
     ["nhiY", 12],
 ];
 
