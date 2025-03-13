@@ -1488,7 +1488,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 
 
 async function moveLoop() {
-    let delay = 2500;
+    let delay = 1000;
     try {
 
 if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
@@ -1498,7 +1498,10 @@ if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 
 			character.y+(gobaltaget.y-character.y)/2
 			);
 		// Walk half the distance
-	
+}
+else
+{
+	gobaltaget = null;
 }
 
 	    
