@@ -1424,7 +1424,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 function get_nearest_monster1(args) ///mod
 {
  let checkkill = 0
-	var min_d=character.range + 125,target=null;
+	var min_d=character.range + 225,target=null;
 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
