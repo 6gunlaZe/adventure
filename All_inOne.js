@@ -62,7 +62,7 @@ const centerY = (topLeftY + bottomRightY) / 2;
 let bosscantank = 0
 let prolive = 0
 let framhaiz = 0
-
+let gobaltaget = null;
 
 
 async function eventer() {
@@ -253,7 +253,7 @@ const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 
 
 async function attackLoop() {
-	if (character.moving)return
+	//if (character.moving)return
     let delay = null; // Default delay
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
@@ -294,25 +294,13 @@ if (!nearest && events){
 
 for (var i = 0; i < bossarmy.length; i++) {
      target= get_nearest_monster1({type: bossarmy[i]});
-			game_log("00" + bossarmy[i])
-
 		  if(target) change_target(target);
 	if ( target && !is_in_range(target))
 	{
-			game_log("11")
-
-		move(
-			character.x+(target.x-character.x)/2,
-			character.y+(target.y-character.y)/2
-			);
-		// Walk half the distance
+          gobaltaget = target;
 	}
-	    
-	    
         // If a monster is found and is in range, execute the attack
         if (target && is_in_range(target)) {
-						game_log("121")
-
             await attack(target); // Initiate attack
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack      
 			break;  // Nếu tìm thấy thì thoát vòng lặp
@@ -325,19 +313,11 @@ for (var i = 0; i < bossarmy.length; i++) {
 if (!target){	    
 for (var i = 0; i < mob.length; i++) {
      target1= get_nearest_monster({type: mob[i]});
-
 		  if(target1)change_target(target1);
-	
 	if ( target1 && !is_in_range(target1))
 	{
-		move(
-			character.x+(target1.x-character.x)/2,
-			character.y+(target1.y-character.y)/2
-			);
-		// Walk half the distance
+          gobaltaget = target1;
 	}
-	    
-	    
         // If a monster is found and is in range, execute the attack
         if (target1 && is_in_range(target1)) {
             await attack(target1); // Initiate attack
@@ -351,13 +331,8 @@ for (var i = 0; i < mob.length; i++) {
 	    		
 	if ( nearest && !is_in_range(nearest))
 	{
-		move(
-			character.x+(nearest.x-character.x)/2,
-			character.y+(nearest.y-character.y)/2
-			);
-		// Walk half the distance
+          gobaltaget = nearest;
 	}
-	    
 	    
         // If a monster is found and is in range, execute the attack
         if (nearest && is_in_range(nearest)) {
