@@ -137,11 +137,29 @@ if (pro>0){
 	 prolive = 1;
 }
 	else {
-	prolive = 0;
+	prolive = 0; ///khi boss đã chết
+		if (pro == 0 && checkeven == 0)
+		{
+			if (events){
+				send_cm("nhiY","back")
+				use_skill("town")
+
+                    if ( character.map == "winterland" && distance(character,  {x: 800, y: 400}) < 250 )
+		    {}
+			else 
+		    {
+			    events = false;
+			    stop_character("Ynhi")
+		            stop_character("nhiY") 
+		    } 
+			bosscantank == 0
+
+			}
+
+		}
 	}	
 
-//if ( pro > 0 &&  bosscantank == 1  )events = true;	
-if ( bosscantank == 1  )events = true;	
+if ( pro > 0 &&  bosscantank == 1  )events = true;	
 	
 }
 
@@ -167,8 +185,8 @@ function handleEvents() {
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
 	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
-	    handlebossPro('oneeye', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
-	  //  handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
+	    handlebossPro('franky', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
+	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
        // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
        // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
        // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
@@ -286,8 +304,8 @@ async function attackLoop() {
 
 	            let target = null;
 	    let target1 = null;
-	    var bossarmy=["icegolem", "franky" , "crabxx", "oneeye" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman"];
+	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","goobrawl"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
@@ -1276,7 +1294,7 @@ function shifting() {
 let checktimeparty = 0
 let partychecktime
 function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
-    if (!parent?.S?.[eventType]) {
+    if (parent?.S?.[eventType]) {
 
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
@@ -1445,7 +1463,7 @@ function get_nearest_monster1(args) ///săn boss franky, ice
 		if(args.NO_target && current.target) continue;
 
 	    checkkill = get_nearest_playerV_noMyparty(current)
-	    if (checkkill < 0)continue
+	    if (checkkill < 2)continue
 
 
 		
