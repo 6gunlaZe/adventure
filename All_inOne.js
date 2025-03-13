@@ -72,10 +72,10 @@ async function eventer() {
             handleEvents();
         } else if (stompyActive || skeletorActive) {
             //handleBosses();
-	} else if (framboss > 0 || framhaiz > 0) {
+	} else if (framboss > 0) {
 		
         } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
-           if(framboss == 0)handleHome();
+           if(!character.target)handleHome();
         } else {
            // walkInCircle();
         }
@@ -326,13 +326,7 @@ if (!target){
 for (var i = 0; i < mob.length; i++) {
      target1= get_nearest_monster({type: mob[i]});
 
-		  if(target1) {change_target(target1);
-                     framhaiz = 1
-			      }
-                   else
-		  {
-			framhaiz = 0  
-		  }
+		  if(target1)change_target(target1);
 	
 	if ( target1 && !is_in_range(target1))
 	{
