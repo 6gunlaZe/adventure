@@ -427,13 +427,16 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 ////hàm tùy chỉnh trang bị chính thức
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
-    if ((events || framboss >0 ) && currentTime - eTime > 50) {
+	if (currentTime - eTime < 50)return
+    if ((events || framboss >0 )) {
         eTime = currentTime;
         equipSet('single');
-    } else if ( currentTime - eTime > 50) {
+    } else {
         eTime = currentTime;
         equipSet('aoe');
     }
+
+	
 }
 
 let lastCleaveTime = 0;
