@@ -1490,6 +1490,18 @@ function get_nearest_playerV_noMyparty(currentTarget)
 async function moveLoop() {
     let delay = 2500;
     try {
+
+if(gobaltaget && !is_in_range(gobaltaget) && !smart.moving)
+{
+		move(
+			character.x+(gobaltaget.x-character.x)/2,
+			character.y+(gobaltaget.y-character.y)/2
+			);
+		// Walk half the distance
+	
+}
+
+	    
 if (!events){
 
 	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
