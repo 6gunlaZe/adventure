@@ -1,7 +1,5 @@
 let frankymode = 0
-
-
-
+let lastUpdateTime = performance.now();
 let lastSwapTime = 0;
 const swapCooldown = 500;
 
@@ -686,7 +684,6 @@ moveLoop();
 
 
 
-let lastUpdateTime = performance.now();
 async function walkInCircle() {
     if (!smart.moving) {
         const center = locations[home][0];
