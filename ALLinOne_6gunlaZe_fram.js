@@ -111,7 +111,9 @@ game_log("m")
     	
     try {
 
-
+var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 5000 }) 
+	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
+	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 game_log("characterRange" +monsterscharacterRange.length)		
@@ -226,53 +228,6 @@ attackLoop();
 
 
 
-
-////////////////////////////////////////////////////////////////
-let scythe = 0;
-let eTime = 0;
-let basher = 0;
-async function skillLoop() {
-    let delay = 10;
-    try {
-        let zap = false;
-        const dead = character.rip;
-        const Mainhand = character.slots?.mainhand?.name;
-        const offhand = character.slots?.offhand?.name;
-        const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 320;
-        const cc = character.cc < 135;
-        const zapperMobs = ["plantoid"];
-        const stMaps = ["", "winter_cove", "arena", "",];
-        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
-        let tank = get_entity("Ynhi");
-
-        if (character.ctype === "warrior") {
-            try {
-				
-
-                if (tank && tank.hp < tank.max_hp * 0.4 && character.name === "haiz") {
-                    //console.log("Calling handleStomp");
-					//game_log("1")
-
-                    handleStomp(Mainhand, stMaps, aoeMaps, tank);
-                }
-                if (character.ctype === "warrior") {
-                    //console.log("Calling handleCleave");
-                    handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
-                    //console.log("Calling handleWarriorSkills");
-                    handleWarriorSkills(tank);
-                }
-            } catch (e) {
-                //console.error("Error in warrior section:", e);
-            }
-        }
-
-
-    } catch (e) {
-        //console.error("Error in skillLoop:", e);
-    }
-    setTimeout(skillLoop, delay);
-}
-skillLoop()
 
 
 
@@ -971,10 +926,13 @@ if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
 
 if (options.maxHP && entity.max_hp > options.maxHP) continue
 if (options.HP && entity.hp > options.HP) continue
+	    if (options.HPmin && entity.hp < options.HPmin) continue
  		if (options.target && entity.target != options.target) continue
 		if (options.havetarget && !entity.target ) continue
 		if (options.Nohavetarget && entity.target ) continue
 		if (options.fire && entity.s.burned  ) continue
+	        if (options.cus && !entity.s["cursed"]  ) continue
+	    	if (options.NoMark && entity.s.marked ) continue
 		if (options.targetNO && entity.target == options.targetNO) continue     
  		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
 	//  if(army.indexOf(entity.mtype) == -1) continue
