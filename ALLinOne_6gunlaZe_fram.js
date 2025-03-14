@@ -3,6 +3,7 @@ let lastUpdateTime = performance.now();
 let lastSwapTime = 0;
 const swapCooldown = 500;
 let receivedData
+let evenmuaban
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
@@ -64,7 +65,7 @@ async function eventer() {
     const delay = 500;
     try {
         if (folowhaizevents) {
-             handlebossPro('franky')
+             handlebossPro(evenmuaban)
 	} else if (framboss > 0) {
 		
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
@@ -721,15 +722,15 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 
 
-function handlebossPro(eventType, mapName ) {
+function handlebossPro(eventType) {
 
 if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
 {
     if (parent?.S?.[eventType]) {
-
-        if (character.map !== mapName && (eventType == "goobrawl" ) ) {
-            parent.socket.emit('join', { name: eventType });
-        }
+	    
+       if ((eventType == "goobrawl"){
+	        if (character.map !== "goobrawl")parent.socket.emit('join', { name: eventType });
+      }
 
 	    
 
@@ -872,9 +873,9 @@ function on_cm(name, data) {
 
 	if(name == "MuaBan")
 	{
-           if(data == "franky")
+           if(data)
 	   {
-		   frankymode = 1
+		   evenmuaban = data
 		   folowhaizevents = true;
 	   }
 	}
