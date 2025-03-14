@@ -98,7 +98,7 @@ function handleHome() {
 
 
 
-const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
+const targetNames = ["Ynhi","haiz", "nhiY"];
 
 
 async function attackLoop() {
@@ -107,87 +107,96 @@ async function attackLoop() {
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
     const now = performance.now();
+
+    const rangeThreshold = 50; // phạm vi tấn công boom
+    const healer = get_entity("Ynhi");
+    const healThreshold = healer && !healer.rip ? 0.4 : 0.9; // Ternary for healer threshold
+
+
+
+	
     try {
-        let nearest = null;
 
-        // Find the nearest monster based on the targetNames
-        for (let i = 0; i < targetNames.length; i++) {
-            nearest = get_nearest_monster_v2({
-                target: targetNames[i],
-                check_min_hp: true,  // Checking for monster with minimum HP
-                max_distance: 50,  // Consider monsters within 50 units
-                statusEffects: ["cursed"], // Check for these debuffs
-            });
-            if (nearest) break;
-        }
 
-	    
-        if (!nearest) {
-            for (let i = 0; i < targetNames.length; i++) {
-                nearest = get_nearest_monster_v2({
-                    target: targetNames[i],
-                    max_distance: character.range,
-                    check_min_hp: true,
-                });
-                if (nearest) break;
+const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
+
+            // Determine number of targets and equip appropriate set
+            if (monstersInRangeList.length >= 5) {
+                weaponSet("boom");
+                await use_skill("5shot", monstersInRangeList.slice(0, 5));
+                delay = ms_to_next_skill("attack");
+		    
+            } else if (monsterscharacterRange.length >= 5) {
+                weaponSet("dead");
+                await use_skill("5shot", monsterscharacterRange.slice(0, 5));
+                delay = ms_to_next_skill("attack");
+		    
+            } else if (monsterscharacterRange.length >= 3) {
+                weaponSet("dead");
+                await use_skill("5shot", monsterscharacterRange.slice(0, 3));
+                delay = ms_to_next_skill("attack");
+		    
+            } else if (targets.length >= 5) {
+                weaponSet("dead");
+                await use_skill("5shot", targets.slice(0, 5));
+                delay = ms_to_next_skill("attack");
+            } else if (targets.length >= 3) {
+                weaponSet("dead");
+                await use_skill("3shot", targets.slice(0, 3));
+                delay = ms_to_next_skill("attack");
+            } else (targets.length === 1) {
+                weaponSet("single");
+                await attack(targets[0]);
+                delay = ms_to_next_skill("attack");
             }
-        }
 
-	            let target = null;
-	    let target1 = null;
-	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","goobrawl"];
-
-// Kiểm tra xem target có thuộc trong bossarmy không
-if (!nearest && folowhaizevents){	  
-
-for (var i = 0; i < bossarmy.length; i++) {
-     target= get_nearest_monster1({type: bossarmy[i]});
-		  if(target) change_target(target);
-	if ( target && !is_in_range(target))
-	{
-          gobaltaget = target;
-	}
-        // If a monster is found and is in range, execute the attack
-        if (target && is_in_range(target)) {
-            await attack(target); // Initiate attack
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack      
-			break;  // Nếu tìm thấy thì thoát vòng lặp
-
-        }
-
-}
-}
-
-if (!target){	    
-for (var i = 0; i < mob.length; i++) {
-     target1= get_nearest_monster({type: mob[i]});
-		  if(target1)change_target(target1);
-	if ( target1 && !is_in_range(target1))
-	{
-          gobaltaget = target1;
-	}
-        // If a monster is found and is in range, execute the attack
-        if (target1 && is_in_range(target1)) {
-            await attack(target1); // Initiate attack
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
-			        break;  // Nếu tìm thấy thì thoát vòng lặp
-
-        }
-
-}
-}
-	    		
-	if ( nearest && !is_in_range(nearest))
-	{
-          gobaltaget = nearest;
-	}
 	    
-        // If a monster is found and is in range, execute the attack
-        if (nearest && is_in_range(nearest)) {
-            await attack(nearest); // Initiate attack
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
-        }
+if (targets.length > 0)return
+
+var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
+
+let check3shot = 0;
+let check5shot = 0;
+
+// Kiểm tra điều kiện cho "3shot"
+if (targets1.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
+    check3shot = 1;
+} else {
+    check3shot = 0;
+}
+
+// Kiểm tra điều kiện cho "5shot"
+if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
+    check5shot = 1;
+} else {
+    check5shot = 0;
+}
+
+// Sử dụng kỹ năng "5shot" nếu đủ điều kiện
+if (check5shot === 1) {
+	weaponSet("dead");
+    await use_skill("5shot", targets1);
+	                delay = ms_to_next_skill("attack");
+
+}
+// Sử dụng kỹ năng "3shot" nếu không sử dụng "5shot" 
+else if (check3shot === 1 ) {
+	weaponSet("dead");
+    await use_skill("3shot", targets1);
+	                delay = ms_to_next_skill("attack");
+}
+else
+{
+	weaponSet("dead");
+	                await attack(targets1[0]);
+                delay = ms_to_next_skill("attack");
+}
+
+	    
+
+	    
+	    
+
     } catch (e) {
         //console.error(e);
     }
@@ -325,6 +334,63 @@ async function equipBatch(data) {
 
 
 
+const equipmentSets = {
+
+    dps: [
+        { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
+        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
+        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
+    ],
+    luck: [
+        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
+    ],
+    single: [
+        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        //{ itemName: "coat", slot: "chest", level: 12, l: "s" }
+    ],
+    dead: [
+        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    ],
+    boom: [
+        { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
+        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    ],
+    heal: [
+        { itemName: "cupid", slot: "mainhand", level: 8, l: "l" },
+    ],
+    xp: [
+        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
+        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    ],
+    stealth: [
+        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+    ],
+    cape: [
+        { itemName: "gcape", slot: "cape", level: 9, l: "l" },
+    ],
+    orb: [
+        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
+        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+    ],
+    mana: [
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    ],
+    stat: [
+        { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    ],
+};
+
+
+
+
+
+
+
 function equipSet(setName) {
     const set = equipmentSets[setName];
     if (set) {
@@ -333,6 +399,27 @@ function equipSet(setName) {
         console.error(`Set "${setName}" not found.`);
     }
 }
+
+
+
+//////////////////////////////////////////////////////////////////
+let lastSwitchTime = 0; // Timestamp of the last switch
+const switchCooldown = 750; // Cooldown period in milliseconds (0.75 seconds)
+
+// Function to check if the cooldown period has passed
+function CD() {
+    return performance.now() - lastSwitchTime > switchCooldown;
+}
+
+// Utility function to handle cooldown check and equipment switch
+const weaponSet = (set) => {
+    if (CD()) {
+        equipSet(set);
+        lastSwitchTime = performance.now();
+    }
+};
+
+
 
 
 // Helper function to handle errors
@@ -608,7 +695,55 @@ async function walkInCircle() {
 
 
 
+function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
+    // Step 1: Filter and sort all valid monster targets
+    const targets = Object.values(parent.entities)
+        .filter(monster =>
+            monster.type === "monster" && // Ensure the entity is a monster
+            monster.target &&             // Có một mục tiêu đang bị tấn công
+            targetNames.includes(monster.target) // Mục tiêu của quái vật phải nằm trong danh sách ưu tiên targetNames (các nhân vật của party mình)
+        )
+        .sort((a, b) => {
+            // Step 2: Sort monsters by priority, distance, and HP Quái vật nào gần hơn sẽ được ưu tiên hơn. mục tiêu có lượng HP cao hơn sẽ được ưu tiên hơn
+            const priorityA = targetNames.indexOf(a.target);
+            const priorityB = targetNames.indexOf(b.target);
 
+            if (priorityA !== priorityB) return priorityA - priorityB;
+
+            const distA = Math.hypot(a.x - homeX, a.y - homeY);
+            const distB = Math.hypot(b.x - homeX, b.y - homeY);
+
+            if (distA !== distB) return distA - distB;
+
+            return b.hp - a.hp; // Highest HP last
+        });
+
+    // Step 3: Separate monsters into in-range and out-of-range categories
+    const inRange = [];
+    const outOfRange = [];
+    const characterRange = [];
+    
+    for (const monster of targets) {
+        const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
+	    //nhỏ hơn hoặc bằng với rangeThreshold (tức là trong phạm vi tầm bắn).
+        if (distance <= rangeThreshold) { 
+            inRange.push(monster);
+	    characterRange.push(monster);
+        } if else (distance <= character.range) {
+	    characterRange.push(monster);
+	}else {
+            outOfRange.push(monster);
+        }
+    }
+
+    // Step 4: Return the combined targets and categorized lists
+    return {
+        targets: [...inRange, ...outOfRange, ...characterRange],  // Combined list with inRange prioritized
+        inRange,
+        outOfRange,
+	characterRange
+    };
+}
 
 
 
@@ -798,7 +933,50 @@ function shifting() {
 
 
 
+///////
+function getBestTargets(options = {}) {
+    const entities = []
+	     let number = 0
 
+     var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
+  
+
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+		
+if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
+if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
+			
+
+if (options.maxHP && entity.max_hp > options.maxHP) continue
+if (options.HP && entity.hp > options.HP) continue
+ 		if (options.target && entity.target != options.target) continue
+		if (options.havetarget && !entity.target ) continue
+		if (options.Nohavetarget && entity.target ) continue
+		if (options.fire && entity.s.burned  ) continue
+		if (options.targetNO && entity.target == options.targetNO) continue     
+ 		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
+	//  if(army.indexOf(entity.mtype) == -1) continue
+		///check list khong co se tra ve -1
+      //  !target2.s.marked 
+		
+		
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
+////////////////////////////////////////////////////
+/////////////////////////////////////////
 
 
 
