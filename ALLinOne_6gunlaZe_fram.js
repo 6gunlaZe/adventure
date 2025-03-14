@@ -122,7 +122,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 game_log("characterRange" +monsterscharacterRange.length)		
 
-            // Determine number of targets and equip appropriate set
+            // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
             if (monstersInRangeList.length >= 5) {
                 weaponSet("boom");
                 await use_skill("5shot", monstersInRangeList.slice(0, 5));
@@ -352,7 +352,7 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
     single: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
         //{ itemName: "coat", slot: "chest", level: 12, l: "s" }
     ],
     dead: [
