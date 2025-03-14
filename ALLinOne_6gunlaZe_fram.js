@@ -721,18 +721,17 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 
 
-function handlebossPro(eventType) {
+function handlebossPro(eventType, mapName ) {
+
+if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
+{
     if (parent?.S?.[eventType]) {
 
-        const monster = get_nearest_monster({ type: eventType });
-        if (monster) {
-
+        if (character.map !== mapName && (eventType == "goobrawl" ) ) {
+            parent.socket.emit('join', { name: eventType });
         }
-	else
-	{
-		
-	}
-var BOSS = eventType
+
+	    
 
 
 let leader = get_player("haiz");
@@ -770,6 +769,51 @@ if (leader && distance(character, leader) < 50) return
     {
 	    folowhaizevents = false;
     }
+}
+	else{
+
+
+if (parent?.S?.[eventType]?.live) {
+
+
+let leader = get_player("haiz");
+if (leader && distance(character, leader) < 50) return
+    // Nếu nhân vật đang di chuyển, không làm gì thêm
+    if (smart.moving) return;
+
+	
+    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;  // Lấy tên bản đồ
+        const targetX = receivedData.x;      // Lấy tọa độ X
+        const targetY = receivedData.y;      // Lấy tọa độ Y
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+        if (character.map !== targetMap && character.map != "crypt") {
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: targetMap,
+                x: targetX,
+                y: targetY
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== targetX || character.y !== targetY) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+                xmove(targetX, targetY);
+            }
+        }
+    }	    
+
+
+}
+	else 
+    {
+	    folowhaizevents = false;
+    }
+
+	
+	}
 
 }
 
