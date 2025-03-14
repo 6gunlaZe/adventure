@@ -191,9 +191,7 @@ else if (check3shot === 1 ) {
 else if (targets1.length < 3 && targets1.length > 0 )
 {
 	weaponSet("dead");
-		var target= get_nearest_monster({type: home,});
-		   if(target) change_target(target); /// chuyen doi sang boss
-                   await attack(target);
+                await attack(targets1[0]);
                 delay = ms_to_next_skill("attack");
 }
 
