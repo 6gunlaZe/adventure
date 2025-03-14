@@ -512,13 +512,13 @@ if (!is_on_cooldown("agitate") &&
 
 	
 	
-if (!is_on_cooldown("charge")) {
+if (!is_on_cooldown("charge") && is_moving(character) ) {
     await use_skill("charge"); // Sử dụng kỹ năng "charge"
 }
 
 
 	
-if (!is_on_cooldown("hardshell") && character.hp < 12000) {
+if (!is_on_cooldown("hardshell") && character.hp < 9000) {
     await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
 }
 
