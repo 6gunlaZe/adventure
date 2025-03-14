@@ -98,7 +98,7 @@ function handleHome() {
 
 const targetNames = ["Ynhi","haiz", "nhiY"];
 
-
+// không được để return trong hàm loop
 async function attackLoop() {
 	//if (character.moving)return
     let delay = null; // Default delay
@@ -168,9 +168,9 @@ game_log("characterRange" +monsterscharacterRange.length)
 	    }
 
 	    
-//if (targets.length > 0 || leaderTarget )return
-
-		
+//if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
+if (targets.length == 0  && !leaderTarget )
+{		
 var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
 
 let check3shot = 0;
@@ -211,7 +211,7 @@ else if (targets1.length < 3 && targets1.length > 0 )
 }
 
 	    
-
+}
 	    
 	    
 
