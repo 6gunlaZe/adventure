@@ -2,7 +2,7 @@ let frankymode = 0
 let lastUpdateTime = performance.now();
 let lastSwapTime = 0;
 const swapCooldown = 500;
-
+let receivedData
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
@@ -64,7 +64,7 @@ async function eventer() {
     const delay = 500;
     try {
         if (folowhaizevents) {
-            //handleBosses();
+             handlebossPro('franky')
 	} else if (framboss > 0) {
 		
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
@@ -721,8 +721,57 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 
 
+function handlebossPro(eventType) {
+    if (parent?.S?.[eventType]) {
+
+        const monster = get_nearest_monster({ type: eventType });
+        if (monster) {
+
+        }
+	else
+	{
+		
+	}
+var BOSS = eventType
 
 
+let leader = get_player("haiz");
+if (leader && distance(character, leader) < 50) return
+    // Nếu nhân vật đang di chuyển, không làm gì thêm
+    if (smart.moving) return;
+
+	
+    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;  // Lấy tên bản đồ
+        const targetX = receivedData.x;      // Lấy tọa độ X
+        const targetY = receivedData.y;      // Lấy tọa độ Y
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+        if (character.map !== targetMap && character.map != "crypt") {
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: targetMap,
+                x: targetX,
+                y: targetY
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== targetX || character.y !== targetY) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+                xmove(targetX, targetY);
+            }
+        }
+    }	    
+
+
+}
+	else 
+    {
+	    folowhaizevents = false;
+    }
+
+}
 
 
 
@@ -777,14 +826,25 @@ function on_magiport(name){
 function on_cm(name, data) {
 	
 
-		    if(name == "MuaBan")
+	if(name == "MuaBan")
 	{
-       if(data == "franky")
+           if(data == "franky")
 	   {
-		   frankymode = 1	
+		   frankymode = 1
+		   folowhaizevents = true;
 	   }
 	}
+
+	 if(name == "haiz"){
+     receivedData = data
+	}
+	
 }
+
+
+
+
+	
 ////////
 
 
