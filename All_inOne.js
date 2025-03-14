@@ -64,7 +64,6 @@ let prolive = 0
 let framhaiz = 0
 let gobaltaget = null;
 
-
 async function eventer() {
     const delay = 500;
     try {
@@ -423,11 +422,12 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 }
 
 
-////hàm tùy chỉnh trang bị chính thức
+////hàm tùy chỉnh trang bị chính thức khi không có events
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+	if (events)return
     const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
-    if ((events || framboss >0 )) {
+    if ((framboss >0 )) {
         eTime = currentTime;
         equipSet('single');
     } else {
