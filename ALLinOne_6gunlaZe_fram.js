@@ -35,8 +35,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'bat';
-const mobMap = 'cave';
+const home = 'armadillo';
+const mobMap = 'main';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -105,7 +105,7 @@ async function attackLoop() {
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
     const now = performance.now();
-
+game_log("m")
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
     	
@@ -168,7 +168,7 @@ game_log("characterRange" +monsterscharacterRange.length)
 	    }
 
 	    
-if (targets.length > 0 || leaderTarget )return
+//if (targets.length > 0 || leaderTarget )return
 
 		
 var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
