@@ -109,12 +109,8 @@ async function attackLoop() {
     const now = performance.now();
 
     const rangeThreshold = 50; // phạm vi tấn công boom
-    const healer = get_entity("Ynhi");
-    const healThreshold = healer && !healer.rip ? 0.4 : 0.9; // Ternary for healer threshold
-
-
-
-	
+    const leader = get_player("haiz");
+    	
     try {
 
 
@@ -150,10 +146,31 @@ game_log("characterRange" +monsterscharacterRange.length)
                 weaponSet("single");
                 await attack(targets[0]);
                 delay = ms_to_next_skill("attack");
-            }
+            }else
+	    {
+
+    // Current target and target of leader.
+    var currentTarget = get_targeted_monster();
+    var leaderTarget = get_target_of(leader)
+		    
+    if (leaderTarget){
+    // Change the target.
+    if (!currentTarget || currentTarget != leaderTarget){ 
+        // Current target is empty or other than the leader's.
+        change_target(leaderTarget);
+        currentTarget = get_targeted_monster();
+    }
+	if( currentTarget && is_in_range(currentTarget))
+	{
+		weaponSet("single");
+                await attack(currentTarget);
+                delay = ms_to_next_skill("attack");
+	}  
+    }
+	    }
 
 	    
-if (targets.length > 0)return
+if (targets.length > 0 || leaderTarget )return
 
 		
 var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
