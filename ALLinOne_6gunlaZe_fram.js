@@ -631,6 +631,8 @@ async function moveLoop() {
     let delay = 1000;
     try {
 
+if (!character.party)send_party_request("haiz");
+
 if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
 {
 		move(
