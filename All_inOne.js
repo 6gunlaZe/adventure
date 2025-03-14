@@ -300,7 +300,7 @@ async function attackLoop() {
 	            let target = null;
 	    let target1 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo"];
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
