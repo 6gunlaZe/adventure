@@ -6,6 +6,7 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 
 const locations = {
+	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
     bscorpion: [{ x: -408, y: -1241 }],
@@ -36,8 +37,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'bat';
-const mobMap = 'cave';
+const home = 'armadillo';
+const mobMap = 'main';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -45,27 +46,17 @@ const destination = {
 };
 let angle = 0;
 const speed = 3; // normal 2 or .65
-let events = false;
+let folowhaizevents = false;
 
-const harpyRespawnTime = 410000; //400 seconds
-let harpyActive = false;
-const skeletorRespawnTime = 1151954; // Example time, adjust as needed
-let skeletorActive = false;
-const stompyRespawnTime = 400000; //400 seconds
-let stompyActive = false;
-const mvampireRespawnTime = 1151954; // Example time, adjust as needed
-let mvampireActive = false;
-const fvampireRespawnTime = 1151954; // Example time, adjust as needed
-let fvampireActive = false;
+
 
 const boundaryOur = Object.values(G.maps[mobMap].monsters).find(e => e.type === home).boundary;
 const [topLeftX, topLeftY, bottomRightX, bottomRightY] = boundaryOur;
 const centerX = (topLeftX + bottomRightX) / 2;
 const centerY = (topLeftY + bottomRightY) / 2;
 
-let bosscantank = 0
-let prolive = 0
-let framhaiz = 0
+let framboss = 0
+let folowhaiz = 0
 let gobaltaget = null;
 
 
@@ -74,14 +65,14 @@ let gobaltaget = null;
 async function eventer() {
     const delay = 500;
     try {
-        if (stompyActive || skeletorActive) {
+        if (folowhaizevents) {
             //handleBosses();
-	      } else if (framboss > 0) {
+	} else if (framboss > 0) {
 		
         } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
            if(!character.target)handleHome();
         } else {
-           // walkInCircle();
+            walkInCircle();
         }
     } catch (e) {
         console.error(e);
@@ -148,7 +139,7 @@ async function attackLoop() {
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","goobrawl"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
-if (!nearest && events){	  
+if (!nearest && folowhaizevents){	  
 
 for (var i = 0; i < bossarmy.length; i++) {
      target= get_nearest_monster1({type: bossarmy[i]});
@@ -564,82 +555,15 @@ else
 }
 
 	    
-if (!events){
+if (!folowhaizevents){
 
-	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
-	const nearB = get_player("nhiY");
 
-if (framboss > 0  && foxmode11 )send_cm("nhiY", "foxmode");
 	
 	
-if (framboss == 1 && !smart.moving && foxmode11  && framboss1  <5   ){
-	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
-framboss1 += 1
-    });
-}
-if (framboss == 2 && !smart.moving && foxmode11  && framboss1  <5 ){
-	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 3 && !smart.moving&& foxmode11  && framboss1  <5 ){
-	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
-framboss1 += 1
-    });
-}		
-if (framboss == 4 && !smart.moving && foxmode11  && framboss1 <5  ){
-	smart_move({ map: "main", x: 1312, y: -200 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 5 && !smart.moving && foxmode11  &&framboss1 <5  ){
-	smart_move({ map: "main", x: 700, y: 1800 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 6 && !smart.moving && foxmode11  && framboss1 <5  ){
-	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <5  ){
-	smart_move({ map: "main", x: -1137, y: 455 }, () => {
-framboss1 += 1
-    });
-}	
-	
-	
-if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <5  ){
-	//send_cm("angioseal", "boss7");
-
-	if (currentBossLocation) {
-	smart_move({ map: currentBossLocation.map, x: currentBossLocation.x, y: currentBossLocation.y }, () => {
-framboss1 += 1
-    });
-}	
-}
 
 
-if ( nearB  && framboss1 > 0 && !smart.moving ){	
-var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-if (targetsoloboss.length == 0) //danh xong
-	{
-		framboss1 = 0
-		framboss = 0
-		bosstime = 0
-		loot();
-		loot();
-		smart_move(destination, () => {
-		framboss = 0
-		 stop_character("nhiY")
-		if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
-                 bosstime = 0
 
-    });	
 
-	}
-		
-}
 
 	    
 }
@@ -653,7 +577,33 @@ moveLoop();
 
 
 
+let lastUpdateTime = performance.now();
+async function walkInCircle() {
+    if (!smart.moving) {
+        const center = locations[home][0];
+        const radius = 45;
 
+        // Calculate time elapsed since the last update
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
+
+        // Calculate the new angle based on elapsed time and speed
+        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
+        angle = (angle + deltaAngle) % (2 * Math.PI);
+
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        const targetX = center.x + offsetX;
+        const targetY = center.y + offsetY;
+
+        if (!character.moving && lastUpdateTime > 100) {
+            await xmove(targetX, targetY);
+        }
+
+        // drawCirclesAndLines(center, radius);
+    }
+}
 
 
 
