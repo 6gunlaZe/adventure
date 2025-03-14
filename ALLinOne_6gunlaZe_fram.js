@@ -119,6 +119,8 @@ async function attackLoop() {
 
 
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
+game_log("monstersInRangeList.length" +monstersInRangeList.length)		
+game_log("characterRange" +monsterscharacterRange.length)		
 
             // Determine number of targets and equip appropriate set
             if (monstersInRangeList.length >= 5) {
@@ -144,7 +146,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 weaponSet("dead");
                 await use_skill("3shot", targets.slice(0, 3));
                 delay = ms_to_next_skill("attack");
-            } else (targets.length === 1) {
+            } else if (targets.length > 0 && targets.length < 3 ) {
                 weaponSet("single");
                 await attack(targets[0]);
                 delay = ms_to_next_skill("attack");
@@ -153,6 +155,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 	    
 if (targets.length > 0)return
 
+		
 var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
 
 let check3shot = 0;
@@ -185,10 +188,10 @@ else if (check3shot === 1 ) {
     await use_skill("3shot", targets1);
 	                delay = ms_to_next_skill("attack");
 }
-else
+else if (targets1.length < 3 && targets1.length > 0 )
 {
 	weaponSet("dead");
-	                await attack(targets1[0]);
+	                await attack(targets1);
                 delay = ms_to_next_skill("attack");
 }
 
@@ -723,18 +726,22 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
     const outOfRange = [];
     const characterRange = [];
     
-    for (const monster of targets) {
-        const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
-	    //nhỏ hơn hoặc bằng với rangeThreshold (tức là trong phạm vi tầm bắn).
-        if (distance <= rangeThreshold) { 
-            inRange.push(monster);
-	    characterRange.push(monster);
-        } if else (distance <= character.range) {
-	    characterRange.push(monster);
-	}else {
-            outOfRange.push(monster);
-        }
+ for (const monster of targets) {
+    const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
+
+    // Kiểm tra nếu quái vật trong phạm vi rangeThreshold
+    if (distance <= rangeThreshold) { 
+        inRange.push(monster);  // Thêm quái vật vào inRange
+        characterRange.push(monster);  // Thêm quái vật vào characterRange
+    } else if (distance <= character.range) {
+        // Nếu quái vật trong phạm vi của nhân vật nhưng ngoài phạm vi rangeThreshold
+        characterRange.push(monster);  // Thêm quái vật vào characterRange
+    } else {
+        // Nếu quái vật ngoài phạm vi của cả rangeThreshold và character.range
+        outOfRange.push(monster);  // Thêm quái vật vào outOfRange
     }
+}
+
 
     // Step 4: Return the combined targets and categorized lists
     return {
@@ -784,12 +791,6 @@ setTimeout(function() {
     }
 }, 10000);  // 10000 mili giây = 10 giây
 
-
-setTimeout(function() {
-    if (frankymode == 0) {
-        smart_move({ map: maptrain, x: farmX, y: farmY });
-    }
-}, 10000);  // 10000 mili giây = 10 giây
 
 
 
@@ -977,31 +978,3 @@ if (options.HP && entity.hp > options.HP) continue
 }
 ////////////////////////////////////////////////////
 /////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
