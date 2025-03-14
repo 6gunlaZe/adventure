@@ -151,7 +151,7 @@ game_log("characterRange" +monsterscharacterRange.length)
     var currentTarget = get_targeted_monster();
     var leaderTarget = get_target_of(leader)
 		    
-    if (leaderTarget){
+    if (leaderTarget && leaderTarget.target ){
     // Change the target.
     if (!currentTarget || currentTarget != leaderTarget){ 
         // Current target is empty or other than the leader's.
