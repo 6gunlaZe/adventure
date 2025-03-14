@@ -35,8 +35,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'bat';
-const mobMap = 'cave';
+const home = 'armadillo';
+const mobMap = 'main';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
