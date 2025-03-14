@@ -176,7 +176,7 @@ function handleEvents() {
         // Handle standard events
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
-        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 42, -169, 15000);
+        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
 	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	    handlebossPro('franky', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
 	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
@@ -225,8 +225,10 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
         if (character.map !== mapName) {
             parent.socket.emit('join', { name: eventType });
         } else if (!smart.moving) {
-            smart_move({ x, y, map: mapName });
+           // smart_move({ x, y, map: mapName });
         }
+	    
+  if (eventType == "goobrawl" )eventType="bgoo"
 
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
@@ -298,7 +300,7 @@ async function attackLoop() {
 	            let target = null;
 	    let target1 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","goobrawl"];
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo"];
 
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
