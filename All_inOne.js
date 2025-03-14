@@ -353,7 +353,7 @@ for (var i = 0; i < mob.length; i++) {
     } catch (e) {
         //console.error(e);
     }
-    setTimeout(attackLoop, delay);
+	 setTimeout(attackLoop, delay || 250); // Default delay if undefined
 }
 
 attackLoop();
