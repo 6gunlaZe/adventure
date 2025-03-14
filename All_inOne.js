@@ -483,9 +483,62 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
 }
 
 async function handleWarriorSkills(tank) {
+
+	
     if (!is_on_cooldown("warcry") && !character.s.warcry && character.s.darkblessing) {
         await use_skill("warcry");
     }
+
+	
+const mobTypes = ["bat"];
+const mobsInRange = Object.values(parent.entities)
+    .filter(entity => 
+        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
+        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
+        distance(character, entity) <= G.skills.agitate.range  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
+    );
+const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
+if (!is_on_cooldown("agitate") && 
+    mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
+    untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
+    !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
+    tank) {                              // Kiểm tra nếu nhân vật là tank
+    let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
+    if (!is_in_range(porc, "agitate")) {  // Kiểm tra nếu "porcupine" không nằm trong phạm vi kỹ năng "agitate"
+        await use_skill("agitate");        // Sử dụng kỹ năng "agitate"
+    }
+}
+
+	
+	
+if (!is_on_cooldown("charge")) {
+    await use_skill("charge"); // Sử dụng kỹ năng "charge"
+}
+
+
+	
+if (!is_on_cooldown("hardshell") && character.hp < 12000) {
+    await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
+}
+
+
+	
+let ango = "quai";
+for (let id in parent.entities) {
+    let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
+
+    // Kiểm tra nếu thực thể là quái vật "quai" và nó chưa nhắm vào nhân vật
+    if (current.mtype === ango && current.target !== character.name) {
+        
+        // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
+        if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
+            await use_skill("taunt", current.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
+            game_log("Taunting " + current.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
+        }
+    }
+}
+
 
 
 }
