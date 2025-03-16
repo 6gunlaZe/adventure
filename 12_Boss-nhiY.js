@@ -89,29 +89,26 @@ if (SM === 1) {
   let map = checkdichuyen.map;
 	
 	
-for (let i = 0; i < checkdichuyen.plot.length; i++) {
+for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
     if (checkdichuyen.plot[i].map == character.map) {
         lastMain = checkdichuyen.plot[i];
-    } else if (lastMain !== null) {
         break;
     }
 }
-
 	
 
 if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	use_skill("blink", [lastMain.x, lastMain.y])
-const congdichuyen = findcongdichchuyen(checkdichuyen);
-if(lastMain && congdichuyen != 1 && distance(character, {x: lastMain.x, y: lastMain.y}) < 30 )transport(congdichuyen.map,congdichuyen.s);	
-	stop()
+if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
+if (lastMain &&  character.map == map && distance(character, {x: x, y: y}) < 30)stop()	
 }
 
 
 ///////smarrtmove
-
-//if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
+const congdichuyen = findcongdichchuyen(checkdichuyen);
+if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
-if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 0 && get_nearest_monster({type: "phoenix"}) ){
+if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 0){
 	mageMagiPort()
 	datasmart = {};
 }
