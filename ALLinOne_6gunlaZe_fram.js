@@ -106,7 +106,7 @@ async function attackLoop() {
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
     const now = performance.now();
-game_log("m")
+//game_log("m")
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
     	
@@ -116,8 +116,8 @@ var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
-game_log("monstersInRangeList.length" +monstersInRangeList.length)		
-game_log("characterRange" +monsterscharacterRange.length)		
+//game_log("monstersInRangeList.length" +monstersInRangeList.length)		
+//game_log("characterRange" +monsterscharacterRange.length)		
 
             // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
             if (monstersInRangeList.length >= 5 && character.mp > 430 ) {
