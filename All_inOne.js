@@ -145,7 +145,7 @@ async function checkGameEvents() {
                     stop_character("nhiY");
                 bosscantank = 0;
                 check_ice = 0;
-
+                framboss = 0
 			
                 }
             }
