@@ -153,6 +153,20 @@ async function checkGameEvents() {
     }
 
     if (pro > 0 && bosscantank == 1) events = true;
+	
+if (events)
+{
+	game_log("Đang có even")
+}
+else
+{
+		game_log("Không có even")
+}
+	game_log("Chỉ số bosscantank = "+bosscantank)
+	game_log("Chỉ số checkeven = "+checkeven)
+	game_log("Chỉ số pro = "+pro)
+
+	
 }
 
 // Tạo vòng lặp 10s để gọi checkGameEvents()
