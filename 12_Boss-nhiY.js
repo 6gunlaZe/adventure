@@ -109,7 +109,7 @@ const congdichuyen = findcongdichchuyen(checkdichuyen);
 if(!smart.moving && congdichuyen != 1)transport(congdichuyen.map,congdichuyen.s);	
 //if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
  if (character.moving || smart.moving) return
-if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 0){
+if (character.mp > 2800 && foxmode == 1 && Object.keys(Savedatasmart).length == 0 && get_nearest_monster({type: "phoenix"}) ){
 	mageMagiPort()
 	datasmart = {};
 }
