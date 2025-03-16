@@ -188,7 +188,7 @@ function handleEvents() {
 
 
 
-function handleHome() {
+async function handleHome() {
     if (character.cc < 100) {
         //homeSet();
     }
