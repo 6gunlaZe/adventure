@@ -1405,7 +1405,7 @@ playerNames.forEach(name => {
     }
 	});
 
-checktimeparty = 0
+// checktimeparty = 0
 
 const characterData = [
     ["6gunlaZe", 33],
