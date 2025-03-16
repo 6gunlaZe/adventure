@@ -84,8 +84,10 @@ eventer();
 
 
 function handleHome() {
-    if (character.cc < 100) {
-        //homeSet();
+	var f1 = get_player("haiz"); 
+    if ( f1 && get_nearest_monster({type: "franky"})) {
+	     folowhaizevents = true;
+	    return
     }
     if (!smart.moving) {
         smart_move(destination);
@@ -723,6 +725,13 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 
 function handlebossPro(eventType) {
+
+if (eventType === undefined || eventType === null) {
+	folowhaizevents = false;
+  return; // Trả về nếu eventType không xác định
+}
+
+// Tiếp tục xử lý nếu eventType có giá trị hợp lệ
 
 if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
 {
