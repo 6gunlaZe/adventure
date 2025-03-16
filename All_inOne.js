@@ -193,7 +193,14 @@ function handleHome() {
         //homeSet();
     }
     if (!smart.moving) {
-        smart_move(destination);
+                    try {
+                // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
+                await smart_move(destination);
+            } catch (error) {
+                // Nếu không thể di chuyển (ví dụ: không có đường đi), thì dùng 'use_town'
+                console.log("Không thể di chuyển đến đích, sử dụng 'use_town'");
+                await use_skill("town");  // Quay lại thành phố
+            }
         game_log(`Moving to ${home}`);
     }
 }
@@ -1381,6 +1388,18 @@ stop_character(f2name)
 stop_character(f1name)  
 stop_character("MuaBan")
 smart_move(destination)
+if (eventType == "icegolem") {
+let region = server.region;
+let serverIden = server.id
+if ( region == "EU" && serverIden == "I" ) 
+{
+change_server("ASIA", "I");	
+}
+	else
+	{
+         change_server("EU", "I");
+	}
+}
 }
 //////////////////////////
 if(targetfk  && character.hp < 4500)
