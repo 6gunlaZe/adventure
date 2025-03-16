@@ -361,7 +361,15 @@ for (var i = 0; i < mob.length; i++) {
 
 }
 }
-	    		
+
+
+if (!nearest){
+	const entity1 = get_entity(character.target) //target mặc định hiện có, bỏ qua các boss
+	if (entity1 && (entity1.mtype != "franky" && entity1.mtype != "icegolem" && entity1.mtype != "crabxx")) {
+		nearest = entity1
+	}
+}
+	    
 	if ( nearest && !is_in_range(nearest))
 	{
           gobaltaget = nearest;
@@ -372,6 +380,8 @@ for (var i = 0; i < mob.length; i++) {
             await attack(nearest); // Initiate attack
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
         }
+
+	    
     } catch (e) {
         //console.error(e);
     }
