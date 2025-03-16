@@ -89,12 +89,14 @@ if (SM === 1) {
   let map = checkdichuyen.map;
 	
 	
-for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
+for (let i = 0; i < checkdichuyen.plot.length; i++) {
     if (checkdichuyen.plot[i].map == character.map) {
         lastMain = checkdichuyen.plot[i];
+    } else if (lastMain !== null) {
         break;
     }
 }
+
 	
 
 if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
