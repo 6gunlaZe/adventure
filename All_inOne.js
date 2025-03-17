@@ -835,13 +835,17 @@ function scare() {
     const orb = character.items.findIndex(i => !i);
     let mobnum = 0;
     let targetedForMoreThanOneSecond = false;
-
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if (current.mtype === home && current.target == character.name) {
+        if (character.hp <4000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
+        if (current.mtype === home && character.hp <8000 && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+	    
     }
 
     if (mobnum > 0 && targetedForMoreThanOneSecond) {
@@ -856,6 +860,7 @@ function scare() {
         }
     }
 }
+setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
