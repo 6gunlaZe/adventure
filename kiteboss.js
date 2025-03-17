@@ -6,7 +6,7 @@ const rangeBuffer = 125;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["bscorpion"];
+const avoidTypes = ["bscorpion","armadillo","iceroamer"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
@@ -32,13 +32,13 @@ function avoidance() {
 
     if (!avoiding) {
         if (!lastMove || new Date() - lastMove > 100) {
-            move(character.real_x, character.real_y); // Move to current position (no goal used)
+           // move(character.real_x, character.real_y); // Move to current position (no goal used)
             lastMove = new Date();
         }
     }
 
 }
-//setInterval(avoidance, 50);
+setInterval(avoidance, 50);
 
 function avoidMobs() {
     let maxWeight = -Infinity;
