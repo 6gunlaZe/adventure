@@ -474,7 +474,7 @@ function scare() {
 
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if (current.mtype === home && current.target == character.name) {
+        if (character.hp <5000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
@@ -492,7 +492,7 @@ function scare() {
         }
     }
 }
-
+setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
