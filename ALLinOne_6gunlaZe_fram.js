@@ -4,7 +4,7 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 let receivedData
 let evenmuaban
-let cryts = 0
+let cryts = 0  ///mode săn boss ở hầm ngục
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
