@@ -1201,20 +1201,31 @@ if (skillbua == 1) return
 
 	if( currentTarget && !is_in_range(currentTarget))
 	{
+		//////////// dung skill
+		            if(character.mp > 100 && !is_on_cooldown("taunt") && (currentTarget.target == "Ynhi" || currentTarget.target == "6gunlaZe" ))
+            {
+                use_skill("taunt", currentTarget);
+				 game_log("phan no !!!!!!");
+            }
+		else
+		{
+if (movesuper == 0){
 		move(
 			character.x+(currentTarget.x-character.x)/2,
 			character.y+(currentTarget.y-character.y)/2
 			);
 		// Walk half the distance
+	
+}
+			
+		}
+
+
+
 	}
 	else if(can_attack(currentTarget))
 	{
-		//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt") && currentTarget.target == "Ynhi" )
-            {
-                use_skill("taunt", currentTarget);
-				 game_log("phan no !!!!!!");
-            }
+
 		
 		
 		
@@ -1389,7 +1400,7 @@ if ( taget.target && taget.target != "haiz" && !is_on_cooldown("taunt") && !tage
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 7;
+const rangeBuffer = 5;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
@@ -1429,7 +1440,7 @@ movesuper = 0
     }
 
 }
-setInterval(avoidance, 50);
+setInterval(avoidance, 100);
 
 function avoidMobs() {
     let maxWeight = -Infinity;
