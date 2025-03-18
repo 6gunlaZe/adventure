@@ -739,7 +739,13 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
                 delayboss = Date.now()
                 use_skill("supershot", currentTarget1);
                 game_log("Supershot!!");
-           }			
+           }
+
+		}
+		else
+		{
+		currentTarget1 = getBestTargets({ max_range: character.range, type: "vbat", subtype: "frog11", number: 1 });
+		if(currentTarget1)use_skill("piercingshot", currentTarget1);	
 		}
 	}
 
