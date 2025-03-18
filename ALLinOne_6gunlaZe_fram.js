@@ -480,7 +480,7 @@ function handleSnowball() {
       
       // Kiểm tra xem quái vật có chết hoặc không thể thấy không
       if (entity.dead || !entity.visible) continue;
-      
+      if (!entity.target) continue;
       // Kiểm tra mtype của quái vật có phải là "goo" không
       if (entity.mtype !== "goo") continue;
       
