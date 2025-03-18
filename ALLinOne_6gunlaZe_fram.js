@@ -1139,7 +1139,7 @@ if (options.HP && entity.hp > options.HP) continue
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 80;
+const rangeBuffer = 60;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
