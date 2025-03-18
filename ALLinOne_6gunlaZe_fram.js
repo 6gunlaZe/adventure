@@ -492,11 +492,11 @@ function scare() {
                     use("scare");
                     equip(slot);
                 }
-            }, 1000); // 1000 milliseconds = 1 second
+            }, 200); // 1000 milliseconds = 1 second
         }
     }
 }
-setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
+setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
@@ -895,7 +895,7 @@ setInterval(function() {
     respawn();
   }
 
-}, 420000);
+}, 120000);
 
 
 function on_magiport(name){
@@ -1139,7 +1139,7 @@ if (options.HP && entity.hp > options.HP) continue
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 125;
+const rangeBuffer = 80;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
