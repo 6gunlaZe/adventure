@@ -735,7 +735,7 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 		var currentTarget1 = get_nearest_monster_solobosskill() 
 		if(currentTarget1) {
 
- if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 100000 ) {
+ if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 20000 ) {
                 delayboss = Date.now()
                 use_skill("supershot", currentTarget1);
                 game_log("Supershot!!");
