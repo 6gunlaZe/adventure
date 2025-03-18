@@ -468,7 +468,7 @@ if(!attack_mode || character.rip ) return;
 		///////////
 		var cung1 = get_player("haiz"); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
-	if(!can_attack(currentTarget) )kite(cung1,50);
+	//if(!can_attack(currentTarget) )kite(cung1,50);
    }
 	
 	////////////
