@@ -39,7 +39,7 @@ setInterval(function() {
 if (character.map != "crypt" && z > 100){
 	z = 1
 	stop_character("Ynhi")	
-	stop_character("haiz1")	
+	stop_character("6gunlaZe")	
 	checkback = 0
 }
 if (character.map != "crypt") return;
@@ -145,7 +145,7 @@ let toado = [
 ];
 
 	
- let member1 = get_player("haiz1");
+ let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 	
 
@@ -157,7 +157,7 @@ if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"})
 
 if (get_NUMber_kill() >= 10 && targetkill.length == 0 || z > 67 || (checkback + z) > 120 ){
 	stop_character("Ynhi")	
-	stop_character("haiz1")	
+	stop_character("6gunlaZe")	
 	z = 1000
 	monsterIds = [];
 	smart_move({ map: "cave", x: -194, y: -1281 })
