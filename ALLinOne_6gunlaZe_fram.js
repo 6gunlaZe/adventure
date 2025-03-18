@@ -83,9 +83,7 @@ async function eventer() {
 
     setTimeout(eventer, delay);
 }
-eventer();
-
-
+setTimeout(eventer, 10000);
 
 function handleHome() {
 	var f1 = get_player("haiz"); 
