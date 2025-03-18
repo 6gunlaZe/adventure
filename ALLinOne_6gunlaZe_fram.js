@@ -4,6 +4,7 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 let receivedData
 let evenmuaban
+var idmap
 let cryts = 0  ///mode săn boss ở hầm ngục
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
@@ -68,7 +69,9 @@ async function eventer() {
         if (folowhaizevents) {
              handlebossPro(evenmuaban)
 	} else if (framboss > 0) {
-		
+
+	} else if (cryts > 0) {
+          cryts()
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
            handleHome();
         } else {
@@ -720,8 +723,29 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 }
 
 
+let delayboss = Date.now()
+function cryts() {
+if (character.map != "cave" && character.map != "crypt" )smart_move({ map: "cave", x: -194, y: -1281 })	
+if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)smart_move({ map: "cave", x: -194, y: -1281 })
+
+    var currentTarget = get_targeted_monster();
+	if(!currentTarget)
+	{
+		var currentTarget1 = get_nearest_monster_solobosskill() 
+		if(currentTarget1) {
+
+ if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 100000 ) {
+                delayboss = Date.now()
+                use_skill("supershot", currentTarget1);
+                game_log("Supershot!!");
+           }			
+		}
+	}
 
 
+	
+	
+}
 
 
 
@@ -890,9 +914,24 @@ function on_cm(name, data) {
 	   }
 	}
 
-	 if(name == "haiz"){
-     receivedData = data
-	}
+if (name == "haiz") {
+    // Kiểm tra nếu data là "goo" và character.map không phải là "crypt"
+    if (data == "goo" && character.map != "crypt") {
+        enter("crypt", idmap);
+    }
+    else if (data == "crypt") {
+        cryts = 1;
+    }    
+    // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
+    else if (data != "goo" && data != "crypt" && typeof data === 'string') {
+        idmap = data;
+    }
+    // Kiểm tra nếu data không phải là "goo" (không cần kiểm tra kiểu dữ liệu ở đây)
+    else if (data != "goo" && data != "crypt") {
+        receivedData = data;
+    }
+}
+
 	
 }
 
@@ -1010,6 +1049,39 @@ function shifting() {
 
 //////////////////////////////////////////////////////////////////////////
 
+function get_nearest_monster_solobosskill(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=450 ,target=null;
+        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
 
 
 ///////
@@ -1094,7 +1166,7 @@ function avoidance() {
     const avoiding = avoidMobs();
 
     if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && cryts == 1) {
+        if ((!lastMove || new Date() - lastMove > 100)  && cryts > 0) {
 		let host = get_player("haiz")
            if(host)xmove(host.real_x, host.real_y); // Move to current position (no goal used)
             lastMove = new Date();
@@ -1284,11 +1356,3 @@ function characterAngle() {
 function distanceToPoint(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
-
-
-
-
-
-
-
-
