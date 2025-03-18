@@ -648,7 +648,7 @@ function changeitem(options = {}) {
 
 function chuyendoithongminh(taget)
 {
-
+changeitem({ slot: "gloves", name : "mittens", level : 8 });
 ///////////////////////////////////	 
 if (taget && !taget.s["frozen"])
 {	
