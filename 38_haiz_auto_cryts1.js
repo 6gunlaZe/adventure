@@ -19,9 +19,9 @@ setInterval(function() {
 
 	
 if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
-if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
+// if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
 // if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
-
+if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 
 	
 }, 40000);
@@ -635,6 +635,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 setInterval(function() {
 
 /////////////////////////
+if(parent.party_list.includes("6gunlaZe") ) send_cm("6gunlaZe","crypt")
 	
 if (character.map == "crypt")	
 {
