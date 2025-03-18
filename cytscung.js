@@ -67,10 +67,10 @@ async function eventer() {
     try {
         if (folowhaizevents) {
              handlebossPro(evenmuaban)
-	      } else if (framboss > 0) {
+	} else if (framboss > 0) {
 
-	      } else if (cryts > 0) {
-          
+	} else if (cryts > 0) {
+          cryts()
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
            handleHome();
         } else {
@@ -721,9 +721,13 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
     };
 }
 
+function cryts() {
+if (character.map != "cave" && character.map != "crypt" )smart_move({ map: "cave", x: -194, y: -1281 })	
+if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)smart_move({ map: "cave", x: -194, y: -1281 })
 
 
-
+	
+}
 
 
 
