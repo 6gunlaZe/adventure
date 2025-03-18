@@ -482,7 +482,7 @@ function handleSnowball() {
       if (entity.dead || !entity.visible) continue;
       if (!entity.target) continue;
       // Kiểm tra mtype của quái vật có phải là "goo" không
-      if (entity.mtype !== "goo") continue;
+      if (entity.mtype == "vbat") continue;
       
       // Kiểm tra quái vật có bị đóng băng không
       if (entity.s["frozen"]) continue;
