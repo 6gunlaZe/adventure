@@ -26,8 +26,8 @@ if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 
 	
 }, 40000);
-
-
+let timeat = Date.now();
+let initialTarget = null
 //////////////////////////////////////////
 let checkkill = -1
 let nhay = 1
@@ -145,13 +145,18 @@ let toado = [
 { x: 2320, y: -1740, z: 68 }
 
 ];
+if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
 
 	
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
-	
 
-if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
+ if (member1.target !== initialTarget && (Date.now() < timeat + 10000 ) )return 
+	
+initialTarget = member1.target	
+timeat = Date.now();
+
+	
 
 	
  var  targetkill = solobosskill({ max_range: 300}) 
@@ -244,7 +249,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 68 && !member1.target) {
+      if (z < 68 ) {
         z++;
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
