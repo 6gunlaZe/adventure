@@ -1227,6 +1227,33 @@ function avoidance() {
 		let host = get_player("haiz")
            if(host && !smart.moving )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
             lastMove = new Date();
+
+		////////////////////////////////////
+		if (!host){
+if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+    const targetMap = receivedData.map;  // Lấy tên bản đồ
+    const targetX = receivedData.x;      // Lấy tọa độ X
+    const targetY = receivedData.y;      // Lấy tọa độ Y
+
+    // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+    if (character.map !== targetMap && character.map != "crypt") {
+        // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+        smart_move({
+            map: targetMap,
+            x: targetX,
+            y: targetY
+        });
+    } else {
+        // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+        if (character.x !== targetX || character.y !== targetY) {
+            // Nếu chưa đến, di chuyển đến tọa độ mới
+           if(!smart.moving) xmove(targetX, targetY);
+        }
+    }
+}
+///////////////////////////////////
+			
+		}
         }
     }
 
