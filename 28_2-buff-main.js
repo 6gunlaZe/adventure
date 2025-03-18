@@ -434,7 +434,7 @@ setInterval(function(){
 	}
 
 	
-if( character.rip || character.moving || smart.moving) return;
+if( character.rip || smart.moving) return;
 if (checkTimeBetweenCalls() === 1) return;	
 	
 ///////////////////////////	
