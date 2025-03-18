@@ -33,7 +33,7 @@ setInterval(function() {
     send_party_request("haiz");
 	}
 
-if (character.map != "crypt")
+if (character.map != "crypt" || !leader)
 {
 cryts = 0	
 
