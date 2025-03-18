@@ -919,12 +919,15 @@ if (name == "haiz") {
     if (data == "goo" && character.map != "crypt") {
         enter("crypt", idmap);
     }
+    else if (data == "crypt") {
+        cryts = 1;
+    }    
     // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
-    else if (data != "goo" && typeof data === 'string') {
+    else if (data != "goo" && data != "crypt" && typeof data === 'string') {
         idmap = data;
     }
     // Kiểm tra nếu data không phải là "goo" (không cần kiểm tra kiểu dữ liệu ở đây)
-    else if (data != "goo") {
+    else if (data != "goo" && data != "crypt") {
         receivedData = data;
     }
 }
