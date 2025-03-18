@@ -244,7 +244,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
       }
 
       // Tăng z khi targetkill = 0
-      if (z < 68) {
+      if (z < 68 && !member1.target) {
         z++;
       }
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
