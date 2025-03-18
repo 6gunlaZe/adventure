@@ -471,13 +471,16 @@ function handleSnowball() {
 	if(character.map != "crypt")return
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
-    
+	  
     for (const id in parent.entities) {
       const entity = parent.entities[id];
       
       // Kiểm tra loại quái vật
       if (entity.type !== "monster") continue;
-      
+	    
+      // Kiểm tra xem mtype của quái vật có thuộc danh sách cần tránh không
+      if (!avoidTypes.includes(entity.mtype)) continue;
+	    
       // Kiểm tra xem quái vật có chết hoặc không thể thấy không
       if (entity.dead || !entity.visible) continue;
       if (!entity.target) continue;
