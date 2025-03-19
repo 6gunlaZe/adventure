@@ -160,7 +160,7 @@ function findcongdichchuyen(data) {
 
 // Trình sát
 var tsname = "goldenbat"
-let godenbat = 1
+let godenbat = 0  // == 1 là có check batkinggold
 let step = 1
 let runb = 0
 let checkbat = 0
