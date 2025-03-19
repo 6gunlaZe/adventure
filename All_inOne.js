@@ -76,7 +76,7 @@ async function eventer() {
         } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
            if(!character.target)handleHome();
         } else {
-           // walkInCircle();
+           safeawwait()
         }
     } catch (e) {
         console.error(e);
@@ -227,7 +227,11 @@ if (!tank){
     if (!smart.moving) {
      xmove(2,-52)
     }
+}else
+{
+if(distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50)smart_move(destination)	
 }
+	
 }
 
 
