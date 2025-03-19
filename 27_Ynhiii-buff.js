@@ -9,11 +9,11 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = "bat"
+var crepp = "mole"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
-var nhanvatfram = "6gunlaZe"
+var nhanvatfram = "haiz"
 let kitefram
 
 if (delayboss == undefined) delayboss = Date.now()
@@ -637,7 +637,7 @@ if ( currentTarget && cung && kitefram == 1) {
  if(currentTarget)chuyendoithongminh(currentTarget)	
 ////////////////////////
 var target11= get_nearest_monster1({type: crepp,  NO_target: 1});	
-if (!target1 && character.targets <= 8 && target11 && character.hp > 3000)
+if (!target1 && character.targets <= 3 && target11 && character.hp > 4000) //////hút quái cho framer
 {
 	change_target(target11)
       if(can_attack(target11))attack(target11);
