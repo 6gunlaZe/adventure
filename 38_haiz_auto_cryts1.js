@@ -15,10 +15,10 @@ let movesuper = 0
 game_log("Game vs 1.1");
 
 smart_move({ map: "cave", x: -194, y: -1281 })
+start_character("MuaBan", 6);	
 
 setInterval(function() {
 
-	
 if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
 // if(!parent.party_list.includes("haiz1") ) start_character("haiz1", 32);	
 // if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
