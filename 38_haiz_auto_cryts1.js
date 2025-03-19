@@ -233,9 +233,10 @@ game_log("ZZZ = !!!!!!  "+ z  );
         else {
 		if (!member2 || !member1)
 		{
-		if (z=0)z = 1
-		else if (z=1)z = 2
-		else if (z=2)z = 1
+if (z == 0) z = 1;
+else if (z == 1) z = 2;
+else if (z == 2) z = 1;
+
                    if (result && z <3) {
                   xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
                  }
