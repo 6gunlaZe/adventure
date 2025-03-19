@@ -427,6 +427,7 @@ async function skillLoop() {
         const stMaps = ["", "winter_cove", "arena", "",];
         const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
         let tank = get_entity("Ynhi");
+	     let f1 = get_entity("6gunlaZe");
 
         if (character.ctype === "warrior") {
             try {
@@ -442,7 +443,7 @@ async function skillLoop() {
                     //console.log("Calling handleCleave");
                     handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
                     //console.log("Calling handleWarriorSkills");
-                    handleWarriorSkills(tank);
+                    handleWarriorSkills(tank,f1);
                 }
             } catch (e) {
                 //console.error("Error in warrior section:", e);
@@ -531,15 +532,15 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
     );
 }
 
-async function handleWarriorSkills(tank) {
+async function handleWarriorSkills(tank,f1) {
 
 	
     if (!is_on_cooldown("warcry") && !character.s.warcry && character.s.darkblessing) {
         await use_skill("warcry");
     }
 
-	
-const mobTypes = ["bat"];
+	///bat thì không cần f1
+const mobTypes = ["bat", "mole"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
@@ -552,7 +553,7 @@ if (!is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
     untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
     !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
-    tank) {                              // Kiểm tra nếu nhân vật là tank
+    tank && f1) {                              // Kiểm tra nếu có tank và f1 xung quanh
     let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
     if (!is_in_range(porc, "agitate")) {  // Kiểm tra nếu "porcupine" không nằm trong phạm vi kỹ năng "agitate"
         await use_skill("agitate");        // Sử dụng kỹ năng "agitate"
