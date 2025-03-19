@@ -73,7 +73,7 @@ async function eventer() {
             //handleBosses();
 	} else if (framboss > 0) {
 		
-        } else if (!get_nearest_monster({ type: home }) || distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200  ) {
+        } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) ) {
            if(!character.target)handleHome();
         } else {
            safeawwait()
