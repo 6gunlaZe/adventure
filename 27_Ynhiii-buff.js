@@ -650,7 +650,7 @@ if (!target1 && character.targets <= 3 && target11 && character.hp > 4000) /////
 	}
 	else
 	{
-if (!target1 && character.targets <= 0 && target11 && character.hp > 4000) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
+if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
 {
 	change_target(target11)
       if(can_attack(target11))attack(target11);
