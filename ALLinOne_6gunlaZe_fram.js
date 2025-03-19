@@ -1236,7 +1236,7 @@ if (receivedData && typeof receivedData === 'object' && receivedData.message ===
     const targetY = receivedData.y;      // Lấy tọa độ Y
 
     // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-    if (character.map !== targetMap && character.map != "crypt") {
+    if (character.map !== targetMap && character.map != "crypt" && !smart.moving) {
         // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
         smart_move({
             map: targetMap,
