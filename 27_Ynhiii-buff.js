@@ -637,7 +637,7 @@ if ( currentTarget && cung && kitefram == 1) {
  if(currentTarget)chuyendoithongminh(currentTarget)	
 ////////////////////////
 var target11= get_nearest_monster1({type: crepp,  NO_target: 1});	
-if (!target1 && character.targets <= 3 && target11 && character.hp > 4000) //////hút quái cho framer
+if (!target1 && character.targets <= 0 && target11 && character.hp > 4000) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
 {
 	change_target(target11)
       if(can_attack(target11))attack(target11);
