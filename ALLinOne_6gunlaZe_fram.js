@@ -20,7 +20,7 @@ const locations = {
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
     mechagnome: [{ x: 0, y: 0 }],
-    mole: [{ x: 14, y: -1072 }],
+    mole: [{ x: 4, y: -52 }],
     mummy: [{ x: 256, y: -1417 }],
     oneeye: [{ x: -270, y: 160 }],
     pinkgoblin: [{ x: 366, y: 377 }],
@@ -38,8 +38,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'armadillo';
-const mobMap = 'main';
+const home = 'mole';
+const mobMap = 'tunnel';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
