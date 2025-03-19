@@ -75,7 +75,8 @@ async function eventer() {
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
            handleHome();
         } else {
-            walkInCircle();
+          ///  walkInCircle(); // khi fram riêng
+		safeawwaitwalkInCircle()  //khi fram chung
         }
     } catch (e) {
         console.error(e);
@@ -83,7 +84,7 @@ async function eventer() {
 
     setTimeout(eventer, delay);
 }
-setTimeout(eventer, 10000);
+setTimeout(eventer, 3000);
 
 function handleHome() {
 	var f1 = get_player("haiz"); 
@@ -717,6 +718,51 @@ async function walkInCircle() {
         // drawCirclesAndLines(center, radius);
     }
 }
+
+
+async function safeawwaitwalkInCircle() {
+		    let tank = get_player("Ynhi");
+
+if (!tank){
+    if (!smart.moving) {
+smart_move({ map: "main", x: 500, y: 1800 })
+    }
+}else
+{
+	if (smart.moving) return
+if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50  ))smart_move(destination)	
+
+    if (!smart.moving) {
+        const center = locations[home][0];
+        const radius = 45;
+
+        // Calculate time elapsed since the last update
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
+
+        // Calculate the new angle based on elapsed time and speed
+        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
+        angle = (angle + deltaAngle) % (2 * Math.PI);
+
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        const targetX = center.x + offsetX;
+        const targetY = center.y + offsetY;
+
+        if (!character.moving && lastUpdateTime > 100) {
+            await xmove(targetX, targetY);
+        }
+
+        // drawCirclesAndLines(center, radius);
+    }
+
+}
+	
+}
+
+
+
 
 
 
