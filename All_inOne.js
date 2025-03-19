@@ -225,11 +225,11 @@ function safeawwait() {
 
 if (!tank){
     if (!smart.moving) {
-     xmove(2,-52)
+smart_move({ map: "main", x: 500, y: 1800 })
     }
 }else
 {
-if(distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50)smart_move(destination)	
+if( character.map != locations[home][0].map  || (  character.map == locations[home][0].map  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50  ))smart_move(destination)	
 }
 	
 }
