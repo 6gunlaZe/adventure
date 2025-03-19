@@ -1059,8 +1059,7 @@ let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
 
 setInterval(function() {	
 	
-if (prolive == 1 || events ) return	
-
+if (prolive == 1 || events || framboss > 0 ) return	
 if (autobuyPonty != 1) return
 	
 	///////////
