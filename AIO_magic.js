@@ -71,11 +71,13 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 }
 	
 
-if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
+if (lastMain && character.mp > 2300 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	await use_skill("blink", [lastMain.x, lastMain.y])
-
 }
-
+else if (lastMain && character.mp > 1600 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150 && character.hp <3000)	
+{
+	await use_skill("blink", [lastMain.x, lastMain.y])
+}
 
 /////// smartmove
 const congdichuyen = findcongdichchuyen(checkdichuyen);
@@ -88,20 +90,19 @@ if ( congdichuyen !== 1 && congdichuyen.s) {
     game_log(`Đang di chuyển đến bản đồ ${congdichuyen.map} với con đường ${congdichuyen.s}`);
     
     // Gọi hàm transport để di chuyển
-  await  transport(congdichuyen.map, congdichuyen.s);
+ 
+	
+	                   try {
+ await  transport(congdichuyen.map, congdichuyen.s);
+                    } catch (error) {
+						game_log("Quá trình xử lý. lỗi");
+                         smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y });
+                    } 
+	
+	
 }
 
-// Log khi không đang di chuyển và không phải là trường hợp congdichuyen = 1
-if (!smart.moving && congdichuyen !== 1) {
-    // Log trước khi gọi smart_move
-    game_log(`Đang di chuyển đến tọa độ (${congdichuyen.x}, ${congdichuyen.y}) trên bản đồ ${congdichuyen.map}`);
-    
-    // Gọi hàm smart_move để bắt đầu di chuyển đến tọa độ
-    smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y });
-}
 
-// Log khi quá trình di chuyển bắt đầu hoặc có sự kiện đáng chú ý
-game_log("Quá trình di chuyển đã được xử lý.");
 }
 
 
@@ -149,7 +150,7 @@ async function moveWithSmartAndSuperMOVE() {
 				               checker = checkSmartPosition(saveS);
                 let checkdichuyen = smart;
                 let SM = 0;
-game_log("saveS.plot: " + JSON.stringify(saveS.plot));
+//game_log("saveS.plot: " + JSON.stringify(saveS.plot));
 game_log("Checker value: " + checker);
 
                 if (checkdichuyen.plot && checker != 2 && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
@@ -231,7 +232,7 @@ function findcongdichchuyen(data) {
   }
 
   // Kiểm tra đối tượng tiếp theo sau "mtunnel"
-  if (lastMtunnelIndex + 1 < data.plot.length) {
+  if (lastMtunnelIndex + 1 < data.plot.length && distance(character, {x: data.plot[lastMtunnelIndex].x, y: data.plot[lastMtunnelIndex].y}) < 30) {
     // Trả về đối tượng tiếp theo nếu có
     return data.plot[lastMtunnelIndex + 1];
   } else {
