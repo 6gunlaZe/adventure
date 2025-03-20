@@ -13,10 +13,13 @@ let numHP = 0
 let numMP = 0
 let stopgiudo = 0  // 1 = stop
 let back = 0
-let receivedData
-
+let receivedData = {
+    map: character.map,  // Tên bản đồ mặc định
+    x: character.x,                // Tọa độ x mặc định
+    y: character.y,                // Tọa độ y mặc định
+};
 //////////////////////////
-let jrmode = 0
+let jrmode = 1
 let foxmode = 0
 let notejr = 0
 let done = 0
@@ -70,21 +73,41 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 
 if (lastMain && character.mp > 1800 && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	await use_skill("blink", [lastMain.x, lastMain.y])
-if(lastMain.x == x && lastMain.y == y && character.map == map)stop()
-if (lastMain &&  character.map == map && distance(character, {x: x, y: y}) < 30)stop()	
+
 }
 
 
-///////smarrtmove
+/////// smartmove
 const congdichuyen = findcongdichchuyen(checkdichuyen);
-  transport(congdichuyen.map,congdichuyen.s);
-if(!smart.moving && congdichuyen != 1)smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y })
+
+// Log thông tin khi tìm được con đường di chuyển
+game_log(`Tìm thấy con đường di chuyển: ${JSON.stringify(congdichuyen)}`);
+
+if ( congdichuyen !== 1 && congdichuyen.s) {
+    // Log trước khi gọi transport
+    game_log(`Đang di chuyển đến bản đồ ${congdichuyen.map} với con đường ${congdichuyen.s}`);
+    
+    // Gọi hàm transport để di chuyển
+  await  transport(congdichuyen.map, congdichuyen.s);
+}
+
+// Log khi không đang di chuyển và không phải là trường hợp congdichuyen = 1
+if (!smart.moving && congdichuyen !== 1) {
+    // Log trước khi gọi smart_move
+    game_log(`Đang di chuyển đến tọa độ (${congdichuyen.x}, ${congdichuyen.y}) trên bản đồ ${congdichuyen.map}`);
+    
+    // Gọi hàm smart_move để bắt đầu di chuyển đến tọa độ
+    smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y });
+}
+
+// Log khi quá trình di chuyển bắt đầu hoặc có sự kiện đáng chú ý
+game_log("Quá trình di chuyển đã được xử lý.");
 }
 
 
 
 
-
+let saveS = {};
 /////////////////////////////////////////////////////////////
 let checkMoveStart = null;  // Biến để theo dõi setInterval
 let isCheckingMoveStart = false; // Cờ để kiểm tra xem có đang kiểm tra di chuyển hay không
@@ -95,8 +118,9 @@ async function moveWithSmartAndSuperMOVE() {
     if (receivedData) {
         const { map, x, y } = receivedData;
 
-        if (smart.moving && ( godenbat == 1 || jrmode == 1)) return;
         // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+		if ( godenbat == 0 && jrmode == 0)
+		{
         if (character.map !== map) {
             // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
             smart_move({
@@ -111,35 +135,43 @@ async function moveWithSmartAndSuperMOVE() {
                 xmove(x, y);
             }
         }
+	}
 
         // Kiểm tra nếu chưa có checkMoveStart đang chạy
         if (!isCheckingMoveStart) {
             isCheckingMoveStart = true;
-
+           game_log("1 value: ");
             // Kiểm tra quá trình di chuyển mỗi 100ms
-            checkMoveStart = setInterval(() => {
+            checkMoveStart = setInterval(async () => {
 
                 // Kiểm tra điều kiện của smart (SM = 1)
+				let checker = 100
+				               checker = checkSmartPosition(saveS);
                 let checkdichuyen = smart;
                 let SM = 0;
-                if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
+game_log("saveS.plot: " + JSON.stringify(saveS.plot));
+game_log("Checker value: " + checker);
+
+                if (checkdichuyen.plot && checker != 2 && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
                     SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
+					saveS = JSON.parse(JSON.stringify(checkdichuyen));
                 }
+			   game_log("check1111111 ======"+checker)
+								game_log("loop")
 
                 // Nếu có dữ liệu hợp lệ (SM = 1), dừng di chuyển hiện tại nếu đang di chuyển và thực hiện superMOVE
-                if (SM === 1) {
+                if (SM === 1 || checker == 2 ) {
                     // Dừng di chuyển hiện tại nếu đang di chuyển
                     if (smart.moving) {
-                        stop();  // Dừng di chuyển nếu đang trong trạng thái di chuyển
                     }
-
+               game_log("check ======"+checker)
                     // Cập nhật datasmart với dữ liệu từ smart
-                    datasmart = smart;
+                    
                    if(parent.S.icegolem) return
 
                     // Thực hiện di chuyển thông minh với superMOVE
                     try {
-                        await superMOVE(datasmart);  // Di chuyển tới các điểm đã tính toán trong smart
+                        await superMOVE(saveS);  // Di chuyển tới các điểm đã tính toán trong smart
                     } catch (error) {
                         console.error('Error during superMOVE:', error);
                     }                }
@@ -154,6 +186,30 @@ setInterval(() => {
     moveWithSmartAndSuperMOVE();  // Di chuyển đến vị trí mới nhất nếu có
 }, 2000);  // Kiểm tra và di chuyển mỗi 2 giây
 //////////////////////////////////////
+
+
+
+
+function checkSmartPosition(data) {
+    // Kiểm tra nếu data.plot tồn tại và có ít nhất một phần tử
+    if (data.plot && data.plot.length > 0) {
+        // Lấy vị trí cuối cùng trong data.plot (dữ liệu truyền vào)
+        const lastPlot = data.plot[data.plot.length - 1];
+
+        // Kiểm tra xem vị trí của data có khớp với vị trí cuối cùng trong data.plot không
+        if (data.map === lastPlot.map && 
+            distance(character, {x: lastPlot.x, y: lastPlot.y}) < 50) {
+            // Nếu vị trí khớp, trả về 1
+            return 1;
+        } else {
+            // Nếu vị trí không khớp và còn lastPlot, trả về 2
+            return 2;
+        }
+    } else {
+        // Nếu không có plot, hoặc plot rỗng, trả về 1
+        return 3;
+    }
+}
 
 
 
@@ -623,40 +679,3 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 // Write your own CODE: https://github.com/kaansoral/adventureland
 // NOTE: If the tab isn't focused, browsers slow down the game
 // NOTE: Use the performance_trick() function as a workaround
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
