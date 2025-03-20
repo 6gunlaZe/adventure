@@ -22,6 +22,8 @@ let notejr = 0
 let done = 0
 let datasmart = {};
 let Savedatasmart = {};
+
+setTimeout(function() {
 setInterval(function() {
 //game_log("JR= " + jrmode)	
 if (done == 1 || (godenbat == 1 && foxmode == 0) ) return
@@ -46,7 +48,7 @@ smart_move({ map: "spookytown", x: -728, y: -123 })
 
 	
 }, 1000);
-
+}, 4000);
 
 
 
@@ -245,7 +247,7 @@ setTimeout(function() {
             runb = 1;
         }
     }, 2000);  // Tiếp tục với setInterval sau 4 giây delay
-}, 4000);  // Đặt delay 4 giây (4000 milliseconds) trước khi bắt đầu
+}, 6000);  // Đặt delay 4 giây (4000 milliseconds) trước khi bắt đầu
 
 
 
