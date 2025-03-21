@@ -1159,7 +1159,7 @@ stop_character("nhiY")
 		   bankk = 1
 	   }	
 		
-  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7") {
+  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
 	  if (modeYnhi == 0)
 	  {
 		parent.api_call("disconnect_character", {name: "nhiY"});
@@ -1202,8 +1202,10 @@ stop_character("nhiY")
 	 }
 	 if(data == "boss7") {
 	  framboss = 7
-	   }		
-		
+	}		
+	if(data == "boss8") {
+	  framboss = 8
+	}	
 
        if(data == "franky")
 	   {
@@ -1684,7 +1686,14 @@ if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <5  ){
 	smart_move({ map: "main", x: -1137, y: 455 }, () => {
 framboss1 += 1
     });
-}	
+}
+if (framboss == 8 && !smart.moving && foxmode11  && framboss1 <5  ){
+	smart_move({ map: "halloween", x: -550, y: -450 }, () => {
+framboss1 += 1
+    });
+}
+
+	
 	
 	
 if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <5  ){
