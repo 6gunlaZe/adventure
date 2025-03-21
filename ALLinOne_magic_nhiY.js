@@ -213,8 +213,16 @@ function checkSmartPosition(data) {
             // Nếu vị trí khớp, trả về 1
             return 1;
         } else {
-            // Nếu vị trí không khớp và còn lastPlot, trả về 2
-            return 2;
+           
+		if(smart.moving)
+		{
+			return 2;  // Nếu vị trí không khớp và còn lastPlot, trả về 2
+		}
+		else
+		{
+			return 4;  // Nếu vị trí không khớp và còn lastPlot, trả về 4 khi bị lỗi di chuyển để lấy lại smart mới
+		}
+            
         }
     } else {
         // Nếu không có plot, hoặc plot rỗng, trả về 1
