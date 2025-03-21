@@ -694,6 +694,26 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function soloboss(options = {}) {
     const entities = []
      let number = 0
