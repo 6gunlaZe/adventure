@@ -537,7 +537,12 @@ function on_cm(name, data) {
 		
 		
 
-	}	
+	}
+
+ if(name == "haiz" && data != "mp" && data != "hp" && data != "full")send_cm("6gunlaZe",data)
+
+
+	
 	
 
 ///////////////////////////	
