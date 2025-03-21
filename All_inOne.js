@@ -954,6 +954,7 @@ if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
 if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
 {	
 	bosstime = 0
+	if(parent.party_list.includes("nhiY"))stop_character("nhiY")
 }	
 //////////////////////	
 	
