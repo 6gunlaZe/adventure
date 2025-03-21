@@ -721,7 +721,8 @@ async function walkInCircle() {
 
 
 async function safeawwaitwalkInCircle() {
-		    let tank = get_player("Ynhi");
+	let tank = get_player("Ynhi");
+	 let playerPosition
 
 if (!tank){
     if (!smart.moving) {
@@ -733,8 +734,12 @@ smart_move({ map: "main", x: 500, y: 1800 })
 if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50  ))smart_move(destination)	
 
     if (!smart.moving) {
-        const center = locations[home][0];
+        let center = locations[home][0];
         const radius = 45;
+
+	   // Tọa độ người chơi (giả sử)
+	    let mainfram = get_player("haiz"); 
+       if(mainfram) center = { x: mainfram.x, y: mainfram.y }; 
 
         // Calculate time elapsed since the last update
         const currentTime = performance.now();
