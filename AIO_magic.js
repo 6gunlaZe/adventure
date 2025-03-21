@@ -19,7 +19,7 @@ let receivedData = {
     y: character.y,                // Tọa độ y mặc định
 };
 //////////////////////////
-let jrmode = 1
+let jrmode = 0
 let foxmode = 0
 let notejr = 0
 let done = 0
@@ -74,7 +74,7 @@ for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
 if (lastMain && character.mp > 3300 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
 	await use_skill("blink", [lastMain.x, lastMain.y])
 }
-else if (lastMain && character.mp > 1600 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150 && character.hp <3000)	
+else if (lastMain && character.mp > 1600 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150 && (character.max_hp - character.hp) >300)	
 {
 	await use_skill("blink", [lastMain.x, lastMain.y])
 }
@@ -120,9 +120,10 @@ async function moveWithSmartAndSuperMOVE() {
         const { map, x, y } = receivedData;
 
         // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-		if ( godenbat == 0 && jrmode == 0)
+		if ( (godenbat == 0 && jrmode == 0) || foxmode == 1)
 		{
         if (character.map !== map) {
+			 if (smart.moving) return
             // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
             smart_move({
                 map: map,
@@ -133,6 +134,7 @@ async function moveWithSmartAndSuperMOVE() {
             // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
             if (character.x !== x || character.y !== y) {
                 // Nếu chưa đến, di chuyển đến tọa độ mới
+				 if (smart.moving) return
                 xmove(x, y);
             }
         }
