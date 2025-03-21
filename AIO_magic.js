@@ -123,7 +123,7 @@ async function moveWithSmartAndSuperMOVE() {
 		if ( (godenbat == 0 && jrmode == 0) || foxmode == 1)
 		{
         if (character.map !== map) {
-			 if (smart.moving) return
+			 if ( checkSmartPosition(saveS) ==2 || smart.moving ) return
             // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
             smart_move({
                 map: map,
@@ -134,7 +134,7 @@ async function moveWithSmartAndSuperMOVE() {
             // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
             if (character.x !== x || character.y !== y) {
                 // Nếu chưa đến, di chuyển đến tọa độ mới
-				 if (smart.moving) return
+				 if ( checkSmartPosition(saveS) ==2 || smart.moving ) return
                 xmove(x, y);
             }
         }
@@ -183,8 +183,7 @@ game_log("Checker value: " + checker);
 		}
 		    else 
 		{
-			var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-	                 if(!smart.moving && targetsoloboss.length > 0 && character.mp > 2800 && foxmode == 1)mageMagiPort()
+	                 if(!smart.moving && character.mp > 2000 && foxmode == 1)mageMagiPort()
 		}
 
             }, 1000);  // Kiểm tra mỗi 1000ms
