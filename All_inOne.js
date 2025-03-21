@@ -63,6 +63,7 @@ let bosscantank = 0
 let prolive = 0
 let framhaiz = 0
 let gobaltaget = null;
+let Now_is_gobalevenrun = false
 
 async function eventer() {
     const delay = 500;
@@ -186,12 +187,16 @@ function handleEvents() {
             });
         }
     } else {
+	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
+	    if(Now_is_gobalevenrun)return
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
+	    if(Now_is_gobalevenrun)return
 	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	    handlebossPro('franky', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
+	    if(Now_is_gobalevenrun)return
 	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
        // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
        // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
@@ -237,10 +242,17 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 
 
 
-
+let callnguoi = 0
 //hpThreshold = ngưỡng sắp chết đổi item luck
 function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
     if (parent?.S?.[eventType]?.live) {
+	    if (callnguoi < 20)
+	    {
+		    send_cm("MuaBan",eventType)
+		   callnguoi += 1 
+	    }
+	    Now_is_gobalevenrun = true
+	    
         const monster = get_nearest_monster({ type: eventType }); 
         if (monster) {
             if (monster.hp > hpThreshold ) {
@@ -260,6 +272,13 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 
 function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
     if (parent?.S?.[eventType]) {
+	    if (callnguoi < 20)
+	    {
+		    send_cm("MuaBan",eventType)
+		   callnguoi += 1 
+	    }
+	    Now_is_gobalevenrun = true
+	    
         if (character.map !== mapName) {
             parent.socket.emit('join', { name: eventType });
         } else if (!smart.moving) {
@@ -1402,7 +1421,8 @@ let checktimeparty = 0
 let partychecktime
 function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
-
+              Now_is_gobalevenrun = true
+	    
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
             if (monster.hp > hpThreshold ) {
