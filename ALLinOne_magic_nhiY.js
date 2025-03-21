@@ -372,17 +372,11 @@ if(parent.S.icegolem && foxmode == 0)
     leave_party();
 	}
 	
-	if (leader && distance(character, leader) < 10  &&  is_moving(character) ){
+
+	if (leader && distance(character, leader) < 30  && !smart.moving ){
 		stop()
 	}
 	
-	if (leader && distance(character, leader) < 30  && smart.moving ){
-		stop()
-	move(leader.x,leader.y)
-	}
-	
-	if (leader && distance(character, leader) < 70 & foxmode == 0) return
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
 
 
 
