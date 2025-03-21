@@ -108,6 +108,7 @@ if (leader && distance(character, leader) < 130) return
         // Kiểm tra nếu nhân vật đang ở đúng bản đồ
         if (character.map !== targetMap && character.map != "crypt") {
             // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+	if ( targetMap == "goobrawl" && character.map !== targetMap) parent.socket.emit('join', { name: "goobrawl" });
             smart_move({
                 map: targetMap,
                 x: targetX,
