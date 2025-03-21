@@ -700,6 +700,9 @@ const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 async function attackLoop() {
 	//if (character.moving)return
     let delay = null; // Default delay
+    const leader1 = get_player('haiz');
+
+	
 
     try {
         let nearest = null;
@@ -727,6 +730,20 @@ async function attackLoop() {
             }
         }
 
+
+      if (!nearest) {
+    // Current target and target of leader.
+    var currentTarget = get_targeted_monster();
+    var leaderTarget = get_target_of(leader1)
+    
+    // Change the target.
+    if (!currentTarget || currentTarget != leaderTarget){ 
+        // Current target is empty or other than the leader's.
+        change_target(leaderTarget);
+        nearest = get_targeted_monster();
+    }
+
+      }
 
         // If a monster is found and is in range, execute the attack
         if (nearest && is_in_range(nearest)) {
