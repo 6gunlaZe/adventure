@@ -115,6 +115,8 @@ let isCheckingMoveStart = false; // Cờ để kiểm tra xem có đang kiểm t
 
 // Hàm di chuyển và chờ cập nhật smart
 async function moveWithSmartAndSuperMOVE() {
+
+	if(parent.S.icegolem && foxmode == 0) return
     // Nếu có vị trí mới, di chuyển đến đó trước
     if (receivedData) {
         const { map, x, y } = receivedData;
@@ -172,8 +174,7 @@ game_log("Checker value: " + checker);
                game_log("check ======"+checker)
                     // Cập nhật datasmart với dữ liệu từ smart
                     
-                   if(parent.S.icegolem) return
-
+                   if(parent.S.icegolem && foxmode == 0) return
                     // Thực hiện di chuyển thông minh với superMOVE
                     try {
                         await superMOVE(saveS);  // Di chuyển tới các điểm đã tính toán trong smart
