@@ -208,7 +208,7 @@ function checkSmartPosition(data) {
 
         // Kiểm tra xem vị trí của data có khớp với vị trí cuối cùng trong data.plot không
         if (data.map === lastPlot.map && 
-            distance(character, {x: lastPlot.x, y: lastPlot.y}) < 50) {
+            distance(character, {x: lastPlot.x, y: lastPlot.y}) < 150) {
             // Nếu vị trí khớp, trả về 1
             return 1;
         } else {
@@ -258,7 +258,7 @@ function findcongdichchuyen(data) {
 
 // Trình sát
 var tsname = "goldenbat"
-let godenbat = 1  // == 1 là có check batkinggold
+let godenbat = 0  // == 1 là có check batkinggold
 let step = 1
 let runb = 0
 let checkbat = 0
