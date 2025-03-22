@@ -1181,7 +1181,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
-	loot();
+	//loot();
 	
 	//if(character.s["hardshell"] && is_moving(character) ) stop();
 	
@@ -1270,7 +1270,7 @@ if (movesuper == 0 && f001){
 		
 		/////////
 		set_message("Attacking");
-		attack(currentTarget);
+		//attack(currentTarget);
 	}
 	
 
@@ -1279,7 +1279,7 @@ if (movesuper == 0 && f001){
 	
 
 	
-},1000/8); // Loops every 1/4 seconds.
+},1000/6); // Loops every 1/4 seconds.
 
 
 
@@ -1458,6 +1458,161 @@ changeitem({ slot: "offhand", name : "mshield", level : 7 });
 	
   await shift(0, 'luckbooster')
 }, 1000)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
+
+
+async function attackLoop() {
+	//if (character.moving)return
+    let delay = null; // Default delay
+    try {
+        let nearest = null;
+
+        // Find the nearest monster based on the targetNames
+        for (let i = 0; i < targetNames.length; i++) {
+            nearest = get_nearest_monster_v2({
+                target: targetNames[i],
+                check_min_hp: true,  // Checking for monster with minimum HP
+                max_distance: character.range,  // Consider monsters within 50 units
+                statusEffects: ["cursed"], // Check for these debuffs
+            });
+            if (nearest) break;
+        }
+
+	    
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+                    max_distance: character.range,
+                    check_min_hp: true,
+                });
+                if (nearest) break;
+            }
+        }
+
+
+ if (!nearest) {
+
+	      
+	const entity1 = get_entity(character.target) // co the doi taget thu cong
+	if (entity1) {
+		nearest = entity1
+	}
+	if(!nearest)
+	{
+		 nearest = get_nearest_monster_solobosskill() 
+		if(nearest) {
+			change_target(nearest);
+		}
+	}	
+
+     
+  }
+
+        // If a monster is found and is in range, execute the attack
+        if (nearest && is_in_range(nearest)) {
+            await attack(nearest); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+
+	    
+    } catch (e) {
+        //console.error(e);
+    }
+	 setTimeout(attackLoop, delay || 250); // Default delay if undefined
+}
+
+attackLoop();
+
+
+
+
+
+
+function get_nearest_monster_v2(args = {}) {
+    let min_d = 999999, target = null;
+    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
+
+    for (let id in parent.entities) {
+        let current = parent.entities[id];
+        if (current.type != "monster" || !current.visible || current.dead) continue;
+        if (args.type && current.mtype != args.type) continue;
+        if (args.min_level !== undefined && current.level < args.min_level) continue;
+        if (args.max_level !== undefined && current.level > args.max_level) continue;
+        if (args.target && !args.target.includes(current.target)) continue;
+        if (args.no_target && current.target && current.target != character.name) continue;
+
+        // Status effects (debuffs/buffs) check
+        if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
+
+        // Min/max XP check
+        if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
+        if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
+
+        // Attack power limit
+        if (args.max_att !== undefined && current.attack > args.max_att) continue;
+
+        // Path check
+        if (args.path_check && !can_move_to(current)) continue;
+
+        // Distance calculation
+        let c_dist = args.point_for_distance_check
+            ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
+            : parent.distance(character, current);
+
+        if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
+
+        // Generalized HP check (min or max)
+        if (args.check_min_hp || args.check_max_hp) {
+            let c_hp = current.hp;
+            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
+                optimal_hp = c_hp;
+                target = current;
+            }
+            continue;
+        }
+
+        // If no specific HP check, choose the closest monster
+        if (c_dist < min_d) {
+            min_d = c_dist;
+            target = current;
+        }
+    }
+    return target;
+}
+
+
+
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
+
+
+
+
+
 
 
 
