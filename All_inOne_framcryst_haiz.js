@@ -154,7 +154,7 @@ if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"})
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 
- if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 10000 ) )return //trở lại khi cung bắt skill shot để chờ 1 thời gian
+ if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 15000 ) )return //trở lại khi cung bắt skill shot để chờ 1 thời gian
 	
 if (member1)initialTarget = member1.target	
 timeat = Date.now();
