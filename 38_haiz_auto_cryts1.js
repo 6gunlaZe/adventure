@@ -1021,7 +1021,7 @@ function kiteSP(taget)
 	{
 		use_skill("hardshell");
 				 game_log("war hardshell !!!!!!");
-		if(is_moving(character))stop()
+		//if(is_moving(character))stop()
 	}
 		
 	}	
@@ -1153,7 +1153,7 @@ setInterval(function(){
 	use_hp_or_mp1();
 	loot();
 	
-	if(character.s["hardshell"] && is_moving(character) ) stop();
+	//if(character.s["hardshell"] && is_moving(character) ) stop();
 	
 	if(!attack_mode || character.rip ||  is_moving(character)) return;
 	
@@ -1361,7 +1361,7 @@ function soloTANK(taget)
  //////
 	////
 
-		    if (taget.target && taget.target == "haiz" &&  !is_on_cooldown("hardshell") && character.mp > 600 && distance(character, taget) < character.range )
+		    if (taget.target && taget.mtype == "a2" && taget.target == "haiz" &&  !is_on_cooldown("hardshell") && character.mp > 600 && distance(character, taget) < character.range )
 	{
 
 		use_skill("hardshell");
