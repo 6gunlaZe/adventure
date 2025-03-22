@@ -6,7 +6,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-
+let delaymageMagiPort = Date.now();
 const TenMinutesInMs = 300 * 60 * 1000
 let started
 let numHP = 0
@@ -184,7 +184,7 @@ game_log("Checker value: " + checker);
 		}
 		    else 
 		{
-	                 if(!smart.moving && character.mp > 2000 && foxmode == 1)mageMagiPort()
+	                 if(!smart.moving && character.mp > 2000 && foxmode == 1 &&  Date.now() > (delaymageMagiPort + 7000)  )mageMagiPort()
 		}
 
             }, 1000);  // Kiểm tra mỗi 1000ms
