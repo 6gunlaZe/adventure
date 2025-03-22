@@ -1215,6 +1215,7 @@ if (nguyhiem == 1)return
 ////////////////////////////////
 chuyendoithongminh(currentTarget)	
 //kiteSP(currentTarget)	
+	var f001 = get_player("6gunlaZe")
 var f00 = get_player("haiz1")
 let rateskill
 if (currentTarget && currentTarget.attack >8000 )
@@ -1243,10 +1244,12 @@ if (skillbua == 1) return
             }
 		else
 		{
-if (movesuper == 0){
+
+			
+if (movesuper == 0 && f001){
 		move(
-			character.x+(currentTarget.x-character.x)/2,
-			character.y+(currentTarget.y-character.y)/2
+			character.x+(f001.x-character.x)/2,
+			character.y+(f001.y-character.y)/2
 			);
 		// Walk half the distance
 	
