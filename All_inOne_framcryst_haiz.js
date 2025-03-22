@@ -149,7 +149,7 @@ let toado = [
 
 ];
 if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
-
+if(character.esize < 3)parent.api_call("disconnect_character", {name: "haiz"});
 	
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
