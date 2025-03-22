@@ -905,33 +905,33 @@ changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
 if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a222" )
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "sshield", level : 8 });	
+if (checkluck == 0)changeitem({ slot: "offhand", name : "sshield", level : 8 });	
 }	
 else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
 {	
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
+if (checkluck == 0)changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
 }
 	else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "franky")
 	{
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
 changeitem({ slot: "offhand", name : "ololipop", level : 9 });		
 	}
-else if (character.hp/character.max_hp < 0.2 && skillbua == 0 )
+else if (character.hp/character.max_hp < 0.2 && skillbua == 0 && checkluck == 0 )
 	{
 changeitem({ slot: "mainhand", name : "fireblade", level : 9 });		
 changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
 	}
 ///////////////////////////////	tang dame
 
-	if ( skillbua == 1){
+	if ( skillbua == 1 && checkluck == 0){
 		if (character.esize == 0){
 		 skillbua = 0
 			 game_log("fulll tui do !!!!!!");
 			return
 			
 		}
-		if (character.slots["offhand"])unequip( "offhand");
+		if (character.slots["offhand"] )unequip( "offhand");
 
         changeitem({ slot: "mainhand", name : "basher", level : 7 });
 		
@@ -1394,6 +1394,41 @@ if ( taget.target && taget.target != "haiz" && !is_on_cooldown("taunt") && !tage
 	
 }
 ////////////////////////
+
+
+
+
+
+
+let checkluck = 0
+setInterval(async () => {
+  await shift(0, 'goldbooster')
+  for(const id in parent.chests) loot(id)
+	
+const mobTypes = ["bat", "mole"];	
+const mobsInRange = Object.values(parent.entities)
+    .filter(entity => 
+        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
+        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
+        entity.hp < 21000 && entity.target == "haiz" 
+    );
+if ( mobsInRange.length >= 1)
+{
+	checkluck = 1
+changeitem({ slot: "offhand", name : "mshield", level : 7 });		
+}
+	else
+{
+	checkluck = 0
+}
+	
+  await shift(0, 'luckbooster')
+}, 1000)
+
+
+
+
 
 
 
