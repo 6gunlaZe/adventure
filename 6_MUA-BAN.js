@@ -709,8 +709,27 @@ function on_cm(name, data) {
 }
 
 
+function mluckallifNOMLuck() {
+    let keys = Object.values(parent.entities).filter(e => is_character(e) && is_in_range(e, "mluck"));
 
-/////////
+    for (let char of keys) {
+        // Kiểm tra char có tồn tại và không phải là merchant
+        if(char.ctype !== "merchant" && !is_on_cooldown("mluck") && (!char.s ||
+            !char.s.mluck ||
+            (char.s.mluck.f !== character.name && !char.s.mluck.strong) ||
+            (char.s.mluck.f === character.name && char.s.mluck.ms < 2050000 ))
+        ) {
+            use_skill("mluck", char);
+        }
+    }
+}
+
+// Thiết lập vòng lặp chạy mỗi giây (1000ms)
+setInterval(mluckallifNOMLuck, 1000);
+
+
+
+
 
 ///////gap nhau xong la ve thanh lien
 
