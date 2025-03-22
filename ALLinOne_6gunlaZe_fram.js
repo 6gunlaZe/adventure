@@ -1086,7 +1086,7 @@ setInterval(function() {
 setInterval(function() {
 	
 
-		if(character.esize < 7)
+		if(character.esize < 7 || !character.s.mluck || character.s.mluck.f !== "MuaBan")
 	{
 		send_cm("MuaBan", "full");
 		game_log("lay do !!!!!!");
