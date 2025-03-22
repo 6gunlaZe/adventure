@@ -1,5 +1,6 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
+let lastUpdateTime = performance.now();
 
 const locations = {
     bat: [{ x: 1200, y: -782 }],
@@ -228,13 +229,45 @@ async function handleHome() {
 function safeawwait() {
 		    let tank = get_player("Ynhi");
 
-if (!tank){
+if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
+	
+if (!tank || tank.rip ){
     if (!smart.moving) {
 smart_move({ map: "main", x: 500, y: 1800 })
     }
-}else
+}
+else
 {
-if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50  ))smart_move(destination)	
+if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 70  ))smart_move(destination)	
+
+
+
+    if (!smart.moving) {
+        let center = locations[home][0];
+        const radius = 25;
+
+        // Calculate time elapsed since the last update
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
+
+        // Calculate the new angle based on elapsed time and speed
+        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
+        angle = (angle + deltaAngle) % (2 * Math.PI);
+
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        const targetX = center.x + offsetX;
+        const targetY = center.y + offsetY;
+
+        if (!character.moving && lastUpdateTime > 100) {
+            await xmove(targetX, targetY);
+        }
+    }
+
+
+
+	
 }
 	
 }
