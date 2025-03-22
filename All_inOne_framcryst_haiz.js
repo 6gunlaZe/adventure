@@ -717,43 +717,6 @@ let delayThreshold = 200; // Ngưỡng thời gian 200ms
 
 
 
-function checkTimeBetweenCalls(setMoc = 0) {
-    const currentTime = Date.now(); // Lấy thời gian hiện tại
-
-    // Nếu setMoc === 1, thì lưu thời gian hiện tại làm thời gian mốc
-    if (setMoc === 1) {
-        lastCallTime = currentTime;
-       // console.log("Thời gian mốc đã được thiết lập: ", currentTime);
-        return;
-    }
-
-    // Nếu không phải gọi để thiết lập thời gian mốc, kiểm tra thời gian giữa các lần gọi
-    if (lastCallTime === 0) {
-        // Lần đầu tiên gọi hàm, không có thời gian mốc
-        lastCallTime = currentTime;
-        return 0; // Lần đầu tiên, không cần kiểm tra
-    }
-
-    const timeDiff = currentTime - lastCallTime; // Tính thời gian giữa các lần gọi
-
-    // Nếu thời gian giữa các lần gọi dưới delayThreshold (500ms), trả về 1 để bỏ qua
-    if (timeDiff < delayThreshold) {
-       // console.log(`Thời gian giữa các lần gọi quá ngắn: ${timeDiff}ms, bỏ qua.`);
-        return 1; // Thời gian quá ngắn, bỏ qua
-    }
-
-    // Nếu thời gian đủ lâu, trả về 0
-   // console.log(`Thời gian giữa các lần gọi là: ${timeDiff}ms, tiếp tục.`);
-    return 0;
-}
-
-
-
-
-
-
-
-
 setInterval(function() {
 ////////////giui vi tri moi 2s
 let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
@@ -830,249 +793,6 @@ for (let char in parent.party) {
 
 
 
-
-
-
-
-function changeitem(options = {}) {
-	
-
-	if ( !options.slot ||  !options.name || !options.level ) return 
-	if (character.slots[options.slot])
-	{
-	if (character.slots[options.slot].name == options.name && character.slots[options.slot].level == options.level) return 
-	}	
-////////	
-	if (delayitem == undefined) delayitem = Date.now()
-	if (Date.now() < 300 + delayitem) return 
-	delayitem = Date.now()
-	checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
-
-//////////		
-	
-	
-	let vitri = 100
-	
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
-
-            if (item.name == options.name && item.level == options.level) {
-                // This is an item we want to use!
-                    vitri = i //tim ra vi tri mon do
-            }
-				
-			}
-				
-	if (vitri == 100 ) return ///ko co mon do dung yeu cau
-	
-	
-	
-	
-	if (!character.slots[options.slot] || character.slots[options.slot].name != options.name) { 
-        unequip(options.slot);
-        equip(vitri, options.slot); 
-		 game_log("change: " + options.name)
-    }
-	
-
-//	changeitem({ slot: "mainhand", name : "firebow", level : 6 });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function chuyendoithongminh(taget)
-{
-///////////////////////////////////////// dang dame
-				// game_log("test 3 !!!!!!");
-
-let rate = 1
-
-if (taget && taget.mtype == "a2" )
-{
-	rate = 10
-}
-	else
-	{
-		rate = 0.75
-	}
-
-if(character.hp/character.max_hp< rate )
-{
-	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
-		changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
-
-}
-else
-	{
-		changeitem({ slot: "gloves", name : "mittens", level : 9 });
-			changeitem({ slot: "helmet", name : "helmet1", level : 8 });
-
-	}
-/////////////////////////////////////////////////// hut mauuuu
-	if(character.s["hardshell"] )
-	{
-	changeitem({ slot: "chest", name : "mcape", level : 8 });	
-	}
-else
-{
-changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
-}
-///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "a222" )
-{	
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-if (checkluck == 0)changeitem({ slot: "offhand", name : "sshield", level : 8 });	
-}	
-else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype != "franky")
-{	
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-if (checkluck == 0)changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
-}
-	else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && taget && taget.mtype == "franky")
-	{
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "ololipop", level : 9 });		
-	}
-else if (character.hp/character.max_hp < 0.2 && skillbua == 0 && checkluck == 0 )
-	{
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });		
-changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
-	}
-///////////////////////////////	tang dame
-
-	if ( skillbua == 1 && checkluck == 0){
-		if (character.esize == 0){
-		 skillbua = 0
-			 game_log("fulll tui do !!!!!!");
-			return
-			
-		}
-		if (character.slots["offhand"] )unequip( "offhand");
-
-        changeitem({ slot: "mainhand", name : "basher", level : 7 });
-		
-			if (character.slots["mainhand"] && character.slots["mainhand"].name == "basher")use_skill("stomp");
-				       
-	}
-	
-	
-		if ( skillbua == 1 &&  is_on_cooldown("stomp")){
-		          skillbua = 0
-	      }
-		
-		
-	
-	
-	
-	
-//////////////////////////////
-}
-
-
-
-//////////////////////////////////////////////
-
-function kite(taget, kite_range)
-{
-
-	const radius = kite_range ;
-const  angle = Math.PI / 5.5 ;
-    if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-        move(endGoal.x, endGoal.y)
-
-	
-	}
- 
-	
-
-}
-
-
-
-function kiteSP(taget)
-{
-
-
-		//////////// dung skill
-	if(character.hp > 1500 && character.mp > 100 && !is_on_cooldown("taunt") && taget && taget.target != "haiz" )
-            {
-                use_skill("taunt", taget);
-				 game_log("phan no kite !!!!!!");
-            }	
- 
-	
-	////
-		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 >  character.range + 10)
-	{
-		                use_skill("charge");
-		 game_log("toc do kite !!!!!!");
-	}
-
-            }	
- //////
-	////
-		if( character.hp > 12000 && character.mp > 840 && !is_on_cooldown("warcry") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 > character.range)
-	{
-		use_skill("warcry");
-				 game_log("war !!!!!!");
-	}
-		
-	
-            }	
- //////
-	 /////////////////////
-		if ( taget && !is_on_cooldown("hardshell") && taget.hp >5000 )
-	{
-		const dist1 = distance(character, taget);
-    if (dist1 <= character.range + 5 && taget.target == "haiz")
-	{
-		use_skill("hardshell");
-				 game_log("war hardshell !!!!!!");
-		//if(is_moving(character))stop()
-	}
-		
-	}	
-
-      //////////////
-	
-//	 !currentTarget.s["cursed"]
-   	if( !character.s["hardshell"] && character.hp < 11000 && character.mp > 340 &&  skillbua == 0 &&  !is_on_cooldown("stomp") && taget){
-		skillbua = 1
-
-			}
-		
-
-
-	
-	///////////
-//	!character.s.hasOwnProperty("massproductionpp")
-
-
-///////////////////
-}
 
 
 
@@ -1186,9 +906,7 @@ setInterval(function(){
 	//if(character.s["hardshell"] && is_moving(character) ) stop();
 	
 	if(!attack_mode || character.rip ||  is_moving(character)) return;
-	
-if (checkTimeBetweenCalls() === 1) return;
-if (nguyhiem == 1)return
+
 
 	const entity1 = get_entity(character.target) // co the doi taget thu cong
 	
@@ -1213,10 +931,7 @@ if (nguyhiem == 1)return
 
 
 
-	
-////////////////////////////////
-chuyendoithongminh(currentTarget)	
-//kiteSP(currentTarget)	
+
 	var f001 = get_player("6gunlaZe")
 var f00 = get_player("haiz1")
 let rateskill
@@ -1229,12 +944,7 @@ else
 	rateskill = 0.9
 }
 
-if (currentTarget && f00 )VIPSuP(currentTarget,rateskill)
-if (currentTarget && !f00 ) soloTANK(currentTarget)
-if (run == 1 && currentTarget && currentTarget.attack >8000 ) return //quai manh qua thi ne ra	
-if (skillbua == 1) return	
-//	if(!can_attack(currentTarget) && currentTarget && !character.s["hardshell"] )kite(currentTarget,character.range + 15);
-//////////////////////////////////////////////	
+
 
 	if( currentTarget && !is_in_range(currentTarget))
 	{
@@ -1265,11 +975,7 @@ if (movesuper == 0 && f001){
 	else if(can_attack(currentTarget))
 	{
 
-		
-		
-		
-		/////////
-		set_message("Attacking");
+
 		//attack(currentTarget);
 	}
 	
@@ -1305,131 +1011,6 @@ function get_nearest_playerV(currentTarget)
 
 
 
-function VIPSuP(taget,rate)
-{
-
-var f0 = get_player("haiz1")
-var targetboss = taget	
-var supBOSS
-let safetank = 1
-let ratehp = rate	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") && !is_on_cooldown("hardshell") && character.mp > 600 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") &&  character.s["hardshell"] && character.mp > 600 && character.hp > 7500 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);	
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") && character.mp > 600 && f0.hp/f0.max_hp < 0.4 ) use_skill("taunt", targetboss); //chi co o main tank	
-	
-if (targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"] && character.hp/character.max_hp < ratehp && focusA2safe0() == 0 ) use_skill("hardshell");
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && is_on_cooldown("taunt") && is_on_cooldown("hardshell") && !character.s["hardshell"] && character.mp > 900 && f0.hp/f0.max_hp < ratehp && !is_on_cooldown("warcry") &&  !character.s["warcry"] )use_skill("warcry"); //support them rieng cho thang de
-	
-	
-if (targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && is_on_cooldown("hardshell") && targetboss.range <120 ) 
-{
-	kite(targetboss,targetboss.range + 50);
-	run = 1
-}
-		else
-	{
-		run = 0;
-	}
-	
-	
-	
-if (is_on_cooldown("hardshell") || character.mp < 550)safetank = 0	
-
-	
-if ( f0.hp/f0.max_hp < ratehp )	
-{	
-if ( targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && character.mp > 200 && !is_on_cooldown("stomp") && distance(character, targetboss) < (targetboss.range + 7) && is_on_cooldown("hardshell") )skillbua = 1
-	
-if (character.mp > 900 && is_on_cooldown("hardshell") && !is_on_cooldown("stomp") && !f0.s["hardshell"] && !targetboss.s["stunned"] && distance(f0, targetboss) < (targetboss.range + 20))skillbua = 1
-	
-if ( character.mp > 1200 && !is_on_cooldown("stomp") && !targetboss.s["stunned"] && !f0.s["hardshell"] && !character.s["hardshell"]  ) skillbua = 1	
-}	
-	
-	
-if (run == 1 && supBOSS )	
-{
-			var target3 = get_nearest_monster({type: supBOSS});
-             if(target3 && is_in_range(target3))attack(target3);
-}		
-	
-	
-
-	
-///////////////////////////////////////////////////////////	
-//////////////////////////////////////////////////////////////
-
-		if(character.mp > 100 && !is_on_cooldown("charge") && run == 1 && safetank == 0 )use_skill("charge");
-
-
-
-if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["warcry"] )use_skill("warcry");
-
-
-	///////////
-//	!character.s.hasOwnProperty("massproductionpp")
-
-
-///////////////////
-}
-
-
-function soloTANK(taget)
-{
- 
-			// game_log("test 2 !!!!!!");
-
-		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 >  character.range)
-	{
-		                use_skill("charge");
-		 game_log("toc do kite !!!!!!");
-	}
-
-            }	
- //////
-	////
-
-		    if (taget.target && taget.mtype == "a2" && taget.target == "haiz" &&  !is_on_cooldown("hardshell") && character.mp > 600 && distance(character, taget) < character.range )
-	{
-
-		use_skill("hardshell");
-				 game_log("war hardshell !!!!!!");
-
-	}	
-
-      //////////////
-	
-	if (character.mp > 1300 &&  !is_on_cooldown("warcry") && !character.s["warcry"] )
-	{
-		use_skill("warcry");
-				 game_log("war kite !!!!!!");
-	}	
-	
-	
-	 //////////////////////////////////
- 	////
-
- //////
-
-if ( taget.target && taget.target == "haiz" && !character.s["hardshell"] && character.mp > 200 && !is_on_cooldown("stomp") && distance(character, taget) < (taget.range + 7) && is_on_cooldown("hardshell") )skillbua = 1
-	
-if (character.mp > 900  && !is_on_cooldown("stomp")  && taget.target && taget.target != "haiz"  )skillbua = 1
-	
-if ( character.mp > 1200 && !is_on_cooldown("stomp") && taget.target ) skillbua = 1	
-
-if ( taget.target && taget.target != "haiz" && !is_on_cooldown("taunt") && !taget.s["stunned"] && character.mp > 400 )use_skill("taunt", taget);
-
-	
-}
-////////////////////////
-
-
-
 
 
 
@@ -1446,14 +1027,32 @@ const mobsInRange = Object.values(parent.entities)
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
         entity.hp < 21000 && entity.target == "haiz" 
     );
+
+
+const a2mob = Object.values(parent.entities)
+    .filter(entity => 
+        entity.mtype == "a2" &&  
+        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
+        distance(character, entity) < 150  
+    );
+	
+	
 if ( mobsInRange.length >= 1)
 {
-	checkluck = 1
-changeitem({ slot: "offhand", name : "mshield", level : 7 });		
+	checkluck = 1  ///luck set
 }
-	else
+else if (a2mob.length >= 1)
 {
-	checkluck = 0
+	checkluck = 2  //  def set
+}
+else if (character.hp < 5000)
+{
+	checkluck = 3   //  defffull
+}
+	else 
+{
+	checkluck = 0  //dame set
 }
 	
   await shift(0, 'luckbooster')
@@ -1608,6 +1207,461 @@ function ms_to_next_skill(skill) {
     const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
     return ms < 0 ? 0 : ms;
 }
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+let scythe = 0;
+let eTime = 0;
+let basher = 0;
+async function skillLoop() {
+    let delay = 10;
+    try {
+        let zap = false;
+        const dead = character.rip;
+        const Mainhand = character.slots?.mainhand?.name;
+        const offhand = character.slots?.offhand?.name;
+        const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 320;
+        const cc = character.cc < 135;
+        const zapperMobs = ["plantoid"];
+        const stMaps = ["", "winter_cove", "arena", "",];
+        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
+        let tank = get_entity("Ynhi");
+	     let f1 = get_entity("6gunlaZe");
+
+        if (character.ctype === "warrior") {
+            try {
+				
+
+                if (tank && tank.hp < tank.max_hp * 0.4 && character.name === "haiz") {
+                    //console.log("Calling handleStomp");
+					//game_log("1")
+
+                    handleStomp(Mainhand, stMaps, aoeMaps, tank);
+                }
+                if (character.ctype === "warrior") {
+                    //console.log("Calling handleCleave");
+                    handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
+                    //console.log("Calling handleWarriorSkills");
+                    handleWarriorSkills(tank,f1);
+                }
+            } catch (e) {
+                //console.error("Error in warrior section:", e);
+            }
+        }
+
+
+    } catch (e) {
+        //console.error("Error in skillLoop:", e);
+    }
+    setTimeout(skillLoop, delay);
+}
+skillLoop()
+
+async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
+    if (!is_on_cooldown("stomp")) {
+        if (Mainhand !== "basher" && performance.now() - basher > 5000) {
+            basher = performance.now();
+            basherSet();
+        }
+        use_skill("stomp");
+        game_log("Using STOMP", "#B900FF");
+    } else {
+        handleWeaponSwap(stMaps, aoeMaps);
+    }
+}
+
+
+////hàm tùy chỉnh trang bị chính thức 
+function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+    const currentTime = performance.now();
+	if (currentTime - eTime < 50)return
+
+
+	if (checkluck == 0)
+	{
+        eTime = currentTime;
+        equipSet('single');	
+	}
+	
+	if (checkluck == 1)
+	{
+        eTime = currentTime;
+        equipSet('luck');	
+	}
+
+	if (checkluck == 2)
+	{
+        eTime = currentTime;
+        equipSet('def');	
+	}
+
+	if (checkluck == 3)
+	{
+        eTime = currentTime;
+        equipSet('fulldef');	
+	}
+
+	
+}
+
+let lastCleaveTime = 0;
+const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
+
+function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
+    const currentTime = performance.now();
+    const timeSinceLastCleave = currentTime - lastCleaveTime;
+    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n", "crypt"];
+    const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
+        type === "monster" &&
+        visible &&
+        !dead &&
+        distance(character, { x, y }) <= G.skills.cleave.range
+    );
+
+    const untargetedMonsters = monstersInRange.filter(({ target }) => !target)
+
+    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters)) {
+        if (Mainhand !== "bataxe") {
+            scytheSet(); // Equip the bataxe
+        }
+        use_skill("cleave"); // Use the cleave skill
+        reduce_cooldown("cleave", character.ping * 0.95);
+        lastCleaveTime = currentTime; // Update the last cleave time
+    }
+
+    // Handle weapon swapping outside of cleave logic to keep it separate
+    handleWeaponSwap(stMaps, aoeMaps);
+}
+
+function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters) {
+    return (
+        !smart.moving // Don't cleave if moving smartly
+        && cc // CC check: Ensure you have CC up
+        && aoe // Mana check: Ensure AOE is available
+        && timeSinceLastCleave >= CLEAVE_THRESHOLD // Prevent cleave spamming
+        && monstersInRange.length > 0 // Ensure there are monsters in range
+        && untargetedMonsters.length === 0 // Only cleave if no untargeted monsters (no aggro)
+        && mapsToInclude.includes(character.map) // Map check (optional, clarify if needed)
+        && tank // Ensure tank (priest) is around
+        && !is_on_cooldown("cleave") // Ensure cleave is not on cooldown
+        && ms_to_next_skill("attack") > 75 // Ensure attack isn't about to be ready
+    );
+}
+
+async function handleWarriorSkills(tank,f1) {
+
+	
+    if (!is_on_cooldown("warcry") && !character.s.warcry && character.s.darkblessing) {
+        await use_skill("warcry");
+    }
+
+	///bat thì không cần f1
+const mobTypes = ["bat", "mole"];
+const mobsInRange = Object.values(parent.entities)
+    .filter(entity => 
+        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
+        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
+        distance(character, entity) <= G.skills.agitate.range  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
+    );
+const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
+if (!is_on_cooldown("agitate") && 
+    mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
+    untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
+    !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
+    tank && f1 && character.hp >12000) {                              // Kiểm tra nếu có tank và f1 xung quanh
+    let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
+    if (!is_in_range(porc, "agitate")) {  // Kiểm tra nếu "porcupine" không nằm trong phạm vi kỹ năng "agitate"
+        await use_skill("agitate");        // Sử dụng kỹ năng "agitate"
+    }
+}
+
+	
+	
+if (!is_on_cooldown("charge") && is_moving(character) ) {
+    await use_skill("charge"); // Sử dụng kỹ năng "charge"
+}
+
+
+	
+if (!is_on_cooldown("hardshell") && character.hp < 11000) {
+    await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
+}
+
+
+	
+const ango  = [ "a2" , "a3", "a7", "vbat"];
+for (let id in parent.entities) {
+    let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
+
+    // Kiểm tra nếu thực thể là quái vật "quai" và nó chưa nhắm vào nhân vật
+    if ( ango.includes(current.mtype) && current.target && current.target !== character.name) {
+        
+        // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
+        if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
+            await use_skill("taunt", current.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
+            game_log("Taunting " + current.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
+        }
+    }
+}
+
+
+
+}
+
+
+
+function scytheSet() {
+    unequip("offhand");
+    equipBatch([
+        { itemName: "bataxe", slot: "mainhand", level: 7, l: "l" },
+    ]);
+}
+
+function basherSet() {
+    unequip("offhand");
+    equipBatch([
+        { itemName: "basher", slot: "mainhand", level: 7 }
+    ]);
+}
+
+//l: "l"  == L lock
+let isEquipping = false; // Flag kiểm soát trạng thái
+
+async function equipBatch(data) {
+    if (isEquipping) {
+        game_log("equipBatch is already running. Skipping.");
+        return;
+    }
+    isEquipping = true; // Đánh dấu đang chạy
+
+    if (!Array.isArray(data)) {
+        game_log("Can't equipBatch non-array");
+        isEquipping = false;
+        return handleEquipBatchError("Invalid input: not an array");
+    }
+    if (data.length > 15) {
+        game_log("Can't equipBatch more than 15 items");
+        isEquipping = false;
+        return handleEquipBatchError("Too many items");
+    }
+
+    let validItems = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let itemName = data[i].itemName;
+        let slot = data[i].slot;
+        let level = data[i].level;
+        let l = data[i].l;
+
+        if (!itemName) {
+            game_log("Item name not provided. Skipping.");
+            continue;
+        }
+
+        let found = false;
+        if (parent.character.slots[slot]) {
+            let slotItem = parent.character.items[parent.character.slots[slot]];
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
+            continue;
+        }
+
+        for (let j = 0; j < parent.character.items.length; j++) {
+            const item = parent.character.items[j];
+            if (item && item.name === itemName && item.level === level && item.l === l) {
+                validItems.push({ num: j, slot: slot });
+                break;
+            }
+        }
+    }
+
+    if (validItems.length === 0) {
+        isEquipping = false;
+        return; // Không có vật phẩm hợp lệ
+    }
+
+    try {
+        parent.socket.emit("equip_batch", validItems);
+        await parent.push_deferred("equip_batch");
+    } catch (error) {
+        console.error("Error in equipBatch:", error);
+        handleEquipBatchError("Failed to equip items");
+    }
+
+    isEquipping = false; // Reset flag khi hoàn tất
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const equipmentSets = {
+
+    def: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	    
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
+        { itemName: "xgloves", slot: "gloves", level: 6, },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
+    ],
+    luck: [
+        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+        //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
+    ],
+    single: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
+        { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
+        { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "helmet1", slot: "helmet", level: 8, },	    
+    ],
+    aoe: [
+        { itemName: "ololipop", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "ololipop", slot: "offhand", level: 9, l: "s" },
+    ],
+    stealth: [
+        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+    ],
+    cape: [
+        { itemName: "vcape", slot: "cape", level: 4, l: "l" },
+    ],
+    fulldef: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	    
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
+        { itemName: "xgloves", slot: "gloves", level: 6, },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
+    ],
+    orb: [
+        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+    ],
+    mana: [
+        { itemName: "tshirt9", slot: "chest", level: 6, l: "l" }
+    ],
+    stat: [
+        { itemName: "coat", slot: "chest", level: 13, l: "l" }
+    ],
+};
+
+
+
+
+
+function equipSet(setName) {
+    const set = equipmentSets[setName];
+    if (set) {
+        equipBatch(set);
+    } else {
+        console.error(`Set "${setName}" not found.`);
+    }
+}
+
+
+
+// Helper function to handle errors
+function handleEquipBatchError(message) {
+    game_log(message);
+    // You may decide to implement a delay or other error handling mechanism here
+    return Promise.reject({ reason: "invalid", message });
+}
+
+
+
+
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
+    for (id in parent.entities) {
+        var current = parent.entities[id];
+        if (character.hp <4000 && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+        if (current.mtype === home && character.hp <8000 && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+	    
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 1000); // 1000 milliseconds = 1 second
+        }
+    }
+}
+setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
