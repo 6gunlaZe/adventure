@@ -957,16 +957,7 @@ else
 		else
 		{
 
-			
-if (movesuper == 0 && f001){
-		move(
-			character.x+(f001.x-character.x)/2,
-			character.y+(f001.y-character.y)/2
-			);
-		// Walk half the distance
-	
-}
-			
+				
 		}
 
 
@@ -1228,7 +1219,7 @@ async function skillLoop() {
         const cc = character.cc < 135;
         const zapperMobs = ["plantoid"];
         const stMaps = ["", "winter_cove", "arena", "",];
-        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
+        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland","crypt"];
         let tank = get_entity("Ynhi");
 	     let f1 = get_entity("6gunlaZe");
 
@@ -1236,12 +1227,16 @@ async function skillLoop() {
             try {
 				
 
-                if (tank && tank.hp < tank.max_hp * 0.4 && character.name === "haiz") {
+                if (tank && tank.hp < tank.max_hp * 0.6 && character.name === "haiz") {
                     //console.log("Calling handleStomp");
 					//game_log("1")
 
                     handleStomp(Mainhand, stMaps, aoeMaps, tank);
                 }
+		    else if (character.hp <12000)handleStomp(Mainhand, stMaps, aoeMaps, tank);
+
+
+		    
                 if (character.ctype === "warrior") {
                     //console.log("Calling handleCleave");
                     handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
@@ -1621,10 +1616,7 @@ function scare() {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
-        if (current.mtype === home && character.hp <8000 && current.target == character.name) {
-            mobnum++;
-            targetedForMoreThanOneSecond = true;
-        }
+
 	    
     }
 
