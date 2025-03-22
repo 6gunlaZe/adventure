@@ -226,7 +226,7 @@ async function handleHome() {
 }
 
 
-function safeawwait() {
+async function safeawwait() {
 		    let tank = get_player("Ynhi");
 
 if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
