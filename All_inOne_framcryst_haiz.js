@@ -1021,7 +1021,7 @@ const mobsInRange = Object.values(parent.entities)
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
         entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        entity.hp < 21000 && entity.target == "haiz" 
+        entity.hp < 27000 && entity.target == "haiz" 
     );
 
 
@@ -1052,7 +1052,7 @@ else if (character.hp < 5000)
 }
 	
   await shift(0, 'luckbooster')
-}, 1000)
+}, 400)
 
 
 
