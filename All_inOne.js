@@ -1666,7 +1666,8 @@ else
 	    
 if (!events){
 
-	const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+	// const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
+	const foxmode11 = true
 	const nearB = get_player("nhiY");
 
 if (framboss > 0  && foxmode11 )send_cm("nhiY", "foxmode");
