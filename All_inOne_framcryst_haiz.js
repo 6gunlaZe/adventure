@@ -154,10 +154,7 @@ if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"})
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 
- if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 15000 ) )return //trở lại khi cung bắt skill shot để chờ 1 thời gian
-	
-if (member1)initialTarget = member1.target	
-timeat = Date.now();
+
 
 
 //////////////////Logic new
@@ -172,6 +169,14 @@ const mobsInRange = Object.values(parent.entities)
     );
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 
+
+	
+if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 15000 ) && mobsInRange.length == 0 )return //trở lại khi cung bắt skill shot để chờ 1 thời gian	
+if (member1)initialTarget = member1.target	
+timeat = Date.now();
+
+
+	
 	
 
 if(mobsInRange.length == 0){
