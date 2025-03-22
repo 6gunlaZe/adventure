@@ -186,6 +186,7 @@ else if (mobsInRange.length == 1 && untargetedMobs.length == 0)
 else
 {
 	backk = 1;
+	checkback++
 	runn = 0;	
 }
 
@@ -293,6 +294,7 @@ if(backk == 1)
         else {
 		if (!member2 || !member1)
 		{
+			 let result = toado.find(item => item.z === z);   
 if (z == 0) z = 1;
 else if (z == 1) z = 2;
 else if (z == 2) z = 1;
