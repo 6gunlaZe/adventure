@@ -35,6 +35,9 @@ let z = 1;
 let bat = 0
 let bossA = 0
 let nguyhiem = 0
+let backk = 0
+let runn = 1
+let stopp = 0
 /// auto ham nguc cryt
 setInterval(function() {
 if (movesuper == 1)return	
@@ -151,12 +154,52 @@ if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"})
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 
- if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 10000 ) )return 
+ if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 10000 ) )return //trở lại khi cung bắt skill shot để chờ 1 thời gian
 	
 if (member1)initialTarget = member1.target	
 timeat = Date.now();
 
+
+//////////////////Logic new
+
+const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
+const mobsInRange = Object.values(parent.entities)
+    .filter(entity => 
+        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
+        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
+        distance(character, entity) <= 350  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
+    );
+const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
+
 	
+
+if(mobsInRange.length == 0){
+	runn = 1;
+	backk = 0;
+}
+else if (mobsInRange.length == 1 && untargetedMobs.length == 0)
+	{
+	backk = 0;
+	runn = 0;
+	}
+else
+{
+	backk = 1;
+	runn = 0;	
+}
+
+
+
+
+
+	
+
+
+
+
+	
+/////////////////	
 
 	
  var  targetkill = solobosskill({ max_range: 300}) 
@@ -177,31 +220,16 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 	        var  targetNOsafe1 = solobossNO1({ max_range: 330}) 	///có a2
 	        var  targetNOsafe = solobossNO({ max_range: 280}) 
 		var currentTarget = get_nearest_monster_solobosskill() 
-		if(currentTarget && currentTarget.target && targetNOsafe1.length == 0 && currentTarget.mtype != "a2") 
-		{
-			nguyhiem = 0
-if ( z > 30 && z < 45) z -= 1;
-if ( z > 51 ) z -= 1;
-			game_log("ZZZ = !!!!!!  "+ z  );	
-	return
-		}
+
 
 		if(currentTarget && currentTarget.target && targetNOsafe.length == 0 && currentTarget.mtype == "a2") 
 		{
-			nguyhiem = 0
-if ( z > 30 && z < 45) z -= 1;
-if ( z > 52 ) z -= 1;
 			if (!member1 || !member2) parent.api_call("disconnect_character", {name: "haiz"});
-
-			game_log("ZZZ = !!!!!!  "+ z  );	
-	return
 		}
 
 let numberkilll = get_NUMber_kill()	
-if (z >= 35 && z<47 && numberkilll >= 9 && targetNOsafe.length > 0 && targetkill.length === 0 &&nhay == 1)	{
-nhay = 0
-z = 47;	
-}
+	
+
 //////////////
 if ( checkkill != numberkilll )
 {
@@ -217,6 +245,39 @@ checkkill = numberkilll
 game_log("ZZZ = !!!!!!  "+ z  );	
 
 
+
+
+/////////////////////////////////logic di chuyển
+
+if (runn == 1)
+{
+      if (z < 68 ) {
+        z++;
+      }
+      let result = toado.find(item => item.z === z);    
+      if (result) {
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }
+
+	
+}
+if(backk == 1)
+{
+      if (z > 1) {
+        z--;
+      }
+      // Lấy đối tượng có z tương ứng
+      let result = toado.find(item => item.z === z);
+
+      if (result) {
+        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
+      }	
+}
+
+///////////////////////////////
+
+
+	
     if (targetkill.length === 1 && targetNO.length == 0 ) {
       // Lệnh riêng của bạn khi targetkill = 1
 	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
@@ -225,7 +286,6 @@ game_log("ZZZ = !!!!!!  "+ z  );
 	/////////////////////////////////    
     } else if (targetkill.length === 0 && targetNO.length == 0) {
       // Lấy đối tượng có z tương ứng
-      let result = toado.find(item => item.z === z);
       nguyhiem = 0
 	    
 	if (member2 && member1 && distance(character, member2) < 150  && distance(character, member1) < 150 )
@@ -244,46 +304,14 @@ else if (z == 2) z = 1;
 		
 		return
 	      }
-	    
-      if (result) {
-        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
-      }
 
-      // Tăng z khi targetkill = 0
-      if (z < 68 ) {
-        z++;
-      }
+
+
+
+
     } else if (targetkill.length >= 2  || targetNO.length > 0) {
-      // Quay lại 
-	    nguyhiem = 1
-	    if (targetNO.length > 0)checkback++
-      if (z > 1) {
-        z--;
-      }
-      // Lấy đối tượng có z tương ứng
-      let result = toado.find(item => item.z === z);
-
-      if (result) {
-        xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
-      }
-
-	    
+    
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	
