@@ -1048,9 +1048,7 @@ function get_nearest_playerV(currentTarget)
 
 let checkluck = 0
 setInterval(async () => {
-  await shift(0, 'goldbooster')
-  for(const id in parent.chests) loot(id)
-	
+
 const mobTypes = ["a2" , "a3", "a7","a0","a1","a5","a4","a6","a8","a9","a10"];	
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
