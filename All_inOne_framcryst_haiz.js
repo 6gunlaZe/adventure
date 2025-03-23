@@ -1055,7 +1055,7 @@ const mobsInRange = Object.values(parent.entities)
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
         entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        entity.hp < 50000 && entity.target 
+        entity.hp < 50000 
     );
 
 
