@@ -712,7 +712,7 @@ const rangeBuffer = 60;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a1","a2","a4","a6","a8","a9","a10"];
+const avoidTypes = ["a0","a1","a2","a4","a6", "a7","a8","a9","a10"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
@@ -817,7 +817,14 @@ function avoidMobs() {
 
 function getRange(entity) {
     if (entity.type !== "character") {
-        return (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
+        
+        calculatedRange = (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
+        ////tùy chỉnh lại cho tay dài
+        if (calculatedRange > (character.range + 5)) {
+            return character.range + 5;
+        }
+        return calculatedRange;
+	    
     } else {
         if (avoidPlayersWhitelist.includes(entity.id) && avoidPlayersWhitelistRange != null) {
             return avoidPlayersWhitelistRange;
