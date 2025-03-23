@@ -1383,8 +1383,8 @@ function getRange(entity) {
         
         calculatedRange = (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
         ////tùy chỉnh lại cho tay dài
-        if (calculatedRange > (character.range + 5)) {
-            return character.range + 5;
+        if (calculatedRange > (character.range + 15)) {
+            return character.range + 15;
         }
         return calculatedRange;
 	    
