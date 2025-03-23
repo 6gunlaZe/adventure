@@ -1,3 +1,124 @@
+function smart_move_logic() { return; }
+
+let last_blink = Date.now(); // Lưu thời gian lần "blink" gần nhất
+
+setInterval(async function() {
+    // Kiểm tra các điều kiện để không di chuyển nếu có quái vật, không đang di chuyển, đang vận chuyển hoặc vừa sử dụng "blink"
+	    game_log("000000000000000", "#A1C4F5");
+
+    if ( !is_moving(character) || is_transporting(character) || mssince(last_blink) < 1000) return;
+
+    game_log("Đang kiểm tra", "#A1C4F5");
+
+    // Nếu chưa tìm đường, bắt đầu tìm đường
+    if (!smart.searching) {
+        game_log("Bắt đầu tìm đường...", "#A1C4F5");
+        start_pathfinding();
+        return;
+    }
+
+	
+    // Nếu chưa tìm thấy lộ trình, tiếp tục tìm đường
+    if (!smart.found) {
+        game_log("không có di chuyển thông minh...", "#A1C4F5");
+       continue_pathfinding();
+        return;
+    }
+
+    // Nếu không còn lộ trình hoặc lộ trình rỗng, kết thúc di chuyển
+    if (!smart.plot || !smart.plot.length) {
+        game_log("Không còn lộ trình để di chuyển. Dừng lại.", "#FFB84D");
+        smart.moving = false;
+        smart.on_done(true); // Gọi callback khi hoàn thành di chuyển
+        return;
+    }
+
+    // Nếu nhân vật đã đến điểm tiếp theo trong lộ trình, xóa điểm đó khỏi lộ trình
+    if (character.map == smart.plot[0].map && character.x == smart.plot[0].x && character.y == smart.plot[0].y) {
+        game_log("Đã đến điểm tiếp theo. Xóa điểm khỏi lộ trình.", "#FFB84D");
+        smart.plot.splice(0, 1);
+        return;
+    }
+
+    // Nếu điểm tiếp theo yêu cầu phương tiện di chuyển, gọi hàm transport
+    if (smart.plot[0].transport) {
+        game_log("Cần phương tiện di chuyển. Đang chuyển đến bản đồ tiếp theo...", "#A1C4F5");
+        transport(smart.plot[0].map, smart.plot[0].s);
+        smart.plot.splice(0, 1); // Xóa điểm đã đến khỏi lộ trình
+        last_blink = Date.now(); // Cập nhật thời gian "blink"
+        return;
+    }
+
+// Kiểm tra nếu có thể sử dụng "blink" đến điểm trong lộ trình
+for (let i = smart.plot.length - 1; i >= 0; i--) {
+    // Kiểm tra xem điểm tiếp theo có cùng bản đồ với nhân vật không
+    if (smart.plot[i].map == character.map) {
+        // Kiểm tra cooldown của "blink" và MP của nhân vật
+        if (!is_on_cooldown("blink") && character.mp >= 1600) {
+            game_log("Đang sử dụng kỹ năng blink để dịch chuyển đến điểm tiếp theo: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+            
+            // Nếu khoảng cách nhỏ hơn 150 và có thể di chuyển đến điểm, thực hiện di chuyển trực tiếp
+            if (distance(character, {x: smart.plot[i].x, y: smart.plot[i].y}) < 150 ) {
+                game_log("Khoảng cách gần, di chuyển trực tiếp đến: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+                move(smart.plot[i].x, smart.plot[i].y);
+            } else {
+                // Nếu không thể di chuyển trực tiếp, sử dụng kỹ năng blink
+                game_log("Khoảng cách xa, sử dụng blink đến: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+                use_skill("blink", [smart.plot[i].x, smart.plot[i].y]);
+            }
+            
+            // Xóa điểm đã sử dụng "blink" hoặc đã di chuyển khỏi lộ trình
+            smart.plot.splice(0, i + 1); 
+            last_blink = new Date(); // Cập nhật thời gian "blink"
+        }
+        return; // Kết thúc vòng lặp sau khi thực hiện di chuyển hoặc "blink"
+    }
+}
+
+    // Nếu quá 10 giây không di chuyển, thông báo lỗi và quay lại điểm ban đầu
+    if (mssince(last_blink) >= 10000) {
+        game_log("Mất lộ trình... Hết thời gian chờ... Quay lại điểm xuất phát.", "#CF5B5B");
+        smart_move({ map: smart.map, x: smart.x, y: smart.y }, smart.on_done); // Quay lại điểm ban đầu
+    }
+}, 50); // Gọi hàm mỗi 50ms
+
+// Hàm tính thời gian kể từ thời điểm "time" đến hiện tại
+function mssince(time) {
+    return Date.now() - time;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Hey there!
@@ -6,353 +127,446 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
-
-let host
-if (character.id == "haiz") host = 1
-else host =0
-game_log("tên nhân vât!! = " +character.id);
-game_log("host = " +host);
-
-let looop = 8
-
-
-const TenMinutesInMs = 10 * 60 * 1000
-const Ten7MinutesInMs = 7 * 60 * 1000
-let bankk = 0
-let trieuhoi = 0
-
-let checktimeparty = 0
-let partychecktime
-let banktime 
-let bosstime = 0 
-let timekillboss
-let skillbua = 0
-let skillriu = 0
-let delayriu  = Date.now()
-let run = 1
-let notefrankyYnhi = 0
-
-let firtice = 0
-let icemode = 0
-let icefight = 0
-	let	delayfram 
-	let	backfram = 0
-	let solo_ice = 0 ///0 =khong danh ice khi co 1 minh/// 1 = check va danh 1 minh
-let check_ice = 0
-	
-	
-let lastCallTime = 0; // Biến lưu trữ thời gian mốc
-let delayThreshold = 200; // Ngưỡng thời gian 200ms
-let killangioseal = 1
-let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
-const delayy = 300 
+let delaymageMagiPort = Date.now();
+const TenMinutesInMs = 300 * 60 * 1000
 let started
-let loop = 9
-let numfram = 0
-let numboss = 0
-let numgo = 0
-let hutquai = 0
-var sanbosss = "phoenix"; 
-var triancrep 
-var maptrain
-let farmX 
-let farmY 
-let help = 0
-let framboss = 0
-let framboss1 = 0
-let Kil_angioseal = 1 // tu dong dang xuat nhan vat angioseal
-let frankymode = 0
-let frankyfight = 0
-let frankysafe = 0
+let numHP = 0
+let numMP = 0
+let stopgiudo = 0  // 1 = stop
+let back = 0
+let receivedData = {
+    map: character.map,  // Tên bản đồ mặc định
+    x: character.x,                // Tọa độ x mặc định
+    y: character.y,                // Tọa độ y mặc định
+};
+//////////////////////////
+let jrmode = 0
+let foxmode = 0
+let notejr = 0
+let done = 0
+let datasmart = {};
+let Savedatasmart = {};
 
-
-let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
-let frammode = 3
-let soluongquai = 2
-
-if ( frammode == 0)
-{
- triancrep = "snake"; 
- maptrain = "halloween"; 
-farmX = 316
-farmY = -720
-
-}
-else if ( frammode == 1 )
-{
- triancrep = "bat"; 
- maptrain = "cave"; 
-farmX = 1262
-farmY = -829
-}
-else if ( frammode == 2 )
-{
- triancrep = "croc"; 
- maptrain = "main"; 
-farmX = 674
-farmY = 1802
-}
-else if ( frammode == 3 )
-{
- triancrep = "ghost"; 
- maptrain = "halloween"; 
-farmX = 324
-farmY = -1319
-}
-
-
-
-
-
-if(!get_nearest_monster({type:'franky'}) && !get_nearest_monster({type:'icegolem'}) )smart_move({ map: maptrain, x: farmX, y: farmY })
-
-
-
-
-
-
-
-function on_party_request(name) {
-if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal") {
-            accept_party_request(name);
-        }
-        if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
-            accept_party_request(name);
-        }	
-	
-	
-    }
-
-
-
+setTimeout(function() {
 setInterval(function() {
-	if (host == 0 ) return
+//game_log("JR= " + jrmode)	
+if (done == 1 || (godenbat == 1 && foxmode == 0) ) return
+if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
+send_cm("haiz","boss1") 
+done = 1
+}
+else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 ))	{
+	send_cm("haiz","stop")
+parent.api_call("disconnect_character", {name: "nhiY"});
+stop_character("nhiY")	
+}
+	
+if(parent.S.icegolem && foxmode == 0){
+	jrmode = 0
+	return	
+}
+if (jrmode == 0) return
+
+if (smart.moving || foxmode == 1) return;
+smart_move({ map: "spookytown", x: -728, y: -123 })
 
 	
-if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
-{
-	bankk = 0
-    start_character("MuaBan", 6);	
-}	
-//////////////////////////	Cho 10p danh boss
-if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
-{	
-	bosstime = 0
-}	
-//////////////////////	
+}, 1000);
+}, 4000);
+
+
+
+
+async function superMOVE(checkdichuyen) {
+	return
+  let x = checkdichuyen.x;
+  let y = checkdichuyen.y;
+  let map = checkdichuyen.map;
+	let lastMain = null;
+
 	
-//	if (parent.S.icegolem || parent.S.franky ) return
+for (let i = checkdichuyen.plot.length - 1; i >= 0; i--) {
+    if (checkdichuyen.plot[i].map == character.map) {
+        lastMain = checkdichuyen.plot[i];
+        break;
+    }
+}
 	
-  if (trieuhoi == 0)
-  {
-	  trieuhoi = 1
-if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
-if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
-	  
-	  
-if (modeYnhi == 0)	 
-{
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
+
+if (lastMain && character.mp > 3300 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150) {
+	await use_skill("blink", [lastMain.x, lastMain.y])
 }
-else if  (modeYnhi == 1)
+else if (lastMain && character.mp > 1600 && !is_on_cooldown("blink") && distance(character, {x: lastMain.x, y: lastMain.y}) > 150 && (character.max_hp - character.hp) >300)	
 {
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
+	await use_skill("blink", [lastMain.x, lastMain.y])
 }
-else if  (modeYnhi == 2)
-{
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
+
+/////// smartmove
+const congdichuyen = findcongdichchuyen(checkdichuyen);
+
+// Log thông tin khi tìm được con đường di chuyển
+game_log(`Tìm thấy con đường di chuyển: ${JSON.stringify(congdichuyen)}`);
+
+if ( congdichuyen !== 1 && congdichuyen.s) {
+    // Log trước khi gọi transport
+    game_log(`Đang di chuyển đến bản đồ ${congdichuyen.map} với con đường ${congdichuyen.s}`);
+    
+    // Gọi hàm transport để di chuyển
+ 
+	
+	                   try {
+ await  transport(congdichuyen.map, congdichuyen.s);
+                    } catch (error) {
+						game_log("Quá trình xử lý. lỗi");
+                         smart_move({ map: congdichuyen.map, x: congdichuyen.x, y: congdichuyen.y });
+                    } 
+	
+	
 }
-	  
+
+
+}
+
+
+
+
+let saveS = {};
+/////////////////////////////////////////////////////////////
+let checkMoveStart = null;  // Biến để theo dõi setInterval
+let isCheckingMoveStart = false; // Cờ để kiểm tra xem có đang kiểm tra di chuyển hay không
+
+// Hàm di chuyển và chờ cập nhật smart
+async function moveWithSmartAndSuperMOVE() {
+	if(parent.S.icegolem && foxmode == 0) return
+    // Nếu có vị trí mới, di chuyển đến đó trước
+    if (receivedData) {
+        const { map, x, y } = receivedData;
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+		if ( (godenbat == 0 && jrmode == 0) || foxmode == 1)
+		{
+        if (character.map !== map) {
+			 if ( checkSmartPosition(saveS) ==2 || smart.moving ) return
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: map,
+                x: x,
+                y: y
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== x || character.y !== y) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+				 if ( checkSmartPosition(saveS) ==2 || smart.moving ) return
+                xmove(x, y);
+            }
+        }
+	}
+
+	    
+
+        // Kiểm tra nếu chưa có checkMoveStart đang chạy
+        if (!isCheckingMoveStart) {
+            isCheckingMoveStart = true;
+           game_log("1 value: ");
+            // Kiểm tra quá trình di chuyển mỗi 100ms
+            checkMoveStart = setInterval(async () => {
+
+                // Kiểm tra điều kiện của smart (SM = 1)
+				let checker = 100
+				               checker = checkSmartPosition(saveS);
+                let checkdichuyen = smart;
+                let SM = 0;
+//game_log("saveS.plot: " + JSON.stringify(saveS.plot));
+game_log("Checker value: " + checker);
+
+                if (checkdichuyen.plot && checker != 2 && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
+                    SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
+					saveS = JSON.parse(JSON.stringify(checkdichuyen));
+                }
+			   game_log("check1111111 ======"+checker)
+								game_log("loop")
+
+                // Nếu có dữ liệu hợp lệ (SM = 1), dừng di chuyển hiện tại nếu đang di chuyển và thực hiện superMOVE
+                if (SM === 1 || checker == 2 ) {
+                    // Dừng di chuyển hiện tại nếu đang di chuyển
+                    if (smart.moving) {
+                    }
+               game_log("check ======"+checker)
+                    // Cập nhật datasmart với dữ liệu từ smart
+                    
+                   if(parent.S.icegolem && foxmode == 0) return
+                    // Thực hiện di chuyển thông minh với superMOVE
+                    try {
+                        await superMOVE(saveS);  // Di chuyển tới các điểm đã tính toán trong smart
+                    } catch (error) {
+                        console.error('Error during superMOVE:', error);
+                    }               
+		}
+		    else 
+		{
+	                 if(!smart.moving && character.mp > 2000 && foxmode == 1 &&  Date.now() > (delaymageMagiPort + 7000)  )mageMagiPort()
+		}
+
+            }, 1000);  // Kiểm tra mỗi 1000ms
+        }
+    }
+}
+
+// Kiểm tra và di chuyển tới vị trí mới nhất mỗi 2s
+setInterval(() => {
+    moveWithSmartAndSuperMOVE();  // Di chuyển đến vị trí mới nhất nếu có
+}, 2000);  // Kiểm tra và di chuyển mỗi 2 giây
+//////////////////////////////////////
+
+
+
+
+function checkSmartPosition(data) {
+    // Kiểm tra nếu data.plot tồn tại và có ít nhất một phần tử
+    if (data.plot && data.plot.length > 0) {
+        // Lấy vị trí cuối cùng trong data.plot (dữ liệu truyền vào)
+        const lastPlot = data.plot[data.plot.length - 1];
+
+        // Kiểm tra xem vị trí của data có khớp với vị trí cuối cùng trong data.plot không
+        if (data.map === lastPlot.map && 
+            distance(character, {x: lastPlot.x, y: lastPlot.y}) < 150) {
+            // Nếu vị trí khớp, trả về 1
+            return 1;
+        } else {
+           
+		if(smart.moving)
+		{
+			return 2;  // Nếu vị trí không khớp và còn lastPlot, trả về 2
+		}
+		else
+		{
+			return 4;  // Nếu vị trí không khớp và còn lastPlot, trả về 4 khi bị lỗi di chuyển để lấy lại smart mới
+		}
+            
+        }
+    } else {
+        // Nếu không có plot, hoặc plot rỗng, trả về 1
+        return 3;
+    }
+}
+
+
+
+
+// Hàm tìm đối tượng cuối cùng có map là "mtunnel"
+function findcongdichchuyen(data) {
+  // Tìm đối tượng cuối cùng có "map": "mtunnel"
+  let lastMtunnelIndex = -1;
+  for (let i = data.plot.length - 1; i >= 0; i--) {
+    if (data.plot[i].map === character.map) {
+      lastMtunnelIndex = i;
+      break;
+    }
+  }
+  
+  // Nếu không tìm thấy "mtunnel", trả về đối tượng đầu tiên
+  if (lastMtunnelIndex === -1) {
+    return data.plot[0];
   }
 
-}, 1000); //trieu hoi 1 lan dau
-///////////////////////////
-
-
-
- ///////////////////////// 
-setInterval(function() {	
-if (host == 0 ) return	
-	
-if (frankymode == 1 || firtice == 1 || evencheckmap == 1 ) return	
-	
-	
-let region = server.region;
-let serverIden = server.id
-
-if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
-{
-if ( region == "ASIA" && serverIden == "I" ) 
-{
-	game_log ("  SV  >>>>" + region + serverIden )
+  // Kiểm tra đối tượng tiếp theo sau "mtunnel"
+  if (lastMtunnelIndex + 1 < data.plot.length && distance(character, {x: data.plot[lastMtunnelIndex].x, y: data.plot[lastMtunnelIndex].y}) < 30) {
+    // Trả về đối tượng tiếp theo nếu có
+    return data.plot[lastMtunnelIndex + 1];
+  } else {
+    // Nếu không có đối tượng nào sau "mtunnel", trả về 1
+    return 1;
+  }
 }
-	else
+
+// Gọi hàm và lưu kết quả vào biến mới
+//const nextValue = findcongdichchuyen(data);
+
+
+
+
+// Trình sát
+var tsname = "goldenbat"
+let godenbat = 1  // == 1 là có check batkinggold
+let step = 1
+let runb = 0
+let checkbat = 0
+
+// Delay 4 giây trước khi bắt đầu
+setTimeout(function() {
+    setInterval(function() {
+        if (godenbat == 0 || foxmode == 1) return;
+        if (parent.S.icegolem) {
+            godenbat = 0;
+            return;
+        }
+
+        if (smart.moving && runb == 1) {
+            runb = 0;
+        }
+
+        if (smart.moving || is_moving(character) || foxmode == 1) return;
+
+        //////////
+        if (get_nearest_monster({type: tsname})) {
+            if (character.mp > 2800) {
+                mageMagiPort();
+                godenbat = 0;
+            }
+            return;
+        }
+
+        //////////
+        if (!is_moving(character)) runb = 0;
+        if (step >= 4) {
+            godenbat = 0;
+        }
+
+        game_log("v7");
+        game_log(step);
+        game_log(runb);
+
+        if (step == 1 && runb == 0) {
+            smart_move({ map: "cave", x: 1154, y: 55 });
+            step = 2;
+            runb = 1;
+        }
+        if (step == 2 && runb == 0) {
+            smart_move({ map: "cave", x: -261, y: -454 });
+            step = 3;
+            runb = 1;
+        }
+        if (step == 3 && runb == 0) {
+            smart_move({ map: "cave", x: 325, y: -1118 });
+            step = 4;
+            runb = 1;
+        }
+    }, 2000);  // Tiếp tục với setInterval sau 4 giây delay
+}, 6000);  // Đặt delay 4 giây (4000 milliseconds) trước khi bắt đầu
+
+
+
+
+//////////// move gan leader
+setInterval(function() {
+
+	////////// moi paty - de nhan dien leader
+//let leader = character.party;
+//if (leader===undefined) 
+	if (!character.party) {
+    send_party_request("haiz");
+
+}
+    if (character.moving || smart.moving) return // We're already moving somewhere
+	
+if (back == 1)
 	{
-	change_server("ASIA", "I");	
+	if (character.map == "winterland" && distance(character, {x: 0, y: 0}) > 250)use_skill("blink", [0, 0])
+	if (character.mp > 2000) mageMagiPort()
 	}
-}	
-
-if(bosstime == 0 && parent.party_list.includes("angioseal") && killangioseal == 1)stop_character("angioseal")	
-if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 	
-/////////////////	
-if (modeYnhi == 0 && frankymode == 0)	 
-{
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
-}
-else if  (modeYnhi == 1 && frankymode == 0)
-{
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
-}
-else if  (modeYnhi == 2 && frankymode == 0)
-{
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
-}
-//nhiY 14 = fram rieng
-//	nhiY 2 = binh mana di dong
-//	
+	
+	//////////////
+		
+	if(parent.S.icegolem && back == 0 && !get_nearest_monster({type:'icegolem'}))
+	{
+        join('icegolem');
+	}
+////////////////////////////////////////////	
+if(parent.S.icegolem && foxmode == 0)
+	{
+	  var target2= get_nearest_monster({type: "icegolem",});	
+		
+	if (character.map != "winterland")smart_move("winterland")
+	if (character.map == "winterland" && !target2 && back == 0 )use_skill("blink", [800, 400])
+	///check member
 
+	mageMagiPort()
+	
+	
+	
+	}
+	if(parent.S.icegolem && foxmode == 0) return //su kien ice thi se tu hoat dong không có di theo lederr
+	
+////////////////////////////////////////////////	
+	
+	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250 && !smart.moving && !parent.S.icegolem  )use_skill("town")
 		
 	
+    if (!character.party) return // No party
+
+	    let leader = get_player("haiz");
+	if (character.party && character.party != "haiz" ) {
+    leave_party();
+	}
 	
-}, 80000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
 
-
-
+	if (leader && distance(character, leader) < 30  && !smart.moving ){
+		stop()
+	}
 	
 
 
 
-setInterval(function() {	
-if (host == 0 ) return	
-	
-if (frankymode == 1 || firtice == 1 || evencheckmap == 1) return	
+}, 2000);
 
-if (autobuyPonty != 1) return
-	
-	///////////
-let randomNumber = getRandom(1, 100);	
-let region = server.region;
-let serverIden = server.id
-		game_log("svvvvvvvv ! ! ==   " +randomNumber);
+///////////
 
 
-if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
-{
-	
-if (randomNumber < 40) {
-    change_server("US", "I");
-} else if (randomNumber > 80) {
-    change_server("EU", "I");
-} else if (randomNumber > 40 && randomNumber < 55) {
-    change_server("EU", "II");
-} else if (randomNumber > 55 && randomNumber < 70) {
-    change_server("US", "III");
-} else if (randomNumber > 70 && randomNumber < 80) {
-    change_server("US", "II");
-} else {
-    change_server("ASIA", "I");
-}	
-	
-}	
-	
-}, 2000000); //30p chuyen sv 1 lan
 
 
-function getRandom(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+var draw_debug = true;
+
+function on_draw(){
+  if(draw_debug){
+      clear_drawings();
+
+      draw_circle(character.real_x, character.real_y, character.range);
+  }
 }
 
-/////////////////////
-/////////////////////////
 
-setInterval(function() {
-	
-if (host == 0 ) return	
-	
-    if (character.esize < 17) {
-       
-	
-	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
-		
-    if (!MuaBan) {
-      start_character("MuaBan", 6);
-		game_log("trieu hoi MuaBan!!");
-	}
+//////////////
+function on_cm(name, data) {
+
+
+/////////////////////		
+
+///////////////////
+    if(name == "haiz"){
+
+		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
+
 	}
 	
-	
-}, 160000); //
+	 if(name == "haiz" && data != "goo" && typeof data === 'string' ){
+     idmap = data
 
-
-
-setInterval(function() {
-	
-if (host == 0 ) return	
-	
-    if (character.esize > 25) {
-       
-	
-	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
-		
-    if (MuaBan) {
-    //  parent.api_call("disconnect_character", {name: "MuaBan"});
-	//	stop_character("MuaBan")
-	start_character("MuaBan", 6);	
-		game_log(" MuaBan da xong nhiem vu!!");
-	}
 	}
 	
-
-}, 9900000); // auto re connet mua ban moi 3h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////
-
-setInterval(function() {
 	
-	const entity = get_entity(character.target)
-	
- if (!smart.moving && !character.moving && !entity && numgo == 0 && help == 0 && framboss == 0 && frankymode == 0 && icemode == 0 ) {
-	smart_move({ map: maptrain, x: farmX, y: farmY })
-		game_log("Trainn !!!!!!");
+	if(name == "haiz" && data == "back" ){
+    back = 1
 		
-		//	smart_move({ map: "winterland", x: 850, y: -40 });
-		
-		
-    }
-	
-	
-	
-	
-}, 300000); // ra bai quai every 5p
+	}
 
+	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode" && data != "jr"){
+		 if (data.message === "location")receivedData = data
+		else datasmart = data
+
+	}
+
+
+	if(name == "haiz" && data == "foxmode" ){
+           foxmode = 1
+	}
+	if(name == "haiz" && data == "jr" ){
+           jrmode = 1
+	}
+	
+	
+}
 
 
 setInterval(function() {
@@ -361,451 +575,378 @@ setInterval(function() {
     respawn();
   }
 
-}, 420000);
 
-
-var draw_debug = true;
-
-function on_draw(){
-  if(draw_debug){
-      clear_drawings();
-/////////
-	  if(character.s["sugarrush"] )
-	  {
-	  
-		  loop = 20
-	const entity1x = get_entity(character.target) // co the doi taget thu cong
-	 var targetxx
-	if (entity1x) {
-		targetxx = entity1x
-		 if(can_attack(targetxx))attack(targetxx)	
-	}
-		  
-		  
-		  
-	  }
-	  else
-	  {
-	     loop = 9
-	  }
-///////////
-	        draw_circle(character.real_x, character.real_y, 320);
-
-
-}
-}
+}, 50000);
 
 
 
 setInterval(function() {
+    let lootMule = get_player("haiz");
 
-	///////////////////////////
-	const entity = get_entity(character.target)
-	
-    if (!smart.moving && !character.moving && !entity && numfram == 0 ) {
-	smart_move({ map: maptrain, x: farmX, y: farmY })
-		game_log("Trainn !!!!!!");
-			//		smart_move({ map: "winterland", x: 850, y: -40 });
-
-		numfram = 1
+		 //giui vang when in range
+    var merch = get_player("haiz"); // replace this with your merchants name
+    if (merch && distance(character, merch) <= 400) {
+        send_gold(merch,character.gold)
     }
-	/////////////////////////////////// auto loot
+	//
 	
-
-	//////////////////////////////////////
-	
-	
-}, 3000); // ra bai quai lan dau
-
-
-
-
-function on_magiport(name){
-    if(name == "nhiY"){
-        accept_magiport(name);
+    if (lootMule == null || stopgiudo == 1) {
+        //game_log("Nobody to transfer to");
+        loot_transfer = false;
+        return;
     }
-}
 
+    let itemsToExclude = ["hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","orbg","froststaff"];
 
-function on_cm(name, data) {
-/////////////////
-    if(name == "MuaBan"){
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
 
-			
-	   if(data == "bank") {
-        start_character("MuaBan", 10);	
-		 banktime = Date.now()  
-		   bankk = 1
-	   }	
-		
-  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7") {
-	  if (modeYnhi == 0)
-	  {
-		parent.api_call("disconnect_character", {name: "nhiY"});
-		stop_character("nhiY");
-	  }
-	  else if (modeYnhi == 2)
-	  {
-	  	parent.api_call("disconnect_character", {name: "haiz1"});
-		stop_character("haiz1");
-	  }
-	  else
-	  {
-		parent.api_call("disconnect_character", {name: "Ynhi"});
-		stop_character("Ynhi");  
-	  }
-		  bosstime = 1
-	    timekillboss = Date.now()
-		start_character("angioseal", 21);
-}
-	
-		
-	 if(data == "boss1") {
-	  framboss = 1
-	   }
-	 if(data == "boss2") {
-	  framboss = 2
-	   }
-	 if(data == "boss3") {
-	  framboss = 3
-	   }	 
-	 if(data == "boss4") {
-	  framboss = 4
-	   }
-	 if(data == "boss5") {
-	  framboss = 5
-	   }	 
-	 if(data == "boss6") {
-	  framboss = 6
-	 }
-	 if(data == "boss7") {
-	  framboss = 7
-	   }		
-		
-
-       if(data == "franky")
-	   {
-		   frankymode = 1	
-	stop_character("angioseal")	
-	stop_character("nhiY")	
-	stop_character("haiz1")	
-
-       if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
-	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 28);
-		   //cũ 31
-	   }		
-		
-		
-		
-		
-		
-}
-/////////////	
-    if(name == "nhiY"){
-
-		
-       if(data == "yes") {
-				game_log("mess !!!!!!");
-
-		   	numboss = 1
-				 }
-					else
-					{
-						numboss = 0
-					}
-		
-	if (numboss == 1 && numgo == 0) {
-			const nhiY = (parent.party_list ?? []).some(c => c === 'nhiY');
-    smart_move(parent.party["nhiY"]);  
-						game_log("lest g !!!!!!");
-
-      numgo = 1
-	}
-		
-		       if(data == "no" && numgo == 1) {
-				game_log("comback !!!!!!");
-				   numgo = 0
-				          smart_move(triancrep)
-				 }
-
+        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
+        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
+            send_item(lootMule.id, i, item.q ?? 1);
+        }
     }
-	
-	////////////////////////////////
- if(name == "6gunlaZe" && host == 0){
-    // game_log("tin nhan = " +data);
-       if(data == "help") {
-	  help = 1
-	   }
-	 else
-	 {
-	  help = 0
-	 }
-	 
-	 if(data == "boss1") {
-	  framboss = 1
-	   }
-	 if(data == "boss2") {
-	  framboss = 2
-	   }
-	 if(data == "boss3") {
-	  framboss = 3
-	   }	 
-	 if(data == "boss4") {
-	  framboss = 4
-	   }
-	 if(data == "boss5") {
-	  framboss = 5
-	   }	 
-	 if(data == "boss6") {
-	  framboss = 6
-	 }
-	 if(data == "boss7") {
-	  framboss = 7
-	   }	   
-	 
-	 
- }
-	//////////////////////////
-}
-
-///////////////////////////
-
-
-setInterval(function() {
-////////////giui vi tri moi 2s
-let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
-let SM = 0;
-if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
-  SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
-}
-
-if (SM === 1) {
-  let x = checkdichuyen.x;
-  let y = checkdichuyen.y;
-  let map = checkdichuyen.map;
-
-for (let char in parent.party) {
-    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
-    if (char !== character.name && char !== "MuaBan" ) {
-		      if (char == "Ynhi" && framboss !== 0) continue
-        send_cm(char, {
-            message: "location",
-            x: x,
-            y: y,
-            map: map
-        });
-		        continue;
-	}	
-	
-}
-	
-
-	
-}	
-else
-{
-
-/////////////////////	
-for (let char in parent.party) {
-    // Kiểm tra các điều kiện để không gửi thông tin cho chính mình, MuaBan, hoặc nếu không phải là người chơi hợp lệ
-    if (char !== character.name && char !== "MuaBan" && !is_moving(character) ) {
-		      if (char == "Ynhi" && framboss !== 0) continue
-        send_cm(char, {
-            message: "location",
-            x: character.x,
-            y: character.y,
-            map: character.map
-        });
-		        continue;
-
-		
-	}
-	    if (char !== character.name && char !== "MuaBan" && is_moving(character) ) {
-			      if (char == "Ynhi" && framboss !== 0) continue
-        send_cm(char, {
-            message: "location",
-            x: character.going_x,
-            y: character.going_y,
-            map: character.map
-        });
-			
-        continue;
-    }
-}
-	//////////////////////////////////
-}
-}, 1300);
-
-
-
-
-/// 
-setInterval(function() {
-
-	if(character.esize < 7)
-	{
-		send_cm("MuaBan", "full");
-		game_log("lay do !!!!!!");
-	}
-
-	
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
-
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
-
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
-
-            }				
-			}
-	/////////		
-	
-	if( (soluonghp < 7000 ) )
-	{
-		send_cm("MuaBan", "hp");
-		game_log("re filll !!!!!!");
-	}
-		if( ( soluongmp < 7000) )
-	{
-		send_cm("MuaBan", "mp");
-		game_log("re filll !!!!!!");
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}, 20000);
-
-///////////
-
-
-setInterval(function() {
-	
-   const mast = get_player("6gunlaZe");
-	if (help == 1 && !smart.moving && !mast ){
-		
-    smart_move(parent.party["6gunlaZe"]);  	
- use_skill("charge")
-	use_skill("warcry")
-	
-	}
-////////////////////////////////////
-	const mast11 = (parent.party_list ?? []).some(c => c === 'angioseal');
-	const nearA = get_player("angioseal");
-	
-if (framboss == 1 && !smart.moving && mast11 && framboss1  <5 ){
-	send_cm("angioseal", "boss1");
-	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
-framboss1 += 1
-    });
-}
-if (framboss == 2 && !smart.moving && mast11 && framboss1  <5 ){
-	send_cm("angioseal", "boss2");
-	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 3 && !smart.moving && mast11 && framboss1  <5 ){
-	send_cm("angioseal", "boss3");
-	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
-framboss1 += 1
-    });
-}		
-if (framboss == 4 && !smart.moving && mast11 && framboss1 <5  ){
-	send_cm("angioseal", "boss4");
-	smart_move({ map: "main", x: 1312, y: -200 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 5 && !smart.moving && mast11 && framboss1 <5  ){
-	send_cm("angioseal", "boss5");
-	smart_move({ map: "main", x: 700, y: 1800 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 6 && !smart.moving && mast11 && framboss1 <5  ){
-	send_cm("angioseal", "boss6");
-	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
-framboss1 += 1
-    });
-}	
-if (framboss == 7 && !smart.moving && mast11 && framboss1 <5  ){
-	send_cm("angioseal", "boss7");
-	smart_move({ map: "main", x: -1137, y: 455 }, () => {
-framboss1 += 1
-    });
-}	
-	
-	
-	
-
-
-	
-	
-	
-	
-	
-	
-if ( nearA && framboss1 > 0 && !smart.moving ){	
-var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-if (targetsoloboss.length == 0) //danh xong
-	{
-		framboss1 = 0
-		         stop_character("angioseal")
-		framboss = 0
-		 bosstime = 0
-		smart_move({ map: maptrain, x: farmX, y: farmY }, () => {
-		framboss = 0
-		 bosstime = 0
-
-    });	
-		
-		loot();
-		        loot();
-		        loot();
-
-	}
-		
-}
-///////////////	check giui da giet boss lan nua
-if (framboss ==  0 && framboss1 ==  0 && mast11 && Kil_angioseal == 1 && host ==0 )send_cm("6gunlaZe", "killboss");
-	///>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>ham nay tu dong không cho Angioseal choi
-//////////////	
-//////////////////////////////////// /  kiem soat khoang cach tanker khi san boss
-   //Get the master from parent.entities
-   const masternhiY = get_player("nhiY");
-  //If the master is close, follow him
-if(masternhiY && numgo == 1){
-	  
-   const kc = distance(character, masternhiY)
-
-   if ( kc > 150 && kc <351){
-    xmove(
-      character.x+(masternhiY.x-character.x)/3,
-      character.y+(masternhiY.y-character.y)/3
-    );
-   }  
-}
-/////////////////////////
-	
 }, 1000);
 
+
+function kite(taget, kite_range)
+{
+
+	const radius = kite_range ;
+const  angle = Math.PI / 9.5 ;
+    if (can_move_to(taget.real_x, taget.real_y)) {
+        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
+        const endGoalAngle = angleFromCenterToCurrent + angle
+        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
+        move(endGoal.x, endGoal.y)
+
+	
+	}
+ 
+	
+
+}
+
+
+function mageMagiPort() {
+    if (character.ctype !== "mage") return;
+
+    if (!is_on_cooldown("magiport")
+        && character.mp > G?.skills?.magiport?.mp
+        && ((character.mp - G.skills.magiport.mp) > 100)) {
+
+let keys = Object.keys(parent.party).reverse();
+for (let char of keys) {
+    // Kiểm tra các điều kiện và không thực hiện magiport với một số nhân vật nhất định
+    if (char !== character.name  // Không magiport chính mình
+        && char !== "MuaBan"     // Không magiport người bán hàng
+        && (!get_player(char))) { // Nếu không phải là người chơi
+        use_skill("magiport", char);
+       // return;
+    }
+}
+
+	    
+    }
+}
+
+
+
+
+function use_hp_or_mp1()
+{
+	
+	
+	if (started == undefined) started = Date.now()
+    if (Date.now() > started + TenMinutesInMs) {
+        show_json({
+            numHP: numHP,
+            numMP: numMP,
+            level: character.level,
+            server: server
+        })
+        started = Date.now()
+        numHP = 0
+        numMP = 0
+    }
+	
+	
+	
+
+	
+	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
+	var used=true;
+	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
+	
+	
+
+///////
+
+
+if (character.hp/character.max_hp< 0.7) {
+   use_skill("use_hp");
+	numHP += 1
+} 
+else if (character.mp/character.max_mp < 0.9) {
+	use_skill("use_mp");
+	numMP += 1
+}
+  else if (character.max_mp>character.mp) return use_skill("regen_mp");
+  else if (character.max_mp>character.mp) return use_skill("regen_mp");
+	
+	else used=false;
+	if(used)
+		last_potion=new Date();
+	else
+		return resolving_promise({reason:"full",success:false,used:false});
+}
+
+///////////
+
+
+
+
+
+
+
+var attack_mode= true
+
+setInterval(function(){
+
+	//use_hp_or_mp();
+	use_hp_or_mp1();
+	loot();
+
+////	khong move gan leader se khong tim muc tieu tan cong	
+const leader1 = get_player('haiz');
+const range1 = character.range; // This may need tuning
+const dist1 = distance(character, leader1);
+if (dist1 > range1 * 2)
+  return false;	
+/////////////////	
+	
+	
+	
+	
+	
+	if(!attack_mode || character.rip || smart.moving) return;
+
+
+	
+	
+	    // Party leader
+    
+    
+    // Current target and target of leader.
+    var currentTarget = get_targeted_monster();
+    var leaderTarget = get_target_of(leader1)
+    
+    // Change the target.
+    if (!currentTarget || currentTarget != leaderTarget){ 
+        // Current target is empty or other than the leader's.
+        change_target(leaderTarget);
+        currentTarget = get_targeted_monster();
+    }
+    
+
+		var cung1 = get_player("haiz"); 
+if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
+	if(!can_attack(currentTarget) )kite(currentTarget,80);
+   }	
+	
+	
+	if( currentTarget && !is_in_range(currentTarget))
+	{
+		move(
+			character.x+(currentTarget.x-character.x)/2,
+			character.y+(currentTarget.y-character.y)/2
+			);
+		// Walk half the distance
+	}
+	else if(can_attack(currentTarget))
+	{
+		//////////// dung skill
+		            if(character.mp > 700 &&  !is_on_cooldown("reflection") && cung1 && currentTarget.target == "haiz" )
+            {
+               use_skill("reflection", cung1);
+				 game_log("reflection !!!!!!");
+            }
+		
+		
+		
+		/////////
+		set_message("Attacking");
+		// attack(currentTarget);
+	}
+	
+	
+	
+	//////buff xa thu
+	 rangerObj = parent.entities["6gunlaZe"]
+     if (is_in_range(rangerObj, "energize")) {
+    let amount = rangerObj.max_mp - rangerObj.mp;
+    	 if(character.mp > (rangerObj.max_mp - rangerObj.mp + 200)     
+                   && !rangerObj.rip
+			&& rangerObj.mp < 300
+                  && !is_on_cooldown("energize")){
+                use_skill("energize", rangerObj.name, amount);
+                game_log("Mage energized " + rangerObj.name);
+           }
+}
+
+	
+	
+	//////
+	
+	
+	
+
+
+	
+	
+	
+	
+	
+},1000/4); // Loops every 1/4 seconds.
+
+
+
+
+
+
+
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
+
+
+async function attackLoop() {
+	//if (character.moving)return
+    let delay = null; // Default delay
+    const leader1 = get_player('haiz');
+
+	
+
+    try {
+        let nearest = null;
+
+        // Find the nearest monster based on the targetNames
+        for (let i = 0; i < targetNames.length; i++) {
+            nearest = get_nearest_monster_v2({
+                target: targetNames[i],
+                check_min_hp: true,  // Checking for monster with minimum HP
+                max_distance: character.range,  // Consider monsters within 50 units
+                statusEffects: ["cursed"], // Check for these debuffs
+            });
+            if (nearest) break;
+        }
+
+	    
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+                    max_distance: character.range,
+                    check_min_hp: true,
+                });
+                if (nearest) break;
+            }
+        }
+
+
+      if (!nearest) {
+    // Current target and target of leader.
+    var currentTarget = get_targeted_monster();
+    var leaderTarget = get_target_of(leader1)
+    
+    // Change the target.
+    if (!currentTarget || currentTarget != leaderTarget){ 
+        // Current target is empty or other than the leader's.
+        change_target(leaderTarget);
+        nearest = get_targeted_monster();
+    }
+
+      }
+
+        // If a monster is found and is in range, execute the attack
+        if (nearest && is_in_range(nearest)) {
+            await attack(nearest); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+
+	    
+    } catch (e) {
+        //console.error(e);
+    }
+	 setTimeout(attackLoop, delay || 250); // Default delay if undefined
+}
+
+attackLoop();
+
+
+
+
+
+
+function get_nearest_monster_v2(args = {}) {
+    let min_d = 999999, target = null;
+    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
+
+    for (let id in parent.entities) {
+        let current = parent.entities[id];
+        if (current.type != "monster" || !current.visible || current.dead) continue;
+        if (args.type && current.mtype != args.type) continue;
+        if (args.min_level !== undefined && current.level < args.min_level) continue;
+        if (args.max_level !== undefined && current.level > args.max_level) continue;
+        if (args.target && !args.target.includes(current.target)) continue;
+        if (args.no_target && current.target && current.target != character.name) continue;
+
+        // Status effects (debuffs/buffs) check
+        if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
+
+        // Min/max XP check
+        if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
+        if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
+
+        // Attack power limit
+        if (args.max_att !== undefined && current.attack > args.max_att) continue;
+
+        // Path check
+        if (args.path_check && !can_move_to(current)) continue;
+
+        // Distance calculation
+        let c_dist = args.point_for_distance_check
+            ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
+            : parent.distance(character, current);
+
+        if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
+
+        // Generalized HP check (min or max)
+        if (args.check_min_hp || args.check_max_hp) {
+            let c_hp = current.hp;
+            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
+                optimal_hp = c_hp;
+                target = current;
+            }
+            continue;
+        }
+
+        // If no specific HP check, choose the closest monster
+        if (c_dist < min_d) {
+            min_d = c_dist;
+            target = current;
+        }
+    }
+    return target;
+}
+
+
+
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
 
 
 
@@ -841,1877 +982,6 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
     return entities
 }
 ///  var  targetsoloboss = soloboss({ max_range: character.range, number : 1 }) 
-// targetsoloboss.length > 0
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-setInterval(function() {
-
-	const gunn = (parent.party_list ?? []).some(c => c === '6gunlaZe');
-
-	if (!character.party && framboss == 0 && host == 0) {
-    send_party_request("6gunlaZe");
-
-}
-	if(framboss > 0&& gunn && frankymode == 0 && host == 0 )leave_party();
-	
-	if (!character.party && frankymode == 0 && host == 0) {
-    send_party_request("6gunlaZe");
-
-}
-
-}, 500);
-
-
-
-
-
-
-
-////////////////////////////////chuyen do tu dong cho nhan vat muaban
-
-setInterval(function() {
-    let lootMule = get_player("MuaBan");
-
-		 //giui vang when in range
-    var merch = get_player("MuaBan"); // replace this with your merchants name
-    if (merch && distance(character, merch) <= 400) {
-		        send_gold(merch,character.gold)
-
-    }
-	//
-	
-	
-    if (lootMule == null) {
-        //game_log("Nobody to transfer to");
-        loot_transfer = false;
-        return;
-    }
-
-    let itemsToExclude = ["hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","fireblade","tracker","glolipop","ololipop","mittens","xgloves","exoarm","hhelmet","mcape","helmet1","wbasher", "basher","bataxe","sweaterhs","tigerstone","sshield"];
-
-    for (let i = 0; i < 42; i++) {
-        const item = character.items[i];
-
-        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
-        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
-            send_item(lootMule.id, i, item.q ?? 1);
-        }
-    }
-}, 1000);
-
-
-
-//////////////////////////////////////////////
-
-function kite(taget, kite_range)
-{
-
-	const radius = kite_range ;
-const  angle = Math.PI / 5.5 ;
-    if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-        move(endGoal.x, endGoal.y)
-
-	
-	}
- 
-	
-
-}
-
-
-
-
-function kiteSP(taget,sluong)
-{
-	
-if (sluong <= 3) return
- var targets11 = getBestTargets({ max_range: 200, type: taget.mtype, havetarget: 1 })  //ham bo dem quai vat	
-	
- var targets = getBestTargets({ max_range: 200,min_range: character.range - 20 , type: taget.mtype, minHP: 0.99 , fullHP:1 , number : 1 })  //ham bo dem quai vat
-	  
-		//////////// dung skill
-if(character.mp > 100 &&  can_use("taunt") && targets && numboss == 0 && character.targets < 4 &&  (character.hp/character.max_hp > 0.67) && character.attack > 1000 && targets11.length <= sluong)
-            {
-				stop("moving")
-				stop("smart")
-
-                use_skill("taunt", targets);
-
-            }	
-
-
-
-}
-
-//////
-
-    
-  
-
-
-////////
-function getBestTargets(options = {}) {
-    const entities = []
-     let number = 0
-	  var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
-    for (const id in parent.entities) {
-        const entity = parent.entities[id]
-        if (entity.type !== "monster") continue
-        if (entity.dead || !entity.visible) continue
-
- if (options.max_range && distance(character, entity) > options.max_range) continue
-if (options.min_range && distance(character, entity) < options.min_range) continue
-		
-if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
-if (!options.subtype && options.type &&entity.mtype != options.type   ) continue		
- if (options.type && entity.mtype !== options.type) continue
-		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
-		 if (options.fullHP && entity.hp < entity.max_hp) continue
-		if (options.havetarget && !entity.target) continue
-		if (options.Nohavetarget && entity.target) continue
-		if (options.target && entity.target != options.target) continue
-		if (options.targetNO && entity.target == options.targetNO) continue
-		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
-		///
-		if ( options.number &&   (number+1) > options.number ) return entities;
-		///
-			number = 1 + number
-        entities.push(entity)
-    }
-
-
-    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
-    return entities
-}
-
-////////////////////////////////////////////
-
-
-
-
-
-function checkTimeBetweenCalls(setMoc = 0) {
-    const currentTime = Date.now(); // Lấy thời gian hiện tại
-
-    // Nếu setMoc === 1, thì lưu thời gian hiện tại làm thời gian mốc
-    if (setMoc === 1) {
-        lastCallTime = currentTime;
-       // console.log("Thời gian mốc đã được thiết lập: ", currentTime);
-        return;
-    }
-
-    // Nếu không phải gọi để thiết lập thời gian mốc, kiểm tra thời gian giữa các lần gọi
-    if (lastCallTime === 0) {
-        // Lần đầu tiên gọi hàm, không có thời gian mốc
-        lastCallTime = currentTime;
-        return 0; // Lần đầu tiên, không cần kiểm tra
-    }
-
-    const timeDiff = currentTime - lastCallTime; // Tính thời gian giữa các lần gọi
-
-    // Nếu thời gian giữa các lần gọi dưới delayThreshold (500ms), trả về 1 để bỏ qua
-    if (timeDiff < delayThreshold) {
-       // console.log(`Thời gian giữa các lần gọi quá ngắn: ${timeDiff}ms, bỏ qua.`);
-        return 1; // Thời gian quá ngắn, bỏ qua
-    }
-
-    // Nếu thời gian đủ lâu, trả về 0
-   // console.log(`Thời gian giữa các lần gọi là: ${timeDiff}ms, tiếp tục.`);
-    return 0;
-}
-
-
-
-
-
-
-/////////////////////////////////////////////////
-	
-
-function changeitem(options = {}) {
-	//them delay tranh lag
-	
-    var merch = get_player("MuaBan"); // replace this with your merchants name
-    if (merch && distance(character, merch) <= 400) return
-	
-	if (started == undefined) started = Date.now()
-    if (Date.now() < started + delayy) return;
-
-	if ( !options.slot ||  !options.name || !options.level ) return 
-	
-	if (character.slots[options.slot])
-	{
-	if (character.slots[options.slot].name == options.name) return 
-	}
-	
-	started = Date.now()
-checkTimeBetweenCalls(1);  // Thiết lập thời gian mốc
-
-	let vitri = 100
-	
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
-
-            if (item.name == options.name && item.level == options.level) {
-                // This is an item we want to use!
-                    vitri = i //tim ra vi tri mon do
-						//game_log("vitri la "+vitri);
-
-            }
-				
-			}
-				
-	if (vitri == 100 ) return ///ko co mon do dung yeu cau
-	
-	
-	
-	
-	if (!character.slots[options.slot] || character.slots[options.slot].name != options.name) { 
-        unequip(options.slot);
-        equip(vitri, options.slot); 
-		 game_log("change: " + options.name)
-    }
-	
-
-//	changeitem({ slot: "mainhand", name : "firebow", level : 6 });
-}
-
-
-
-
-///////////////////////////
-
-
-function use_hp_or_mp1()
-{
-	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
-	var used=true;
-	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
-	
-	
-if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
-
-	
-	else used=false;
-	if(used)
-		last_potion=new Date();
-	else
-		return resolving_promise({reason:"full",success:false,used:false});
-}
-
-
-
-////////////////////////////////////////////////////////
-setInterval(function() {
-looting()	
-}, 500);
-function looting() {
-    if(Object.keys(parent.chests).length >= 2) 
-	{
-     shift(0, 'goldbooster');
-    loot();
-    setTimeout(shifting, 250);
-	}
-}
-function shifting() {
-    shift(0, 'xpbooster');
-}
-
-//////////////////////////////////////////////////////////////////////////
-var attack_mode= true
-
-setInterval(function(){
-
-	//use_hp_or_mp();
-	use_hp_or_mp1();
-/////////////////	
-	let pings = Math.min(...parent.pings)
-					// game_log("ping!!! = " +pings);
-
-if (is_disabled(character) || pings >500)
-{
-	looop = 4
-}
-else
-{
-	looop = 8
-}	
-
-if (checkTimeBetweenCalls() === 1) return;
-////////////////////
-	 if(Object.keys(parent.chests).length >= 5)loot();
-/////////////////////////	
-
-	if(!attack_mode || character.rip || smart.moving) return;
-///
-		if(character.s["hardshell"] && is_moving(character) ) stop();
-	
-	//  var target=get_targeted_monster();
-if (frankymode == 1)
-{
-	franky()
-	 return
-}		
-	// lua chon 2 loai quai de fram
-	
-	const entity1 = get_entity(character.target) // co the doi taget thu cong
-	
-	 var target
-	
-	if (entity1) {
-		target = entity1
-	}
-
-if (icemode == 0 && evenbossmode == 0)
-{	
-	
-	
-	if(!target)
-	{
-		var target= get_nearest_monster({type: "greenjr"});
-		if(target) {
-			change_target(target);
-						//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt"))
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }
-		/////////
-
-		}
-		else
-		{
-		
-		
-		var target= get_nearest_monster({type: "jr"});
-		if(target) {
-			change_target(target);
-						//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt"))
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }
-		/////////
-		}	
-		else
-		{
-			
-		var target= get_nearest_monster({type: "phoenix"});
-		if(target && framboss > 0) {
-			change_target(target);
-						//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt"))
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }
-		/////////
-		}	
-		else
-		{	
-		
-		var target= get_nearest_monster({type: "mvampire"});
-		if(target && framboss > 0) {
-			change_target(target);
-						//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt"))
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }
-		/////////
-		}	
-		else
-		{		
-			
-		var target= get_nearest_monster({type: triancrep});
-		  if(target) change_target(target);
-		else
-		{
-
-		 var target= get_nearest_monster({type: "osnake"});
-		  if(target) change_target(target);
-		else
-		{
-			
-			
-			
-			
-			
-
-			set_message("No Monsters");
-			return;
-		  }
-		}
-		}
-		}
-		}
-		}
-	}
-	
-	///////////////////////////////////
-
-
-	
-		///////////////goi dong doi toi skill boss
-		var b1 = get_player("nhiY"); 
-
-		 var target111= get_nearest_monster({type: sanbosss});
-		
- if (target111 &&  b1 != null  ) {
-	 
-	    const d_b1 = distance(character, b1)
-	 
-	 
-	  if (d_b1 < 250   ) {  /// lai gan moi kill
-	 
-                    game_log("kill boss nao ae");
-	
-	 	 var target= get_nearest_monster({type: sanbosss});
-
-		   if(target) change_target(target); /// chuyen doi sang boss
-		  
-	  }
-	 
-	 
-			
-
- }
-////////////////////////////////////////
-//game_log("!!!!!! =   "+ skillriu);
-
-if (skillbua == 1 || skillriu == 1)
-{
-	if ( skillriu == 1 ){
-		if (character.esize == 0){
-		 skillriu = 0
-			 game_log("fulll tui do !!!!!!");
-			return
-			
-		}
-		
-
-		if (character.slots["offhand"])unequip( "offhand");
-
-        changeitem({ slot: "mainhand", name : "bataxe", level : 4 });
-		
-			if (character.slots["mainhand"] && character.slots["mainhand"].name == "bataxe")use_skill("cleave");
-				       
-	}
-	
-	
-		if ( skillriu == 1 &&  is_on_cooldown("cleave")){
-		          skillriu = 0
-	      }
-	
-	
-}	
-if (skillbua == 1 || skillriu == 1)	return		
-	
-	//////////////////// ne dung aoe len boss
-var targets11 = getBestTargets({ max_range: 80 , type: "crabxx" , number : 1 }) 
-var targets12 = getBestTargets({ max_range: 380 , type: "phoenix" , number : 1 }) 
-var targets13 = getBestTargets({ max_range: 200 , type: "greenjr" , number : 1 }) //ham bo dem quai vat
-			//game_log("framboss = "+ framboss);
-  
-		//////////// dung skill 
-
-if(( targets12.length > 0 ) && framboss == 0 )
-            {
-
-					var target= get_nearest_monster({type: "phoenix"});
-		  if(target) change_target(target);
-		//	send_cm("6gunlaZe", "help");/// an toan tuyet doi
-            }
-	else if (character.targets = 1 && framboss > 0)
-	{
-
-	}
-	else if (targets13.length > 0)
-	{
-
-	}	
-	else
-	{
-
-				//	game_log("framboss = "+ framboss + character.targets);
-
-	}
-	
-	
-	/////////////// chay vong vong gom quai lai
- chuyendoithongminhFRAM(target)  
-	
-	 kiteSP(target,soluongquai)
-
-	   	 var targets1 = getBestTargets({ max_range: character.range ,   type: target.mtype, })  //ham bo dem quai vat
-		//  if(targets1 && character.targets > 2 ) change_target(targets1); //tro lai muc tieu ban dau o gan neu dang co dong muc tieu xung quanh
-		if(targets1 ) {
-			change_target(targets1);  
-	               //  target = targets1
-					  }
-	if(!can_attack(target) && target && !character.s["hardshell"] && !character.s["sugarrush"]    )kite(target,character.range + 3);
-	
-
-
-     skillwarboss(target)
-
-}	
-	
-else if (icemode == 1 )
-	/////
-{
-chuyendoithongminh(target)	
-//kiteSP(currentTarget)	
-var f00 = get_player("haiz1")
-let rateskill
-if (target && target.attack >8000 )
-{
-	rateskill = 1.1
-}
-else
-{
-	rateskill = 0.85
-}
-
-if (target && f00 )VIPSuP(target,rateskill)	
-if (target && !f00 ) soloTANK(target)
-	
-if (run == 1 && target && target.attack >8000 ) return //quai manh qua thi ne ra	
-if (skillbua == 1) return	
-	
-	
-if (icefight ==1)	
-{
-		var target= get_nearest_monster({type: "icegolem"});
-		  if(target) change_target(target);
-}	
-	
-	
-}
-/////////	
-else if (evenbossmode == 1 )
-	/////
-{
-chuyendoithongminh(target)	
-//kiteSP(currentTarget)	
-var f00 = get_player("haiz1")
-let rateskill
-if (target && target.attack >8000 )
-{
-	rateskill = 1.1
-}
-else
-{
-	rateskill = 0.85
-}
-
-if (target && f00 )VIPSuP(target,rateskill)	
-if (target && !f00 ) soloTANK(target)
-	
-if (run == 1 && target && target.attack >8000 ) return //quai manh qua thi ne ra	
-if (skillbua == 1) return	
-	
-	
-if (boss_even_fight ==1)	
-{
-		var target= get_nearest_monster({type: "dragold"});
-		  if(target) change_target(target);
-}	
-	
-	
-}
-/////////		
-	
-	
-	
-	
-	
-//get_nearest_playerV_noMyparty(target)	
-	
-	/////////////////////////////////////
-	if ( target && !is_in_range(target))
-	{
-		move(
-			character.x+(target.x-character.x)/2,
-			character.y+(target.y-character.y)/2
-			);
-		// Walk half the distance
-	}
-	else if(can_attack(target))
-	{
-		
-	
-		
-		
-		//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt") && numgo == 1 )
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }
- if(character.mp > 100 && !is_on_cooldown("taunt") && (target.target == "Ynhi" || target.target == "nhiY" || target.target == "6gunlaZe" ))
-            {
-                use_skill("taunt", target);
-				 game_log("phan no !!!!!!");
-            }		
-		
-		
-		/////////
-		
-		
-		
-		
-		
-		set_message("Attacking");
-		attack(target);
-	}
-
-
-	
-	
-},1000/looop); // Loops every 1/4 seconds.
-
-
-///////////
-setInterval(function() {
-
-
-		if(character.hp < 5000)
-	{
-		send_cm("angioseal", "bosshelp");
-		send_cm("Ynhi", "bosshelp");
-
-		game_log("help !!!!!!");
-	}
-	
-		if(character.hp < 4000)
-	{
-		send_cm("angioseal", "bosshelp");
-		send_cm("Ynhi", "bosshelp");
-
-		game_log("help !!!!!!");
-	}	
-
-			if(character.hp < 3000)
-	{
-		send_cm("angioseal", "bosshelp");
-		send_cm("Ynhi", "bosshelp");
-
-		game_log("help !!!!!!");
-	}	
-				if(character.hp < 2000)
-	{
-		send_cm("angioseal", "bosshelp");
-		send_cm("Ynhi", "bosshelp");
-
-		game_log("help !!!!!!");
-	}	
-	skill_scare();
-}, 700);
-
-
-
-function skill_scare() {
-	
-if (is_on_cooldown("scare")) 
-{
-	changeitem({ slot: "orb", name : "tigerstone", level : 3 });
-}
-	 var targetsab11 = getBestTargets({ max_range: 80, type: triancrep , target : "haiz" })  //ham bo dem quai vat
-	
-if ( (targetsab11.length) >= 3 && !is_on_cooldown("scare") && soluongquai <= 3 ) 
-{
-	changeitem({ slot: "orb", name : "jacko", level : 1 });
-	use_skill("scare");
-	game_log("skill scare");
-
-}	
-	
-	
-
-if (character.hp > 5000) {
-	return;
-}
-
-
-	 
-if ( (targetsab11.length) == 0) {
-	return;
-}	
-	 
-if ( (targetsab11.length) >= 1 && character.hp < 5000 && !is_on_cooldown("scare") ) 
-{
-	changeitem({ slot: "orb", name : "jacko", level : 1 });
-	use_skill("scare");
-	game_log("skill scare");
-
-}
-}
-
-function soloTANK(taget)
-{
- 
-
-		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 >  character.range)
-	{
-		                use_skill("charge");
-		 game_log("toc do kite !!!!!!");
-	}
-
-            }	
- //////
-	////
-		if(character.mp > 440 && !is_on_cooldown("warcry") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 > character.range)
-	{
-		use_skill("warcry");
-				 game_log("war !!!!!!");
-	}
-
-	    if (character.hp < 7000 &&  !is_on_cooldown("warcry") )
-	{
-		use_skill("warcry");
-				 game_log("war kite !!!!!!");
-	}			
-				
-	
-            }	
- /////////////////////
-		    if (character.hp < 7000 &&  !is_on_cooldown("hardshell") && taget.hp >8000 )
-	{
-		const dist1 = distance(character, taget);
-    if (dist1 <= character.range)
-	{
-		use_skill("hardshell");
-				 game_log("war hardshell !!!!!!");
-	}
-		
-	}	
-
-      //////////////
-	
-	if (character.mp > 1300 &&  !is_on_cooldown("warcry") && !character.s["warcry"] )
-	{
-		use_skill("warcry");
-				 game_log("war kite !!!!!!");
-	}	
-	
-	
-	 //////////////////////////////////
- 	////
-		if( character.hp > 10000 && character.mp > 840 && !is_on_cooldown("warcry") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 > character.range)
-	{
-		use_skill("warcry");
-				 game_log("war !!!!!!");
-	}
-		
-	
-            }	
- //////
-	
-}
-////////////////////////
-function skillwarboss(taget)
-{
- 
-
-		if(character.mp > 100 && !is_on_cooldown("charge") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 >  character.range)
-	{
-		                use_skill("charge");
-		 game_log("toc do kite !!!!!!");
-	}
-
-            }	
- //////
-	////
-		if(character.mp > 440 && !is_on_cooldown("warcry") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 > character.range)
-	{
-		use_skill("warcry");
-				 game_log("war !!!!!!");
-	}
-
-	    if (character.hp < 7000 &&  !is_on_cooldown("warcry") )
-	{
-		use_skill("warcry");
-				 game_log("war kite !!!!!!");
-	}			
-				
-	
-            }	
- /////////////////////
-		    if (character.hp < 9000 &&  !is_on_cooldown("hardshell") && taget.hp >8000 && character.mp > 600)
-	{
-		const dist1 = distance(character, taget);
-    if (dist1 <= character.range)
-	{
-		use_skill("hardshell");
-				 game_log("war hardshell !!!!!!");
-	}
-		
-	}	
-
-      //////////////
-	
-	if (character.mp > 1300 &&  !is_on_cooldown("warcry") && !character.s["warcry"] )
-	{
-		use_skill("warcry");
-				 game_log("war kite !!!!!!");
-	}	
-	
-	
-	 //////////////////////////////////
- 	////
-		if( character.hp > 10000 && character.mp > 840 && !is_on_cooldown("warcry") && taget )
-            {
-				   const dist1 = distance(character, taget);
-    if (dist1 > character.range)
-	{
-		use_skill("warcry");
-				 game_log("war !!!!!!");
-	}
-		
-	
-            }	
- //////
-	 /////////////////////
-	
-	
-	 var targetsab = getBestTargets({ max_range: character.range, type: taget.mtype , })  //ham bo dem quai vat
-		if ( (taget && !is_on_cooldown("hardshell") && targetsab.length >=4 && character.hp < 13000 && character.mp > 600 )  || (taget && !is_on_cooldown("hardshell") && targetsab.length >=2 && character.hp < 7000 && character.mp > 600 ) )
-	{
-		//game_log("check1!");
-		
-		const dist1 = distance(character, taget);
-    if (dist1 <= character.range + 5 && taget.target == "haiz")
-	{
-		use_skill("hardshell");
-				 game_log("war hardshell !!!!!!");
-		if(is_moving(character))stop()
-	}
-		
-	}	
-
-      //////////////
-	 var targetsab1 = getBestTargets({ max_range: 150, type: taget.mtype , subtype: "armadillo"  , targetNO : "haiz" })  //ham bo dem quai vat
-	if ( (targetsab1.length) <= 4 &&  (targetsab1.length) >1 &&  taget && !is_on_cooldown("agitate") && character.hp > 13000 && frankymode == 0 && character.mp > 700 && character.attack > 1000 )
-	{
-	//  use_skill("agitate");
-
-	}
-	
-////////////	
-			if ( Date.now() > delayriu + 2000)
-		{
- var targetsabc = getBestTargets({ max_range: 165, type: taget.mtype , target : "haiz" }) 
-  var targetsabcd = getBestTargets({ max_range: 165, type: taget.mtype , Nohavetarget : 1 }) //ham bo dem quai vatv
-	if ( character.hp > 12000 && character.mp > 1050 && !is_on_cooldown("cleave") && (targetsabc.length + targetsabcd.length)  <=soluongquai && skillriu == 0 && character.attack > 1000 && framboss == 0	
- )
-	{
-		skillriu = 1	
-	delayriu = Date.now()
-	
-	}	
-}
-//////////
-	
-
-}
-
-
-function get_nearest_playerV_noMyparty(currentTarget)
-{
-	// Just as an example
-	var min_d=2000,target=0;
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
-		if(current.target == currentTarget.id) target +=1;
-	}
-	game_log("so luong nguoi choi kill boss la: " + target)
-	return target;
-}
-
-
-
-
-
-//////////////////
-function get_nearest_playerV(currentTarget)
-{
-	// Just as an example
-	var min_d=2000,target=0;
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(!current.player) continue;
-		if(current.target == currentTarget.id) target +=1;
-	}
-	game_log("so luong nguoi choi kill boss la: " + target)
-	return target;
-}
-
-/////////////////////////////////////
-/////////////////////////////////////
-
-function franky()
-{
-	if (frankymode == 0 || smart.moving) return
-var BOSS = "franky"
-let SOLUONG = 3  ///so nguoi choi xung quanh de kich hoat
-
-
-	var targetfk
-	targetfk= get_nearest_monster({type: BOSS});
-
-	///gioi han vong tron fight + check member
-		var f1 = get_player("Ynhi"); 
-		var f2 = get_player("6gunlaZe"); 
-
-//////////////bo chay khi moi nguoi chay het
-if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && f1 && f2 && character.hp < 6000)
-{
-
-smart_move({ map: maptrain, x: farmX, y: farmY })
-frankymode = 0
-frankyfight = 0
-frankysafe = 0
- stop_character("6gunlaZe")  
-}
-
-
-
-	
-//////////
-if ( checktimeparty == 0)
-{
-partychecktime = Date.now()
-checktimeparty = 1	
-}
-
-if (Date.now() > partychecktime + 60000){
-partychecktime = Date.now()
-	
-	stop_character("angioseal")	
-	stop_character("nhiY")	
-	stop_character("haiz1")	
-checktimeparty = 0	
- if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
- if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 28);
-}
-
-
-
-
-//////////
-
-
-
-	//move map fk
-if(character.map == "level2w" && !parent.S.franky  &&  !is_moving(character)  )	
-		{
-frankymode = 0
-frankyfight = 0
-frankysafe = 0
-				if (modeYnhi != 1)stop_character("Ynhi") 
-				smart_move({ map: maptrain, x: farmX, y: farmY })
-		}
-
-	////////////
-	if(character.map != "level2w")smart_move({ map: "level2w", x: 12, y: 5 }, () => {
-  //
-    });	
-	if ( distance(character, {x: 12, y: 5}) > 80 && !smart.moving)xmove(12,5)
-
-	if(targetfk && get_nearest_playerV(targetfk) >= SOLUONG && f1 && f2)frankyfight =1
-	else frankyfight =0;
-	
- var targets13 = getBestTargets({ max_range: character.range+10, type: BOSS, subtype : "nerfedmummy" , target1: "6gunlaZe" , target2: "haiz" , target3: "Ynhi" })
-
-	 if (targets13.length <= 4)
-	{
-	changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-    changeitem({ slot: "offhand", name : "fireblade", level : 9 });
-	}	
-	else
-	{
-	changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
-    changeitem({ slot: "offhand", name : "ololipop", level : 8 });
-	}		
-	
-	
-	////Cac dieu kien rut lui
-var targetf1	
-var targetf2 
-
-if (f1)
-{
-targetf1 = getBestTargets({ max_range: 180 , target: "Ynhi" , number : 1 }) 
-skillwarboss(targetf1)	
-if(targetf1 && (f1.hp/f1.max_hp) < 0.75 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
-
-}        
-		
-if (f2)
-{
-targetf2 = getBestTargets({ max_range: 180 , target: "6gunlaZe" , number : 1 }) 
-skillwarboss(targetf2)	
-if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
-	
-}  
-	
-if (targetfk && f1 && f2 && (targetfk.target == "Ynhi" || targetfk.target == "6gunlaZe") )use_skill("taunt", targetfk);
-	
-	
-if (targetfk && f1 && f2 && targetfk.target != "Ynhi" && targetfk.target != "6gunlaZe" && character.hp > 10000 && f1.hp > 4500 && f2.hp > 4500 && frankyfight ==1 )frankysafe = 1
-	else frankysafe = 0;
-
-if (frankysafe == 0)skill_scare();	
-	
-	
-
-	
-	////fight
-	
-	if (frankyfight == 1 && frankysafe == 1)
-{		
-	if ( distance(character, {x: 12, y: 5}) > 30 && !smart.moving )xmove(12,5)
-	skillwarboss(targetfk)	
-	if(targetfk && !is_in_range(targetfk))
-	{
-		move(
-			character.x+(targetfk.x-character.x)/2,
-			character.y+(targetfk.y-character.y)/2
-			);
-		// Walk half the distance
-	}
-	else if( targetfk && can_attack(targetfk) && targetfk.target)
-	{
-
-		set_message("Attacking");
-		attack(targetfk);
-	}
-}
-
-	
-}
-/////////////
-
-
-
-
-
-function VIPSuP(taget,rate)
-{
-
-var f0 = get_player("haiz1")
-var targetboss = taget	
-var supBOSS
-let safetank = 1
-let ratehp = rate	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") && !is_on_cooldown("hardshell") && character.mp > 600 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") &&  character.s["hardshell"] && character.mp > 600 && character.hp > 7500 && f0.hp/f0.max_hp < ratehp ) use_skill("taunt", targetboss);	
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && !is_on_cooldown("taunt") && character.mp > 600 && f0.hp/f0.max_hp < 0.4 ) use_skill("taunt", targetboss); //chi co o main tank	
-	
-if (targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && distance(character, targetboss) < (targetboss.range + 14) && !is_on_cooldown("hardshell") && character.mp > 500 && !targetboss.s["stunned"]  ) use_skill("hardshell");
-	
-if (targetboss.target && targetboss.target == "haiz1" && !f0.s["hardshell"] && distance(f0, targetboss) < (targetboss.range + 10) && is_on_cooldown("taunt") && is_on_cooldown("hardshell") && !character.s["hardshell"] && character.mp > 900 && f0.hp/f0.max_hp < ratehp && !is_on_cooldown("warcry") &&  !character.s["warcry"] )use_skill("warcry"); //support them rieng cho thang de
-	
-	
-if (targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && is_on_cooldown("hardshell") && targetboss.range <120 ) 
-{
-	kite(targetboss,targetboss.range + 50);
-	run = 1
-}
-		else
-	{
-		run = 0;
-	}
-	
-	
-	
-if (is_on_cooldown("hardshell") || character.mp < 550)safetank = 0	
-
-	
-if ( f0.hp/f0.max_hp < ratehp )	
-{	
-if ( targetboss.target && targetboss.target == "haiz" && !character.s["hardshell"] && character.mp > 200 && !is_on_cooldown("stomp") && distance(character, targetboss) < (targetboss.range + 7) && is_on_cooldown("hardshell") )skillbua = 1
-	
-if (character.mp > 900 && is_on_cooldown("hardshell") && !is_on_cooldown("stomp") && !f0.s["hardshell"] && !targetboss.s["stunned"] && distance(f0, targetboss) < (targetboss.range + 20))skillbua = 1
-	
-if ( character.mp > 1200 && !is_on_cooldown("stomp") && !targetboss.s["stunned"] && !f0.s["hardshell"] && !character.s["hardshell"]  ) skillbua = 1	
-}	
-	
-	
-if (run == 1 && supBOSS )	
-{
-			var target3 = get_nearest_monster({type: supBOSS});
-             if(target3 && is_in_range(target3))attack(target3);
-}		
-	
-	
-
-	
-///////////////////////////////////////////////////////////	
-//////////////////////////////////////////////////////////////
-
-		if(character.mp > 100 && !is_on_cooldown("charge") && run == 1 && safetank == 0 )use_skill("charge");
-
-
-
-if( character.mp > 1400 && !is_on_cooldown("warcry") && taget &&  !character.s["warcry"] )use_skill("warcry");
-
-
-	///////////
-//	!character.s.hasOwnProperty("massproductionpp")
-
-
-///////////////////
-}
-
-
-
-function chuyendoithongminhFRAM(taget)
-{
-
-if (skillbua == 1 || skillriu == 1)return
-let arr = ["phoenix", "mvampire", "jr","greenjr", "grinch", "fvampire","stompy", "mvampire", "jr"]; ///các boss dùng kiếm lửa
-let magic = 0
-var targetstype = getBestTargets({ max_range: character.range , type: taget.mtype , target : "haiz" , number : 1}) 
-var targetsabc = getBestTargets({ max_range: character.range + 5, type: taget.mtype }) 
-if (targetstype.damage_type == "magical")magic = 1;
-
-if (arr.includes(taget.mtype))
-{
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-  if (character.hp/character.max_hp >= 0.3)changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
-else
-{
-if (magic = 0)
-{
-  changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
-}
-else
-{
-  changeitem({ slot: "offhand", name : "sshield", level : 7 });		
-}
-}
-
-
-}
-else
-{
-	changeitem({ slot: "mainhand", name : "ololipop", level : 9 });
-  if (character.hp/character.max_hp >= 0.3)changeitem({ slot: "offhand", name : "ololipop", level : 8 });
-  else
-{
-if (magic = 0)
-{
-  changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
-}
-else
-{
-  changeitem({ slot: "offhand", name : "sshield", level : 7 });		
-}
-}
-
-
-}
-
-
-if(character.hp/character.max_hp< 0.6  )
-{
-	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
-	changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
-
-}
-
-else 
-	{
-		changeitem({ slot: "gloves", name : "mittens", level : 9 });
-		changeitem({ slot: "helmet", name : "helmet1", level : 8 });
-	}
-
-
-
-//////////////////////////////
-}
-
-
-
-function chuyendoithongminh(taget)
-{
-///////////////////////////////////////// dang dame
-let rate = 1
-
-if (taget && taget.mtype == "a2" )
-{
-	rate = 10
-}
-	else
-	{
-		rate = 0.75
-	}
-
-if(character.hp/character.max_hp< rate)
-{
-	changeitem({ slot: "gloves", name : "xgloves", level : 6 });
-		changeitem({ slot: "helmet", name : "hhelmet", level : 7 });
-
-}
-else
-	{
-		changeitem({ slot: "gloves", name : "mittens", level : 9 });
-			changeitem({ slot: "helmet", name : "helmet1", level : 8 });
-
-	}
-/////////////////////////////////////////////////// hut mauuuu
-	if(character.s["hardshell"] )
-	{
-	changeitem({ slot: "chest", name : "mcape", level : 8 });	
-	}
-else
-{
-changeitem({ slot: "chest", name : "sweaterhs", level : 8 });
-}
-///////////////////////////////////	 defffffffff
-if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && skillriu == 0 && taget && taget.mtype != "franky")
-{	
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "fireblade", level : 9 });	
-}
-	else if (character.hp/character.max_hp >= 0.2 && skillbua == 0 && skillriu == 0 && taget && taget.mtype == "franky")
-	{
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });
-changeitem({ slot: "offhand", name : "ololipop", level : 9 });		
-	}
-else if (character.hp/character.max_hp < 0.2 && skillbua == 0 && skillriu == 0 )
-	{
-changeitem({ slot: "mainhand", name : "fireblade", level : 9 });		
-changeitem({ slot: "offhand", name : "exoarm", level : 1 });		
-	}
-///////////////////////////////	tang dame
-
-	if ( skillbua == 1){
-		if (character.esize == 0){
-		 skillbua = 0
-			 game_log("fulll tui do !!!!!!");
-			return
-			
-		}
-		if (character.slots["offhand"])unequip( "offhand");
-
-        changeitem({ slot: "mainhand", name : "basher", level : 5 });
-		
-			if (character.slots["mainhand"] && character.slots["mainhand"].name == "basher")use_skill("stomp");
-				       
-	}
-	
-	
-		if ( skillbua == 1 &&  is_on_cooldown("stomp")){
-		          skillbua = 0
-	      }
-		
-//////////////////////////////		
-	
-	
-	
-	
-//////////////////////////////
-}
-
-
-
-///////////
-setInterval(function() {
-	icegolem()
-	
-	if ( character.map == "winterland" && distance(character,  {x: 800, y: 400}) < 250 && !smart.moving && !parent.S.icegolem  )
-	{
-		use_skill("town")
-		delayfram = Date.now()
-		backfram = 1
-	}	
-	
-	
-}, 10000);
-
-let boqua = 0
-
-function icegolem()
-{
-        if (boss_even_fight == 1) return;
-	
-	
-	////////////////////////////////tro ve sau khi san icegolem
-if (!is_moving(character) && backfram == 1 && Date.now() > (delayfram +9000) )
-{
-	smart_move({ map: maptrain, x: farmX, y: farmY })
-				backfram = 0
-	            icemode = 0
-	            firtice = 0
-		stop_character("Ynhi")
-		stop_character("nhiY") 
-}
-//////////////////bo chay khi it nguoi
-if (backfram == 1) return	
-	if (boqua == 1) return;
-var icee = get_nearest_monster({type: "icegolem"})
-if(icee && get_nearest_playerV(icee) < 2 && icemode == 1 )
-   {
-        use_skill("town")
-		delayfram = Date.now()
-		backfram = 1
-	   send_cm("nhiY","back")
-	   boqua = 1
-   }
-if (backfram == 1) return	
-	
-	
-	
-	
-////////////////////////////////////////////////////	
-	
-ICEcheckHPMYSv(["icegolem"] , 15000000)
-if (solo_ice == 0)	
-{
-game_log ("check = " + check_ice)
-if ((check_ice == 1 && solo_ice == 0) || firtice == 1
- )  ///check dung sv dang danh ice
-{
-	game_log ("dung sv roiii")
-}
-	else
-	{
-			game_log ("Can chuyen qua SV khac")
-	return
-	}
-}	
-	
-	
-
-	
-	
-game_log ("San boss thoi")
-
-if(parent.S.icegolem && firtice == 0 )
-	{
-stop_character("6gunlaZe") 
-stop_character("angioseal") 
-stop_character("haiz1") 
-stop_character("nhiY") 
-stop_character("Ynhi") 
-firtice = 1
-partychecktime = Date.now()
-start_character("Ynhi", 28);
-start_character("nhiY", 12);		
-	}
-
-if (Date.now() > partychecktime + 60000){
-partychecktime = Date.now()
-	
-stop_character("6gunlaZe") 
-stop_character("angioseal") 
-stop_character("haiz1") 
-	
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 28);
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 12);
-}
-	
-	
-	
-	
-if (get_nearest_monster({type:'icegolem'}))	icemode = 1
-	
-	
-	
-
-if ( icemode == 0 || smart.moving) return	
-	
-
-	
-var BOSS = "icegolem"
-let SOLUONG = 2  ///so nguoi choi xung quanh de kich hoat
-	
-	
-	//move map fk
-if(!parent.S.icegolem  &&  !is_moving(character) && character.hp/character.max_hp >= 0.8 && character.mp/character.max_mp>= 0.75 && backfram == 0 )	
-		{
-        use_skill("town")
-		stop_character("Ynhi")
-		stop_character("nhiY") 
-		delayfram = Date.now()
-		backfram = 1
-		}
-
-	
-
-
-//////////////////////	
-	
-	
-	
-	
-	
-	////////////
-	
-	var targetfk
-	targetfk= get_nearest_monster({type: BOSS});
-
-
-
-	///gioi han vong tron fight + check member
-		var f1 = get_player("Ynhi"); 
-		var f2 = get_player("nhiY"); 
-	if((targetfk && get_nearest_playerV(targetfk) >= SOLUONG && f1 && f2) || ( targetfk && targetfk.target && get_nearest_playerV(targetfk) >= SOLUONG + 7  ))icefight =1
-	else icefight =0;
-	
-	
-}
-
-
-
-
-/////////////////////////////////////auto chuyen sv tim boss - lua chon boss
-
-
-async function checkServersForMonsters(monsters,monsters1) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
-  if (!Array.isArray(monsters1)) return;
-  if (monsters1.length == 0) return;
-		if (frankymode == 1)  return;
-        if (check_ice == 1) return;
-	    if (icemode == 1) return;
-        if (boss_even_fight == 1) return;
-
-	
-	
-let validObjects0
-let validObjects
-let validObjects1
-	 let hpcheck =120000000
-	 let hpcheck1 =14000000
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects0 = data.filter(obj => obj.hp !== undefined  && obj.serverIdentifier != "PVP" );	
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000 )    && obj.serverIdentifier != "PVP" );	  	  
-  }
-  // Query API1
-  const url1 = "https://aldata.earthiverse.ca/monsters/" + monsters1.join(",");
-
-  const response1 = await fetch(url1);
-  if (response1.status == 200) {
-    const data1 = await response1.json();
-  //  parent.S3 = data1;
-
-validObjects1 = data1.filter(obj => obj.hp !== undefined && obj.hp < hpcheck1  && obj.serverIdentifier != "PVP");
-
-  }
-///////////////////////////////////////////////////////	  
-if (validObjects.length > 0) // co nguoi dang kill franky
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen fr  SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-
-}
-	
-else if (validObjects1.length > 0)	///co nguoi dang kill icegolem
-{
-
-let minHpObject = validObjects1.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen ice  SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-		
-}
-	
-else if (validObjects0.length > 0)	///cho doi nguoi qua kill frannky
-{	  
-
-let minHpObject = validObjects0.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen wait SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}		
-
-	
-}
-	  else
-	  {
-	  	  game_log ("khong tim thay doi tuong")
-	  }
-	  
-	  
-/////////////////////////////////  
- 
- 
-}
-
-
-// Check now, and every 10p
-setInterval(() => {
-	checkServersForMonsters(["franky"] ,["icegolem"] );
-
-}, 80000); // 60s check 1lan
-
-
-////////////////////////////////////
-
-
-
-async function ICEcheckHPMYSv(monsters,HP) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
- // if (!parent.S.icegolem) return;
-	
-	
-	
-let check	
-let region = server.region;
-let serverIden = server.id	
-	let validObjects
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < HP && obj.serverRegion ==region  && obj.serverIdentifier == serverIden);	  	  
-  }
-/////////////	
-if (validObjects.length > 0) // 
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("tim thay  >>>>" + sR + sI )
-check_ice = 1
-}
-	else {
-		game_log ("khong tim thay doi tuong")
-      check_ice = 0
-	     }
-////////////	
-	
-}
-
-
-
-async function BosscheckHPMYSv(monsters,HP) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
- // if (!parent.S.icegolem) return;
-	
-	
-	
-let check	
-let region = server.region;
-let serverIden = server.id	
-	let validObjects
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < HP && obj.serverRegion ==region  && obj.serverIdentifier == serverIden);	  	  
-  }
-/////////////	
-if (validObjects.length > 0) // 
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("tim thay  >>>>" + sR + sI )
-return evencheckmap = 1
-}
-	else {
-		game_log ("khong tim thay doi tuong boss sv minh")
-return evencheckmap = 0
-}
-////////////	
-	
-}
-
-
-/////////////////////////////////
-///////////
-setInterval(function() {
-	evenboss("dragold",24000000)
-}, 7000);
-
-let evenfram = 0
-let evenbossmode = 0
-let even1s = 0
-let boss_even_fight = 0
-let evencheckmap = 0
-
-function evenboss(name,hp_real)
-{
-	
-		if (frankymode == 1)  return;
-        if (check_ice == 1) return;
-	    if (icemode == 1) return;
-	if ( smart.moving) return	
-
-if (evenfram == 0) return
-var bossname = name
-		var f1 = get_player("Ynhi"); 
-		var f2 = get_player("angioseal"); 
-		var targetfk
-	targetfk= get_nearest_monster({type: bossname});
-	const dist1 = distance(character, targetfk);
-
-	////////////////////////////////tro ve sau khi san boss
-if (!is_moving(character) && backfram == 1 )
-{
-	smart_move({ map: maptrain, x: farmX, y: farmY })
-				backfram = 0
-	            evenbossmode = 0
-}
-//////////////////bo chay khi it nguoi
-if (backfram == 1) return		
-if( get_nearest_monster({type: bossname}) && get_nearest_playerV(targetfk) < 3 )
-   {
-           use_skill("town")
-
-   }
-if (backfram == 1) return	
-	
-
-	
-	
-let SOLUONG = 3  ///so nguoi choi xung quanh de kich hoat
-	
-	
-if ( evenbossmode == 1 && !get_nearest_monster({type:bossname})  &&  !is_moving(character) && character.hp/character.max_hp >= 0.8 && character.mp/character.max_mp>= 0.75 && backfram == 0 )	
-		{
-		stop_character("Ynhi")
-		stop_character("angioseal") 
-		backfram = 1
-		}	
-////////////////////////////////////////////////////	
-	
-BosscheckHPMYSv([bossname] , hp_real);
-
-game_log ("check = " + evencheckmap)
-if (evencheckmap == 1 )  ///check dung sv dang danh bôss
-{
-	game_log ("dung sv roiii")
-}
-	else
-	{
-			game_log ("Can chuyen qua SV khac")
-	return
-	}
-	
-	
-	
-
-	
-	
-game_log ("San boss thoi")
-
-if(even1s == 0 )
-	{
-stop_character("6gunlaZe") 
-stop_character("angioseal") 
-stop_character("haiz1") 
-stop_character("nhiY") 
-stop_character("Ynhi") 
-even1s = 1
-partychecktime = Date.now()
-start_character("Ynhi", 28);
-start_character("angioseal", 28);		
-	}
-
-if (Date.now() > partychecktime + 60000){
-partychecktime = Date.now()
-	
-stop_character("6gunlaZe") 
-stop_character("nhiY") 
-stop_character("haiz1") 
-	
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 28);
-if(!parent.party_list.includes("angioseal")) start_character("angioseal", 28);
-}
-	
-	
-	
-	
-if(!smart.moving && !get_nearest_monster({type:bossname}))
-	{
-smart_move({ map: "cave", x: 801, y: -753 })
-	}
-if (get_nearest_monster({type:bossname})) evenbossmode = 1
-	
-	
-
-if ( evenbossmode == 0 || smart.moving) return	
-	
-
-stop_character("MuaBan") 
-	
-
-
-
-
-	///gioi han vong tron fight + check member
-
-	if( (get_nearest_playerV(targetfk) >= SOLUONG && f1 && f2 && targetfk  ))boss_even_fight =1
-	else boss_even_fight =0;
-	
-	
-}
-
-/////////////////////
-
-async function checkServersForBosseven(monsters) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
-		if (frankymode == 1)  return;
-        if (check_ice == 1) return;
-	    if (icemode == 1) return;
-        if (boss_even_fight == 1) return;
-
-	
-	
-let validObjects
-
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < 24000000 && obj.serverIdentifier != "PVP" );	  	  
-  }
-  // Query API1
-
-
- 
-///////////////////////////////////////////////////////	  
-if (validObjects.length > 0) // co nguoi dang kill 
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen  SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-
-}
-	
-	  else
-	  {
-	  	  game_log ("khong tim thay doi tuong evennnnn")
-	  }
-	  
-	  
-/////////////////////////////////  
- 
- 
-}
-
-
-// Check now, and every 10p
-setInterval(() => {
-	if (evenfram == 0) return
-
-	checkServersForBosseven(["dragold"] );
-
-}, 30000); // 60s check 1lan
 
 
 
@@ -2724,5 +994,25 @@ setInterval(() => {
 // Write your own CODE: https://github.com/kaansoral/adventureland
 // NOTE: If the tab isn't focused, browsers slow down the game
 // NOTE: Use the performance_trick() function as a workaround
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
