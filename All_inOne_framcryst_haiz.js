@@ -1041,18 +1041,21 @@ if ( mobsInRange.length >= 1)
 else if (a2mob.length >= 1)
 {
 	checkluck = 2  //  def set
+	equipSet('def');
 }
 else if (character.hp < 5000)
 {
 	checkluck = 3   //  defffull
+	equipSet('def');
 }
 	else 
 {
 	checkluck = 0  //dame set
+	 equipSet('nodef');
 }
 	
   await shift(0, 'luckbooster')
-}, 400)
+}, 700)
 
 
 
@@ -1287,22 +1290,15 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         equipSet('single');	
 	}
 	
-	if (checkluck == 1)
+	else if (checkluck == 1)
 	{
         eTime = currentTime;
         equipSet('luck');	
 	}
-
-	if (checkluck == 2)
+	else 
 	{
         eTime = currentTime;
-        equipSet('def');	
-	}
-
-	if (checkluck == 3)
-	{
-        eTime = currentTime;
-        equipSet('fulldef');	
+        equipSet('def1');	
 	}
 
 	
@@ -1539,23 +1535,20 @@ async function equipBatch(data) {
 
 const equipmentSets = {
 
-    def: [
-        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
-        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	    
+    def: [	    
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
         { itemName: "xgloves", slot: "gloves", level: 6, },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
     ],
     luck: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
-        { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
-        { itemName: "mittens", slot: "gloves", level: 9, },
-        { itemName: "helmet1", slot: "helmet", level: 8, },	    
+    
     ],
     aoe: [
         { itemName: "ololipop", slot: "mainhand", level: 9, l: "l" },
@@ -1564,15 +1557,14 @@ const equipmentSets = {
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
-    cape: [
-        { itemName: "vcape", slot: "cape", level: 4, l: "l" },
-    ],
-    fulldef: [
-        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+    def1: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	    
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
-        { itemName: "xgloves", slot: "gloves", level: 6, },
-        { itemName: "hhelmet", slot: "helmet", level: 7, },
+    ],
+    nodef: [    
+        { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
+        { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "helmet1", slot: "helmet", level: 8, },	
     ],
     orb: [
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
