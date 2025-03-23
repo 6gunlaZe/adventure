@@ -1500,7 +1500,14 @@ bosscantank = 0;
 stop_character(f2name)  	
 stop_character(f1name)  
 stop_character("MuaBan")
-smart_move(destination)
+if(eventType == "franky")
+{
+	smart_move({ map: "level2", x: -277, y: -67 })	
+}
+	else
+{
+	smart_move(destination)
+}
 if (eventType == "icegolem") {
 let region = server.region;
 let serverIden = server.id
