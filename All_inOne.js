@@ -909,11 +909,11 @@ function scare() {
     let targetedForMoreThanOneSecond = false;
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if (character.hp <4000 && current.target == character.name) {
+        if (character.hp <7000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
-        if (current.mtype === home && character.hp <8000 && current.target == character.name) {
+        if (current.mtype === home && character.hp <9000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
@@ -928,11 +928,11 @@ function scare() {
                     use("scare");
                     equip(slot);
                 }
-            }, 1000); // 1000 milliseconds = 1 second
+            }, 400); // 1000 milliseconds = 1 second
         }
     }
 }
-setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
+setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
