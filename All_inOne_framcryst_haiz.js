@@ -1087,7 +1087,8 @@ else if (character.hp < 5000)
 	checkluck = 0  //dame set
 	 equipSet('nodef');
 }
-	
+
+game_log("checkluck =="+checkluck)	
   await shift(0, 'luckbooster')
 }, 700)
 
@@ -1317,7 +1318,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 
-
+game_log("trang bi checkluck =="+checkluck)
 	if (checkluck == 0)
 	{
         eTime = currentTime;
