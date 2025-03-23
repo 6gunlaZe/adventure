@@ -86,14 +86,22 @@ async function eventer() {
 }
 setTimeout(eventer, 3000);
 
-function handleHome() {
+async function handleHome() {
 	var f1 = get_player("haiz"); 
     if ( f1 && get_nearest_monster({type: "franky"})) {
 	     folowhaizevents = true;
 	    return
     }
+
     if (!smart.moving) {
-        smart_move(destination);
+                    try {
+                // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
+                await smart_move(destination);
+            } catch (error) {
+                // Nếu không thể di chuyển (ví dụ: không có đường đi), thì dùng 'use_town'
+                console.log("Không thể di chuyển đến đích, sử dụng 'use_town'");
+                await use_skill("town");  // Quay lại thành phố
+            }
         game_log(`Moving to ${home}`);
     }
 }
