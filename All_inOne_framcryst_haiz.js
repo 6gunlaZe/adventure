@@ -197,7 +197,7 @@ else
 
 
 
-
+game_log("checkk checkback ==  "+ checkback);
 
 	
 
