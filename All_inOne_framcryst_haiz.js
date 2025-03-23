@@ -942,7 +942,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
-	//loot();
+	loot();
 	
 	//if(character.s["hardshell"] && is_moving(character) ) stop();
 	
