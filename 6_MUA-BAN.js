@@ -99,9 +99,9 @@ if(1>0) for(const slot in character.items)
 var item = character.items[slot];
       // Kiểm tra level của item, nếu không có level thì mặc định là 0
       const level = item?.level ? item.level : 0;		
-if (level >= 1)continue
+if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["oozingterror","harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -1197,7 +1197,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		ololipop: 5,
 		glolipop: 5,
 		frankypants: 3,
-		oozingterror: 5,
+		//oozingterror: 5,
 		basher: 3 ,
 		mittens: 6,
 		hboots: 3,
@@ -1234,7 +1234,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		glolipop:8,
 		mittens: 8,
 		mcape: 8,
-		oozingterror: 7,
+		//oozingterror: 7,
 		basher: 6 ,
                 hboots: 6,
 		starkillers: 5,
@@ -1286,7 +1286,7 @@ var upgradeWhitelist = /// list moi
 		wingedboots: 3,
 		froststaff: 4,
 		cupid: 5,
-		oozingterror: 5,
+		//oozingterror: 5,
 		
         coat: 9,
 	};
@@ -1321,7 +1321,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		wingedboots: 6,
 		froststaff: 7,
 		//cupid: 5,
-		oozingterror: 6,
+		//oozingterror: 6,
 		firebow: 7,
 		
 	};
