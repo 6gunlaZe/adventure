@@ -1577,7 +1577,6 @@ const equipmentSets = {
     luck: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
-        //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
