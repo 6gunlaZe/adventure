@@ -829,7 +829,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 let delayboss = Date.now()
 function crytsgame() {
-if (smart.moving)return
+if (smart.moving && character.map != "crypt")return
 if (character.map != "cave" && character.map != "crypt" )smart_move({ map: "cave", x: -194, y: -1281 })	
 if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)smart_move({ map: "cave", x: -194, y: -1281 })
 
