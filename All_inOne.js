@@ -1493,7 +1493,7 @@ var BOSS = eventType
 
 	    
 //////////////bo chay khi moi nguoi chay het
-if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 7000)
+if(targetfk && get_nearest_playerV_noMyparty(targetfk) <=1 && character.hp < 8000 && !smart.moving)
 {
 events = false;
 bosscantank = 0;
