@@ -746,7 +746,7 @@ function avoidance() {
     }
 
 }
-setInterval(avoidance, 50);
+setInterval(avoidance, 100);
 
 function avoidMobs() {
     let maxWeight = -Infinity;
