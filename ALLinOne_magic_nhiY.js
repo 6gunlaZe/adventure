@@ -1,5 +1,3 @@
-
-
 // Hey there!
 // This is CODE, lets you control your character with code.
 // If you don't know how to code, don't worry, It's easy.
@@ -57,6 +55,7 @@ smart_move({ map: "spookytown", x: -728, y: -123 })
 
 
 async function superMOVE(checkdichuyen) {
+	return //hàm vip copy ở cuối thay  thế
   let x = checkdichuyen.x;
   let y = checkdichuyen.y;
   let map = checkdichuyen.map;
@@ -115,7 +114,6 @@ let isCheckingMoveStart = false; // Cờ để kiểm tra xem có đang kiểm t
 
 // Hàm di chuyển và chờ cập nhật smart
 async function moveWithSmartAndSuperMOVE() {
-
 	if(parent.S.icegolem && foxmode == 0) return
     // Nếu có vị trí mới, di chuyển đến đó trước
     if (receivedData) {
@@ -873,3 +871,117 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 // Write your own CODE: https://github.com/kaansoral/adventureland
 // NOTE: If the tab isn't focused, browsers slow down the game
 // NOTE: Use the performance_trick() function as a workaround
+
+
+
+
+
+function smart_move_logic() { return; }
+
+let last_blink = Date.now(); // Lưu thời gian lần "blink" gần nhất
+
+setInterval(async function() {
+    // Kiểm tra các điều kiện để không di chuyển nếu có quái vật, không đang di chuyển, đang vận chuyển hoặc vừa sử dụng "blink"
+	  //  game_log("000000000000000", "#A1C4F5");
+	if(parent.S.icegolem && foxmode == 0) return
+
+    if ( !is_moving(character) || is_transporting(character) || mssince(last_blink) < 1000) return;
+
+   // game_log("Đang kiểm tra", "#A1C4F5");
+
+    // Nếu chưa tìm đường, bắt đầu tìm đường
+    if (!smart.searching) {
+     //   game_log("Bắt đầu tìm đường...", "#A1C4F5");
+        start_pathfinding();
+        return;
+    }
+
+	
+    // Nếu chưa tìm thấy lộ trình, tiếp tục tìm đường
+    if (!smart.found) {
+     //   game_log("không có di chuyển thông minh...", "#A1C4F5");
+       continue_pathfinding();
+        return;
+    }
+
+    // Nếu không còn lộ trình hoặc lộ trình rỗng, kết thúc di chuyển
+    if (!smart.plot || !smart.plot.length) {
+     //   game_log("Không còn lộ trình để di chuyển. Dừng lại.", "#FFB84D");
+        smart.moving = false;
+        smart.on_done(true); // Gọi callback khi hoàn thành di chuyển
+        return;
+    }
+
+    // Nếu nhân vật đã đến điểm tiếp theo trong lộ trình, xóa điểm đó khỏi lộ trình
+    if (character.map == smart.plot[0].map && character.x == smart.plot[0].x && character.y == smart.plot[0].y) {
+    //    game_log("Đã đến điểm tiếp theo. Xóa điểm khỏi lộ trình.", "#FFB84D");
+        smart.plot.splice(0, 1);
+        return;
+    }
+
+    // Nếu điểm tiếp theo yêu cầu phương tiện di chuyển, gọi hàm transport
+    if (smart.plot[0].transport) {
+     //   game_log("Cần phương tiện di chuyển. Đang chuyển đến bản đồ tiếp theo...", "#A1C4F5");
+        transport(smart.plot[0].map, smart.plot[0].s);
+        smart.plot.splice(0, 1); // Xóa điểm đã đến khỏi lộ trình
+        last_blink = Date.now(); // Cập nhật thời gian "blink"
+        return;
+    }
+
+// Kiểm tra nếu có thể sử dụng "blink" đến điểm trong lộ trình
+for (let i = smart.plot.length - 1; i >= 0; i--) {
+    // Kiểm tra xem điểm tiếp theo có cùng bản đồ với nhân vật không
+    if (smart.plot[i].map == character.map) {
+        // Kiểm tra cooldown của "blink" và MP của nhân vật
+        if (!is_on_cooldown("blink") && character.mp >= 1600) {
+         //   game_log("Đang sử dụng kỹ năng blink để dịch chuyển đến điểm tiếp theo: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+            
+            // Nếu khoảng cách nhỏ hơn 150 và có thể di chuyển đến điểm, thực hiện di chuyển trực tiếp
+            if (distance(character, {x: smart.plot[i].x, y: smart.plot[i].y}) < 200 ) {
+            //    game_log("Khoảng cách gần, di chuyển trực tiếp đến: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+                move(smart.plot[i].x, smart.plot[i].y);
+            } else {
+                // Nếu không thể di chuyển trực tiếp, sử dụng kỹ năng blink
+            //    game_log("Khoảng cách xa, sử dụng blink đến: (" + smart.plot[i].x + ", " + smart.plot[i].y + ")", "#A1C4F5");
+                use_skill("blink", [smart.plot[i].x, smart.plot[i].y]);
+            }
+            
+            // Xóa điểm đã sử dụng "blink" hoặc đã di chuyển khỏi lộ trình
+            smart.plot.splice(0, i + 1); 
+            last_blink = new Date(); // Cập nhật thời gian "blink"
+        }
+	    else
+	{
+	move(smart.plot[0].x, smart.plot[0].y);
+	}
+        return; // Kết thúc vòng lặp sau khi thực hiện di chuyển hoặc "blink"
+    }
+}
+
+    // Nếu quá 10 giây không di chuyển, thông báo lỗi và quay lại điểm ban đầu
+    if (mssince(last_blink) >= 10000) {
+        game_log("Mất lộ trình... Hết thời gian chờ... Quay lại điểm xuất phát.", "#CF5B5B");
+        smart_move({ map: smart.map, x: smart.x, y: smart.y }, smart.on_done); // Quay lại điểm ban đầu
+    }
+}, 50); // Gọi hàm mỗi 50ms
+
+// Hàm tính thời gian kể từ thời điểm "time" đến hiện tại
+function mssince(time) {
+    return Date.now() - time;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
