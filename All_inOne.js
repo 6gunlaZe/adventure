@@ -164,6 +164,7 @@ else
 {
 		game_log("Không có even")
 }
+	game_log("Chỉ số framboss = "+framboss)
 	game_log("Chỉ số bosscantank = "+bosscantank)
 	game_log("Chỉ số checkeven = "+checkeven)
 	game_log("Chỉ số pro = "+pro)
