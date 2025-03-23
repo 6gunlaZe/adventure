@@ -1432,18 +1432,27 @@ setInterval(function() {
 
 ////////////////////////////////////////////////////////
 setInterval(function() {
-looting()	
-}, 500);
-function looting() {
-    if(Object.keys(parent.chests).length >= 20) 
-	{
-     shift(0, 'goldbooster');
-    loot();
-    setTimeout(shifting, 250);
-	}
-}
+lootAllChests()
+}, 4000);
+
+shifting()
+
 function shifting() {
     shift(0, 'xpbooster');
+}
+
+function lootAllChests() {
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
+
+    if (chestIds.length > 20) {
+	  shift(0, 'goldbooster');   
+        for (let id of chestIds) {
+            loot(id);
+        }
+	 setTimeout(shifting, 550);  
+    }
+    
 }
 
 
