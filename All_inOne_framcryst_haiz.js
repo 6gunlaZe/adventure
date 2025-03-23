@@ -467,6 +467,42 @@ function get_NUMber_kill(args) ///mod
 
 
 
+
+////////////////////////////////chuyen do tu dong cho nhan vat muaban
+
+setInterval(function() {
+    let lootMule = get_player("Ynhi");
+
+		 //giui vang when in range
+    var merch = get_player("Ynhi"); // replace this with your merchants name
+    if (merch && distance(character, merch) <= 400) {
+		        send_gold(merch,character.gold)
+
+    }
+	//
+	
+	
+    if (lootMule == null) {
+        //game_log("Nobody to transfer to");
+        loot_transfer = false;
+        return;
+    }
+
+    let itemsToExclude = ["hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","helmet1","wbasher", "basher","bataxe","sweaterhs","tigerstone"];
+
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
+
+        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
+        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
+            send_item(lootMule.id, i, item.q ?? 1);
+        }
+    }
+}, 1000);
+
+
+
+
 function get_nearest_monster_solobosskill(args) ///mod
 {
 	//args:
