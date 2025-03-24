@@ -476,6 +476,7 @@ function get_nearest_monster_v2(args = {}) {
 
 function handleSnowball() {
 	if(character.map != "crypt")return
+
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
 	  
@@ -493,7 +494,8 @@ function handleSnowball() {
       if (!entity.target) continue;
       // Kiểm tra mtype của quái vật có phải là "goo" không
       if (entity.mtype == "vbat") continue;
-      
+      if (entity.mtype == "a3") continue;
+      if (entity.mtype == "a7") continue;
       // Kiểm tra quái vật có bị đóng băng không
       if (entity.s["frozen"]) continue;
       
