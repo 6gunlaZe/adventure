@@ -29,11 +29,14 @@ setInterval(function() {
 //game_log("JR= " + jrmode)	
 if (done == 1 || (godenbat == 1 && foxmode == 0) ) return
 if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
-//send_cm("haiz","boss1") 
-if(character.mp > 2000 ){
+
+	var nearest = get_nearest_monster({type: "jr"})
+	if (nearest && is_in_range(nearest)) attack(nearest); 
+
+	
+if(character.mp > 2000 && nearest && nearest.target){
 	mageMagiPort()	
         done = 1
-	send_cm("haiz","boss1") 
 }
 }
 else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 ))	{
@@ -49,7 +52,7 @@ if(parent.S.icegolem && foxmode == 0){
 if (jrmode == 0) return
 
 if (smart.moving || foxmode == 1) return;
-smart_move({ map: "spookytown", x: -728, y: -123 })
+smart_move({ map: "spookytown", x: -785, y: -308 })
 
 	
 }, 1000);
