@@ -165,7 +165,7 @@ const mobsInRange = Object.values(parent.entities)
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
         entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) <= 350  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
+        distance(character, entity) <= 400  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
     );
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 
