@@ -1073,13 +1073,13 @@ let serverIden = server.id
 
 if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv trở về nhà
 {
-if ( region == "EU" && serverIden == "I" ) 
+if ( region == "EU" && serverIden == "II" ) 
 {
 	game_log ("  SV  >>>>" + region + serverIden )
 }
 	else
 	{
-         change_server("EU", "I");
+         change_server("EU", "II");
 	//change_server("ASIA", "I");	
 	}
 }	
@@ -1129,7 +1129,7 @@ if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
 if (randomNumber < 20) {
     change_server("US", "I");
 } else if (randomNumber > 80) {
-    change_server("EU", "II");
+    change_server("EU", "I");
 } else if (randomNumber > 20 && randomNumber < 30) {
    // change_server("EU", "II");
        change_server("ASIA", "I");
@@ -1139,7 +1139,7 @@ if (randomNumber < 20) {
     change_server("US", "II");
 } else {
     //change_server("ASIA", "I");
-      change_server("EU", "I");
+      change_server("EU", "II");
 }	
 	
 }	
@@ -1511,13 +1511,13 @@ if(eventType == "franky")
 if (eventType == "icegolem") {
 let region = server.region;
 let serverIden = server.id
-if ( region == "EU" && serverIden == "I" ) 
+if ( region == "EU" && serverIden == "II" ) 
 {
 change_server("ASIA", "I");	
 }
 	else
 	{
-         change_server("EU", "I");
+         change_server("EU", "II");
 	}
 }
 }
