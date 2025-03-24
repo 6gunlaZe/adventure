@@ -1058,10 +1058,10 @@ const mobsInRange = Object.values(parent.entities)
         entity.hp < 50000 
     );
 
-
+const mobTypes1 = ["a2"];	
 const a2mob = Object.values(parent.entities)
     .filter(entity => 
-        entity.mtype == "a2" &&  
+        mobTypes1.includes(entity.mtype) &&  
         entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
         distance(character, entity) < 150  
