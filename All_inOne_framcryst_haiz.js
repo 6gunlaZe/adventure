@@ -1089,7 +1089,9 @@ else if (character.hp < 5000)
 	 equipSet('nodef');
 }
 
-game_log("checkluck =="+checkluck)	
+        game_log("checkluck ==========="+checkluck)
+	game_log("checkluck ==========="+checkluck)
+	game_log("checkluck ==========="+checkluck)
   await shift(0, 'luckbooster')
 }, 700)
 
