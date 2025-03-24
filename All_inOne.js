@@ -787,8 +787,8 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
     ],
     aoe: [
-        { itemName: "ololipop", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "ololipop", slot: "offhand", level: 9, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 6, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 6, l: "s" },
     ],
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
