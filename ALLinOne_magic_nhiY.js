@@ -28,7 +28,7 @@ setTimeout(function() {
 setInterval(function() {
 //game_log("JR= " + jrmode)	
 if (done == 1 || (godenbat == 1 && foxmode == 0) ) return
-if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50){
+if (get_nearest_monster({type: "jr"}) && !get_player("haiz") && character.map == "spookytown" && distance(character, {x: -785, y: -308}) < 150){
 
 	var nearest = get_nearest_monster({type: "jr"})
 	if (nearest && is_in_range(nearest)) attack(nearest); 
@@ -38,8 +38,9 @@ if(character.mp > 2000 && nearest && nearest.target){
 	mageMagiPort()	
         done = 1
 }
+	return
 }
-else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -728, y: -123}) < 50) && (notejr == 1 || jrmode == 1 ))	{
+else if ((!get_nearest_monster({type: "jr"}) && character.map == "spookytown" && distance(character, {x: -785, y: -308}) < 150) && (notejr == 1 || jrmode == 1 ))	{
 	send_cm("haiz","stop")
 parent.api_call("disconnect_character", {name: "nhiY"});
 stop_character("nhiY")	
