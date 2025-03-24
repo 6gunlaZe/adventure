@@ -1572,7 +1572,7 @@ const equipmentSets = {
 
     def: [	    
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
-        { itemName: "xgloves", slot: "gloves", level: 6, },
+        { itemName: "vgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
     ],
     luck: [
