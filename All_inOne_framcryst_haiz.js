@@ -1067,7 +1067,8 @@ const a2mob = Object.values(parent.entities)
         distance(character, entity) < 150  
     );
 	
-	
+game_log("mobsInRange.length =="+mobsInRange.length)
+game_log("a2mob.length =="+a2mob.length)
 if ( mobsInRange.length >= 1)
 {
 	checkluck = 1  ///luck set
@@ -1318,7 +1319,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 
-game_log("trang bi checkluck =="+checkluck)
+//game_log("trang bi checkluck =="+checkluck)
 	if (checkluck == 0)
 	{
         eTime = currentTime;
