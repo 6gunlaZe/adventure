@@ -1049,7 +1049,7 @@ function get_nearest_playerV(currentTarget)
 let checkluck = 0
 setInterval(async () => {
 
-const mobTypes = ["a2" , "a3", "a7","a0","a1","a5","a4","a6","a8","a9","a10"];	
+const mobTypes = ["a2","a3","a7","a0","a1","a5","a4","a6","a8","a9","a10"];	
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
