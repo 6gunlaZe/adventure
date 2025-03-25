@@ -156,7 +156,7 @@ async function moveWithSmartAndSuperMOVE() {
            game_log("1 value: ");
             // Kiểm tra quá trình di chuyển mỗi 100ms
             checkMoveStart = setInterval(async () => {
-
+                if(parent.S.icegolem && foxmode == 0) return
                 // Kiểm tra điều kiện của smart (SM = 1)
 				let checker = 100
 				               checker = checkSmartPosition(saveS);
