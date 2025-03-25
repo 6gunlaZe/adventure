@@ -1286,15 +1286,11 @@ function avoidance() {
     if (!avoiding) {
         if ((!lastMove || new Date() - lastMove > 100)  && cryts > 0) {
 		let host = get_player("haiz")
-           if(host && !smart.moving && character.target 
-	      && !parent.entities[character.target].dead 
-	      && parent.entities[character.target].visible 
-	      && distance(character, host) > (character.range - 30) )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
-	   else if (host && !smart.moving 
-		    && (!character.target ||  (character.target 
-	      && (parent.entities[character.target].dead 
-	      || parent.entities[character.target].visible ))  )  
-		   )xmove(host.real_x, host.real_y);
+		const target = get_target();
+                let check = !!target && !target.rip;
+
+           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
+	   else if (host && !smart.moving && !check )xmove(host.real_x, host.real_y);
             lastMove = new Date();
 
 		////////////////////////////////////
