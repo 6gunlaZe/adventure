@@ -881,10 +881,62 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 // NOTE: Use the performance_trick() function as a workaround
 
 
+//Source code of: smart_move_logic hàm di chuyển gốc, mở gọi nó khi cần di chuyển theo logic sever
+function smart_move_logic()
+{
+if(parent.S.icegolem && foxmode == 0) 
+{
+	if(!smart.moving) return;
+	if(!smart.searching && !smart.found)
+	{
+		start_pathfinding();
+	}
+	else if(!smart.found && game.cli) { /* Just wait */ }
+	else if(!smart.found)
+	{
+		if(Math.random()<0.1)
+		{
+			move(character.real_x+Math.random()*0.0002-0.0001,character.real_y+Math.random()*0.0002-0.0001);
+			parent.d_text(shuffle(["Hmm","...","???","Definitely left","No right!","Is it?","I can do this!","I think ...","What If","Should be","I'm Sure","Nope","Wait a min!","Oh my"])[0],character,{color:shuffle(["#68B3D1","#D06F99","#6ED5A3","#D2CF5A"])[0]});
+		}
+		continue_pathfinding();
+	}
+	else if(!character.moving && can_walk(character) && !is_transporting(character))
+	{
+		if(!smart.plot.length)
+		{
+			smart.moving=false;
+			smart.on_done(true);
+			return;
+		}
+		var current=smart.plot[0];
+		smart.plot.splice(0,1);
+		// game_log(JSON.stringify(current));
+		if(current.town)
+		{
+			use("town");
+		}
+		else if(current.transport)
+		{
+			parent.socket.emit("transport",{to:current.map,s:current.s});
+			parent.push_deferred("transport")
+			// use("transporter",current.map);
+		}
+		else if(character.map==current.map && (smart.try_exact_spot && !smart.plot.length || can_move_to(current.x,current.y))) 
+		{
+			// game_log("S "+current.x+" "+current.y);
+			move(current.x,current.y);
+		}
+		else
+		{
+			game_log("Lost the path...","#CF5B5B");
+			smart_move({map:smart.map,x:smart.x,y:smart.y},smart.on_done);
+		}
+	}
+}
+}
 
 
-
-function smart_move_logic() { return; }
 
 let last_blink = Date.now(); // Lưu thời gian lần "blink" gần nhất
 
