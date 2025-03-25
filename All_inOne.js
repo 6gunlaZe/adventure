@@ -1899,6 +1899,9 @@ if (prolive == 1 || events ) return
 
 
 
+// Biến lưu trữ các ID boss đã xuất tọa độ
+const seenBossIds = new Set();
+
 async function BosscheckHPMYSv11(monsters, HP) {
   // Safety Checks
   if (!Array.isArray(monsters) || monsters.length === 0) {
@@ -1934,11 +1937,24 @@ async function BosscheckHPMYSv11(monsters, HP) {
       if (validObjects.length > 0) {
         game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
 
-        // Tìm boss có HP thấp nhất
-        const minHpBoss = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+        // Tìm boss có HP thấp nhất trong các boss hợp lệ
+        for (const boss of validObjects) {
+          // Kiểm tra xem boss này đã xuất tọa độ chưa
+          if (!seenBossIds.has(boss.id)) {
+            // Đánh dấu boss đã xuất tọa độ
+            seenBossIds.add(boss.id);
 
-        // Trả về tọa độ của boss có HP thấp nhất
-        return { x: minHpBoss.x, y: minHpBoss.y, map: minHpBoss.map };
+            // Trả về tọa độ của boss
+            game_log(`Boss ${boss.id} có tọa độ: (${boss.x}, ${boss.y}), Map: ${boss.map}`);
+
+            // Trả lại tọa độ của boss có HP thấp nhất
+            return { x: boss.x, y: boss.y, map: boss.map };
+          }
+        }
+
+        // Nếu không tìm thấy boss nào chưa xuất tọa độ
+        game_log("Tất cả các boss đã xuất tọa độ hoặc không hợp lệ.");
+        return null;
       } else {
         game_log("Không tìm thấy boss nào có HP thấp hơn yêu cầu trong server của bạn");
         return null; // Nếu không tìm thấy boss nào
