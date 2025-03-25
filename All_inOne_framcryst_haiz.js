@@ -201,7 +201,7 @@ if(mobsInRange.length == 0 && member1 && member2 && distance(character, member1)
 	runn = 1;
 	backk = 0;
 }
-else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange.length == 0 && (distance(character, member1) > 150 || distance(character, member2) > 150)) )
+else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange.length == 0 && (distance(character, member1) > 190 || distance(character, member2) > 150)) )
 	{
 	backk = 0;
 	runn = 0;
