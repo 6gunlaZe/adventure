@@ -1213,7 +1213,7 @@ stop_character("nhiY")
 	   }	
 		
   if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
-	  if (events)return
+	  if (events || prolive == 1)return
 	  if (modeYnhi == 0)
 	  {
 		parent.api_call("disconnect_character", {name: "nhiY"});
@@ -1715,7 +1715,7 @@ else
 }
 
 	    
-if (!events){
+if (!events || prolive == 0){
 
 	// const foxmode11 = (parent.party_list ?? []).some(c => c === 'nhiY');
 	const foxmode11 = true
