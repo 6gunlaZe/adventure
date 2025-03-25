@@ -1778,8 +1778,8 @@ framboss1 += 1
 }	
 }
 
-
-if ( nearB  && framboss1 > 0 && !smart.moving ){	
+if ( framboss1 > 0 && !smart.moving ){	
+//if ( nearB  && framboss1 > 0 && !smart.moving ){	
 var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 if (targetsoloboss.length == 0) //danh xong
 	{
