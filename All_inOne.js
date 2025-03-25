@@ -1201,6 +1201,7 @@ function on_cm(name, data) {
  }
  if(name == "nhiY" && data == "stop"){
 stop_character("nhiY") 
+start_character("6gunlaZe", 33);
  }	
 /////////////////
     if(name == "MuaBan"){
