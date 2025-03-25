@@ -1323,7 +1323,7 @@ if (receivedData && typeof receivedData === 'object' && receivedData.message ===
     }
 
 }
-setInterval(avoidance, 100);
+setInterval(avoidance, 80);
 
 function avoidMobs() {
     let maxWeight = -Infinity;
