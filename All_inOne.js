@@ -210,9 +210,9 @@ function handleEvents() {
 
 
 async function handleHome() {
-    if (character.cc < 100) {
-        //homeSet();
-    }
+    if (!smart.moving && character.cc < 100) {
+         equipSet('home');
+            }
     if (!smart.moving) {
                     try {
                 // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
@@ -790,8 +790,8 @@ const equipmentSets = {
         { itemName: "vhammer", slot: "mainhand", level: 6, l: "l" },
         { itemName: "vhammer", slot: "offhand", level: 6, l: "s" },
     ],
-    stealth: [
-        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+    home: [
+        { itemName: "mittens", slot: "gloves", level: 9, },
     ],
     cape: [
         { itemName: "vcape", slot: "cape", level: 4, l: "l" },
