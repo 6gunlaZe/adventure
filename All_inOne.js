@@ -1725,42 +1725,42 @@ if (!events || prolive == 0){
 if (framboss > 0  && foxmode11 )send_cm("nhiY", "foxmode");
 	
 	
-if (framboss == 1 && !smart.moving && foxmode11  && framboss1  <5   ){
+if (framboss == 1 && !smart.moving && foxmode11  && framboss1  <2   ){
 	smart_move({ map: "spookytown", x: -728, y: -123 }, () => {
 framboss1 += 1
     });
 }
-if (framboss == 2 && !smart.moving && foxmode11  && framboss1  <5 ){
+if (framboss == 2 && !smart.moving && foxmode11  && framboss1  <2 ){
 	smart_move({ map: "cave", x: 68, y: -1163 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 3 && !smart.moving&& foxmode11  && framboss1  <5 ){
+if (framboss == 3 && !smart.moving&& foxmode11  && framboss1  <2 ){
 	smart_move({ map: "cave",  x: 982, y: 105 }, () => {
 framboss1 += 1
     });
 }		
-if (framboss == 4 && !smart.moving && foxmode11  && framboss1 <5  ){
+if (framboss == 4 && !smart.moving && foxmode11  && framboss1 <2  ){
 	smart_move({ map: "main", x: 1312, y: -200 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 5 && !smart.moving && foxmode11  &&framboss1 <5  ){
+if (framboss == 5 && !smart.moving && foxmode11  &&framboss1 <2  ){
 	smart_move({ map: "main", x: 700, y: 1800 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 6 && !smart.moving && foxmode11  && framboss1 <5  ){
+if (framboss == 6 && !smart.moving && foxmode11  && framboss1 <2  ){
 	smart_move({ map: "halloween", x: -140, y: 512 }, () => {
 framboss1 += 1
     });
 }	
-if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <5  ){
+if (framboss == 7 && !smart.moving && foxmode11  && framboss1 <2  ){
 	smart_move({ map: "main", x: -1137, y: 455 }, () => {
 framboss1 += 1
     });
 }
-if (framboss == 8 && !smart.moving && foxmode11  && framboss1 <5  ){
+if (framboss == 8 && !smart.moving && foxmode11  && framboss1 <2  ){
 	smart_move({ map: "halloween", x: -550, y: -450 }, () => {
 framboss1 += 1
     });
@@ -1769,7 +1769,7 @@ framboss1 += 1
 	
 	
 	
-if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <5  ){
+if (framboss == 10 && !smart.moving && foxmode11  && framboss1 <2  ){
 	//send_cm("angioseal", "boss7");
 
 	if (currentBossLocation) {
