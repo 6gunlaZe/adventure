@@ -170,7 +170,7 @@ const mobsInRange = Object.values(parent.entities)
     );
 
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
-const lowhpMob = mobsInRange.filter(monster => monster.hp < 30000); 
+const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2"); 
 if ( lowhpMob.length >= 1)
 {
