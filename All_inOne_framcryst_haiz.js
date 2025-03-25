@@ -165,8 +165,7 @@ const mobsInRange = Object.values(parent.entities)
         mobTypes.includes(entity.mtype) &&          // Kiểm tra nếu loại mob là trong danh sách
         entity.visible &&                            // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                              // Kiểm tra nếu thực thể chưa chết
-        ((entity.mtype != "vbat" && distance(character, entity) <= 400) ||  // Nếu không phải vbat, kiểm tra khoảng cách <= 400
-        (entity.mtype == "vbat" && distance(character, entity) <= 100))    // Nếu là vbat, kiểm tra khoảng cách <= 100
+        distance(character, entity) <= 400          // Nếu không phải vbat, kiểm tra khoảng cách <= 400
     );
 
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
