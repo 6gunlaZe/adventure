@@ -1937,18 +1937,17 @@ async function BosscheckHPMYSv11(monsters, HP) {
       if (validObjects.length > 0) {
         game_log(`Tìm thấy ${validObjects.length} boss phù hợp!`);
 
-        // Tìm boss có HP thấp nhất trong các boss hợp lệ
+        // Kiểm tra từng boss
         for (const boss of validObjects) {
           // Kiểm tra xem boss này đã xuất tọa độ chưa
           if (!seenBossIds.has(boss.id)) {
             // Đánh dấu boss đã xuất tọa độ
             seenBossIds.add(boss.id);
 
-            // Trả về tọa độ của boss
+            // Trả về tọa độ của boss đầu tiên chưa xuất tọa độ
             game_log(`Boss ${boss.id} có tọa độ: (${boss.x}, ${boss.y}), Map: ${boss.map}`);
 
-            // Trả lại tọa độ của boss có HP thấp nhất
-            return { x: boss.x, y: boss.y, map: boss.map };
+            return { x: boss.x, y: boss.y, map: boss.map }; // Trả về tọa độ của boss
           }
         }
 
@@ -1969,6 +1968,7 @@ async function BosscheckHPMYSv11(monsters, HP) {
     return null; // Nếu có lỗi kết nối
   }
 }
+
 
 
 
