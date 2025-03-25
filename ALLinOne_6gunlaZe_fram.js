@@ -329,11 +329,11 @@ const equipmentSets = {
     ],
     single: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        //{ itemName: "coat", slot: "chest", level: 12, l: "s" }
+        { itemName: "supermittens", slot: "gloves", level: 7 },
     ],
     dead: [
         { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+        { itemName: "mittens", slot: "gloves", level: 8 },
     ],
     boom: [
         { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
