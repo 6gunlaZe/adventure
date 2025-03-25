@@ -427,7 +427,8 @@ setInterval(function(){
         }
 	}
 	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6) {
+    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && !is_on_cooldown("partyheal")
+	&& character.mp>=G.skills.partyheal.mp) {
                 use_skill("partyheal");
 				 game_log("hoi mau ALL !!!!!");
 
@@ -528,7 +529,7 @@ if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") &&
 	}
 	
 
-},1000/8); // Loops every 1/4 seconds.
+},1000/5); // Loops every 1/4 seconds.
 
 
 
