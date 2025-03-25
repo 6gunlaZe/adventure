@@ -1286,7 +1286,8 @@ function avoidance() {
     if (!avoiding) {
         if ((!lastMove || new Date() - lastMove > 100)  && cryts > 0) {
 		let host = get_player("haiz")
-           if(host && !smart.moving )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
+           if(host && !smart.moving && character.target && distance(character, host) > (character.range - 30) )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
+	   else if (host && !smart.moving && !character.target)xmove(host.real_x, host.real_y);
             lastMove = new Date();
 
 		////////////////////////////////////
