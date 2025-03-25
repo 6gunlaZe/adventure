@@ -159,7 +159,7 @@ if(character.esize < 3)parent.api_call("disconnect_character", {name: "haiz"});
 
 //////////////////Logic new
 
-const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
+const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
