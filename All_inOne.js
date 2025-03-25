@@ -527,7 +527,7 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 
 ////hàm tùy chỉnh trang bị chính thức khi không có events
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
-	if (events)return
+	if (events && !get_nearest_monster({ type: home }))return
     const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
     if ((framboss >0 )) {
@@ -1213,6 +1213,7 @@ stop_character("nhiY")
 	   }	
 		
   if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
+	  if (events)return
 	  if (modeYnhi == 0)
 	  {
 		parent.api_call("disconnect_character", {name: "nhiY"});
