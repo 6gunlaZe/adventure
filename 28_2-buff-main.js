@@ -644,6 +644,7 @@ function changeitem(options = {}) {
 
 
 
+changeitem({ slot: "gloves", name : "mittens", level : 8 });
 
 
 function chuyendoithongminh(taget)
