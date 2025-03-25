@@ -168,7 +168,23 @@ const mobsInRange = Object.values(parent.entities)
         distance(character, entity) <= 400  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
     );
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
-
+const lowhpMob = mobsInRange.filter(monster => monster.hp < 30000); 
+const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2"); 
+if ( lowhpMob.length >= 1)
+{
+	checkluck = 1  ///luck set
+}
+else if (MobisA2.length >= 1 || character.hp < 5000)
+{
+	checkluck = 2  //  def set
+	equipSet('def');
+}
+else 
+{
+	checkluck = 0  //dame set
+	 equipSet('nodef');
+}
+	
 
 	
 if (member1 && member1.target !== initialTarget && (Date.now() < timeat + 15000 ) && mobsInRange.length == 0 )return //trở lại khi cung bắt skill shot để chờ 1 thời gian	
@@ -1043,70 +1059,13 @@ function get_nearest_playerV(currentTarget)
 
 
 
-
-
-
 let checkluck = 0
 setInterval(async () => {
-
-const mobTypes = ["a2","a3","a7","a0","a1","a5","a4","a6","a8","a9","a10"];	
-const mobsInRange = Object.values(parent.entities)
-    .filter(entity => 
-        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
-        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
-        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        entity.hp < 50000 
-    );
-
-const mobTypes1 = ["a2"];	
-const a2mob = Object.values(parent.entities)
-    .filter(entity => 
-        mobTypes1.includes(entity.mtype) &&  
-        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
-        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) < 150  
-    );
-	
-game_log("mobsInRange.length =="+mobsInRange.length)
-game_log("a2mob.length =="+a2mob.length)
-if ( mobsInRange.length >= 1)
-{
-	checkluck = 1  ///luck set
-}
-else if (a2mob.length >= 1)
-{
-	checkluck = 2  //  def set
-	equipSet('def');
-}
-else if (character.hp < 5000)
-{
-	checkluck = 3   //  defffull
-	equipSet('def');
-}
-	else 
-{
-	checkluck = 0  //dame set
-	 equipSet('nodef');
-}
-
         game_log("checkluck ==========="+checkluck)
 	game_log("checkluck ==========="+checkluck)
 	game_log("checkluck ==========="+checkluck)
   await shift(0, 'luckbooster')
 }, 700)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
