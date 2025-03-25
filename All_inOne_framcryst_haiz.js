@@ -197,7 +197,7 @@ timeat = Date.now();
 	
 	
 
-if(mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 150 && distance(character, member2) <= 150){
+if(mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 190 && distance(character, member2) <= 150){
 	runn = 1;
 	backk = 0;
 }
