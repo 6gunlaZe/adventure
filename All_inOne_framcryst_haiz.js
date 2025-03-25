@@ -159,13 +159,13 @@ if(character.esize < 3)parent.api_call("disconnect_character", {name: "haiz"});
 
 //////////////////Logic new
 
-const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8"];
+const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
         entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) <= 400  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
+        (distance(character, entity) <= 400 && entity.mtype != "vbat")  &&   (distance(character, entity) <= 100 && entity.mtype == "vbat")    ) // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
     );
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 30000); 
