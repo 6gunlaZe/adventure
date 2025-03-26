@@ -445,9 +445,10 @@ async function attackLoop() {
 
 	            let target = null;
 	    let target1 = null;
+	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo", "stompy", "skeletor"];
-
+                    var mob2=["stompy", "skeletor"]; //boss mạnh cần có healter
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
 
@@ -487,6 +488,28 @@ for (var i = 0; i < mob.length; i++) {
 
 }
 }
+
+if (!target1){	    
+for (var i = 0; i < mob2.length; i++) {
+     target2= get_nearest_monster({type: mob2[i]});
+		  if(target2)change_target(target2);
+	if ( target2 && !is_in_range(target2))
+	{
+          gobaltaget = target2;
+	}
+        // If a monster is found and is in range, execute the attack
+        if (target2 && is_in_range(target2)) {
+            await attack(target2); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+			        break;  // Nếu tìm thấy thì thoát vòng lặp
+
+        }
+
+}
+}
+
+
+	    
 
 
 if (!nearest){
