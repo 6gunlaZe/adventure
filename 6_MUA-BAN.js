@@ -968,7 +968,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
