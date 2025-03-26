@@ -526,7 +526,7 @@ if (!nearest){
 	}
 	    
         // If a monster is found and is in range, execute the attack
-        if (nearest && is_in_range(nearest)) {
+        if (nearest && is_in_range(nearest) && !smart.moving) {
             await attack(nearest); // Initiate attack
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
         }
