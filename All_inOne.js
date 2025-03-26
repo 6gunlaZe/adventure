@@ -289,7 +289,7 @@ if (bossvip == 1)
                 equipSet('luck');
             }
         }
-        else if ( !monster && distance(character, { x: 434, y: -2557 }) <= 50 && character.map === 'winterland')
+        else if ( !monster && distance(character, { x: 404, y: -2423 }) <= 80 && character.map === 'winterland')
         {
 	bossvip = 0
         }			
@@ -314,7 +314,7 @@ else if (bossvip == 2)
                 equipSet('luck');
             }
         }
-        else if ( !monster && distance(character, { x: 666, y: -555 }) <= 50 && character.map === 'arena')
+        else if ( !monster && distance(character, { x: 666, y: -555 }) <= 80 && character.map === 'arena')
         {
 	bossvip = 0
         }	
