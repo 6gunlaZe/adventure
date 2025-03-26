@@ -581,6 +581,7 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 ////hàm tùy chỉnh trang bị chính thức khi không có events
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 	if (events && !get_nearest_monster({ type: home }))return
+	if (bossvip > 0)return
     const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
     if ((framboss >0 )) {
