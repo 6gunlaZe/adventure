@@ -295,7 +295,7 @@ if (bossvip == 1)
         }			
 	    else
 	{
-	 if (!smart.moving) smart_move({ map: "winterland", x: 434, y: -2557 });
+	 if (!smart.moving) smart_move({ map: "winterland", x: 404, y: -2423 });
 	}
 
 
