@@ -102,7 +102,7 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["oozingterror","harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["cclaw","oozingterror","harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -1286,7 +1286,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		cupid: 7,
 		cape: 6,
 		sshield: 5,
-		cclaw: 7,
+		//cclaw: 7,
 		dagger: 7,
 		//stinger: 7,
 		ecape: 6,
@@ -1322,7 +1322,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		starkillers: 5,
 		sshield:8,
 		hgloves: 7,
-		cclaw: 8,
+		//cclaw: 8,
 		dagger: 8,
 		//stinger: 8,
 		ecape: 8,
@@ -1359,7 +1359,7 @@ var upgradeWhitelist = /// list moi
 		cape: 4,
 		sshield:4,
 		hgloves: 4,
-		cclaw: 6,
+		//cclaw: 6,
 		dagger: 6,
 		//stinger: 6,
 		wingedboots: 4,
@@ -1394,7 +1394,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		sshield:7,
 		//hgloves: 6,
 		hhelmet:6,
-		cclaw: 8,
+		//cclaw: 8,
 		dagger: 6,
 		//stinger: 6,
 		wingedboots: 6,
