@@ -72,7 +72,7 @@ async function eventer() {
 	} else if (framboss > 0) {
 		
 	} else if (bossvip > 0) {
-          bossvip()
+          Handelbossvip()
 	} else if (cryts > 0) {
           crytsgame()
 	} else if (crab > 0) {
@@ -862,7 +862,7 @@ crab = 0
 
 
 
-function bossvip() {
+function Handelbossvip() {
 if (smart.moving)return
 	let f1 = get_player("Ynhi");
 	let f2 = get_player("haiz");
