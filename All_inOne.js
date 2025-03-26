@@ -278,6 +278,7 @@ if(smart.moving)return
 var monster
 if (bossvip == 1)
 {
+	 send_cm("6gunlaZe", "bossvip1");
         monster = get_nearest_monster({ type: "stompy" }); 
         if (monster) {
             if (monster.hp > 15000 ) {
@@ -302,6 +303,7 @@ if (bossvip == 1)
 }
 else if (bossvip == 2)
 {
+		 send_cm("6gunlaZe", "bossvip2");
         monster = get_nearest_monster({ type: "skeletor" }); 
         if (monster) {
             if (monster.hp > 15000 ) {
