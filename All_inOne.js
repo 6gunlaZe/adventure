@@ -680,13 +680,12 @@ if (!is_on_cooldown("hardshell") && character.hp < 9000) {
 }
 
 
-	
-let ango = "quai";
+let monstersAgo = ["stompy", "skeletor"];  // Mảng chứa các tên quái vật cần kiểm tra
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
-    // Kiểm tra nếu thực thể là quái vật "quai" và nó chưa nhắm vào nhân vật
-    if (current.mtype === ango && current.target !== character.name) {
+    // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
+    if (monstersAgo.includes(current.mtype) && current.target !== character.name && f1 && character.hp >6000)  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
@@ -695,6 +694,7 @@ for (let id in parent.entities) {
         }
     }
 }
+
 
 
 
