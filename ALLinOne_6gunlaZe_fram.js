@@ -6,6 +6,8 @@ let receivedData
 let evenmuaban
 var idmap
 let cryts = 0  ///mode săn boss ở hầm ngục
+let crab = 0  ///mode săn crabxx
+
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
@@ -72,6 +74,8 @@ async function eventer() {
 
 	} else if (cryts > 0) {
           crytsgame()
+	} else if (crab > 0) {
+          crabgame()		
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
            handleHome();
         } else {
@@ -835,6 +839,21 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 	characterRange
     };
 }
+
+
+
+
+
+
+
+function crabgame() {
+if (smart.moving)return
+if (!get_nearest_monster({ type: "crabxx" }))smart_move({ map: "main", x: -976, y: 1785 })	
+
+}
+
+
+
 
 
 let delayboss = Date.now()
