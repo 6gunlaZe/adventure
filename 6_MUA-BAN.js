@@ -32,6 +32,7 @@ const ten3sec = 30 * 1000
 
 let evenNoel = 0 // bat tu dong doi do khi chuyen sang 1
 let frankymode = 0
+let crabxxmode = 0;
 let icemode = 0
 let misstoe
 let misstoenum = 100  ///cai dat tren 100 la chay doi qua
@@ -964,7 +965,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 ////////////////////////////////////////	
 function timbosskill()
 {
-	if (frankymode == 1 || icemode == 1) return
+	if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return
 	if (timboss == undefined) timboss = Date.now()
     if (Date.now() < (timboss + TenMinutesInMs11) ) return;
 	
@@ -2120,7 +2121,7 @@ setInterval(function() {
 skill_scare();
 
 	
-	
+crabxx()	
  franky()	
 icegolem()
 }, 400);
@@ -2332,17 +2333,24 @@ smart_move({ map: "main", x: -705, y: 1708 }, () => {
   //checkbuyhpmp();
     });		   
 }
-	
+var bossc = get_nearest_monster({type:'crabxx'})
 if( get_nearest_monster({type:'crabxx'})  &&  !is_moving(character)  )	
 {
-	if(get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes("6gunlaZe") ){
-		send_cm("6gunlaZe","crabxx")
+	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes("6gunlaZe") ){
 		send_cm("haiz","crabxx") 
 		crabxxmode = 1
 smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
     });
 	}
+	else
+	{
+smart_move({ map: "main", x: -200, y: -110 }, () => {
+  open_stand();
+    });
+	}
+
+	
 } 
 
 if( get_nearest_monster({type:'crabx'}) && !get_nearest_monster({type:'crabxx'}) && !parent.S.crabxx &&  !is_moving(character)  )				   
@@ -2352,6 +2360,7 @@ if( get_nearest_monster({type:'crabx'}) && !get_nearest_monster({type:'crabxx'})
     });
 		}
 
+		
 	
 }
 
