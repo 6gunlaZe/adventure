@@ -192,17 +192,15 @@ function handleEvents() {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
-        handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
-	    if(Now_is_gobalevenrun)return
+        //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
+	 //   if(Now_is_gobalevenrun)return
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
 	    if(Now_is_gobalevenrun)return
 	   // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	    handlebossPro('franky', 'level2w', -23, 15, 50000, "Ynhi","6gunlaZe")
 	    if(Now_is_gobalevenrun)return
 	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
-       // handleSpecificEventWithJoin('crabxx', 'main', -976, 1785, 10000);
-       // handleSpecificEventWithJoin('franky', 'level2w', 23, 38, 1000000);
-       // handleSpecificEventWithJoin('icegolem', 'winterland', 820, 420, 50000);
+
     }
 }
 
