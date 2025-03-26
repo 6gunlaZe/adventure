@@ -274,6 +274,51 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 }
 
 
+
+
+
+function checkPVPandARENA() {
+
+if (character.map != "arena")return
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
+    .filter(entity => 
+	 entity.player  &&   
+        !friend.includes(entity.name) &&       //không phải bạn bè thì chọn đối tượng đó
+        entity.visible &&                      // Kiểm tra nếu thực thể đang hiển thị
+        distance(character, entity) <= 500     // Nếu không phải vbat, kiểm tra khoảng cách <= 400
+ 
+    );
+
+	
+if(PVPInRange.length >= 1)
+{
+
+let region = server.region;
+let serverIden = server.id
+if ( region == "EU" && serverIden == "II" ) 
+{
+change_server("ASIA", "I");	
+}
+	else
+	{
+         change_server("EU", "II");
+	}	
+}
+
+
+	
+    // Đây là công việc bạn muốn thực hiện mỗi 1 giây
+    console.log("Vòng lặp chạy mỗi giây...");
+}
+
+// Thiết lập vòng lặp mỗi 1 giây (1000ms)
+setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
+
+
+
+
+
 function VIPBosses() {
 if(smart.moving)return	
 var monster
