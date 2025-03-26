@@ -870,7 +870,7 @@ if (smart.moving)return
 
 	
     var currentTarget = get_targeted_monster();
-	if(!currentTarget && f1 && f2)
+	if(!currentTarget && f1 && f2 && distance(character, f1) < 150 && distance(character, f2) < 150)
 	{
 		var currentTarget1 = get_nearest_monster_solobosskill() 
 		if(currentTarget1) {
