@@ -990,7 +990,7 @@ function scare() {
     let targetedForMoreThanOneSecond = false;
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if (character.hp <7000 && current.target == character.name) {
+        if ((character.hp <7000 || smart.moving ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
