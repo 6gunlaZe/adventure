@@ -915,6 +915,10 @@ function scare() {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
+        if (current.mtype === "crabxx" && character.hp <14000 && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }		
 	    
     }
 
