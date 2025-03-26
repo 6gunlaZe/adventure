@@ -1017,7 +1017,7 @@ function taskBoss() {
 	else
 	{
 		smart_move({ map: "arena", x: 666, y: -555 }, () => {
- 	var targetb= get_nearest_monster({type: "jr"});
+ 	var targetb= get_nearest_monster({type: "skeletor"});
 	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"bossvip2") 
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
