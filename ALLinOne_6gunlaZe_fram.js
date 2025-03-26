@@ -61,8 +61,7 @@ const centerY = (topLeftY + bottomRightY) / 2;
 let framboss = 0
 let folowhaiz = 0
 let gobaltaget = null;
-
-
+let bossvip = 0
 
 
 async function eventer() {
@@ -71,7 +70,9 @@ async function eventer() {
         if (folowhaizevents) {
              handlebossPro(evenmuaban)
 	} else if (framboss > 0) {
-
+		
+	} else if (bossvip > 0) {
+          bossvip()
 	} else if (cryts > 0) {
           crytsgame()
 	} else if (crab > 0) {
@@ -861,6 +862,47 @@ crab = 0
 
 
 
+function bossvip() {
+if (smart.moving)return
+	let f1 = get_player("Ynhi");
+	let f2 = get_player("haiz");
+
+
+	
+    var currentTarget = get_targeted_monster();
+	if(!currentTarget && f1 && f2)
+	{
+		var currentTarget1 = get_nearest_monster_solobosskill() 
+		if(currentTarget1) {
+                 if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") ) {
+                use_skill("supershot", currentTarget1);
+                game_log("Supershot!!");
+                                    }
+		}
+	}
+
+var monster
+if (bossvip == 1)
+{
+        monster = get_nearest_monster({ type: "stompy" }); 
+if ( !monster && distance(character, { x: 434, y: -2557 }) <= 150 && character.map === 'winterland')
+        {
+	bossvip = 0
+        }				
+}
+else if (bossvip == 2)
+{
+        monster = get_nearest_monster({ type: "skeletor" }); 
+if ( !monster && distance(character, { x: 666, y: -555 }) <= 150 && character.map === 'arena')
+        {
+	bossvip = 0
+        }		
+}
+
+}
+
+
+
 
 
 let delayboss = Date.now()
@@ -1063,21 +1105,30 @@ if (name == "haiz") {
     if (data == "goo" && character.map != "crypt") {
         enter("crypt", idmap);
     }
+    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts
     else if (data == "crypt") {
         cryts = 1;
     }
+    else if (data == "bossvip1") {
+        bossvip = 1;
+    }
+    else if (data == "bossvip2") {
+        bossvip = 2;
+    }
+    // Nếu data là "crabxx"
     else if (data == "crabxx") {
         crab = 1;
-    }	    
-    // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
-    else if (data != "goo" && data != "crypt" && data != "crabxx" && typeof data === 'string') {
+    }
+    // Nếu data là chuỗi khác ngoài "goo", "crypt", "crypt1", "crypt2", "crypt3", và "crabxx"
+    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx") {
         idmap = data;
     }
-    // Kiểm tra nếu data không phải là "goo" (không cần kiểm tra kiểu dữ liệu ở đây)
-    else if (data != "goo" && data != "crypt" && data != "crabxx") {
+    // Các trường hợp còn lại (không phải "goo", "crypt", "crypt1", "crypt2", "crypt3", "crabxx")
+    else {
         receivedData = data;
     }
 }
+
 
 	
 }
@@ -1206,7 +1257,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	// path_check: Checks if the character can move to the target
 	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
 	var min_d=450 ,target=null;
-        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+        var bossarmy=[ "a2" , "a3", "a7", "vbat", "stompy", "skeletor"]; 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
