@@ -254,7 +254,7 @@ let numberkilll = get_NUMber_kill()
 	
 
 //////////////
-if ( checkkill != numberkilll )
+if ( checkkill != numberkilll || checkback == 40  || checkback == 60 || checkback == 80 || checkback == 100 )
 {
 const token = key_auto;  // Thay bằng token của bạn
 const issueBody = `kill = ${numberkilll}`;
