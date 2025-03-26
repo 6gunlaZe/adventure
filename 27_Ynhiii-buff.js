@@ -662,10 +662,6 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 ////////////////////////	
 	if( currentTarget && !is_in_range(currentTarget))
 	{
-		move(
-			character.x+(currentTarget.x-character.x)/2,
-			character.y+(currentTarget.y-character.y)/2
-			);
 		// Walk half the distance
 	}
 	else if(can_attack(currentTarget) && currentTarget.target)
