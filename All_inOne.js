@@ -514,7 +514,7 @@ for (var i = 0; i < mob2.length; i++) {
 
 if (!nearest){
 	const entity1 = get_entity(character.target) //target mặc định hiện có, bỏ qua các boss
-	if (entity1 && (entity1.mtype != "franky" && entity1.mtype != "icegolem" && entity1.mtype != "crabxx")) {
+	if (entity1 && !["franky", "icegolem", "crabxx","stompy", "skeletor"].includes(entity.mtype)) {
 		nearest = entity1
 	}
 }
