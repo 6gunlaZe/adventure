@@ -60,6 +60,7 @@ const [topLeftX, topLeftY, bottomRightX, bottomRightY] = boundaryOur;
 const centerX = (topLeftX + bottomRightX) / 2;
 const centerY = (topLeftY + bottomRightY) / 2;
 
+let bossvip = 0
 let bosscantank = 0
 let prolive = 0
 let framhaiz = 0
@@ -71,8 +72,8 @@ async function eventer() {
     try {
         if (events) {
             handleEvents();
-        } else if (stompyActive || skeletorActive) {
-            //handleBosses();
+        } else if (bossvip > 0) {
+            VIPBosses();
 	} else if (framboss > 0) {
 		
         } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) ) {
@@ -270,6 +271,60 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 }
 	
 }
+
+
+function VIPBosses() {
+if(smart.moving)return	
+var monster
+if (bossvip == 1)
+{
+        monster = get_nearest_monster({ type: "stompy" }); 
+        if (monster) {
+            if (monster.hp > 15000 ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+        else if ( !monster && distance(character, { x: 434, y: -2557 }) <= 50 && character.map === 'winterland')
+        {
+	bossvip = 0
+        }			
+	    else
+	{
+	 if (!smart.moving) smart_move({ map: "winterland", x: 434, y: -2557 });
+	}
+
+
+	
+}
+else if (bossvip == 2)
+{
+        monster = get_nearest_monster({ type: "skeletor" }); 
+        if (monster) {
+            if (monster.hp > 15000 ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+            }
+        }
+        else if ( !monster && distance(character, { x: 666, y: -555 }) <= 50 && character.map === 'arena')
+        {
+	bossvip = 0
+        }	
+	    else
+	{
+	 if (!smart.moving) smart_move({ map: "arena", x: 666, y: -555 });
+	}
+	
+}
+
+}
+
 
 
 
@@ -1262,7 +1317,14 @@ start_character("6gunlaZe", 33);
 	}		
 	if(data == "boss8") {
 	  framboss = 8
-	}	
+	}
+	if(data == "bossvip1") {
+	  bossvip = 1
+	}
+	if(data == "bossvip2") {
+	  bossvip = 2
+	}
+	    
 
        if(data == "franky" || data == "crabxx" )
 	   {
