@@ -1339,7 +1339,7 @@ const rangeBuffer = 90;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a1","a2","a3","a4","a6", "a7","a8","a9","vbat"];
+const avoidTypes = ["a0","a1","a2","a3","a4","a6", "a7","a8","a9","vbat","stompy","skeletor"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
@@ -1364,7 +1364,7 @@ function avoidance() {
     const avoiding = avoidMobs();
 
     if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 ) ) {
+        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 || bossvip > 0 ) ) {
 		let host = get_player("haiz")
 		const target = get_target();
                 let check = !!target && !target.rip;
