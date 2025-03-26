@@ -847,9 +847,16 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 
 
 function crabgame() {
+if (parent?.S?.["crabxx"])
+{
 if (smart.moving)return
 if (!get_nearest_monster({ type: "crabxx" }))smart_move({ map: "main", x: -976, y: 1785 })	
-
+}
+else
+{
+crab = 0	
+}
+	
 }
 
 
@@ -1060,7 +1067,7 @@ if (name == "haiz") {
         cryts = 1;
     }
     else if (data == "crabxx") {
-        crabx = 1;
+        crab = 1;
     }	    
     // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
     else if (data != "goo" && data != "crypt" && data != "crabxx" && typeof data === 'string') {
