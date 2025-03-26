@@ -417,6 +417,7 @@ async function attackLoop() {
     const X = locations[home][0].x; // X coordinate of home location
     const Y = locations[home][0].y; // Y coordinate of home location
     const now = performance.now();
+	var buff = get_player("Ynhi"); 
     try {
         let nearest = null;
 
@@ -489,7 +490,7 @@ for (var i = 0; i < mob.length; i++) {
 }
 }
 
-if (!target1 && !target && !nearest){	    
+if (!target1 && !target && !nearest && buff){	    
 for (var i = 0; i < mob2.length; i++) {
      target2= get_nearest_monster({type: mob2[i]});
 		  if(target2)change_target(target2);
@@ -1149,7 +1150,7 @@ let intervalId = setInterval(function() {
 
  ///////////////////////// 
 setInterval(function() {	
-if ( events ) return	
+if ( events || bossvip > 0  ) return	
 		
 let region = server.region;
 let serverIden = server.id
@@ -1196,7 +1197,7 @@ let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
 
 setInterval(function() {	
 	
-if (prolive == 1 || events || framboss > 0 ) return	
+if (prolive == 1 || events || framboss > 0 || bossvip > 0 ) return	
 if (autobuyPonty != 1) return
 	
 	///////////
@@ -1297,7 +1298,7 @@ start_character("6gunlaZe", 33);
 	   }	
 		
   if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
-	  if (events || prolive == 1)return
+	  if (events || prolive == 1 || bossvip > 0)return
 	  if (modeYnhi == 0)
 	  {
 		parent.api_call("disconnect_character", {name: "nhiY"});
@@ -1344,10 +1345,10 @@ start_character("6gunlaZe", 33);
 	if(data == "boss8") {
 	  framboss = 8
 	}
-	if(data == "bossvip1") {
+	if(data == "bossvip1" && !events) {
 	  bossvip = 1
 	}
-	if(data == "bossvip2") {
+	if(data == "bossvip2" && !events) {
 	  bossvip = 2
 	}
 	    
@@ -1956,7 +1957,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 async function moveToBossIfFound(monsters, HP) {
 
-if (prolive == 1 || events ) return	
+if (prolive == 1 || events || bossvip > 0) return	
 	
   const bossLocation = await BosscheckHPMYSv11(monsters, HP);
 
