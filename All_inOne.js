@@ -496,7 +496,7 @@ for (var i = 0; i < mob2.length; i++) {
 		  if(target2)change_target(target2);
 	if ( target2 && !is_in_range(target2))
 	{
-          gobaltaget = target2;
+         // gobaltaget = target2;
 	}
         // If a monster is found and is in range, execute the attack
         if (target2 && is_in_range(target2)) {
