@@ -885,8 +885,8 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 }
 
 
-
-function handlebossPro(eventType) {
+// dùng cho các even quái yếu không nguy hiểm
+function handlebossPro(eventType) { 
 
 if (eventType === undefined || eventType === null) {
 	folowhaizevents = false;
@@ -1058,13 +1058,16 @@ if (name == "haiz") {
     }
     else if (data == "crypt") {
         cryts = 1;
-    }    
+    }
+    else if (data == "crabxx") {
+        crabx = 1;
+    }	    
     // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
-    else if (data != "goo" && data != "crypt" && typeof data === 'string') {
+    else if (data != "goo" && data != "crypt" && data != "crabxx" && typeof data === 'string') {
         idmap = data;
     }
     // Kiểm tra nếu data không phải là "goo" (không cần kiểm tra kiểu dữ liệu ở đây)
-    else if (data != "goo" && data != "crypt") {
+    else if (data != "goo" && data != "crypt" && data != "crabxx") {
         receivedData = data;
     }
 }
@@ -1303,7 +1306,7 @@ function avoidance() {
     const avoiding = avoidMobs();
 
     if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && cryts > 0) {
+        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 ) ) {
 		let host = get_player("haiz")
 		const target = get_target();
                 let check = !!target && !target.rip;
