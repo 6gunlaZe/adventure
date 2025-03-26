@@ -969,6 +969,34 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 }
 
 
+
+function moveToTargetLocation(receivedData) {
+    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;  // Lấy tên bản đồ
+        const targetX = receivedData.x;      // Lấy tọa độ X
+        const targetY = receivedData.y;      // Lấy tọa độ Y
+
+        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
+        if (character.map !== targetMap && character.map != "crypt") {
+            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
+            smart_move({
+                map: targetMap,
+                x: targetX,
+                y: targetY
+            });
+        } else {
+            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
+            if (character.x !== targetX || character.y !== targetY) {
+                // Nếu chưa đến, di chuyển đến tọa độ mới
+                xmove(targetX, targetY);
+            }
+        }
+    }
+}
+
+
+
 // dùng cho các even quái yếu không nguy hiểm
 function handlebossPro(eventType) { 
 
@@ -987,39 +1015,6 @@ if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
 	        if (character.map !== "goobrawl")parent.socket.emit('join', { name: eventType });
       }
 
-	    
-
-
-let leader = get_player("haiz");
-if (leader && distance(character, leader) < 50) return
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
-
-	
-    // Đảm bảo rằng nhận được thông tin hợp lệ
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
-
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
-        } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-            if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
-                xmove(targetX, targetY);
-            }
-        }
-    }	    
-
-
 }
 	else 
     {
@@ -1031,37 +1026,6 @@ if (leader && distance(character, leader) < 50) return
 
 if (parent?.S?.[eventType]?.live) {
 
-
-let leader = get_player("haiz");
-if (leader && distance(character, leader) < 50) return
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
-
-	
-    // Đảm bảo rằng nhận được thông tin hợp lệ
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
-
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
-        } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-            if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
-                xmove(targetX, targetY);
-            }
-        }
-    }	    
-
-
 }
 	else 
     {
@@ -1072,24 +1036,6 @@ if (leader && distance(character, leader) < 50) return
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1399,7 +1345,7 @@ function avoidance() {
     const avoiding = avoidMobs();
 
     if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 || bossvip > 0 ) ) {
+        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents ) ) {
 		let host = get_player("haiz")
 		const target = get_target();
                 let check = !!target && !target.rip;
@@ -1409,30 +1355,8 @@ function avoidance() {
             lastMove = new Date();
 
 		////////////////////////////////////
-		if (!host){
-if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-    const targetMap = receivedData.map;  // Lấy tên bản đồ
-    const targetX = receivedData.x;      // Lấy tọa độ X
-    const targetY = receivedData.y;      // Lấy tọa độ Y
-
-    // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-    if (character.map !== targetMap && character.map != "crypt" && !smart.moving) {
-        // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-        smart_move({
-            map: targetMap,
-            x: targetX,
-            y: targetY
-        });
-    } else {
-        // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-        if (character.x !== targetX || character.y !== targetY) {
-            // Nếu chưa đến, di chuyển đến tọa độ mới
-           if(!smart.moving) xmove(targetX, targetY);
-        }
-    }
-}
-///////////////////////////////////
-			
+		if (!host && !smart.moving){
+moveToTargetLocation(receivedData)
 		}
         }
     }
