@@ -477,6 +477,7 @@ setInterval(function() {
 
 
 
+changeitem({ slot: "gloves", name : "mittens", level : 8 });
 
 
 setInterval(function() {
