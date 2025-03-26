@@ -1264,7 +1264,7 @@ start_character("6gunlaZe", 33);
 	  framboss = 8
 	}	
 
-       if(data == "franky")
+       if(data == "franky" || data == "crabxx" )
 	   {
 		    bosscantank = 1	
 	stop_character("angioseal")	
