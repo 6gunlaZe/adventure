@@ -490,7 +490,7 @@ for (var i = 0; i < mob.length; i++) {
 }
 }
 
-if (!target1 && !target && !nearest && buff){	    
+if (!target1 && !target && !nearest && buff && distance(character, buff) < 180){	    
 for (var i = 0; i < mob2.length; i++) {
      target2= get_nearest_monster({type: mob2[i]});
 		  if(target2)change_target(target2);
