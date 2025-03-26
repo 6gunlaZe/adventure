@@ -961,7 +961,85 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 ///////////////////////////////////////////////////////////////	
 	
 }, 1000);	
+
+
+
+function checkPVPandARENA() {
+
+if (character.map != "arena")return
+const friend = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
+const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
+    .filter(entity => 
+	 entity.player  &&   
+        !friend.includes(entity.name) &&       //không phải bạn bè thì chọn đối tượng đó
+        entity.visible &&                      // Kiểm tra nếu thực thể đang hiển thị
+        distance(character, entity) <= 500     // Nếu không phải vbat, kiểm tra khoảng cách <= 400
+ 
+    );
+
 	
+if(PVPInRange.length >= 1)
+{
+send_cm("haiz","stop")
+parent.api_call("disconnect_character", {name: "MuaBan"});
+stop_character("MuaBan")	
+}
+
+
+	
+    // Đây là công việc bạn muốn thực hiện mỗi 1 giây
+    console.log("Vòng lặp chạy mỗi giây...");
+}
+
+// Thiết lập vòng lặp mỗi 1 giây (1000ms)
+setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
+
+
+
+
+function taskBoss() {
+
+	if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return
+        if(smart.moving)return
+	
+    // Tạo số ngẫu nhiên 1 hoặc 2
+    const randomNum = Math.floor(Math.random() * 2) + 1;
+	
+	if (randomNum == 1){
+		smart_move({ map: "winterland", x: 434, y: -2557 }, () => {
+ 	var targetb= get_nearest_monster({type: "stompy"});
+	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"bossvip1") 
+				smart_move({ map: "main", x: -200, y: -110 }, () => {
+  open_stand();
+    });	
+    });
+	}
+	else
+	{
+		smart_move({ map: "arena", x: 666, y: -555 }, () => {
+ 	var targetb= get_nearest_monster({type: "jr"});
+	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"bossvip2") 
+				smart_move({ map: "main", x: -200, y: -110 }, () => {
+  open_stand();
+    });	
+    });
+
+	}
+
+
+
+	
+    // In ra số ngẫu nhiên
+    console.log(randomNum);
+}
+
+// Thiết lập một vòng lặp để bắt đầu sau 25 phút và chạy mỗi 25 phút
+setTimeout(function() {
+    taskBoss(); // Gọi hàm task sau 25 phút
+    setInterval(task, 25 * 60 * 1000); // Sau lần đầu, tiếp tục mỗi 25 phút
+}, 25 * 60 * 1000); // 25 phút = 25 * 60 * 1000 ms
+
+
 ////////////////////////////////////////	
 function timbosskill()
 {
