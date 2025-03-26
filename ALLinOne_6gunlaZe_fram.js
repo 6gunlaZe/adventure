@@ -867,18 +867,15 @@ if (smart.moving)return
 	let f1 = get_player("Ynhi");
 	let f2 = get_player("haiz");
 
-
-	
-    var currentTarget = get_targeted_monster();
-	if(!currentTarget && f1 && f2 && distance(character, f1) < 150 && distance(character, f2) < 150)
-	{
 		const target = get_target();
                 let check = !!target && !target.rip;
+	
+	if(!check && f1 && f2 && distance(character, f1) < 150 && distance(character, f2) < 150)
+	{
 
-		
 		var currentTarget1 = get_nearest_monster_solobosskill() 
 		if(currentTarget1) {
-                 if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && !check ) {
+                 if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") ) {
                 use_skill("supershot", currentTarget1);
                 game_log("Supershot!!");
                                     }
