@@ -154,7 +154,8 @@ essenceoffrostl: {bank: "items5", level: -1, quantity: 1},
 eggnog: {bank: "items5", level: -1, quantity: 1},		
 feather0: {bank: "items5", level: -1, quantity: 1},
 candycane: {bank: "items5", level: -1, quantity: 1},
-	
+tombkey: {bank: "items5", level: -1, quantity: 1},
+leather: {bank: "items5", level: -1, quantity: 1},	
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
 	intamulet: {bank: "items7", level: -1, quantity: 1},
