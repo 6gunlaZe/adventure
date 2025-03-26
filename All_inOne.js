@@ -470,7 +470,7 @@ for (var i = 0; i < bossarmy.length; i++) {
 }
 }
 
-if (!target){	    
+if (!target && !nearest){	    
 for (var i = 0; i < mob.length; i++) {
      target1= get_nearest_monster({type: mob[i]});
 		  if(target1)change_target(target1);
@@ -489,7 +489,7 @@ for (var i = 0; i < mob.length; i++) {
 }
 }
 
-if (!target1){	    
+if (!target1 && !target && !nearest){	    
 for (var i = 0; i < mob2.length; i++) {
      target2= get_nearest_monster({type: mob2[i]});
 		  if(target2)change_target(target2);
