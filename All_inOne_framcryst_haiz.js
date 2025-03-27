@@ -148,7 +148,7 @@ let toado = [
 { x: 2320, y: -1740, z: 68 }
 
 ];
-if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
+if (character.hp < 5000) parent.api_call("disconnect_character", {name: "haiz"});
 if(character.esize < 3)parent.api_call("disconnect_character", {name: "haiz"});
 	
  let member1 = get_player("6gunlaZe");
@@ -245,7 +245,7 @@ game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );
 		var currentTarget = get_nearest_monster_solobosskill() 
 
 
-		if(currentTarget && currentTarget.target && targetNOsafe.length == 0 && currentTarget.mtype == "a2") 
+		if(currentTarget && currentTarget.target && targetNOsafe.length == 0 && currentTarget.mtype == "a2" && character.hp < 6000 ) 
 		{
 			if (!member1 || !member2) parent.api_call("disconnect_character", {name: "haiz"});
 		}
