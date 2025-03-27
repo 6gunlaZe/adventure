@@ -138,12 +138,12 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 //game_log("characterRange" +monsterscharacterRange.length)		
 
             // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
-            if (monstersInRangeList.length >= 5 && character.mp > 430 ) {
+            if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("boom");
                 await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 430 ) {
+            } else if (monsterscharacterRange.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("dead");
                 await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
