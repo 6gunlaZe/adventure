@@ -1350,7 +1350,9 @@ start_character("6gunlaZe", 33);
 		 banktime = Date.now()  
 		   bankk = 1
 	   }	
-		
+
+if(framboss>0)return
+	    
   if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
 	  if (events || prolive == 1 || bossvip > 0)return
 	  if (modeYnhi == 0)
