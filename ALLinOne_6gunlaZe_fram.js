@@ -1308,6 +1308,43 @@ if (options.HP && entity.hp > options.HP) continue
     // We will return all entities, so that this function can be used with skills that target multiple entities in the future
     return entities
 }
+
+
+
+
+
+// Hàm gửi item đến loot mule
+function sendItems(name) {
+    // Lấy thông tin loot mule có tên "haiz"
+    let lootMule = get_player(name);
+
+    // Kiểm tra xem loot mule có tồn tại và trong khoảng cách 250 đơn vị hay không
+    if (!lootMule || distance(character, lootMule) > 250) {
+        // Nếu loot mule không tồn tại hoặc quá xa, dừng lại
+        //console.log("Loot mule out of range for item transfer.");
+        return;
+    }
+
+    // Duyệt qua tất cả các item của nhân vật
+    character.items.forEach((item, index) => {
+        // Kiểm tra nếu item là "cryptkey" và không bị khóa (l và s đều không có giá trị)
+        if (item && item.name == "cryptkey" && !item.l && !item.s) {
+            // Gửi item cho loot mule với số lượng item (hoặc 1 nếu không có số lượng)
+            send_item(lootMule, index, item.q ?? 1);
+        }
+    });
+}
+
+// Gọi hàm sendItems mỗi 30 giây (30000 mili giây)
+setInterval(() => sendItems("haiz"), 30000);
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////
 /////////////////////////////////////////
 
