@@ -1573,7 +1573,7 @@ setInterval(function() {
 ////////////////////////////////////////////////////////
 setInterval(function() {
 lootAllChests()
-}, 4000);
+}, 2000);
 
 shifting()
 
@@ -1589,9 +1589,18 @@ function lootAllChests() {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);
-        }
+        }    
 	 setTimeout(shifting, 550);  
     }
+    else if (chestIds.length > 0 && !get_nearest_monster({ type: home }) )
+   {
+	  shift(0, 'goldbooster');   
+        for (let id of chestIds) {
+            loot(id);
+        }    
+	 setTimeout(shifting, 550);  
+    }
+	
     
 }
 
