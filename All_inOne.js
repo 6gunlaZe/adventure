@@ -67,6 +67,14 @@ let framhaiz = 0
 let gobaltaget = null;
 let Now_is_gobalevenrun = false
 
+///check 1 lần đầu tiên khi mở - sợ bị dissconnet khi đang đánh boss
+	 var kiltargetfk= get_nearest_monster({type: "franky"});
+if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp > 10000){
+	bosscantank = 1
+        events = true
+}
+
+
 async function eventer() {
     const delay = 500;
     try {
