@@ -1581,6 +1581,11 @@ function shifting() {
     shift(0, 'xpbooster');
 }
 
+function shifting1() {
+shift(0, 'luckbooster')
+}
+
+
 function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
@@ -1598,8 +1603,19 @@ function lootAllChests() {
         for (let id of chestIds) {
             loot(id);
         }    
+	 setTimeout(shifting1, 550);  
+    }
+    else if (get_nearest_monster({ type: home }) )
+   {    
 	 setTimeout(shifting, 550);  
     }
+	else
+    {
+	    shift(0, 'luckbooster')
+    }
+
+
+	
 	
     
 }
