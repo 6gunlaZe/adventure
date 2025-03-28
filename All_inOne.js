@@ -742,7 +742,7 @@ if (!is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
     untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
     !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
-    tank && f1 && character.hp >12000) {                              // Kiểm tra nếu có tank và f1 xung quanh
+    tank && f1 && character.hp >12000 && !tank.rip && !f1.rip) {                              // Kiểm tra nếu có tank và f1 xung quanh
     let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
     if (!is_in_range(porc, "agitate")) {  // Kiểm tra nếu "porcupine" không nằm trong phạm vi kỹ năng "agitate"
         await use_skill("agitate");        // Sử dụng kỹ năng "agitate"
