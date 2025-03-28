@@ -738,17 +738,22 @@ async function attackLoop() {
 
 
       if (!nearest) {
-    // Current target and target of leader.
     var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader1)
-    
+    var leaderTarget = get_target_of(leader)
+		    
+    if (leaderTarget && leaderTarget.target ){
     // Change the target.
     if (!currentTarget || currentTarget != leaderTarget){ 
         // Current target is empty or other than the leader's.
         change_target(leaderTarget);
-        nearest = get_targeted_monster();
+        currentTarget = get_targeted_monster();
     }
-
+	if( currentTarget && is_in_range(currentTarget))
+	{
+                await attack(currentTarget);
+                delay = ms_to_next_skill("attack");
+	}  
+    }
       }
 
         // If a monster is found and is in range, execute the attack
