@@ -79,7 +79,7 @@ async function eventer() {
           crytsgame()
 	} else if (crab > 0) {
           crabgame()		
-        } else if ( tank && (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
+        } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
            handleHome();
         } else {
           ///  walkInCircle(); // khi fram riêng
@@ -741,7 +741,7 @@ async function safeawwaitwalkInCircle() {
 	let tank = get_player("Ynhi");
 	 let playerPosition
 
-if (!tank){
+if (!tank || tank.rip){
     if (!smart.moving) {
 smart_move({ map: "main", x: 500, y: 1800 })
     }
