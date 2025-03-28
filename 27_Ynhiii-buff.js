@@ -589,7 +589,17 @@ if (Date.now() < delayBug +15000 ) return
 		var cung1 = get_player("haiz"); 
 	var cung = get_player(nhanvatfram); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
-	if(!can_attack(currentTarget) )kite(cung1,50);
+	if(!can_attack(currentTarget) )
+	{
+		if (currentTarget.mtype == "franky")
+		{
+		kite(cung1,10);
+		}
+		else
+		{
+		kite(cung1,50);	
+		}
+	}
    }
 if ( currentTarget && cung && kitefram == 1) {
 	if(!can_attack(currentTarget) )kite(cung,25);
