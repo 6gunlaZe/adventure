@@ -150,7 +150,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 330 ) {
+            } else if (monsterscharacterRange.length >= 3 && character.mp > 330  && leader && leader.hp > 10000) {
                 weaponSet("dead");
                 await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
