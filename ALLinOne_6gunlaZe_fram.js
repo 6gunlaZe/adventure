@@ -66,7 +66,6 @@ let bossvip = 0
 
 async function eventer() {
     const delay = 500;
-	    let tank = get_player("Ynhi");
 
     try {
         if (folowhaizevents) {
@@ -79,7 +78,7 @@ async function eventer() {
           crytsgame()
 	} else if (crab > 0) {
           crabgame()		
-        } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
+        } else if (  (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
            handleHome();
         } else {
           ///  walkInCircle(); // khi fram riêng
