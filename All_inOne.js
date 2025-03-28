@@ -86,7 +86,7 @@ async function eventer() {
             VIPBosses();
 	} else if (framboss > 0) {
 		
-        } else if ( tank && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) )) {
+        } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) )) {
            handleHome();
         } else {
            safeawwait()
