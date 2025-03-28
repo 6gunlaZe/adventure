@@ -77,6 +77,8 @@ if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp
 
 async function eventer() {
     const delay = 500;
+    let tank = get_player("Ynhi");
+
     try {
         if (events) {
             handleEvents();
@@ -84,7 +86,7 @@ async function eventer() {
             VIPBosses();
 	} else if (framboss > 0) {
 		
-        } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) ) {
+        } else if ( tank && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 200 ) )) {
            handleHome();
         } else {
            safeawwait()
