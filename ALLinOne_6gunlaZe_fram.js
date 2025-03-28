@@ -1388,7 +1388,7 @@ function avoidance() {
                 let check = !!target && !target.rip;
 
            if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
-	   else if (host && !smart.moving && !check )xmove(host.real_x, host.real_y);
+	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )xmove(host.real_x, host.real_y);
             lastMove = new Date();
 
 		////////////////////////////////////
