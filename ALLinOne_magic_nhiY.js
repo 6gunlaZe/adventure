@@ -739,7 +739,7 @@ async function attackLoop() {
 
       if (!nearest) {
     var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader)
+    var leaderTarget = get_target_of(leader1)
 		    
     if (leaderTarget && leaderTarget.target ){
     // Change the target.
