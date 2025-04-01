@@ -1277,7 +1277,7 @@ var upgradeWhitelistmoi1 = /// list moi
         hammer: 4,
 		mcape: 5,
 		ololipop: 5,
-		glolipop: 5,
+		//glolipop: 5,
 		frankypants: 3,
 		//oozingterror: 5,
 		basher: 3 ,
@@ -1313,7 +1313,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		hpants: 7,
 		frankypants: 5,
 		ololipop: 8,
-		glolipop:8,
+		//glolipop:8,
 		mittens: 8,
 		mcape: 8,
 		//oozingterror: 7,
@@ -1349,7 +1349,7 @@ var upgradeWhitelist = /// list moi
 		fireblade: 8,
 		firestaff: 8,
 		ololipop: 3,
-		glolipop:3,
+		//glolipop:3,
 		frankypants: 2,
 		hboots: 2,
 		mittens: 3,
@@ -1383,7 +1383,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		basher: 6 ,
 		vgloves:6,
 		ololipop: 7,
-		glolipop:7,
+		//glolipop:7,
 		frankypants: 6,
 		hboots: 4,
 		mittens: 7,
@@ -2037,7 +2037,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "glolipop" , "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs" , "crossbow" , "harbringer",  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs" , "crossbow" , "harbringer",  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
