@@ -802,7 +802,7 @@ for (let id in parent.entities) {
 function scytheSet() {
     unequip("offhand");
     equipBatch([
-        { itemName: "bataxe", slot: "mainhand", level: 7, l: "l" },
+        { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" },
     ]);
 }
 
