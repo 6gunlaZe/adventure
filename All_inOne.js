@@ -209,7 +209,10 @@ function handleEvents() {
         }
     }else if (parent?.S?.wabbit && !character?.s?.easterluck  ){
 	if (!smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
-        smart_move("wabbit");
+        let wabbit = parent.S.wabbit;
+        if(wabbit && wabbit.live && !smart.moving) {
+            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map })
+        }
         } 
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
