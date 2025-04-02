@@ -208,7 +208,7 @@ function handleEvents() {
             });
         }
     }else if (parent?.S?.wabbit && !character?.s?.easterluck  ){
-	if (!smart.moving && get_nearest_monster({ type: "wabbit" }) ) {
+	if (!smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
         smart_move("wabbit");
         } 
     } else {
