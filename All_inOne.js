@@ -106,7 +106,8 @@ async function checkGameEvents() {
     let checkeven = 0;
     let pro = 0;
     const events1 = [
-        { eventType: 'snowman', type: 'withJoin' },
+       // { eventType: 'snowman', type: 'withJoin' },
+	    { eventType: 'wabbit', type: 'withJoin' },
         { eventType: 'goobrawl', type: 'specific' },
         { eventType: 'crabxx', type: 'pro' },
         { eventType: 'franky', type: 'pro' },
@@ -119,7 +120,14 @@ async function checkGameEvents() {
         if (event.type === 'specific') {
             isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
-            isEventValid = !!parent?.S?.[event.eventType]?.live;
+		if (event.eventType == "wabbit" && !character?.s?.easterluck)
+		{
+                isEventValid = !!parent?.S?.[event.eventType]?.live;  
+		}
+		else
+		{
+		isEventValid = !!parent?.S?.[event.eventType]?.live;  
+		}
         } else if (event.type === 'pro') {
             procheck = !!parent?.S?.[event.eventType];
         }
@@ -199,6 +207,10 @@ function handleEvents() {
                 parent.socket.emit("interaction", { type: "newyear_tree" });
             });
         }
+    }else if (parent?.S?.wabbit && !character?.s?.easterluck  ){
+	if (!smart.moving && get_nearest_monster({ type: "wabbit" }) ) {
+        smart_move("wabbit");
+        } 
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
@@ -504,7 +516,7 @@ async function attackLoop() {
 	    let target1 = null;
 	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
-	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo"];
+	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo","wabbit"];
                     var mob2=["stompy", "skeletor"]; //boss mạnh cần có healter
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
