@@ -99,6 +99,19 @@ async function handleHome() {
 	    return
     }
 
+    if(  parent?.S?.wabbit && !character?.s?.easterluck  ) {
+        let wabbit = parent.S.wabbit;
+        if(wabbit && wabbit.live && !smart.moving) {
+            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map }).then(() => {
+                let target_monster = get_nearest_monster({ type : "wabbit" });
+                if (target_monster) {
+                    change_target(target_monster);
+                }
+            });
+        }
+	    return
+    }
+
     if (!smart.moving) {
                     try {
                 // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
