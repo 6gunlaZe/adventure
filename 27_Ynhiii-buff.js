@@ -591,7 +591,7 @@ if (Date.now() < delayBug +15000 ) return
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )
 	{
-		if (currentTarget.mtype == "franky")
+		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
 		{
 		kite(cung1,10);
 		}
