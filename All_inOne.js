@@ -107,7 +107,7 @@ async function checkGameEvents() {
     let pro = 0;
     const events1 = [
        // { eventType: 'snowman', type: 'withJoin' },
-	    { eventType: 'wabbit', type: 'withJoin' },
+	//    { eventType: 'wabbit', type: 'withJoin' },
         { eventType: 'goobrawl', type: 'specific' },
         { eventType: 'crabxx', type: 'pro' },
         { eventType: 'franky', type: 'pro' },
@@ -120,14 +120,7 @@ async function checkGameEvents() {
         if (event.type === 'specific') {
             isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
-		if (event.eventType == "wabbit" && !character?.s?.easterluck)
-		{
-                isEventValid = !!parent?.S?.[event.eventType]?.live;  
-		}
-		else
-		{
 		isEventValid = !!parent?.S?.[event.eventType]?.live;  
-		}
         } else if (event.type === 'pro') {
             procheck = !!parent?.S?.[event.eventType];
         }
@@ -207,13 +200,6 @@ function handleEvents() {
                 parent.socket.emit("interaction", { type: "newyear_tree" });
             });
         }
-    }else if (parent?.S?.wabbit && !character?.s?.easterluck  ){
-	if (!smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
-        let wabbit = parent.S.wabbit;
-        if(wabbit && wabbit.live && !smart.moving) {
-            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map })
-        }
-        } 
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
@@ -238,6 +224,22 @@ async function handleHome() {
     if (!smart.moving && character.cc < 100) {
          equipSet('home');
             }
+
+    if(  parent?.S?.wabbit && !character?.s?.easterluck  ) {
+        let wabbit = parent.S.wabbit;
+        if(wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
+            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map }).then(() => {
+                let target_monster = get_nearest_monster({ type : "wabbit" });
+                if (target_monster) {
+                    change_target(target_monster);
+                }
+            });
+        }
+	    return
+    }
+
+
+	
     if (!smart.moving) {
                     try {
                 // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
