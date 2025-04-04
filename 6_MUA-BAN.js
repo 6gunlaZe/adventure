@@ -1347,7 +1347,7 @@ var upgradeMaxLevel = 8; //Max level it will stop upgrading items at if enabled
 var upgradeWhitelist = /// list moi
 	{
 		//ItemName, Max Level
-        firebow: 8,
+        //firebow: 8,
 		fireblade: 8,
 		firestaff: 8,
 		ololipop: 3,
@@ -1405,7 +1405,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		froststaff: 7,
 		//cupid: 5,
 		//oozingterror: 6,
-		firebow: 7,
+		//firebow: 7,
 		
 	};
 
