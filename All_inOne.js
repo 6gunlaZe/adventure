@@ -1251,7 +1251,7 @@ if (modeYnhi == 0 && prolive == 0)
 {
 if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
 }
-else if  (modeYnhi == 1 && prolive == 0)
+else if  (modeYnhi == 1)
 {
 if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
 }
