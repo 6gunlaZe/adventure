@@ -2039,7 +2039,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs" , "crossbow" , "harbringer",  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
