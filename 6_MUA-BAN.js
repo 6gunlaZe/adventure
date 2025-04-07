@@ -1376,6 +1376,7 @@ var upgradeWhitelist = /// list moi
 		froststaff: 4,
 		cupid: 5,
 		bataxe: 6,
+		pinkie: 4,
 		vgloves:6,
 		//oozingterror: 5,
 		
@@ -1412,6 +1413,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		wingedboots: 6,
 		froststaff: 7,
 		bataxe: 6,
+		pinkie: 4,
 		//cupid: 5,
 		//oozingterror: 6,
 		//firebow: 7,
