@@ -1426,7 +1426,7 @@ function scanSLitemUP_2_line()
 {
 	let sl = 0
 	//Iterate over every slot in our inventory.
-	for(var i = 0; i <= 55; i++)
+	for(var i = 0; i <= 41; i++)
 	{
 		var d = character.items[i];
 		if (d)
