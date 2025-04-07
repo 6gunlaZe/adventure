@@ -1302,6 +1302,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		wingedboots: 5,
 		froststaff: 6,
                 bataxe: 6,
+		pinkie: 4,
 		//fireblade: 7,
 		coat: 9,
 		hgloves: 5
@@ -1337,6 +1338,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		wingedboots: 7,
 		froststaff: 8,
                  bataxe: 6,
+		pinkie: 4,
 		//fireblade: 8,
 
         coat: 10,
