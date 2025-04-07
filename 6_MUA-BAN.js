@@ -1374,6 +1374,7 @@ var upgradeWhitelist = /// list moi
 		froststaff: 4,
 		cupid: 5,
 		bataxe: 6,
+		vgloves:6,
 		//oozingterror: 5,
 		
         coat: 9,
