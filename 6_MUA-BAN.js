@@ -1118,7 +1118,7 @@ function timbosskill()
 	if (timboss1 == 3){
 		smart_move({ map: "main", x: 1312, y: -200 }, () => {
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss4") 
+	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss400") 
 			timboss = Date.now()
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
@@ -1130,7 +1130,7 @@ function timbosskill()
 	if (timboss1 == 6){
 		smart_move({ map: "main", x: 700, y: 1800 }, () => {
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss5") 
+	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss500") 
 			timboss = Date.now()
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
@@ -1143,7 +1143,7 @@ function timbosskill()
 	if (timboss1 == 8){
 		smart_move({ map: "halloween", x: -140, y: 512 }, () => {
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss6") 
+	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss600") 
 			timboss = Date.now()
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
@@ -1155,7 +1155,7 @@ function timbosskill()
 	if (timboss1 == 0){
 		smart_move({ map: "main", x: -1137, y: 455 }, () => {
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
-	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss7") 
+	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss700") 
 			timboss = Date.now()
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
