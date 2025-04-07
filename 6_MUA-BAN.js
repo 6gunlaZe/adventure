@@ -1297,7 +1297,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		crossbow:5,
 		wingedboots: 5,
 		froststaff: 6,
-
+                bataxe: 6,
 		//fireblade: 7,
 		coat: 9,
 		hgloves: 5
@@ -1332,7 +1332,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		crossbow:8,
 		wingedboots: 7,
 		froststaff: 8,
-
+                 bataxe: 6,
 		//fireblade: 8,
 
         coat: 10,
@@ -1369,6 +1369,7 @@ var upgradeWhitelist = /// list moi
 		wingedboots: 3,
 		froststaff: 4,
 		cupid: 5,
+		bataxe: 6,
 		//oozingterror: 5,
 		
         coat: 9,
