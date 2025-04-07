@@ -1403,6 +1403,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		crossbow:6,
 		wingedboots: 6,
 		froststaff: 7,
+		bataxe: 6,
 		//cupid: 5,
 		//oozingterror: 6,
 		//firebow: 7,
