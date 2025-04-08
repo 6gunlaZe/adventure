@@ -1770,14 +1770,13 @@ characterData.forEach(([name, level]) => {
 var targetf1	
 var targetf2 
 
-if (f1)
+if (f1 && character.hp > 9000)
 {
 targetf1 = getBestTargets({ max_range: 180 , target: f1name , number : 1 }) 
 if(targetf1 && (f1.hp/f1.max_hp) < 0.75 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
-
 }        
 		
-if (f2)
+if (f2 && character.hp > 5500)
 {
 targetf2 = getBestTargets({ max_range: 180 , target: f2name , number : 1 }) 
 if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
