@@ -1665,7 +1665,15 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
         if (monster) {
             if (monster.hp > hpThreshold ) {
                 if (character.cc < 100) {
-                    equipSet('single');
+			if(eventType == "franky" && monster.target == "haiz")
+			{
+			equipSet('aoe');	
+			}
+			else
+			{
+			equipSet('single');	
+			}
+                   
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
