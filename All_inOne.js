@@ -256,7 +256,7 @@ async function handleHome() {
 
 async function safeawwait() {
 		    let tank = get_player("Ynhi");
-
+if(  parent?.S?.wabbit.live && !character?.s?.easterluck  )return
 if (character.hp < 3000) parent.api_call("disconnect_character", {name: "haiz"});
 	
 if (!tank || tank.rip ){
