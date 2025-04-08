@@ -2125,7 +2125,8 @@ async function BosscheckHPMYSv11(monsters, HP) {
         obj.hp < HP && 
         obj.serverRegion === region && 
         obj.serverIdentifier === serverIden &&
-        obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
+	obj.target == undefined  //chỉ đánh những quái chưa có ai đánh
+        //obj.target !== "haiz" && obj.target !== "Ynhi" && obj.target !== "nhiY"
       );
 
       // Nếu tìm thấy các đối tượng hợp lệ
