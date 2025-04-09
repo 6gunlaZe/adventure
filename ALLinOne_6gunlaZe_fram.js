@@ -198,7 +198,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 //if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
 if (targets.length == 0  && !leaderTarget )
 {		
-var targets1 = getBestTargets({ max_range: character.range, type: "quamanh", subtype: "frog11", number: 3 }); // Hàm gọi quái vật
+var targets1 = getBestTargets({ max_range: character.range, type: "spider", subtype: "scorpion", number: 3 }); // Hàm gọi quái vật
 
 let check3shot = 0;
 let check5shot = 0;
