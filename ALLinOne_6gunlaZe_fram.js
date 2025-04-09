@@ -146,13 +146,19 @@ async function attackLoop() {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
+var hutquai = getBestTargets({ max_range: character.range, type: "scorpion", number: 3, Nohavetarget: 1 }); // Hàm check
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 //game_log("characterRange" +monsterscharacterRange.length)		
 
             // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
-            if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
+
+	    if (hutquai.length == 3 && character.mp > 330 && !is_on_cooldown("3shot")){
+		    	weaponSet("dead");
+                        await use_skill("3shot", hutquai);
+	                delay = ms_to_next_skill("attack");
+	    }else if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("boom");
                 await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
