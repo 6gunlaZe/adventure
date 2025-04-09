@@ -33,15 +33,15 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1247, y: -91 }],
+    spider: [{ x: 1180, y: -71 }],
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'mole';
-const mobMap = 'tunnel';
+const home = 'spider';
+const mobMap = 'main';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -755,7 +755,7 @@ async function safeawwaitwalkInCircle() {
 
 if (!tank || tank.rip){
     if (!smart.moving) {
-smart_move({ map: "main", x: 500, y: 1800 })
+smart_move({ map: "main", x: 971, y: -66 })
     }
 }else
 {
