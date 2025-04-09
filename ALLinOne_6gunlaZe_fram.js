@@ -33,7 +33,7 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1180, y: -71 }],
+    spider: [{ x: 1299, y: -154 }],
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
@@ -146,7 +146,7 @@ async function attackLoop() {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "scorpion", number: 3, Nohavetarget: 1 }); // Hàm check
+var hutquai = getBestTargets({ max_range: character.range, type: "scorpion", Nohavetarget:1,  number: 1 }); // Hàm check
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
@@ -154,10 +154,10 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
             // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
 
-	    if (hutquai.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")){
+	    if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
 		    	weaponSet("dead");
-                        await use_skill("3shot", hutquai);
-	                delay = ms_to_next_skill("attack");
+               await attack(hutquai[0]);
+	           delay = ms_to_next_skill("attack");
 	    }else if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("boom");
                 await use_skill("5shot", monstersInRangeList.slice(0, 5));
@@ -775,8 +775,8 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
         const radius = 45;
 
 	   // Tọa độ người chơi (giả sử)
-	    let mainfram = get_player("haiz"); 
-       if(mainfram) center = { x: mainfram.x, y: mainfram.y }; 
+	 //   let mainfram = get_player("haiz"); 
+     //  if(mainfram) center = { x: mainfram.x, y: mainfram.y }; 
 
         // Calculate time elapsed since the last update
         const currentTime = performance.now();
