@@ -746,7 +746,7 @@ async function handleWarriorSkills(tank,f1) {
     }
 
 	///bat thì không cần f1
-const mobTypes = ["bat", "mole"];
+const mobTypes = ["bat", "mole","bigbird","spider","scorpion"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
