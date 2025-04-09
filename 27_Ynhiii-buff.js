@@ -650,7 +650,7 @@ if ( currentTarget && cung && kitefram == 1) {
 ////////////////////////
 var checkvar = get_player("6gunlaZe"); 
 	
-var target11= get_nearest_monster1({type: crepp,  NO_target: 1});
+var target11= get_nearest_monster1({type: crepp, subtype: "bigbird" , NO_target: 1});
 
 	if (checkvar){
 if (!target1 && character.targets <= 3 && target11 && character.hp > 4000) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
@@ -879,7 +879,7 @@ if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "oozingterror",
 function get_nearest_monster1(args) ///mod
 {
 	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
-
+        var army=[args.subtype, args.type, "scorpion"];  
 	var min_d=character.range ,target=null;
 		let hpp = 1000000000
 
@@ -892,7 +892,14 @@ function get_nearest_monster1(args) ///mod
 	{
 		var current=parent.entities[id];
 		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
+
+		
+		//if(args.type && current.mtype!=args.type) continue;
+
+if (args.subtype && args.type && (army.indexOf(current.mtype) == -1)   ) continue
+if (!args.subtype && args.type &&current.mtype != args.type   ) continue
+
+		
 		if(args.min_xp && current.xp<args.min_xp) continue;
 		if(args.max_att && current.attack>args.max_att) continue;
 		if(args.target && current.target!=args.target) continue;
