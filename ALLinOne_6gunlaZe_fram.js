@@ -349,14 +349,16 @@ const equipmentSets = {
     single: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 7 },
+	{ itemName: "t2quiver", slot: "offhand", level: 7, l: "l" },
     ],
     dead: [
         { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 8 },
+	{ itemName: "alloyquiver", slot: "offhand", level: 6, l: "l" },
     ],
     boom: [
         { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+        { itemName: "alloyquiver", slot: "offhand", level: 6, l: "l" },
     ],
     heal: [
         { itemName: "cupid", slot: "mainhand", level: 8, l: "l" },
