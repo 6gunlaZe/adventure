@@ -154,7 +154,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
             // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
 
-	    if (hutquai.length == 3 && character.mp > 330 && !is_on_cooldown("3shot")){
+	    if (hutquai.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")){
 		    	weaponSet("dead");
                         await use_skill("3shot", hutquai);
 	                delay = ms_to_next_skill("attack");
