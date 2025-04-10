@@ -129,7 +129,7 @@ async function handleHome() {
 
 
 
-const targetNames = ["Ynhi","haiz", "nhiY"];
+const targetNames = ["Ynhi","haiz", "nhiY","6gunlaZe"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
