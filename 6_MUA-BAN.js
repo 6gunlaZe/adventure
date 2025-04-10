@@ -157,7 +157,9 @@ candycane: {bank: "items5", level: -1, quantity: 1},
 tombkey: {bank: "items5", level: -1, quantity: 1},
 leather: {bank: "items5", level: -1, quantity: 1},
 shadowstone: {bank: "items5", level: -1, quantity: 1},
-
+frozenkey: {bank: "items5", level: -1, quantity: 1},
+spiderkey: {bank: "items5", level: -1, quantity: 1},
+	
 fieldgen0: {bank: "items1", level: -1, quantity: 1},
 
 
