@@ -676,13 +676,31 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
     }
 }
 
-
+let checkdef = 0;
 ////hàm tùy chỉnh trang bị chính thức khi không có events
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+	const currentTime = performance.now();
+	if (currentTime - eTime < 50)return
+	
+	if(checkdef == 0 && character.hp < 8000)
+	{
+	checkdef = 1
+        eTime = currentTime;
+        equipSet('deff');	
+		return
+	}
+	if(checkdef == 1 && character.hp > 12000)
+	{
+        eTime = currentTime;
+        equipSet('nodeff');		
+	checkdef = 0	
+		return
+	}
+
+	
 	if (events && !get_nearest_monster({ type: home }))return
 	if (bossvip > 0)return
-    const currentTime = performance.now();
-	if (currentTime - eTime < 50)return
+
     if ((framboss >0 )) {
         eTime = currentTime;
         equipSet('single');
@@ -953,11 +971,13 @@ const equipmentSets = {
         { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
         //{ itemName: "northstar", slot: "amulet", level: 0, l: "l" },
     ],
-    orb: [
-        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+    deff: [
+        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
     ],
-    mana: [
-        { itemName: "tshirt9", slot: "chest", level: 6, l: "l" }
+    nodeff: [
+        { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "helmet1", slot: "helmet", level: 8, },
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 13, l: "l" }
