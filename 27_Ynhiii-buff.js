@@ -295,17 +295,24 @@ setInterval(function() {
 
 
 
-
+let checkwwall = 1
 function kite(taget, kite_range)
 {
 
 	const radius = kite_range ;
-const  angle = Math.PI / 3.5 ;
+const  angle = Math.PI / 3.5  * checkwwall;
     if (can_move_to(taget.real_x, taget.real_y)) {
         const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
         const endGoalAngle = angleFromCenterToCurrent + angle
         const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-        move(endGoal.x, endGoal.y)
+	    if (can_move_to(endGoal.x, endGoal.y))
+	    {
+		    move(endGoal.x, endGoal.y)
+	    }
+	    else
+	    {
+		 checkwwall = checkwwall*(-1)   
+	    }
 
 	
 	}
