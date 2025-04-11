@@ -33,7 +33,7 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1299, y: -154 }],
+    spider: [{ x: 1159, y: -154 }],
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
@@ -146,7 +146,7 @@ async function attackLoop() {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "scorpion", Nohavetarget:1,  number: 1 }); // Hàm check
+var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
