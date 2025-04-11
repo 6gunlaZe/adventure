@@ -26,7 +26,7 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1180, y: -71 }],
+    spider: [{ x: 1300, y: -66 }],  // [{ x: 1180, y: -71 }],
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
@@ -271,6 +271,7 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 
 
     if (!smart.moving) {
+	    return //không chạy lòng vòng
         let center = locations[home][0];
         const radius = 25;
 
