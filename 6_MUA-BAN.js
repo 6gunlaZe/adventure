@@ -164,7 +164,7 @@ spidersilk: {bank: "items5", level: -1, quantity: 1},
 	
 fieldgen0: {bank: "items1", level: -1, quantity: 1},
 sstinger: {bank: "items1", level: -1, quantity: 1},
-
+frankypants: {bank: "items1", level: -1, quantity: 1},
 	
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
@@ -1288,7 +1288,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		mcape: 5,
 		ololipop: 5,
 		//glolipop: 5,
-		frankypants: 3,
+		//frankypants: 3,
 		//oozingterror: 5,
 		basher: 3 ,
 		mittens: 6,
@@ -1323,7 +1323,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		hboots: 4,
 		hhelmet: 6,
 		hpants: 7,
-		frankypants: 5,
+		//frankypants: 5,
 		ololipop: 8,
 		//glolipop:8,
 		mittens: 8,
@@ -1364,7 +1364,7 @@ var upgradeWhitelist = /// list moi
 		firestaff: 8,
 		ololipop: 3,
 		//glolipop:3,
-		frankypants: 2,
+		//frankypants: 2,
 		hboots: 2,
 		mittens: 3,
 		ecape: 7,
@@ -1401,7 +1401,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		vgloves:6,
 		ololipop: 7,
 		//glolipop:7,
-		frankypants: 6,
+		//frankypants: 6,
 		hboots: 4,
 		mittens: 7,
 		ecape: 7,
@@ -2056,7 +2056,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "frankypants" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","hhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "hboots", "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
