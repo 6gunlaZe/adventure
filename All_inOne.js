@@ -266,7 +266,7 @@ smart_move({ map: "main", x: 971, y: -66 })
 }
 else
 {
-if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 70  ))smart_move(destination)	
+if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 70  ))smart_move(destination)	
 
 
 
