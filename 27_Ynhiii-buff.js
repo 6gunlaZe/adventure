@@ -639,7 +639,7 @@ if ( currentTarget && cung && kitefram == 1) {
             }		
 	
 	
-	var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
+	var target1xc= get_nearest_monster1({comuctieu: 1 ,  nhonhat: 1});
 		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] )
             {
                 use_skill("curse", target1xc);
@@ -912,6 +912,7 @@ if (!args.subtype && args.type &&current.mtype != args.type   ) continue
 		if(args.target && current.target!=args.target) continue;
 		if(args.no_target && current.target && current.target!=character.name) continue;
 		if(args.NO_target && current.target) continue;
+		if(args.comuctieu && !current.target) continue;
 		if(args.path_check && !can_move_to(current)) continue;
 		var c_dist=parent.distance(character,current);
 		if(args.cus && !current.s["cursed"]  )continue;//co debuff thi chon
