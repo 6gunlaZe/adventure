@@ -210,7 +210,7 @@ function handleEvents() {
 	    if(Now_is_gobalevenrun)return
 	   handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	     if(Now_is_gobalevenrun)return
-	    handlebossPro('franky', 'level2w', 14, 30, 50000, "Ynhi","6gunlaZe")
+	    handlebossPro('franky', 'level2w', 14, 30, 10000, "Ynhi","6gunlaZe")
 	    if(Now_is_gobalevenrun)return
 	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
 
