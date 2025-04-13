@@ -1806,7 +1806,7 @@ if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown
 //nếu mọi người bỏ chạy nhưng mình vẫn còn gánh được
 if (f2 && f1 && character.hp > 12500 && targetfk)
 {
-if( (targetfk.hp/ targetfk.max_hp) < 0.3  && !targetfk.target && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetfk);	
+if( (targetfk.hp/ targetfk.max_hp) < 0.5  && !targetfk.target && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetfk);	
 }	    
 //////////
     }
