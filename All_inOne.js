@@ -552,6 +552,11 @@ for (var i = 0; i < mob.length; i++) {
 	{
           gobaltaget = target1;
 	}
+	
+        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && target1.target !== character.name ) {
+            await use_skill("taunt", target1.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
+		 break;
+        }
         // If a monster is found and is in range, execute the attack
         if (target1 && is_in_range(target1)) {
             await attack(target1); // Initiate attack
