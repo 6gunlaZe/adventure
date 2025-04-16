@@ -1798,18 +1798,18 @@ var targetf2
 if (f1 && character.hp > 9000)
 {
 targetf1 = getBestTargets({ max_range: 180 , target: f1name , number : 1 }) 
-if(targetf1 && (f1.hp/f1.max_hp) < 0.75 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
+if(targetf1 && (f1.hp/f1.max_hp) < 0.55 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf1);
 }        
 		
 if (f2 && character.hp > 5500)
 {
 targetf2 = getBestTargets({ max_range: 180 , target: f2name , number : 1 }) 
-if(targetf2 && (f2.hp/f2.max_hp) < 0.85 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
+if(targetf2 && (f2.hp/f2.max_hp) < 0.65 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
 	
 } 
 
 //nếu mọi người bỏ chạy nhưng mình vẫn còn gánh được
-if (f2 && f1 && character.hp > 12500 && targetfk)
+if (f2 && f1 && character.hp > 11500 && targetfk)
 {
 if( (targetfk.hp/ targetfk.max_hp) < 0.85  && !targetfk.target && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetfk);	
 }	    
