@@ -1310,6 +1310,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		//fireblade: 7,
 		coat: 9,
 		vgloves:6,
+		rapier: 7,
 		hgloves: 5
 
 
@@ -1345,6 +1346,7 @@ var upgradeWhitelistmoi2 = /// list moi
                  bataxe: 6,
 		pinkie: 4,
 		vgloves:6,
+		rapier: 7,
 		//fireblade: 8,
 
         coat: 10,
@@ -1384,6 +1386,7 @@ var upgradeWhitelist = /// list moi
 		bataxe: 6,
 		pinkie: 4,
 		vgloves:6,
+		rapier: 7,
 		//oozingterror: 5,
 		
         coat: 9,
@@ -1420,7 +1423,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		froststaff: 7,
 		bataxe: 6,
 		pinkie: 4,
-		//cupid: 5,
+		rapier: 7,
 		//oozingterror: 6,
 		//firebow: 7,
 		
