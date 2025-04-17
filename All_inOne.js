@@ -643,7 +643,7 @@ async function skillLoop() {
             try {
 				
 
-                if ((tank && tank.hp < tank.max_hp * 0.6 && character.name === "haiz") || character.hp < 12000 ){
+                if ( character.mp >= 170 && ( (f1 && f1.hp < f1.max_hp * 0.6 )  || (tank && tank.hp < tank.max_hp * 0.6 ) || character.hp < 12000 )  ){
                     //console.log("Calling handleStomp");
 					//game_log("1")
 
