@@ -530,6 +530,7 @@ setInterval(function(){
 if (checkTimeBetweenCalls() === 1) return;
 
 ///////////////////////////////////////////////	hoi mau
+	let didHealParty = false;
 	    var lowest_health = lowest_health_partymember();
 	    var lowest_health1 = lowest_health_partymember1();
 	//	game_log(lowest_health.name +">>>>>  "+lowest_health.name );
@@ -547,7 +548,7 @@ if (checkTimeBetweenCalls() === 1) return;
         if ( distance(character,{x: lowest_health.real_x, y: lowest_health.real_y}) < character.range) {
             heal(lowest_health);
 				 game_log("hoi mau!!!!!");
-
+                  didHealParty = true;
         }
 	}
 	
@@ -560,6 +561,28 @@ if (checkTimeBetweenCalls() === 1) return;
 	    }
 	}
 
+
+if (!didHealParty) {
+    const targetToHeal = Object.values(parent.entities)
+        .filter(entity =>
+            entity.player &&
+            entity.visible &&
+	    get_nearest_monster({type: "franky"}) &&
+            !entity.dead &&
+            entity.hp < entity.max_hp * 0.4 && 
+            distance(character, entity) <= 50
+        )
+        .reduce((lowest, mob) => (!lowest || mob.hp < lowest.hp) ? mob : lowest, null);
+
+    if (targetToHeal) {
+        heal(targetToHeal);
+        game_log("heal mob!!! ");
+    }
+}
+
+
+
+	
 	
 if( character.rip || smart.moving) return;
 	
