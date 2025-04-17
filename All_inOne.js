@@ -1807,11 +1807,14 @@ targetf2 = getBestTargets({ max_range: 180 , target: f2name , number : 1 })
 if(targetf2 && (f2.hp/f2.max_hp) < 0.65 && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetf2);
 	
 } 
-
+	    
 //nếu mọi người bỏ chạy nhưng mình vẫn còn gánh được
+var f33
 if (f2 && f1 && character.hp > 11500 && targetfk)
 {
 if( (targetfk.hp/ targetfk.max_hp) < 0.85  && !targetfk.target && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetfk);	
+if(targetfk.target && targetfk.target != character.name )f33 = get_player(targetfk.target);	
+if(f33 && f33.level && f33.level < 84  && character.mp > 100 && !is_on_cooldown("taunt") )use_skill("taunt", targetfk);		
 }	    
 //////////
     }
