@@ -1295,7 +1295,7 @@ function getBestTargets(options = {}) {
     const entities = []
 	     let number = 0
 
-     var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
+     var army=[options.subtype, options.type, "wabbit", "bbb", "cccc"];  
   
 
     for (const id in parent.entities) {
