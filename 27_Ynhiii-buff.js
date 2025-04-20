@@ -623,7 +623,7 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 	{
 		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
 		{
-		kite(cung1,10);
+		kite(cung1,30);
 		}
 		else
 		{
