@@ -553,8 +553,8 @@ for (var i = 0; i < mob.length; i++) {
           gobaltaget = target1;
 	}
 	
-        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && target1.target !== character.name ) {
-            await use_skill("taunt", target1.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
+        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && target1.target != character.name ) {
+            await use_skill("taunt", target1); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
 		 break;
         }
         // If a monster is found and is in range, execute the attack
@@ -807,7 +807,7 @@ for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.target && current.target !== character.name && f1 && character.hp >6000 && distance(character, f1) < 150 )  {
+    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
