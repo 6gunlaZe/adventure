@@ -99,7 +99,7 @@ async function handleHome() {
 	    return
     }
 
-    if (parent?.S?.wabbit?.live && !character?.s?.easterluck) {
+    if (parent?.S?.wabbit?.live && !character?.s?.easterluck && 1 == 2 ) {
         let wabbit = parent.S.wabbit;
         if (wabbit && wabbit.live && !smart.moving) {
             try {
