@@ -1414,8 +1414,8 @@ function avoidance() {
 		const target = get_target();
                 let check = !!target && !target.rip;
 
-           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )kite(host, 30)
-	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )kite(host, 30)
+           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )kite(host, 20)
+	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )kite(host, 20)
             lastMove = new Date();
 
 		////////////////////////////////////
@@ -1441,7 +1441,7 @@ const  angle = Math.PI / 3.5  * checkwwall;
         const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
 	    if (can_move_to(endGoal.x, endGoal.y))
 	    {
-		    move(endGoal.x, endGoal.y)
+		    xmove(endGoal.x, endGoal.y)
 	    }
 	    else
 	    {
