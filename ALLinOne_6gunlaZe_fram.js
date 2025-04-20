@@ -1446,6 +1446,7 @@ const  angle = Math.PI / 3.5  * checkwwall;
 	    }
 	    else
 	    {
+		    xmove(taget.real_x, taget.real_y)
 		 checkwwall = checkwwall*(-1)   
 	    }
 	}
