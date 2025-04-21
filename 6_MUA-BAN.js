@@ -1289,7 +1289,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		//glolipop: 5,
 		//frankypants: 3,
 		//oozingterror: 5,
-		basher: 3 ,
+		//basher: 3 ,
 		mittens: 6,
 		hboots: 3,
 		cupid: 7,
@@ -1329,7 +1329,7 @@ var upgradeWhitelistmoi2 = /// list moi
 		mittens: 8,
 		mcape: 8,
 		//oozingterror: 7,
-		basher: 6 ,
+		//basher: 6 ,
 		starkillers: 5,
 		sshield:8,
 		hgloves: 7,
@@ -1399,7 +1399,7 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 	{
 		//ItemName, Max Level
       
-		basher: 6 ,
+		//basher: 6 ,
 		vgloves:6,
 		ololipop: 7,
 		//glolipop:7,
