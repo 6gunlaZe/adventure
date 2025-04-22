@@ -1416,7 +1416,7 @@ function avoidance() {
 
            if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )kite(host, 20)
 	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )kite(host, 20)
-	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 20)	
+	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 30)	
             lastMove = new Date();
 
 		////////////////////////////////////
