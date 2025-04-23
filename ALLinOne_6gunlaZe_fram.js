@@ -1431,26 +1431,41 @@ setInterval(avoidance, 80);
 
 
 
-let checkwwall = 1
-function kite(taget, kite_range)
-{
-	const radius = kite_range ;
-const  angle = Math.PI / 3.5  * checkwwall;
-    if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-	    if (can_move_to(endGoal.x, endGoal.y))
-	    {
-		    xmove(endGoal.x, endGoal.y)
-	    }
-	    else
-	    {
-		    xmove(taget.real_x, taget.real_y)
-		 checkwwall = checkwwall*(-1)   
-	    }
+let checkwwall = 1;
+
+function kite(taget, kite_range) {
+	const radius = kite_range;
+
+	const angle = Math.PI / 3.5 * checkwwall;
+	const reverseAngle = Math.PI / 3.5 * -checkwwall;
+
+	if (can_move_to(taget.real_x, taget.real_y)) {
+		const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+
+		const endGoal = {
+			x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + angle),
+			y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + angle)
+		};
+
+		const endGoal1 = {
+			x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + reverseAngle),
+			y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + reverseAngle)
+		};
+
+		if (can_move_to(endGoal.x, endGoal.y)) {
+			xmove(endGoal.x, endGoal.y);
+		} else if (can_move_to(endGoal1.x, endGoal1.y)) {
+			xmove(endGoal1.x, endGoal1.y);
+			// Đảo hướng nếu phải đi ngược
+			checkwwall = -checkwwall;
+		} else {
+			xmove(taget.real_x, taget.real_y);
+			// Đảo hướng nếu buộc phải áp sát
+			checkwwall = -checkwwall;
+		}
 	}
 }
+
 
 
 
