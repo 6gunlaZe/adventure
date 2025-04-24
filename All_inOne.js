@@ -225,6 +225,7 @@ async function handleHome() {
          equipSet('home');
             }
 
+	/*
     if(  parent?.S?.wabbit.live && !character?.s?.easterluck  ) {
         let wabbit = parent.S.wabbit;
         if(wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
@@ -237,7 +238,7 @@ async function handleHome() {
         }
 	    return
     }
-
+*/
 
 	
     if (!smart.moving) {
