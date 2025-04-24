@@ -1414,8 +1414,16 @@ function avoidance() {
 		const target = get_target();
                 let check = !!target && !target.rip;
 
-           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )kite(host, 20)
-	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )kite(host, 20)
+           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )
+	   {
+		   if (character.map != "crypt") kite(host, 20)
+		   else xmove(host.real_x, host.real_y);
+	   }
+	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )
+	   {
+		   if (character.map != "crypt") kite(host, 20)
+		   else xmove(host.real_x, host.real_y);
+	   }
 	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 30)	
             lastMove = new Date();
 
