@@ -364,7 +364,7 @@ const equipmentSets = {
     ],
     dead: [
         { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 8 },
+        { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 6, l: "l" },
     ],
     boom: [
