@@ -151,7 +151,7 @@ async function attackLoop() {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check
+var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
@@ -209,7 +209,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 //if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
 if (targets.length == 0  && !leaderTarget )
 {		
-var targets1 = getBestTargets({ max_range: character.range, type: "spider", subtype: "scorpion", number: 3 }); // Hàm gọi quái vật
+var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "scorpion", number: 3 }); // Hàm gọi quái vật fram chính
 
 let check3shot = 0;
 let check5shot = 0;
