@@ -26,15 +26,15 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1290, y: -80 }],  // [{ x: 1180, y: -71 }],
+    spider: [{ x: 1290, y: -80 }],  // [{ x: 1180, y: -71 }], //vip3
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'spider';
-const mobMap = 'main';
+const home = 'fireroamer';
+const mobMap = 'desertland';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -262,7 +262,7 @@ if (character.hp < 4000 && !character.rip) parent.api_call("disconnect_character
 	
 if (!tank || tank.rip ){
     if (!smart.moving) {
-smart_move({ map: "main", x: 971, y: -66 })
+smart_move({ map: "desertland", x: 222, y: -700 })
     }
 }
 else
