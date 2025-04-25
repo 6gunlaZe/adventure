@@ -40,8 +40,8 @@ const locations = {
     xscorpion: [{ x: -495, y: 685 }]
 };
 
-const home = 'spider';
-const mobMap = 'main';
+const home = 'fireroamer';
+const mobMap = 'desertland';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -768,7 +768,7 @@ async function safeawwaitwalkInCircle() {
 
 if (!tank || tank.rip){
     if (!smart.moving) {
-smart_move({ map: "main", x: 971, y: -66 })
+smart_move({ map: "desertland", x: 222, y: -627 })
     }
 }else
 {
