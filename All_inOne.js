@@ -262,7 +262,7 @@ if (character.hp < 4000 && !character.rip) parent.api_call("disconnect_character
 	
 if (!tank || tank.rip ){
     if (!smart.moving) {
-smart_move({ map: "desertland", x: 222, y: -700 })
+smart_move({ map: "desertland", x: -100, y: 800 })
     }
 }
 else
