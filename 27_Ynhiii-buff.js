@@ -484,7 +484,7 @@ setInterval(function() {
 
 
 
-changeitem({ slot: "gloves", name : "mittens", level : 8 });
+changeitem({ slot: "gloves", name : "mittens", level : 9 });
 
 
 setInterval(function() {
@@ -493,7 +493,7 @@ lootAllChests()
 
 function shifting() {
     shift(0, 'xpbooster');
-changeitem({ slot: "gloves", name : "mittens", level : 8 });
+changeitem({ slot: "gloves", name : "mittens", level : 9 });
 }
 
 function lootAllChests() {
