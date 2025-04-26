@@ -17,7 +17,7 @@ const locations = {
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
-    fireroamer: [{ x: 222, y: -727 }],
+    fireroamer: [{ x: 50, y: -800 }],
     ghost: [{ x: -405, y: -1642 }],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
@@ -768,7 +768,7 @@ async function safeawwaitwalkInCircle() {
 
 if (!tank || tank.rip){
     if (!smart.moving) {
-smart_move({ map: "desertland", x: 222, y: -627 })
+smart_move({ map: "desertland", x: 0, y: 0 })
     }
 }else
 {
