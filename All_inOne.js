@@ -273,7 +273,7 @@ if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && 
 
     if (!smart.moving) {
         let center = locations[home][0];
-        const radius = 14;
+        const radius = 34;
 
         // Calculate time elapsed since the last update
         const currentTime = performance.now();
