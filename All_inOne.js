@@ -10,7 +10,7 @@ const locations = {
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
-    fireroamer: [{ x: 102, y: -727 }],
+    fireroamer: [{ x: 50, y: -727 }],
     ghost: [{ x: -405, y: -1642 }],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
