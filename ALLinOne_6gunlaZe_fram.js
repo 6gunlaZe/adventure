@@ -146,6 +146,7 @@ async function attackLoop() {
 //game_log("m")
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
+     const healerr = get_player("Ynhi");
     	
     try {
 
@@ -157,9 +158,21 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 //game_log("characterRange" +monsterscharacterRange.length)		
 
-            // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
-
-	    if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
+            if( (leader && leader.hp < 14000) || (healerr && healerr.hp < 8000)  ){
+		weaponSet("heal");
+// Lựa chọn healTarget có % máu thấp nhất
+let healTarget = leader;
+if (healerr) {
+    const healTargetHpPercent = healTarget.hp / healTarget.max_hp;
+    const healerrHpPercent = healerr.hp / healerr.max_hp;
+    if (!healTarget || healerrHpPercent < healTargetHpPercent) {
+        healTarget = healerr;
+    }
+}
+            await attack(healTarget);
+            delay = ms_to_next_skill("attack");    
+	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
+		    // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
 		    	weaponSet("dead");
                await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
