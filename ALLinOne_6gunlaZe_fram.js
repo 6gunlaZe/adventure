@@ -169,7 +169,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 //game_log("characterRange" +monsterscharacterRange.length)		
 
-            if( (leader && leader.hp < 14000) || (healerr && healerr.hp < 8000)  ){
+            if( (leader && leader.hp < 8000) || (healerr && healerr.hp < 4000)  ){
 		weaponSet("heal");
             const possibleTargets = [leader, healerr].filter(t => t); // bỏ null
             let healTarget = getLowestHpPercentTarget(possibleTargets);
