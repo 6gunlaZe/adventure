@@ -132,7 +132,18 @@ async function handleHome() {
 
 
 
-
+function getLowestHpPercentTarget(targets) {
+    if (!targets || targets.length === 0) return null;
+    let lowest = targets[0];
+    for (let i = 1; i < targets.length; i++) {
+        const currentPercent = targets[i].hp / targets[i].max_hp;
+        const lowestPercent = lowest.hp / lowest.max_hp;
+        if (currentPercent < lowestPercent) {
+            lowest = targets[i];
+        }
+    }
+    return lowest;
+}
 
 const targetNames = ["Ynhi","haiz", "nhiY","6gunlaZe"];
 
@@ -160,15 +171,8 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
             if( (leader && leader.hp < 14000) || (healerr && healerr.hp < 8000)  ){
 		weaponSet("heal");
-// Lựa chọn healTarget có % máu thấp nhất
-let healTarget = leader;
-if (healerr) {
-    const healTargetHpPercent = healTarget.hp / healTarget.max_hp;
-    const healerrHpPercent = healerr.hp / healerr.max_hp;
-    if (!healTarget || healerrHpPercent < healTargetHpPercent) {
-        healTarget = healerr;
-    }
-}
+            const possibleTargets = [leader, healerr].filter(t => t); // bỏ null
+            let healTarget = getLowestHpPercentTarget(possibleTargets);
             await attack(healTarget);
             delay = ms_to_next_skill("attack");    
 	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
@@ -192,9 +196,20 @@ if (healerr) {
                 delay = ms_to_next_skill("attack");
 		    
             } else if (targets.length > 0 && targets.length < 3 ) {
+		       if ( (leader && leader.hp < 14000) || (healerr && healerr.hp < 4500) )
+                           {
+		weaponSet("heal");
+            const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
+            let healTarget1 = getLowestHpPercentTarget(possibleTargets1);
+            await attack(healTarget1);
+            delay = ms_to_next_skill("attack");    
+                           }
+                       else
+                      {
                 weaponSet("single");
                 await attack(targets[0]);
                 delay = ms_to_next_skill("attack");
+		      }
             }else
 	    {
 
@@ -385,7 +400,7 @@ const equipmentSets = {
         { itemName: "alloyquiver", slot: "offhand", level: 6, l: "l" },
     ],
     heal: [
-        { itemName: "cupid", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "cupid", slot: "mainhand", level: 7, },
     ],
     xp: [
         { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
