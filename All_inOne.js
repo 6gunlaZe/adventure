@@ -10,7 +10,7 @@ const locations = {
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
-    fireroamer: [{ x: 50, y: -800 }],
+    fireroamer: [{ x: 0, y: -800 }],
     ghost: [{ x: -405, y: -1642 }],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
@@ -273,7 +273,7 @@ if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && 
 
     if (!smart.moving) {
         let center = locations[home][0];
-        const radius = 34;
+        const radius = 24;
 
         // Calculate time elapsed since the last update
         const currentTime = performance.now();
