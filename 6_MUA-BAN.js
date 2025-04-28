@@ -102,7 +102,7 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["cclaw","oozingterror","harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", "cupid", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["cclaw","oozingterror","harmor","hgloves","hpants","firestaff","fireblade","pmaceofthedead","bowofthedead","staffofthedead","maceofthedead","swordofthedead","daggerofthedead","shield","pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat", "snowball","vitring","carrot","beewings","crabclaw","santasbelt", "iceskates","wattire","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "mshield", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -1292,7 +1292,7 @@ var upgradeWhitelistmoi1 = /// list moi
 		//basher: 3 ,
 		mittens: 6,
 		hboots: 3,
-		cupid: 7,
+		//cupid: 7,
 		cape: 6,
 		sshield: 5,
 		//cclaw: 7,
@@ -1381,7 +1381,7 @@ var upgradeWhitelist = /// list moi
 		crossbow:3,
 		wingedboots: 3,
 		froststaff: 4,
-		cupid: 5,
+		//cupid: 5,
 		bataxe: 6,
 		pinkie: 4,
 		vgloves:6,
