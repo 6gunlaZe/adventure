@@ -813,7 +813,7 @@ const mobstype = Object.values(parent.entities)
         !entity.dead && entity.damage_type == "physical" &&  
         distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
     );	
-if (!is_on_cooldown("hardshell") && character.hp < 17000 &&  mobstype.length >= 1) {
+if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 1) {
     await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
 }
 
