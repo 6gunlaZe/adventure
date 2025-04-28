@@ -344,7 +344,13 @@ change_server("ASIA", "I");
 setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
 
 
-
+function waitAndUnluck() {
+    if (character.cc < 100) {
+        equipSet('UNluck');
+    } else {
+        setTimeout(waitAndUnluck, 5000);
+    }
+}
 
 
 function VIPBosses() {
@@ -361,6 +367,7 @@ if (bossvip == 1)
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
             }
         }
         else if ( !monster && distance(character, { x: 404, y: -2423 }) <= 80 && character.map === 'winterland')
@@ -386,6 +393,7 @@ else if (bossvip == 2)
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
             }
         }
         else if ( !monster && distance(character, { x: 666, y: -555 }) <= 80 && character.map === 'arena')
@@ -424,6 +432,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
             }
         }
 	    else
@@ -458,6 +467,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
             }
         }
 	 else
@@ -1703,6 +1713,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
                 }
             } else if (character.cc < 100) {
                 equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
             }
         }
 	    else
