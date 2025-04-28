@@ -688,14 +688,14 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 	const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 	
-	if(checkdef == 0 && character.hp < 8000)
+	if(checkdef == 0 && character.hp < 10000)
 	{
 	checkdef = 1
         eTime = currentTime;
         equipSet('deff');	
 		return
 	}
-	if(checkdef == 1 && character.hp > 12000)
+	if(checkdef == 1 && character.hp > 14000)
 	{
         eTime = currentTime;
         equipSet('nodeff');		
