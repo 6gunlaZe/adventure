@@ -967,6 +967,10 @@ const equipmentSets = {
     ],
     luck: [
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, } 
+    ],
+    UNluck: [
+        { itemName: "tigerstone", slot: "orb", level: 3, },
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
