@@ -1984,6 +1984,9 @@ var combineWhitelist =
 		t2intamulet: 2,
 		t2stramulet: 2,
 		t2dexamulet: 2,
+		orbofstr: 1,
+		orbofdex: 1,
+		orbofint: 1,
 	}
 
 
