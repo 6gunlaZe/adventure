@@ -1062,9 +1062,6 @@ function get_nearest_playerV(currentTarget)
 
 let checkluck = 0
 setInterval(async () => {
-        game_log("checkluck ==========="+checkluck)
-	game_log("checkluck ==========="+checkluck)
-	game_log("checkluck ==========="+checkluck)
   await shift(0, 'luckbooster')
 }, 700)
 
@@ -1276,6 +1273,17 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 }
 
 
+
+function waitAndUnluck() {
+    if (character.cc < 100) {
+        equipSet('UNluck');
+    } else {
+        setTimeout(waitAndUnluck, 5000);
+    }
+}
+
+
+
 ////hàm tùy chỉnh trang bị chính thức 
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
@@ -1291,7 +1299,8 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 	else if (checkluck == 1)
 	{
         eTime = currentTime;
-        equipSet('luck');	
+        equipSet('luck');
+		 setTimeout(waitAndUnluck, 10000);
 	}
 	else 
 	{
@@ -1541,6 +1550,11 @@ const equipmentSets = {
     luck: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, } 
+    ],
+    UNluck: [
+        { itemName: "tigerstone", slot: "orb", level: 3, },
+        //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
@@ -1561,7 +1575,7 @@ const equipmentSets = {
     nodef: [    
         { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
         { itemName: "mittens", slot: "gloves", level: 9, },
-        { itemName: "helmet1", slot: "helmet", level: 8, },	
+        { itemName: "fury", slot: "helmet", level: 4, },	
     ],
     orb: [
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
