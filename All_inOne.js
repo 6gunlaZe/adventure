@@ -118,7 +118,7 @@ async function checkGameEvents() {
         let isEventValid = false;
         let procheck = false;
         if (event.type === 'specific') {
-            isEventValid = !!parent?.S?.[event.eventType];
+		if (server.region == "EU" && server.id == "II" )isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
 		isEventValid = !!parent?.S?.[event.eventType]?.live;  
         } else if (event.type === 'pro') {
