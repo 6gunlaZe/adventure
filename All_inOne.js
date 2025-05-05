@@ -1281,7 +1281,7 @@ if ( region == "EU" && serverIden == "II" )
 }
 	else
 	{
-         change_server("EU", "II");
+         if(character.hp > 8000)change_server("EU", "II");
 	//change_server("ASIA", "I");	
 	}
 }	
@@ -1310,43 +1310,48 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 
 
 
+let autobuyPonty = 1; // bật auto
+let readyToSwitch = false;
 
-let autobuyPonty = 1 ///tu dong chuyen sv mua do ponty
+// Bước 1: đếm 2000s (33 phút)
+setTimeout(() => {
+    game_log("Đã đủ 2000s. Đang chờ máu hồi để chuyển server...");
+    readyToSwitch = true;
+    waitForHPAndSwitch();
+}, 2000000); // 2000 * 1000 ms
 
-setInterval(function() {	
-	
-if (prolive == 1 || events || framboss > 0 || bossvip > 0 ) return	
-if (autobuyPonty != 1) return
-	
-	///////////
-let randomNumber = getRandom(1, 100);	
-let region = server.region;
-let serverIden = server.id
-		game_log("svvvvvvvv ! ! ==   " +randomNumber);
+// Bước 2: kiểm tra máu liên tục khi đã sẵn sàng
+function waitForHPAndSwitch() {
+    if (!readyToSwitch || autobuyPonty != 1) return;
+
+    if (character.hp > 10000) {
+        // Không có sự kiện thì mới chuyển
+        if (prolive == 1 || events || framboss > 0 || bossvip > 0) return;
+        if (parent.S.franky || parent.S.icegolem) return;
+
+        let randomNumber = getRandom(1, 100);
+        game_log("Đủ điều kiện. Chuyển server với số ngẫu nhiên: " + randomNumber);
+
+        if (randomNumber < 20) {
+            change_server("US", "I");
+        } else if (randomNumber > 80) {
+            change_server("EU", "I");
+        } else if (randomNumber > 20 && randomNumber < 30) {
+            change_server("ASIA", "I");
+        } else if (randomNumber > 30 && randomNumber < 60) {
+            change_server("US", "III");
+        } else if (randomNumber > 60 && randomNumber < 80) {
+            change_server("US", "II");
+        } else {
+            change_server("EU", "II");
+        }
+    } else {
+        game_log("Máu chưa đủ (" + character.hp + "). Đang chờ...");
+        setTimeout(waitForHPAndSwitch, 5000); // Kiểm tra lại sau 5s
+    }
+}
 
 
-if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv
-{
-	
-if (randomNumber < 20) {
-    change_server("US", "I");
-} else if (randomNumber > 80) {
-    change_server("EU", "I");
-} else if (randomNumber > 20 && randomNumber < 30) {
-   // change_server("EU", "II");
-       change_server("ASIA", "I");
-} else if (randomNumber > 30 && randomNumber < 60) {
-    change_server("US", "III");
-} else if (randomNumber > 60 && randomNumber < 80) {
-    change_server("US", "II");
-} else {
-    //change_server("ASIA", "I");
-      change_server("EU", "II");
-}	
-	
-}	
-	
-}, 2000000); //30p chuyen sv 1 lan
 
 function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
