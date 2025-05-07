@@ -457,7 +457,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["wbookhs","mittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","orbg","froststaff","wbook1"];
+    let itemsToExclude = ["wbookhs","mittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","jacko","slimestaff","tigerstone","froststaff","wbook1"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
@@ -784,7 +784,7 @@ function skill_scare() {
 	
 if (is_on_cooldown("scare")) 
 {
-	changeitem({ slot: "orb", name : "orbg", level : 3 });
+	changeitem({ slot: "orb", name : "tigerstone", level : 3 });
 }
 	
 if (character.targets == 0) {
