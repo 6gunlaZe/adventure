@@ -1,7 +1,7 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
 let lastUpdateTime = performance.now();
-
+setTimeout(waitAndUnluck, 1000);
 const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
