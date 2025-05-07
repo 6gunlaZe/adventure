@@ -1111,7 +1111,7 @@ function scare() {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
-        if (current.mtype === home && character.hp <11000 && current.target == character.name) {
+        if (current.mtype === home && character.hp <10000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
