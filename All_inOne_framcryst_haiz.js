@@ -170,7 +170,7 @@ const mobsInRange = Object.values(parent.entities)
 
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
-const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2"); 
+const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
 if ( lowhpMob.length >= 1)
 {
 	checkluck = 1  ///luck set
@@ -1397,7 +1397,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 11000) {
 
 
 	
-const ango  = [ "a2" , "a3", "a7", "vbat"];
+const ango  = [ "a2" , "a3", "a7", "vbat","a5","a8"];
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
@@ -1683,7 +1683,7 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 5;
+const rangeBuffer = 50;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
