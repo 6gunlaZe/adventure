@@ -1293,7 +1293,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	// path_check: Checks if the character can move to the target
 	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
 	var min_d=450 ,target=null;
-        var bossarmy=[ "a2" , "a3", "a7", "vbat", "stompy", "skeletor"]; 
+        var bossarmy=[ "a2" , "a3", "a7", "vbat", "stompy", "skeletor","a5","a8"]; 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
@@ -1412,7 +1412,7 @@ const rangeBuffer = 90;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a1","a2","a3","a4","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx"];
+const avoidTypes = ["a0","a1","a2","a3","a4","a5","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
