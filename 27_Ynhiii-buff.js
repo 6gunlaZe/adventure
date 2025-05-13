@@ -479,8 +479,9 @@ setInterval(function() {
 
 
 
-
-
+setTimeout(function() {
+    changeitem({ slot: "orb", name : "tigerstone", level : 3 });
+}, 3000);
 
 
 
