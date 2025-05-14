@@ -164,6 +164,8 @@ async function attackLoop() {
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
+ var KILLdauTien = getBestTargets({ max_range: character.range, type: "a5", subtype: "zapper0",  number: 1 }); // Hàm check hút quái
+
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
@@ -174,7 +176,12 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
             const possibleTargets = [leader, healerr].filter(t => t); // bỏ null
             let healTarget = getLowestHpPercentTarget(possibleTargets);
             await attack(healTarget);
-            delay = ms_to_next_skill("attack");    
+            delay = ms_to_next_skill("attack");  
+	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
+		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
+		    	weaponSet("single");
+               await attack(KILLdauTien[0]);
+	           delay = ms_to_next_skill("attack");
 	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
 		    // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
 		    	weaponSet("dead");
