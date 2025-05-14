@@ -203,7 +203,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 delay = ms_to_next_skill("attack");
 		    
             } else if (targets.length > 0 && targets.length < 3 ) {
-		       if ( (leader && leader.hp < 14000) || (healerr && healerr.hp < 6000) )
+		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
                            {
 		weaponSet("heal");
             const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
