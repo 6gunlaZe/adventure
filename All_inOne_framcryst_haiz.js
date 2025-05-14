@@ -1400,7 +1400,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 11000) {
 
 
 	
-const ango  = [ "a2" , "a3", "a7", "vbat","a5","a8"];
+const ango  = [ "a2" , "a3", "a7", "vbat","a8"];
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
