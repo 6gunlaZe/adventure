@@ -24,8 +24,12 @@ if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
 // if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 25);
 if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 
+if (character.map != "crypt" && character.rip )respawn();
 	
 }, 40000);
+
+
+
 let timeat = Date.now();
 let initialTarget = null
 //////////////////////////////////////////
