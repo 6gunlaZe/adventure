@@ -1686,7 +1686,7 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 50;
+const rangeBuffer = 30;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
