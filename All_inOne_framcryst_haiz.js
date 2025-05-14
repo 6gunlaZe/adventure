@@ -1653,7 +1653,7 @@ function scare() {
     let targetedForMoreThanOneSecond = false;
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if (character.hp <4000 && current.target == character.name) {
+        if (character.hp <8000 && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
