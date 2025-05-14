@@ -859,6 +859,10 @@ for (let char in parent.party) {
 
 function getBestTargets(options = {}) {
     const entities = []
+	     let number = 0
+
+     var army=[options.subtype, options.type, "wabbit", "bbb", "cccc"];  
+  
 
     for (const id in parent.entities) {
         const entity = parent.entities[id]
@@ -866,11 +870,30 @@ function getBestTargets(options = {}) {
         if (entity.dead || !entity.visible) continue
 
  if (options.max_range && distance(character, entity) > options.max_range) continue
-if (options.min_range && distance(character, entity) < options.min_range) continue
- if (options.type && entity.mtype !== options.type) continue
-		 if (options.minHP && options.minHP*entity.max_hp > entity.hp) continue
+		
+if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
+if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
+			
+
+if (options.maxHP && entity.max_hp > options.maxHP) continue
+if (options.HP && entity.hp > options.HP) continue
+	    if (options.HPmin && entity.hp < options.HPmin) continue
+ 		if (options.target && entity.target != options.target) continue
+		if (options.havetarget && !entity.target ) continue
+		if (options.Nohavetarget && entity.target ) continue
+		if (options.fire && entity.s.burned  ) continue
+	        if (options.cus && !entity.s["cursed"]  ) continue
+	    	if (options.NoMark && entity.s.marked ) continue
+		if (options.targetNO && entity.target == options.targetNO) continue     
+ 		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
+	//  if(army.indexOf(entity.mtype) == -1) continue
+		///check list khong co se tra ve -1
+      //  !target2.s.marked 
 		
 		
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
         entities.push(entity)
     }
 
@@ -1080,8 +1103,15 @@ async function attackLoop() {
     let delay = null; // Default delay
     try {
         let nearest = null;
+        var KILLdauTien = getBestTargets({ max_range: character.range, type: "zapper0", subtype: "a5",  number: 1 }); 
 
+        if (KILLdauTien.length >= 1 && character.mp > 100 ){
+		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
+              nearest = KILLdauTien[0];
+	}
+	    
         // Find the nearest monster based on the targetNames
+if (!nearest) {
         for (let i = 0; i < targetNames.length; i++) {
             nearest = get_nearest_monster_v2({
                 target: targetNames[i],
@@ -1091,7 +1121,7 @@ async function attackLoop() {
             });
             if (nearest) break;
         }
-
+}
 	    
         if (!nearest) {
             for (let i = 0; i < targetNames.length; i++) {
