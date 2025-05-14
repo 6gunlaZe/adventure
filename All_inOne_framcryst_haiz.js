@@ -148,8 +148,7 @@ let toado = [
 { x: 2320, y: -1740, z: 68 }
 
 ];
-if (character.hp < 5000) parent.api_call("disconnect_character", {name: "haiz"});
-if(character.esize < 3)parent.api_call("disconnect_character", {name: "haiz"});
+if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_call("disconnect_character", {name: "haiz"});
 	
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
