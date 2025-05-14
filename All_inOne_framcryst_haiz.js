@@ -1424,7 +1424,13 @@ if (!is_on_cooldown("charge") && is_moving(character) ) {
 
 
 	
-if (!is_on_cooldown("hardshell") && character.hp < 11000) {
+const mobstype = Object.values(parent.entities)
+    .filter(entity => 
+        entity.visible && entity.target && entity.target == character.name &&  
+        !entity.dead && entity.damage_type == "physical" &&  
+        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
+    );	
+if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 1 && character.mp > 530) {
     await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
 }
 
