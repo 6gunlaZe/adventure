@@ -198,11 +198,13 @@ game_log("Checker value: " + checker);
     }
 }
 
-// Kiểm tra và di chuyển tới vị trí mới nhất mỗi 2s
-setInterval(() => {
-    moveWithSmartAndSuperMOVE();  // Di chuyển đến vị trí mới nhất nếu có
-}, 2000);  // Kiểm tra và di chuyển mỗi 2 giây
-//////////////////////////////////////
+// Đợi 6 giây rồi mới bắt đầu setInterval
+setTimeout(() => {
+    setInterval(() => {
+        moveWithSmartAndSuperMOVE();  // Di chuyển đến vị trí mới nhất nếu có
+    }, 2000);  // Sau đó lặp mỗi 2 giây
+}, 6000); // Delay 6 giây ban đầu
+
 
 
 
