@@ -2267,7 +2267,7 @@ let validObjects1
     const data = await response.json();
   //  parent.S2 = data;
 validObjects0 = data.filter(obj => obj.hp !== undefined  && obj.serverIdentifier != "PVP" );	
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000 )    && obj.serverIdentifier != "PVP" );	  	  
+validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000000 )    && obj.serverIdentifier != "PVP" );	  	  
   }
   // Query API1
   const url1 = "https://aldata.earthiverse.ca/monsters/" + monsters1.join(",");
