@@ -1285,35 +1285,6 @@ smart_move({ map: "main", x: -200, y: -110 }, () => {
 var upgradeWhitelistmoi1 = /// list moi
 	{
 		//ItemName, Max Level
-        hammer: 4,
-		mcape: 5,
-		ololipop: 5,
-		//glolipop: 5,
-		//frankypants: 3,
-		//oozingterror: 5,
-		//basher: 3 ,
-		mittens: 6,
-		hboots: 3,
-		//cupid: 7,
-		cape: 6,
-		sshield: 5,
-		//cclaw: 7,
-		//dagger: 7,
-		//stinger: 7,
-		//ecape: 7,
-		wingedboots: 5,
-		pmace:5,
-		crossbow:5,
-		wingedboots: 5,
-		froststaff: 6,
-                bataxe: 6,
-		pinkie: 4,
-		//fireblade: 7,
-		coat: 9,
-		vgloves:6,
-		rapier: 7,
-		hgloves: 5
-
 
 	};
 
@@ -1322,37 +1293,6 @@ var upgradeWhitelistmoi1 = /// list moi
 var upgradeWhitelistmoi2 = /// list moi
 	{
 		//ItemName, Max Level
-		hboots: 4,
-		hhelmet: 6,
-		hpants: 7,
-		//frankypants: 5,
-		ololipop: 8,
-		//glolipop:8,
-		mittens: 8,
-		mcape: 8,
-		//oozingterror: 7,
-		//basher: 6 ,
-		starkillers: 5,
-		sshield:8,
-		hgloves: 7,
-		//cclaw: 8,
-		//dagger: 8,
-		//stinger: 8,
-		//ecape: 8,
-		wingedboots: 7,
-		pmace:7,
-		crossbow:8,
-		wingedboots: 7,
-		froststaff: 8,
-                 bataxe: 6,
-		pinkie: 4,
-		vgloves:6,
-		rapier: 7,
-		//fireblade: 8,
-
-        coat: 10,
-		//fireblade: 9,
-
 
 	};
 
@@ -1363,34 +1303,7 @@ var upgradeWhitelist = /// list moi
 	{
 		//ItemName, Max Level
         //firebow: 8,
-		fireblade: 8,
-		firestaff: 8,
-		ololipop: 3,
-		//glolipop:3,
-		//frankypants: 2,
-		hboots: 2,
-		mittens: 3,
-		//ecape: 7,
-		mcape: 4,
-		cape: 4,
-		sshield:4,
-		hgloves: 4,
-		//cclaw: 6,
-		//dagger: 6,
-		//stinger: 6,
-		wingedboots: 4,
-		pmace:4,
-		crossbow:3,
-		wingedboots: 3,
-		froststaff: 4,
-		//cupid: 5,
-		bataxe: 6,
-		pinkie: 4,
-		vgloves:6,
-		rapier: 7,
-		//oozingterror: 5,
-		
-        coat: 9,
+
 	};
 
 
@@ -1402,31 +1315,6 @@ var upgradeWhitelistmodebinhthuong = /// list moi
 		//ItemName, Max Level
       
 		//basher: 6 ,
-		vgloves:6,
-		ololipop: 7,
-		//glolipop:7,
-		//frankypants: 6,
-		hboots: 4,
-		mittens: 7,
-		//ecape: 7,
-		mcape: 6,
-		cape: 4,
-		sshield:7,
-		//hgloves: 6,
-		hhelmet:6,
-		//cclaw: 8,
-		//dagger: 6,
-		//stinger: 6,
-		wingedboots: 6,
-		pmace:6,
-		crossbow:6,
-		wingedboots: 6,
-		froststaff: 7,
-		bataxe: 6,
-		pinkie: 4,
-		rapier: 7,
-		//oozingterror: 6,
-		//firebow: 7,
 		
 	};
 
