@@ -229,7 +229,6 @@ setInterval(function() {
 /////////////////////////////////
 
 setInterval(() => {
-	skill_scare()
 	
 	if (character.ping > 600 )
 {
@@ -763,43 +762,6 @@ setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
 
 
 
-
-
-
-
-
-
-
-
-////////////
-setInterval(function() {
-
-skill_scare();
-
-}, 200);
-
-
-
-
-function skill_scare() {
-	
-if (is_on_cooldown("scare")) 
-{
-	changeitem({ slot: "orb", name : "tigerstone", level : 3 });
-}
-	
-if (character.targets == 0) {
-	return;
-}
-
-if (character.targets >= 1 && character.hp < 3000 && !is_on_cooldown("scare") ) 
-{
-	changeitem({ slot: "orb", name : "jacko", level : 1 });
-	use_skill("scare");
-	game_log("skill scare");
-
-}
-}
 
 
 
