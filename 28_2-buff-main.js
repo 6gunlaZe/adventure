@@ -214,7 +214,7 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 setInterval(function() {
 
-changeitem({ slot: "gloves", name : "mittens", level : 8 });
+changeitem({ slot: "gloves", name : "mittens", level : 9 });
 	
  if (character.rip) { ///////auto hoi sinh
     respawn();
@@ -225,6 +225,13 @@ changeitem({ slot: "gloves", name : "mittens", level : 8 });
 
 
 
+setTimeout(function() {
+    changeitem({ slot: "orb", name : "tigerstone", level : 3 });
+}, 3000);
+
+
+
+changeitem({ slot: "gloves", name : "mittens", level : 9 });
 
 
 
@@ -645,12 +652,11 @@ function changeitem(options = {}) {
 
 
 
-changeitem({ slot: "gloves", name : "mittens", level : 8 });
 
 
 function chuyendoithongminh(taget)
 {
-changeitem({ slot: "gloves", name : "mittens", level : 8 });
+changeitem({ slot: "gloves", name : "mittens", level : 9 });
 ///////////////////////////////////	 
 if (taget && !taget.s["frozen"])
 {	
