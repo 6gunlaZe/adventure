@@ -142,7 +142,6 @@ function on_cm(name, data) {
 /////////////////////////////////
 
 setInterval(() => {
-	skill_scare()
 	if (started == undefined) started = Date.now()
     if ( Date.now() < started + 1000) return
 	if(is_on_cooldown("use_hp")) return 
@@ -555,46 +554,6 @@ if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") &&
 
 
 
-
-
-
-
-
-
-
-
-
-////////////
-setInterval(function() {
-
-skill_scare();
-
-}, 200);
-
-
-
-function skill_scare() {
-	
-if (is_on_cooldown("scare")) 
-{
-	changeitem({ slot: "orb", name : "tigerstone", level : 3 });
-}
-	
-if (character.targets == 0) {
-	return;
-}
-
-if (character.targets >= 1 && character.hp < 3000 && !is_on_cooldown("scare") ) 
-{
-	changeitem({ slot: "orb", name : "jacko", level : 1 });
-	use_skill("scare");
-	game_log("skill scare");
-
-}
-}
-
-
-
 function changeitem(options = {}) {
 	
 
@@ -656,7 +615,6 @@ function changeitem(options = {}) {
 
 function chuyendoithongminh(taget)
 {
-changeitem({ slot: "gloves", name : "mittens", level : 9 });
 ///////////////////////////////////	 
 if (taget && !taget.s["frozen"])
 {	
@@ -664,7 +622,6 @@ changeitem({ slot: "mainhand", name : "froststaff", level : 8 });
 }
 	else
 	{
-//if (character.id == "angioseal")changeitem({ slot: "mainhand", name : "firestaff", level : 9 });
 if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "oozingterror", level : 8 });		
 	}
 
@@ -949,5 +906,306 @@ function distanceToPoint(x1, y1, x2, y2) {
 }
 // Learn Javascript: https://www.codecademy.com/learn/introduction-to-javascript
 // Write your own CODE: https://github.com/kaansoral/adventureland
+
+
+
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+
+
+//l: "l"  == L lock
+let isEquipping = false; // Flag kiểm soát trạng thái
+
+async function equipBatch(data) {
+    if (isEquipping) {
+        game_log("equipBatch is already running. Skipping.");
+        return;
+    }
+    isEquipping = true; // Đánh dấu đang chạy
+
+    if (!Array.isArray(data)) {
+        game_log("Can't equipBatch non-array");
+        isEquipping = false;
+        return handleEquipBatchError("Invalid input: not an array");
+    }
+    if (data.length > 15) {
+        game_log("Can't equipBatch more than 15 items");
+        isEquipping = false;
+        return handleEquipBatchError("Too many items");
+    }
+
+    let validItems = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let itemName = data[i].itemName;
+        let slot = data[i].slot;
+        let level = data[i].level;
+        let l = data[i].l;
+
+        if (!itemName) {
+            game_log("Item name not provided. Skipping.");
+            continue;
+        }
+
+        let found = false;
+        if (parent.character.slots[slot]) {
+            let slotItem = parent.character.items[parent.character.slots[slot]];
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
+            continue;
+        }
+
+        for (let j = 0; j < parent.character.items.length; j++) {
+            const item = parent.character.items[j];
+            if (item && item.name === itemName && item.level === level && item.l === l) {
+                validItems.push({ num: j, slot: slot });
+                break;
+            }
+        }
+    }
+
+    if (validItems.length === 0) {
+        isEquipping = false;
+        return; // Không có vật phẩm hợp lệ
+    }
+
+    try {
+        parent.socket.emit("equip_batch", validItems);
+        await parent.push_deferred("equip_batch");
+    } catch (error) {
+        console.error("Error in equipBatch:", error);
+        handleEquipBatchError("Failed to equip items");
+    }
+
+    isEquipping = false; // Reset flag khi hoàn tất
+}
+
+
+
+
+
+const equipmentSets = {
+
+    deff: [
+        { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+    ],
+    nodeff: [
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+    ],
+    gold: [
+        { itemName: "handofmidas", slot: "gloves", level: 7 },
+    ],
+    luck: [
+        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 9 },
+	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+    ],
+    healmax: [
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+    ],
+    fram: [
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+    ],
+    xp: [
+        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
+        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    ],
+    vatly: [
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+    ],
+    phep: [
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+    ],
+    orb: [
+        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
+        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+    ],
+    nogold: [
+        { itemName: "mittens", slot: "gloves", level: 9 },
+    ],
+    stat: [
+        { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    ],
+};
+
+
+
+
+
+
+
+function equipSet(setName) {
+    const set = equipmentSets[setName];
+    if (set) {
+        equipBatch(set);
+    } else {
+        console.error(`Set "${setName}" not found.`);
+    }
+}
+
+
+
+//////////////////////////////////////////////////////////////////
+let lastSwitchTime = 0; // Timestamp of the last switch
+const switchCooldown = 750; // Cooldown period in milliseconds (0.75 seconds)
+
+// Function to check if the cooldown period has passed
+function CD() {
+    return performance.now() - lastSwitchTime > switchCooldown;
+}
+
+// Utility function to handle cooldown check and equipment switch
+const weaponSet = (set) => {
+    if (CD()) {
+        equipSet(set);
+        lastSwitchTime = performance.now();
+    }
+};
+
+
+
+
+// Helper function to handle errors
+function handleEquipBatchError(message) {
+    game_log(message);
+    // You may decide to implement a delay or other error handling mechanism here
+    return Promise.reject({ reason: "invalid", message });
+}
+
+
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
+
+
+
+
+
+
+
+
+
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
+
+    for (id in parent.entities) {
+        var current = parent.entities[id];
+        if ((character.hp < 4700 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 200); // 1000 milliseconds = 1 second
+        }
+    }
+}
+setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
+
+
+
+
+let eTime = 0;
+let checkdef = 0;
+let checkheall = 0;
+
+function ChuyendoiITEM() {
+
+     const leader = get_player("haiz");
+     const damer = get_player("6gunlaZe");
+	const currentTime = performance.now();
+	if (currentTime - eTime < 50)return
+	
+	if(checkdef == 0 && character.hp/character.max_hp < 0.64)
+	{
+	checkdef = 1
+        eTime = currentTime;
+        equipSet('deff');	
+		return
+	}
+	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
+	{
+        eTime = currentTime;
+        equipSet('nodeff');		
+	checkdef = 0	
+		return
+	}
+
+	if(checkheall == 0 && character.hp > 8000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	{
+	checkheall = 1
+        eTime = currentTime;
+        equipSet('healmax');
+		return
+	}
+	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp > 7000)) )
+	{
+        eTime = currentTime;
+        equipSet('fram');
+	checkheall = 0	
+		return
+	}
+
+
+const mobstype = Object.values(parent.entities)
+    .filter(entity => 
+        entity.visible && entity.target && entity.target == character.name &&  
+        !entity.dead && entity.damage_type == "physical" &&  
+        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
+    );	
+	
+const mobstype1 = Object.values(parent.entities)
+    .filter(entity => 
+        entity.visible && entity.target && entity.target == character.name &&  
+        !entity.dead && entity.damage_type == "magical" &&  
+        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
+    );		
+	
+	
+if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
+	eTime = currentTime;
+        equipSet('vatly');
+}
+else if (mobstype1.length >= 1 && character.hp < 8000)
+	{
+	eTime = currentTime;
+        equipSet('phep');
+	}
+
+}
+
+setInterval(ChuyendoiITEM, 100);
+
+
+
+
+
+
+
+
+
 // NOTE: If the tab isn't focused, browsers slow down the game
 // NOTE: Use the performance_trick() function as a workaround
