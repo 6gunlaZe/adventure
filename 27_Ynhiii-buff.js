@@ -1197,10 +1197,9 @@ else if (mobstype1.length >= 1 && checkheall == 0 && checkdef == 0 && character.
         equipSet('phep');
 	}
 
-
-
 }
 
+setInterval(ChuyendoiITEM, 100);
 
 
 
