@@ -948,6 +948,238 @@ if (!args.subtype && args.type &&current.mtype != args.type   ) continue
 }
 
 
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+
+
+//l: "l"  == L lock
+let isEquipping = false; // Flag kiểm soát trạng thái
+
+async function equipBatch(data) {
+    if (isEquipping) {
+        game_log("equipBatch is already running. Skipping.");
+        return;
+    }
+    isEquipping = true; // Đánh dấu đang chạy
+
+    if (!Array.isArray(data)) {
+        game_log("Can't equipBatch non-array");
+        isEquipping = false;
+        return handleEquipBatchError("Invalid input: not an array");
+    }
+    if (data.length > 15) {
+        game_log("Can't equipBatch more than 15 items");
+        isEquipping = false;
+        return handleEquipBatchError("Too many items");
+    }
+
+    let validItems = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let itemName = data[i].itemName;
+        let slot = data[i].slot;
+        let level = data[i].level;
+        let l = data[i].l;
+
+        if (!itemName) {
+            game_log("Item name not provided. Skipping.");
+            continue;
+        }
+
+        let found = false;
+        if (parent.character.slots[slot]) {
+            let slotItem = parent.character.items[parent.character.slots[slot]];
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
+            continue;
+        }
+
+        for (let j = 0; j < parent.character.items.length; j++) {
+            const item = parent.character.items[j];
+            if (item && item.name === itemName && item.level === level && item.l === l) {
+                validItems.push({ num: j, slot: slot });
+                break;
+            }
+        }
+    }
+
+    if (validItems.length === 0) {
+        isEquipping = false;
+        return; // Không có vật phẩm hợp lệ
+    }
+
+    try {
+        parent.socket.emit("equip_batch", validItems);
+        await parent.push_deferred("equip_batch");
+    } catch (error) {
+        console.error("Error in equipBatch:", error);
+        handleEquipBatchError("Failed to equip items");
+    }
+
+    isEquipping = false; // Reset flag khi hoàn tất
+}
+
+
+
+
+
+const equipmentSets = {
+
+    dps: [
+        { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
+        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
+        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
+    ],
+    luck: [
+        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
+    ],
+    single: [
+        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 7 },
+	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+    ],
+    dead: [
+        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 9 },
+	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+    ],
+    boom: [
+        { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+    ],
+    heal: [
+        { itemName: "cupid", slot: "mainhand", level: 7, },
+    ],
+    xp: [
+        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
+        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    ],
+    stealth: [
+        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+    ],
+    cape: [
+        { itemName: "gcape", slot: "cape", level: 9, l: "l" },
+    ],
+    orb: [
+        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
+        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+    ],
+    mana: [
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    ],
+    stat: [
+        { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    ],
+};
+
+
+
+
+
+
+
+function equipSet(setName) {
+    const set = equipmentSets[setName];
+    if (set) {
+        equipBatch(set);
+    } else {
+        console.error(`Set "${setName}" not found.`);
+    }
+}
+
+
+
+//////////////////////////////////////////////////////////////////
+let lastSwitchTime = 0; // Timestamp of the last switch
+const switchCooldown = 750; // Cooldown period in milliseconds (0.75 seconds)
+
+// Function to check if the cooldown period has passed
+function CD() {
+    return performance.now() - lastSwitchTime > switchCooldown;
+}
+
+// Utility function to handle cooldown check and equipment switch
+const weaponSet = (set) => {
+    if (CD()) {
+        equipSet(set);
+        lastSwitchTime = performance.now();
+    }
+};
+
+
+
+
+// Helper function to handle errors
+function handleEquipBatchError(message) {
+    game_log(message);
+    // You may decide to implement a delay or other error handling mechanism here
+    return Promise.reject({ reason: "invalid", message });
+}
+
+
+
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    return ms < 0 ? 0 : ms;
+}
+
+
+
+
+
+
+
+
+
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
+
+    for (id in parent.entities) {
+        var current = parent.entities[id];
+        if ((character.hp < 5000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 200); // 1000 milliseconds = 1 second
+        }
+    }
+}
+setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
+
+
+
+
+
+
+
+
+
+
+
 
 
 
