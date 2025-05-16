@@ -1030,43 +1030,43 @@ async function equipBatch(data) {
 
 const equipmentSets = {
 
-    dps: [
+    deff: [
         { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
         { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
         { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
         { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
     ],
-    luck: [
+    nodeff: [
         { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
         { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
-    single: [
+    gold: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 7 },
 	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
     ],
-    dead: [
+    luck: [
         { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
-    boom: [
+    healmax: [
         { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
-    heal: [
+    fram: [
         { itemName: "cupid", slot: "mainhand", level: 7, },
     ],
     xp: [
         { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
         //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
     ],
-    stealth: [
+    vatly: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
-    cape: [
+    phep: [
         { itemName: "gcape", slot: "cape", level: 9, l: "l" },
     ],
     orb: [
@@ -1173,10 +1173,68 @@ setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
+let eTime = 0;
+let checkdef = 0;
+let checkheall = 0;
+
+function ChuyendoiITEM() {
+
+     const leader = get_player("haiz");
+     const damer = get_player("6gunlaZe");
+	const currentTime = performance.now();
+	if (currentTime - eTime < 50)return
+	
+	if(checkdef == 0 && character.hp/character.max_hp < 0.64)
+	{
+	checkdef = 1
+        eTime = currentTime;
+        equipSet('deff');	
+		return
+	}
+	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
+	{
+        eTime = currentTime;
+        equipSet('nodeff');		
+	checkdef = 0	
+		return
+	}
+
+	if(checkheall == 0 && character.hp > 5000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	{
+	checkheall = 1
+        eTime = currentTime;
+        equipSet('healmax');
+		return
+	}
+	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp > 7000)) )
+	{
+        eTime = currentTime;
+        equipSet('fram');
+	checkheall = 0	
+		return
+	}
 
 
+const mobstype = Object.values(parent.entities)
+    .filter(entity => 
+        entity.visible && entity.target && entity.target == character.name &&  
+        !entity.dead && entity.damage_type == "physical" &&  
+        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
+    );	
+	
+	
+if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
+	eTime = currentTime;
+        equipSet('vatly');
+}
+else if ( mobstype.length < 1 && checkheall == 0 && checkdef == 0)
+{
+	eTime = currentTime;
+        equipSet('phep');
+}
 
 
+}
 
 
 
