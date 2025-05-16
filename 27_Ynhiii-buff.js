@@ -995,16 +995,10 @@ async function equipBatch(data) {
 const equipmentSets = {
 
     deff: [
-        { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
-        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
-        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
-        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
+        { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
     ],
     nodeff: [
-        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
-        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
@@ -1015,21 +1009,22 @@ const equipmentSets = {
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     healmax: [
-        { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
     ],
     fram: [
-        { itemName: "cupid", slot: "mainhand", level: 7, },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     ],
     xp: [
         { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
         //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
     ],
     vatly: [
-        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
     ],
     phep: [
-        { itemName: "gcape", slot: "cape", level: 9, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     ],
     orb: [
         { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
@@ -1161,7 +1156,7 @@ function ChuyendoiITEM() {
 		return
 	}
 
-	if(checkheall == 0 && character.hp > 5000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	if(checkheall == 0 && character.hp > 8000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
 	{
 	checkheall = 1
         eTime = currentTime;
@@ -1184,16 +1179,24 @@ const mobstype = Object.values(parent.entities)
         distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
     );	
 	
+const mobstype1 = Object.values(parent.entities)
+    .filter(entity => 
+        entity.visible && entity.target && entity.target == character.name &&  
+        !entity.dead && entity.damage_type == "magical" &&  
+        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
+    );		
+	
 	
 if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
 	eTime = currentTime;
         equipSet('vatly');
 }
-else if ( mobstype.length < 1 && checkheall == 0 && checkdef == 0)
-{
+else if (mobstype1.length >= 1 && checkheall == 0 && checkdef == 0 && character.hp < 8000)
+	{
 	eTime = currentTime;
         equipSet('phep');
-}
+	}
+
 
 
 }
