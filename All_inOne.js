@@ -451,7 +451,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 	    }
 	    Now_is_gobalevenrun = true
 	    
-        if (character.map !== mapName) {
+        if (character.map !== mapName && !smart.moving ) {  ////!smart.moving một số lý do chưa kịp tới vị trí mặc định đã tạo 1 lệnh mới nên lỗi
             parent.socket.emit('join', { name: eventType });
         } else if (!smart.moving) {
            // smart_move({ x, y, map: mapName });
