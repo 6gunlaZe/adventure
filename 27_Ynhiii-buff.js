@@ -1191,7 +1191,7 @@ if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
 	eTime = currentTime;
         equipSet('vatly');
 }
-else if (mobstype1.length >= 1 && checkheall == 0 && checkdef == 0 && character.hp < 8000)
+else if (mobstype1.length >= 1 && character.hp < 8000)
 	{
 	eTime = currentTime;
         equipSet('phep');
