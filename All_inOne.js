@@ -643,7 +643,7 @@ async function skillLoop() {
         const Mainhand = character.slots?.mainhand?.name;
         const offhand = character.slots?.offhand?.name;
         const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 30;
-        const cc = character.cc < 185;
+        const cc = character.cc < 235;
         const zapperMobs = ["plantoid"];
         const stMaps = ["", "winter_cove", "arena", "",];
         const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland"];
