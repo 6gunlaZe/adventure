@@ -493,15 +493,17 @@ lootAllChests()
 
 function shifting() {
     shift(0, 'xpbooster');
-changeitem({ slot: "gloves", name : "mittens", level : 9 });
+//changeitem({ slot: "gloves", name : "mittens", level : 9 });
+equipSet('nogold');
 }
 
 function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
 
-    if (chestIds.length > 10) {
-	changeitem({ slot: "gloves", name : "handofmidas", level : 7 });
+    if (chestIds.length > 10 && character.cc < 200 ) {
+	//changeitem({ slot: "gloves", name : "handofmidas", level : 7 });
+        equipSet('gold');
 	    if (character.slots["gloves"] && character.slots["gloves"].name == "handofmidas"){
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
@@ -1005,9 +1007,7 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
     gold: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 7 },
-	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
     luck: [
         { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
@@ -1035,8 +1035,8 @@ const equipmentSets = {
         { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
-    mana: [
-        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    nogold: [
+        { itemName: "mittens", slot: "gloves", level: 9 },
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 12, l: "s" }
@@ -1112,7 +1112,7 @@ function scare() {
 
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((character.hp < 5000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((character.hp < 4000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
