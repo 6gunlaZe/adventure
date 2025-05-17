@@ -193,7 +193,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
-                weaponSet("dead");
+                weaponSet("shot5");
                 await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
@@ -265,7 +265,7 @@ if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
 
 // Sử dụng kỹ năng "5shot" nếu đủ điều kiện
 if (check5shot === 1) {
-	weaponSet("dead");
+	weaponSet("shot5");
     await use_skill("5shot", targets1);
 	                delay = ms_to_next_skill("attack");
 
@@ -409,9 +409,10 @@ const equipmentSets = {
     heal: [
         { itemName: "cupid", slot: "mainhand", level: 7, },
     ],
-    xp: [
-        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
-        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    shot5: [
+        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 9 },
+	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
