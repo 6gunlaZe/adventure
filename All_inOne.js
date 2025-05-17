@@ -1328,7 +1328,14 @@ function waitForHPAndSwitch() {
         // Không có sự kiện thì mới chuyển
         if (prolive == 1 || events || framboss > 0 || bossvip > 0) return;
         if (parent.S.franky || parent.S.icegolem) return;
+	    
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
+        for (let id of chestIds) {
+            loot(id);
+        }  
 
+	    
         let randomNumber = getRandom(1, 100);
         game_log("Đủ điều kiện. Chuyển server với số ngẫu nhiên: " + randomNumber);
 
@@ -1669,7 +1676,7 @@ function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
 
-    if (chestIds.length > 20) {
+    if (chestIds.length > 20 || smart.moving ) {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);
