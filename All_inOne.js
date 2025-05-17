@@ -417,7 +417,7 @@ let callnguoi = 0
 //hpThreshold = ngưỡng sắp chết đổi item luck
 function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
     if (parent?.S?.[eventType]?.live) {
-	    if (callnguoi < 20)
+	    if (callnguoi < 200)
 	    {
 		    send_cm("MuaBan",eventType)
 		   callnguoi += 1 
@@ -444,7 +444,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 
 function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
     if (parent?.S?.[eventType]) {
-	    if (callnguoi < 20)
+	    if (callnguoi < 200)
 	    {
 		    send_cm("MuaBan",eventType)
 		   callnguoi += 1 
