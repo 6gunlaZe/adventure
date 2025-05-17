@@ -65,7 +65,7 @@ let bossvip = 0
 
 
 async function eventer() {
-    const delay = 500;
+    const delay1 = 500;
 
     try {
         if (folowhaizevents) {
@@ -88,7 +88,7 @@ async function eventer() {
         console.error(e);
     }
 
-    setTimeout(eventer, delay);
+    setTimeout(eventer, delay1);
 }
 setTimeout(eventer, 6000);
 
@@ -291,7 +291,7 @@ else if (targets1.length < 3 && targets1.length > 0 )
     } catch (e) {
         //console.error(e);
     }
-    setTimeout(attackLoop, delay);
+	setTimeout(attackLoop, delay/2 || 250); // Default delay if undefined
 }
 
 attackLoop();
