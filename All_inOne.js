@@ -1217,7 +1217,7 @@ if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
   if (trieuhoi == 0)
   {
 	  trieuhoi = 1
-if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+//if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	  
 	  
