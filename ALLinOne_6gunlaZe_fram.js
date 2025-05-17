@@ -1462,10 +1462,10 @@ setInterval(() => sendItems("haiz"), 30000);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 90;
+const rangeBuffer = 90;  // Thêm vào tầm đánh của quái để tránh xa hơn một chút
 
 // How far away we want to consider monsters
-const calcRadius = 300;
+const calcRadius = 300;  // Bán kính xét quái để tránh
 
 // Types of monsters we want to avoid
 const avoidTypes = ["a0","a1","a2","a3","a4","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx"];
