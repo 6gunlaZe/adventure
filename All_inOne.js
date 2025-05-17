@@ -624,7 +624,7 @@ if (!nearest){
     } catch (e) {
         //console.error(e);
     }
-	 setTimeout(attackLoop, delay || 250); // Default delay if undefined
+	 setTimeout(attackLoop, delay/2 || 250); // Default delay if undefined
 }
 
 attackLoop();
