@@ -1815,7 +1815,7 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 25;
+const rangeBuffer = 28;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
@@ -1924,7 +1924,7 @@ function avoidMobs() {
         }
 
         // Sau khi duyệt hết, chọn hướng tốt nhất và di chuyển
-        const movePoint = pointOnAngle(character, maxWeightAngle, 8); // Di chuyển mỗi lần 5 đơn vị
+        const movePoint = pointOnAngle(character, maxWeightAngle, 10); // Di chuyển mỗi lần 5 đơn vị
 
         if (!lastMove || new Date() - lastMove > 100) {
             lastMove = new Date();
