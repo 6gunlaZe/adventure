@@ -1553,7 +1553,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 
 
 	
-const ango  = [ "a2" , "a3", "a7", "vbat","a8"];
+const ango  = [ "a2" , "a3", "a7", "vbat","a8","a6","a4","a1"];
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
