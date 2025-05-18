@@ -581,7 +581,7 @@ function get_NUMber_kill(args) ///mod
 	// path_check: Checks if the character can move to the target
 	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
 	var min_d=character.range + 150,target=null;
-        var bossarmy=[ "a2" , "a3", "a7", "vbat","a8","a6","a5","a4"]; 
+        var bossarmy=[ "a1","a2" , "a3", "a7", "vbat","a8","a6","a5","a4"]; 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
