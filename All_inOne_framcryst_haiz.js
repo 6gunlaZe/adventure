@@ -276,7 +276,16 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	backk = 0;
 	runn = 0;
                 if (z > 50 && kitecheck == 0 && mobsInRange.length == 1 && untargetedMobs.length == 0){
-			z = Math.max(z - 5, 50);  ///giảm z đi 5 nhưng giới hạn luôn là 50
+/////			
+    const khung = [110, 100, 90, 80, 70, 60, 50];
+    for (let i = 0; i < khung.length; i++) {
+        if (z >= khung[i]) {
+            z = khung[i];
+            break;
+        }
+    }
+
+/////
 		      let resultkite = toado.find(item => item.z === z);    
                       if (resultkite) {
                        xmove(resultkite.x, resultkite.y);  // Di chuyển tới vị trí (x, y)
