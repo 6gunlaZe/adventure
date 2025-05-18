@@ -225,12 +225,12 @@ timeat = Date.now();
 	
 	
 let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
-if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 155){
+if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 65){
 	runn = 1;
 	backk = 0;
 	kitecheck = 0
 }
-else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange.length == 0 && (distance(character, member1) > 150 || distance(character, member2) > 150)) )
+else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange.length == 0 && (distance(character, member1) > 150 || distance(character, member2) > 60)) )
 	{
 	backk = 0;
 	runn = 0;
@@ -272,7 +272,12 @@ if (get_NUMber_kill() >= 11 && targetkill.length == 0 || z > 90 || (checkback + 
 	stop_character("6gunlaZe")	
 	z = 1000
 	monsterIds = [];
+	use_skill("town");
+
+// Đợi 6 giây 
+setTimeout(() => {
 	smart_move({ map: "cave", x: -194, y: -1281 })
+}, 6000);
 }
 
 	
