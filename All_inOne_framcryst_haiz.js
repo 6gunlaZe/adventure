@@ -228,7 +228,7 @@ let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
 if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 65){
 	runn = 1;
 	backk = 0;
-	kitecheck = 0
+	if(kitecheck > 1)kitecheck -= 1
 }
 else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange.length == 0 && (distance(character, member1) > 150 || distance(character, member2) > 60)) )
 	{
@@ -240,7 +240,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
                       if (resultkite) {
                        xmove(resultkite.x, resultkite.y);  // Di chuyển tới vị trí (x, y)
                        }
-			kitecheck = 1
+			kitecheck = 5
 	         }
 	}
 else
@@ -278,6 +278,8 @@ if (get_NUMber_kill() >= 11 && targetkill.length == 0 || z > 90 || (checkback + 
 setTimeout(() => {
 	smart_move({ map: "cave", x: -194, y: -1281 })
 }, 6000);
+	
+	return
 }
 
 	
