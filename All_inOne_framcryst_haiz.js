@@ -211,7 +211,7 @@ timeat = Date.now();
 
 	
 	
-let kitecheck = 0
+let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
 if(mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 140 && distance(character, member2) <= 140){
 	runn = 1;
 	backk = 0;
