@@ -1397,6 +1397,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
 	var min_d=450 ,target=null;
         var bossarmy=[ "a2" , "a3", "a7", "vbat", "stompy", "skeletor","a8","a6"]; 
+	var bossarmylevel=["a6"]; 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
@@ -1406,6 +1407,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	{
 		var current=parent.entities[id];
 		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if ( (bossarmylevel.indexOf(current.mtype) != -1) && current.level > 1  ) continue
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
 		if(args.min_xp && current.xp<args.min_xp) continue;
