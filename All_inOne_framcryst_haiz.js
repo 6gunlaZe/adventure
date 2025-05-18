@@ -461,6 +461,18 @@ function findNearestZ(toado, a, b) {
 }
 
 
+function moveToZapperTarget() {
+    if (movesuper == 1) return;
+
+    const zapperTargets = getBestTargets({ max_range: 150, type: "zapper0", number: 1 });
+    if (zapperTargets.length) {
+        const target = get_nearest_monster({ type: "zapper0" });
+        if (target) xmove(target.x, target.y);
+    }
+}
+
+setInterval(moveToZapperTarget, 500);
+
 
 function ghichu(title, mess, key_auto1) {
   const token = key_auto1;  // Thay bằng token của bạn
