@@ -1857,7 +1857,7 @@ const rangeBuffer = 28;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a6","a8"];
+const avoidTypes = ["a6","a8","a1"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
