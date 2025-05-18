@@ -176,7 +176,48 @@ let toado = [
 { x: 2350, y: -1090, z: 89 },
 { x: 2280, y: -1090, z: 90 },
 { x: 2200, y: -1090, z: 91 },	
+{ x: 2120, y: -1090, z: 89 },
+{ x: 2060, y: -1090, z: 90 },
+	
+{ x: 2050, y: -1020, z: 91 },
+{ x: 2050, y: -970, z: 92 },
+{ x: 2050, y: -900, z: 93 },
+{ x: 2050, y: -820, z: 94 },
+{ x: 2050, y: -750, z: 95 },
+{ x: 2050, y: -680, z: 96 },
 
+{ x: 2120, y: -675, z: 97 },	
+{ x: 2200, y: -675, z: 98 },	
+{ x: 2280, y: -675, z: 99 },	
+{ x: 2350, y: -675, z: 100 },	
+{ x: 2420, y: -675, z: 101 },	
+{ x: 2500, y: -675, z: 102 },	
+{ x: 2570, y: -675, z: 103 },	
+{ x: 2630, y: -675, z: 104 },	
+{ x: 2700, y: -675, z: 105 },
+	
+{ x: 2745, y: -600, z: 106 },		
+{ x: 2745, y: -520, z: 107 },
+{ x: 2745, y: -450, z: 108 },
+{ x: 2745, y: -380, z: 109 },
+{ x: 2745, y: -300, z: 110 },
+{ x: 2745, y: -220, z: 111 },		
+{ x: 2745, y: -170, z: 112 },
+	
+{ x: 2620, y: -145, z: 113 },
+{ x: 2550, y: -145, z: 114 },
+{ x: 2480, y: -145, z: 115 },
+{ x: 2400, y: -145, z: 116 },
+{ x: 2320, y: -145, z: 117 },
+{ x: 2280, y: -145, z: 118 },
+	
+{ x: 2200, y: -100, z: 119 },
+{ x: 2200, y: -20, z: 120 },
+{ x: 2200, y: 50, z: 121 },
+{ x: 2200, y: 120, z: 122 },
+{ x: 2200, y: 200, z: 123 },
+{ x: 2200, y: 280, z: 124 },
+	
 ];
 if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_call("disconnect_character", {name: "haiz"});
 	
@@ -267,7 +308,7 @@ game_log("checkk checkback ==  "+ checkback);
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 11 && targetkill.length == 0 || z > 90 || (checkback + z) > 135 ){
+if (get_NUMber_kill() >= 13 && targetkill.length == 0 || z > 90 || (checkback + z) > 145 ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
@@ -495,7 +536,7 @@ function get_NUMber_kill(args) ///mod
 	// path_check: Checks if the character can move to the target
 	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
 	var min_d=character.range + 150,target=null;
-        var bossarmy=[ "a2" , "a3", "a7", "vbat","a8"]; 
+        var bossarmy=[ "a2" , "a3", "a7", "vbat","a8","a6","a5","a4"]; 
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
