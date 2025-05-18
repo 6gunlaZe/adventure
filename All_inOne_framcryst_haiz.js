@@ -1758,7 +1758,7 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 18;
+const rangeBuffer = 22;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
@@ -1811,9 +1811,9 @@ function avoidMobs() {
 
     // Các khoảng cách sẽ kiểm tra để tính an toàn (gần, trung, xa)
     const distancesToCheck = [
-        { d: 35, w: 1 },     // Gần, trọng số thấp
-        { d: 70, w: 1.5 },  // Trung bình, trọng số cao hơn
-        { d: 110, w: 2 }     // Xa, trọng số cao nhất
+        { d: 30, w: 2 },     // Gần, trọng số thấp
+        { d: 60, w: 1.5 },  // Trung bình, trọng số cao hơn
+        { d: 90, w: 1 }     // Xa, trọng số cao nhất
     ];
 
     // Nếu đang bị nguy hiểm (bị quái áp sát hoặc kẹt địa hình)
