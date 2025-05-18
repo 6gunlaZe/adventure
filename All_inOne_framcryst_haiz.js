@@ -318,7 +318,7 @@ game_log("checkk checkback ==  "+ checkback);
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 13 && targetkill.length == 0 || z > 123 || (checkback + z) > 160 ){
+if (get_NUMber_kill() >= 15 && targetkill.length == 0 || z > 123 || (checkback + z) > 170 ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
