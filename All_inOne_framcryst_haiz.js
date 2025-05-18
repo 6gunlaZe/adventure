@@ -385,6 +385,11 @@ if(backk == 1)
       if (z > 1) {
         z--;
       }
+
+const zGanNhat = findNearestZ(toado, character.x, character.y);
+if (zGanNhat < z) {
+  z = zGanNhat;
+}	
       // Lấy đối tượng có z tương ứng
       let result = toado.find(item => item.z === z);
 
@@ -436,6 +441,24 @@ else if (z == 2) z = 1;
 
 	
 }, 500);
+
+
+function findNearestZ(toado, a, b) {
+  let minDistance = Infinity;
+  let nearestZ = null;
+
+  for (const point of toado) {
+    const dx = point.x - a;
+    const dy = point.y - b;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < minDistance) {
+      minDistance = distance;
+      nearestZ = point.z;
+    }
+  }
+
+  return nearestZ;
+}
 
 
 
