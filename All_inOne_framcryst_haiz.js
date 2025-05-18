@@ -234,7 +234,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	{
 	backk = 0;
 	runn = 0;
-                if (z > 50 && kitecheck == 0){
+                if (z > 50 && kitecheck == 0 && mobsInRange.length == 1 && untargetedMobs.length == 0){
 			z = Math.max(z - 5, 50);  ///giảm z đi 5 nhưng giới hạn luôn là 50
 		      let resultkite = toado.find(item => item.z === z);    
                       if (resultkite) {
