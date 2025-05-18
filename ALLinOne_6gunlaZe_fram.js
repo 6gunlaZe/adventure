@@ -1040,7 +1040,7 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 		}
 		else if(currentTargeta4 && checkzapper.length == 0) {
 
-                 if (is_in_range(currentTargeta4, "supershot") && character.mp > 500 && currentTargeta5.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
+                 if (is_in_range(currentTargeta4, "supershot") && character.mp > 500 && currentTargeta4.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
                 delayboss = Date.now()
                 use_skill("supershot", currentTargeta4);
                 game_log("Supershot!!");
