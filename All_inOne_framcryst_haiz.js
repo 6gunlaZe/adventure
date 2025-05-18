@@ -187,8 +187,8 @@ if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_c
 
 
 //////////////////Logic new
-
-const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a5" , "a6" , "a7", "a8", "vbat"];
+var checka5 = getBestTargets({ max_range: character.range, type: "a5",  number: 1 }); 
+const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a6" , "a7", "a8", "vbat"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
         mobTypes.includes(entity.mtype) &&          // Kiểm tra nếu loại mob là trong danh sách
@@ -225,7 +225,7 @@ timeat = Date.now();
 	
 	
 let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
-if(mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 155){
+if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 155){
 	runn = 1;
 	backk = 0;
 	kitecheck = 0
@@ -245,6 +245,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	}
 else
 {
+	if (checka5.length == 1 && mobsInRange.length == 0)return
 	backk = 1;
 	checkback++
 	runn = 0;	
