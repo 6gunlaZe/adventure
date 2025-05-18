@@ -164,7 +164,7 @@ async function attackLoop() {
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "zapper0", subtype: "a5",  number: 1 }); // Hàm check hút quái
+ var KILLdauTien = getBestTargets({ max_range: character.range, type: "zapper00000", subtype: "a5",  number: 1 }); // Hàm check hút quái
 
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
@@ -1014,7 +1014,8 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 	{
 		var currentTarget1 = get_nearest_monster_solobosskill()  ////đối tượng tổng không có a5
 		var currentTargeta5 = get_nearest_monster_solobosskilla5()  ///đối tượng a5
-
+                var currentTargeta4 = get_nearest_monster_solobosskilla4()  ///đối tượng a5
+                var checkzapper = getBestTargets({ max_range: 320, type: "zapper0", number: 1 }); // Hàm check hút quái
 
 		if(currentTarget1) {
 
@@ -1030,6 +1031,15 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
                  if (is_in_range(currentTargeta5, "supershot") && character.mp > 500 && currentTargeta5.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
                 delayboss = Date.now()
                 use_skill("supershot", currentTargeta5);
+                game_log("Supershot!!");
+                                    }
+
+		}
+		else if(currentTargeta4 && checkzapper.length == 0) {
+
+                 if (is_in_range(currentTargeta4, "supershot") && character.mp > 500 && currentTargeta5.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
+                delayboss = Date.now()
+                use_skill("supershot", currentTargeta4);
                 game_log("Supershot!!");
                                     }
 
@@ -1304,6 +1314,43 @@ function shifting() {
 }
 
 //////////////////////////////////////////////////////////////////////////
+
+
+function get_nearest_monster_solobosskilla4(args) ///mod
+{
+	//args:
+	// max_att - max attack
+	// min_xp - min XP
+	// target: Only return monsters that target this "name" or player object
+	// no_target: Only pick monsters that don't have any target
+	// path_check: Checks if the character can move to the target
+	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
+	var min_d=450 ,target=null;
+        var bossarmy=["a4"]; 
+	if(!args) args={};
+	if(args && args.target && args.target.name) args.target=args.target.name;
+	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	for(id in parent.entities)
+	{
+		var current=parent.entities[id];
+		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+		if(args.type && current.mtype!=args.type) continue;
+		if(args.min_xp && current.xp<args.min_xp) continue;
+		if(args.max_att && current.attack>args.max_att) continue;
+		if(args.target && current.target!=args.target) continue;
+		if(args.no_target && current.target && current.target!=character.name) continue;
+		if(args.NO_target && current.target) continue;
+		if(args.path_check && !can_move_to(current)) continue;
+		var c_dist=parent.distance(character,current);
+		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+	}
+	return target;
+}
+
+
 
 function get_nearest_monster_solobosskilla5(args) ///mod
 {
