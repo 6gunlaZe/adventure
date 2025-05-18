@@ -1757,13 +1757,13 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 20;
+const rangeBuffer = 25;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a1","a6","a8","a9","a10"];
+const avoidTypes = ["a6","a8"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
