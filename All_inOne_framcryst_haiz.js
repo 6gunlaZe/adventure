@@ -308,7 +308,7 @@ game_log("checkk checkback ==  "+ checkback);
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 
-if (get_NUMber_kill() >= 13 && targetkill.length == 0 || z > 90 || (checkback + z) > 145 ){
+if (get_NUMber_kill() >= 13 && targetkill.length == 0 || z > 105 || (checkback + z) > 145 ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
@@ -361,7 +361,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 if (runn == 1)
 {
-      if (z < 91 ) {
+      if (z < 124 ) {
         z++;
       }
       let result = toado.find(item => item.z === z);    
