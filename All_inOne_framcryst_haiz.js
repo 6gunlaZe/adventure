@@ -57,7 +57,6 @@ if (character.map != "crypt") return;
 
 
 if (smart.moving || is_moving(character) ) return;
-if (z > 100)smart_move({ map: "cave", x: -194, y: -1281 })	
 let toado = [
 
 
