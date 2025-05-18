@@ -42,6 +42,8 @@ let nguyhiem = 0
 let backk = 0
 let runn = 1
 let stopp = 0
+let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
+
 /// auto ham nguc cryt
 setInterval(function() {
 if (movesuper == 1)return	
@@ -265,7 +267,6 @@ timeat = Date.now();
 
 	
 	
-let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
 if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 65){
 	runn = 1;
 	backk = 0;
