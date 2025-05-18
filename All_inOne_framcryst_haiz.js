@@ -1811,9 +1811,9 @@ function avoidMobs() {
 
     // Các khoảng cách sẽ kiểm tra để tính an toàn (gần, trung, xa)
     const distancesToCheck = [
-        { d: 75, w: 1 },     // Gần, trọng số thấp
-        { d: 120, w: 1.5 },  // Trung bình, trọng số cao hơn
-        { d: 180, w: 2 }     // Xa, trọng số cao nhất
+        { d: 35, w: 1 },     // Gần, trọng số thấp
+        { d: 70, w: 1.5 },  // Trung bình, trọng số cao hơn
+        { d: 110, w: 2 }     // Xa, trọng số cao nhất
     ];
 
     // Nếu đang bị nguy hiểm (bị quái áp sát hoặc kẹt địa hình)
