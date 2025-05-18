@@ -1009,8 +1009,11 @@ if (smart.moving && character.map != "crypt")return
 if (character.map != "cave" && character.map != "crypt" )smart_move({ map: "cave", x: -194, y: -1281 })	
 if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)smart_move({ map: "cave", x: -194, y: -1281 })
 
+		let host = get_player("haiz")
+		let healerr = get_player("Ynhi")
+
     var currentTarget = get_targeted_monster();
-	if(!currentTarget)
+	if((!currentTarget || (currentTarget && distance(character, currentTarget) > character.range + 50) ) && host && distance(character, host) < 180 && healerr && distance(character, healerr) < 180  )
 	{
 		var currentTarget1 = get_nearest_monster_solobosskill()  ////đối tượng tổng không có a5
 		var currentTargeta5 = get_nearest_monster_solobosskilla5()  ///đối tượng a5
