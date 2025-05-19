@@ -1595,8 +1595,12 @@ function avoidance() {
 		let host = get_player("haiz")
 		const target = get_target();
                 let check = !!target && !target.rip;
-
-           if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )
+               var a1check= get_nearest_monster({type: "a1",});
+		
+           if (host && !smart.moving && a1check && is_in_range(a1check) ){
+		   xmove(host.real_x, host.real_y);
+	   }   
+           else if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )
 	   {
 		   if (character.map != "crypt") kite(host, 20)
 		   else xmove(host.real_x, host.real_y);
