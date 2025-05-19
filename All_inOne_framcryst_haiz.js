@@ -229,7 +229,7 @@ if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_c
 
 
 //////////////////Logic new
-var checka5 = getBestTargets({ max_range: character.range, type: "a5",  number: 1 }); 
+var checka5 = getBestTargets({ max_range: character.range, type: "a555555555",  number: 1 });  /// a5 đứng 1 mình rất trâu từ bỏ giết
 const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a6" , "a7", "a8", "vbat"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
