@@ -1830,7 +1830,14 @@ function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung qua
 }
 // if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 
-
+function check_quai_A4_stop_attach() {
+    var quai = get_nearest_monster({type: "a4"});
+    if (quai && is_in_range(quai) && character.hp / character.max_hp < 0.6 && is_on_cooldown("scare")) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 
 function scare() {
