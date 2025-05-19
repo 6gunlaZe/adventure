@@ -635,7 +635,7 @@ if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((  current.mtype == 'zapper0'  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((  (current.mtype == 'zapper0'  && character.hp < 5000 )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
