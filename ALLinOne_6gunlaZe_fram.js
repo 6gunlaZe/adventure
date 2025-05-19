@@ -616,7 +616,7 @@ function scare() {
         }
     }
 
-    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+    if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
         if (!is_on_cooldown("scare")) {
             setTimeout(() => {
                 if (!is_on_cooldown("scare")) {
