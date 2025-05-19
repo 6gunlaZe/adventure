@@ -1991,7 +1991,7 @@ function avoidMobs() {
                         const distToHealer = distance(position, healer); // Tính khoảng cách đến healer
                         const maxHealerDistance = 200; // Khoảng cách tối đa để được ưu tiên
                         const healerWeight = Math.max(0, maxHealerDistance - distToHealer) / maxHealerDistance;
-                        totalWeight += healerWeight * 10; // Ưu tiên mạnh mẽ nếu gần healer
+                        totalWeight += healerWeight * 70; // Ưu tiên mạnh mẽ nếu gần healer////////////////////////////////
                     }
 
                     safeAngle = true;
@@ -2009,7 +2009,7 @@ function avoidMobs() {
         }
 
         // Di chuyển theo hướng có trọng số cao nhất
-        const movePoint = pointOnAngle(character, maxWeightAngle, 10);
+        const movePoint = pointOnAngle(character, maxWeightAngle, 10);  /////////////////////////////
 
         if (!lastMove || new Date() - lastMove > 100) {
             lastMove = new Date();
