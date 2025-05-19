@@ -243,6 +243,8 @@ const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiể
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
+const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
+
 
 if ( lowhpMob.length >= 1)
 {
@@ -272,7 +274,7 @@ timeat = Date.now();
 
 	
 	
-if(checka5.length == 0 && mobsInRange.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 65){
+if(checka5.length == 0 && mobsInRangeNoA4.length == 0 && member1 && member2 && distance(character, member1) <= 155 && distance(character, member2) <= 65){
 	runn = 1;
 	backk = 0;
 	if(kitecheck > 1)kitecheck -= 1
