@@ -164,7 +164,7 @@ async function attackLoop() {
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "zapper0", subtype: "a5",  number: 1 }); // Hàm check hút quái
+ var KILLdauTien = getBestTargets({ max_range: character.range, type: "zapper00000", subtype: "a5",  number: 1 }); // Hàm check hút quái
 
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
