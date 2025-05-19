@@ -487,7 +487,7 @@ if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") &&
 //////////// dung skill
 
 
-	 	var target000= get_nearest_monster({type: "zapper0",});
+	 	var target000= get_nearest_monster({type: "zapper000000000",});
 		    if(target000&& character.mp > 500 && !is_on_cooldown("curse") &&  !target000.s["cursed"] )
             {
                 use_skill("curse", target000);
