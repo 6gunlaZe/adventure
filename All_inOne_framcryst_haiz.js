@@ -1250,7 +1250,11 @@ const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
 async function attackLoop() {
 	//if (character.moving)return
     let delay = null; // Default delay
+	
+    let stopAttack = (check_quai_A4_stop_attach() == 1);
+	
     try {
+if (!stopAttack) {	    
         let nearest = null;
         var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1", subtype: "a5",  number: 1 }); 
 
@@ -1308,7 +1312,9 @@ if (!nearest) {
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
         }
 
-	    
+} else {
+            // Dừng tấn công, có thể hồi phục hoặc đứng yên
+}	    
     } catch (e) {
         //console.error(e);
     }
