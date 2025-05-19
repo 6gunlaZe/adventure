@@ -616,6 +616,19 @@ function handleSnowball() {
 setInterval(handleSnowball, 100);
 
 
+
+function check_quai_A4_stop_attach() {
+    var quai = get_nearest_monster({type: "a4"});
+    if (quai && is_in_range(quai) && character.hp / character.max_hp < 0.8 && is_on_cooldown("scare")) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+
+
+
 function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung quanh để kiểm soát hp
     // Kiểm tra mục tiêu đầu tiên
     var zapper0 = getBestTargets({ max_range: 300, type: "zapper0", number: 1 }); 
