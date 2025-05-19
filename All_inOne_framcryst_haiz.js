@@ -1869,14 +1869,33 @@ setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
+function KhoangcachTangthem() {
+    const mobTypes = ["a6", "a8"];
+    const healer = get_player('Ynhi');
 
+    // Kiểm tra nếu healer không tồn tại
+    if (!healer) return 200;
 
+    const dist1 = distance(character, healer);
+    if (dist1 > 200) return 160;
+
+    const mobsInRange = Object.values(parent.entities).filter(entity =>
+        mobTypes.includes(entity.mtype) &&
+        entity.visible &&
+        !entity.dead &&
+        distance(character, entity) <= 400 && entity.s["cursed"] && entity.s["frozen"]
+    );
+
+    if (mobsInRange.length >= 1) return -20;
+
+    return 0;
+}
 
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 28;
+const rangeBuffer = 45;
 
 // How far away we want to consider monsters
 const calcRadius = 300;
@@ -2008,7 +2027,7 @@ function avoidMobs() {
 
 function getRange(entity) {
     if (entity.type !== "character") {
-        return (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
+        return (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer + KhoangcachTangthem();
     } else {
         if (avoidPlayersWhitelist.includes(entity.id) && avoidPlayersWhitelistRange != null) {
             return avoidPlayersWhitelistRange;
