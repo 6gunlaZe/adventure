@@ -43,7 +43,7 @@ let backk = 0
 let runn = 1
 let stopp = 0
 let kitecheck = 0  //check để chạy vể 1 lần khi tìm thấy boss thôi
-
+let togglea1 = true; // cờ để chuyển trạng thái kite a1
 /// auto ham nguc cryt
 setInterval(function() {
 if (movesuper == 1)return	
@@ -299,6 +299,20 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
                        }
 			kitecheck = 5
 	         }
+		else if (MobisA1.length >= 1 && untargetedMobs.length == 0)  //thả diều a1
+		{
+        if (togglea1) {
+            runn = 1;
+            backk = 0;
+        } else {
+            runn = 0;
+            backk = 1;
+        }
+        togglea1 = !togglea1; // đổi trạng thái ở vòng lặp tiếp theo
+			
+		}
+
+		
 	}
 else
 {
