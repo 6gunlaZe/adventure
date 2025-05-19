@@ -355,9 +355,7 @@ setTimeout(() => {
 	return
 }
 
-	
-game_log("checkk boss can kill !!!!!!  "+ targetkill.length   );	
-game_log("checkk boss NO kill!!!!!!  "+  targetNO.length  );	
+		
 
 	        var  targetNOsafe1 = solobossNO1({ max_range: 330}) 	///có a2
 	        var  targetNOsafe = solobossNO({ max_range: 280}) 
