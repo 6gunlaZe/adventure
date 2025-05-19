@@ -179,7 +179,16 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
             delay = ms_to_next_skill("attack");  
 	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
-		    	weaponSet("single");
+		    
+		        let a11 = get_nearest_monster({ type: "a1" }); // Lấy quái vật "a1" gần nhất
+                        if (a11 && is_in_range(a11)) {  // Kiểm tra nếu "a1"  nằm trong phạm vi 
+                        weaponSet("boom");
+                        }
+		         else
+			{
+			weaponSet("single");
+			}
+
                await attack(KILLdauTien[0]);
 	           delay = ms_to_next_skill("attack");
 	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
