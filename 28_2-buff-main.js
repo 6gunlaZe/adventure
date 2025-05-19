@@ -1260,7 +1260,7 @@ function scare() {
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((   (current.mtype == 'zapper0' ) || character.hp < 4700 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((   (current.mtype == 'zapper0' || current.mtype == 'a4' ) || character.hp < 4700 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
