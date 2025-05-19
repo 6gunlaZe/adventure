@@ -1249,7 +1249,7 @@ function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung qua
 
 function check_quai_A4_stop_attach() {
     var quai = get_nearest_monster({type: "a4"});
-    if (quai && is_in_range(quai) && character.hp / character.max_hp < 0.6 && is_on_cooldown("scare")) {
+    if (quai && is_in_range(quai) && character.hp / character.max_hp < 0.7 && is_on_cooldown("scare")) {
         return 1;
     } else {
         return 0;
