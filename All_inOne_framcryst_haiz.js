@@ -1942,58 +1942,63 @@ function avoidMobs() {
     let maxWeight = -Infinity; // Trọng số cao nhất tìm được
     let maxWeightAngle = 0;    // Góc tương ứng với trọng số cao nhất
 
-    const monstersInRadius = getMonstersInRadius();        // Lấy danh sách quái nguy hiểm trong vùng
+    const monstersInRadius = getMonstersInRadius();         // Danh sách quái trong vùng nguy hiểm
     const avoidRanges = getAnglesToAvoid(monstersInRadius); // Các góc nguy hiểm cần tránh
-    const inAttackRange = isInAttackRange(monstersInRadius); // Đang trong tầm đánh quái?
+    const inAttackRange = isInAttackRange(monstersInRadius); // Đang trong vùng tấn công của quái?
 
-    // Các khoảng cách sẽ kiểm tra để tính an toàn (gần, trung, xa)
+    const healer = get_player("Ynhi"); // Tên nhân vật healer muốn ưu tiên gần
+
     const distancesToCheck = [
-        { d: 20, w: 2 },     // Gần, trọng số thấp
-        { d: 40, w: 1.5 },  // Trung bình, trọng số cao hơn
-        { d: 60, w: 1 }     // Xa, trọng số cao nhất
+        { d: 20, w: 2 },     // Gần, trọng số thấp (ít an toàn hơn)
+        { d: 40, w: 1.5 },   // Trung bình
+        { d: 60, w: 1 }      // Xa, trọng số cao hơn (thường an toàn hơn)
     ];
 
-    // Nếu đang bị nguy hiểm (bị quái áp sát hoặc kẹt địa hình)
+    // Nếu đang bị nguy hiểm (quái gần hoặc không di chuyển được)
     if (inAttackRange || (!can_move_to(character.real_x, character.real_y))) {
-        // Duyệt 360 độ quanh nhân vật, mỗi lần tăng 3 độ
         for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 60) {
             let totalWeight = 0;
             let safeAngle = false;
 
-            // Kiểm tra mỗi khoảng cách trên góc hiện tại
             for (const check of distancesToCheck) {
-                const position = pointOnAngle(character, angle, check.d); // Tọa độ giả định khi đi theo góc đó
+                const position = pointOnAngle(character, angle, check.d); // Tạo điểm giả định theo góc và khoảng cách
 
                 if (can_move_to(position.x, position.y)) {
                     let rangeWeight = 0;
                     let inRange = false;
 
-                    // Duyệt qua từng quái để xem hướng này có giúp né xa hơn không
+                    // Kiểm tra từng quái xem di chuyển hướng này có giúp thoát khỏi vùng nguy hiểm không
                     for (const id in monstersInRadius) {
                         const entity = monstersInRadius[id];
                         const monsterRange = getRange(entity);
                         const distToMonster = distanceToPoint(position.x, position.y, entity.real_x, entity.real_y);
                         const charDistToMonster = distanceToPoint(character.real_x, character.real_y, entity.real_x, entity.real_y);
 
-                        // Nếu đang trong vùng nguy hiểm
                         if (charDistToMonster < monsterRange) {
                             inRange = true;
                             if (distToMonster > charDistToMonster) {
-                                // Càng rời xa quái càng được cộng điểm
                                 rangeWeight += (distToMonster - charDistToMonster);
                             }
                         }
                     }
 
                     if (inRange) {
-                        totalWeight += rangeWeight * check.w; // Nhân với trọng số của khoảng cách
+                        totalWeight += rangeWeight * check.w; // Cộng điểm né tránh dựa trên khoảng cách
                     }
 
-                    safeAngle = true; // Ít nhất có 1 điểm trong hướng này đi được
+                    // Ưu tiên hướng gần healer
+                    if (healer) {
+                        const distToHealer = distance(position, healer); // Tính khoảng cách đến healer
+                        const maxHealerDistance = 200; // Khoảng cách tối đa để được ưu tiên
+                        const healerWeight = Math.max(0, maxHealerDistance - distToHealer) / maxHealerDistance;
+                        totalWeight += healerWeight * 10; // Ưu tiên mạnh mẽ nếu gần healer
+                    }
+
+                    safeAngle = true;
                 }
             }
 
-            // Nếu hướng này không trùng với góc nguy hiểm và có điểm đi được
+            // Nếu không trùng với góc nguy hiểm và có thể đi được
             const intersectsRadius = angleIntersectsMonsters(avoidRanges, angle);
             if (safeAngle && !intersectsRadius) {
                 if (totalWeight > maxWeight) {
@@ -2003,20 +2008,20 @@ function avoidMobs() {
             }
         }
 
-        // Sau khi duyệt hết, chọn hướng tốt nhất và di chuyển
-        const movePoint = pointOnAngle(character, maxWeightAngle, 10); // Di chuyển mỗi lần 5 đơn vị
+        // Di chuyển theo hướng có trọng số cao nhất
+        const movePoint = pointOnAngle(character, maxWeightAngle, 10);
 
         if (!lastMove || new Date() - lastMove > 100) {
             lastMove = new Date();
             move(movePoint.x, movePoint.y);
         }
 
-        // Nếu bật chế độ vẽ debug
+        // Vẽ đường debug (nếu bật)
         if (drawDebug) {
-            draw_line(character.real_x, character.real_y, movePoint.x, movePoint.y, 2, 0xF20D0D); // Đường né màu đỏ
+            draw_line(character.real_x, character.real_y, movePoint.x, movePoint.y, 2, 0xF20D0D);
         }
 
-        return true; // Đã xử lý né
+        return true; // Đã thực hiện né
     }
 
     return false; // Không cần né
