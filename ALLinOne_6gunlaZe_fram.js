@@ -599,7 +599,30 @@ function handleSnowball() {
 setInterval(handleSnowball, 100);
 
 
+function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung quanh để kiểm soát hp
+    // Kiểm tra mục tiêu đầu tiên
+    var zapper0 = getBestTargets({ max_range: 300, type: "zapper0", number: 1 }); 
 
+    // Nếu không có mục tiêu nào => return 0 luôn
+    if (zapper0.length === 0) return 0;
+
+    // Lấy thông tin 3 người chơi
+    const player1 = get_player("haiz");
+    const player2 = get_player("Ynhi");
+    const player3 = get_player("6gunlaZe");
+
+    // Kiểm tra nếu có bất kỳ ai máu thấp hơn ngưỡng
+    if (
+        (player1 && player1.hp < 8000) ||
+        (player2 && player2.hp < 5000) ||
+        (player3 && player3.hp < 5000)
+    ) {
+        return 1;
+    }
+
+    return 0;
+}
+// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 
 
 function scare() {
@@ -607,7 +630,9 @@ function scare() {
     const orb = character.items.findIndex(i => !i);
     let mobnum = 0;
     let targetedForMoreThanOneSecond = false;
-
+	
+if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
+	
     for (id in parent.entities) {
         var current = parent.entities[id];
         if ((  current.mtype == 'zapper0'  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
