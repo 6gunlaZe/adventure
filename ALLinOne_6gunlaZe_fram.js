@@ -151,14 +151,22 @@ const targetNames = ["Ynhi","haiz", "nhiY","6gunlaZe"];
 async function attackLoop() {
 	//if (character.moving)return
     let delay = null; // Default delay
-    const X = locations[home][0].x; // X coordinate of home location
-    const Y = locations[home][0].y; // Y coordinate of home location
     const now = performance.now();
 //game_log("m")
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
      const healerr = get_player("Ynhi");
-    	
+
+let X, Y;
+if (healerr && distance(character, healerr) < 150 ) {
+    X = healerr.x;
+    Y = healerr.y;
+} else {
+    X = character.x;
+    Y = character.y;
+}
+	
+	
     try {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
