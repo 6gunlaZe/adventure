@@ -752,7 +752,7 @@ if ( distance(character, entity) < 180) continue
 function solobosskill(options = {}) {
     const entities = []
      let number = 0
-	var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
+	var bossarmy=["a2" , "a3", "a7", "vbat","a1","a6","a8"]; 
 	
     for (const id in parent.entities) {
         const entity = parent.entities[id]
