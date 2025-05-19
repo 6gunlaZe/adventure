@@ -1236,8 +1236,8 @@ function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung qua
     // Kiểm tra nếu có bất kỳ ai máu thấp hơn ngưỡng
     if (
         (player1 && player1.hp < 12000) ||
-        (player2 && player2.hp < 7000) ||
-        (player3 && player3.hp < 7000)
+        (player2 && player2.hp < 9000) ||
+        (player3 && player3.hp < 7000) || (player2 && player2.mp < 4000)
     ) {
         return 1;
     }
