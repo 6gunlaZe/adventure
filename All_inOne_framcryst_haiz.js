@@ -242,6 +242,8 @@ const mobsInRange = Object.values(parent.entities)
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
+const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
+
 if ( lowhpMob.length >= 1)
 {
 	checkluck = 1  ///luck set
@@ -251,6 +253,10 @@ else if (MobisA2.length >= 1 || character.hp < 5000)
 	checkluck = 2  //  def set
 	equipSet('def');
 }
+else if (MobisA1.length >= 1)
+{
+	checkluck = 3 //set aoe
+}	
 else 
 {
 	checkluck = 0  //dame set
@@ -1464,10 +1470,15 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         equipSet('luck');
 		 setTimeout(waitAndUnluck, 10000);
 	}
+	else if (checkluck == 3)
+	{
+        eTime = currentTime;
+        equipSet('aoe');
+	}	
 	else 
 	{
         eTime = currentTime;
-        equipSet('def1');	
+        equipSet('def1'); ///def vũ khí	
 	}
 
 	
@@ -1730,8 +1741,8 @@ const equipmentSets = {
     
     ],
     aoe: [
-        { itemName: "ololipop", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "ololipop", slot: "offhand", level: 9, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 6, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 6, l: "s" },
     ],
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
