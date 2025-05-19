@@ -145,7 +145,7 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
-const targetNames = ["Ynhi","haiz", "nhiY","6gunlaZe"];
+const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
@@ -889,60 +889,64 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 
 
 
-
-
-
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
-    // Step 1: Filter and sort all valid monster targets
+    // === 1. Xác định danh sách quái vật "ưu tiên đặc biệt" ===
+    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx"];
+    const isPriorityMtype = (monster) => priorityMtypes.includes(monster.mtype);
+
+    // === 2. Lọc tất cả các quái vật đang tấn công người trong party ===
     const targets = Object.values(parent.entities)
         .filter(monster =>
-            monster.type === "monster" && // Ensure the entity is a monster
-            monster.target &&             // Có một mục tiêu đang bị tấn công
-            targetNames.includes(monster.target) // Mục tiêu của quái vật phải nằm trong danh sách ưu tiên targetNames (các nhân vật của party mình)
+            monster.type === "monster" &&         // Chỉ lấy quái (loại entity là "monster")
+            monster.target &&                     // Chỉ lấy quái đang có mục tiêu
+            targetNames.includes(monster.target)  // Mục tiêu đó phải là người trong party
         )
+
+        // === 3. Sắp xếp quái theo nhiều lớp ưu tiên ===
         .sort((a, b) => {
-            // Step 2: Sort monsters by priority, distance, and HP Quái vật nào gần hơn sẽ được ưu tiên hơn. mục tiêu có lượng HP cao hơn sẽ được ưu tiên hơn
+            // --- Ưu tiên 1: Quái đặc biệt (boss, rare mob, v.v.) ---
+            const isPriorityA = isPriorityMtype(a) ? -1 : 0;
+            const isPriorityB = isPriorityMtype(b) ? -1 : 0;
+            if (isPriorityA !== isPriorityB) return isPriorityA - isPriorityB;
+
+            // --- Ưu tiên 2: Quái đang tấn công người quan trọng hơn trong party ---
             const priorityA = targetNames.indexOf(a.target);
             const priorityB = targetNames.indexOf(b.target);
-
             if (priorityA !== priorityB) return priorityA - priorityB;
 
+            // --- Ưu tiên 3: Quái gần vị trí home hơn ---
             const distA = Math.hypot(a.x - homeX, a.y - homeY);
             const distB = Math.hypot(b.x - homeX, b.y - homeY);
-
             if (distA !== distB) return distA - distB;
 
-            return b.hp - a.hp; // Highest HP last
+            // --- Ưu tiên 4: Quái yếu hơn (HP thấp hơn) ---
+            return a.hp - b.hp;
         });
 
-    // Step 3: Separate monsters into in-range and out-of-range categories
-    const inRange = [];
-    const outOfRange = [];
-    const characterRange = [];
-    
- for (const monster of targets) {
-    const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
+    // === 4. Phân loại quái vật theo phạm vi tấn công ===
+    const inRange = [];         // Trong phạm vi ưu tiên (rangeThreshold)
+    const characterRange = [];  // Trong phạm vi kỹ năng của nhân vật
+    const outOfRange = [];      // Ngoài cả 2 phạm vi
 
-    // Kiểm tra nếu quái vật trong phạm vi rangeThreshold
-    if (distance <= rangeThreshold) { 
-        inRange.push(monster);  // Thêm quái vật vào inRange
-        characterRange.push(monster);  // Thêm quái vật vào characterRange
-    } else if (distance <= character.range) {
-        // Nếu quái vật trong phạm vi của nhân vật nhưng ngoài phạm vi rangeThreshold
-        characterRange.push(monster);  // Thêm quái vật vào characterRange
-    } else {
-        // Nếu quái vật ngoài phạm vi của cả rangeThreshold và character.range
-        outOfRange.push(monster);  // Thêm quái vật vào outOfRange
+    for (const monster of targets) {
+        const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
+
+        if (distance <= rangeThreshold) {
+            inRange.push(monster);            // Quái trong phạm vi ưu tiên
+            characterRange.push(monster);     // Và cũng nằm trong tầm đánh
+        } else if (distance <= character.range) {
+            characterRange.push(monster);     // Trong tầm đánh, nhưng ngoài phạm vi ưu tiên
+        } else {
+            outOfRange.push(monster);         // Không đánh được
+        }
     }
-}
 
-
-    // Step 4: Return the combined targets and categorized lists
+    // === 5. Trả về danh sách đầy đủ và ba nhóm riêng biệt ===
     return {
-        targets: [...inRange, ...outOfRange, ...characterRange],  // Combined list with inRange prioritized
+        targets: [...inRange, ...outOfRange, ...characterRange], // Danh sách tổng hợp (ưu tiên inRange đầu tiên)
         inRange,
         outOfRange,
-	characterRange
+        characterRange
     };
 }
 
