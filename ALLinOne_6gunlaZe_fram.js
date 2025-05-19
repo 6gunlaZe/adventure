@@ -621,18 +621,6 @@ setInterval(handleSnowball, 100);
 
 
 
-function check_quai_A4_stop_attach() {
-    var quai = get_nearest_monster({type: "a4"});
-    if (quai && is_in_range(quai) && character.hp / character.max_hp < 0.8 && is_on_cooldown("scare")) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-
-
-
 function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung quanh để kiểm soát hp
     // Kiểm tra mục tiêu đầu tiên
     var zapper0 = getBestTargets({ max_range: 300, type: "zapper0", number: 1 }); 
@@ -647,14 +635,24 @@ function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung qua
 
     // Kiểm tra nếu có bất kỳ ai máu thấp hơn ngưỡng
     if (
-        (player1 && player1.hp < 8000) ||
-        (player2 && player2.hp < 5000) ||
-        (player3 && player3.hp < 5000)
+        (player1 && player1.hp < 12000) ||
+        (player2 && player2.hp < 7000) ||
+        (player3 && player3.hp < 7000)
     ) {
         return 1;
     }
 
     return 0;
+}
+// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
+
+function check_quai_A4_stop_attach() {
+    var quai = get_nearest_monster({type: "a4"});
+    if (quai && is_in_range(quai) && (check_viem_xung_quanh() == 1 || is_on_cooldown("scare") )) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 // if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 
