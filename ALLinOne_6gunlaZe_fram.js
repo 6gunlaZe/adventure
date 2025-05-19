@@ -166,8 +166,10 @@ if (healerr && distance(character, healerr) < 150 ) {
     Y = character.y;
 }
 	
+    let stopAttack = (check_quai_A4_stop_attach() == 1);
 	
     try {
+ if (!stopAttack) {	    
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
@@ -303,7 +305,9 @@ else if (targets1.length < 3 && targets1.length > 0 )
 	    
 }
 	    
-	    
+        } else {
+            // Dừng tấn công, có thể hồi phục hoặc đứng yên
+        }	    
 
     } catch (e) {
         //console.error(e);
