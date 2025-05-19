@@ -701,7 +701,50 @@ setInterval(handleSnowball, 100);
 
 
 
+function getBestTargets(options = {}) {
+    const entities = []
+	     let number = 0
 
+     var army=[options.subtype, options.type, "wabbit", "bbb", "cccc"];  
+  
+
+    for (const id in parent.entities) {
+        const entity = parent.entities[id]
+        if (entity.type !== "monster") continue
+        if (entity.dead || !entity.visible) continue
+
+ if (options.max_range && distance(character, entity) > options.max_range) continue
+		
+if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
+if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
+			
+
+if (options.maxHP && entity.max_hp > options.maxHP) continue
+if (options.HP && entity.hp > options.HP) continue
+	    if (options.HPmin && entity.hp < options.HPmin) continue
+ 		if (options.target && entity.target != options.target) continue
+		if (options.havetarget && !entity.target ) continue
+		if (options.Nohavetarget && entity.target ) continue
+		if (options.fire && entity.s.burned  ) continue
+	        if (options.cus && !entity.s["cursed"]  ) continue
+	    	if (options.NoMark && entity.s.marked ) continue
+		if (options.targetNO && entity.target == options.targetNO) continue     
+ 		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
+	//  if(army.indexOf(entity.mtype) == -1) continue
+		///check list khong co se tra ve -1
+      //  !target2.s.marked 
+		
+		
+		if ( options.number &&   (number+1) > options.number ) return entities;
+		/// lon hon so luong thi bo qua
+			number = 1 + number
+        entities.push(entity)
+    }
+
+
+    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
+    return entities
+}
 
 
 
