@@ -485,6 +485,15 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
 	
 //////////// dung skill
+
+
+	 	var target000= get_nearest_monster({type: "zapper0",});
+		    if(target000&& character.mp > 500 && !is_on_cooldown("curse") &&  !target000.s["cursed"] )
+            {
+                use_skill("curse", target000);
+				 game_log("curse - lowstart !!!!!!");
+            }	
+	
 	
 	 	var target1= get_nearest_monster({type: "franky",});
 		    if(target1&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1.s["cursed"] )
