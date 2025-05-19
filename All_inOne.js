@@ -1395,6 +1395,7 @@ setInterval(function() {
 function on_magiport(name){
     if(name == "nhiY"){
         accept_magiport(name);
+	    stop()
     }
 }
 
