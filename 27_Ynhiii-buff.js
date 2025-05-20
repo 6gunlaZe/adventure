@@ -999,6 +999,7 @@ const equipmentSets = {
     ],
     nodeff: [
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
