@@ -1041,6 +1041,7 @@ const equipmentSets = {
     Unluck: [
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+    ],
 };
 
 
