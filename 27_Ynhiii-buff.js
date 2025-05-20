@@ -1003,12 +1003,12 @@ const equipmentSets = {
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
-    luck: [
+    luck: [ //quái đang mạnh quá sức nên giảm luck
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", l: "l"},
-	{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
+	//{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
+        //{ itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
     ],
     healmax: [
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
