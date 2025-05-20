@@ -1141,12 +1141,26 @@ let checkheall = 0;
 
 function ChuyendoiITEM() {
 
+const mobsInRange = Object.values(parent.entities).filter(entity => 
+    entity.visible &&
+    entity.target === character.name &&
+    !entity.dead &&
+    distance(character, entity) <= 100
+);
+
+// Tách theo loại damage
+const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
+const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
+// Tách theo máu
+const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == character.name && leader && distance(character, leader) <= 100);
+
+	
      const leader = get_player("haiz");
      const damer = get_player("6gunlaZe");
 	const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 
-	if(character.max_hp < 10000 && character.hp/character.max_hp < 0.9)
+	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75)
 	{
         eTime = currentTime;
         equipSet('fram');	
@@ -1185,18 +1199,6 @@ function ChuyendoiITEM() {
 	}
 
 
-const mobsInRange = Object.values(parent.entities).filter(entity => 
-    entity.visible &&
-    entity.target === character.name &&
-    !entity.dead &&
-    distance(character, entity) <= 100
-);
-
-// Tách theo loại damage
-const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
-const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
-// Tách theo máu
-const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == character.name && leader && distance(character, leader) <= 100);
 
 
 if ( lowHpMobs.length >= 1) {
