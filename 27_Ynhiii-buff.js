@@ -1038,9 +1038,9 @@ const equipmentSets = {
     nogold: [
         { itemName: "mittens", slot: "gloves", level: 9 },
     ],
-    stat: [
-        { itemName: "coat", slot: "chest", level: 12, l: "s" }
-    ],
+    Unluck: [
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
 };
 
 
@@ -1160,7 +1160,7 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 	const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 
-	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75)
+	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
         eTime = currentTime;
         equipSet('fram');	
@@ -1198,7 +1198,12 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 		return
 	}
 
-
+	if(lowHpMobs.length == 0)
+	{
+        eTime = currentTime;
+        equipSet('Unluck');	
+		return
+	}
 
 
 if ( lowHpMobs.length >= 1) {
