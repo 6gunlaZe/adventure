@@ -1005,7 +1005,7 @@ const equipmentSets = {
     ],
     luck: [
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
-        { itemName: "spookyamulet", slot: "amulet", level: 0, l: "l"},
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
@@ -1146,7 +1146,7 @@ function ChuyendoiITEM() {
 	const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
 
-	if(character.max_hp < 10000 && character.hp/character.max_hp < 0.8)
+	if(character.max_hp < 10000 && character.hp/character.max_hp < 0.9)
 	{
         eTime = currentTime;
         equipSet('fram');	
