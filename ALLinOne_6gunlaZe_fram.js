@@ -174,8 +174,8 @@ if (healerr && distance(character, healerr) < 150 ) {
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1", subtype: "a5",  number: 1 }); // Hàm check hút quái
-
+ var KILLdauTien = getBestTargets({ max_range: character.range, type: "a111111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
+                                                               // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
@@ -189,16 +189,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
             delay = ms_to_next_skill("attack");  
 	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
-		    
-		        let a11 = get_nearest_monster({ type: "a1" }); // Lấy quái vật "a1" gần nhất
-                        if (a11 && is_in_range(a11)) {  // Kiểm tra nếu "a1"  nằm trong phạm vi 
-                        weaponSet("boom");
-                        }
-		         else
-			{
 			weaponSet("single");
-			}
-
                await attack(KILLdauTien[0]);
 	           delay = ms_to_next_skill("attack");
 	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
@@ -232,7 +223,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                            }
                        else
                       {
-                weaponSet("single");
+                weaponSet("singleAOE");
                 await attack(targets[0]);
                 delay = ms_to_next_skill("attack");
 		      }
@@ -252,7 +243,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
     }
 	if( currentTarget && is_in_range(currentTarget))
 	{
-		weaponSet("single");
+		weaponSet("singleAOE");
                 await attack(currentTarget);
                 delay = ms_to_next_skill("attack");
 	}  
@@ -412,6 +403,11 @@ const equipmentSets = {
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
         { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
+    ],
+     singleAOE: [
+        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 7 },
+        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     single: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
