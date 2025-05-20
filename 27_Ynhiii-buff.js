@@ -1004,9 +1004,11 @@ const equipmentSets = {
         { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
     luck: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "oxhelmet", slot: "helmet", level: 1, l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", level: 1, l: "l"},
+	{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
+        { itemName: "cdragon", slot: "chest", level: 1, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
     ],
     healmax: [
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
@@ -1015,6 +1017,9 @@ const equipmentSets = {
     fram: [
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
     ],
     xp: [
         { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
@@ -1140,6 +1145,14 @@ function ChuyendoiITEM() {
      const damer = get_player("6gunlaZe");
 	const currentTime = performance.now();
 	if (currentTime - eTime < 50)return
+
+	if(character.max_hp < 10000 && character.hp/character.max_hp < 0.8)
+	{
+        eTime = currentTime;
+        equipSet('fram');	
+		return
+	}
+
 	
 	if(checkdef == 0 && character.hp/character.max_hp < 0.64)
 	{
@@ -1156,7 +1169,7 @@ function ChuyendoiITEM() {
 		return
 	}
 
-	if(checkheall == 0 && character.hp > 8000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
 	{
 	checkheall = 1
         eTime = currentTime;
@@ -1172,26 +1185,32 @@ function ChuyendoiITEM() {
 	}
 
 
-const mobstype = Object.values(parent.entities)
-    .filter(entity => 
-        entity.visible && entity.target && entity.target == character.name &&  
-        !entity.dead && entity.damage_type == "physical" &&  
-        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
-    );	
+const mobsInRange = Object.values(parent.entities).filter(entity => 
+    entity.visible &&
+    entity.target === character.name &&
+    !entity.dead &&
+    distance(character, entity) <= 100
+);
+
+// Tách theo loại damage
+const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
+const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
+// Tách theo máu
+const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == character.name && leader && distance(character, leader) <= 100);
+
+
+if ( lowHpMobs.length >= 1) {
+	eTime = currentTime;
+        equipSet('luck');
+	return
+}
+
 	
-const mobstype1 = Object.values(parent.entities)
-    .filter(entity => 
-        entity.visible && entity.target && entity.target == character.name &&  
-        !entity.dead && entity.damage_type == "magical" &&  
-        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
-    );		
-	
-	
-if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
+if ( physicalMobs.length >= 1 && checkheall == 0 && checkdef == 0) {
 	eTime = currentTime;
         equipSet('vatly');
 }
-else if (mobstype1.length >= 1 && character.hp < 8000)
+else if (magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65)
 	{
 	eTime = currentTime;
         equipSet('phep');
@@ -1199,7 +1218,7 @@ else if (mobstype1.length >= 1 && character.hp < 8000)
 
 }
 
-setInterval(ChuyendoiITEM, 100);
+setInterval(ChuyendoiITEM, 70);
 
 
 
