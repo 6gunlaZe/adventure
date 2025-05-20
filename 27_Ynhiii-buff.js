@@ -1141,7 +1141,9 @@ let checkdef = 0;
 let checkheall = 0;
 
 function ChuyendoiITEM() {
-
+     const leader = get_player("haiz");
+     const damer = get_player("6gunlaZe");
+	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
     entity.visible &&
     entity.target === character.name &&
@@ -1156,9 +1158,7 @@ const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == character.name && leader && distance(character, leader) <= 100);
 
 	
-     const leader = get_player("haiz");
-     const damer = get_player("6gunlaZe");
-	const currentTime = performance.now();
+
 	if (currentTime - eTime < 50)return
 
 	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
