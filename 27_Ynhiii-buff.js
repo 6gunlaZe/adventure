@@ -853,7 +853,7 @@ setInterval(() => sendItems("haiz"), 30000);
 function chuyendoithongminh(taget)
 {
 
-if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "oozingterror", level : 8 });		
+if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "harbringer", level : 9 });		
 	
 
 //////////////////////////////
