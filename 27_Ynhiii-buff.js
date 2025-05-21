@@ -554,7 +554,7 @@ if (checkTimeBetweenCalls() === 1) return;
         }
 	}
 	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6) {
+    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && character.mp > 500) {
 	    if ( Date.now() > delayaoe + 260)
 	    {
                 use_skill("partyheal");
