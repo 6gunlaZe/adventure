@@ -1140,6 +1140,7 @@ setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 let eTime = 0;
 let checkdef = 0;
 let checkheall = 0;
+let checkluckk = 0;
 
 function ChuyendoiITEM() {
      const leader = get_player("haiz");
@@ -1200,10 +1201,11 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 		return
 	}
 
-	if(lowHpMobs.length == 0)
+	if(lowHpMobs.length == 0 && checkluckk > 0)
 	{
         eTime = currentTime;
         equipSet('Unluck');	
+		checkluckk -= 1
 		return
 	}
 
@@ -1211,6 +1213,7 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 if ( lowHpMobs.length >= 1) {
 	eTime = currentTime;
         equipSet('luck');
+	checkluckk =5
 	return
 }
 
