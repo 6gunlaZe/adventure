@@ -149,7 +149,7 @@ function on_cm(name, data) {
 	{
        if(data == "bosshelp") {
 
- if (!is_on_cooldown("partyheal") && character.mp > 450)use_skill("partyheal");
+ if (!is_on_cooldown("partyheal") && character.mp > 550)use_skill("partyheal");
 
 		 }
 
@@ -554,7 +554,7 @@ if (checkTimeBetweenCalls() === 1) return;
         }
 	}
 	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && character.mp > 500) {
+    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && character.mp > 620) {
 	    if ( Date.now() > delayaoe + 260)
 	    {
                 use_skill("partyheal");
