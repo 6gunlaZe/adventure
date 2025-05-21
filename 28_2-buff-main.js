@@ -110,7 +110,7 @@ function on_cm(name, data) {
 	{
        if(data == "bosshelp") {
 
- if (!is_on_cooldown("partyheal") && character.mp > 450)use_skill("partyheal");
+ if (!is_on_cooldown("partyheal") && character.mp > 580)use_skill("partyheal");
 
 		 }
 
@@ -434,7 +434,7 @@ setInterval(function(){
 	}
 	
     if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && !is_on_cooldown("partyheal")
-	&& character.mp>= (G.skills.partyheal.mp + 80) ) {
+	&& character.mp>= (G.skills.partyheal.mp + 180) ) {
                 use_skill("partyheal");
 				 game_log("hoi mau ALL !!!!!");
 
