@@ -434,7 +434,7 @@ setInterval(function(){
 	}
 	
     if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && !is_on_cooldown("partyheal")
-	&& character.mp>=G.skills.partyheal.mp) {
+	&& character.mp>= (G.skills.partyheal.mp + 80) ) {
                 use_skill("partyheal");
 				 game_log("hoi mau ALL !!!!!");
 
