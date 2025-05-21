@@ -685,7 +685,7 @@ var checkvar = get_player("6gunlaZe");
 var target11= get_nearest_monster1({type: crepp, subtype: "bigbird" , NO_target: 1});
 
 	if (checkvar && cung1 ){
-if (!target1 && character.targets <= 5 && target11 && character.hp/character.max_hp > 0.8 && cung1.hp > 12700 && cung1.mp > 500) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
+if (!target1 && character.targets <= 6 && target11 && character.hp/character.max_hp > 0.8 && cung1.hp > 12700 && cung1.mp > 300) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
 {
 	change_target(target11)
       if(can_attack(target11))attack(target11);
