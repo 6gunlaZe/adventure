@@ -243,7 +243,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
     }
 	if( currentTarget && is_in_range(currentTarget))
 	{
-		weaponSet("singleAOE");
+		weaponSet("single");
                 await attack(currentTarget);
                 delay = ms_to_next_skill("attack");
 	}  
