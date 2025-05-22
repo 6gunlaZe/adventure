@@ -261,7 +261,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
     (monster.mtype === "a1" || monster.mtype === "a6") && monster.level > 3
 );
 
-if ( nguyehiemoutngay.length >= 1 && !character.target)
+if ( nguyehiemoutngay.length >= 1)
 {
 z = 250
 }
