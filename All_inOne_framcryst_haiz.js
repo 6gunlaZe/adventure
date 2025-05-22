@@ -1256,7 +1256,7 @@ async function attackLoop() {
     try {
 if (!stopAttack) {	    
         let nearest = null;
-        var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1", subtype: "a4",  number: 1 }); 
+        var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1", subtype: "a444444444",  number: 1 }); 
 
         if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
