@@ -257,7 +257,15 @@ const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000);
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
+const nguyehiemoutngay = mobsInRange.filter(monster => 
+    (monster.mtype === "a1" || monster.mtype === "a6") && monster.level > 3
+);
 
+if ( nguyehiemoutngay.length >= 1)
+{
+z = 250
+}
+	
 
 if ( lowhpMob.length >= 1)
 {
