@@ -415,6 +415,13 @@ if (runn == 1)
       if (z < 131 ) {
         z++;
       }
+
+const zGanNhat1 = findNearestZ(toado, character.x, character.y);
+if (zGanNhat1 < z-2) {
+  z = zGanNhat1;
+}
+
+	
       let result = toado.find(item => item.z === z);    
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
