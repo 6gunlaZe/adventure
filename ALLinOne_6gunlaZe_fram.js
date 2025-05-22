@@ -212,7 +212,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (targets.length > 0 && targets.length < 3 ) {
+            } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
 		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
                            {
 		weaponSet("heal");
