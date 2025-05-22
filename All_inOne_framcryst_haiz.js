@@ -218,6 +218,19 @@ let toado = [
 { x: 2200, y: 120, z: 122 },
 { x: 2200, y: 200, z: 123 },
 { x: 2200, y: 280, z: 124 },
+
+{ x: 2260, y: 340, z: 125 },
+{ x: 2310, y: 340, z: 126 },
+{ x: 2360, y: 340, z: 127 },
+{ x: 2410, y: 340, z: 128 },
+{ x: 2460, y: 340, z: 129 },
+{ x: 2510, y: 340, z: 130 },
+{ x: 2560, y: 340, z: 131 },
+
+
+
+
+	
 	
 ];
 if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_call("disconnect_character", {name: "haiz"});
@@ -340,7 +353,7 @@ game_log("checkk checkback ==  "+ checkback);
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 if (z > 990)return
-if (get_NUMber_kill() >= 14 && targetkill.length == 0 || z > 123 || (checkback + z) > 230 ){
+if (get_NUMber_kill() >= 14 && targetkill.length == 0 || z > 130 || (checkback + z) > 235 ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
@@ -391,7 +404,7 @@ game_log("ZZZ = !!!!!!  "+ z  );
 
 if (runn == 1)
 {
-      if (z < 124 ) {
+      if (z < 131 ) {
         z++;
       }
       let result = toado.find(item => item.z === z);    
