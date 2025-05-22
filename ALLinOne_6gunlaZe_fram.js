@@ -174,7 +174,7 @@ if (healerr && distance(character, healerr) < 150 ) {
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "a111111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
+ var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
                                                                // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
 	    
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
@@ -907,7 +907,7 @@ if( character.map != mobMap  || (  character.map == mobMap  && distance(characte
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
     // === 1. Xác định danh sách quái vật "ưu tiên đặc biệt" ===
-    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx"];
+    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx","a4"];
     const isPriorityMtype = (monster) => priorityMtypes.includes(monster.mtype);
 
     // === 2. Lọc tất cả các quái vật đang tấn công người trong party ===
