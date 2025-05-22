@@ -211,7 +211,11 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                 weaponSet("dead");
                 await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
-		    
+
+            } else if (monsterscharacterRange.length > 1) {
+                weaponSet("singleAOE");
+                    await attack(monsterscharacterRange[0]);
+                delay = ms_to_next_skill("attack");
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
 		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
                            {
@@ -223,8 +227,8 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                            }
                        else
                       {
-                weaponSet("singleAOE");
-                await attack(targets[0]);
+                weaponSet("single");
+                    await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
 		      }
             }else
