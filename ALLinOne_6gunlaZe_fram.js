@@ -658,12 +658,13 @@ function scare() {
     const orb = character.items.findIndex(i => !i);
     let mobnum = 0;
     let targetedForMoreThanOneSecond = false;
-	
+	    const leader = get_player("haiz");
+	    const a1 = get_nearest_monster({type: "a1"});
 // if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;  ///chỉ mở lại khi muốn kill a4
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((  (current.mtype == 'zapper0' || current.mtype == 'a4' || current.mtype == 'nerfedbat'  )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((  (current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 150 ) )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
