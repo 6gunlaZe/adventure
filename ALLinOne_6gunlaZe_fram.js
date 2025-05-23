@@ -37,11 +37,13 @@ const locations = {
     squig: [{ x: -1175, y: 422 }],
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
-    xscorpion: [{ x: -495, y: 685 }]
+    xscorpion: [{ x: -495, y: 685 }],
+    odino: [{ x: -20, y: 675 }],
+
 };
 
-const home = 'fireroamer';
-const mobMap = 'desertland';
+const home = 'odino';
+const mobMap = 'mforest';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
@@ -862,7 +864,7 @@ async function safeawwaitwalkInCircle() {
 
 if (!tank || tank.rip){
     if (!smart.moving) {
-smart_move({ map: "desertland", x: 0, y: 0 })
+smart_move({ map: "mforest", x: -240, y: 700 })
     }
 }else
 {
