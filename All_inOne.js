@@ -2081,7 +2081,7 @@ if (targetsoloboss.length == 0) //danh xong
 moveLoop();
 
 //["phoenix", "jr","greenjr", "mvampire"];
-const monstersfarm = ["jr","greenjr", "mvampire"]; // Danh sách các boss ID
+const monstersfarm = ["jr","greenjr", "mvampire111111"]; // Danh sách các boss ID
 let currentBossLocation = null;
 
 
