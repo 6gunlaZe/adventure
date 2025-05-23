@@ -1017,7 +1017,8 @@ const equipmentSets = {
     ],
     fram: [
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+      //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	    
