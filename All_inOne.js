@@ -740,7 +740,7 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
         type === "monster" &&
         visible &&
         !dead &&
-        distance(character, { x, y }) <= (G.skills.cleave.range + 10)
+        distance(character, { x, y }) <= (G.skills.cleave.range + 4)
     );
 
     const untargetedMonsters = monstersInRange.filter(({ target }) => !target)
