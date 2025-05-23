@@ -1055,6 +1055,8 @@ setTimeout(function() {
 ////////////////////////////////////////	
 function timbosskill()
 {
+
+	return ///tắt chức năng
 	if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return
 	if (timboss == undefined) timboss = Date.now()
     if (Date.now() < (timboss + TenMinutesInMs11) ) return;
