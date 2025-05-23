@@ -264,6 +264,8 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
 if ( nguyehiemoutngay.length >= 1)
 {
 z = 250
+let toke1n = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "13",toke1n)
 }
 	
 
