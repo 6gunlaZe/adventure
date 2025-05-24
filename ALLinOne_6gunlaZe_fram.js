@@ -201,31 +201,31 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
 			weaponSet("single");
-               await attack(KILLdauTien[0]);
+               if(codame) await attack(KILLdauTien[0]);
 	           delay = ms_to_next_skill("attack");
 	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
 		    // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
 		    	weaponSet("dead");
-               await attack(hutquai[0]);
+              if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
 	    }else if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("boom");
-                await use_skill("5shot", monstersInRangeList.slice(0, 5));
+              if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
                 weaponSet("shot5");
-                await use_skill("5shot", monsterscharacterRange.slice(0, 5));
+              if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 3 && character.mp > 330  && leader && leader.hp > 10000) {
                 weaponSet("dead");
-                await use_skill("3shot", monsterscharacterRange.slice(0, 3));
+              if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
 
             } else if (monsterscharacterRange.length > 1) {
                 weaponSet("singleAOE");
-                    await attack(monsterscharacterRange[0]);
+                 if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
 		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
@@ -239,7 +239,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
                        else
                       {
                 weaponSet("single");
-                    await attack(monsterscharacterRange[0]);
+                 if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
 		      }
             }else
@@ -259,7 +259,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 	if( currentTarget && is_in_range(currentTarget))
 	{
 		weaponSet("single");
-                await attack(currentTarget);
+             if (codame)   await attack(currentTarget);
                 delay = ms_to_next_skill("attack");
 	}  
     }
