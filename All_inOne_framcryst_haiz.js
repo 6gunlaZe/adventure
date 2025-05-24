@@ -496,7 +496,7 @@ else if (z == 2) z = 1;
 
 setInterval(function() {
 
- if (character.rip) { ///////auto reset
+ if (character.rip && character.map == "crypt") { ///////auto reset
 parent.api_call("disconnect_character", {name: "haiz"});  
  }
 
