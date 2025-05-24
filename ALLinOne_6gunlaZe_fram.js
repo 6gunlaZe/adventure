@@ -160,9 +160,7 @@ async function attackLoop() {
      const healerr = get_player("Ynhi");
 
 	let codame = true;
-let slotItem = parent.character.items[parent.character.slots["mainhand"]];
-
-if (slotItem && slotItem.name == "cupid") {
+if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
     codame = false;
 }
 
