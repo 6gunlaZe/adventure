@@ -159,6 +159,15 @@ async function attackLoop() {
     const leader = get_player("haiz");
      const healerr = get_player("Ynhi");
 
+	let codame = true;
+let slotItem = parent.character.items[parent.character.slots["mainhand"]];
+
+if (slotItem && slotItem.name == "cupid") {
+    codame = false;
+}
+
+
+	
 let X, Y;
 if (healerr && distance(character, healerr) < 150 ) {
     X = healerr.x;
