@@ -261,7 +261,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
     (monster.mtype === "a1" || monster.mtype === "a6") && monster.level > 3
 );
 
-if ( nguyehiemoutngay.length >= 1)
+if ( nguyehiemoutngay.length >= 1 || character.rip)
 {
 z = 250
 let toke1n = key_auto;  // Thay bằng token của bạn
@@ -492,6 +492,16 @@ else if (z == 2) z = 1;
 
 	
 }, 500);
+
+
+setInterval(function() {
+
+ if (character.rip) { ///////auto reset
+parent.api_call("disconnect_character", {name: "haiz"});  
+ }
+
+}, 20000);
+
 
 
 function findNearestZ(toado, a, b) {
