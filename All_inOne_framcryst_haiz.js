@@ -233,7 +233,14 @@ let toado = [
 	
 	
 ];
-if (character.hp < 5000 ||  character.esize < 3 || character.rip  ) parent.api_call("disconnect_character", {name: "haiz"});
+	
+if (character.hp < 5000 ||  character.esize < 3 )parent.api_call("disconnect_character", {name: "haiz"});
+if (character.rip  ){
+	z = 250
+let toke2n = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "14",toke2n)
+	parent.api_call("disconnect_character", {name: "haiz"});
+}
 	
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
