@@ -998,6 +998,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
     ],
     nodeff: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
     ],
@@ -1005,17 +1006,20 @@ const equipmentSets = {
         { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
+	{ itemName: "lmace", slot: "mainhand", level: 5, l: "l" },
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", l: "l"},
-	//{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
+	{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
-        //{ itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
     ],
     healmax: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
     ],
     fram: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
       //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1043,7 +1047,11 @@ const equipmentSets = {
     Unluck: [
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+
     ],
 };
 
