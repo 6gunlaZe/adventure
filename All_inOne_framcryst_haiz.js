@@ -412,7 +412,7 @@ if ( checkkill != numberkilll || checkback == 40  || checkback == 60 || checkbac
 const token = key_auto;  // Thay bằng token của bạn
 const issueBody = `kill = ${numberkilll}`;
 
-ghichu(character.in, issueBody,token)
+if(landaucheck != 1)ghichu(character.in, issueBody,token)
 
 checkkill = numberkilll
 }
