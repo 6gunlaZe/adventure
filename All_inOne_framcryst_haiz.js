@@ -29,7 +29,6 @@ if (character.map != "crypt" && character.rip )respawn();
 }, 40000);
 
 
-
 let timeat = Date.now();
 let initialTarget = null
 //////////////////////////////////////////
@@ -57,6 +56,10 @@ if (character.map != "crypt") return;
 
 
 if (smart.moving || is_moving(character) ) return;
+
+let landaucheck = landau;
+
+	
 let toado = [
 
 
@@ -237,8 +240,8 @@ let toado = [
 if (character.hp < 5000 ||  character.esize < 3 )parent.api_call("disconnect_character", {name: "haiz"});
 if (character.rip  ){
 	z = 250
-let toke2n = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "14",toke2n)
+let toke21n = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "14",toke21n)
 	parent.api_call("disconnect_character", {name: "haiz"});
 }
 	
@@ -370,14 +373,15 @@ game_log("checkk checkback ==  "+ checkback);
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 if (z > 990)return
-if (get_NUMber_kill() >= 14 && targetkill.length == 0 || z > 130 || (checkback + z) > 235 ){
+if (  (get_NUMber_kill() >= 1 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kill() >= 14 && targetkill.length == 0) || z > 130 || (checkback + z) > 235 ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
 	monsterIds = [];
 	use_skill("town");
 let toke2n = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "12",toke2n)
+if (landaucheck == 0)ghichu(character.in, "12",toke2n)
+if (landaucheck == 1)ghichu(character.in, "landau",toke2n)
 	
 // Đợi 6 giây 
 setTimeout(() => {
