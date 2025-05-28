@@ -681,6 +681,10 @@ function scare() {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
+	    else if (current.target == character.name)
+	    {
+	    mobnum++;    
+	    }
     }
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
