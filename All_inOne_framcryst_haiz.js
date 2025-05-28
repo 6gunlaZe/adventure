@@ -268,7 +268,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
     (monster.mtype === "a1" || monster.mtype === "a6") && monster.level > 3
 );
 
-if ( nguyehiemoutngay.length >= 1 || character.rip)
+if ( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) )
 {
 z = 250
 let toke1n = key_auto;  // Thay bằng token của bạn
