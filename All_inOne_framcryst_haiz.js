@@ -376,7 +376,9 @@ if (get_NUMber_kill() >= 14 && targetkill.length == 0 || z > 130 || (checkback +
 	z = 1000
 	monsterIds = [];
 	use_skill("town");
-
+let toke2n = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "12",toke2n)
+	
 // Đợi 6 giây 
 setTimeout(() => {
 	smart_move({ map: "cave", x: -194, y: -1281 })
