@@ -206,17 +206,17 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 		    	weaponSet("dead");
               if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
-	    }else if (monstersInRangeList.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
+	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
                 weaponSet("boom");
               if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 430 && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
                 weaponSet("shot5");
               if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 330  && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
                 weaponSet("dead");
               if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
