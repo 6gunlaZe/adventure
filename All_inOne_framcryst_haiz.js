@@ -275,7 +275,7 @@ if ( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) |
 {
 z = 250
 let toke1n = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "13",toke1n)
+ghichu(character.in, "13 - nguy hiem",toke1n)
 }
 	
 
@@ -380,7 +380,7 @@ if (  ( z == 2 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kil
 	monsterIds = [];
 	use_skill("town");
 let toke2n = key_auto;  // Thay bằng token của bạn
-if (landaucheck == 0)ghichu(character.in, "12",toke2n)
+if (landaucheck == 0)ghichu(character.in, "12 - full",toke2n)
 if (landaucheck == 1)ghichu(character.in, "landau",toke2n)
 	
 // Đợi 6 giây 
