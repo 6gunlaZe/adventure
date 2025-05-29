@@ -2037,6 +2037,10 @@ setInterval(avoidance, 50);
 function avoidMobs() {
     let maxWeight = -Infinity; // Trọng số cao nhất tìm được
     let maxWeightAngle = 0;    // Góc tương ứng với trọng số cao nhất
+	
+const dangerHole = { x: 1445, y: -545 }; // Tọa độ hố nguy hiểm
+const holeAvoidRadius = 100; // Bán kính tối thiểu cần tránh xa hố
+
 
     const monstersInRadius = getMonstersInRadius();         // Danh sách quái trong vùng nguy hiểm
     const avoidRanges = getAnglesToAvoid(monstersInRadius); // Các góc nguy hiểm cần tránh
@@ -2062,6 +2066,11 @@ function avoidMobs() {
                 if (can_move_to(position.x, position.y)) {
                     let rangeWeight = 0;
                     let inRange = false;
+
+const distToHole = distanceToPoint(position.x, position.y, dangerHole.x, dangerHole.y);
+if (distToHole < holeAvoidRadius && character.map == "crypt" ) {
+    continue; // Bỏ qua hướng này nếu quá gần hố
+}
 
                     // Kiểm tra từng quái xem di chuyển hướng này có giúp thoát khỏi vùng nguy hiểm không
                     for (const id in monstersInRadius) {
