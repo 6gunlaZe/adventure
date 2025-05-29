@@ -627,7 +627,7 @@ function chuyendoithongminh(taget)
 ///////////////////////////////////	 
 if (taget && !taget.s["frozen"])
 {	
-changeitem({ slot: "mainhand", name : "froststaff", level : 8 });
+// changeitem({ slot: "mainhand", name : "froststaff", level : 8 });
 }
 	else
 	{
