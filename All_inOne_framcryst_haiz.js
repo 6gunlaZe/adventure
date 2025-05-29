@@ -268,8 +268,10 @@ const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.m
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
-    (monster.mtype === "a1" || monster.mtype === "a6") && monster.level > 3
+    (monster.mtype === "a1" && monster.level > 2) ||
+    (monster.mtype === "a6" && monster.level > 4)
 );
+
 
 if ( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) )
 {
