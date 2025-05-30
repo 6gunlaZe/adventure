@@ -2098,7 +2098,7 @@ if (distToHole < holeAvoidRadius && character.map == "crypt" ) {
                         const distToHealer = distance(position, healer); // Tính khoảng cách đến healer
                         const maxHealerDistance = 400; // Khoảng cách tối đa để được ưu tiên
                         const healerWeight = Math.max(0, maxHealerDistance - distToHealer) / maxHealerDistance;
-                        totalWeight += healerWeight * 120; // Ưu tiên mạnh mẽ nếu gần healer////////////////////////////////
+                        totalWeight += healerWeight * 120 + 80; // Ưu tiên mạnh mẽ nếu gần healer////////////////////////////////
                     }
 
                     safeAngle = true;
