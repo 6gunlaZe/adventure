@@ -985,7 +985,7 @@ const equipmentSets = {
     ],
     aoe: [
         { itemName: "vhammer", slot: "mainhand", level: 6, l: "l" },
-        { itemName: "vhammer", slot: "offhand", level: 6, l: "s" },
+        { itemName: "vhammer", slot: "offhand", level: 7, l: "s" },
     ],
     home: [
         { itemName: "mittens", slot: "gloves", level: 9, },
