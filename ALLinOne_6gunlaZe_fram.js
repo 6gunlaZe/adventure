@@ -1137,30 +1137,31 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 
 
 
-function moveToTargetLocation(receivedData) {
-    // Đảm bảo rằng nhận được thông tin hợp lệ
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
 
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
+async function moveToTargetLocation(receivedData) {
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const { map: targetMap, x: targetX, y: targetY } = receivedData;
+
+        // Nếu không ở đúng bản đồ, thử di chuyển đến bản đồ đích
+        if (character.map !== targetMap && character.map !== "crypt") {
+            try {
+                // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
+                await smart_move({ map: targetMap, x: targetX, y: targetY });
+            } catch (error) {
+                // Nếu không thể di chuyển (ví dụ: không có đường đi), thì dùng 'use_town'
+                console.log("Không thể di chuyển đến đích, sử dụng 'use_town'");
+                await use_skill("town");  // Quay lại thành phố
+            }
         } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-            if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
-                xmove(targetX, targetY);
+            // Nếu đã ở đúng bản đồ, kiểm tra và di chuyển đến tọa độ nếu chưa đến
+            const distance = Math.hypot(character.x - targetX, character.y - targetY);
+            if (distance > 5) {
+                xmove(targetX, targetY);  // Di chuyển mà không cần bắt lỗi
             }
         }
     }
 }
+
 
 
 
