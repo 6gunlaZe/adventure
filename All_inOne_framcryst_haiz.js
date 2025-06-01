@@ -269,7 +269,7 @@ const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1");
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
     (monster.mtype === "a1" && monster.level > 2) ||
-    (monster.mtype === "a6" && monster.level > 7)
+    (monster.mtype === "a6" && monster.level > 4)
 );
 
 
