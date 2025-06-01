@@ -1489,7 +1489,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 		var current=parent.entities[id];
 		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
         if (current.mtype === "a1" && current.level > 2) continue;
-        if (current.mtype === "a6" && current.level > 6) continue;
+        if (current.mtype === "a6" && current.level > 7) continue;
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
 		if(args.min_xp && current.xp<args.min_xp) continue;
