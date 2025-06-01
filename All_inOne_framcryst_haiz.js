@@ -983,7 +983,7 @@ let delayThreshold = 200; // Ngưỡng thời gian 200ms
 
 
 setInterval(function() {
-////////////giui vi tri moi 2s
+////////////giui vi tri moi 200ms
 let checkdichuyen = smart;  // checkdichuyen sẽ là smart, đối tượng dữ liệu 
 let SM = 0;
 if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y !== undefined)) {
@@ -1053,7 +1053,7 @@ for (let char in parent.party) {
 }
 	//////////////////////////////////
 }
-}, 1300);
+}, 200);
 
 
 
