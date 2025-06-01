@@ -1006,7 +1006,7 @@ const equipmentSets = {
         { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
-	{ itemName: "lmace", slot: "mainhand", level: 5, l: "l" },
+	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 5, l: "l" },
