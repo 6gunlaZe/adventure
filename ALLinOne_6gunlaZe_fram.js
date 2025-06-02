@@ -1629,7 +1629,9 @@ function avoidance() {
 		const target = get_target();
                 let check = !!target && !target.rip;
                var a1check= get_nearest_monster({type: "a1",});
-		
+
+	if (host && !character.moving && character.map == "crypt" && (!check || (check && !is_in_range(target))) )xmove(host.real_x, host.real_y);
+
            if (host && !smart.moving && a1check && is_in_range(a1check) ){
 		   xmove(host.real_x, host.real_y);
 	   }   
@@ -1643,7 +1645,8 @@ function avoidance() {
 		   if (character.map != "crypt") kite(host, 20)
 		   else xmove(host.real_x, host.real_y);
 	   }
-	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 30)	
+	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 30)
+		
             lastMove = new Date();
 
 		////////////////////////////////////
