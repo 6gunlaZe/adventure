@@ -1623,7 +1623,7 @@ function avoidance() {
 
     const avoiding = avoidMobs();
 
-    if (!avoiding || !smart.moving) {
+    if (!avoiding && !smart.moving) {
         if ((!lastMove || new Date() - lastMove > 100) &&
             (cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents)) {
             
