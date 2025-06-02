@@ -1616,48 +1616,67 @@ const drawDebug = false;
 
 
 function avoidance() {
-    if (drawDebug) {
-        clear_drawings();
-    }
+    if (drawDebug) clear_drawings();
 
-    // Try to avoid monsters
+    // Ghi log bắt đầu hàm
+    game_log("⛔ Đang kiểm tra tránh quái...");
+
     const avoiding = avoidMobs();
 
-    if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && (cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents ) ) {
-		let host = get_player("haiz")
-		const target = get_target();
-                let check = !!target && !target.rip;
-               var a1check= get_nearest_monster({type: "a1",});
+    if (!avoiding || !smart.moving) {
+        if ((!lastMove || new Date() - lastMove > 100) &&
+            (cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents)) {
+            
+            let host = get_player("haiz");
+            const target = get_target();
+            let check = !!target && !target.rip;
+            let a1check = get_nearest_monster({ type: "a1" });
 
-	if (host && !character.moving && character.map == "crypt" && (!check || (check && !is_in_range(target))) )xmove(host.real_x, host.real_y);
+            if (host) {
+                game_log("🎯 Theo dõi 'haiz': " + host.name);
 
-           if (host && !smart.moving && a1check && is_in_range(a1check) ){
-		   xmove(host.real_x, host.real_y);
-	   }   
-           else if(host && !smart.moving && check && distance(character, host) > (character.range - 30) )
-	   {
-		   if (character.map != "crypt") kite(host, 20)
-		   else xmove(host.real_x, host.real_y);
-	   }
-	   else if (host && !smart.moving && (!check || (check && !is_in_range(target))) )
-	   {
-		   if (character.map != "crypt") kite(host, 20)
-		   else xmove(host.real_x, host.real_y);
-	   }
-	   else if (host && !smart.moving && check && get_nearest_monster({type: "franky"}) )kite(host, 30)
-		
-            lastMove = new Date();
+                if (!character.moving && character.map === "crypt" &&
+                    (!check || (check && !is_in_range(target)))) {
+                    game_log("🔄 Di chuyển về phía host (crypt, không có mục tiêu gần)");
+                    xmove(host.real_x, host.real_y);
+                }
 
-		////////////////////////////////////
-		if (!host && !smart.moving){
-moveToTargetLocation(receivedData)
-		}
+                else if (!smart.moving && a1check && is_in_range(a1check)) {
+                    game_log("⚠️ Phát hiện quái a1 gần — di chuyển theo host");
+                    xmove(host.real_x, host.real_y);
+                }
+
+                else if (!smart.moving && check && distance(character, host) > (character.range - 30)) {
+                    game_log("📏 Quá xa host + có mục tiêu, di chuyển theo");
+                    if (character.map !== "crypt") kite(host, 20);
+                    else xmove(host.real_x, host.real_y);
+                }
+
+                else if (!smart.moving && (!check || (check && !is_in_range(target)))) {
+                    game_log("💨 Không có mục tiêu hoặc ngoài tầm — di chuyển về host");
+                    if (character.map !== "crypt") kite(host, 20);
+                    else xmove(host.real_x, host.real_y);
+                }
+
+                else if (!smart.moving && check && get_nearest_monster({ type: "franky" })) {
+                    game_log("😨 Gần quái Franky! Kite!");
+                    kite(host, 30);
+                }
+
+                lastMove = new Date();
+            }
+
+            // Nếu không tìm thấy host
+            if (!host && !smart.moving) {
+                game_log("⚠️ Không tìm thấy host, di chuyển theo dữ liệu mục tiêu!");
+                moveToTargetLocation(receivedData);
+            }
         }
     }
-
 }
+
 setInterval(avoidance, 80);
+
 
 
 
