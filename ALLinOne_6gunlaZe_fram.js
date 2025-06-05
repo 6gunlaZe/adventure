@@ -418,7 +418,7 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
      singleAOE: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 7 },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
@@ -428,7 +428,7 @@ const equipmentSets = {
 	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
     ],
     dead: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
