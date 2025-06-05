@@ -1573,7 +1573,7 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
         distance(character, { x, y }) <= G.skills.cleave.range
     );
 
-    const untargetedMonsters = monstersInRange.filter(({ target }) => !target)
+const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);
 
     if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters)) {
         if (Mainhand !== "bataxe") {
