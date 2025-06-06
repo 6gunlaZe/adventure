@@ -1633,7 +1633,7 @@ function avoidance() {
             let check = !!target && !target.rip;
             let a1check = get_nearest_monster({ type: "a1" });
 
-            if (host) {
+            if (host && distance(character, host) < 300) {
                 game_log("🎯 Theo dõi 'haiz': " + host.name);
 
                 if (!character.moving && character.map === "crypt" &&
@@ -1675,7 +1675,7 @@ function avoidance() {
             }
 
             // Nếu không tìm thấy host
-            if (!host && !smart.moving) {
+            if ((!host || (host && distance(character, host) >= 300)) && !smart.moving) {
                 game_log("⚠️ Không tìm thấy host, di chuyển theo dữ liệu mục tiêu!");
                 moveToTargetLocation(receivedData);
             }
