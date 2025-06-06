@@ -1663,6 +1663,13 @@ function avoidance() {
                     game_log("😨 Gần quái Franky! Kite!");
                     kite(host, 30);
                 }
+		    else
+		{
+			 if (!character.moving){
+                    if (character.map !== "crypt") kite(host, 20);
+                    else xmove(host.real_x, host.real_y);
+			 }
+		}
 
                 lastMove = new Date();
             }
