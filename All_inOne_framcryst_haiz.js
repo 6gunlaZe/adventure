@@ -266,6 +266,7 @@ const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiể
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
+const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
     (monster.mtype === "a1" && monster.level > 2) ||
@@ -273,7 +274,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
 );
 
 
-if ( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) )
+if (( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) ) && MobisA3.length == 0  )
 {
 z = 250
 let toke1n = key_auto;  // Thay bằng token của bạn
