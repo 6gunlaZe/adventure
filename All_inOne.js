@@ -2255,7 +2255,7 @@ let validObjects0
 let validObjects
 let validObjects1
 	 let hpcheck =120000000
-	 let hpcheck1 =14000000
+	 let hpcheck1 =15000000
 
   // Query API
   const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
