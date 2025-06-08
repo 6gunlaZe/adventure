@@ -7,7 +7,7 @@ let evenmuaban
 var idmap
 let cryts = 0  ///mode săn boss ở hầm ngục
 let crab = 0  ///mode săn crabxx
-let landaucyp ///mode lần đầu trong crypt
+let landaucyp = 2; ///mode lần đầu trong crypt
 
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
@@ -1256,9 +1256,15 @@ if (name == "haiz") {
     if (data == "goo" && character.map != "crypt") {
         enter("crypt", idmap);
     }
-    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts
+    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp
     else if (data == "crypt") {
         cryts = 1;
+    }
+    else if (data == "landau1") {
+        landaucyp = 1;
+    }
+    else if (data == "landau0") {
+        landaucyp = 0;
     }
     else if (data == "bossvip1") {
         bossvip = 1;
