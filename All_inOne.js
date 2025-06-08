@@ -990,6 +990,7 @@ const equipmentSets = {
     ],
     home: [
         { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "fury", slot: "helmet", level: 4, },
     ],
     cape: [
         { itemName: "vcape", slot: "cape", level: 4, l: "l" },
