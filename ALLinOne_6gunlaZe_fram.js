@@ -7,6 +7,7 @@ let evenmuaban
 var idmap
 let cryts = 0  ///mode săn boss ở hầm ngục
 let crab = 0  ///mode săn crabxx
+let landaucyp ///mode lần đầu trong crypt
 
 const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
