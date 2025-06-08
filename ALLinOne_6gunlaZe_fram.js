@@ -1487,6 +1487,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	var min_d=450 ,target=null;
         var bossarmy=[ "a2" , "a3", "a7", "vbat", "stompy", "skeletor","a8","a6","a1"]; 
 	var bossarmylevel=["a6","a1"]; 
+	let landaucheck = landaucyp
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
@@ -1496,6 +1497,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	{
 		var current=parent.entities[id];
 		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
+	if (current.mtype === "a3" && landaucheck == 1) continue;
         if (current.mtype === "a1" && current.level > 2) continue;
         if (current.mtype === "a6" && current.level > 4) continue;
 		if(current.type!="monster" || !current.visible || current.dead) continue;
