@@ -939,7 +939,12 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 setInterval(function() {
 
 /////////////////////////
-if(parent.party_list.includes("6gunlaZe") ) send_cm("6gunlaZe","crypt")
+if(parent.party_list.includes("6gunlaZe") ){
+	send_cm("6gunlaZe","crypt")
+	
+           if (landau == 1)send_cm("6gunlaZe","landau1")
+	     else 	send_cm("6gunlaZe","landau0")	
+}
 	
 if (character.map == "crypt")	
 {
