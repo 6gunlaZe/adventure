@@ -1214,6 +1214,7 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 	if(lowHpMobs.length == 0 && checkluckk > 0)
 	{
         eTime = currentTime;
+        game_log("🎯 Unluck"); 	
         equipSet('Unluck');	
 		checkluckk -= 1
 		return
@@ -1222,6 +1223,7 @@ const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == chara
 
 if ( lowHpMobs.length >= 1) {
 	eTime = currentTime;
+        game_log("🔄 luck") ;	
         equipSet('luck');
 	checkluckk =5
 	return
