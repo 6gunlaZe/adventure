@@ -1167,7 +1167,7 @@ const mobsInRange = Object.values(parent.entities).filter(entity =>
 const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
 const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
-const lowHpMobs = mobsInRange.filter(mob => mob.hp < 4000 && mob.target == character.name && leader && distance(character, leader) <= 100);
+const lowHpMobs = mobsInRange.filter(mob => mob.hp < 5000 && mob.target == character.name && leader && distance(character, leader) <= 100);
 
 	
 
