@@ -1452,7 +1452,7 @@ start_character("6gunlaZe", 33);
 /////////////////
     if(name == "MuaBan"){
 
-			
+	   if(data == "framtay")framtay = 1;
 	   if(data == "bank") {
         start_character("MuaBan", 10);	
 		 banktime = Date.now()  
