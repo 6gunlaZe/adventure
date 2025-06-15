@@ -6,6 +6,7 @@ let receivedData
 let evenmuaban
 var idmap
 let cryts = 0  ///mode săn boss ở hầm ngục
+let tomb = 0  ///mode săn boss ở hầm ngục
 let crab = 0  ///mode săn crabxx
 let landaucyp = 2; ///mode lần đầu trong crypt
 
@@ -79,6 +80,8 @@ async function eventer() {
           Handelbossvip()
 	} else if (cryts > 0) {
           crytsgame()
+	} else if (tomb > 0) {
+          tombgame()
 	} else if (crab > 0) {
           crabgame()		
         } else if (  (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
@@ -1079,7 +1082,8 @@ if ( !monster && distance(character, { x: 666, y: -555 }) <= 150 && character.ma
 
 
 
-
+function tombgame() {
+}
 
 let delayboss = Date.now()
 function crytsgame() {
@@ -1256,10 +1260,13 @@ if (name == "haiz") {
     if (data == "goo" && character.map != "crypt") {
         enter("crypt", idmap);
     }
-    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp
+    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp // tomb
     else if (data == "crypt") {
         cryts = 1;
     }
+    else if (data == "tomb") {
+        tomb = 1;
+    }    
     else if (data == "landau1") {
         landaucyp = 1;
     }
@@ -1277,7 +1284,7 @@ if (name == "haiz") {
         crab = 1;
     }
     // Nếu data là chuỗi khác ngoài "goo", "crypt", "crypt1", "crypt2", "crypt3", và "crabxx"
-    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0") {
+    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb") {
         idmap = data;
     }
     // Các trường hợp còn lại (không phải "goo", "crypt", "crypt1", "crypt2", "crypt3", "crabxx")
