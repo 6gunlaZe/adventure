@@ -88,7 +88,7 @@ async function eventer() {
 	} else if (framboss > 0) {
 
 	} else if (framtay > 0) {
-	   framtay()
+	   framtaygame()
         } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50 ) )) {
            handleHome();
         } else {
@@ -357,7 +357,7 @@ function waitAndUnluck() {
 
 
 
-function framtay() {
+function framtaygame() {
 if(parent.party_list.includes("6gunlaZe") ){
 	send_cm("6gunlaZe","tomb")	
 }
