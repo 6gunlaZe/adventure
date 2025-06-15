@@ -158,15 +158,16 @@ function on_cm(name, data) {
     if(name == "haiz"){
 
 		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
+		if (data == "goo1" && character.map != "tomb")enter("tomb",idmap);
 
 	}
 	
-	 if(name == "haiz" && data != "goo" && typeof data === 'string' ){
+	 if(name == "haiz" && data != "goo" && data != "goo1" && typeof data === 'string' ){
      idmap = data
 
 	}
 	
-	 if(name == "haiz" && data != "goo" ){
+	 if(name == "haiz" && data != "goo" && data != "goo1" ){
      receivedData = data
 
 	}
@@ -306,7 +307,7 @@ const  angle = Math.PI / 3.5  * checkwwall;
         const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
 	    if (can_move_to(endGoal.x, endGoal.y))
 	    {
-		    move(endGoal.x, endGoal.y)
+		    xmove(endGoal.x, endGoal.y)
 	    }
 	    else
 	    {
@@ -633,9 +634,18 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 		}
 	}
    }
+else if (cung1 && (distance(character,cung1) < 300 )  )
+	{
+				kite(cung1,30);
+	}
+
+
+	
 if ( currentTarget && cung && kitefram == 1) {
 	if(!can_attack(currentTarget) )kite(cung,25);
    }
+
+	
 	
 	////////////
 	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
