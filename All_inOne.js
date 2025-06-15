@@ -75,7 +75,7 @@ if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp
         events = true
 }
 
-
+let framtay = 0
 async function eventer() {
     const delay = 500;
     let tank = get_player("Ynhi");
@@ -86,7 +86,9 @@ async function eventer() {
         } else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
-		
+
+	} else if (framtay > 0) {
+	   framtay()
         } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50 ) )) {
            handleHome();
         } else {
@@ -353,6 +355,11 @@ function waitAndUnluck() {
     }
 }
 
+
+
+function framtay() {
+
+}
 
 function VIPBosses() {
 if(smart.moving)return	
