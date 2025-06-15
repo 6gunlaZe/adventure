@@ -81,6 +81,7 @@ async function eventer() {
     let tank = get_player("Ynhi");
 
     try {
+	    game_log(framtay)
         if (events) {
             handleEvents();
         } else if (bossvip > 0) {
@@ -358,6 +359,7 @@ function waitAndUnluck() {
 
 
 function framtaygame() {
+
 if(parent.party_list.includes("6gunlaZe") ){
 	send_cm("6gunlaZe","tomb")	
 }
