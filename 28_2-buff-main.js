@@ -119,15 +119,16 @@ function on_cm(name, data) {
     if(name == "haiz"){
 
 		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
+		if (data == "goo1" && character.map != "tomb")enter("tomb",idmap);
 
 	}
 	
-	 if(name == "haiz" && data != "goo" && typeof data === 'string' ){
+	 if(name == "haiz" && data != "goo" && data != "goo1" && typeof data === 'string' ){
      idmap = data
 
 	}
 	
-	 if(name == "haiz" && data != "goo" ){
+	 if(name == "haiz" && data != "goo" && data != "goo1" ){
      receivedData = data
 
 	}
