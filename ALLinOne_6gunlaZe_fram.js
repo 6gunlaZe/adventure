@@ -1260,6 +1260,9 @@ if (name == "haiz") {
     if (data == "goo" && character.map != "crypt") {
         enter("crypt", idmap);
     }
+    if (data == "goo1" && character.map != "tomb") {
+        enter("tomb", idmap);
+    }	    
     // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp // tomb
     else if (data == "crypt") {
         cryts = 1;
@@ -1284,7 +1287,7 @@ if (name == "haiz") {
         crab = 1;
     }
     // Nếu data là chuỗi khác ngoài "goo", "crypt", "crypt1", "crypt2", "crypt3", và "crabxx"
-    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb") {
+    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb" && data != "goo1") {
         idmap = data;
     }
     // Các trường hợp còn lại (không phải "goo", "crypt", "crypt1", "crypt2", "crypt3", "crabxx")
@@ -1396,7 +1399,7 @@ looting()
 function looting() {
 	    let chests = get_chests();
     let chestIds = Object.keys(chests);
-    if (chestIds.length > 20 || character.map == "crypt") {
+    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb") {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);   
@@ -1642,7 +1645,7 @@ function avoidance() {
 
     if (!avoiding && !smart.moving) {
         if ((!lastMove || new Date() - lastMove > 100) &&
-            (cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents)) {
+            (tomb > 0 || cryts > 0 || crab > 0 || bossvip > 0 || folowhaizevents)) {
             
             let host = get_player("haiz");
             const target = get_target();
