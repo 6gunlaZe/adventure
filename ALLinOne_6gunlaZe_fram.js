@@ -579,7 +579,7 @@ function get_nearest_monster_v2(args = {}) {
 
 
 function handleSnowball() {
-	if(character.map != "crypt")return
+	if(character.map != "crypt" && character.map != "tomb")return
 const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","ggreenpro"];
 
   if (can_use("snowball")) {
