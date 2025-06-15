@@ -580,6 +580,7 @@ function get_nearest_monster_v2(args = {}) {
 
 function handleSnowball() {
 	if(character.map != "crypt")return
+const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","ggreenpro"];
 
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
@@ -591,7 +592,7 @@ function handleSnowball() {
       if (entity.type !== "monster") continue;
 	    
       // Kiểm tra xem mtype của quái vật có thuộc danh sách cần tránh không
-      if (!avoidTypes.includes(entity.mtype)) continue;
+      if (!avoidTypes1.includes(entity.mtype)) continue;
 	    
       // Kiểm tra xem quái vật có chết hoặc không thể thấy không
       if (entity.dead || !entity.visible) continue;
