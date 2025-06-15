@@ -848,7 +848,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 }
 
 
-let monstersAgo = ["stompy", "skeletor"];  // Mảng chứa các tên quái vật cần kiểm tra
+let monstersAgo = ["stompy", "skeletor","gpurplepro","gredpro"];  // Mảng chứa các tên quái vật cần kiểm tra
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
