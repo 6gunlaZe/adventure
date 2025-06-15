@@ -1664,7 +1664,7 @@ setInterval(function() {
 
 
 
-////////////////////////////////chuyen do tu dong cho nhan vat muaban
+////////////////////////////////chuyen do tu dong cho nhan vat muaban ///chuyendo/// giuido
 
 setInterval(function() {
     let lootMule = get_player("MuaBan");
@@ -1684,7 +1684,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","sweaterhs","tigerstone","rabbitsfoot"];
+    let itemsToExclude = ["tombkey","elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","sweaterhs","tigerstone","rabbitsfoot"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
