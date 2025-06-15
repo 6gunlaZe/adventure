@@ -84,12 +84,12 @@ async function eventer() {
 	    game_log(framtay)
         if (events) {
             handleEvents();
+	} else if (framtay > 0) {
+	   framtaygame()
         } else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
 
-	} else if (framtay > 0) {
-	   framtaygame()
         } else if ( tank && !tank.rip && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50 ) )) {
            handleHome();
         } else {
