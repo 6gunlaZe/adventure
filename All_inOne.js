@@ -2162,7 +2162,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 async function moveToBossIfFound(monsters, HP) {
 
-if (prolive == 1 || events || bossvip > 0 || || framtay > 0) return	
+if (prolive == 1 || events || bossvip > 0 || framtay > 0) return	
 	
   const bossLocation = await BosscheckHPMYSv11(monsters, HP);
 
