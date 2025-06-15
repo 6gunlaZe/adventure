@@ -81,7 +81,6 @@ async function eventer() {
     let tank = get_player("Ynhi");
 
     try {
-	    game_log(framtay)
         if (events) {
             handleEvents();
 	} else if (framtay > 0) {
@@ -744,7 +743,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
 	
 	if (events && !get_nearest_monster({ type: home }))return
-	if (bossvip > 0)return
+	if (bossvip > 0 || framtay > 0 )return
 
     if ((framboss >0 )) {
         eTime = currentTime;
@@ -1299,7 +1298,7 @@ let intervalId = setInterval(function() {
 
  ///////////////////////// 
 setInterval(function() {	
-if ( events || bossvip > 0  ) return	
+if ( events || bossvip > 0 || framtay > 0 ) return	
 		
 let region = server.region;
 let serverIden = server.id
@@ -1357,7 +1356,7 @@ function waitForHPAndSwitch() {
 
     if (character.hp > 10000) {
         // Không có sự kiện thì mới chuyển
-        if (prolive == 1 || events || framboss > 0 || bossvip > 0) return;
+        if (prolive == 1 || events || framboss > 0 || bossvip > 0 || framtay > 0) return;
         if (parent.S.franky || parent.S.icegolem) return;
 	    
     let chests = get_chests();
@@ -2151,7 +2150,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 async function moveToBossIfFound(monsters, HP) {
 
-if (prolive == 1 || events || bossvip > 0) return	
+if (prolive == 1 || events || bossvip > 0 || || framtay > 0) return	
 	
   const bossLocation = await BosscheckHPMYSv11(monsters, HP);
 
