@@ -358,7 +358,26 @@ function waitAndUnluck() {
 
 
 function framtay() {
+if(parent.party_list.includes("6gunlaZe") ){
+	send_cm("6gunlaZe","tomb")	
+}
 
+if (character.map == "tomb")	
+{
+send_cm("haiz1","goo1")
+send_cm("Ynhi","goo1")
+send_cm("6gunlaZe","goo1")
+
+
+send_cm("haiz1",character.in)
+send_cm("Ynhi",character.in)
+send_cm("6gunlaZe",character.in)
+
+}
+
+
+	
+	
 }
 
 function VIPBosses() {
