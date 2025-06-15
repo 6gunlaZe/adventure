@@ -376,8 +376,20 @@ send_cm("6gunlaZe",character.in)
 
 }
 
+if(smart.moving)return	
+var monster
 
-	
+        monster = get_targeted_monster() 
+        if (monster) {
+            if (monster.hp > 15000 ) {
+                if (character.cc < 100) {
+                    equipSet('single');
+                }
+            } else if (character.cc < 100) {
+                equipSet('luck');
+		    setTimeout(waitAndUnluck, 5000);
+            }
+        }
 	
 }
 
