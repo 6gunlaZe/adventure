@@ -1476,6 +1476,7 @@ setInterval(function() {
 
 setInterval(function() {
  if (character.rip) { ///////auto hoi sinh
+	 framtay = 0
     respawn();
   }
 }, 420000);
