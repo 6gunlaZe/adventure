@@ -1712,7 +1712,7 @@ let checkwwall = 1;
 
 function kite(taget, kite_range) {
 	const radius = kite_range;
-
+        if(smart.moving)return	
 	const angle = Math.PI / 3.5 * checkwwall;
 	const reverseAngle = Math.PI / 3.5 * -checkwwall;
 
