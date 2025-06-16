@@ -2049,7 +2049,7 @@ async function moveLoop() {
 if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
 {
 	if (movesuper == 1)return	
-		move(
+		xmove(
 			character.x+(gobaltaget.x-character.x)/2,
 			character.y+(gobaltaget.y-character.y)/2
 			);
