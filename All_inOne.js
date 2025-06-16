@@ -1765,7 +1765,7 @@ function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
 
-    if (chestIds.length > 20 || smart.moving ) {
+    if (chestIds.length > 20 || smart.moving || character.map == "mansion" ) {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);
