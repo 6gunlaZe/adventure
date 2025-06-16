@@ -10,3 +10,5 @@ stop_character("MuaBan")
 stop_character("Ynhi")
 
 enter("crypt","");
+
+send_cm("haiz","framtay")
