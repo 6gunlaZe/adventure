@@ -640,7 +640,7 @@ if (Date.now() < delayBug +1000 ) return
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )
 	{
-		game_log(""🟢 Move 1: Checked!"")
+		game_log("🟢 Move 1: Checked!")
 		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
 		{
 			game_log("🔵 Move 3: Pending")
