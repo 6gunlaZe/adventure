@@ -356,7 +356,7 @@ function waitAndUnluck() {
 }
 
 
-
+let buoc = 0
 function framtaygame() {
 
 if(parent.party_list.includes("6gunlaZe") ){
@@ -390,6 +390,48 @@ var monster
 		    setTimeout(waitAndUnluck, 5000);
             }
         }
+
+/////////
+
+	
+ let member1 = get_player("6gunlaZe");
+ let member2 = get_player("Ynhi");
+
+if ( character.map == "cave" && distance(character, {x: -194, y: -1281}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
+    enter("crypt");
+	buoc = 1;
+}
+
+// Danh sách bước đi kèm loại quái cần kiểm tra
+const steps = [
+    { x: 312, y: -187, monster: "gbluepro" },
+    { x: -231, y: 154, monster: "ggreenpro" },
+    { x: -292, y: -312, monster: "gredpro" },
+    { x: 45, y: -771, monster: "gpurplepro" },
+];
+
+
+if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
+    const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
+    xmove(step.x, step.y);
+
+    // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
+    const monster = get_nearest_monster({ type: step.monster });
+    if (distance(character, step) < 50 && !monster) {
+        buoc++;
+    }
+}
+
+if (buoc == 5)
+{
+	stop_character("Ynhi")	
+	stop_character("6gunlaZe")	
+	buoc = 0
+	framtay = 0
+}
+
+
+///////////	
 	
 }
 
