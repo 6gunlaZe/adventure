@@ -393,12 +393,16 @@ var monster
 
 /////////
 
-	
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
+if ( character.map != "tomb")
+{
+	if ( character.map != "mansion")smart_move("tomb")
+	if ( character.map == "mansion" && distance(character, {x: 768, y: 348}) >= 50 )smart_move("tomb")
 
-if ( character.map == "cave" && distance(character, {x: -194, y: -1281}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
-    enter("crypt");
+}
+if ( character.map == "mansion" && distance(character, {x: 768, y: 348}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
+    enter("tomb");
 	buoc = 1;
 }
 
