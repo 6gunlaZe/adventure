@@ -417,7 +417,7 @@ const steps = [
 
 if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
-    xmove(step.x, step.y);
+    if (distance(character, {x: step.x, y: step.y}) > 40 ) xmove(step.x, step.y);
 
     // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
     const monster = get_nearest_monster({ type: step.monster });
