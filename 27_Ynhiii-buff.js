@@ -334,7 +334,7 @@ function kite(taget, kite_range) {
 
     // Nếu sau tối đa maxAttempts mà không thể di chuyển, quay lại vị trí ban đầu của taget
     xmove(originalPosition.x, originalPosition.y);
-	game_log("🟣 Move 6: New Move Added")  # Thêm Move 6
+	game_log("🟣 Move 6: New Move Added")
 
 }
 
