@@ -295,31 +295,47 @@ setInterval(function() {
 
 
 
-let checkwwall = 1
-function kite(taget, kite_range)
-{
+let checkwwall = 1;
+const maxAttempts = 10; // Giới hạn số lần thử
 
-	const radius = kite_range ;
-const  angle = Math.PI / 3.5  * checkwwall;
-    if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-	    if (can_move_to(endGoal.x, endGoal.y))
-	    {
-		    xmove(endGoal.x, endGoal.y)
-	    }
-	    else
-	    {
-		 checkwwall = checkwwall*(-1)   
-	    }
+function kite(taget, kite_range) {
+    if (smart.moving)return
+    const radius = kite_range;
+    let attempts = 0;
 
-	
-	}
- 
-	
+    // Lưu lại vị trí ban đầu của taget
+    const originalPosition = { x: taget.real_x, y: taget.real_y };
 
+    while (attempts < maxAttempts) {
+        // Tính toán góc với checkwwall, đồng thời thay đổi một chút ngẫu nhiên
+        const angle = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10; // Góc thay đổi ngẫu nhiên trong phạm vi ±π/10
+
+        if (can_move_to(taget.real_x, taget.real_y)) {
+            const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+            const endGoalAngle = angleFromCenterToCurrent + angle;
+
+            // Tính toán vị trí mới của endGoal
+            const endGoal = { 
+                x: taget.real_x + radius * Math.cos(endGoalAngle), 
+                y: taget.real_y + radius * Math.sin(endGoalAngle) 
+            };
+
+            // Nếu có thể di chuyển tới vị trí endGoal
+            if (can_move_to(endGoal.x, endGoal.y)) {
+                xmove(endGoal.x, endGoal.y);
+                return; // Thoát khỏi hàm sau khi di chuyển thành công
+            }
+        }
+
+        // Nếu không thể di chuyển, thay đổi hướng đảo chiều
+        checkwwall = -checkwwall; // Đảo chiều
+        attempts++;
+    }
+
+    // Nếu sau tối đa maxAttempts mà không thể di chuyển, quay lại vị trí ban đầu của taget
+    xmove(originalPosition.x, originalPosition.y);
 }
+
 
 
 
