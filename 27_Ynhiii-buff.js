@@ -302,7 +302,6 @@ function kite(taget, kite_range) {
     if (smart.moving)return
     const radius = kite_range;
     let attempts = 0;
-
     // Lưu lại vị trí ban đầu của taget
     const originalPosition = { x: taget.real_x, y: taget.real_y };
 
@@ -323,6 +322,7 @@ function kite(taget, kite_range) {
             // Nếu có thể di chuyển tới vị trí endGoal
             if (can_move_to(endGoal.x, endGoal.y)) {
                 xmove(endGoal.x, endGoal.y);
+		    game_log("🔴 Move 5: Error Detected!")
                 return; // Thoát khỏi hàm sau khi di chuyển thành công
             }
         }
@@ -334,6 +334,8 @@ function kite(taget, kite_range) {
 
     // Nếu sau tối đa maxAttempts mà không thể di chuyển, quay lại vị trí ban đầu của taget
     xmove(originalPosition.x, originalPosition.y);
+	game_log("🟣 Move 6: New Move Added")  # Thêm Move 6
+
 }
 
 
@@ -638,12 +640,15 @@ if (Date.now() < delayBug +1000 ) return
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )
 	{
+		game_log(""🟢 Move 1: Checked!"")
 		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
 		{
+			game_log("🔵 Move 3: Pending")
 		kite(cung1,30);
 		}
 		else
 		{
+			game_log("🟠 Move 4: Completed")
 		kite(cung1,50);	
 		}
 	}
@@ -654,6 +659,7 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
    }
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
+		game_log("🟡 Move 2: In Progress")
 				kite(cung1,30);
 	}
 
