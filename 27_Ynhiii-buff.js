@@ -631,6 +631,10 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 		kite(cung1,50);	
 		}
 	}
+	else
+	{
+		kite(cung1,40);
+	}
    }
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
