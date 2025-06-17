@@ -411,7 +411,9 @@ const steps = [
     { x: 312, y: -187, monster: "gbluepro" },
     { x: -231, y: 154, monster: "ggreenpro" },
     { x: -292, y: -312, monster: "gredpro" },
-    { x: 45, y: -771, monster: "gpurplepro" },
+{ x: -200, y: -400, monster: "wait" },
+{ x: -38, y: -505, monster: "wait" },
+	{ x: 45, y: -771, monster: "gpurplepro" },
 ];
 
 
@@ -421,12 +423,12 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
 
     // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
     const monster = get_nearest_monster({ type: step.monster });
-    if (distance(character, step) < 50 && !monster) {
+    if (distance(character, step) < 50 && !monster && member2 && distance(character,member2) < 60 ) {
         buoc++;
     }
 }
 
-if (buoc == 5)
+if (buoc == 7)
 {
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
