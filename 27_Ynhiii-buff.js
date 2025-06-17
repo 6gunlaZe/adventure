@@ -637,6 +637,7 @@ if (Date.now() < delayBug +1000 ) return
 		///////////
 		var cung1 = get_player("haiz"); 
 	var cung = get_player(nhanvatfram); 
+			game_log("🟢🔵 Move 0: okeeeee!")
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )
 	{
