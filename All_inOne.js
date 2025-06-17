@@ -429,6 +429,8 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
 
     // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
     const monster = get_nearest_monster({ type: step.monster });
+    if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
+	    
     if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
         buoc++;
     }
