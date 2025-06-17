@@ -704,7 +704,7 @@ if ( currentTarget && cung && kitefram == 1) {
             }		
 	
 	
-	var target1xc= get_nearest_monster1({comuctieu: 1 ,  nhonhat: 1});
+	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 1
 		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] )
             {
                 use_skill("curse", target1xc);
@@ -911,45 +911,63 @@ function chuyendoithongminh(taget)
 
 
 /////
-function get_nearest_monster1(args) ///mod
+function get_nearest_monster1(args)
 {
-	//var target1xc= get_nearest_monster1({type: crepp,  nhonhat: 1});
-        var army=[args.subtype, args.type, "scorpion"];  
-	var min_d=character.range ,target=null;
-		let hpp = 1000000000
+    if (!args) args = {};
+    if (args && args.target && args.target.name) args.target = args.target.name;
+    if (args && args.type == "monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
+    if (args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
 
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+    var army = [args.subtype, args.type, "scorpion"];
+    var min_d = character.range, target = null;
 
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(current.type!="monster" || !current.visible || current.dead) continue;
+    // HP mặc định cho lọc
+    let hpp = args.nhonhat ? 1000000000 : 0; // Nếu nhonhat thì bắt đầu từ lớn, nếu lonnhat thì từ nhỏ
 
-		
-		//if(args.type && current.mtype!=args.type) continue;
+    for (let id in parent.entities)
+    {
+        let current = parent.entities[id];
+        if (current.type != "monster" || !current.visible || current.dead) continue;
 
-if (args.subtype && args.type && (army.indexOf(current.mtype) == -1)   ) continue
-if (!args.subtype && args.type &&current.mtype != args.type   ) continue
+        // Kiểm tra mtype
+        if (args.subtype && args.type && army.indexOf(current.mtype) === -1) continue;
+        if (!args.subtype && args.type && current.mtype !== args.type) continue;
 
-		
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-		if(args.comuctieu && !current.target) continue;
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(args.cus && !current.s["cursed"]  )continue;//co debuff thi chon
-		if(args.nhonhat && current.hp > hpp)continue;//lua chon hp nho nhat
-		hpp = current.hp
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
+        if (args.min_xp && current.xp < args.min_xp) continue;
+        if (args.max_att && current.attack > args.max_att) continue;
+        if (args.target && current.target !== args.target) continue;
+        if (args.no_target && current.target && current.target !== character.name) continue;
+        if (args.NO_target && current.target) continue;
+        if (args.comuctieu && !current.target) continue;
+        if (args.path_check && !can_move_to(current)) continue;
+        if (args.cus && !current.s["cursed"]) continue;
+
+        let c_dist = parent.distance(character, current);
+
+        // Tìm quái HP nhỏ nhất
+        if (args.nhonhat && current.hp < hpp) {
+            hpp = current.hp;
+            target = current;
+            continue;
+        }
+
+        // Tìm quái HP lớn nhất
+        if (args.lonnhat && current.hp > hpp) {
+            hpp = current.hp;
+            target = current;
+            continue;
+        }
+
+        // Nếu không lọc theo HP, chọn con gần nhất
+        if (!args.nhonhat && !args.lonnhat && c_dist < min_d) {
+            min_d = c_dist;
+            target = current;
+        }
+    }
+
+    return target;
 }
+
 
 
 /////////////////////////////////////////////////
