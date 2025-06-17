@@ -355,7 +355,6 @@ function waitAndUnluck() {
     }
 }
 
-
 let buoc = 0
 function framtaygame() {
 
@@ -414,21 +413,28 @@ const steps = [
 { x: -200, y: -400, monster: "wait" },
 { x: -38, y: -505, monster: "wait" },
 	{ x: 45, y: -771, monster: "gpurplepro" },
+	
+	{ x: 45, y: -771, monster: "gpurplepro" },
+	{ x: 133, y: -733, monster: "gpurplepro" },
+	{ x: 46, y: -771, monster: "gpurplepro" },
+	{ x: -45, y: -771, monster: "gpurplepro" },
+	
+	
 ];
 
 
 if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
-    if (distance(character, {x: step.x, y: step.y}) > 40 ) xmove(step.x, step.y);
+    if (distance(character, {x: step.x, y: step.y}) > 30 ) xmove(step.x, step.y);
 
     // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
     const monster = get_nearest_monster({ type: step.monster });
-    if (distance(character, step) < 50 && !monster && member2 && distance(character,member2) < 60 ) {
+    if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
         buoc++;
     }
 }
 
-if (buoc == 7)
+if (buoc == 11)
 {
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
