@@ -2354,7 +2354,7 @@ async function checkServersForMonsters(monsters,monsters1) {
   if (monsters.length == 0) return;
   if (!Array.isArray(monsters1)) return;
   if (monsters1.length == 0) return;
-   if (events) return	
+   if (events || framtay == 1) return	
 
 	
 	
