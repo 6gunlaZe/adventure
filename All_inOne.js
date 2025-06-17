@@ -369,7 +369,7 @@ function framtaygame() {
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 	
-if(parent.party_list.includes("6gunlaZe") && !member1 ){
+if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
 	send_cm("6gunlaZe","tomb")	
 }
 
