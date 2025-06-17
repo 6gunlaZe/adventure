@@ -83,6 +83,7 @@ async function eventer() {
     try {
         if (events) {
             handleEvents();
+		framtay = 0
 	} else if (framtay > 0) {
 	   framtaygame()
         } else if (bossvip > 0) {
