@@ -211,23 +211,31 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
               if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
 	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                weaponSet("boom");
+                
+		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
+		    else weaponSet("boom");
               if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                weaponSet("shot5");
+                
+		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
+		    else weaponSet("shot5");
               if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
-                weaponSet("dead");
-              if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
+                
+		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
+		    else weaponSet("dead");
+		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
 
             } else if (monsterscharacterRange.length > 1) {
-                weaponSet("singleAOE");
-                 if (codame)   await attack(monsterscharacterRange[0]);
+                
+		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
+		    else weaponSet("singleAOE");
+		if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
 		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
