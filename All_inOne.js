@@ -1366,7 +1366,7 @@ let intervalId = setInterval(function() {
 
  ///////////////////////// 
 setInterval(function() {	
-if ( events || bossvip > 0 || framtay > 0 ) return	
+if ( events || bossvip > 0 ) return	
 		
 let region = server.region;
 let serverIden = server.id
@@ -1530,7 +1530,7 @@ start_character("6gunlaZe", 33);
 if(framboss>0)return
 	    
   if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
-	  if (events || prolive == 1 || bossvip > 0)return
+	  if (events || prolive == 1 || bossvip > 0 || framtay > 0)return
 	  if (modeYnhi == 0)
 	  {
 		parent.api_call("disconnect_character", {name: "nhiY"});
@@ -1577,10 +1577,10 @@ if(framboss>0)return
 	if(data == "boss8") {
 	  framboss = 8
 	}
-	if(data == "bossvip1" && !events) {
+	if(data == "bossvip1" && !events && framtay == 0) {
 	  bossvip = 1
 	}
-	if(data == "bossvip2" && !events) {
+	if(data == "bossvip2" && !events && framtay == 0) {
 	  bossvip = 2
 	}
 	    
