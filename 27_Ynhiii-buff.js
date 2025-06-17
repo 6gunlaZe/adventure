@@ -562,7 +562,7 @@ if (checkTimeBetweenCalls() === 1) return;
 	}
 	else
 	{
-		rateheal = 0.8
+		rateheal = 0.85
 	}
     //If we have a target to heal, heal them
     if (lowest_health != null && lowest_health.health_ratio < rateheal) {
@@ -573,7 +573,7 @@ if (checkTimeBetweenCalls() === 1) return;
         }
 	}
 	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && character.mp > 620) {
+    if (lowest_health1 != null && lowest_health1.health_ratio < 0.65 && character.mp > 620) {
 	    if ( Date.now() > delayaoe + 260)
 	    {
                 use_skill("partyheal");
