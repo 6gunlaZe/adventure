@@ -663,6 +663,11 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 		game_log("🟡 Move 2: In Progress")
 				kite(cung1,30);
 	}
+	else
+{
+			game_log("🟡🟠 Move 7: In")
+				kite(cung1,25);
+}
 
 
 	
