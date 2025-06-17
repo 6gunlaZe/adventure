@@ -57,7 +57,7 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 setInterval(function() {
 	    let leader = get_player("haiz");
-	
+	let tranferr = get_player("nhiY");
 
 	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250 && !leader  ){
 	use_skill("town")
@@ -74,7 +74,7 @@ setInterval(function() {
 	
 if (!character.party)return	
 
-if (smart.moving && receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+if (smart.moving && receivedData && typeof receivedData === 'object' && receivedData.message === "location" && tranferr) {
         const Map = receivedData.map;  // Lấy tên bản đồ
         const X = receivedData.x;      // Lấy tọa độ X
         const Y = receivedData.y;      // Lấy tọa độ Y	
