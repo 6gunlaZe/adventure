@@ -359,18 +359,21 @@ function waitAndUnluck() {
 let buoc = 0
 function framtaygame() {
 
-if(parent.party_list.includes("6gunlaZe") ){
+ let member1 = get_player("6gunlaZe");
+ let member2 = get_player("Ynhi");
+	
+if(parent.party_list.includes("6gunlaZe") && !member1 ){
 	send_cm("6gunlaZe","tomb")	
 }
 
-if (character.map == "tomb")	
+if (character.map == "tomb" && (!member1 || !member2) )	
 {
-send_cm("haiz1","goo1")
+//send_cm("haiz1","goo1")
 send_cm("Ynhi","goo1")
 send_cm("6gunlaZe","goo1")
 
 
-send_cm("haiz1",character.in)
+//send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
 send_cm("6gunlaZe",character.in)
 
@@ -393,8 +396,7 @@ var monster
 
 /////////
 
- let member1 = get_player("6gunlaZe");
- let member2 = get_player("Ynhi");
+
 if ( character.map != "tomb")
 {
 	if ( character.map != "mansion")smart_move({ map: "mansion", x: 0, y: -470 })
