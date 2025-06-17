@@ -75,6 +75,7 @@ if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp
         events = true
 }
 
+let framtaywwait = 0;
 let framtay = 0
 async function eventer() {
     const delay = 500;
@@ -85,8 +86,11 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-	   framtaygame()
-        } else if (bossvip > 0) {
+            if (framtaywwait === 0) {
+                framtaygame();
+                framtaywwait = 2; // chờ 2 vòng = ~1s
+            }
+	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
 
@@ -95,6 +99,9 @@ async function eventer() {
         } else {
            safeawwait()
         }
+	    
+	    if (framtaywwait > 0) framtaywwait--;
+	    
     } catch (e) {
         console.error(e);
     }
