@@ -615,7 +615,7 @@ async function attackLoop() {
         for (let i = 0; i < targetNames.length; i++) {
             nearest = get_nearest_monster_v2({
                 target: targetNames[i],
-                check_max_hp: true,  // Checking for monster with minimum HP
+                check_max_hp: true,  // Checking for monster with max HP
                 max_distance: 50,  // Consider monsters within 50 units
                 statusEffects: ["cursed"], // Check for these debuffs
             });
@@ -628,7 +628,7 @@ async function attackLoop() {
                 nearest = get_nearest_monster_v2({
                     target: targetNames[i],
                     max_distance: character.range,
-                    check_min_hp: true,
+                    check_max_hp: true,  // Checking for monster with max HP
                 });
                 if (nearest) break;
             }
