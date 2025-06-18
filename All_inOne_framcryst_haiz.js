@@ -408,12 +408,16 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
 );
 
 
-if ((( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) ) && MobisA3.length == 0  ) ||  (dacbietmobsInRange.length == 2 && character.hp < 15000)  ))
-{
-z = 250
-let toke1n = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "13 - nguy hiem",toke1n)
+const isRip = character.rip || (member1 && member1.rip) || (member2 && member2.rip);
+const isDanger = nguyehiemoutngay.length >= 1 || isRip;
+const isCritical = dacbietmobsInRange.length == 2 && character.hp < 15000;
+
+if ((isDanger && MobisA3.length == 0) || isCritical) {
+  z = 250;
+  const toke1n = key_auto;
+  ghichu(character.in, "13 - nguy hiem", toke1n);
 }
+
 	
 
 if ( lowhpMob.length >= 1)
