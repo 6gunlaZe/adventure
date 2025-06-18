@@ -2203,7 +2203,7 @@ const holeAvoidRadius = 100; // Bán kính tối thiểu cần tránh xa hố
                     let inRange = false;
 
 const distToHole = distanceToPoint(position.x, position.y, dangerHole.x, dangerHole.y);
-if (distToHole < holeAvoidRadius && character.map == "crypt" ) {
+if (distToHole < holeAvoidRadius && character.map == "crypt" && landau != 1) {
     continue; // Bỏ qua hướng này nếu quá gần hố
 }
 
