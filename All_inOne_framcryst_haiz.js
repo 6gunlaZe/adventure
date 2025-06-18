@@ -391,7 +391,7 @@ const mobsInRange = Object.values(parent.entities)
 
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
-const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8"); 
+const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8" || monster.mtype == "a6" ); 
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
 const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
@@ -2132,7 +2132,7 @@ const rangeBuffer = 45;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a6","a8"];
+const avoidTypes = landau == 1 ? ["a10000"] : ["a6", "a8"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
