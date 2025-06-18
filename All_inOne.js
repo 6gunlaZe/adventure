@@ -446,7 +446,7 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     }
 }
 
-if (buoc == 11)
+if (buoc == 11 || character.rip)
 {
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
