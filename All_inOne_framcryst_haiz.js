@@ -375,7 +375,14 @@ ghichu(character.in, "14",toke21n)
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
 
-
+const dacbiet = ["a1", "a4"];
+const dacbietmobsInRange = Object.values(parent.entities)
+    .filter(entity => 
+        dacbiet.includes(entity.mtype) &&          // Kiểm tra nếu loại mob là trong danh sách
+        entity.visible &&                            // Kiểm tra nếu thực thể đang hiển thị
+        !entity.dead &&                              // Kiểm tra nếu thực thể chưa chết
+        distance(character, entity) <= 180          // Nếu
+    );
 
 
 //////////////////Logic new
@@ -401,7 +408,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
 );
 
 
-if (( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) ) && MobisA3.length == 0  )
+if ((( nguyehiemoutngay.length >= 1 || character.rip || (member1 && member1.rip) || (member2 && member2.rip) ) && MobisA3.length == 0  ) ||  (dacbietmobsInRange.length == 2 && character.hp < 15000)  ))
 {
 z = 250
 let toke1n = key_auto;  // Thay bằng token của bạn
