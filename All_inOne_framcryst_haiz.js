@@ -458,7 +458,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
     }
 
 /////
-		      let resultkite = toado.find(item => item.z === z);    
+                      let resultkite = (landaucheck == 1 ? toado1 : toado).find(item => item.z === z);
                       if (resultkite) {
                        xmove(resultkite.x, resultkite.y);  // Di chuyển tới vị trí (x, y)
                        }
@@ -561,13 +561,13 @@ if (runn == 1)
         z++;
       }
 
-const zGanNhat1 = findNearestZ(toado, character.x, character.y);
+const zGanNhat1 = findNearestZ(landaucheck == 1 ? toado1 : toado, character.x, character.y);
 if (zGanNhat1 < z-2) {
   z = zGanNhat1;
 }
 
 	
-      let result = toado.find(item => item.z === z);    
+let result = (landaucheck == 1 ? toado1 : toado).find(item => item.z === z);
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
       }
@@ -580,12 +580,12 @@ if(backk == 1)
         z--;
       }
 
-const zGanNhat = findNearestZ(toado, character.x, character.y);
+const zGanNhat = findNearestZ(landaucheck == 1 ? toado1 : toado, character.x, character.y);
 if (zGanNhat < z) {
   z = zGanNhat;
 }	
       // Lấy đối tượng có z tương ứng
-      let result = toado.find(item => item.z === z);
+let result = (landaucheck == 1 ? toado1 : toado).find(item => item.z === z);
 
       if (result) {
         xmove(result.x, result.y);  // Di chuyển tới vị trí (x, y)
@@ -611,7 +611,7 @@ if (zGanNhat < z) {
         else {
 		if (!member2 || !member1)
 		{
-			 let result = toado.find(item => item.z === z);   
+			 let result = (landaucheck == 1 ? toado1 : toado).find(item => item.z === z);   
 if (z == 0) z = 1;
 else if (z == 1) z = 2;
 else if (z == 2) z = 1;
