@@ -694,7 +694,7 @@ function scare() {
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 195 ) )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 175 ) )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
