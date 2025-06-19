@@ -936,7 +936,7 @@ for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 )  {
+    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 && current.target != "fieldgen0" )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
