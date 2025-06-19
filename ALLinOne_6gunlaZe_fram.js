@@ -202,10 +202,10 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 let healTargets = lowest_health_partymember(0.9, true);
 if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
-	if (!codame) await use_skill("3shot", healTargets.slice(0, 3));
+	await use_skill("3shot", healTargets.slice(0, 3));
 	delay = ms_to_next_skill("attack");  
 } else if (healTargets.length >= 1) {
-	if (!codame) await attack(healTargets[0]);
+	await attack(healTargets[0]);
 	delay = ms_to_next_skill("attack");  
 }
 
