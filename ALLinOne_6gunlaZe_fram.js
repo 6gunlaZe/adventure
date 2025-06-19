@@ -354,7 +354,7 @@ function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false)
 		for (let id in parent.party_list) {
 			let member = parent.party_list[id];
 			let entity = parent.entities[member];
-
+                        if (member === "MuaBan" || member === "6gunlaZe") continue; // ❌ Bỏ qua nếu là MuaBan hoặc 6gunlaZe
 			if (member === character.name) entity = character;
 
 			if (entity && distance(character, entity) < character.range) {
@@ -366,7 +366,7 @@ function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false)
 		party.push({ name: character.name, entity: character });
 	}
 
-	// Thêm fieldgen0 nếu HP dưới 60%
+	// Thêm fieldgen0 
 	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 	if (fieldgen0 && distance(character, fieldgen0) < character.range ) {
 		party.push({ name: "fieldgen0", entity: fieldgen0 });
