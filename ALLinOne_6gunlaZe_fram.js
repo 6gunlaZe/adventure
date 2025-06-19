@@ -193,13 +193,22 @@ var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohav
 const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 //game_log("characterRange" +monsterscharacterRange.length)		
+	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 
-            if( (leader && leader.hp < 8000) || (healerr && healerr.hp < 5300)  ){
+
+	 
+            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
 		weaponSet("heal");
-            const possibleTargets = [leader, healerr].filter(t => t); // bỏ null
-            let healTarget = getLowestHpPercentTarget(possibleTargets);
-            await attack(healTarget);
-            delay = ms_to_next_skill("attack");  
+
+let healTargets = lowest_health_partymember(0.9, true);
+if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
+	if (!codame) await use_skill("3shot", healTargets.slice(0, 3));
+	delay = ms_to_next_skill("attack");  
+} else if (healTargets.length >= 1) {
+	if (!codame) await attack(healTargets[0]);
+	delay = ms_to_next_skill("attack");  
+}
+
 	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
 			weaponSet("single");
@@ -335,6 +344,57 @@ attackLoop();
 
 
 
+function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false) {
+	if (Date.now() < 300 + delayitem2) return;
+	delayitem2 = Date.now();
+
+	let party = [];
+
+	// Lấy các thành viên trong party nếu có
+	if (parent.party_list.length > 0) {
+		for (let id in parent.party_list) {
+			let member = parent.party_list[id];
+			let entity = parent.entities[member];
+
+			if (member === character.name) entity = character;
+
+			if (entity && distance(character, entity) < character.range) {
+				party.push({ name: member, entity });
+			}
+		}
+	} else {
+		// Không có party, thêm chính mình
+		party.push({ name: character.name, entity: character });
+	}
+
+	// Thêm fieldgen0 nếu HP dưới 60%
+	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+	if (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.6) {
+		party.push({ name: "fieldgen0", entity: fieldgen0 });
+	}
+
+	// Tính tỷ lệ máu
+	for (let member of party) {
+		if (member.entity && member.entity.max_hp > 0) {
+			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
+		} else {
+			member.entity.health_ratio = 1;
+		}
+	}
+
+	// Lọc nếu cần
+	party = party.filter(m => m.entity.health_ratio < hp_threshold);
+
+	// Sắp xếp tăng dần theo % máu
+	party.sort((a, b) => a.entity.health_ratio - b.entity.health_ratio);
+
+	// Trả về cả danh sách hay chỉ người thấp nhất
+	if (return_full_list) {
+		return party.map(p => p.entity); // trả về danh sách entity đã lọc và sort
+	} else {
+		return party.length > 0 ? party[0].entity : null;
+	}
+}
 
 
 
