@@ -368,7 +368,7 @@ if (character.hp < 5000 ||  character.esize < 3 )parent.api_call("disconnect_cha
 if (character.rip  ){
 	z = 250
 let toke21n = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "14",toke21n)
+if (landaucheck == 0)ghichu(character.in, "14",toke21n)
 	parent.api_call("disconnect_character", {name: "haiz"});
 }
 	
@@ -415,7 +415,7 @@ const isCritical = dacbietmobsInRange.length == 2 && character.hp < 15000;
 if ((isDanger && MobisA3.length == 0) || isCritical) {
   z = 250;
   const toke1n = key_auto;
-  ghichu(character.in, "13 - nguy hiem", toke1n);
+  if (landaucheck == 0)ghichu(character.in, "13 - nguy hiem", toke1n);
 }
 
 	
