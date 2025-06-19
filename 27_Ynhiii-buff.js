@@ -198,13 +198,13 @@ setInterval(function() {
             if (item.name == "mpot1" ) {
                 // This is an item we want to use!
                     soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
+						//game_log("so luong  la "+soluongmp);
 
             }
             if (item.name == "hpot1" ) {
                 // This is an item we want to use!
                     soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
+						//game_log("so luong  la "+soluonghp);
 
             }				
 			}
@@ -337,7 +337,7 @@ if (strongMonster && nearbyAlly && distance(character, strongMonster) < 100 && d
             // Nếu có thể di chuyển tới vị trí endGoal
             if (can_move_to(endGoal.x, endGoal.y)) {
                 xmove(endGoal.x, endGoal.y);
-		    game_log("🔴 Move 5: Error Detected!")
+		 //   game_log("🔴 Move 5: Error Detected!")
                 return; // Thoát khỏi hàm sau khi di chuyển thành công
             }
         }
@@ -349,7 +349,7 @@ if (strongMonster && nearbyAlly && distance(character, strongMonster) < 100 && d
 
     // Nếu sau tối đa maxAttempts mà không thể di chuyển, quay lại vị trí ban đầu của taget
     xmove(originalPosition.x, originalPosition.y);
-	game_log("🟣 Move 6: New Move Added")
+	//game_log("🟣 Move 6: New Move Added")
 
 }
 
@@ -577,7 +577,7 @@ if (checkTimeBetweenCalls() === 1) return;
     if (lowest_health != null && lowest_health.health_ratio < rateheal) {
         if ( distance(character,{x: lowest_health.real_x, y: lowest_health.real_y}) < character.range) {
             heal(lowest_health);
-				 game_log("hoi mau!!!!!");
+				// game_log("hoi mau!!!!!");
                   didHealParty = true;
         }
 	}
@@ -587,7 +587,7 @@ if (checkTimeBetweenCalls() === 1) return;
 	    {
                 use_skill("partyheal");
 		    delayaoe  = Date.now()
-				 game_log("hoi mau ALL !!!!!");
+				// game_log("hoi mau ALL !!!!!");
 	    }
 	}
 
@@ -606,7 +606,7 @@ if (!didHealParty) {
 
     if (targetToHeal) {
         heal(targetToHeal);
-        game_log("heal mob!!! ");
+       // game_log("heal mob!!! ");
     }
 }
 
@@ -646,19 +646,19 @@ if (Date.now() < delayBug +1000 ) return
 		///////////
 		var cung1 = get_player("haiz"); 
 	var cung = get_player(nhanvatfram); 
-			game_log("🟢🔵 Move 0: okeeeee!")
+			//game_log("🟢🔵 Move 0: okeeeee!")
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
 	if(!can_attack(currentTarget) )
 	{
 		game_log("🟢 Move 1: Checked!")
 		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
 		{
-			game_log("🔵 Move 3: Pending")
+			//game_log("🔵 Move 3: Pending")
 		kite(cung1,30);
 		}
 		else
 		{
-			game_log("🟠 Move 4: Completed")
+			//game_log("🟠 Move 4: Completed")
 		kite(cung1,50);	
 		}
 	}
@@ -669,12 +669,12 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
    }
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
-		game_log("🟡 Move 2: In Progress")
+		//game_log("🟡 Move 2: In Progress")
 				kite(cung1,30);
 	}
 	else
 {
-			game_log("🟡🟠 Move 7: In")
+			//game_log("🟡🟠 Move 7: In")
 				kite(cung1,25);
 }
 
