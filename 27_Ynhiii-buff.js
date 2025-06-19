@@ -347,58 +347,52 @@ function kite(taget, kite_range) {
 
 
 function lowest_health_partymember() {
-	if (Date.now() < 300 + delayitem2) return 
-	delayitem2 = Date.now()
-    var party = [];
-    if (parent.party_list.length > 0) {
-		for(id in parent.party_list)
-		{
-			var member = parent.party_list[id];
-			var entity = parent.entities[member];
-			
-			if(member == character.name)
-			{
-				entity = character;
-			}
-			
-			if(entity != null && ( distance(character,{x: entity.real_x, y: entity.real_y}) < character.range))
-			{
-					//	game_log(entity.name + "1");
-				party.push({name: member, entity: entity});
+	if (Date.now() < 300 + delayitem2) return;
+	delayitem2 = Date.now();
+
+	let party = [];
+
+	// Lấy các thành viên trong party nếu có
+	if (parent.party_list.length > 0) {
+		for (let id in parent.party_list) {
+			let member = parent.party_list[id];
+			let entity = parent.entities[member];
+
+			if (member == character.name) entity = character;
+
+			if (entity && distance(character, { x: entity.real_x, y: entity.real_y }) < character.range) {
+				party.push({ name: member, entity: entity });
 			}
 		}
-    }
-	else
-	{
-		//Add Self to Party Array
-		party.push(
-		{
-			name: character.name,
-			entity: character
-		});
+	} else {
+		// Không có party, thêm chính mình
+		party.push({ name: character.name, entity: character });
 	}
 
-    //Populate health percentages
-    for (id in party) {
-        var member = party[id];
-        if (member.entity != null) {
-            member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
-        }
-        else {
-            member.health_ratio = 1;
-        }
-    }
-	
-    //Order our party array by health percentage
-    party.sort(function (current, next) {
-        return current.entity.health_ratio - next.entity.health_ratio;
-    });
-	
+	// THÊM: nếu có quái "fieldgen0" bị thương nặng thì đưa vào danh sách
+	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+	if (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.6) {
+		party.push({ name: "fieldgen0", entity: fieldgen0 });
+	}
 
-    //Return the lowest health
-    return party[0].entity;
+	// Tính tỉ lệ máu
+	for (let id in party) {
+		let member = party[id];
+		if (member.entity) {
+			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
+		} else {
+			member.entity = { health_ratio: 1 }; // giả lập
+		}
+	}
+
+	// Sắp xếp theo tỉ lệ máu tăng dần
+	party.sort(function (a, b) {
+		return a.entity.health_ratio - b.entity.health_ratio;
+	});
+
+	// Trả về entity có máu thấp nhất
+	return party[0].entity;
 }
-
 
 
 
