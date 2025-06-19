@@ -365,7 +365,7 @@ let toado1 = [
 	
 	
 if (character.hp < 5000 ||  character.esize < 3 )parent.api_call("disconnect_character", {name: "haiz"});
-if (character.rip  ){
+if (character.rip && z < 250 ){
 	z = 250
 let toke21n = key_auto;  // Thay bằng token của bạn
 if (landaucheck == 0)ghichu(character.in, "14",toke21n)
@@ -413,9 +413,11 @@ const isDanger = nguyehiemoutngay.length >= 1 || isRip;
 const isCritical = dacbietmobsInRange.length == 2 ;
 
 if ((isDanger && MobisA3.length == 0) || isCritical) {
-  z = 1250;
+	if (z < 250){
+  z = 250;
   const toke1n = key_auto;
   if (landaucheck == 0)ghichu(character.in, "13 - nguy hiem", toke1n);
+	}
 }
 
 	
