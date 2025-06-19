@@ -698,10 +698,12 @@ function scare() {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
-	    else if (current.target == character.name)
-	    {
-	    mobnum++;    
-	    }
+else if (current.target == character.name && 
+         (current.mtype != 'nerfedbat' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 225)))
+{
+    mobnum++;    
+}
+
     }
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
