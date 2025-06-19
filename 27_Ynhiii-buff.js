@@ -306,7 +306,7 @@ function check_danger_nearby() {
     return Object.values(parent.entities).some(ent =>
         ent && ent.type === "monster" && !ent.dead && ent.visible &&
         dangerTypes.includes(ent.mtype) &&
-        distance(character, ent) < (avoidingDanger ? 130 : 100)
+        distance(character, ent) < (avoidingDanger ? 160 : 120)
     );
 }
 
