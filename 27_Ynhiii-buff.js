@@ -295,66 +295,59 @@ setInterval(function() {
 
 
 
+
+
+let avoidingDanger = false;
+const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
 let checkwwall = 1;
-const maxAttempts = 10; // Giới hạn số lần thử
+const maxAttempts = 5;
+
+function check_danger_nearby() {
+    return Object.values(parent.entities).some(ent =>
+        ent && ent.type === "monster" && !ent.dead && ent.visible &&
+        dangerTypes.includes(ent.mtype) &&
+        distance(character, ent) < (avoidingDanger ? 130 : 100)
+    );
+}
 
 function kite(taget, kite_range = 20) {
-    if (smart.moving || !taget) return;
+    if (smart.moving || character.moving || !taget) return;
 
-    const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
-    let strongMonster = null;
+    // Cập nhật trạng thái né tránh
+    if (check_danger_nearby()) avoidingDanger = true;
+    else avoidingDanger = false;
 
-    // Kiểm tra xem có quái nguy hiểm gần không
-    for (let id in parent.entities) {
-        const ent = parent.entities[id];
-        if (!ent || ent.type !== "monster" || ent.dead || !ent.visible) continue;
-        if (!dangerTypes.includes(ent.mtype)) continue;
-        if (distance(character, ent) < 100) {
-            strongMonster = ent;
-            break;
-        }
-    }
+    // Chọn mục tiêu kite
+    let currentTarget = avoidingDanger ? get_player("6gunlaZe") : taget;
+    if (avoidingDanger) kite_range = 10;
 
-    // Nếu có quái nguy hiểm, ta chỉ tạm thời di chuyển quanh nearbyAlly (B)
-    let currentTarget = taget;
-    const nearbyAlly = get_player("6gunlaZe");
-    if (
-        strongMonster &&
-        nearbyAlly &&
-        distance(character, nearbyAlly) < 240 &&
-        distance(character, taget) < 180
-    ) {
-        currentTarget = nearbyAlly;
-        kite_range = 10;
-        game_log("⚠️ Tạm thời kite theo B do gần quái mạnh!");
-    }
-
-    // --- Bắt đầu phần di chuyển ---
     const radius = kite_range;
     let attempts = 0;
     const originalPosition = { x: currentTarget.real_x, y: currentTarget.real_y };
 
     while (attempts < maxAttempts) {
-        const angle = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
-        if (can_move_to(currentTarget.real_x, currentTarget.real_y)) {
-            const angleFromCenter = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
-            const endGoalAngle = angleFromCenter + angle;
-            const endGoal = {
-                x: currentTarget.real_x + radius * Math.cos(endGoalAngle),
-                y: currentTarget.real_y + radius * Math.sin(endGoalAngle)
-            };
-            if (can_move_to(endGoal.x, endGoal.y)) {
-                xmove(endGoal.x, endGoal.y);
-                return;
-            }
+        const angleOffset = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
+        const angleFromTarget = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
+        const endGoalAngle = angleFromTarget + angleOffset;
+
+        const endGoal = {
+            x: currentTarget.real_x + radius * Math.cos(endGoalAngle),
+            y: currentTarget.real_y + radius * Math.sin(endGoalAngle)
+        };
+
+        if (can_move_to(endGoal.x, endGoal.y)) {
+            xmove(endGoal.x, endGoal.y);
+            return;
         }
-        checkwwall = -checkwwall;
+
+        checkwwall = -checkwwall; // đảo chiều
         attempts++;
     }
 
-    // Fallback nếu không tìm được vị trí an toàn
+    // Không tìm được vị trí tốt, quay về gần target
     xmove(originalPosition.x, originalPosition.y);
 }
+
 
 
 
