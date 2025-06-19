@@ -413,7 +413,7 @@ const isDanger = nguyehiemoutngay.length >= 1 || isRip;
 const isCritical = dacbietmobsInRange.length == 2 ;
 
 if ((isDanger && MobisA3.length == 0) || isCritical) {
-  z = 250;
+  z = 1250;
   const toke1n = key_auto;
   if (landaucheck == 0)ghichu(character.in, "13 - nguy hiem", toke1n);
 }
