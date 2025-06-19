@@ -2143,7 +2143,7 @@ const rangeBuffer = 45;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = landau == 1 ? ["a10000"] : ["a6", "a8"];
+let avoidTypes = landau == 1 ? ["a10000"] : ["a6", "a8"];  // Khai báo ban đầu
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
@@ -2164,6 +2164,7 @@ function avoidance() {
     if (drawDebug) {
         clear_drawings();
     }
+    avoidTypes = landau == 1 ? ["a10000"] : ["a6", "a8"];
 
     // Try to avoid monsters
     const avoiding = avoidMobs();
