@@ -381,7 +381,7 @@ const dacbietmobsInRange = Object.values(parent.entities)
         dacbiet.includes(entity.mtype) &&          // Kiểm tra nếu loại mob là trong danh sách
         entity.visible &&                            // Kiểm tra nếu thực thể đang hiển thị
         !entity.dead &&                              // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) <= 180          // Nếu
+        distance(character, entity) <= 220          // Nếu
     );
 
 
@@ -410,7 +410,7 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
 
 const isRip = character.rip || (member1 && member1.rip) || (member2 && member2.rip);
 const isDanger = nguyehiemoutngay.length >= 1 || isRip;
-const isCritical = dacbietmobsInRange.length == 2 && character.hp < 15000;
+const isCritical = dacbietmobsInRange.length == 2 && character.hp < 16000;
 
 if ((isDanger && MobisA3.length == 0) || isCritical) {
   z = 250;
