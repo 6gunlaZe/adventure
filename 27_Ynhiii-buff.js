@@ -298,75 +298,64 @@ setInterval(function() {
 let checkwwall = 1;
 const maxAttempts = 10; // Giới hạn số lần thử
 
-function kite(taget, kite_range) {
-    if (smart.moving)return
+function kite(taget, kite_range = 20) {
+    if (smart.moving || !taget) return;
 
+    const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
+    let strongMonster = null;
 
-const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
-let minDistance = Infinity;
-let strongMonster = null;
-
-for (let id in parent.entities) {
-    let ent = parent.entities[id];
-    if (!ent || ent.type !== "monster" || ent.dead || !ent.visible) continue;
-    if (!dangerTypes.includes(ent.mtype)) continue;
-
-    let dist = distance(character, ent);
-    if (dist < 100 && dist < minDistance) {
-        minDistance = dist;
-        strongMonster = ent;
+    // Kiểm tra xem có quái nguy hiểm gần không
+    for (let id in parent.entities) {
+        const ent = parent.entities[id];
+        if (!ent || ent.type !== "monster" || ent.dead || !ent.visible) continue;
+        if (!dangerTypes.includes(ent.mtype)) continue;
+        if (distance(character, ent) < 100) {
+            strongMonster = ent;
+            break;
+        }
     }
-}
 
-const nearbyAlly = get_player("6gunlaZe");
+    // Nếu có quái nguy hiểm, ta chỉ tạm thời di chuyển quanh nearbyAlly (B)
+    let currentTarget = taget;
+    const nearbyAlly = get_player("6gunlaZe");
+    if (
+        strongMonster &&
+        nearbyAlly &&
+        distance(character, nearbyAlly) < 240 &&
+        distance(character, taget) < 180
+    ) {
+        currentTarget = nearbyAlly;
+        kite_range = 10;
+        game_log("⚠️ Tạm thời kite theo B do gần quái mạnh!");
+    }
 
-if (strongMonster && nearbyAlly && distance(character, nearbyAlly) < 240 && taget && distance(character, taget) < 180) {
-    taget = nearbyAlly;
-    kite_range = 10;
-    game_log("⚠️ Target switched to B due to strong monster!");
-}
-
-
-
-
-	
+    // --- Bắt đầu phần di chuyển ---
     const radius = kite_range;
     let attempts = 0;
-    // Lưu lại vị trí ban đầu của taget
-    const originalPosition = { x: taget.real_x, y: taget.real_y };
+    const originalPosition = { x: currentTarget.real_x, y: currentTarget.real_y };
 
     while (attempts < maxAttempts) {
-        // Tính toán góc với checkwwall, đồng thời thay đổi một chút ngẫu nhiên
-        const angle = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10; // Góc thay đổi ngẫu nhiên trong phạm vi ±π/10
-
-        if (can_move_to(taget.real_x, taget.real_y)) {
-            const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
-            const endGoalAngle = angleFromCenterToCurrent + angle;
-
-            // Tính toán vị trí mới của endGoal
-            const endGoal = { 
-                x: taget.real_x + radius * Math.cos(endGoalAngle), 
-                y: taget.real_y + radius * Math.sin(endGoalAngle) 
+        const angle = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
+        if (can_move_to(currentTarget.real_x, currentTarget.real_y)) {
+            const angleFromCenter = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
+            const endGoalAngle = angleFromCenter + angle;
+            const endGoal = {
+                x: currentTarget.real_x + radius * Math.cos(endGoalAngle),
+                y: currentTarget.real_y + radius * Math.sin(endGoalAngle)
             };
-
-            // Nếu có thể di chuyển tới vị trí endGoal
             if (can_move_to(endGoal.x, endGoal.y)) {
                 xmove(endGoal.x, endGoal.y);
-		 //   game_log("🔴 Move 5: Error Detected!")
-                return; // Thoát khỏi hàm sau khi di chuyển thành công
+                return;
             }
         }
-
-        // Nếu không thể di chuyển, thay đổi hướng đảo chiều
-        checkwwall = -checkwwall; // Đảo chiều
+        checkwwall = -checkwwall;
         attempts++;
     }
 
-    // Nếu sau tối đa maxAttempts mà không thể di chuyển, quay lại vị trí ban đầu của taget
+    // Fallback nếu không tìm được vị trí an toàn
     xmove(originalPosition.x, originalPosition.y);
-	//game_log("🟣 Move 6: New Move Added")
-
 }
+
 
 
 
