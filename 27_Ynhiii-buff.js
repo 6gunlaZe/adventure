@@ -320,7 +320,7 @@ for (let id in parent.entities) {
 
 const nearbyAlly = get_player("6gunlaZe");
 
-if (strongMonster && nearbyAlly && distance(character, nearbyAlly) < 140 && taget && distance(character, taget) < 180) {
+if (strongMonster && nearbyAlly && distance(character, nearbyAlly) < 240 && taget && distance(character, taget) < 180) {
     taget = nearbyAlly;
     kite_range = 10;
     game_log("⚠️ Target switched to B due to strong monster!");
