@@ -1632,7 +1632,7 @@ const rangeBuffer = 90;  // Thêm vào tầm đánh của quái để tránh xa 
 const calcRadius = 300;  // Bán kính xét quái để tránh
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx"];
+const avoidTypes = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
