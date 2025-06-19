@@ -345,8 +345,7 @@ attackLoop();
 
 
 function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false) {
-	if (Date.now() < 300 + delayitem2) return;
-	delayitem2 = Date.now();
+
 
 	let party = [];
 
