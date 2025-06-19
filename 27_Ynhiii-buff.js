@@ -300,6 +300,21 @@ const maxAttempts = 10; // Giới hạn số lần thử
 
 function kite(taget, kite_range) {
     if (smart.moving)return
+
+
+// Kiểm tra nếu mục tiêu (taget) đang bị một quái mạnh tấn công và có người khác gần đó thì chuyển target
+const strongMonster = get_nearest_monster({ type: "gpurplepro" });
+const nearbyAlly = get_player("6gunlaZe");
+
+if (strongMonster && nearbyAlly && distance(character, strongMonster) < 100 && distance(character, nearbyAlly) < 140 && taget && distance(character, taget) < 180 ) {
+    taget = nearbyAlly;
+    kite_range = 10;
+    game_log("⚠️ Target switched to B due to strong monster!");
+}
+
+
+
+	
     const radius = kite_range;
     let attempts = 0;
     // Lưu lại vị trí ban đầu của taget
