@@ -441,7 +441,7 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     const monster = get_nearest_monster({ type: step.monster });
     if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
 	
-    if (step.monster == "gpurplepro" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) )
+    if (step.monster == "gpurplepro" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 30 )
 	  {
 		 let item = locate_item("fieldgen0");
                  if (item)use(item);
