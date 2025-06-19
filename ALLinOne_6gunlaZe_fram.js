@@ -368,7 +368,7 @@ function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false)
 
 	// Thêm fieldgen0 nếu HP dưới 60%
 	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
-	if (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.6 && distance(character, fieldgen0) < character.range ) {
+	if (fieldgen0 && distance(character, fieldgen0) < character.range ) {
 		party.push({ name: "fieldgen0", entity: fieldgen0 });
 	}
 
