@@ -302,15 +302,30 @@ function kite(taget, kite_range) {
     if (smart.moving)return
 
 
-// Kiểm tra nếu mục tiêu (taget) đang bị một quái mạnh tấn công và có người khác gần đó thì chuyển target
-const strongMonster = get_nearest_monster({ type: "gpurplepro" });
+const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
+let minDistance = Infinity;
+let strongMonster = null;
+
+for (let id in parent.entities) {
+    let ent = parent.entities[id];
+    if (!ent || ent.type !== "monster" || ent.dead || !ent.visible) continue;
+    if (!dangerTypes.includes(ent.mtype)) continue;
+
+    let dist = distance(character, ent);
+    if (dist < 100 && dist < minDistance) {
+        minDistance = dist;
+        strongMonster = ent;
+    }
+}
+
 const nearbyAlly = get_player("6gunlaZe");
 
-if (strongMonster && nearbyAlly && distance(character, strongMonster) < 100 && distance(character, nearbyAlly) < 140 && taget && distance(character, taget) < 180 ) {
+if (strongMonster && nearbyAlly && distance(character, nearbyAlly) < 140 && taget && distance(character, taget) < 180) {
     taget = nearbyAlly;
     kite_range = 10;
     game_log("⚠️ Target switched to B due to strong monster!");
 }
+
 
 
 
