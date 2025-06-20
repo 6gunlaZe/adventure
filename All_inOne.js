@@ -363,6 +363,78 @@ function waitAndUnluck() {
     }
 }
 
+
+
+
+// 🔧 Hàm đổi độ sang radian
+function degToRad(deg) {
+    return deg * Math.PI / 180;
+}
+
+// 🔁 Biến hướng quay quanh (1 = thuận, -1 = ngược kim đồng hồ)
+let checkwwall = 1;
+
+// ⚙️ Các góc thử thêm nếu hướng chính bị chặn
+const extraAngles = [20, 35, 70].map(degToRad);
+
+// 🚀 Số lần thử bán kính khác nhau nếu bị kẹt
+const maxAttempts = 5;
+
+/**
+ * 🎯 Di chuyển vòng quanh một vị trí theo vòng tròn — dùng để thả diều quanh fieldgen0
+ * @param {Object} fieldgen_pos - Tọa độ của fieldgen0, ví dụ: { x: 400, y: 200 }
+ * @param {number} radius - Bán kính vòng tròn, mặc định là 60
+ */
+function kite_around_fieldgen(fieldgen_pos, radius = 60) {
+    if (!fieldgen_pos || smart.moving) return;
+
+    const angleToCharacter = Math.atan2(character.y - fieldgen_pos.y, character.x - fieldgen_pos.x);
+
+    // Tính góc mới để quay quanh theo hướng đang đi
+    const offsetAngle = degToRad(45) * checkwwall;
+    const targetAngle = angleToCharacter + offsetAngle;
+
+    // Thử các vị trí quanh vòng tròn bán kính tăng dần
+    for (let i = 0; i < maxAttempts; i++) {
+        const tryRadius = radius + i * 5;
+        const goal = {
+            x: fieldgen_pos.x + tryRadius * Math.cos(targetAngle),
+            y: fieldgen_pos.y + tryRadius * Math.sin(targetAngle)
+        };
+
+        if (can_move_to(goal.x, goal.y)) {
+            move(goal.x, goal.y);
+            return;
+        }
+
+        // Nếu bị chặn, thử các góc lệch ±20°, ±35°, ±70°
+        for (let angleOffset of extraAngles) {
+            for (let dir of [1, -1]) {
+                const tryAngle = targetAngle + angleOffset * dir;
+                const altGoal = {
+                    x: fieldgen_pos.x + tryRadius * Math.cos(tryAngle),
+                    y: fieldgen_pos.y + tryRadius * Math.sin(tryAngle)
+                };
+
+                if (can_move_to(altGoal.x, altGoal.y)) {
+                    checkwwall *= -1; // Đổi chiều quay nếu cần
+                    move(altGoal.x, altGoal.y);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
 let buoc = 0
 function framtaygame() {
 
