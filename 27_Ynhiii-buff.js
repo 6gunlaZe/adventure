@@ -293,70 +293,69 @@ setInterval(function() {
 
 
 
-
-
-
-
-let avoidingDanger = false;
-const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
-let checkwwall = 1;
-const maxAttempts = 5;
-
-function check_danger_nearby() {
-    return Object.values(parent.entities).some(ent =>
-        ent && ent.type === "monster" && !ent.dead && ent.visible &&
-        dangerTypes.includes(ent.mtype) &&
-        distance(character, ent) < (avoidingDanger ? 100 : 70)
-    );
+// Hàm đổi độ sang radian
+function degToRad(deg) {
+    return deg * Math.PI / 180;
 }
+
+// Danh sách các góc lệch để thử né (ưu tiên góc hẹp trước)
+const angleOffsets = [
+    degToRad(20),
+    degToRad(-20),
+    degToRad(35),
+    degToRad(-35),
+    degToRad(51.4),
+    degToRad(-51.4),
+    degToRad(70),
+    degToRad(-70)
+];
+
+const maxAttempts = 5; // số lần tăng bán kính né
 
 function kite(taget, kite_range = 20) {
     if (smart.moving || !taget) return;
 
-    // Cập nhật trạng thái né tránh
-    if (check_danger_nearby()) avoidingDanger = true;
-    else avoidingDanger = false;
+    const originalPosition = {
+        x: taget.real_x,
+        y: taget.real_y
+    };
 
-	
-    // Chọn mục tiêu kite
-let haize = get_player("6gunlaZe");
-let currentTarget = (avoidingDanger && haize) ? haize : taget;
+    for (let i = 0; i < maxAttempts; i++) {
+        const radius = kite_range + i * 5;
 
-if (avoidingDanger) kite_range = 10;
+        for (let offset of angleOffsets) {
+            const angleFromTarget = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+            const endGoalAngle = angleFromTarget + offset;
 
-const radius = kite_range;
-let attempts = 0;
+            const endGoal = {
+                x: taget.real_x + radius * Math.cos(endGoalAngle),
+                y: taget.real_y + radius * Math.sin(endGoalAngle)
+            };
 
-const originalPosition = {
-    x: currentTarget.real_x,
-    y: currentTarget.real_y
-};
-
-
-
-	
-    while (attempts < maxAttempts) {
-        const angleOffset = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
-        const angleFromTarget = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
-        const endGoalAngle = angleFromTarget + angleOffset;
-
-        const endGoal = {
-            x: currentTarget.real_x + radius * Math.cos(endGoalAngle),
-            y: currentTarget.real_y + radius * Math.sin(endGoalAngle)
-        };
-
-        if (can_move_to(endGoal.x, endGoal.y)) {
-            xmove(endGoal.x, endGoal.y);
-            return;
+            if (can_move_to(endGoal.x, endGoal.y)) {
+                move(endGoal.x, endGoal.y);
+                return;
+            }
         }
-
-        checkwwall = -checkwwall; // đảo chiều
-        attempts++;
     }
 
-    // Không tìm được vị trí tốt, quay về gần target
-    xmove(originalPosition.x, originalPosition.y);
+// ❗Fallback nếu mọi hướng đều bị chặn: di chuyển về vị trí được nhận qua dữ liệu
+if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+    const targetMap = receivedData.map;
+    const targetX = receivedData.x;
+    const targetY = receivedData.y;
+
+    if (character.map !== targetMap && character.map !== "crypt") {
+        smart_move({ map: targetMap, x: targetX, y: targetY });
+    } else {
+        xmove(targetX, targetY);
+    }
 }
+	
+}
+
+
+
 
 
 
