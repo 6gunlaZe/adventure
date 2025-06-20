@@ -1311,23 +1311,37 @@ function get_nearest_monster_v2(args = {}) {
 function scare() {
     const slot = character.items.findIndex(i => i && i.name === "jacko");
     const orb = character.items.findIndex(i => !i);
+
+    // Các mtype đặc biệt với ngưỡng HP riêng
+    const specialHPThresholds = {
+        a1: 200,
+        a2: 760
+    };
+
     let mobnum = 0;
     let targetedForMoreThanOneSecond = false;
-    for (id in parent.entities) {
-        var current = parent.entities[id];
-        if ((character.hp <6000 || smart.moving ) && current.target == character.name) {
+
+    for (let id in parent.entities) {
+        const current = parent.entities[id];
+        if (!current.target || current.target !== character.name) continue;
+
+        let threshold = 6000; // mặc định
+
+        // Ưu tiên nếu là mtype đặc biệt
+        if (specialHPThresholds.hasOwnProperty(current.mtype)) {
+            threshold = specialHPThresholds[current.mtype];
+        } else {
+            // Dựa trên chỉ số attack
+            const atk = current.attack || 0;
+            if (atk >= 1200) threshold = 14000;
+            else if (atk >= 800) threshold = 10000;
+            else if (atk >= 500) threshold = 8000;
+        }
+
+        if (character.hp < threshold || smart.moving) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
-        if (current.mtype === home && character.hp <10000 && current.target == character.name) {
-            mobnum++;
-            targetedForMoreThanOneSecond = true;
-        }
-        if (current.mtype === "crabxx" && character.hp <14000 && current.target == character.name) {
-            mobnum++;
-            targetedForMoreThanOneSecond = true;
-        }		
-	    
     }
 
     if (mobnum > 0 && targetedForMoreThanOneSecond) {
@@ -1338,11 +1352,67 @@ function scare() {
                     use("scare");
                     equip(slot);
                 }
-            }, 400); // 1000 milliseconds = 1 second
+            }, 400);
         }
     }
 }
-setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
+
+setInterval(scare, 1000);
+function scare() {
+    const slot = character.items.findIndex(i => i && i.name === "jacko");
+    const orb = character.items.findIndex(i => !i);
+
+    // Các mtype đặc biệt với ngưỡng HP riêng
+    const specialHPThresholds = {
+        a145645: 2000,
+        xmagex: 7000
+    };
+
+    let mobnum = 0;
+    let targetedForMoreThanOneSecond = false;
+
+    for (let id in parent.entities) {
+        const current = parent.entities[id];
+        if (!current.target || current.target !== character.name) continue;
+
+        let threshold = 3000; // mặc định
+
+        // Ưu tiên nếu là mtype đặc biệt
+        if (specialHPThresholds.hasOwnProperty(current.mtype)) {
+            threshold = specialHPThresholds[current.mtype];
+        } else {
+            // Dựa trên chỉ số attack
+            const atk = current.attack || 0;
+            if (atk >= 5200) threshold = 6000;
+            else if (atk >= 2200) threshold = 5500;
+            else if (atk >= 1500) threshold = 5000;
+            else if (atk >= 1000) threshold = 4500;
+            else if (atk >= 700) threshold = 4000;
+            else if (atk >= 500) threshold = 3500;
+        }
+
+        if (character.hp < threshold || smart.moving) {
+            mobnum++;
+            targetedForMoreThanOneSecond = true;
+        }
+    }
+
+    if (mobnum > 0 && targetedForMoreThanOneSecond) {
+        if (!is_on_cooldown("scare")) {
+            setTimeout(() => {
+                if (!is_on_cooldown("scare")) {
+                    equip(slot);
+                    use("scare");
+                    equip(slot);
+                }
+            }, 400);
+        }
+    }
+}
+
+setInterval(scare, 1000);
+
+
 
 
 
