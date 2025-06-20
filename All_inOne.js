@@ -390,16 +390,28 @@ if(smart.moving)return
 var monster
 
         monster = get_targeted_monster() 
-        if (monster) {
-            if (monster.hp > 15000 ) {
-                if (character.cc < 100) {
-                    equipSet('single');
-                }
-            } else if (character.cc < 100) {
-                equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
-            }
+
+
+
+if (monster && character.cc < 100) {
+    // Ưu tiên trang bị luck nếu máu quái thấp
+    if (monster.hp < 15000) {
+        equipSet("luck");
+        setTimeout(waitAndUnluck, 5000);
+    } else {
+        // Phân loại theo damage_type của quái
+        if (monster.damage_type === "magical" && monster.attack > 3500) {
+            equipSet("single_Magic");
+        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
+            equipSet("single_physical");
+        } else {
+            // Mặc định nếu không rõ loại (hoặc khác magic/physical)
+            equipSet("single");
         }
+    }
+}
+
+	
 
 /////////
 
