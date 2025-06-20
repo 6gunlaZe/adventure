@@ -293,24 +293,16 @@ setInterval(function() {
 
 
 
-// Hàm đổi độ sang radian
+
 function degToRad(deg) {
     return deg * Math.PI / 180;
 }
 
-// Danh sách các góc lệch để thử né (ưu tiên góc hẹp trước)
-const angleOffsets = [
-    degToRad(20),
-    degToRad(-20),
-    degToRad(35),
-    degToRad(-35),
-    degToRad(51.4),
-    degToRad(-51.4),
-    degToRad(70),
-    degToRad(-70)
-];
+let checkwwall = 1;
+const maxAttempts = 5;
 
-const maxAttempts = 5; // số lần tăng bán kính né
+// Góc phụ để thử nếu hướng chính bị chặn (theo độ lệch nhỏ hơn)
+const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
 
 function kite(taget, kite_range = 20) {
     if (smart.moving || !taget) return;
@@ -322,39 +314,55 @@ function kite(taget, kite_range = 20) {
 
     for (let i = 0; i < maxAttempts; i++) {
         const radius = kite_range + i * 5;
+        const angleFromTarget = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
 
-        for (let offset of angleOffsets) {
-            const angleFromTarget = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
-            const endGoalAngle = angleFromTarget + offset;
+        // 1️⃣ Ưu tiên hướng chính (theo checkwwall)
+        const mainOffset = degToRad(51.4) * checkwwall;
+        const mainAngle = angleFromTarget + mainOffset;
 
-            const endGoal = {
-                x: taget.real_x + radius * Math.cos(endGoalAngle),
-                y: taget.real_y + radius * Math.sin(endGoalAngle)
-            };
+        const mainGoal = {
+            x: taget.real_x + radius * Math.cos(mainAngle),
+            y: taget.real_y + radius * Math.sin(mainAngle)
+        };
 
-            if (can_move_to(endGoal.x, endGoal.y)) {
-                move(endGoal.x, endGoal.y);
-                return;
+        if (can_move_to(mainGoal.x, mainGoal.y)) {
+            move(mainGoal.x, mainGoal.y);
+            return;
+        }
+
+        // 2️⃣ Nếu không đi được, thử các góc phụ (±20°, ±35°, ±70°)
+        for (let angle of extraAngles) {
+            for (let dir of [1, -1]) {
+                const offset = angle * dir;
+                const tryAngle = angleFromTarget + offset;
+                const tryGoal = {
+                    x: taget.real_x + radius * Math.cos(tryAngle),
+                    y: taget.real_y + radius * Math.sin(tryAngle)
+                };
+
+                if (can_move_to(tryGoal.x, tryGoal.y)) {
+                    // ✅ Nếu hướng phụ thành công → đảo hướng chính cho lần sau
+                    checkwwall *= -1;
+                    move(tryGoal.x, tryGoal.y);
+                    return;
+                }
             }
         }
     }
 
-// ❗Fallback nếu mọi hướng đều bị chặn: di chuyển về vị trí được nhận qua dữ liệu
-if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-    const targetMap = receivedData.map;
-    const targetX = receivedData.x;
-    const targetY = receivedData.y;
+    // ❗Fallback: nếu tất cả đều thất bại → dùng vị trí trong receivedData
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;
+        const targetX = receivedData.x;
+        const targetY = receivedData.y;
 
-    if (character.map !== targetMap && character.map !== "crypt") {
-        smart_move({ map: targetMap, x: targetX, y: targetY });
-    } else {
-        xmove(targetX, targetY);
+        if (character.map !== targetMap && character.map !== "crypt") {
+            smart_move({ map: targetMap, x: targetX, y: targetY });
+        } else {
+            xmove(targetX, targetY);
+        }
     }
 }
-	
-}
-
-
 
 
 
