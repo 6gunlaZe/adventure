@@ -1175,12 +1175,19 @@ const equipmentSets = {
         { itemName: "mittens", slot: "gloves", level: 9, },
         { itemName: "fury", slot: "helmet", level: 4, },
     ],
-    cape: [
-        { itemName: "vcape", slot: "cape", level: 4, l: "l" },
+    def_magical: [
+        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
+
     ],
-    xp: [
-        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
-        //{ itemName: "northstar", slot: "amulet", level: 0, l: "l" },
+    def_physical: [
+        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
+
     ],
     deff: [
         { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
@@ -1189,6 +1196,9 @@ const equipmentSets = {
     nodeff: [
         { itemName: "mittens", slot: "gloves", level: 9, },
         { itemName: "fury", slot: "helmet", level: 4, },
+        { itemName: "mcape", slot: "chest", level: 8, l: "l" },
+
+	    
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 13, l: "l" }
