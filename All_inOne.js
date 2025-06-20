@@ -88,7 +88,7 @@ async function eventer() {
 	} else if (framtay > 0) {
             if (framtaywwait === 0) {
                 framtaygame();
-                framtaywwait = 2; // chờ 2 vòng = ~1s
+              //  framtaywwait = 2; // chờ 2 vòng = ~1s
             }
 	} else if (bossvip > 0) {
             VIPBosses();
