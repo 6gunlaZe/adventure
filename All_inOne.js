@@ -434,7 +434,7 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 
 
-
+let fieldgen0_position = null;
 let buoc = 0
 function framtaygame() {
 
@@ -523,14 +523,21 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     const monster = get_nearest_monster({ type: step.monster });
 	
     if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
-    else if ( monster && distance(character,monster) > 10 &&  character.hp > 4000 )xmove(monster.real_x, monster.real_y);
+    else if (fieldgen0_position && monster && distance(character,monster) < character.range && monster.target && monster.target == character.name )kite_around_fieldgen(fieldgen0_position, 20);
+    else if ( monster && distance(character,monster) > 10 && character.hp > 4000 )xmove(monster.real_x, monster.real_y);
 
+
+
+
+	
     if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
 	
     if (step.monster == "gpurplepro" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 130 )
 	  {
 		 let item = locate_item("fieldgen0");
                  if (item)use(item);
+		fieldgen0_position = { x: character.real_x, y: character.real_y };
+
 	  }
 	
     if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
