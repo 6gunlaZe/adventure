@@ -840,7 +840,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     );
 
     // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
-    if (physicalMobs.length >= 2) {
+    if (physicalMobs.length >= 1) {
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_physical');
@@ -848,7 +848,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         return;
     }
 
-    if (magicalMobs.length >= 2) {
+    if (magicalMobs.length >= 1) {
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
