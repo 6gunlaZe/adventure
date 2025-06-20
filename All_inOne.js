@@ -1308,6 +1308,9 @@ function get_nearest_monster_v2(args = {}) {
 
 
 function scare() {
+
+    if ( is_on_cooldown("scare") ) return;
+	
     const slot = character.items.findIndex(i => i && i.name === "jacko");
     const orb = character.items.findIndex(i => !i);
 
