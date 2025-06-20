@@ -1709,7 +1709,7 @@ const drawDebug = false;
 
 function avoidance() {
     if (drawDebug) clear_drawings();
-    game_log("⛔ Đang kiểm tra tránh quái...");
+   // game_log("⛔ Đang kiểm tra tránh quái...");
 
     const avoiding = avoidMobs();
     if (avoiding || smart.moving) return;
@@ -1725,34 +1725,34 @@ function avoidance() {
     const tooFarFromHost = !host || distance(character, host) >= 300;
 
     if (tooFarFromHost) {
-        game_log("⚠️ Không tìm thấy host, di chuyển theo dữ liệu mục tiêu!");
+       // game_log("⚠️ Không tìm thấy host, di chuyển theo dữ liệu mục tiêu!");
         moveToTargetLocation(receivedData);
         return;
     }
 
-    game_log("🎯 Theo dõi 'haiz': " + host.name);
+   // game_log("🎯 Theo dõi 'haiz': " + host.name);
 
     const isInCrypt = character.map === "crypt";
     const frankyNearby = get_nearest_monster({ type: "franky" });
 
     if (!character.moving) {
         if (isInCrypt && (!validTarget || !is_in_range(target))) {
-            game_log("🔄 Di chuyển về phía host (crypt, không có mục tiêu gần)");
+          //  game_log("🔄 Di chuyển về phía host (crypt, không có mục tiêu gần)");
             xmove(host.real_x, host.real_y);
         } else if (a1Nearby && is_in_range(a1Nearby)) {
-            game_log("⚠️ Phát hiện quái a1 gần — di chuyển theo host");
+           // game_log("⚠️ Phát hiện quái a1 gần — di chuyển theo host");
             xmove(host.real_x, host.real_y);
         } else if (validTarget && distance(character, host) > (character.range - 30)) {
-            game_log("📏 Quá xa host + có mục tiêu, di chuyển theo");
+          //  game_log("📏 Quá xa host + có mục tiêu, di chuyển theo");
             isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
         } else if (!validTarget || !is_in_range(target)) {
-            game_log("💨 Không có mục tiêu hoặc ngoài tầm — di chuyển về host");
+          //  game_log("💨 Không có mục tiêu hoặc ngoài tầm — di chuyển về host");
             isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
         } else if (frankyNearby) {
-            game_log("😨 Gần quái Franky! Kite!");
+          //  game_log("😨 Gần quái Franky! Kite!");
             kite(host, 30);
         } else {
-            game_log("🚶 Đứng yên nhưng không có gì đặc biệt, bám host");
+         //   game_log("🚶 Đứng yên nhưng không có gì đặc biệt, bám host");
             isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
         }
     }
