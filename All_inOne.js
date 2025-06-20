@@ -1200,6 +1200,18 @@ const equipmentSets = {
 
 	    
     ],
+
+    single_Magic: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
+    ],
+
+    single_physical: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
+    ],
+	
+	
     stat: [
         { itemName: "coat", slot: "chest", level: 13, l: "l" }
     ],
