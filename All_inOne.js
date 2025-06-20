@@ -806,8 +806,8 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 
 
 
-
-let checkdef = 0; // 0 = không phòng thủ, 1 = deff, 2 = def mạnh
+let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
+let defSafeSince = null;
 
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
@@ -839,8 +839,9 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         mob.mtype !== "nerfedbat"
     );
 
-    // ƯU TIÊN 1: Mob mạnh
+    // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
     if (physicalMobs.length >= 2) {
+        defSafeSince = null;
         eTime = currentTime;
         equipSet('def_physical');
         checkdef = 2;
@@ -848,39 +849,54 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     }
 
     if (magicalMobs.length >= 2) {
+        defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
         checkdef = 2;
         return;
     }
 
-    // ƯU TIÊN 2: Mob máu thấp  ///chưa sửa dụng bây giờ
+    // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
     if (lowHpMobs.length >= 2 && 1 == 2) {
         eTime = currentTime;
         equipSet('lowhp_clear');
         return;
     }
 
-    // GỠ DEFF (cả loại nhẹ và mạnh) nếu máu cao + không còn mob mạnh
+    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
     if ((checkdef === 1 || checkdef === 2) &&
         character.hp > 14000 &&
         physicalMobs.length === 0 &&
         magicalMobs.length === 0) {
-        checkdef = 0;
-        eTime = currentTime;
-        equipSet('nodeff');
+        
+        // Ghi thời điểm bắt đầu an toàn
+        if (!defSafeSince) defSafeSince = currentTime;
+
+        // Đủ thời gian an toàn → gỡ phòng thủ
+        if (currentTime - defSafeSince >= 3000) {
+            checkdef = 0;
+            defSafeSince = null;
+            eTime = currentTime;
+            equipSet('nodeff');
+            return;
+        }
+
+        // Chưa đủ 3 giây → chờ tiếp
         return;
+    } else {
+        // Nếu có mob mạnh lại → reset đồng hồ an toàn
+        defSafeSince = null;
     }
 
-    // TRẠNG THÁI deff nhẹ nếu chưa bị mob mạnh nhưng máu thấp
+    // 👉 Chuyển sang deff nhẹ nếu máu thấp mà chưa bị mob mạnh
     if (checkdef === 0 && character.hp < 10000) {
-        checkdef = 1;
         eTime = currentTime;
+        checkdef = 1;
         equipSet('deff');
         return;
     }
 
-    // Tránh xử lý nếu đang ở trạng thái đặc biệt
+    // 👉 Trạng thái đặc biệt → bỏ qua
     if (events && !get_nearest_monster({ type: home })) return;
     if (bossvip > 0 || framtay > 0) return;
 
