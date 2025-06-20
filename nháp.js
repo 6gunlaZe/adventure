@@ -14,6 +14,67 @@ if (backdrop) {
 
 
 
+let avoidingDanger = false;
+const dangerTypes = ["gpurplepro", "gbluepro", "gredpro", "ggreenpro"];
+let checkwwall = 1;
+const maxAttempts = 5;
+
+function check_danger_nearby() {
+    return Object.values(parent.entities).some(ent =>
+        ent && ent.type === "monster" && !ent.dead && ent.visible &&
+        dangerTypes.includes(ent.mtype) &&
+        distance(character, ent) < (avoidingDanger ? 100 : 70)
+    );
+}
+
+function kite(taget, kite_range = 20) {
+    if (smart.moving || !taget) return;
+
+    // Cập nhật trạng thái né tránh
+    if (check_danger_nearby()) avoidingDanger = true;
+    else avoidingDanger = false;
+
+	
+    // Chọn mục tiêu kite
+let haize = get_player("6gunlaZe");
+let currentTarget = (avoidingDanger && haize) ? haize : taget;
+
+if (avoidingDanger) kite_range = 10;
+
+const radius = kite_range;
+let attempts = 0;
+
+const originalPosition = {
+    x: currentTarget.real_x,
+    y: currentTarget.real_y
+};
+
+
+
+	
+    while (attempts < maxAttempts) {
+        const angleOffset = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
+        const angleFromTarget = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
+        const endGoalAngle = angleFromTarget + angleOffset;
+
+        const endGoal = {
+            x: currentTarget.real_x + radius * Math.cos(endGoalAngle),
+            y: currentTarget.real_y + radius * Math.sin(endGoalAngle)
+        };
+
+        if (can_move_to(endGoal.x, endGoal.y)) {
+            xmove(endGoal.x, endGoal.y);
+            return;
+        }
+
+        checkwwall = -checkwwall; // đảo chiều
+        attempts++;
+    }
+
+    // Không tìm được vị trí tốt, quay về gần target
+    xmove(originalPosition.x, originalPosition.y);
+}
+
 
 
 
