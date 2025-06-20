@@ -12,3 +12,20 @@ stop_character("Ynhi")
 enter("crypt","");
 
 send_cm("haiz","framtay")
+
+
+// Ẩn modal chính
+const modal = document.getElementById('Modal-NotificationWithButton');
+if (modal) {
+  modal.style.display = 'none';
+  modal.classList.remove('show'); // Nếu dùng Bootstrap, remove class show để tắt animation
+}
+
+// Ẩn backdrop (lớp nền mờ phía sau modal)
+const backdrop = document.querySelector('.modal-backdrop');
+if (backdrop) {
+  backdrop.style.display = 'none';
+}
+
+
+https://guland.vn/soi-quy-hoach/binh-duong/thanh-pho-thuan-an
