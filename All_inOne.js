@@ -1307,7 +1307,6 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
-setInterval(scare, 1000);
 function scare() {
     const slot = character.items.findIndex(i => i && i.name === "jacko");
     const orb = character.items.findIndex(i => !i);
