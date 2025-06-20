@@ -833,8 +833,6 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         mob.hp < 6000 &&
         mob.attack > 500 &&
         mob.target === character.name &&
-        leader &&
-        distance(character, leader) <= 100 &&
         mob.mtype !== "nerfedmummy" &&
         mob.mtype !== "nerfedbat"
     );
