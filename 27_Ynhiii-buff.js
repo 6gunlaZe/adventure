@@ -311,7 +311,7 @@ function check_danger_nearby() {
 }
 
 function kite(taget, kite_range = 20) {
-    if (smart.moving || character.moving || !taget) return;
+    if (smart.moving || !taget) return;
 
     // Cập nhật trạng thái né tránh
     if (check_danger_nearby()) avoidingDanger = true;
