@@ -1307,56 +1307,6 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
-
-function scare() {
-    const slot = character.items.findIndex(i => i && i.name === "jacko");
-    const orb = character.items.findIndex(i => !i);
-
-    // Các mtype đặc biệt với ngưỡng HP riêng
-    const specialHPThresholds = {
-        a1: 200,
-        a2: 760
-    };
-
-    let mobnum = 0;
-    let targetedForMoreThanOneSecond = false;
-
-    for (let id in parent.entities) {
-        const current = parent.entities[id];
-        if (!current.target || current.target !== character.name) continue;
-
-        let threshold = 6000; // mặc định
-
-        // Ưu tiên nếu là mtype đặc biệt
-        if (specialHPThresholds.hasOwnProperty(current.mtype)) {
-            threshold = specialHPThresholds[current.mtype];
-        } else {
-            // Dựa trên chỉ số attack
-            const atk = current.attack || 0;
-            if (atk >= 1200) threshold = 14000;
-            else if (atk >= 800) threshold = 10000;
-            else if (atk >= 500) threshold = 8000;
-        }
-
-        if (character.hp < threshold || smart.moving) {
-            mobnum++;
-            targetedForMoreThanOneSecond = true;
-        }
-    }
-
-    if (mobnum > 0 && targetedForMoreThanOneSecond) {
-        if (!is_on_cooldown("scare")) {
-            setTimeout(() => {
-                if (!is_on_cooldown("scare")) {
-                    equip(slot);
-                    use("scare");
-                    equip(slot);
-                }
-            }, 400);
-        }
-    }
-}
-
 setInterval(scare, 1000);
 function scare() {
     const slot = character.items.findIndex(i => i && i.name === "jacko");
@@ -1364,8 +1314,8 @@ function scare() {
 
     // Các mtype đặc biệt với ngưỡng HP riêng
     const specialHPThresholds = {
-        a145645: 2000,
-        xmagex: 7000
+        franky: 6000,
+        xmagex: 7500
     };
 
     let mobnum = 0;
