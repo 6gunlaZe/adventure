@@ -317,14 +317,24 @@ function kite(taget, kite_range = 20) {
     if (check_danger_nearby()) avoidingDanger = true;
     else avoidingDanger = false;
 
+	
     // Chọn mục tiêu kite
-    let currentTarget = avoidingDanger ? get_player("6gunlaZe") : taget;
-    if (avoidingDanger) kite_range = 10;
+let haize = get_player("6gunlaZe");
+let currentTarget = (avoidingDanger && haize) ? haize : taget;
 
-    const radius = kite_range;
-    let attempts = 0;
-    const originalPosition = { x: currentTarget.real_x, y: currentTarget.real_y };
+if (avoidingDanger) kite_range = 10;
 
+const radius = kite_range;
+let attempts = 0;
+
+const originalPosition = {
+    x: currentTarget.real_x,
+    y: currentTarget.real_y
+};
+
+
+
+	
     while (attempts < maxAttempts) {
         const angleOffset = Math.PI / 3.5 * checkwwall + (Math.random() - 0.5) * Math.PI / 10;
         const angleFromTarget = Math.atan2(character.y - currentTarget.real_y, character.x - currentTarget.real_x);
