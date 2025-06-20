@@ -700,7 +700,7 @@ for (var i = 0; i < mob2.length; i++) {
          gobaltaget = target2;
 	}
         // If a monster is found and is in range, execute the attack
-        if (target2 && is_in_range(target2)) {
+        if (target2 && is_in_range(target2) && character.hp > 7000) {
             await attack(target2); // Initiate attack
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
 			        break;  // Nếu tìm thấy thì thoát vòng lặp
@@ -1008,7 +1008,7 @@ for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 && current.target != "fieldgen0" )  {
+    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
