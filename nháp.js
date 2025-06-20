@@ -1,4 +1,26 @@
 
+
+const modal = document.getElementById('Modal-NotificationWithButton');
+if (modal) {
+  modal.style.display = 'none';
+  modal.classList.remove('show'); // Nếu dùng Bootstrap, remove class show để tắt animation
+}
+
+const backdrop = document.querySelector('.modal-backdrop');
+if (backdrop) {
+  backdrop.style.display = 'none';
+}
+
+
+
+
+
+
+
+
+
+
+
 const url = "https://api.github.com/repos/6gunlaZe/game/issues";
 
 // Mảng để lưu các tiêu đề issue có số dòng body dưới 8
