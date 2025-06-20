@@ -804,41 +804,99 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
     }
 }
 
-let checkdef = 0;
-////hàm tùy chỉnh trang bị chính thức khi không có events
+
+
+
+let checkdef = 0; // 0 = không phòng thủ, 1 = deff, 2 = def mạnh
+
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
-	const currentTime = performance.now();
-	if (currentTime - eTime < 50)return
-	
-	if(checkdef == 0 && character.hp < 10000)
-	{
-	checkdef = 1
-        eTime = currentTime;
-        equipSet('deff');	
-		return
-	}
-	if(checkdef == 1 && character.hp > 14000)
-	{
-        eTime = currentTime;
-        equipSet('nodeff');		
-	checkdef = 0	
-		return
-	}
+    const currentTime = performance.now();
+    if (currentTime - eTime < 50) return;
 
-	
-	if (events && !get_nearest_monster({ type: home }))return
-	if (bossvip > 0 || framtay > 0 )return
+    // Mob xung quanh
+    const mobsInRange = Object.values(parent.entities).filter(entity =>
+        entity.visible &&
+        entity.target === character.name &&
+        !entity.dead &&
+        distance(character, entity) <= 100
+    );
 
-    if ((framboss >0 )) {
+    const physicalMobs = mobsInRange.filter(mob =>
+        mob.damage_type === "physical" && mob.attack > 1500
+    );
+
+    const magicalMobs = mobsInRange.filter(mob =>
+        mob.damage_type === "magical" && mob.attack > 1500
+    );
+
+    const lowHpMobs = mobsInRange.filter(mob =>
+        mob.hp < 6000 &&
+        mob.attack > 500 &&
+        mob.target === character.name &&
+        leader &&
+        distance(character, leader) <= 100 &&
+        mob.mtype !== "nerfedmummy" &&
+        mob.mtype !== "nerfedbat"
+    );
+
+    // ƯU TIÊN 1: Mob mạnh
+    if (physicalMobs.length >= 2) {
+        eTime = currentTime;
+        equipSet('def_physical');
+        checkdef = 2;
+        return;
+    }
+
+    if (magicalMobs.length >= 2) {
+        eTime = currentTime;
+        equipSet('def_magical');
+        checkdef = 2;
+        return;
+    }
+
+    // ƯU TIÊN 2: Mob máu thấp  ///chưa sửa dụng bây giờ
+    if (lowHpMobs.length >= 2 && 1 == 2) {
+        eTime = currentTime;
+        equipSet('lowhp_clear');
+        return;
+    }
+
+    // GỠ DEFF (cả loại nhẹ và mạnh) nếu máu cao + không còn mob mạnh
+    if ((checkdef === 1 || checkdef === 2) &&
+        character.hp > 14000 &&
+        physicalMobs.length === 0 &&
+        magicalMobs.length === 0) {
+        checkdef = 0;
+        eTime = currentTime;
+        equipSet('nodeff');
+        return;
+    }
+
+    // TRẠNG THÁI deff nhẹ nếu chưa bị mob mạnh nhưng máu thấp
+    if (checkdef === 0 && character.hp < 10000) {
+        checkdef = 1;
+        eTime = currentTime;
+        equipSet('deff');
+        return;
+    }
+
+    // Tránh xử lý nếu đang ở trạng thái đặc biệt
+    if (events && !get_nearest_monster({ type: home })) return;
+    if (bossvip > 0 || framtay > 0) return;
+
+    if (framboss > 0) {
         eTime = currentTime;
         equipSet('single');
     } else {
         eTime = currentTime;
         equipSet('aoe');
     }
-
-	
 }
+
+
+
+
+
 
 let lastCleaveTime = 0;
 const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
