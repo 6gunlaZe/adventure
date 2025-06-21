@@ -712,7 +712,7 @@ const filteredMobs = Object.values(parent.entities)
         entity.visible &&
         !entity.dead &&
         partyMembers.includes(entity.target) &&
-        entity.attack > 3500 &&
+        entity.attack > 350 &&
         get_player(entity.target) &&
         distance(character, get_player(entity.target)) < 240 &&                     // Đội gần mình
         get_player(entity.target).hp < get_player(entity.target).max_hp * 0.99       // Máu < 50%
