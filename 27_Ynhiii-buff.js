@@ -702,43 +702,76 @@ if ( currentTarget && cung && kitefram == 1) {
 	
 	////////////
 	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
-	
+///////////////////////////	
 
-const partyMembers = Object.keys(parent.party_list);
+  
+if (character.party) {
+    let party = get_party();
+    let bestTarget = null;
+    let highestThreat = 0;
 
-// Lọc quái đang tấn công đồng đội gần và có attack lớn
-const filteredMobs = Object.values(parent.entities)
-    .filter(entity =>
-        entity.visible &&
-        !entity.dead &&
-        partyMembers.includes(entity.target) &&
-        entity.attack > 350 &&
-        get_player(entity.target) &&
-        distance(character, get_player(entity.target)) < 240 &&                     // Đội gần mình
-        get_player(entity.target).hp < get_player(entity.target).max_hp * 0.99       // Máu < 50%
-    );
+    for (let char_name in party) {
+        if (character.name == char_name) continue;
 
-// Nếu có mob nguy hiểm và mình đủ máu để absorb
-if (
-    filteredMobs.length > 0 &&
-    !is_on_cooldown("absorb") &&
-    character.hp > character.max_hp * 0.7                                            // Máu > 70%
-) {
-    // Đếm số quái tấn công từng người
-    const targetCount = {};
-    for (const mob of filteredMobs) {
-        if (!targetCount[mob.target]) targetCount[mob.target] = 0;
-        targetCount[mob.target]++;
+        let player = get_player(char_name);
+        if (!player || player.rip) continue;
+
+        let threats = Object.values(parent.entities).filter(e =>
+            e.type === "monster" &&
+            e.target === char_name &&
+            !e.dead &&
+            e.attack > 3500 &&
+            distance(player, e) < 250
+        );
+
+        let threatCount = threats.length;
+        if (threatCount === 0) {
+           // log(`❌ Bỏ qua ${char_name} - không bị quái nào tấn công`);
+            continue;
+        }
+
+        let score = threatCount * 2;
+
+        if (player.hp < player.max_hp * 0.8) {
+            score += 2;
+            // log(`⚠️ ${char_name} đang thấp máu (${player.hp}/${player.max_hp})`);
+        }
+
+        if (distance(character, player) > 240) {
+            // log(`❌ Bỏ qua ${char_name} - quá xa`);
+            continue;
+        }
+
+        // log(`🔍 Đánh giá ${char_name} | Quái: ${threatCount}, HP: ${player.hp}, Điểm: ${score}`);
+
+        if (score > highestThreat) {
+            highestThreat = score;
+            bestTarget = char_name;
+        }
     }
 
-    // Chọn người bị nhiều quái nguy hiểm đánh nhất
-    const topTarget = Object.entries(targetCount).sort((a, b) => b[1] - a[1])[0][0];
-    use_skill("absorb", topTarget);
-	game_log(`🛡️ Absorb dùng cho: ${topTarget} (${targetCount[topTarget]} mob nguy hiểm)`);
-
+    // Chỉ absorb nếu có mục tiêu và priest đủ máu
+    if (bestTarget) {
+        if (!is_on_cooldown("absorb")) {
+            if (character.hp >= character.max_hp * 0.7) {
+                log(`🛡 Dùng absorb lên ${bestTarget} (điểm: ${highestThreat})`);
+                use_skill("absorb", bestTarget);
+            } else {
+                log(`❌ Không dùng absorb - HP priest thấp (${character.hp}/${character.max_hp})`);
+            }
+        } else {
+          //  log(`⏳ absorb đang hồi chiêu`);
+        }
+    } else {
+      //  log("✅ Không có ai cần absorb lúc này.");
+    }
 }
 
+
+
+
 	
+
 //////////// dung skill
 	
 	 	var target1= get_nearest_monster({type: "franky",});
