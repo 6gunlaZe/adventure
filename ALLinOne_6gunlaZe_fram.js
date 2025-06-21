@@ -1459,7 +1459,7 @@ setInterval(function() {
 	
 
 	
-}, 40000); 
+}, 20000); 
 
 
 
