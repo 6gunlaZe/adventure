@@ -702,7 +702,30 @@ if ( currentTarget && cung && kitefram == 1) {
 	
 	////////////
 	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
+	
 
+const partyMembers = Object.keys(parent.party_list);
+const filteredMobs = Object.values(parent.entities)
+    .filter(entity =>
+        entity.visible &&
+        !entity.dead &&
+        partyMembers.includes(entity.target) &&
+        entity.attack > 2000
+    );
+
+// Lấy người trong party đang bị nhiều quái mạnh đánh nhất
+if (filteredMobs.length > 0 && !is_on_cooldown("absorb")) {
+    // Gom theo entity.target để đếm ai bị đánh nhiều nhất
+    const targetCount = {};
+    for (const mob of filteredMobs) {
+        if (!targetCount[mob.target]) targetCount[mob.target] = 0;
+        targetCount[mob.target]++;
+    }
+    const topTarget = Object.entries(targetCount).sort((a, b) => b[1] - a[1])[0][0];
+    use_skill("absorb", topTarget);
+}
+
+	
 //////////// dung skill
 	
 	 	var target1= get_nearest_monster({type: "franky",});
