@@ -2054,19 +2054,19 @@ setInterval(function() {
         if (item && itemsToExclude.includes(item.name) && !item.l && !item.s && item.q > 180 ) {
             //send_item(lootMule.id, i, item.q ?? 1);
 			if (lootMule != null && vanchuyenHPMP == 1 ) {
-				send_item(lootMule.id, i, 100);
+				send_item(lootMule.id, i, 1000);
 			}
 			if (lootMule2 != null && vanchuyenHPMP ==2 ) {
-				send_item(lootMule2.id, i, 100);
+				send_item(lootMule2.id, i, 1000);
 			}
 			if (lootMule3 != null && vanchuyenHPMP ==3) {
-				send_item(lootMule3.id, i, 100);
+				send_item(lootMule3.id, i, 1000);
 			}
 			if (lootMule4 != null && vanchuyenHPMP ==4) {
-				send_item(lootMule4.id, i, 100);
+				send_item(lootMule4.id, i, 1000);
 			}
 			if (lootMule5 != null && vanchuyenHPMP ==5) {
-				send_item(lootMule5.id, i, 100);
+				send_item(lootMule5.id, i, 1000);
 			}	
         }
     }
@@ -2083,19 +2083,19 @@ setInterval(function() {
         if (item1 && itemsToExclude1.includes(item1.name) && !item1.l && !item1.s) {
             //send_item(lootMule.id, i, item.q ?? 1);
 			if (lootMule != null&& vanchuyenHPMP == 1) {
-				send_item(lootMule.id, i, 200);
+				send_item(lootMule.id, i, 500);
 			}
 			if (lootMule2 != null&& vanchuyenHPMP == 2) {
-				send_item(lootMule2.id, i, 200);
+				send_item(lootMule2.id, i, 500);
 			}
 			if (lootMule3 != null&& vanchuyenHPMP == 3) {
-				send_item(lootMule3.id, i, 200);
+				send_item(lootMule3.id, i, 500);
 			}
 			if (lootMule4 != null && vanchuyenHPMP ==4) {
-				send_item(lootMule4.id, i, 200);
+				send_item(lootMule4.id, i, 500);
 			}	
 			if (lootMule5 != null && vanchuyenHPMP ==5) {
-				send_item(lootMule5.id, i, 200);
+				send_item(lootMule5.id, i, 500);
 			}				
 			
         }
