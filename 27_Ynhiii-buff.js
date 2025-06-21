@@ -715,7 +715,7 @@ const filteredMobs = Object.values(parent.entities)
         entity.attack > 3500 &&
         get_player(entity.target) &&
         distance(character, get_player(entity.target)) < 240 &&                     // Đội gần mình
-        get_player(entity.target).hp < get_player(entity.target).max_hp * 0.8       // Máu < 50%
+        get_player(entity.target).hp < get_player(entity.target).max_hp * 0.99       // Máu < 50%
     );
 
 // Nếu có mob nguy hiểm và mình đủ máu để absorb
@@ -734,6 +734,8 @@ if (
     // Chọn người bị nhiều quái nguy hiểm đánh nhất
     const topTarget = Object.entries(targetCount).sort((a, b) => b[1] - a[1])[0][0];
     use_skill("absorb", topTarget);
+	game_log(`🛡️ Absorb dùng cho: ${topTarget} (${targetCount[topTarget]} mob nguy hiểm)`);
+
 }
 
 	
