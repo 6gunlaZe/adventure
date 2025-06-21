@@ -705,22 +705,33 @@ if ( currentTarget && cung && kitefram == 1) {
 	
 
 const partyMembers = Object.keys(parent.party_list);
+
+// Lọc quái đang tấn công đồng đội gần và có attack lớn
 const filteredMobs = Object.values(parent.entities)
     .filter(entity =>
         entity.visible &&
         !entity.dead &&
         partyMembers.includes(entity.target) &&
-        entity.attack > 2000
+        entity.attack > 3500 &&
+        get_player(entity.target) &&
+        distance(character, get_player(entity.target)) < 240 &&                     // Đội gần mình
+        get_player(entity.target).hp < get_player(entity.target).max_hp * 0.8       // Máu < 50%
     );
 
-// Lấy người trong party đang bị nhiều quái mạnh đánh nhất
-if (filteredMobs.length > 0 && !is_on_cooldown("absorb")) {
-    // Gom theo entity.target để đếm ai bị đánh nhiều nhất
+// Nếu có mob nguy hiểm và mình đủ máu để absorb
+if (
+    filteredMobs.length > 0 &&
+    !is_on_cooldown("absorb") &&
+    character.hp > character.max_hp * 0.7                                            // Máu > 70%
+) {
+    // Đếm số quái tấn công từng người
     const targetCount = {};
     for (const mob of filteredMobs) {
         if (!targetCount[mob.target]) targetCount[mob.target] = 0;
         targetCount[mob.target]++;
     }
+
+    // Chọn người bị nhiều quái nguy hiểm đánh nhất
     const topTarget = Object.entries(targetCount).sort((a, b) => b[1] - a[1])[0][0];
     use_skill("absorb", topTarget);
 }
