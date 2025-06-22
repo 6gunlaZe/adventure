@@ -80,8 +80,8 @@ async function eventer() {
           Handelbossvip()
 	} else if (cryts > 0) {
           crytsgame()
-	} else if (tomb > 0) {
-          tombgame()
+	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
+          Xmage()
 	} else if (crab > 0) {
           crabgame()		
         } else if (  (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
@@ -648,8 +648,8 @@ function get_nearest_monster_v2(args = {}) {
 
 
 function handleSnowball() {
-	if(character.map != "crypt" && character.map != "tomb")return
-const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro"];
+	if(character.map != "crypt" && character.map != "tomb" && character.map != "winter_instance")return
+const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","xmagefz","xmagefi","xmagefn"];
 
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
@@ -1154,7 +1154,7 @@ if ( !monster && distance(character, { x: 666, y: -555 }) <= 150 && character.ma
 
 
 
-function tombgame() {
+function Xmage() {
 }
 
 let delayboss = Date.now()
@@ -1334,14 +1334,18 @@ if (name == "haiz") {
     }
     if (data == "goo1" && character.map != "tomb") {
         enter("tomb", idmap);
-    }	    
+    }	
+    if (data == "goo2" && character.map != "winter_instance") {
+        enter("winter_instance", idmap);
+    }	
+	    
     // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp // tomb
     else if (data == "crypt") {
         cryts = 1;
     }
-    else if (data == "tomb") {
+    else if (data == "tomb" || data == "mage") {
         tomb = 1;
-    }    
+    } 
     else if (data == "landau1") {
         landaucyp = 1;
     }
@@ -1359,7 +1363,7 @@ if (name == "haiz") {
         crab = 1;
     }
     // Nếu data là chuỗi khác ngoài "goo", "crypt", "crypt1", "crypt2", "crypt3", và "crabxx"
-    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb" && data != "goo1") {
+    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb" && data != "goo1" && data != "goo2") {
         idmap = data;
     }
     // Các trường hợp còn lại (không phải "goo", "crypt", "crypt1", "crypt2", "crypt3", "crabxx")
@@ -1471,7 +1475,7 @@ looting()
 function looting() {
 	    let chests = get_chests();
     let chestIds = Object.keys(chests);
-    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb") {
+    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb" || character.map == "winter_instance") {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);   
