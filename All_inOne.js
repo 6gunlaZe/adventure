@@ -1467,6 +1467,7 @@ const equipmentSets = {
     ],
     def_fire: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 2, l: "l" },
     ],
 };
