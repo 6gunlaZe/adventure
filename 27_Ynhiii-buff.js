@@ -1147,6 +1147,7 @@ const equipmentSets = {
 
     deff: [
         { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
     ],
     nodeff: [
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
@@ -1178,9 +1179,13 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	    
     ],
-    xp: [
-        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
-        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    bossburn: [
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "test_orb", slot: "orb", level: 0, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1331,6 +1336,15 @@ const lowHpMobs = mobsInRange.filter(mob =>
 
 	if (currentTime - eTime < 50)return
 
+
+	if(get_nearest_monster({ type: "xmagefi" }))
+	{
+        eTime = currentTime;
+        equipSet('bossburn');	
+		return
+	}
+
+	
 	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
         eTime = currentTime;
