@@ -185,7 +185,7 @@ if (healerr && distance(character, healerr) < 150 ) {
  if (!stopAttack) {	    
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
-	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
+	    if ( tagetskill.length == 1 && character.map != "winter_instance" )use_skill("huntersmark", tagetskill);
 var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
  var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
                                                                // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
@@ -668,7 +668,7 @@ function get_nearest_monster_v2(args = {}) {
 
 function handleSnowball() {
 	if(character.map != "crypt" && character.map != "tomb" && character.map != "winter_instance")return
-const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","xmagefz","xmagefi","xmagefn"];
+const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro"];
 
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
