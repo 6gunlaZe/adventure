@@ -479,6 +479,8 @@ if (monster && character.cc < 100) {
             equipSet("single_physical");
         } else if (character.s.deepfreezed) {
             equipSet("def_bang");
+        } else if (character.s.burned) {
+            equipSet("def_fire");
 	} else {
             // Mặc định nếu không rõ loại (hoặc khác magic/physical)
             equipSet("single");
@@ -1468,7 +1470,10 @@ const equipmentSets = {
     def_fire: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
+        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 2, l: "l" },
+        { itemName: "hhelmet", slot: "helmet", level: 7, },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
     ],
 };
 
