@@ -1049,6 +1049,10 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const FireMobs = mobsInRange.filter(mob =>
         mob.mtype == "xmagefi"
     );
+
+    const BangMobs = mobsInRange.filter(mob =>
+        mob.mtype == "xmagefz"
+    );
 	
     const physicalMobs = mobsInRange.filter(mob =>
         mob.damage_type === "physical" && mob.attack > 3500
@@ -1087,6 +1091,12 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 	{
         eTime = currentTime;
         equipSet('def_fire');
+        return;
+	}
+    else if (BangMobs.length >= 1)
+	{
+        eTime = currentTime;
+        equipSet('def_bang');
         return;
 	}
 
@@ -1447,8 +1457,12 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
     ],
-	
-	
+    def_bang: [
+        { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
+        { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
+        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "orboffrost", slot: "orb", level: 2, l: "l" },
+    ],
     def_fire: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "orboffire", slot: "orb", level: 2, l: "l" },
