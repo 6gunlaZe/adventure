@@ -1046,6 +1046,10 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         distance(character, entity) <= 100
     );
 
+    const FireMobs = mobsInRange.filter(mob =>
+        mob.mtype == "xmagefz"
+    );
+	
     const physicalMobs = mobsInRange.filter(mob =>
         mob.damage_type === "physical" && mob.attack > 3500
     );
@@ -1071,14 +1075,29 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         return;
     }
 
-    if (magicalMobs.length >= 1) {
+    if (magicalMobs.length >= 1 || FireMobs.length >= 1) {
+
+	  if (FireMobs.length >= 1)  
+	  {
+        defSafeSince = null;
+        eTime = currentTime;
+        equipSet('def_fire');
+        checkdef = 2;
+        return;
+	  }
+	    else
+         {
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
         checkdef = 2;
         return;
+	 }
     }
 
+
+
+	
     // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
     if (lowHpMobs.length >= 2 && 1 == 2) {
         eTime = currentTime;
@@ -1437,8 +1456,8 @@ const equipmentSets = {
     ],
 	
 	
-    stat: [
-        { itemName: "coat", slot: "chest", level: 13, l: "l" }
+    def_fire: [
+        { itemName: "orbofstr", slot: "orb", level: 4, l: "l" },
     ],
 };
 
