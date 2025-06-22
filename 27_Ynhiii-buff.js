@@ -1392,7 +1392,7 @@ if ( physicalMobs.length >= 1 && checkheall == 0 && checkdef == 0) {
 	eTime = currentTime;
         equipSet('vatly');
 }
-else if (magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65)
+else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || character.map == "winter_instance" )
 	{
 	eTime = currentTime;
         equipSet('phep');
