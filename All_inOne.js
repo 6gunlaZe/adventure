@@ -869,7 +869,8 @@ async function attackLoop() {
 	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo","wabbit"];
-                    var mob2=["stompy", "skeletor","gbluepro","gredpro","ggreenpro","gpurplepro"]; //boss mạnh cần có healter
+                    var mob2=["stompy", "skeletor","gbluepro","gredpro","ggreenpro","gpurplepro", "xmagefz","xmagefi","xmagefn","xmagex", ]; //boss mạnh cần có healter
+    
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
 
@@ -1227,12 +1228,12 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 }
 
 
-let monstersAgo = ["stompy", "skeletor","gpurplepro","gredpro"];  // Mảng chứa các tên quái vật cần kiểm tra
+let monstersAgo = ["stompy", "skeletor","gpurplepro","gredpro", "xmagefz","xmagefi","xmagefn","xmagex",];  // Mảng chứa các tên quái vật cần kiểm tra
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >6000 && distance(character, f1) < 150 )  {
+    if (monstersAgo.includes(current.mtype) && current.target && current.target != character.name && f1 && character.hp >7000 && distance(character, f1) < 150 )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
