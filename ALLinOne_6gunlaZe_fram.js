@@ -525,12 +525,11 @@ const equipmentSets = {
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
-    orb: [
-        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+    def_fire: [
+        { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
-    mana: [
-        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
+    orb: [
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" }
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 12, l: "s" }
