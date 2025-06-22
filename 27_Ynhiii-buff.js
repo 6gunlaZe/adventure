@@ -1379,7 +1379,7 @@ const lowHpMobs = mobsInRange.filter(mob =>
 	}
 
 
-if ( lowHpMobs.length >= 1) {
+if ( lowHpMobs.length >= 1 && character.map != "winter_instance" ) {
 	eTime = currentTime;
         game_log("🔄 luck") ;	
         equipSet('luck');
