@@ -1075,27 +1075,20 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         return;
     }
 
-    if (magicalMobs.length >= 1 || FireMobs.length >= 1) {
-
-	  if (FireMobs.length >= 1)  
-	  {
-        defSafeSince = null;
-        eTime = currentTime;
-        equipSet('def_fire');
-        checkdef = 2;
-        return;
-	  }
-	    else
-         {
+	
+    if (magicalMobs.length >= 1) {  
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
         checkdef = 2;
         return;
-	 }
     }
-
-
+    else if (FireMobs.length >= 1)
+	{
+        eTime = currentTime;
+        equipSet('def_fire');
+        return;
+	}
 
 	
     // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
