@@ -1636,9 +1636,9 @@ function use_hp_or_mp1()
 	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
 	
 	
-if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
+if (character.mp < 600 && character.hp > 5500 ) use_skill("use_mp");
   else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
+  else if (character.mp/character.max_mp < 0.95) use_skill("use_mp");
 
 	
 	else used=false;
