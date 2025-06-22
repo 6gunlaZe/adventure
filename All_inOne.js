@@ -1047,7 +1047,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     );
 
     const FireMobs = mobsInRange.filter(mob =>
-        mob.mtype == "xmagefz"
+        mob.mtype == "xmagefi"
     );
 	
     const physicalMobs = mobsInRange.filter(mob =>
