@@ -1410,7 +1410,7 @@ function scare() {
     // Các mtype đặc biệt với ngưỡng HP riêng
     const specialHPThresholds = {
         franky: 6000,
-        xmagex: 7500
+        xmagex: 7000
     };
 
     let mobnum = 0;
