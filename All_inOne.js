@@ -532,7 +532,7 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
 	
    // if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
 	
-    if (step.monster == "xmagex" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 130 )
+    if (step.monster == "xmagex" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 250 )
 	  {
 		 let item = locate_item("fieldgen0");
                  if (item)use(item);
