@@ -491,11 +491,11 @@ if (monster && character.cc < 100) {
 
 if ( character.map != "winter_instance")
 {
-	if ( character.map != "winterland")smart_move({ map: "winterland", x: 600, y: -1272 })
-	if ( character.map == "winterland" && distance(character, {x: 600, y: -1272}) >= 50 )smart_move({ map: "winterland", x: 600, y: -1272 })
+	if ( character.map != "winterland")smart_move({ map: "winterland", x: 1049, y: -2002 })
+	if ( character.map == "winterland" && distance(character, {x: 1049, y: -2002}) >= 50 )smart_move({ map: "winterland", x: 1049, y: -2002 })
 
 }
-if ( character.map == "winterland" && distance(character, {x: 600, y: -1272}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
+if ( character.map == "winterland" && distance(character, {x: 1049, y: -2002}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
 enter("winter_instance");
 	buoc = 1;
 }
@@ -524,7 +524,7 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
 	
     if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
     else if (fieldgen0_position && monster && distance(character,monster) < character.range && monster.target && monster.target == character.name )kite_around_fieldgen(fieldgen0_position, 20);
-    else if ( monster && distance(character,monster) > 10 && character.hp > 6000 )xmove(monster.real_x, monster.real_y);
+    else if ( monster && distance(character,monster) > 10 && character.hp > 7000 )xmove(monster.real_x, monster.real_y);
 
 
 
