@@ -732,7 +732,7 @@ if (character.party) {
 
         let score = threatCount * 2;
 
-        if (player.hp < player.max_hp * 0.8) {
+        if (player.hp < 7000) {
             score += 2;
             // log(`⚠️ ${char_name} đang thấp máu (${player.hp}/${player.max_hp})`);
         }
@@ -753,7 +753,7 @@ if (character.party) {
     // Chỉ absorb nếu có mục tiêu và priest đủ máu
     if (bestTarget) {
         if (!is_on_cooldown("absorb")) {
-            if (character.hp >= character.max_hp * 0.7) {
+            if (character.hp >= 7000) {
                 log(`🛡 Dùng absorb lên ${bestTarget} (điểm: ${highestThreat})`);
                 use_skill("absorb", bestTarget);
             } else {
