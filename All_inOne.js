@@ -1450,7 +1450,7 @@ const equipmentSets = {
 	
 	
     def_fire: [
-        { itemName: "orbofstr", slot: "orb", level: 4, l: "l" },
+        { itemName: "orboffire", slot: "orb", level: 2, l: "l" },
     ],
 };
 
