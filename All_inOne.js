@@ -87,7 +87,8 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
             if (framtaywwait === 0) {
-                framtaygame();
+               // framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
+		    framXmage()
               //  framtaywwait = 2; // chờ 2 vòng = ~1s
             }
 	} else if (bossvip > 0) {
@@ -434,6 +435,131 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 
 
+
+
+function framXmage() {
+
+ let member1 = get_player("6gunlaZe");
+ let member2 = get_player("Ynhi");
+	
+if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm("6gunlaZe","mage")	
+}
+
+if (character.map == "winter_instance" && (!member1 || !member2) )	
+{
+//send_cm("haiz1","goo2")
+send_cm("Ynhi","goo2")
+send_cm("6gunlaZe","goo2")
+
+
+//send_cm("haiz1",character.in)
+send_cm("Ynhi",character.in)
+send_cm("6gunlaZe",character.in)
+
+}
+
+if(smart.moving)return	
+var monster
+
+        monster = get_targeted_monster() 
+
+
+
+if (monster && character.cc < 100) {
+    // Ưu tiên trang bị luck nếu máu quái thấp
+    if (monster.hp < 15000) {
+        equipSet("luck");
+        setTimeout(waitAndUnluck, 5000);
+    } else {
+        // Phân loại theo damage_type của quái
+        if (monster.damage_type === "magical" && monster.attack > 3500) {
+            equipSet("single_Magic");
+        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
+            equipSet("single_physical");
+        } else {
+            // Mặc định nếu không rõ loại (hoặc khác magic/physical)
+            equipSet("single");
+        }
+    }
+}
+
+	
+
+/////////
+
+
+if ( character.map != "winter_instance")
+{
+	if ( character.map != "winterland")smart_move({ map: "winterland", x: 600, y: -1272 })
+	if ( character.map == "winterland" && distance(character, {x: 600, y: -1272}) >= 50 )smart_move({ map: "winterland", x: 600, y: -1272 })
+
+}
+if ( character.map == "winterland" && distance(character, {x: 600, y: -1272}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
+enter("winter_instance");
+	buoc = 1;
+}
+
+// Danh sách bước đi kèm loại quái cần kiểm tra
+const steps = [
+    { x: -8, y: 68, monster: "xmagefz" },
+    { x: -8, y: 68, monster: "xmagefi" },
+    { x: -8, y: 68, monster: "xmagefn" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+    { x: -8, y: 68, monster: "xmagex" },
+
+	
+];
+
+
+if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
+    const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
+    // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
+    const monster = get_nearest_monster({ type: step.monster });
+	
+    if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
+    else if (fieldgen0_position && monster && distance(character,monster) < character.range && monster.target && monster.target == character.name )kite_around_fieldgen(fieldgen0_position, 20);
+    else if ( monster && distance(character,monster) > 10 && character.hp > 6000 )xmove(monster.real_x, monster.real_y);
+
+
+
+
+	
+   // if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
+	
+    if (step.monster == "xmagex" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 130 )
+	  {
+		 let item = locate_item("fieldgen0");
+                 if (item)use(item);
+		fieldgen0_position = { x: character.real_x, y: character.real_y };
+
+	  }
+	
+    if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
+        buoc++;
+    }
+}
+
+if (buoc == 8 || character.rip)
+{
+	stop_character("Ynhi")	
+	stop_character("6gunlaZe")	
+	buoc = 0
+	framtay = 0
+}
+	
+}
+
+
+
+
+
+
 let fieldgen0_position = null;
 let buoc = 0
 function framtaygame() {
@@ -558,6 +684,11 @@ if (buoc == 11 || character.rip)
 	
 }
 
+
+
+
+
+	
 function VIPBosses() {
 if(smart.moving)return	
 var monster
