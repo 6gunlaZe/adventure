@@ -477,7 +477,9 @@ if (monster && character.cc < 100) {
             equipSet("single_Magic");
         } else if (monster.damage_type === "physical" && monster.attack > 3500) {
             equipSet("single_physical");
-        } else {
+        } else if (character.s.deepfreezed) {
+            equipSet("def_bang");
+	} else {
             // Mặc định nếu không rõ loại (hoặc khác magic/physical)
             equipSet("single");
         }
