@@ -537,39 +537,23 @@ const equipmentSets = {
 };
 
 
-let eTime = 0;
-
 function ChuyendoiITEM() {
-     const leader = get_player("haiz");
-     const damer = get_player("6gunlaZe");
-	
-	const currentTime = performance.now();
-	if (currentTime - eTime < 50)return
-
-	
-const mobsInRange = Object.values(parent.entities).filter(entity => 
-    entity.visible &&
-    entity.target === character.name &&
-    !entity.dead &&
-    distance(character, entity) <= 400
-);
-
-    const FireMobs = mobsInRange.filter(mob =>
-        mob.mtype == "xmagefi"
+    const mobsInRange = Object.values(parent.entities).filter(entity =>
+        entity.visible &&
+        entity.target === character.name &&
+        !entity.dead &&
+        distance(character, entity) <= 400
     );
 
+    const FireMobs = mobsInRange.filter(mob =>
+        mob.mtype === "xmagefi"
+    );
 
-        if (FireMobs.length >= 1)
-	{
-        eTime = currentTime;
+    if (FireMobs.length > 0) {
         equipSet('def_fire');
-	}
-	else
-	{
-        eTime = currentTime;
+    } else {
         equipSet('orb');
-	}	       
-
+    }
 }
 
 setInterval(ChuyendoiITEM, 700);
