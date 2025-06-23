@@ -254,7 +254,7 @@ setInterval(function () {
             enter("crypt", Key[index]);
             game_log("Đăng nhập = " + Key[index]);
             localkey = Key[index];
-            ghichu(localkey, "00", "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");
+            ghichu(localkey, "00", "gU4Ry3ml");
             Key.splice(index, 1);
             landau = 0;
         } else {
@@ -269,11 +269,11 @@ setInterval(function () {
                 distance(character, member1) < 50 &&
                 distance(character, member2) < 50
             ) {
-                ghichu(localkey, "16 không đăng nhập được", "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");
+                ghichu(localkey, "16 không đăng nhập được", "ghp_7n4Ry3ml");
             } else if (character.map == "crypt") {
                 localkey = character.in; // Cập nhật localkey theo character.in
                 if (localkey !== lastLoggedKey) {
-                    ghichu(localkey, "tru 1 key", "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");
+                    ghichu(localkey, "tru 1 key", "ghp_7nK4Ry3ml");
                     lastLoggedKey = localkey; // Đánh dấu key này đã được ghi
                 }
             }
