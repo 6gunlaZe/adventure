@@ -407,12 +407,29 @@ const nguyehiemoutngay = mobsInRange.filter(monster =>
     (monster.mtype === "a6" && monster.level > 4)
 );
 
+const dangerNearby = (() => {
+    // Tìm a1 gần trong bán kính 150
+    const hasA1Nearby = mobsInRange.some(mob =>
+        mob.mtype === "a1" && distance(character, mob) <= 150
+    );
+
+    // Tìm ít nhất 1 mob trong số a4, a6, a8 gần trong bán kính 150
+    const hasA468Nearby = mobsInRange.some(mob =>
+        ["a4", "a6", "a8"].includes(mob.mtype) && distance(character, mob) <= 150
+    );
+
+    return hasA1Nearby && hasA468Nearby ? 1 : 0;
+})();
+
+
+	
+
 
 const isRip = character.rip || (member1 && member1.rip) || (member2 && member2.rip);
 const isDanger = nguyehiemoutngay.length >= 1 || isRip;
 const isCritical = dacbietmobsInRange.length == 2 ;
 
-if ((isDanger && MobisA3.length == 0) || isCritical) {
+if ((isDanger && MobisA3.length == 0) || isCritical || dangerNearby == 1 ) {
 	if (z < 250){
   z = 250;
   const toke1n = key_auto;
