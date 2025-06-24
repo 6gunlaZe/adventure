@@ -1879,10 +1879,7 @@ var combineWhitelist =
 		orbofstr: 1,
 		orbofdex: 1,
 		orbofint: 1,
-		orbofplague:1,
-		orboffire:1,
-		orbofresolve:1,
-		orboffrost:1,
+
 
 		
 	}
