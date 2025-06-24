@@ -87,8 +87,8 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
             if (framtaywwait === 0) {
-               // framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
-		    framXmage()
+               framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
+		  //  framXmage()
               //  framtaywwait = 2; // chờ 2 vòng = ~1s
             }
 	} else if (bossvip > 0) {
