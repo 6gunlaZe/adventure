@@ -2368,8 +2368,11 @@ function get_nearest_monster1(args) ///săn boss franky, ice
 {
  let checkkill = 0
 	var heal = get_player("Ynhi"); 
+	var heal1 = get_player("6gunlaZe"); 
 	var min_d=character.range + 225,target=null;
-  if(!heal) return target;
+// Nếu không có buff/heal và máu thấp thì bỏ qua việc đánh boss mạnh
+if (!heal && character.hp < 13000) return null;
+if (!heal && !heal1) return null;	
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
 	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
