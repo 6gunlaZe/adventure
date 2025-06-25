@@ -871,7 +871,7 @@ async function attackLoop() {
 	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
 	    	    var mob=["phoenix", "jr","greenjr", "mvampire","snowman","bgoo","rgoo","wabbit"];
-                    var mob2=["stompy", "skeletor","gbluepro","gredpro","ggreenpro","gpurplepro", "xmagefz","xmagefi","xmagefn","xmagex", ]; //boss mạnh cần có healter
+                    var mob2=["stompy", "skeletor","gbluepro","gredpro","ggreenpro", "xmagefz","xmagefi","xmagefn","xmagex", ]; //boss mạnh cần có healter
     
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
