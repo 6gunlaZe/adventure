@@ -721,7 +721,6 @@ if (character.party) {
             e.type === "monster" &&
             e.target === char_name &&
             !e.dead &&
-            e.attack > 3500 &&
             distance(player, e) < 250
         );
 
@@ -733,9 +732,10 @@ if (character.party) {
 
         let score = threatCount * 2;
 
-        if (player.hp < 8500) {
-            score += 2;
-            // log(`⚠️ ${char_name} đang thấp máu (${player.hp}/${player.max_hp})`);
+        if (player.hp < 5000) {  // 🔸 Chỉ absorb khi HP thấp thực sự
+        score += 5;           // Tăng điểm ưu tiên mạnh hơn
+        } else {
+         continue;             // ❌ Không tính nếu máu chưa thấp
         }
 
         if (distance(character, player) > 240) {
