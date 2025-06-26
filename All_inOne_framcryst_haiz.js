@@ -404,7 +404,9 @@ const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3");
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
     (monster.mtype === "a1" && monster.level > 2) ||
-    (monster.mtype === "a6" && monster.level > 4)
+    (monster.mtype === "a6" && monster.level > 4) ||
+    (monster.mtype === "a8" && monster.level > 4 && character.hp < 6500)
+
 );
 
 const dangerNearby = (() => {
