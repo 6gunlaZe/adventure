@@ -674,7 +674,7 @@ function handleSnowball() {
 const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro"];
 
 	    const leader = get_player("haiz");
-if ( (leader && leader.hp > 9500)  || !leader) return
+if ( (leader && leader.hp > 11500)  || !leader) return
 	
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
