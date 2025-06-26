@@ -1125,29 +1125,45 @@ const equipmentSets = {
 
     deff: [
         { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
     ],
     nodeff: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
     ],
-    luck: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+    luck: [ //quái đang mạnh quá sức nên giảm luck
+	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
+        { itemName: "oxhelmet", slot: "helmet", l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
+	{ itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+        { itemName: "cdragon", slot: "chest", l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
     ],
     healmax: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
     ],
     fram: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+      //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
     ],
-    xp: [
-        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
-        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
+    bossburn: [
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "test_orb", slot: "orb", level: 0, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1162,11 +1178,16 @@ const equipmentSets = {
     nogold: [
         { itemName: "mittens", slot: "gloves", level: 9 },
     ],
-    stat: [
-        { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    Unluck: [
+        { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+
     ],
 };
-
 
 
 
@@ -1293,13 +1314,52 @@ setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 let eTime = 0;
 let checkdef = 0;
 let checkheall = 0;
+let checkluckk = 0;
 
 function ChuyendoiITEM() {
-
      const leader = get_player("haiz");
      const damer = get_player("6gunlaZe");
 	const currentTime = performance.now();
+const mobsInRange = Object.values(parent.entities).filter(entity => 
+    entity.visible &&
+    entity.target === character.name &&
+    !entity.dead &&
+    distance(character, entity) <= 100
+);
+
+// Tách theo loại damage
+const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
+const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
+// Tách theo máu
+const lowHpMobs = mobsInRange.filter(mob =>
+    mob.hp < 6000 &&
+    mob.target === character.name &&
+    leader &&
+    distance(character, leader) <= 100 &&
+    mob.mtype !== "nerfedmummy" &&
+    mob.mtype !== "nerfedbat"
+);
+
+	
+
 	if (currentTime - eTime < 50)return
+
+
+	if(get_nearest_monster({ type: "xmagefi" }))
+	{
+        eTime = currentTime;
+        equipSet('bossburn');	
+		return
+	}
+
+	
+	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
+	{
+        eTime = currentTime;
+        equipSet('fram');	
+		return
+	}
+
 	
 	if(checkdef == 0 && character.hp/character.max_hp < 0.64)
 	{
@@ -1316,7 +1376,7 @@ function ChuyendoiITEM() {
 		return
 	}
 
-	if(checkheall == 0 && character.hp > 8000 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
 	{
 	checkheall = 1
         eTime = currentTime;
@@ -1331,27 +1391,30 @@ function ChuyendoiITEM() {
 		return
 	}
 
+	if(lowHpMobs.length == 0 && checkluckk > 0)
+	{
+        eTime = currentTime;
+        game_log("🎯 Unluck"); 	
+        equipSet('Unluck');	
+		checkluckk -= 1
+		return
+	}
 
-const mobstype = Object.values(parent.entities)
-    .filter(entity => 
-        entity.visible && entity.target && entity.target == character.name &&  
-        !entity.dead && entity.damage_type == "physical" &&  
-        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
-    );	
+
+if ( lowHpMobs.length >= 1 && character.map != "winter_instance" ) {
+	eTime = currentTime;
+        game_log("🔄 luck") ;	
+        equipSet('luck');
+	checkluckk =5
+	return
+}
+
 	
-const mobstype1 = Object.values(parent.entities)
-    .filter(entity => 
-        entity.visible && entity.target && entity.target == character.name &&  
-        !entity.dead && entity.damage_type == "magical" &&  
-        distance(character, entity) <= 100  // Kiểm tra nếu khoảng cách 
-    );		
-	
-	
-if ( mobstype.length >= 1 && checkheall == 0 && checkdef == 0) {
+if ( physicalMobs.length >= 1 && checkheall == 0 && checkdef == 0) {
 	eTime = currentTime;
         equipSet('vatly');
 }
-else if (mobstype1.length >= 1 && character.hp < 8000)
+else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || character.map == "winter_instance" )
 	{
 	eTime = currentTime;
         equipSet('phep');
@@ -1359,8 +1422,7 @@ else if (mobstype1.length >= 1 && character.hp < 8000)
 
 }
 
-setInterval(ChuyendoiITEM, 100);
-
+setInterval(ChuyendoiITEM, 70);
 
 
 
