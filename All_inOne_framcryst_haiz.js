@@ -404,10 +404,20 @@ const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3");
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
     (monster.mtype === "a1" && monster.level > 2) ||
-    (monster.mtype === "a6" && monster.level > 4) ||
-    (monster.mtype === "a8" && monster.level > 4 && character.hp < 6500)
-
+    (monster.mtype === "a6" && monster.level > 4) 
 );
+const nguyehiemmmm = mobsInRange.filter(monster => 
+    (monster.mtype === "a8" && monster.level > 4 && character.hp < 8500)
+);
+
+if (nguyehiemmmm.length >= 1)
+{
+		z = 250
+let toke21n1 = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "15",toke21n1)
+	parent.api_call("disconnect_character", {name: "haiz"});
+}
+	
 
 const dangerNearby = (() => {
     // Tìm a1 gần trong bán kính 150
