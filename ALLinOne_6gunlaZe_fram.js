@@ -220,7 +220,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
               if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
 		    
-	    }else if ((character.hp < 4500 && smart.moving) || character.hp < 2500 ){
+	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
               //khi máu yếu và đang di chuyển thông minh không làm gì cả
 	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
                 
