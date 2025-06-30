@@ -1911,6 +1911,7 @@ var combineWhitelist =
 		orbofstr: 1,
 		orbofdex: 1,
 		orbofint: 1,
+		orba: 1,
 
 
 		
