@@ -2162,7 +2162,7 @@ function skill_scare() {
 	
 if (is_on_cooldown("scare")) 
 {
-	changeitem({ slot: "orb", name : "orbg", level : 1 });
+	changeitem({ slot: "orb", name : "orbg", level : 3 });
 }
 	
 if (character.targets == 0) {
