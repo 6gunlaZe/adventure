@@ -988,7 +988,7 @@ async function safeawwaitwalkInCircle() {
 
 if (!tank || tank.rip){
     if (!smart.moving) {
-smart_move({ map: "mforest", x: -240, y: 700 })
+smart_move(safeDestination);
     }
 }else
 {
