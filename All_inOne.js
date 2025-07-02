@@ -1418,20 +1418,20 @@ const equipmentSets = {
     ],
     def_magical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
-        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
         { itemName: "lantern", slot: "offhand", level: 2, l: "l" },
     ],
     def_physical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
-        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
     ],
     deff: [
-        { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
     ],
     nodeff: [
