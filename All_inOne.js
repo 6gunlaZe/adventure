@@ -31,7 +31,11 @@ const locations = {
     wolf: [{ x: 433, y: -2745 }],
     wolfie: [{ x: 113, y: -2014 }],
     xscorpion: [{ x: -495, y: 685 }],
-    odino: [{ x: -20, y: 675 }],
+    odino: [
+  { type: "farm", x: -20, y: 675 },
+  { type: "safe", x: -240, y: 700 }
+    ],
+
 };
 
 const home = 'odino';
@@ -41,6 +45,14 @@ const destination = {
     x: locations[home][0].x,
     y: locations[home][0].y
 };
+
+const safeSpot = locations[home].find(p => p.type === "safe");
+const safeDestination = {
+    map: mobMap,
+    x: safeSpot?.x ?? 0,
+    y: safeSpot?.y ?? 0
+};
+
 let angle = 0;
 const speed = 3; // normal 2 or .65
 let events = false;
@@ -275,7 +287,7 @@ if (character.hp < 4000 && !character.rip) parent.api_call("disconnect_character
 	
 if (!tank || tank.rip ){
     if (!smart.moving) {
-smart_move({ map: "mforest", x: -240, y: 700 })
+smart_move(safeDestination);
     }
 }
 else
