@@ -41,8 +41,8 @@ const locations = {
 
 };
 
-const home = 'mechagnome';
-const mobMap = 'cyberland';
+const home = 'odino';
+const mobMap = 'mforest';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
