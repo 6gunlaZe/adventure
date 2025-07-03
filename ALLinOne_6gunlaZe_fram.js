@@ -1152,45 +1152,58 @@ crab = 0
 
 
 
+
+const bossVipInfo = {
+    1: { type: "stompy", map: "winterland", x: 434, y: -2557 },
+    2: { type: "skeletor", map: "arena", x: 666, y: -555 },
+    3: { type: "mechagnome", map: "cyberland", x: 0, y: 0 },
+    // Thêm boss mới ở đây
+};
+
+
 function Handelbossvip() {
-if (smart.moving)return
-	let f1 = get_player("Ynhi");
-	let f2 = get_player("haiz");
+    if (smart.moving || bossvip === 0) return;
 
-		const target = get_target();
-                let check = !!target && !target.rip;
-	
-	if((!check || (check && !is_in_range(target)) ) && f1 && f2 && distance(character, f1) < 150 && distance(character, f2) < 150)
-	{
+    const info = bossVipInfo[bossvip];
+    if (!info) return;
 
-		var currentTarget1 = get_nearest_monster_solobosskill() 
-		if(currentTarget1) {
-                 if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") ) {
+    const f1 = get_player("Ynhi");
+    const f2 = get_player("haiz");
+
+    const target = get_target();
+    const check = !!target && !target.rip;
+
+    // Nếu không có mục tiêu hoặc ngoài tầm bắn, và đồng đội ở gần → tìm boss
+    if ((!check || (check && !is_in_range(target))) && f1 && f2 && distance(character, f1) < 150 && distance(character, f2) < 150) {
+        const currentTarget1 = get_nearest_monster_solobosskill?.() ?? get_nearest_monster({ type: info.type });
+
+        if (currentTarget1) {
+            if (
+                is_in_range(currentTarget1, "supershot") &&
+                character.mp > 500 &&
+                currentTarget1.hp > 10000 &&
+                !is_on_cooldown("supershot")
+            ) {
                 use_skill("supershot", currentTarget1);
-                game_log("Supershot!!");
-                                    }
-		}
-	}
+                game_log("💥 Supershot!!");
+            }
 
-var monster
-if (bossvip == 1)
-{
-        monster = get_nearest_monster({ type: "stompy" }); 
-if ( !monster && distance(character, { x: 434, y: -2557 }) <= 150 && character.map === 'winterland')
-        {
-	bossvip = 0
-        }				
-}
-else if (bossvip == 2)
-{
-        monster = get_nearest_monster({ type: "skeletor" }); 
-if ( !monster && distance(character, { x: 666, y: -555 }) <= 150 && character.map === 'arena')
-        {
-	bossvip = 0
-        }		
+            if (!target) change_target(currentTarget1);
+        }
+    }
+
+    // Nếu đến đúng khu vực boss nhưng không thấy boss → reset bossvip
+    if (
+        character.map === info.map &&
+        distance(character, { x: info.x, y: info.y }) <= 150 &&
+        !get_nearest_monster({ type: info.type })
+    ) {
+        bossvip = 0;
+        game_log(`✅ Boss ${info.type} đã hết!`);
+    }
 }
 
-}
+
 
 
 
