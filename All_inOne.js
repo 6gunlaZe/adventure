@@ -703,65 +703,76 @@ if (buoc == 11 || character.rip)
 }
 
 
+const bossData = {
+    1: {
+        name: "stompy",
+        map: "winterland",
+        x: 404,
+        y: -2423
+    },
+    2: {
+        name: "skeletor",
+        map: "arena",
+        x: 666,
+        y: -555
+    }
+    // Bạn có thể thêm boss khác vào đây dễ dàng
+};
 
 
 
-	
-function VIPBosses() {
-if(smart.moving)return	
-var monster
-if (bossvip == 1)
-{
-	 send_cm("6gunlaZe", "bossvip1");
-        monster = get_nearest_monster({ type: "stompy" }); 
-        if (monster) {
-            if (monster.hp > 15000 ) {
-                if (character.cc < 100) {
-                    equipSet('single');
-                }
-            } else if (character.cc < 100) {
-                equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
-            }
+function getBossInfo(bossvip) {
+    return bossData[bossvip] ?? null;
+}
+
+
+async function VIPBosses() {
+    if (smart.moving || !bossvip) return;
+
+    const info = getBossInfo(bossvip);
+    if (!info) return;
+
+    send_cm("6gunlaZe", `bossvip${bossvip}`);
+    
+    // Tìm quái chưa có target
+    const targetless = Object.values(parent.entities).find(mob => // khi dùng find thì chỉ tìm 1 quái
+        mob?.mtype === info.name &&
+        !mob.dead &&
+        (!mob.target || mob.target !== character.name) &&
+        distance(character, mob) <= 200 
+    );
+
+    if (targetless) {
+        // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
+        if (is_in_range(targetless, "taunt") && !is_on_cooldown("taunt")) {
+            await use_skill("taunt", targetless.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
+            game_log("Taunting " + targetless.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
         }
-        else if ( !monster && distance(character, { x: 404, y: -2423 }) <= 80 && character.map === 'winterland')
-        {
-	bossvip = 0
-        }			
-	    else
-	{
-	 if (!smart.moving) smart_move({ map: "winterland", x: 404, y: -2423 });
-	}
+    }
 
+    const monster = get_nearest_monster({ type: info.name });
 
-	
-}
-else if (bossvip == 2)
-{
-		 send_cm("6gunlaZe", "bossvip2");
-        monster = get_nearest_monster({ type: "skeletor" }); 
-        if (monster) {
-            if (monster.hp > 15000 ) {
-                if (character.cc < 100) {
-                    equipSet('single');
-                }
-            } else if (character.cc < 100) {
-                equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
-            }
+    if (monster) {
+        if (monster.hp > 15000 && character.cc < 100) {
+            equipSet("single");
+        } else if (character.cc < 100 && monster.target == character.name)  {
+            equipSet("luck");
+            setTimeout(waitAndUnluck, 5000);
         }
-        else if ( !monster && distance(character, { x: 666, y: -555 }) <= 80 && character.map === 'arena')
-        {
-	bossvip = 0
-        }	
-	    else
-	{
-	 if (!smart.moving) smart_move({ map: "arena", x: 666, y: -555 });
-	}
-	
+    } else if (
+        character.map === info.map &&
+        distance(character, { x: info.x, y: info.y }) <= 80
+    ) {
+        bossvip = 0; // Không thấy boss nữa => reset
+    } else {
+        if (!smart.moving) {
+            await smart_move({ map: info.map, x: info.x, y: info.y });
+        }
+    }
 }
 
-}
+
+	
 
 
 
