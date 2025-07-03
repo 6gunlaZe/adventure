@@ -1087,7 +1087,7 @@ function taskBoss() {
 }
 
 // ==== ⏰ BẮT ĐẦU KIỂM TRA MỖI PHÚT ====
-setInterval(taskBoss, 60 * 1000);
+setInterval(taskBoss, 59 * 1000);
 
 
 
