@@ -734,6 +734,8 @@ function getBossInfo(bossvip) {
 }
 
 
+let bossvipWaitStart = 0; // Biến toàn cục dùng để đếm thời gian chờ boss
+
 async function VIPBosses() {
     if (smart.moving || !bossvip) return;
 
@@ -741,44 +743,67 @@ async function VIPBosses() {
     if (!info) return;
 
     send_cm("6gunlaZe", `bossvip${bossvip}`);
-    
+
     // Tìm quái chưa có target
-    const targetless = Object.values(parent.entities).find(mob => // khi dùng find thì chỉ tìm 1 quái
+    const targetless = Object.values(parent.entities).find(mob =>
         mob?.mtype === info.name &&
         !mob.dead &&
         (!mob.target || mob.target !== character.name) &&
-        distance(character, mob) <= 200 
+        distance(character, mob) <= 200
     );
 
     if (targetless && targetless.attack < 200) {
-        // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(targetless, "taunt") && !is_on_cooldown("taunt")) {
-            await use_skill("taunt", targetless.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
-            game_log("Taunting " + targetless.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
+            await use_skill("taunt", targetless.id);
+            game_log("Taunting " + targetless.name, "#FFA600");
         }
     }
 
     const monster = get_nearest_monster({ type: info.name });
 
     if (monster) {
+        // Có boss xuất hiện → reset bộ đếm thời gian
+        bossvipWaitStart = 0;
+
         if (monster.hp > 15000 && character.cc < 100) {
             equipSet("single");
-        } else if (character.cc < 100 && monster.target == character.name)  {
+        } else if (character.cc < 100 && monster.target === character.name) {
             equipSet("luck");
             setTimeout(waitAndUnluck, 5000);
         }
-    } else if (
+    }
+    // Không thấy boss, đang ở đúng map và gần đúng tọa độ boss
+    else if (
         character.map === info.map &&
         distance(character, { x: info.x, y: info.y }) <= 80
     ) {
-        bossvip = 0; // Không thấy boss nữa => reset
-    } else {
+        const teammate = get_player("6gunlaZe");
+        const teammateNearby = teammate && distance(character, teammate) <= 50;
+
+        if (teammateNearby) {
+            game_log("❌ Không thấy boss nhưng 6gunlaZe ở gần → reset bossvip ngay.");
+            bossvip = 0;
+            bossvipWaitStart = 0;
+            return;
+        }
+
+        // Nếu không có đồng đội gần → chờ 2 phút rồi mới reset
+        if (!bossvipWaitStart) bossvipWaitStart = Date.now();
+
+        if (Date.now() - bossvipWaitStart > 180000) {
+            game_log("❌ Boss không xuất hiện sau 3 phút, reset bossvip.");
+            bossvip = 0;
+            bossvipWaitStart = 0;
+        }
+    }
+    // Không ở đúng vị trí → di chuyển tới
+    else {
+        bossvipWaitStart = 0;
         if (!smart.moving) {
             await smart_move({ map: info.map, x: info.x, y: info.y });
         }
     }
 }
-
 
 	
 
