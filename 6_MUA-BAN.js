@@ -1039,49 +1039,56 @@ stop_character("MuaBan")
 setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
 
 
-
+let lastBossvip3Minute = -1;
+let lastBossvip12Minute = -1;
 
 function taskBoss() {
+    if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return;
+    if (smart.moving) return;
 
-	if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return
-        if(smart.moving)return
-	
-    // Tạo số ngẫu nhiên 1 hoặc 2
-    const randomNum = Math.floor(Math.random() * 2) + 1;
-	
-	if (randomNum == 1){
-		smart_move({ map: "winterland", x: 434, y: -2557 }, () => {
- 	var targetb= get_nearest_monster({type: "stompy"});
-	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"bossvip1") 
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
-  open_stand();
-    });	
-    });
-	}
-	else
-	{
-		smart_move({ map: "arena", x: 666, y: -555 }, () => {
- 	var targetb= get_nearest_monster({type: "skeletor"});
-	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"bossvip2") 
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
-  open_stand();
-    });	
-    });
+    const now = new Date();
+    const minute = now.getMinutes();
 
-	}
+    // ==== ⏱ GỬI BOSSVIP3 VÀO PHÚT 5, 10, 15, 20 ====
+    if ([5, 10, 15, 20].includes(minute) && lastBossvip3Minute !== minute) {
+        if (parent.party_list.includes("haiz")) {
+            send_cm(hostname, "bossvip3");
+            game_log("📡 Gửi bossvip3 lúc phút " + minute, "#00FFFF");
+        }
+        lastBossvip3Minute = minute;
+        return;
+    }
 
+    // ==== 🎲 GỌI BOSSVIP 1 HOẶC 2 VÀO PHÚT 25 ====
+    if (minute === 25 && lastBossvip12Minute !== minute) {
+        const randomNum = Math.floor(Math.random() * 2) + 1;
 
+        if (randomNum == 1) {
+            smart_move({ map: "winterland", x: 434, y: -2557 }, () => {
+                const target = get_nearest_monster({ type: "stompy" });
+                if (target && parent.party_list.includes("haiz")) {
+                    send_cm(hostname, "bossvip1");
+                }
+                smart_move({ map: "main", x: -200, y: -110 }, open_stand);
+            });
+        } else {
+            smart_move({ map: "arena", x: 666, y: -555 }, () => {
+                const target = get_nearest_monster({ type: "skeletor" });
+                if (target && parent.party_list.includes("haiz")) {
+                    send_cm(hostname, "bossvip2");
+                }
+                smart_move({ map: "main", x: -200, y: -110 }, open_stand);
+            });
+        }
 
-	
-    // In ra số ngẫu nhiên
-    console.log(randomNum);
+        game_log("🎲 Gọi bossvip" + randomNum + " lúc phút 25", "#FFD700");
+        lastBossvip12Minute = minute;
+    }
 }
 
-// Thiết lập một vòng lặp để bắt đầu sau 25 phút và chạy mỗi 25 phút
-setTimeout(function() {
-    taskBoss(); // Gọi hàm task sau 25 phút
-    setInterval(task, 25 * 60 * 1000); // Sau lần đầu, tiếp tục mỗi 25 phút
-}, 25 * 60 * 1000); // 25 phút = 25 * 60 * 1000 ms
+// ==== ⏰ BẮT ĐẦU KIỂM TRA MỖI PHÚT ====
+setInterval(taskBoss, 60 * 1000);
+
 
 
 ////////////////////////////////////////	
