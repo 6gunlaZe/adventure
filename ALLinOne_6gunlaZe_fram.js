@@ -1380,50 +1380,54 @@ function on_cm(name, data) {
 	   }
 	}
 
-if (name == "haiz") {
-    // Kiểm tra nếu data là "goo" và character.map không phải là "crypt"
-    if (data == "goo" && character.map != "crypt") {
-        enter("crypt", idmap);
+if (name === "haiz") {
+    // Lệnh chuyển map nếu chưa đúng map
+    const teleportCommands = {
+        goo: "crypt",
+        goo1: "tomb",
+        goo2: "winter_instance",
+    };
+
+    // Các lệnh gán biến trạng thái
+    const flagCommands = {
+        crypt: () => { cryts = 1; },
+        tomb: () => { tomb = 1; },
+        mage: () => { tomb = 1; },
+        landau1: () => { landaucyp = 1; },
+        landau0: () => { landaucyp = 0; },
+        bossvip1: () => { bossvip = 1; },
+        bossvip2: () => { bossvip = 2; },
+        bossvip3: () => { bossvip = 3; },
+        crabxx: () => { crab = 1; },
+    };
+
+    // Tổng hợp tất cả key đặc biệt để loại trừ khi gán idmap
+    const knownKeys = [
+        ...Object.keys(teleportCommands),
+        ...Object.keys(flagCommands)
+    ];
+
+    // Ưu tiên xử lý lệnh dịch chuyển
+    if (teleportCommands[data]) {
+        const targetMap = teleportCommands[data];
+        if (character.map !== targetMap) {
+            enter(targetMap, idmap);
+        }
     }
-    if (data == "goo1" && character.map != "tomb") {
-        enter("tomb", idmap);
-    }	
-    if (data == "goo2" && character.map != "winter_instance") {
-        enter("winter_instance", idmap);
-    }	
-	    
-    // Kiểm tra nếu data là "crypt", "crypt1", "crypt2", hoặc "crypt3" và gán giá trị cho cryts// landaucyp // tomb
-    else if (data == "crypt") {
-        cryts = 1;
+    // Nếu là các lệnh gán trạng thái
+    else if (flagCommands[data]) {
+        flagCommands[data]();
     }
-    else if (data == "tomb" || data == "mage") {
-        tomb = 1;
-    } 
-    else if (data == "landau1") {
-        landaucyp = 1;
-    }
-    else if (data == "landau0") {
-        landaucyp = 0;
-    }
-    else if (data == "bossvip1") {
-        bossvip = 1;
-    }
-    else if (data == "bossvip2") {
-        bossvip = 2;
-    }
-    // Nếu data là "crabxx"
-    else if (data == "crabxx") {
-        crab = 1;
-    }
-    // Nếu data là chuỗi khác ngoài "goo", "crypt", "crypt1", "crypt2", "crypt3", và "crabxx"
-    else if (typeof data === 'string' && data != "goo" && data != "crypt" && data != "crypt1" && data != "crypt2" && data != "crypt3" && data != "crabxx" && data != "landau1" && data != "landau0" && data != "tomb" && data != "goo1" && data != "goo2") {
+    // Nếu là chuỗi hợp lệ và không phải lệnh đặc biệt → coi như idmap
+    else if (typeof data === "string" && !knownKeys.includes(data)) {
         idmap = data;
     }
-    // Các trường hợp còn lại (không phải "goo", "crypt", "crypt1", "crypt2", "crypt3", "crabxx")
+    // Mặc định: lưu vào receivedData
     else {
         receivedData = data;
     }
 }
+
 
 
 	
