@@ -734,12 +734,12 @@ function getBossInfo(bossvip) {
 }
 
 
-let bossvipWaitStart = 0; // Biến toàn cục dùng để đếm thời gian chờ boss
+let bossvipWaitStart = 0; // Biến toàn cục, reset sau 2 phút nếu không thấy boss
 
 async function VIPBosses() {
     if (smart.moving || !bossvip) return;
 
-    const info = getBossInfo(bossvip);
+    const info = getBossInfo(bossvip); // Lấy thông tin boss từ ID
     if (!info) return;
 
     send_cm("6gunlaZe", `bossvip${bossvip}`);
@@ -762,7 +762,7 @@ async function VIPBosses() {
     const monster = get_nearest_monster({ type: info.name });
 
     if (monster) {
-        // Có boss xuất hiện → reset bộ đếm thời gian
+        // Có boss → reset thời gian chờ
         bossvipWaitStart = 0;
 
         if (monster.hp > 15000 && character.cc < 100) {
@@ -771,41 +771,41 @@ async function VIPBosses() {
             equipSet("luck");
             setTimeout(waitAndUnluck, 5000);
         }
-    }
-    // Không thấy boss, đang ở đúng map và gần đúng tọa độ boss
-    else if (
+    } else if (
         character.map === info.map &&
         distance(character, { x: info.x, y: info.y }) <= 80
     ) {
-        const teammate = get_player("6gunlaZe");
-        const teammateNearby = teammate && distance(character, teammate) <= 50;
+        // Không thấy boss và đang đứng đúng vị trí
 
-        if (teammateNearby) {
-            game_log("❌ Không thấy boss nhưng 6gunlaZe ở gần → reset bossvip ngay.");
+        const teammateNames = ["6gunlaZe", "Ynhi"];
+        const allTeammatesNearby = teammateNames.every(name => {
+            const player = get_player(name);
+            return player && distance(character, player) <= 50;
+        });
+
+        if (allTeammatesNearby) {
+            game_log("❌ Không thấy boss nhưng cả 6gunlaZe & Ynhi đều ở gần → reset bossvip ngay.");
             bossvip = 0;
             bossvipWaitStart = 0;
             return;
         }
 
-        // Nếu không có đồng đội gần → chờ 2 phút rồi mới reset
+        // Không đủ người gần → chờ 2 phút
         if (!bossvipWaitStart) bossvipWaitStart = Date.now();
 
-        if (Date.now() - bossvipWaitStart > 180000) {
-            game_log("❌ Boss không xuất hiện sau 3 phút, reset bossvip.");
+        if (Date.now() - bossvipWaitStart > 120000) {
+            game_log("❌ Boss không xuất hiện sau 2 phút, reset bossvip.");
             bossvip = 0;
             bossvipWaitStart = 0;
         }
-    }
-    // Không ở đúng vị trí → di chuyển tới
-    else {
+    } else {
+        // Không ở đúng vị trí → di chuyển tới boss
         bossvipWaitStart = 0;
         if (!smart.moving) {
             await smart_move({ map: info.map, x: info.x, y: info.y });
         }
     }
 }
-
-	
 
 
 
