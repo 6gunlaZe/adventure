@@ -750,7 +750,7 @@ async function VIPBosses() {
         distance(character, mob) <= 200 
     );
 
-    if (targetless) {
+    if (targetless && targetless.attack < 200) {
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(targetless, "taunt") && !is_on_cooldown("taunt")) {
             await use_skill("taunt", targetless.id); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
