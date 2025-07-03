@@ -1923,86 +1923,60 @@ stop_character("nhiY")
 start_character("6gunlaZe", 33);
  }	
 /////////////////
-    if(name == "MuaBan"){
+if (name == "MuaBan") {
+    if (data === "framtay") framtay = 1;
 
-	   if(data == "framtay")framtay = 1;
-	   if(data == "bank") {
-        start_character("MuaBan", 10);	
-		 banktime = Date.now()  
-		   bankk = 1
-	   }	
+    if (data === "bank") {
+        start_character("MuaBan", 10);
+        banktime = Date.now();
+        bankk = 1;
+    }
 
-if(framboss>0)return
-	    
-  if(data == "boss1" || data == "boss2"  || data == "boss3" || data == "boss4" || data == "boss5"  || data == "boss6" || data == "boss7" || data == "boss8") {
-	  if (events || prolive == 1 || bossvip > 0 || framtay > 0)return
-	  if (modeYnhi == 0)
-	  {
-		parent.api_call("disconnect_character", {name: "nhiY"});
-		stop_character("nhiY");
-	  }
-	  else if (modeYnhi == 2)
-	  {
-	  	parent.api_call("disconnect_character", {name: "haiz1"});
-		stop_character("haiz1");
-	  }
-	  else
-	  {
+    if (framboss > 0) return;
 
-		parent.api_call("disconnect_character", {name: "6gunlaZe"});
-		stop_character("6gunlaZe");    	  
-	  }
-		  bosstime = 1
-	    timekillboss = Date.now()
-	  start_character("nhiY", 12);
+    // Xử lý boss thường: boss1 → boss99
+    const bossMatch = data.match(/^boss(\d+)$/);
+    if (bossMatch && !events && prolive !== 1 && bossvip === 0 && framtay === 0) {
+        const bossNum = parseInt(bossMatch[1]);
+        framboss = bossNum;
+
+        if (modeYnhi === 0) {
+            parent.api_call("disconnect_character", { name: "nhiY" });
+            stop_character("nhiY");
+        } else if (modeYnhi === 2) {
+            parent.api_call("disconnect_character", { name: "haiz1" });
+            stop_character("haiz1");
+        } else {
+            parent.api_call("disconnect_character", { name: "6gunlaZe" });
+            stop_character("6gunlaZe");
+        }
+
+        bosstime = 1;
+        timekillboss = Date.now();
+        start_character("nhiY", 12);
+        return;
+    }
+
+    // Xử lý boss VIP: bossvip1 → bossvip99
+    const vipMatch = data.match(/^bossvip(\d+)$/);
+    if (vipMatch && !events && framtay === 0) {
+        bossvip = parseInt(vipMatch[1]);
+        return;
+    }
+
+    // Boss không tank được, bật nhóm đánh riêng
+    if (data === "franky" || data === "crabxx") {
+        bosscantank = 1;
+        stop_character("angioseal");
+        stop_character("nhiY");
+        stop_character("haiz1");
+
+        if (!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+        if (!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);
+    }
 }
+///////////////
 	
-		
-	 if(data == "boss1") {
-	  framboss = 1
-	   }
-	 if(data == "boss2") {
-	  framboss = 2
-	   }
-	 if(data == "boss3") {
-	  framboss = 3
-	   }	 
-	 if(data == "boss4") {
-	  framboss = 4
-	   }
-	 if(data == "boss5") {
-	  framboss = 5
-	   }	 
-	 if(data == "boss6") {
-	  framboss = 6
-	 }
-	 if(data == "boss7") {
-	  framboss = 7
-	}		
-	if(data == "boss8") {
-	  framboss = 8
-	}
-	if(data == "bossvip1" && !events && framtay == 0) {
-	  bossvip = 1
-	}
-	if(data == "bossvip2" && !events && framtay == 0) {
-	  bossvip = 2
-	}
-	    
-
-       if(data == "franky" || data == "crabxx" )
-	   {
-		    bosscantank = 1	
-	stop_character("angioseal")	
-	stop_character("nhiY")	
-	stop_character("haiz1")	
-
-       if(!parent.party_list.includes("6gunlaZe"))start_character("6gunlaZe", 33);
-	    if(!parent.party_list.includes("Ynhi"))start_character("Ynhi", 27);
-		   //cũ 31
-	   }		
-			
-}
 }
 
 
