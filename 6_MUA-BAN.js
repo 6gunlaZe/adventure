@@ -1044,7 +1044,7 @@ let lastBossvip12Minute = -1;
 
 function taskBoss() {
     if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return;
-    if (smart.moving) return;
+    // if (smart.moving) return;
 
     const now = new Date();
     const minute = now.getMinutes();
