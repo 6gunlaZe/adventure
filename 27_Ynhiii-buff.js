@@ -1313,7 +1313,7 @@ function ChuyendoiITEM() {
      const damer = get_player("6gunlaZe");
 	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
-    entity.visible &&
+    entity.visible && entity.type=="monster" &&
     entity.target === character.name &&
     !entity.dead &&
     distance(character, entity) <= 100
