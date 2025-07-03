@@ -14,7 +14,10 @@ const locations = {
     ghost: [{ x: -405, y: -1642 }],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
-    mechagnome: [{ x: 0, y: 0 }],
+    mechagnome: [
+  { type: "farm", x: 0, y: 0 },
+  { type: "safe", x: -152, y: 2 }
+    ],
     mole: [{ x: 4, y: -282 }],  //-282
     mummy: [{ x: 256, y: -1417 }],
     oneeye: [{ x: -270, y: 160 }],
@@ -38,8 +41,8 @@ const locations = {
 
 };
 
-const home = 'odino';
-const mobMap = 'mforest';
+const home = 'mechagnome';
+const mobMap = 'cyberland';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
