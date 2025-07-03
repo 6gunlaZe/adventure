@@ -715,7 +715,15 @@ const bossData = {
         map: "arena",
         x: 666,
         y: -555
-    }
+    },
+    3: {
+        name: "mechagnome",
+        map: "cyberland",
+        x: 0,
+        y: 0
+    },
+
+	
     // Bạn có thể thêm boss khác vào đây dễ dàng
 };
 
