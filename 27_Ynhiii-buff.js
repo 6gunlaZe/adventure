@@ -18,6 +18,13 @@ let kitefram
 
 if (delayboss == undefined) delayboss = Date.now()
 
+
+setInterval(() => {
+    parent.socket.emit("send_updates", {});
+    game_log("🔁 Force refresh", "#AAAAFF");
+}, 90000); // mỗi 90 giây
+
+
 	
 let lastCallTime = 0; // Biến lưu trữ thời gian mốc
 let delayThreshold = 200; // Ngưỡng thời gian 200ms
