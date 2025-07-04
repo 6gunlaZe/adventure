@@ -712,7 +712,8 @@ if ( currentTarget && cung && kitefram == 1) {
 	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
 ///////////////////////////	
 
-  
+const currentFarmMob = "ghost"; // 👈 loại quái đang farm
+
 if (character.party) {
     let party = get_party();
     let bestTarget = null;
@@ -724,6 +725,7 @@ if (character.party) {
         let player = get_player(char_name);
         if (!player || player.rip) continue;
 
+        // Quái tấn công đồng đội
         let threats = Object.values(parent.entities).filter(e =>
             e.type === "monster" &&
             e.target === char_name &&
@@ -732,25 +734,28 @@ if (character.party) {
         );
 
         let threatCount = threats.length;
-        if (threatCount === 0) {
-           // log(`❌ Bỏ qua ${char_name} - không bị quái nào tấn công`);
-            continue;
-        }
+        if (threatCount === 0) continue;
 
+        // ==== ƯU TIÊN TRONG TRƯỜNG HỢP FARM MOB CỤ THỂ ====
+        let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
         let score = threatCount * 2;
 
-        if (player.hp < 5000) {  // 🔸 Chỉ absorb khi HP thấp thực sự
-        score += 5;           // Tăng điểm ưu tiên mạnh hơn
-        } else {
-         continue;             // ❌ Không tính nếu máu chưa thấp
+        let useAbsorbNoMatterWhat = false;
+
+        if (farmMobAround >= 2 && character.hp > 8000) {
+            useAbsorbNoMatterWhat = true;
+            score += 20; // Ưu tiên rất cao nếu đang farm mob này
         }
 
-        if (distance(character, player) > 240) {
-            // log(`❌ Bỏ qua ${char_name} - quá xa`);
-            continue;
+        if (!useAbsorbNoMatterWhat) {
+            if (player.hp < 5000) {
+                score += 5;
+            } else {
+                continue; // Bỏ qua nếu không đủ yếu và không có farmMob đặc biệt
+            }
         }
 
-        // log(`🔍 Đánh giá ${char_name} | Quái: ${threatCount}, HP: ${player.hp}, Điểm: ${score}`);
+        if (distance(character, player) > 240) continue;
 
         if (score > highestThreat) {
             highestThreat = score;
@@ -758,23 +763,16 @@ if (character.party) {
         }
     }
 
-    // Chỉ absorb nếu có mục tiêu và priest đủ máu
-    if (bestTarget) {
-        if (!is_on_cooldown("absorb")) {
-            if (character.hp >= 8500) {
-                log(`🛡 Dùng absorb lên ${bestTarget} (điểm: ${highestThreat})`);
-                use_skill("absorb", bestTarget);
-            } else {
-                log(`❌ Không dùng absorb - HP priest thấp (${character.hp}/${character.max_hp})`);
-            }
+    // Sử dụng absorb nếu hợp lệ
+    if (bestTarget && !is_on_cooldown("absorb")) {
+        if (character.hp >= 8500) {
+            log(`🛡 Absorb ${bestTarget} (score: ${highestThreat})`);
+            use_skill("absorb", bestTarget);
         } else {
-          //  log(`⏳ absorb đang hồi chiêu`);
+            log(`❌ Không absorb - máu thấp (${character.hp}/${character.max_hp})`);
         }
-    } else {
-      //  log("✅ Không có ai cần absorb lúc này.");
     }
 }
-
 
 
 
