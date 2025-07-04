@@ -994,51 +994,57 @@ async function walkInCircle() {
 }
 
 
+let followHaizMode = true; // ✅ Công tắc follow haiz
 async function safeawwaitwalkInCircle() {
-	let tank = get_player("Ynhi");
-	 let playerPosition
+    let tank = get_player("Ynhi");
+    let center;
 
-if (!tank || tank.rip){
-    if (!smart.moving) {
-smart_move(safeDestination);
-    }
-}else
-{
-	if (smart.moving) return
-if( character.map != mobMap  || (  character.map == mobMap  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50  ))smart_move(destination)	
-
-    if (!smart.moving) {
-        let center = locations[home][0];
-        const radius = 45;
-
-	   // Tọa độ người chơi (giả sử)
-	 //   let mainfram = get_player("haiz"); 
-     //  if(mainfram) center = { x: mainfram.x, y: mainfram.y }; 
-
-        // Calculate time elapsed since the last update
-        const currentTime = performance.now();
-        const deltaTime = currentTime - lastUpdateTime;
-        lastUpdateTime = currentTime;
-
-        // Calculate the new angle based on elapsed time and speed
-        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
-        angle = (angle + deltaAngle) % (2 * Math.PI);
-
-        const offsetX = Math.cos(angle) * radius;
-        const offsetY = Math.sin(angle) * radius;
-        const targetX = center.x + offsetX;
-        const targetY = center.y + offsetY;
-
-        if (!character.moving && lastUpdateTime > 100) {
-            await xmove(targetX, targetY);
+    if (!tank || tank.rip) {
+        if (!smart.moving) {
+            smart_move(safeDestination);
         }
-
-        // drawCirclesAndLines(center, radius);
+        return;
     }
 
+    if (smart.moving) return;
+
+    // ✅ Nếu chưa đúng map hoặc quá xa home → smart_move về
+    if (character.map !== mobMap || distance(character, { x: locations[home][0].x, y: locations[home][0].y }) > 50) {
+        smart_move(destination);
+        return;
+    }
+
+    // ✅ Chọn trung tâm quay
+    if (followHaizMode) {
+        let haiz = get_player("haiz");
+        if (haiz) {
+            center = { x: haiz.x, y: haiz.y };
+        } else {
+            center = locations[home][0]; // fallback nếu không thấy haiz
+        }
+    } else {
+        center = locations[home][0];
+    }
+
+    const radius = 45;
+    const currentTime = performance.now();
+    const deltaTime = currentTime - lastUpdateTime;
+    lastUpdateTime = currentTime;
+
+    // ✅ Tính góc mới
+    const deltaAngle = speed * (deltaTime / 1000);
+    angle = (angle + deltaAngle) % (2 * Math.PI);
+
+    const offsetX = Math.cos(angle) * radius;
+    const offsetY = Math.sin(angle) * radius;
+    const targetX = center.x + offsetX;
+    const targetY = center.y + offsetY;
+
+    if (!character.moving && deltaTime > 100) {
+        await xmove(targetX, targetY);
+    }
 }
-	
-}
+
 
 
 
