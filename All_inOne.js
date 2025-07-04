@@ -116,11 +116,9 @@ async function eventer() {
             VIPBosses();
 	} else if (framboss > 0) {
 
-        } else if ( tank && !tank.rip && distance(character, tank) <= 70 && (!get_nearest_monster({ type: home }) || ( character.map == mobMap && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 50 ) )) {
-		if (new Date().getHours() >= 6 && new Date().getHours() < 10 && locate_item("tombkey") !== -1)framtay = 1;
-           handleHome();
         } else {
-           safeawwait()
+           //safeawwait()
+		handleHome();
         }
 	    
 	    if (framtaywwait > 0) framtaywwait--;
