@@ -41,14 +41,16 @@ const locations = {
     wolfie: [{ x: 113, y: -2014 }],
     xscorpion: [{ x: -495, y: 685 }],
     odino: [
-  { type: "farm", x: -20, y: 675 },
-  { type: "safe", x: -240, y: 700 }
+  { type: "farm", x: -20, y: 675, map: "mforest" },
+  { type: "safe", x: -240, y: 700, map: "mforest" }
     ],
 
 };
 
-const home = 'booboo';
-const mobMap = 'spookytown';
+const home = 'odino';
+const farmLocation = locations[home].find(p => p.type === "farm");
+const mobMap = farmLocation?.map || "main"; // fallback nếu không có
+
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
