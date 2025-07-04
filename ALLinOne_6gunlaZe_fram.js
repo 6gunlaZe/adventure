@@ -92,6 +92,7 @@ let bossvip = 0
 
 async function eventer() {
     const delay1 = 500;
+    let tank = get_player("Ynhi");
 
     try {
         if (folowhaizevents) {
@@ -106,7 +107,7 @@ async function eventer() {
           Xmage()
 	} else if (crab > 0) {
           crabgame()		
-        } else if (  (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
+        } else if ( tank && !tank.rip && distance(character, tank) <= 170 && (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
            handleHome();
         } else {
           ///  walkInCircle(); // khi fram riêng
@@ -999,7 +1000,7 @@ async function safeawwaitwalkInCircle() {
     let tank = get_player("Ynhi");
     let center;
 
-    if (!tank || tank.rip) {
+    if (!tank || tank.rip || ( tank && !tank.rip && distance(character, tank) > 170 ) ) {
         if (!smart.moving) {
             smart_move(safeDestination);
         }
