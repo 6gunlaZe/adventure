@@ -712,7 +712,7 @@ if ( currentTarget && cung && kitefram == 1) {
 	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
 ///////////////////////////	
 
-const currentFarmMob = "ghost"; // 👈 loại quái đang farm
+const currentFarmMob = crepp; // 👈 loại quái đang farm
 
 if (character.party) {
     let party = get_party();
