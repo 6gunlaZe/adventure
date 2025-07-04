@@ -33,7 +33,7 @@ const locations = {
     mole: [{ x: 4, y: -282 }],  //-282
     mummy: [{ x: 256, y: -1417 }],
     booboo: [
-  { type: "farm", x: 192, y: -666 },
+  { type: "farm", x: 350, y: -675 },
   { type: "safe", x: 158, y: -660 }
     ],
     oneeye: [{ x: -270, y: 160 }],
