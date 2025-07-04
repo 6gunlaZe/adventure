@@ -126,6 +126,11 @@ setTimeout(eventer, 6000);
 const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
 
 async function handleHome() {
+
+let lastUpdateTime = performance.now();
+const radius = 40;
+
+	
 	var f1 = get_player("haiz"); 
     if ( f1 && get_nearest_monster({type: "franky"})) {
 	     folowhaizevents = true;
