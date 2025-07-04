@@ -22,7 +22,10 @@ const locations = {
   { type: "safe", x: -152, y: 2 }
     ],
     mole: [{ x: 4, y: -282 }],  //-282
-    mummy: [{ x: 256, y: -1417 }],
+    booboo: [
+  { type: "farm", x: 350, y: -675 },
+  { type: "safe", x: 158, y: -660 }
+    ],
     oneeye: [{ x: -270, y: 160 }],
     pinkgoblin: [{ x: 366, y: 377 }],
     poisio: [{ x: -121, y: 1360 }],
@@ -44,8 +47,8 @@ const locations = {
 
 };
 
-const home = 'ghost';
-const mobMap = 'halloween';
+const home = 'booboo';
+const mobMap = 'spookytown';
 const destination = {
     map: mobMap,
     x: locations[home][0].x,
