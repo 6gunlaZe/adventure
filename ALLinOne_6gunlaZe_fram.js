@@ -127,7 +127,6 @@ const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc f
 
 async function handleHome() {
 if (smart.moving) return;
-const radius = 40;
 
 	
 	var f1 = get_player("haiz"); 
@@ -186,6 +185,7 @@ const radius = 40;
 
     // Khi đang ở vị trí farm → quay vòng
     if (!smart.moving) {
+        const radius = 40;
         let center = locations[home][0];
         if (mode_follow_haiz) {
             const haiz = f1;
