@@ -778,20 +778,18 @@ async function VIPBosses() {
         character.map === info.map &&
         distance(character, { x: info.x, y: info.y }) <= 80
     ) {
-        // Không thấy boss và đang đứng đúng vị trí
 
-        const teammateNames = ["6gunlaZe", "Ynhi"];
-        const allTeammatesNearby = teammateNames.every(name => {
-            const player = get_player(name);
-            return player && distance(character, player) <= 50;
-        });
+	    
+const teammate = get_player("6gunlaZe");
+const teammateNearby = teammate && distance(character, teammate) <= 50;
 
-        if (allTeammatesNearby) {
-            game_log("❌ Không thấy boss nhưng cả 6gunlaZe & Ynhi đều ở gần → reset bossvip ngay.");
-            bossvip = 0;
-            bossvipWaitStart = 0;
-            return;
-        }
+if (teammateNearby) {
+    game_log("❌ Không thấy boss nhưng 6gunlaZe đang ở gần → reset bossvip ngay.");
+    bossvip = 0;
+    bossvipWaitStart = 0;
+    return;
+}
+
 
         // Không đủ người gần → chờ 2 phút
         if (!bossvipWaitStart) bossvipWaitStart = Date.now();
