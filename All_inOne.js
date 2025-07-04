@@ -294,7 +294,7 @@ async function safeawwait() {
 //if(  parent?.S?.wabbit.live && !character?.s?.easterluck  )return
 if (character.hp < 4000 && !character.rip) parent.api_call("disconnect_character", {name: "haiz"});
 	
-if (!tank || tank.rip ){
+if (!tank || tank.rip || (tank && !tank.rip && distance(character, tank) > 70) ){
     if (!smart.moving) {
 smart_move(safeDestination);
     }
