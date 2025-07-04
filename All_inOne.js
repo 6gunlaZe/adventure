@@ -269,7 +269,6 @@ function handleEvents() {
 
 async function handleHome() {
     if (smart.moving) return;
-    const radius = 24;
     const tank = get_player("Ynhi");
 
     // 🩸 Nếu máu thấp thì disconnect
@@ -304,25 +303,25 @@ async function handleHome() {
     }
 
     // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm
-    if (!character.moving) {
-        const center = locations[home][0];
+        let center = locations[home][0];
+	const radius = 24;
+
         const currentTime = performance.now();
         const deltaTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
 
-        if (deltaTime > 100) {
-            lastUpdateTime = currentTime;
+        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
+        angle = (angle + deltaAngle) % (2 * Math.PI);
 
-            const deltaAngle = speed * (deltaTime / 1000);
-            angle = (angle + deltaAngle) % (2 * Math.PI);
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        const targetX = center.x + offsetX;
+        const targetY = center.y + offsetY;
 
-            const offsetX = Math.cos(angle) * radius;
-            const offsetY = Math.sin(angle) * radius;
-            const targetX = center.x + offsetX;
-            const targetY = center.y + offsetY;
-
+        if (!character.moving && lastUpdateTime > 100) {
             await xmove(targetX, targetY);
         }
-    }
+    
 }
 
 
