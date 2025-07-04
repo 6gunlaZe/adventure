@@ -1050,20 +1050,20 @@ function taskBoss() {
     const now = Date.now();
     const elapsed = (now - startTime) / 60000; // phút đã trôi qua
 
-    // === ⏱ Gọi bossvip3 tại phút 8,16 sau đăng nhập ===
-    const elapsed5 = Math.floor(elapsed / 8);
+    // === ⏱ Gọi bossvip3 tại phút 10,20 sau đăng nhập ===
+    const elapsed5 = Math.floor(elapsed / 10);
     if (elapsed5 > lastBossvip3Time && bossvip3Count < 2) {
         if (parent.party_list.includes("haiz")) {
             send_cm(hostname, "bossvip3");
-            game_log(`📡 [${bossvip3Count + 1}/2] Gửi bossvip3 sau ${elapsed5 * 8} phút`, "#00FFFF");
+            game_log(`📡 [${bossvip3Count + 1}/2] Gửi bossvip3 sau ${elapsed5 * 10} phút`, "#00FFFF");
             bossvip3Count += 1;
         }
         lastBossvip3Time = elapsed5;
         return;
     }
 
-    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 25 phút ===
-    const elapsed25 = Math.floor(elapsed / 25);
+    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 27 phút ===
+    const elapsed25 = Math.floor(elapsed / 27);
     if (elapsed25 > lastBossvip12Time) {
         const randomNum = Math.floor(Math.random() * 2) + 1;
 
@@ -1089,7 +1089,7 @@ function taskBoss() {
             });
         }
 
-        game_log(`🎲 Gọi bossvip${randomNum} sau ${elapsed25 * 25} phút`, "#FFD700");
+        game_log(`🎲 Gọi bossvip${randomNum} sau ${elapsed25 * 27} phút`, "#FFD700");
         lastBossvip12Time = elapsed25;
     }
 }
