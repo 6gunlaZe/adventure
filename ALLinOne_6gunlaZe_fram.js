@@ -138,7 +138,7 @@ async function handleHome() {
                 }
             } catch (error) {
                 console.log("Không thể di chuyển đến wabbit, sử dụng 'use_town'");
-                await smart_move(safeDestination);
+                await smart_move(destination);
             }
             game_log("Đang di chuyển đến wabbit");
         }
@@ -148,7 +148,7 @@ async function handleHome() {
     if (!smart.moving) {
                     try {
                 // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
-                await smart_move(safeDestination);
+                await smart_move(destination);
             } catch (error) {
                 // Nếu không thể di chuyển (ví dụ: không có đường đi), thì dùng 'use_town'
                 console.log("Không thể di chuyển đến đích, sử dụng 'use_town'");
