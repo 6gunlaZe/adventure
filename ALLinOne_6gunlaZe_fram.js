@@ -107,11 +107,10 @@ async function eventer() {
           Xmage()
 	} else if (crab > 0) {
           crabgame()		
-        } else if ( tank && !tank.rip && distance(character, tank) <= 170 && (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) )) {
-           handleHome();
         } else {
-          ///  walkInCircle(); // khi fram riêng
-		safeawwaitwalkInCircle()  //khi fram chung
+		 handleHome();
+                ///  walkInCircle(); // khi fram riêng
+		// safeawwaitwalkInCircle()  //khi fram chung
         }
     } catch (e) {
         console.error(e);
@@ -120,6 +119,11 @@ async function eventer() {
     setTimeout(eventer, delay1);
 }
 setTimeout(eventer, 6000);
+
+
+
+
+const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
 
 async function handleHome() {
 	var f1 = get_player("haiz"); 
@@ -146,17 +150,66 @@ async function handleHome() {
         return;
     }
 
-    if (!smart.moving) {
-                    try {
-                // Sử dụng smart_move để di chuyển đến vị trí, nếu không thành công thì bắt lỗi
-                await smart_move(destination);
+
+    const tank = get_player("Ynhi");
+
+    // Nếu chưa có tank, tank chết, hoặc tank quá xa → rút về điểm an toàn
+    if (!tank || tank.rip || distance(character, tank) > 200) {
+        if (!smart.moving) {
+            try {
+                await smart_move(safeDestination);
             } catch (error) {
-                // Nếu không thể di chuyển (ví dụ: không có đường đi), thì dùng 'use_town'
-                console.log("Không thể di chuyển đến đích, sử dụng 'use_town'");
-                await use_skill("town");  // Quay lại thành phố
+                console.log("Không thể đi tới safeDestination, dùng town.");
+                await use_skill("town");
             }
-        game_log(`Moving to ${home}`);
+        }
+        return;
     }
+
+    // Khi có tank gần, thì tới điểm farm nếu chưa đúng chỗ
+    if (
+        character.map !== mobMap ||
+        (!smart.moving && distance(character, { x: locations[home][0].x, y: locations[home][0].y }) > 100)
+    ) {
+        try {
+            await smart_move(destination);
+        } catch (error) {
+            console.log("Không thể đi tới destination, dùng town.");
+            await use_skill("town");
+        }
+        return;
+    }
+
+    // Khi đang ở vị trí farm → quay vòng
+    if (!smart.moving) {
+        let center = locations[home][0];
+        if (mode_follow_haiz) {
+            const haiz = f1;
+            if (haiz) center = { x: haiz.x, y: haiz.y };
+        }
+
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastUpdateTime;
+        lastUpdateTime = currentTime;
+
+        const deltaAngle = speed * (deltaTime / 1000);
+        angle = (angle + deltaAngle) % (2 * Math.PI);
+
+        const offsetX = Math.cos(angle) * radius;
+        const offsetY = Math.sin(angle) * radius;
+        const targetX = center.x + offsetX;
+        const targetY = center.y + offsetY;
+
+        if (!character.moving && lastUpdateTime > 100) {
+            await xmove(targetX, targetY);
+        }
+    }
+
+
+	
+	
+
+
 }
 
 
