@@ -1087,7 +1087,18 @@ function taskBoss() {
 }
 
 // ==== ⏰ BẮT ĐẦU KIỂM TRA MỖI PHÚT ====
-setInterval(taskBoss, 59 * 1000);
+function startTaskBossLoop() {
+    const now = new Date();
+    const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+
+    setTimeout(() => {
+        taskBoss(); // chạy đúng đầu phút
+        setInterval(taskBoss, 60 * 1000); // sau đó lặp lại mỗi phút
+    }, msUntilNextMinute);
+}
+
+// GỌI HÀM KHI BẮT ĐẦU
+startTaskBossLoop();
 
 
 
