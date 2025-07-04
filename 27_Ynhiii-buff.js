@@ -1341,7 +1341,14 @@ const lowHpMobs = mobsInRange.filter(mob =>
 
 	if (currentTime - eTime < 50)return
 
+ if (smart.moving) 
+	{
+        eTime = currentTime;
+        equipSet('nogold');	
+		return
+	}
 
+	
 	if(get_nearest_monster({ type: "xmagefi" }))
 	{
         eTime = currentTime;
