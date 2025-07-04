@@ -1050,12 +1050,12 @@ function taskBoss() {
     const now = Date.now();
     const elapsed = (now - startTime) / 60000; // phút đã trôi qua
 
-    // === ⏱ Gọi bossvip3 tại phút 5,10,15,20 sau đăng nhập ===
-    const elapsed5 = Math.floor(elapsed / 5);
-    if (elapsed5 > lastBossvip3Time && bossvip3Count < 4) {
+    // === ⏱ Gọi bossvip3 tại phút 8,16 sau đăng nhập ===
+    const elapsed5 = Math.floor(elapsed / 8);
+    if (elapsed5 > lastBossvip3Time && bossvip3Count < 2) {
         if (parent.party_list.includes("haiz")) {
             send_cm(hostname, "bossvip3");
-            game_log(`📡 [${bossvip3Count + 1}/4] Gửi bossvip3 sau ${elapsed5 * 5} phút`, "#00FFFF");
+            game_log(`📡 [${bossvip3Count + 1}/2] Gửi bossvip3 sau ${elapsed5 * 8} phút`, "#00FFFF");
             bossvip3Count += 1;
         }
         lastBossvip3Time = elapsed5;
