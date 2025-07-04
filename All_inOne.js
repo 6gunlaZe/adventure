@@ -120,6 +120,7 @@ async function eventer() {
 
         } else {
            //safeawwait()
+		if (new Date().getHours() >= 6 && new Date().getHours() < 10 && locate_item("tombkey") !== -1)framtay = 1;
 		handleHome();
         }
 	    
