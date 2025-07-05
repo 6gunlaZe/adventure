@@ -1062,8 +1062,8 @@ function taskBoss() {
         return;
     }
 
-    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 27 phút ===
-    const elapsed25 = Math.floor(elapsed / 27);
+    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 23 phút ===
+    const elapsed25 = Math.floor(elapsed / 23);
     if (elapsed25 > lastBossvip12Time) {
         const randomNum = Math.floor(Math.random() * 2) + 1;
 
@@ -1089,7 +1089,7 @@ function taskBoss() {
             });
         }
 
-        game_log(`🎲 Gọi bossvip${randomNum} sau ${elapsed25 * 27} phút`, "#FFD700");
+        game_log(`🎲 Gọi bossvip${randomNum} sau ${elapsed25 * 23} phút`, "#FFD700");
         lastBossvip12Time = elapsed25;
     }
 }
