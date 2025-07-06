@@ -1324,7 +1324,7 @@ const mobsInRange = Object.values(parent.entities)
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 if (!is_on_cooldown("agitate") && 
     mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
-    untargetedMobs.length >= 4 &&        // Kiểm tra nếu có ít nhất 4 quái vật chưa bị nhắm mục tiêu
+    untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
     !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
     tank && character.hp >14000 && character.mp > 800 && !tank.rip) {                              // Kiểm tra nếu có tank và f1 xung quanh
     let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
