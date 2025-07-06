@@ -1855,7 +1855,7 @@ let intervalId = setInterval(function() {
 
  ///////////////////////// 
 setInterval(function() {	
-if ( events || bossvip > 0 ) return	
+if ( events ) return	
 		
 let region = server.region;
 let serverIden = server.id
