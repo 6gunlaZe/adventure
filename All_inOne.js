@@ -1334,7 +1334,7 @@ if (!is_on_cooldown("agitate") &&
 }
 
 const untargeted = untargetedMobs[0];  // cố gắng dùng đơn lẻ khi có ít quái để tiết kiệm mana
-if (untargeted && is_in_range(untargeted, "taunt") && !is_on_cooldown("taunt")) {
+if (untargeted && is_in_range(untargeted, "taunt") && !is_on_cooldown("taunt") && character.hp >14000 ) {
     await use_skill("taunt", untargeted.id);
     game_log("🧲 Taunted " + untargeted.mtype, "#AA00FF");
 }
