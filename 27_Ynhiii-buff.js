@@ -1434,7 +1434,7 @@ const lowHpMobs = mobsInRange.filter(mob =>
 	if(lowHpMobs.length == 0 && checkluckk > 0)
 	{
         eTime = currentTime;
-        game_log("🎯 Unluck"); 	
+        // game_log("🎯 Unluck"); 	
         equipSet('Unluck');	
 		checkluckk -= 1
 		return
@@ -1443,7 +1443,7 @@ const lowHpMobs = mobsInRange.filter(mob =>
 
 if ( lowHpMobs.length >= 1 && character.map != "winter_instance" ) {
 	eTime = currentTime;
-        game_log("🔄 luck") ;	
+        // game_log("🔄 luck") ;	
 	shift(0, 'luckbooster')
         equipSet('luck');
 	checkluckk =5
