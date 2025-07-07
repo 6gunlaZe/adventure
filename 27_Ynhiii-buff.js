@@ -62,76 +62,86 @@ function checkTimeBetweenCalls(setMoc = 0) {
 }
 
 
-setInterval(function() {
-	    let leader = get_player("haiz");
-	let tranferr = get_player("nhiY");
 
-	if ( character.map == "winterland" && distance(character, {x: 800, y: 400}) < 250 && !leader  ){
-	use_skill("town")
-	 return	
-	}
-	
-	if (!character.party) {
-    send_party_request("haiz");
-	}
+let isMoving = false;
 
-	if (character.party && character.party != "haiz" ) {
-    leave_party();
-	}
-	
-if (!character.party)return	
+setInterval(() => {
+    mainLogic();
+}, 1000);
 
-if (smart.moving && receivedData && typeof receivedData === 'object' && receivedData.message === "location" && tranferr) {
-        const Map = receivedData.map;  // Lấy tên bản đồ
-        const X = receivedData.x;      // Lấy tọa độ X
-        const Y = receivedData.y;      // Lấy tọa độ Y	
-     if ( character.map == Map && distance(character, {x: X, y: Y}) < 150 ) xmove(X, Y); ////dưng lai khi duoc dich chuyen
-	    
- }
+async function mainLogic() {
+    let leader = get_player("haiz");
+    let tranferr = get_player("nhiY");
 
-let leaderfram = get_player(nhanvatfram);
-if (framfocus == 1 && leaderfram && distance(character, leaderfram) < 230 && distance(character, leader) < 230 && get_nearest_monster({type:crepp}))
-{
-	kitefram = 1
-	return
-}else kitefram = 0
-	
-	
-if (leader && distance(character, leader) < 130) return
+    if (character.map === "winterland" && distance(character, {x: 800, y: 400}) < 250 && !leader) {
+        use_skill("town");
+        return;
+    }
 
+    if (!character.party) {
+        send_party_request("haiz");
+    }
 
+    if (character.party && character.party !== "haiz") {
+        leave_party();
+    }
 
-	
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
+    if (!character.party) return;
 
-	
-    // Đảm bảo rằng nhận được thông tin hợp lệ
+    if (
+        smart.moving &&
+        receivedData &&
+        typeof receivedData === 'object' &&
+        receivedData.message === "location" &&
+        tranferr
+    ) {
+        const { map: Map, x: X, y: Y } = receivedData;
+        if (character.map === Map && distance(character, { x: X, y: Y }) < 150) {
+            xmove(X, Y);
+        }
+    }
+
+    let leaderfram = get_player(nhanvatfram);
+    if (
+        framfocus === 1 &&
+        leaderfram &&
+        distance(character, leaderfram) < 230 &&
+        distance(character, leader) < 230 &&
+        get_nearest_monster({ type: crepp })
+    ) {
+        kitefram = 1;
+        return;
+    } else {
+        kitefram = 0;
+    }
+
+    if (leader && distance(character, leader) < 130) return;
+
+    if (smart.moving || isMoving) return;
+
     if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
+        const { map: targetMap, x: targetX, y: targetY } = receivedData;
 
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-	if ( targetMap == "goobrawl" && character.map !== targetMap) parent.socket.emit('join', { name: "goobrawl" });
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
+        if (character.map !== targetMap && character.map !== "crypt") {
+            if (targetMap === "goobrawl") {
+                parent.socket.emit('join', { name: "goobrawl" });
+            }
+
+            isMoving = true;
+            try {
+                await smart_move({ map: targetMap, x: targetX, y: targetY });
+            } catch (err) {
+                console.log("Không thể đi tới điểm đến, dùng town.");
+                await use_skill("town");
+            }
+            isMoving = false;
         } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
             if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
                 xmove(targetX, targetY);
             }
         }
     }
-
-}, 1000);
-
+}
 
 
 
