@@ -566,7 +566,7 @@ setInterval(function() {
 
 setTimeout(function() {
     changeitem({ slot: "orb", name : "tigerstone", level : 3 });
-}, 3000);
+}, 3000);  //chạy 1 lần sau 3s
 
 
 
@@ -579,7 +579,6 @@ lootAllChests()
 
 function shifting() {
     shift(0, 'xpbooster');
-//changeitem({ slot: "gloves", name : "mittens", level : 9 });
 equipSet('nogold');
 }
 
@@ -588,7 +587,6 @@ function lootAllChests() {
     let chestIds = Object.keys(chests);
 
     if (chestIds.length > 10 && character.cc < 200 ) {
-	//changeitem({ slot: "gloves", name : "handofmidas", level : 7 });
         equipSet('gold');
 	    if (character.slots["gloves"] && character.slots["gloves"].name == "handofmidas"){
 	  shift(0, 'goldbooster');   
@@ -983,7 +981,6 @@ function changeitem(options = {}) {
     }
 	
 
-//	changeitem({ slot: "mainhand", name : "firebow", level : 6 });
 }
 
 
