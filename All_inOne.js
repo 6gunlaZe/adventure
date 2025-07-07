@@ -284,7 +284,7 @@ async function handleHome() {
     }
 
     // 🛡 Nếu không có tank, tank chết, hoặc tank quá xa → về điểm an toàn
-    if (!tank || tank.rip || distance(character, tank) > 200) {
+    if (!tank || tank.rip || distance(character, tank) > 300) {
         try {
             await smart_move(safeDestination);
         } catch (error) {
