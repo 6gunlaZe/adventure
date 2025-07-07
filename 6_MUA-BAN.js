@@ -1907,7 +1907,6 @@ var combineWhitelist =
 		intring: 4,
 		dexring: 4,
 		strring: 4,
-		vitring: 3,
 		dexamulet: 4,
 		intamulet: 4,
 		stramulet: 4,
