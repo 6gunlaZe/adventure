@@ -1333,12 +1333,40 @@ if (!is_on_cooldown("agitate") &&
     }
 }
 
+
+const mobsTargetingTank = Object.values(parent.entities).filter(e =>
+    e.type === "monster" &&
+    !e.dead &&
+    e.target === tank?.name &&
+    distance(character, e) < 250
+);
+
+if (
+    mobsTargetingTank.length > 0 &&
+    !is_on_cooldown("taunt") &&
+    character.hp > 10000 &&
+    tank && !tank.rip &&
+    tank.hp < 6000  // Chỉ hỗ trợ khi tank yếu máu
+) {
+    const monsterToTaunt = mobsTargetingTank[0];  // Ưu tiên con đầu tiên
+    if (is_in_range(monsterToTaunt, "taunt")) {
+        await use_skill("taunt", monsterToTaunt.id);
+        game_log(`🛡 Taunted quái đang đánh ${tank.name}: ${monsterToTaunt.mtype}`, "#AA00FF");
+    }
+}
+
+
+	
 const untargeted = untargetedMobs[0];  // cố gắng dùng đơn lẻ khi có ít quái để tiết kiệm mana
-if (untargeted && is_in_range(untargeted, "taunt") && !is_on_cooldown("taunt") && character.hp >14000 ) {
+if (untargeted && is_in_range(untargeted, "taunt") && !is_on_cooldown("taunt") && character.hp >14000 && tank && !tank.rip ) {
     await use_skill("taunt", untargeted.id);
     game_log("🧲 Taunted " + untargeted.mtype, "#AA00FF");
 }
 
+
+
+
+	
 	
 	
 if (!is_on_cooldown("charge") && is_moving(character) ) {
