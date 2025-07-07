@@ -778,7 +778,7 @@ if (character.party) {
 
         let useAbsorbNoMatterWhat = false;
 
-        if (farmMobAround >= 2 && character.hp > 8000) {
+        if (farmMobAround >= 2 && character.hp > 10000) {
             useAbsorbNoMatterWhat = true;
             score += 20; // Ưu tiên rất cao nếu đang farm mob này
         }
