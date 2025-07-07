@@ -1312,57 +1312,65 @@ async function handleWarriorSkills(tank,f1) {
         await use_skill("warcry");
     }
 
-	///bat thì không cần f1
-const mobTypes = ["bat", "mole","bigbird","spider","scorpion","ghost","wolf"];
-const mobsInRange = Object.values(parent.entities)
-    .filter(entity => 
-        mobTypes.includes(entity.mtype) &&  // Kiểm tra nếu loại mob là "bat" hoặc "bigbird"
-        entity.visible &&                    // Kiểm tra nếu thực thể đang hiển thị
-        !entity.dead &&                      // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) <= G.skills.agitate.range  // Kiểm tra nếu khoảng cách từ nhân vật đến mob nhỏ hơn phạm vi của kỹ năng "agitate"
-    );
-const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
-if (!is_on_cooldown("agitate") && 
-    mobsInRange.length >= 3 &&           // Kiểm tra nếu có ít nhất 3 quái vật trong phạm vi
-    untargetedMobs.length >= 3 &&        // Kiểm tra nếu có ít nhất 3 quái vật chưa bị nhắm mục tiêu
-    !smart.moving &&                     // Kiểm tra nếu nhân vật không đang di chuyển
-    tank && character.hp >14000 && character.mp > 800 && !tank.rip) {                              // Kiểm tra nếu có tank và f1 xung quanh
-    let porc = get_nearest_monster({ type: "porcupine" }); // Lấy quái vật "porcupine" gần nhất
-    if (!is_in_range(porc, "agitate")) {  // Kiểm tra nếu "porcupine" không nằm trong phạm vi kỹ năng "agitate"
-        await use_skill("agitate");        // Sử dụng kỹ năng "agitate"
-    }
-}
 
 
+const mobTypes = ["bat", "mole", "bigbird", "spider", "scorpion", "ghost", "wolf"];
+const mobsInRange = Object.values(parent.entities).filter(e =>
+    mobTypes.includes(e.mtype) &&
+    e.visible && !e.dead &&
+    distance(character, e) <= G.skills.agitate.range
+);
+
+const untargetedMobs = mobsInRange.filter(e => !e.target);
 const mobsTargetingTank = Object.values(parent.entities).filter(e =>
     e.type === "monster" &&
     !e.dead &&
     e.target === tank?.name &&
-    distance(character, e) < 250
+    distance(character, e) <= 250
 );
 
 if (
-    mobsTargetingTank.length > 0 &&
-    !is_on_cooldown("taunt") &&
-    character.hp > 10000 &&
+    !smart.moving &&
+    !is_on_cooldown("agitate") &&
+    mobsInRange.length >= 3 &&
+    untargetedMobs.length >= 3 &&
     tank && !tank.rip &&
-    tank.hp < 6000  // Chỉ hỗ trợ khi tank yếu máu
+    character.hp > 14000 && character.mp > 800
 ) {
-    const monsterToTaunt = mobsTargetingTank[0];  // Ưu tiên con đầu tiên
-    if (is_in_range(monsterToTaunt, "taunt")) {
-        await use_skill("taunt", monsterToTaunt.id);
-        game_log(`🛡 Taunted quái đang đánh ${tank.name}: ${monsterToTaunt.mtype}`, "#AA00FF");
+    const porc = get_nearest_monster({ type: "porcupine" });
+    if (!is_in_range(porc, "agitate")) {
+        await use_skill("agitate");
+        game_log("🌪️ Agitated!", "#00FFFF");
     }
 }
 
-
-	
-const untargeted = untargetedMobs[0];  // cố gắng dùng đơn lẻ khi có ít quái để tiết kiệm mana
-if (untargeted && is_in_range(untargeted, "taunt") && !is_on_cooldown("taunt") && character.hp >14000 && tank && !tank.rip ) {
-    await use_skill("taunt", untargeted.id);
-    game_log("🧲 Taunted " + untargeted.mtype, "#AA00FF");
+// 🛡 Ưu tiên taunt quái đang đánh tank yếu
+if (
+    mobsTargetingTank.length > 0 &&
+    !is_on_cooldown("taunt") &&
+    tank && !tank.rip &&
+    tank.hp < 6000 &&
+    character.hp > 10000
+) {
+    const mob = mobsTargetingTank[0];
+    if (is_in_range(mob, "taunt")) {
+        await use_skill("taunt", mob.id);
+        game_log(`🛡 Taunted quái đánh ${tank.name}: ${mob.mtype}`, "#AA00FF");
+    }
+} 
+// 🧲 Nếu không thì taunt mob chưa có target (hút về để tiết kiệm mana)
+else if (
+    untargetedMobs.length > 0 &&
+    !is_on_cooldown("taunt") &&
+    tank && !tank.rip &&
+    character.hp > 14000
+) {
+    const mob = untargetedMobs[0];
+    if (is_in_range(mob, "taunt")) {
+        await use_skill("taunt", mob.id);
+        game_log(`🧲 Taunted ${mob.mtype}`, "#AA00FF");
+    }
 }
-
 
 
 
