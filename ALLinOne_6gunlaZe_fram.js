@@ -161,7 +161,7 @@ if (smart.moving) return;
     const tank = get_player("Ynhi");
 
     // Nếu chưa có tank, tank chết, hoặc tank quá xa → rút về điểm an toàn
-    if (!tank || tank.rip || distance(character, tank) > 200) {
+    if (!tank || tank.rip || distance(character, tank) > 300) {
         if (!smart.moving) {
             try {
                 await smart_move(safeDestination);
