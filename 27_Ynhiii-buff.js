@@ -63,33 +63,54 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 
 
+
+let isRunning = false;
 let isMoving = false;
+let townUsed = false;
 
 setInterval(() => {
-    mainLogic();
+    if (!isRunning) {
+        isRunning = true;
+        mainLogic().finally(() => isRunning = false);
+    }
 }, 1000);
 
 async function mainLogic() {
     let leader = get_player("haiz");
     let tranferr = get_player("nhiY");
 
-    if (character.map === "winterland" && distance(character, {x: 800, y: 400}) < 250 && !leader) {
-        use_skill("town");
+    // Nếu đang ở winterland mà không thấy leader => về town (1 lần)
+    if (
+        character.map === "winterland" &&
+        distance(character, { x: 800, y: 400 }) < 250 &&
+        !leader &&
+        !townUsed
+    ) {
+        townUsed = true;
+        await use_skill("town");
         return;
     }
 
+    // Reset townUsed nếu đã về town hoặc bank
+    if (character.map === "main" || character.map === "bank") {
+        townUsed = false;
+    }
+
+    // Tham gia party nếu chưa có
     if (!character.party) {
         send_party_request("haiz");
     }
 
+    // Rời party nếu đang ở party sai
     if (character.party && character.party !== "haiz") {
         leave_party();
     }
 
+    // Không làm gì nếu chưa vào party
     if (!character.party) return;
 
+    // Nếu có dữ liệu vị trí và đang ở gần mục tiêu => xmove nhẹ
     if (
-        smart.moving &&
         receivedData &&
         typeof receivedData === 'object' &&
         receivedData.message === "location" &&
@@ -97,10 +118,13 @@ async function mainLogic() {
     ) {
         const { map: Map, x: X, y: Y } = receivedData;
         if (character.map === Map && distance(character, { x: X, y: Y }) < 150) {
-            xmove(X, Y);
+            if (distance(character, { x: X, y: Y }) > 10) {
+                xmove(X, Y);
+            }
         }
     }
 
+    // Xử lý framfocus nếu cần (giữ nguyên logic gốc)
     let leaderfram = get_player(nhanvatfram);
     if (
         framfocus === 1 &&
@@ -115,10 +139,13 @@ async function mainLogic() {
         kitefram = 0;
     }
 
+    // Nếu đã gần leader thì không cần di chuyển
     if (leader && distance(character, leader) < 130) return;
 
-    if (smart.moving || isMoving) return;
+    // Nếu đang di chuyển thì không làm gì
+    if (isMoving || smart.moving) return;
 
+    // Xử lý di chuyển đến vị trí nhận từ receivedData
     if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
         const { map: targetMap, x: targetX, y: targetY } = receivedData;
 
@@ -136,13 +163,12 @@ async function mainLogic() {
             }
             isMoving = false;
         } else {
-            if (character.x !== targetX || character.y !== targetY) {
+            if (distance(character, { x: targetX, y: targetY }) > 10) {
                 xmove(targetX, targetY);
             }
         }
     }
 }
-
 
 
 
