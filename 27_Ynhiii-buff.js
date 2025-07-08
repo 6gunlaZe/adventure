@@ -1441,7 +1441,8 @@ const lowHpMobs = mobsInRange.filter(mob =>
 if ( lowHpMobs.length >= 1 && character.map != "winter_instance" ) {
 	eTime = currentTime;
         // game_log("🔄 luck") ;	
-	shift(0, 'luckbooster')
+	let slot = locate_item("luckbooster");
+        if (slot == -1)shift(0, 'luckbooster')
         equipSet('luck');
 	checkluckk =5
 	return
