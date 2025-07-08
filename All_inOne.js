@@ -38,8 +38,8 @@ const locations = {
     spider: [{ x: 1290, y: -80 }],  // [{ x: 1180, y: -71 }], //vip3
     squig: [{ x: -1175, y: 422 }],
     wolf: [
-  { type: "farm", x: 400, y: -2680, map: "winterland" },
-  { type: "safe", x: 400, y: -2400, map: "winterland" }
+  { type: "farm", x: 400, y: -2730, map: "winterland" },
+  { type: "safe", x: 400, y: -2450, map: "winterland" }
     ],
     wolfie: [{ x: 113, y: -2014 }],
     xscorpion: [{ x: -495, y: 685 }],
