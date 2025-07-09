@@ -1904,7 +1904,6 @@ var combineWhitelist =
 		intearring: 4,
 		dexearring: 4,
 		skullamulet: 2,
-		intring: 4,
 		dexring: 4,
 		strring: 4,
 		dexamulet: 4,
