@@ -627,13 +627,34 @@ if (buoc == 8 || character.rip)
 
 
 
-
+let startTime = null; // Thời gian bắt đầu đếm giờ
 let fieldgen0_position = null;
 let buoc = 0
 function framtaygame() {
 
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
+
+  // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
+  if ((!member1 || !member2) && startTime === null) {
+    startTime = Date.now(); // Lưu lại thời gian bắt đầu
+  }
+
+  // Nếu cả 2 thành viên đã có mặt, reset lại startTime
+  if (member1 && member2) {
+    startTime = null; // Reset nếu có đủ 2 thành viên
+  }
+
+  // Kiểm tra nếu đã trôi qua 20 phút (1200 giây)
+  if (startTime !== null && Date.now() - startTime >= 20 * 60 * 1000) {
+    // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
+	stop_character("Ynhi")	
+	stop_character("6gunlaZe")	
+	buoc = 0
+	framtay = 0
+  }
+
+
 	
 if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
 	send_cm("6gunlaZe","tomb")	
