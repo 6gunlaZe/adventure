@@ -645,8 +645,8 @@ function framtaygame() {
     startTime = null; // Reset nếu có đủ 2 thành viên
   }
 
-  // Kiểm tra nếu đã trôi qua 20 phút (1200 giây)
-  if (startTime !== null && Date.now() - startTime >= 20 * 60 * 1000) {
+  // Kiểm tra nếu đã trôi qua 10 phút (600 giây)
+  if (startTime !== null && Date.now() - startTime >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
