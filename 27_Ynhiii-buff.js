@@ -772,27 +772,29 @@ if (character.party) {
 
         // ==== ƯU TIÊN ĐẶC BIỆT ====
         let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
-        let dyingMobs = threats.filter(e => e.hp < 8000).length;
+        let dyingMobs = threats.filter(e => e.hp < 7000 && e.max_hp > 8000).length;
 
         let score = threatCount * 2;
-        let useAbsorbNoMatterWhat = false;
+        let dungskill = false;
 
         if (farmMobAround >= 2 && character.hp > 10000) {
-            useAbsorbNoMatterWhat = true;
+            dungskill = true;
             score += 20;
         }
 
         // ✅ Ưu tiên nếu có quái đang sắp chết → để cướp kill (tăng luck)
         if (dyingMobs > 0) {
+	    dungskill = true;
             score += 40;
         }
 
-        if (!useAbsorbNoMatterWhat) {
-            if (player.hp < 5000) {
+        if (player.hp < 5000) {
                 score += 50;
-            }
+		dungskill = true;
         }
-
+	    
+	if (!dungskill) continue;
+        
         if (distance(character, player) > 240) continue;
 
         if (score > highestThreat) {
