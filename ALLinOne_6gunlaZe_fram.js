@@ -298,7 +298,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 			weaponSet("single");
                if(codame) await attack(KILLdauTien[0]);
 	           delay = ms_to_next_skill("attack");
-	    }else if (hutquai.length >= 1 && character.mp > 330 && character.targets <2 ){
+	    }else if (hutquai.length >= 1 && character.mp < 150 && character.targets <2 ){
 		    	weaponSet("dead");
               if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
