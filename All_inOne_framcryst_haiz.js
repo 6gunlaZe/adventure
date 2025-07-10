@@ -510,6 +510,16 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	         }
 		else if (MobisA1.length >= 1 && untargetedMobs.length == 0)  //thả diều a1
 		{
+/////////////////
+                let target_monster = get_nearest_monster({ type: "a1" });
+
+    if (target_monster && distance(character, target_monster) < character.range )
+    {
+	
+    }
+     else
+    {
+			
         if (togglea1) {
             runn = 1;
             backk = 0;
@@ -518,7 +528,8 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
             backk = 1;
         }
         togglea1 = !togglea1; // đổi trạng thái ở vòng lặp tiếp theo
-			
+    }
+///////////////////
 		}
 
 		
