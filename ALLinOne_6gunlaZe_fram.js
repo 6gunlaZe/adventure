@@ -766,14 +766,17 @@ function getSupershotTarget() {
 	
     const validNames = ["wolf", "wolfie"]; // ✅ Chỉ bắn mấy quái đặc biệt này
 
-    // Lọc các quái đủ điều kiện cơ bản
-    let candidates = Object.values(parent.entities).filter(e =>
-        e.type === "monster" &&
-        !e.dead &&
-        validNames.includes(e.mtype) &&
-        e.hp > 10000 &&
-        is_in_range(e, "supershot")
-    );
+// Lọc các quái đủ điều kiện cơ bản
+let candidates = Object.values(parent.entities).filter(e =>
+    e.type === "monster" &&
+    !e.dead &&
+    validNames.includes(e.mtype) &&
+    e.hp > 10000 &&
+    is_in_range(e, "supershot") &&
+    distance(character, e) <= 450 &&
+    distance(character, e) > (character.range + 20) // ✅ Nằm ngoài tầm đánh một khoảng
+);
+
 
     // ✅ Lọc theo vị trí của Ynhi và Haiz
     candidates = candidates.filter(mob => {
