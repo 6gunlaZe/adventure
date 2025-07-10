@@ -784,14 +784,12 @@ if (character.party) {
 
         // ✅ Ưu tiên nếu có quái đang sắp chết → để cướp kill (tăng luck)
         if (dyingMobs > 0) {
-            score += 10;
+            score += 40;
         }
 
         if (!useAbsorbNoMatterWhat) {
             if (player.hp < 5000) {
-                score += 5;
-            } else if (dyingMobs === 0) {
-                continue; // Không đáng absorb nếu không yếu và không có quái sắp chết
+                score += 50;
             }
         }
 
