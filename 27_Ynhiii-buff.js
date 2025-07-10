@@ -788,7 +788,7 @@ if (character.party) {
             score += 40;
         }
 
-        if (player.hp < 5000) {
+        if (player.hp < 7000 || char_name == "6gunlaZe") {
                 score += 50;
 		dungskill = true;
         }
