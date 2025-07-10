@@ -515,7 +515,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 
     if (target_monster && distance(character, target_monster) < character.range )
     {
-	
+	kite(target_monster,15);	
     }
      else
     {
@@ -2444,7 +2444,78 @@ function distanceToPoint(x1, y1, x2, y2) {
 
 
 
+//////////////////////////////////
 
+
+function degToRad(deg) {
+    return deg * Math.PI / 180;
+}
+
+let checkwwall = 1;
+const maxAttempts = 5;
+
+// Góc phụ để thử nếu hướng chính bị chặn (theo độ lệch nhỏ hơn)
+const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
+
+function kite(taget, kite_range = 20) {
+    if (smart.moving || !taget) return;
+
+    const originalPosition = {
+        x: taget.real_x,
+        y: taget.real_y
+    };
+
+    for (let i = 0; i < maxAttempts; i++) {
+        const radius = kite_range + i * 5;
+        const angleFromTarget = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+
+        // 1️⃣ Ưu tiên hướng chính (theo checkwwall)
+        const mainOffset = degToRad(51.4) * checkwwall;
+        const mainAngle = angleFromTarget + mainOffset;
+
+        const mainGoal = {
+            x: taget.real_x + radius * Math.cos(mainAngle),
+            y: taget.real_y + radius * Math.sin(mainAngle)
+        };
+
+        if (can_move_to(mainGoal.x, mainGoal.y)) {
+            move(mainGoal.x, mainGoal.y);
+            return;
+        }
+
+        // 2️⃣ Nếu không đi được, thử các góc phụ (±20°, ±35°, ±70°)
+        for (let angle of extraAngles) {
+            for (let dir of [1, -1]) {
+                const offset = angle * dir;
+                const tryAngle = angleFromTarget + offset;
+                const tryGoal = {
+                    x: taget.real_x + radius * Math.cos(tryAngle),
+                    y: taget.real_y + radius * Math.sin(tryAngle)
+                };
+
+                if (can_move_to(tryGoal.x, tryGoal.y)) {
+                    // ✅ Nếu hướng phụ thành công → đảo hướng chính cho lần sau
+                    checkwwall *= -1;
+                    move(tryGoal.x, tryGoal.y);
+                    return;
+                }
+            }
+        }
+    }
+
+    // ❗Fallback: nếu tất cả đều thất bại → dùng vị trí trong receivedData
+    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+        const targetMap = receivedData.map;
+        const targetX = receivedData.x;
+        const targetY = receivedData.y;
+
+        if (character.map !== targetMap && character.map !== "crypt") {
+            smart_move({ map: targetMap, x: targetX, y: targetY });
+        } else {
+            xmove(targetX, targetY);
+        }
+    }
+}
 
 
 
