@@ -763,7 +763,7 @@ function getSupershotTarget() {
     const haiz = get_player("haiz");
         if (!ynhi) return null;
 	
-    const validNames = ["wolf", "wolfie"]; // ✅ Chỉ bắn mấy quái đặc biệt này
+    const validNames = ["wolf"]; // ✅ Chỉ bắn mấy quái đặc biệt này
 
 // Lọc các quái đủ điều kiện cơ bản
 let candidates = Object.values(parent.entities).filter(e =>
