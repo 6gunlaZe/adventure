@@ -759,9 +759,11 @@ function get_nearest_monster_v2(args = {}) {
 
 
 function getSupershotTarget() {
+	if (smart.moving) return null;
     const ynhi = get_player("Ynhi");
     const haiz = get_player("haiz");
-
+        if (!ynhi) return null;
+	
     const validNames = ["wolf", "wolfie"]; // ✅ Chỉ bắn mấy quái đặc biệt này
 
     // Lọc các quái đủ điều kiện cơ bản
