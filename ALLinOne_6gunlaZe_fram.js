@@ -270,7 +270,7 @@ if (healerr && distance(character, healerr) < 150 ) {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if ( tagetskill.length == 1 && character.map != "winter_instance" )use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "wolf", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
+var hutquai = getBestTargets({ max_range: character.range, type: "wolf11", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
  var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
                                                                // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
 	    
@@ -298,7 +298,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 			weaponSet("single");
                if(codame) await attack(KILLdauTien[0]);
 	           delay = ms_to_next_skill("attack");
-	    }else if (hutquai.length >= 1 && character.mp < 150 && character.targets <2 ){
+	    }else if (hutquai.length >= 1 && character.mp < 200 && character.targets <2 ){
 		    	weaponSet("dead");
               if (codame) await attack(hutquai[0]);
 	           delay = ms_to_next_skill("attack");
