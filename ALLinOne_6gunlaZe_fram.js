@@ -431,6 +431,7 @@ attackLoop();
 
 
 
+
 function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false) {
 
 
@@ -556,6 +557,7 @@ async function equipBatch(data) {
 
     isEquipping = false; // Reset flag khi hoàn tất
 }
+
 
 
 
@@ -751,6 +753,74 @@ function get_nearest_monster_v2(args = {}) {
     }
     return target;
 }
+
+
+
+
+
+function getSupershotTarget() {
+    const ynhi = get_player("Ynhi");
+    const haiz = get_player("haiz");
+
+    const validNames = ["wolf", "wolfie"]; // ✅ Chỉ bắn mấy quái đặc biệt này
+
+    // Lọc các quái đủ điều kiện cơ bản
+    let candidates = Object.values(parent.entities).filter(e =>
+        e.type === "monster" &&
+        !e.dead &&
+        validNames.includes(e.mtype) &&
+        e.hp > 10000 &&
+        is_in_range(e, "supershot")
+    );
+
+    // ✅ Lọc theo vị trí của Ynhi và Haiz
+    candidates = candidates.filter(mob => {
+        // Nếu có Ynhi, mà quái nằm TRONG tầm đánh của Ynhi → bỏ qua
+        if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
+
+        // Nếu có Haiz, mà quái ở gần quá (< 200) → bỏ qua
+        if (haiz && distance(haiz, mob) <= 200) return false;
+
+        return true; // Chỉ giữ nếu không bị loại bởi 2 điều kiện trên
+    });
+
+    // ✅ Nếu còn quái hợp lệ, chọn quái xa nhất (ưu tiên kéo về)
+    if (candidates.length > 0) {
+        candidates.sort((a, b) => distance(character, b) - distance(character, a));
+        return candidates[0];
+    }
+
+    return null; // ❌ Không có mục tiêu phù hợp
+}
+
+
+async function skillLoop() {
+    try {
+        const target = getSupershotTarget();
+
+        if (
+            target &&
+            character.mp > 550 &&
+            !is_on_cooldown("supershot")
+        ) {
+            await use_skill("supershot", target);
+            game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
+        }
+    } catch (e) {
+        //console.log("Skill loop error:", e);
+    }
+
+    setTimeout(skillLoop, 2000); // lặp 2s
+}
+
+skillLoop();
+
+
+
+
+
+
+
 
 
 function handleSnowball() {
