@@ -1362,7 +1362,7 @@ const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
 const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
 const lowHpMobs = mobsInRange.filter(mob =>
-    mob.hp < 6000 &&
+    mob.hp < 7000 &&
     mob.target === character.name &&
     leader &&
     distance(character, leader) <= 100 &&
@@ -1461,7 +1461,7 @@ else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || ch
 
 }
 
-setInterval(ChuyendoiITEM, 100);
+setInterval(ChuyendoiITEM, 90);
 
 
 
