@@ -759,7 +759,7 @@ if (character.party) {
         let player = get_player(char_name);
         if (!player || player.rip) continue;
 
-        // Quái tấn công đồng đội
+        // Quái đang đánh người chơi
         let threats = Object.values(parent.entities).filter(e =>
             e.type === "monster" &&
             e.target === char_name &&
@@ -770,22 +770,28 @@ if (character.party) {
         let threatCount = threats.length;
         if (threatCount === 0) continue;
 
-        // ==== ƯU TIÊN TRONG TRƯỜNG HỢP FARM MOB CỤ THỂ ====
+        // ==== ƯU TIÊN ĐẶC BIỆT ====
         let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
-        let score = threatCount * 2;
+        let dyingMobs = threats.filter(e => e.hp < 8000).length;
 
+        let score = threatCount * 2;
         let useAbsorbNoMatterWhat = false;
 
         if (farmMobAround >= 2 && character.hp > 10000) {
             useAbsorbNoMatterWhat = true;
-            score += 20; // Ưu tiên rất cao nếu đang farm mob này
+            score += 20;
+        }
+
+        // ✅ Ưu tiên nếu có quái đang sắp chết → để cướp kill (tăng luck)
+        if (dyingMobs > 0) {
+            score += 10;
         }
 
         if (!useAbsorbNoMatterWhat) {
             if (player.hp < 5000) {
                 score += 5;
-            } else {
-                continue; // Bỏ qua nếu không đủ yếu và không có farmMob đặc biệt
+            } else if (dyingMobs === 0) {
+                continue; // Không đáng absorb nếu không yếu và không có quái sắp chết
             }
         }
 
@@ -797,7 +803,7 @@ if (character.party) {
         }
     }
 
-    // Sử dụng absorb nếu hợp lệ
+    // Dùng absorb nếu hợp lệ
     if (bestTarget && !is_on_cooldown("absorb")) {
         if (character.hp >= 8500) {
             log(`🛡 Absorb ${bestTarget} (score: ${highestThreat})`);
