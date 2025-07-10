@@ -1372,7 +1372,7 @@ const lowHpMobs = mobsInRange.filter(mob =>
 
 	
 
-	if (currentTime - eTime < 100)return
+	if (currentTime - eTime < 70)return
 
  if (smart.moving) 
 	{
