@@ -1346,7 +1346,7 @@ const untargetedMobs = mobsInRange.filter(e => !e.target);
 const mobsTargetingTank = Object.values(parent.entities).filter(e =>
     e.type === "monster" &&
     !e.dead &&
-    e.target === tank?.name &&
+    e.target === tank?.name && e.hp > 10000 &&
     distance(character, e) <= 250
 );
 
