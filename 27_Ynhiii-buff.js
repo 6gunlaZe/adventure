@@ -893,7 +893,7 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 	}
 	
 
-},1000/8); // Loops every 1/4 seconds.
+},1000/4); // Loops every 1/4 seconds.
 
 
 
