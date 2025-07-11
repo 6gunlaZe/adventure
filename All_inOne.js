@@ -101,7 +101,6 @@ if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp
         events = true
 }
 
-let framtaywwait = 0;
 let framtay = 0
 async function eventer() {
     const delay = 500;
@@ -112,11 +111,8 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-            if (framtaywwait === 0) {
                framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
 		  //  framXmage()
-              //  framtaywwait = 2; // chờ 2 vòng = ~1s
-            }
 	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
@@ -127,7 +123,6 @@ async function eventer() {
 		handleHome();
         }
 	    
-	    if (framtaywwait > 0) framtaywwait--;
 	    
     } catch (e) {
         console.error(e);
@@ -652,6 +647,7 @@ function framtaygame() {
 	stop_character("6gunlaZe")	
 	buoc = 0
 	framtay = 0
+	startTime  = null
   }
 
 
