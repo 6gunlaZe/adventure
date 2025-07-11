@@ -2396,9 +2396,23 @@ change_server("ASIA", "I");
 //////////////////////////
 if(targetfk  && character.hp < 4500)
 {
+if (eventType == "icegolem") {
+let region11 = server.region;
+let serverIden11 = server.id
+if ( region11 == "EU" && serverIden11 == "II" ) 
+{
+change_server("ASIA", "I");	
+}
+	else
+	{
+         change_server("EU", "II");
+	}
+}
+	else
+{
 parent.api_call("disconnect_character", {name: "haiz"});
 }
-	    
+}	    
 ////////////////////////////////
 if ( checktimeparty == 0)
 {
