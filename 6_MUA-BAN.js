@@ -2336,7 +2336,7 @@ smart_move({ map: "level2w", x: -123, y: -65 }, () => {
 	
 if( get_nearest_monster({type:'franky'})  &&  !is_moving(character)  )	
 {
-	if(get_nearest_playerV() >=3 && parent.party_list.includes("haiz") ){
+	if(get_nearest_playerV() >=2 && parent.party_list.includes("haiz") ){
 		send_cm("6gunlaZe","franky")
 		send_cm("haiz","franky") 
 		frankymode = 1
