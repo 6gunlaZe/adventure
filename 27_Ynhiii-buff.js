@@ -1378,7 +1378,7 @@ const lowHpMobs = mobsInRange.filter(mob =>
 
 	
 
-	if (currentTime - eTime < 70)return
+	if (currentTime - eTime < 120)return
 
  if (smart.moving) 
 	{
@@ -1467,7 +1467,7 @@ else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || ch
 
 }
 
-setInterval(ChuyendoiITEM, 80);
+setInterval(ChuyendoiITEM, 130);
 
 
 
