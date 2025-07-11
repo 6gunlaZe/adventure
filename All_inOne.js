@@ -2582,7 +2582,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
     if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
-	game_log("so luong nguoi choi kill boss la: " + target)
+	//game_log("so luong nguoi choi kill boss la: " + target)
 	return target;
 }
 
