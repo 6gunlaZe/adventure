@@ -1367,15 +1367,19 @@ const mobsInRange = Object.values(parent.entities).filter(entity =>
 const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
 const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
-const lowHpMobs = mobsInRange.filter(mob =>
-    mob.hp < 7000 &&
-    mob.target === character.name &&
-    leader &&
-    distance(character, leader) <= 100 &&
-    mob.mtype !== "nerfedmummy" &&
-    mob.mtype !== "nerfedbat"
-);
+const lowHpMobs = mobsInRange.filter(mob => {
+    const hpThreshold = mob.max_hp < 800000 ? 7000 : 25000;
+    return (
+        mob.hp < hpThreshold &&
+        mob.target === character.name &&
+        leader &&
+        distance(character, leader) <= 100 &&
+        mob.mtype !== "nerfedmummy" &&
+        mob.mtype !== "nerfedbat"
+    );
+});
 
+	
 	
 
 	if (currentTime - eTime < 120)return
