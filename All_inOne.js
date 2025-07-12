@@ -176,7 +176,7 @@ async function checkGameEvents() {
 
     if (pro > 0) {
         prolive = 1;
-	ICEcheckHPMYSv(["icegolem"] , 15000000)
+	ICEcheckHPMYSv(["icegolem"] , 17000000)
 
     } else {
         prolive = 0; // khi boss đã chết
@@ -2888,7 +2888,7 @@ let validObjects0
 let validObjects
 let validObjects1
 	 let hpcheck =120000000
-	 let hpcheck1 =15000000
+	 let hpcheck1 =17000000
 
   // Query API
   const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
