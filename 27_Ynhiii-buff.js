@@ -772,8 +772,13 @@ if (character.party) {
 
         // ==== ƯU TIÊN ĐẶC BIỆT ====
         let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
-        let dyingMobs = threats.filter(e => e.hp < 7000 && e.max_hp > 8000).length;
+	    
+let dyingMobs = threats.filter(e => {
+    const hpThreshold = e.max_hp < 800000 ? 7000 : 25000;
+    return e.hp < hpThreshold && e.max_hp > 8000;
+}).length;
 
+	    
         let score = threatCount * 2;
         let dungskill = false;
 
