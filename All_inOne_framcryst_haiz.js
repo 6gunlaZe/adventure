@@ -878,10 +878,10 @@ function get_NUMber_kill(args) ///mod
 ////////////////////////////////chuyen do tu dong cho nhan vat muaban
 
 setInterval(function() {
-    let lootMule = get_player("Ynhi");
+    let lootMule = get_player("6gunlaZe");
 
 		 //giui vang when in range
-    var merch = get_player("Ynhi"); // replace this with your merchants name
+    var merch = get_player("6gunlaZe"); // replace this with your merchants name
     if (merch && distance(character, merch) <= 400) {
 		        send_gold(merch,character.gold)
 
@@ -905,7 +905,7 @@ setInterval(function() {
             send_item(lootMule.id, i, item.q ?? 1);
         }
     }
-}, 1000);
+}, 5000);
 
 
 
