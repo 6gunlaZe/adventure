@@ -234,7 +234,7 @@ setInterval(function() {
 //if (leader===undefined) 
 	if (!character.party) {
     send_party_request("haiz");
-
+    return
 }
     if (character.moving || smart.moving) return // We're already moving somewhere
 	
@@ -257,14 +257,22 @@ if(parent.S.icegolem && foxmode == 0)
 	  var target2= get_nearest_monster({type: "icegolem",});	
 		
 	if (character.map != "winterland")smart_move("winterland")
-	if (character.map == "winterland" && !target2 && back == 0 )use_skill("blink", [800, 400])
-	///check member
-
-	mageMagiPort()
-	
-	
-	
+	if (character.map == "winterland" && !target2 && back == 0 && parent.party_list.includes("Ynhi") && character.hp > 6000 && character.mp > 3000 )
+	{
+		use_skill("blink", [800, 400])
 	}
+	else if (character.map == "winterland" && target2 && character.hp < 4000)
+        {
+		use_skill("blink", [0, 0])
+	}
+
+        if (target2)mageMagiPort()
+        if (!target2 && character.hp < 6000)mageMagiPort()
+	}
+
+
+
+	
 	if(parent.S.icegolem && foxmode == 0) return //su kien ice thi se tu hoat dong không có di theo lederr
 	
 ////////////////////////////////////////////////	
