@@ -161,6 +161,8 @@ frozenkey: {bank: "items5", level: -1, quantity: 1},
 spiderkey: {bank: "items5", level: -1, quantity: 1},
 spidersilk: {bank: "items5", level: -1, quantity: 1},
 sstinger: {bank: "items5", level: -1, quantity: 1},
+gemfragment: {bank: "items5", level: -1, quantity: 1},
+	
 	
 fieldgen0: {bank: "items1", level: -1, quantity: 1},
 frankypants: {bank: "items1", level: -1, quantity: 1},
