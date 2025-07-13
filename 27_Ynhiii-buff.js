@@ -774,7 +774,7 @@ if (character.party) {
         let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
 	    
 let dyingMobs = threats.filter(e => {
-    const hpThreshold = e.max_hp < 800000 ? 7000 : 25000;
+    const hpThreshold = e.max_hp < 200000 ? 7000 : 25000;
     return e.hp < hpThreshold && e.max_hp > 8000;
 }).length;
 
@@ -1373,7 +1373,7 @@ const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
 const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
 const lowHpMobs = mobsInRange.filter(mob => {
-    const hpThreshold = mob.max_hp < 800000 ? 7000 : 25000;
+    const hpThreshold = mob.max_hp < 200000 ? 7000 : 25000;
     return (
         mob.hp < hpThreshold &&
         mob.target === character.name &&
