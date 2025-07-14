@@ -2196,7 +2196,7 @@ for (let char in parent.party) {
 /// 
 setInterval(function() {
 
-	if(character.esize < 7 || !character.s.mluck || character.s.mluck.f !== "MuaBan")
+	if(character.esize < 11 || !character.s.mluck || character.s.mluck.f !== "MuaBan")
 	{
 		send_cm("MuaBan", "full");
 		game_log("lay do !!!!!!");
