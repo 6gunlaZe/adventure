@@ -1333,7 +1333,7 @@ async function handleWarriorSkills(tank,f1) {
 
 const mobTypes = ["bat", "mole", "bigbird", "spider", "scorpion", "ghost", "wolf"];
 const mobsInRange = Object.values(parent.entities).filter(e =>
-    mobTypes.includes(e.mtype) &&
+    mobTypes.includes(e.mtype) && e.level < 3 && // canh chỉnh level tùy theo quái mạnh yếu
     e.visible && !e.dead &&
     distance(character, e) <= G.skills.agitate.range
 );
