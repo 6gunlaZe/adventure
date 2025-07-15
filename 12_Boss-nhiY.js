@@ -559,7 +559,7 @@ if (dist1 > range1 * 2)
         change_target(leaderTarget);
         currentTarget = get_targeted_monster();
     }
-    
+     if (!currentTarget) currentTarget = get_nearest_monster({type: "jr"});
 
 		var cung1 = get_player("haiz"); 
 if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
