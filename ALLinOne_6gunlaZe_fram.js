@@ -761,7 +761,7 @@ function getSupershotTarget() {
 	if (smart.moving) return null;
     const ynhi = get_player("Ynhi");
     const haiz = get_player("haiz");
-        if (!ynhi) return null;
+        if (!ynhi || (ynhi && distance(character, ynhi) > 150 ) ) return null;
 	
     const validNames = ["wolf"]; // ✅ Chỉ bắn mấy quái đặc biệt này
 
