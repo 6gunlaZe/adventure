@@ -10,6 +10,8 @@ let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
 let cryts = 0
+let crytsTank = 0
+
 let receivedData
 
 if (delayboss == undefined) delayboss = Date.now()
@@ -912,7 +914,7 @@ const drawDebug = false;
 
 
 function avoidance() {
-	if (cryts == 0)return
+	if (cryts == 0 || crytsTank == 1)return
     if (drawDebug) {
         clear_drawings();
     }
@@ -1452,7 +1454,18 @@ const lowHpMobs = mobsInRange.filter(mob => {
     );
 });
 	
+if (character.map == "crypt"  && lowHpMobs.length >= 1)
+{
+crytsTank = 1
+}
+else
+{
+crytsTank = 0	
+}
+	
 
+
+	
 	if (currentTime - eTime < 50)return
 
 
