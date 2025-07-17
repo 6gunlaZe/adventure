@@ -490,7 +490,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	{
 	backk = 0;
 	runn = 0;
-	moveToZapperTarget()	
+	// moveToZapperTarget()	// tạm ngưng đánh a4
                 if (z > 50 && kitecheck == 0 && mobsInRange.length == 1 && untargetedMobs.length == 0){
 /////			
     const khung = [110, 100, 90, 80, 70, 60, 50];
