@@ -653,7 +653,7 @@ let result = (landaucheck == 1 ? toado1 : toado).find(item => item.z === z);
 	
     if (targetkill.length === 1 && targetNO.length == 0 ) {
       // Lệnh riêng của bạn khi targetkill = 1
-	    if (character.mp > 100 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
+	    if (character.mp > 100 && targetkill.hp > 50000 &&  can_use("taunt") &&  (targetkill.target == "Ynhi" || targetkill.target == "nhiY" || targetkill.target == "6gunlaZe" ) )
              use_skill("taunt", targetkill);
           nguyhiem = 0
 	/////////////////////////////////    
@@ -1426,7 +1426,7 @@ else
 	if( currentTarget && !is_in_range(currentTarget))
 	{
 		//////////// dung skill
-		            if(character.mp > 100 && !is_on_cooldown("taunt") && (currentTarget.target == "Ynhi" || currentTarget.target == "6gunlaZe" ))
+		            if(character.mp > 100 && !is_on_cooldown("taunt") && (currentTarget.target == "6gunlaZe" ))
             {
                 use_skill("taunt", currentTarget);
 				 game_log("phan no !!!!!!");
@@ -1845,7 +1845,7 @@ for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật "quai" và nó chưa nhắm vào nhân vật
-    if ( ango.includes(current.mtype) && current.hp > 20000 && current.target && current.target !== character.name) {
+    if ( ango.includes(current.mtype) && current.hp > 50000 && current.target && current.target !== character.name) {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
