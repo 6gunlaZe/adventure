@@ -503,11 +503,95 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 	//if(!can_attack(currentTarget) )kite(cung1,50);
    }
 	
-	////////////
 
-
-
+///////////////////////
 if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
+
+
+///////////////////////
+
+
+
+const currentFarmMob = "bosssNOQuai"; // 👈 loại quái đang farm
+
+if (character.party) {
+    let party = get_party();
+    let bestTarget = null;
+    let highestThreat = 0;
+
+    for (let char_name in party) {
+        if (character.name == char_name) continue;
+
+        let player = get_player(char_name);
+        if (!player || player.rip) continue;
+
+        // Quái đang đánh người chơi
+        let threats = Object.values(parent.entities).filter(e =>
+            e.type === "monster" &&
+            e.target === char_name &&
+            !e.dead &&
+            distance(player, e) < 250
+        );
+
+        let threatCount = threats.length;
+        if (threatCount === 0) continue;
+
+        // ==== ƯU TIÊN ĐẶC BIỆT ====
+        let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
+	    
+let dyingMobs = threats.filter(e => {
+	
+const hpThreshold = e.max_hp >= 800000 ? 55000 :
+                    e.max_hp >= 200000 ? 35000 : 7000;
+	
+    return e.hp < hpThreshold && e.max_hp > 8000;
+}).length;
+
+	    
+        let score = threatCount * 2;
+        let dungskill = false;
+
+        if (farmMobAround >= 2 && character.hp > 10000) {
+            dungskill = true;
+            score += 20;
+        }
+
+        // ✅ Ưu tiên nếu có quái đang sắp chết → để cướp kill (tăng luck)
+        if (dyingMobs > 0) {
+	    dungskill = true;
+            score += 40;
+        }
+
+        if (player.hp < 7000 || char_name == "6gunlaZe") {
+                score += 50;
+		dungskill = true;
+        }
+	    
+	if (!dungskill) continue;
+        
+        if (distance(character, player) > 240) continue;
+
+        if (score > highestThreat) {
+            highestThreat = score;
+            bestTarget = char_name;
+        }
+    }
+
+    // Dùng absorb nếu hợp lệ
+    if (bestTarget && !is_on_cooldown("absorb")) {
+        if (character.hp >= 8500) {
+            log(`🛡 Absorb ${bestTarget} (score: ${highestThreat})`);
+            use_skill("absorb", bestTarget);
+        } else {
+            log(`❌ Không absorb - máu thấp (${character.hp}/${character.max_hp})`);
+        }
+    }
+}
+
+
+
+
+
 	
 //////////// dung skill
 
