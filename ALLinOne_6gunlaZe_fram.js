@@ -770,7 +770,7 @@ let candidates = Object.values(parent.entities).filter(e =>
     e.type === "monster" &&
     !e.dead &&
     validNames.includes(e.mtype) &&
-    e.hp > 10000 &&
+    e.hp > 10000 &&  e.level < 3 &&
     is_in_range(e, "supershot") &&
     distance(character, e) <= 450 &&
     distance(character, e) > (character.range + 20) // ✅ Nằm ngoài tầm đánh một khoảng
