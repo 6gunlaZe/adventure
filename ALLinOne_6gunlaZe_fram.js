@@ -1459,7 +1459,7 @@ if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
 {
     if (parent?.S?.[eventType]) {
 	    
-       if (eventType == "goobrawl"){
+       if (eventType == "goobrawl" && !smart.moving ){
 	        if (character.map !== "goobrawl")parent.socket.emit('join', { name: eventType });
       }
 
