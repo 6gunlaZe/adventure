@@ -1953,7 +1953,9 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 
 
 
-let autobuyPonty = 1; // bật auto
+// let autobuyPonty = 1; // bật auto
+let autobuyPonty = 0; // tắt auto
+
 let readyToSwitch = false;
 
 // Bước 1: đếm 2000s (33 phút)
