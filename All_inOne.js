@@ -1953,8 +1953,8 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 
 
 
-// let autobuyPonty = 1; // bật auto chuyển sever
-let autobuyPonty = 0; // tắt auto chuyển sever
+let autobuyPonty = 1; // bật auto chuyển sever
+//let autobuyPonty = 0; // tắt auto chuyển sever
 
 let readyToSwitch = false;
 
