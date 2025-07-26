@@ -1468,16 +1468,19 @@ if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp
 	return
 }
 
-	
-if ( physicalMobs.length >= 1 && checkheall == 0 && checkdef == 0) {
+if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
+{
+        if ( physicalMobs.length >= 1 ) {
 	eTime = currentTime;
         equipSet('vatly');
-}
-else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || character.map == "winter_instance" )
+        }
+        else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.68) || character.map == "winter_instance" )
 	{
 	eTime = currentTime;
         equipSet('phep');
 	}
+}
+
 
 }
 
