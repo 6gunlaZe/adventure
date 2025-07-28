@@ -1157,7 +1157,7 @@ async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
 }
 
 
-
+equipSet('nodeff');  // lần đầu đăng nhập trở về mặc định
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
 
