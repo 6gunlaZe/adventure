@@ -1959,6 +1959,22 @@ async function equipBatch(data) {
 
 
 
+game.on('death', function (data) {
+    if (parent.entities[data.id]) { // Check if the entity exists
+        const mob = parent.entities[data.id];
+        const mobName = mob.mtype; // Get the mob type
+        const mobTarget = mob.target; // Get the mob's target (likely the killer)
+
+        // Get your party members
+        const party = get_party();
+        const partyMembers = party ? Object.keys(party) : [];
+
+        // Check if the mob's target was the player or someone in the party
+        if (mobTarget === character.name || partyMembers.includes(mobTarget)) {
+            game_log(`${mobName} died with ${data.luckm} luck by ${mobTarget}`, "#96a4ff");
+        }
+    }
+});
 
 
 
