@@ -102,7 +102,7 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","ink" ,"vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","vitearring","hbow", "ringsj","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -2004,7 +2004,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "smoke","cclaw","pmace","glolipop","dexamulet","stramulet","snowball","bowofthedead","pinkie","intbelt","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "ink","smoke","cclaw","pmace","glolipop","dexamulet","stramulet","snowball","bowofthedead","pinkie","intbelt","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
