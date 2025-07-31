@@ -1486,7 +1486,7 @@ async function equipBatch(data) {
         let found = false;
         if (parent.character.slots[slot]) {
             let slotItem = parent.character.items[parent.character.slots[slot]];
-            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && (l === undefined || slotItem.l === l) ) {
                 found = true;
             }
         }
