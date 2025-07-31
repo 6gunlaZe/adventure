@@ -1454,7 +1454,7 @@ let isEquipping = false; // Flag kiểm soát trạng thái
 
 async function equipBatch(data) {
     if (isEquipping) {
-        game_log("equipBatch is already running. Skipping.");
+       // game_log("equipBatch is already running. Skipping.");
         return;
     }
     isEquipping = true; // Đánh dấu đang chạy
@@ -2232,13 +2232,13 @@ setInterval(function() {
             if (item.name == "mpot1" ) {
                 // This is an item we want to use!
                     soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
+						// game_log("so luong  la "+soluongmp);
 
             }
             if (item.name == "hpot1" ) {
                 // This is an item we want to use!
                     soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
+						// game_log("so luong  la "+soluonghp);
 
             }				
 			}
