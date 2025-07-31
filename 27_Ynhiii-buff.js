@@ -295,16 +295,16 @@ if ((character.max_mp-character.mp) <300)use_skill("partyheal");
 if (character.hp < 2100 && character.mp > 100) {
      if(can_use("use_hp"))use_skill("use_hp");
 	        started = Date.now()
-	 game_log("use_hp");
+	// game_log("use_hp");
 } 
 else if (character.mp/character.max_mp < 0.9) {
 	  if(can_use("use_mp"))use_skill("use_mp");
 	        started = Date.now()
-	 game_log("use_mp");
+	// game_log("use_mp");
 }
   else if (character.max_mp>character.mp && can_use("use_mp") ) 
   {
-	  use_skill("regen_mp");      
+	 use_skill("regen_mp");      
 	started = Date.now();
 	  return
   }
@@ -1124,7 +1124,7 @@ let isEquipping = false; // Flag kiểm soát trạng thái
 
 async function equipBatch(data) {
     if (isEquipping) {
-        game_log("equipBatch is already running. Skipping.");
+      //  game_log("equipBatch is already running. Skipping.");
         return;
     }
     isEquipping = true; // Đánh dấu đang chạy
