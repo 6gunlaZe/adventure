@@ -832,21 +832,21 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 		    if(target1&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1.s["cursed"] )
             {
                 use_skill("curse", target1);
-				 game_log("curse - lowstart !!!!!!");
+				// game_log("curse - lowstart !!!!!!");
             }	
 
 	 	var target2= get_nearest_monster({type: "icegolem",});
 		    if(target2&& character.mp > 500 && !is_on_cooldown("curse") &&  !target2.s["cursed"] )
             {
                 use_skill("curse", target2);
-				 game_log("curse - lowstart !!!!!!");
+				// game_log("curse - lowstart !!!!!!");
             }		
 	
 	 	var target3= get_nearest_monster({type: "crabxx",});
 		    if(target3&& character.mp > 500 && !is_on_cooldown("curse") &&  !target3.s["cursed"] )
             {
                 use_skill("curse", target3);
-				 game_log("curse - lowstart !!!!!!");
+				// game_log("curse - lowstart !!!!!!");
             }		
 	
 	
@@ -854,14 +854,14 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" )
             {
                 use_skill("curse", target1xc);
-				 game_log("curse - low!!!!!!");
+				// game_log("curse - low!!!!!!");
             }
 
 	
 		    if(currentTarget&& character.mp > 500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance")
             {
                 use_skill("curse", currentTarget);
-				 game_log("curse - lowstart !!!!!!");
+				// game_log("curse - lowstart !!!!!!");
             }
 	
  if(currentTarget)chuyendoithongminh(currentTarget)	
