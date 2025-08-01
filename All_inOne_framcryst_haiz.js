@@ -491,6 +491,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 	backk = 0;
 	runn = 0;
 	// moveToZapperTarget()	// tạm ngưng đánh a4
+		moveToMosster() // move tới đánh quái gần chết khi bị ynhi hút
                 if (z > 50 && kitecheck == 0 && mobsInRange.length == 1 && untargetedMobs.length == 0){
 /////			
     const khung = [110, 100, 90, 80, 70, 60, 50];
@@ -717,6 +718,12 @@ function findNearestZ(toado, a, b) {
   }
 
   return nearestZ;
+}
+
+function moveToMosster() {
+    if (movesuper == 1) return;
+        const target = get_nearest_monster();
+        if (target && target.hp < 50000 && target.max_hp > 150000 && distance(character,target) >= character.range ) xmove(target.x, target.y); 
 }
 
 
