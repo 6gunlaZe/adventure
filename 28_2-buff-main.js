@@ -1251,7 +1251,7 @@ const equipmentSets = {
         { itemName: "spookyamulet", slot: "amulet", l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 0, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
     ],
     healmax: [
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
