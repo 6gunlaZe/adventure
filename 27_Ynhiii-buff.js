@@ -1216,6 +1216,7 @@ const equipmentSets = {
 	{ itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
     ],
     healmax: [
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
@@ -1259,7 +1260,7 @@ const equipmentSets = {
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
-
+        { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
     ],
 };
 
