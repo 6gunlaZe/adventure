@@ -185,7 +185,10 @@ dexbelt: {bank: "items6", level: -1, quantity: 1},
 strbelt: {bank: "items7", level: -1, quantity: 1},	
 cring: {bank: "items6", level: -1, quantity: 1},
 cearring: {bank: "items6", level: -1, quantity: 1},
-lostearring	: {bank: "items7", level: -1, quantity: 1},
+lostearring: {bank: "items7", level: -1, quantity: 1},
+ringsj: {bank: "items4", level: -1, quantity: 1},
+
+	
 };
 
 
