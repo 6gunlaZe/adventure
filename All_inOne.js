@@ -2889,7 +2889,7 @@ async function BosscheckHPMYSv11(monsters, HP) {
 
 async function checkCrabxx() {
 	const monsters = ["crabxx"];
-	const hpThreshold = 900000;
+	const hpThreshold = 930000;
 
 	const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
 	const response = await fetch(url);
