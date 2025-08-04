@@ -2887,6 +2887,47 @@ async function BosscheckHPMYSv11(monsters, HP) {
 
 
 
+async function checkCrabxx() {
+	const monsters = ["crabxx"];
+	const hpThreshold = 900000;
+
+	const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+	const response = await fetch(url);
+	if (response.status !== 200) return;
+
+	const data = await response.json();
+	const validObjects = data.filter(obj =>
+		obj.hp !== undefined &&
+		obj.hp < hpThreshold &&
+		obj.serverIdentifier != "PVP"
+	);
+
+	if (validObjects.length > 0) {
+		let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+		let sR = minHpObject.serverRegion;
+		let sI = minHpObject.serverIdentifier;
+
+		game_log("chuyen crabxx SV >>>> " + sR + sI);
+
+		let region = server.region;
+		let serverIden = server.id;
+
+		if (sI != "PVP" && !(sR == region && sI == serverIden)) {
+			change_server(sR, sI);
+		}
+	}
+}
+
+
+
+
+
+setInterval(() => {
+	checkCrabxx();
+}, 90000); // kiểm tra mỗi 30 giây
+
+
+
 // Check now, and every 10p
 setInterval(() => {
 	checkServersForMonsters(["franky"] ,["icegolem"] );
