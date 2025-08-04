@@ -939,7 +939,7 @@ function scare() {
 	    
 	        if (!current || current.type !== "monster") continue; //fix loi
 
-        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 105 ) )  || character.hp < 6000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 105 ) )  || character.hp < 5000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
