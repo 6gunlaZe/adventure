@@ -1935,7 +1935,7 @@ if ( events ) return
 let region = server.region;
 let serverIden = server.id
 
-if (!parent.S.franky && !parent.S.icegolem) //khong co su kien thi moi chuyen sv trở về nhà
+if (!parent.S.franky && !parent.S.icegolem && !parent.S.crabxx) //khong co su kien thi moi chuyen sv trở về nhà
 {
 if ( region == "EU" && serverIden == "II" ) 
 {
