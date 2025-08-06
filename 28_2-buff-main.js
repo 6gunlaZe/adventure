@@ -1240,7 +1240,7 @@ const equipmentSets = {
     nodeff: [
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
@@ -1260,7 +1260,7 @@ const equipmentSets = {
     ],
     fram: [
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
       //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
