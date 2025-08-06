@@ -1237,12 +1237,15 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+
     ],
     nodeff: [
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 7 },
@@ -1257,13 +1260,13 @@ const equipmentSets = {
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
     ],
     healmax: [
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
     ],
     fram: [
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
       //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1274,7 +1277,7 @@ const equipmentSets = {
     bossburn: [
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 2, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
@@ -1296,14 +1299,14 @@ const equipmentSets = {
     Unluck: [
         { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-
     ],
 };
+
 
 
 
