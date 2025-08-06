@@ -1237,7 +1237,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "coat", slot: "chest", level: 10, l: "l" },	  
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "test_orb", slot: "orb", level: 0, l: "l"},	    
+        { itemName: "orba", slot: "orb", level: 2, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     ],
     vatly: [
