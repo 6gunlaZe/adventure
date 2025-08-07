@@ -906,7 +906,56 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 
 
 
+async function handleZap() {
+    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy"];  // List of mobs to zap
+    const delay = 200;
+    let zap = true;
+    const dead = character.rip;
+	var haiz = get_player("haiz"); 
 
+    try {
+		// if (currentState === "looting") return;
+        if (!dead && zap && !smart.moving) {
+            // Scan all mobs that are in the zapperMobs list
+            const entities = Object.values(parent.entities).filter(entity =>
+                entity && entity.type === "monster" && !entity.target && entity.level < 4 &&
+                zapperMobs.includes(entity.mtype) &&
+                is_in_range(entity, "zapperzap") &&
+                entity.visible && !entity.dead
+            );
+            //console.log("Entities:", entities.length, entities.map(e => e.mtype));  // For debugging
+			/*
+            // Step 1: Equip the correct set based on mob presence
+            if (entities.length > 0 && character.cc < 175 && character.slots.ring2?.name !== "zapper") {
+                // Equip the zapOn set if there are zapable mobs
+                equipSet("zapOn");
+                //console.log("Equipped zapper set.");
+            } else if (entities.length === 0 && character.cc < 175 && character.slots.ring2?.name !== "ringofluck") {
+                // Equip the zapOff set if all mobs are targeted, dead, or invisible
+                equipSet("zapOff");
+                //console.log("Equipped luck ring set.");
+            }
+            */
+            // Step 2: Use zapper skill if conditions are met
+		if (character.targets <= 6 && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 )
+		{
+            if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > G?.skills?.zapperzap?.mp + 3250 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  ) {
+                for (const entity of entities) {
+                    if (!is_on_cooldown("zapperzap")) {
+                        await use_skill("zapperzap", entity);  // Zap the entity
+                        //console.log(`Zapped ${entity.mtype}`);
+                    }
+                }
+            }
+		}
+			
+        }
+    } catch (e) {
+        console.error(e);
+    }
+    setTimeout(handleZap, delay);
+}
+handleZap();
 
 
 
