@@ -167,7 +167,7 @@ gemfragment: {bank: "items5", level: -1, quantity: 1},
 fieldgen0: {bank: "items1", level: -1, quantity: 1},
 frankypants: {bank: "items1", level: -1, quantity: 1},
 harbringer: {bank: "items1", level: -1, quantity: 1},
-oozingterror: {bank: "items1", level: -1, quantity: 1},
+bcape: {bank: "items1", level: -1, quantity: 1},
 bowofthedead: {bank: "items1", level: -1, quantity: 1},
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
