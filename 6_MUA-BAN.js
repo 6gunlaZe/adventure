@@ -1905,14 +1905,14 @@ var combineWhitelist =
 	{
 		//ItemName, Max Level
 		lostearring: 2,
-		strearring: 4,
-		intearring: 4,
+		//strearring: 4,
+		//intearring: 4,
 		dexearring: 4,
 		skullamulet: 2,
-		dexring: 4,
+		//dexring: 4,
 		strring: 3,
 		dexamulet: 4,
-		intamulet: 4,
+		//intamulet: 4,
 		stramulet: 4,
 		ctristone:3,
 		dexbelt: 3,
