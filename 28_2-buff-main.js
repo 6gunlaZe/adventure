@@ -1412,12 +1412,12 @@ function scare() {
     const orb = character.items.findIndex(i => !i);
     let mobnum = 0;
     let targetedForMoreThanOneSecond = false;
-
+	    const a1 = get_nearest_monster({type: "a1"});
 // if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;  ///chỉ mở lại khi muốn kill a4
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
-        if ((   (current.mtype == 'zapper0' || current.mtype == 'a4' || current.mtype == 'nerfedbat' ) || character.hp < 4700 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((   (current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 125 ) ) || character.hp < 4700 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
