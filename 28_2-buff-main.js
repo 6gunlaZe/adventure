@@ -928,9 +928,19 @@ function avoidance() {
 		const target = get_target();
                 let check = !!target && !target.rip;
 
-           if(host && !smart.moving && check && distance(character, host) > 120 )xmove(host.real_x, host.real_y); // Move to current position (no goal used)
-	   else if (host && !smart.moving && !check )xmove(host.real_x, host.real_y);
-            lastMove = new Date();
+           if(host && !smart.moving && check && distance(character, host) > 120 ){
+			   xmove(host.real_x, host.real_y); // Move to current position (no goal used)
+			               lastMove = new Date();
+		   }
+	   else if (host && !smart.moving && !check ){
+		   xmove(host.real_x, host.real_y);
+		               lastMove = new Date();
+	   }
+	   else if (host && !smart.moving && new Date() - lastMove > 30000 ){
+		   xmove(host.real_x, host.real_y);
+		               lastMove = new Date();
+	   }
+			
         }
     }
 
