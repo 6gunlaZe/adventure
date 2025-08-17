@@ -951,6 +951,12 @@ else if (current.target == character.name &&
 
     }
 
+    // Kiểm tra nếu a1 còn quá xa, không dụ được về leader, không nên gọi scare
+    if (a1 && distance(character, a1) > 120 && leader && distance(leader, a1) > 105 && character.hp > 6000 ) {
+        return;  // Nếu a1 còn xa quá, không cần dùng scare
+    }
+	
+
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
         if (!is_on_cooldown("scare")) {
             setTimeout(() => {
