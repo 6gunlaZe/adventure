@@ -951,11 +951,7 @@ else if (current.target == character.name &&
 
     }
 
-    // Kiểm tra nếu a1 còn quá xa, không dụ được về leader, không nên gọi scare
-    if (a1 && distance(character, a1) > 80 && leader && distance(leader, a1) > 85 && character.hp > 4500 ) {
-        return;  // Nếu a1 còn xa quá, không cần dùng scare
-    }
-
+	
 if (a1) {
     game_log('distance(character, a1): ' + distance(character, a1).toFixed(0));
     game_log('distance(leader, a1): ' + (leader ? distance(leader, a1).toFixed(0) : 'no leader'));
@@ -963,9 +959,13 @@ if (a1) {
 } else {
     game_log('Không có a1');
 }
-
-
 	
+	
+    // Kiểm tra nếu a1 còn quá xa, không dụ được về leader, không nên gọi scare
+    if (a1 && distance(character, a1) > 80 && leader && distance(leader, a1) > 85 && character.hp > 4500 ) {
+        return;  // Nếu a1 còn xa quá, không cần dùng scare
+    }
+
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
         if (!is_on_cooldown("scare")) {
