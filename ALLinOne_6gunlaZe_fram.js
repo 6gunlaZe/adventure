@@ -956,16 +956,14 @@ else if (current.target == character.name &&
         return;  // Nếu a1 còn xa quá, không cần dùng scare
     }
 
-	if (a1)
-	{
-    game_log('distance(character, a1): ' + distance(character, a1));
-    game_log('distance(leader, a1): ' + (leader ? distance(leader, a1) : 'no leader'));
-    game_log('character.hp: ' + character.hp);
-	}
-	else
-	{
-		    game_log('Không có a1');
-	}
+if (a1) {
+    game_log('distance(character, a1): ' + distance(character, a1).toFixed(0));
+    game_log('distance(leader, a1): ' + (leader ? distance(leader, a1).toFixed(0) : 'no leader'));
+    game_log('character.hp: ' + character.hp.toFixed(0));
+} else {
+    game_log('Không có a1');
+}
+
 
 	
 
