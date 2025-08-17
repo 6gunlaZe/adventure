@@ -962,6 +962,10 @@ else if (current.target == character.name &&
     game_log('distance(leader, a1): ' + (leader ? distance(leader, a1) : 'no leader'));
     game_log('character.hp: ' + character.hp);
 	}
+	else
+	{
+		    game_log('Không có a1');
+	}
 
 	
 
