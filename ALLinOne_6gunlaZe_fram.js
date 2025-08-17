@@ -944,7 +944,7 @@ function scare() {
             targetedForMoreThanOneSecond = true;
         }
 else if (current.target == character.name && 
-         (current.mtype != 'nerfedbat' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 120)))
+         (current.mtype != 'nerfedbat' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 120)))  // lưu ý Ynhi có thể đã hút ago hết từ khi mình bắn super shot
 {
     mobnum++;    
 }
