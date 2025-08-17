@@ -545,7 +545,7 @@ else
 
 
 
-game_log("checkk checkback ==  "+ checkback);
+//game_log("checkk checkback ==  "+ checkback);
 
 	
 
@@ -604,7 +604,7 @@ checkkill = numberkilll
 }
 /////////////
 	
-game_log("ZZZ = !!!!!!  "+ z  );	
+//game_log("ZZZ = !!!!!!  "+ z  );	
 
 
 
@@ -873,7 +873,7 @@ function get_NUMber_kill(args) ///mod
 		
 	}
 	
-	game_log("Số lượng quái vật kill: " + monsterIds.length)
+	//game_log("Số lượng quái vật kill: " + monsterIds.length)
 
 	return monsterIds.length;
 }
@@ -1185,7 +1185,7 @@ if (checkdichuyen.plot && checkdichuyen.plot.some(p => p.x !== undefined && p.y 
   SM = 1;  // Nếu có ít nhất một điểm có vị trí x, y hợp lệ
 }
 
- game_log(SM)
+ //game_log(SM)
 	
 	
 if (SM === 1) {
@@ -1478,7 +1478,7 @@ function get_nearest_playerV(currentTarget)
 		if(!current.player) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
-	game_log("so luong nguoi choi kill boss la: " + target)
+	//game_log("so luong nguoi choi kill boss la: " + target)
 	return target;
 }
 
