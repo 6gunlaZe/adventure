@@ -939,32 +939,18 @@ function scare() {
 	    
 	        if (!current || current.type !== "monster") continue; //fix loi
 
-        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 105 ) )  || character.hp < 5000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
+        if ((  ( current.mtype == 'gpurplepro' || current.mtype == 'zapper0' || current.mtype == 'a4' || (current.mtype == 'nerfedbat' && leader && a1 && distance(leader, a1) < 125 ) )  || character.hp < 5000 || (smart.moving && character.map != "crypt") ) && current.target == character.name) {
             mobnum++;
             targetedForMoreThanOneSecond = true;
         }
 else if (current.target == character.name && 
-         (current.mtype != 'nerfedbat' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 100)))
+         (current.mtype != 'nerfedbat' || (current.mtype == 'nerfedbat' && a1 && distance(character, a1) < 120)))
 {
     mobnum++;    
 }
 
     }
 
-	
-if (a1) {
-    game_log('distance(character, a1): ' + distance(character, a1).toFixed(0));
-    game_log('distance(leader, a1): ' + (leader ? distance(leader, a1).toFixed(0) : 'no leader'));
-    game_log('character.hp: ' + character.hp.toFixed(0));
-} else {
-    game_log('Không có a1');
-}
-	
-	
-    // Kiểm tra nếu a1 còn quá xa, không dụ được về leader, không nên gọi scare
-    if (a1 && distance(character, a1) > 80 && leader && distance(leader, a1) > 85 && character.hp > 4500 ) {
-        return;  // Nếu a1 còn xa quá, không cần dùng scare
-    }
 
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
