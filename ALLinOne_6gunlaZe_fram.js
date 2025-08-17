@@ -952,7 +952,7 @@ else if (current.target == character.name &&
     }
 
     // Kiểm tra nếu a1 còn quá xa, không dụ được về leader, không nên gọi scare
-    if (a1 && distance(character, a1) > 100 && leader && distance(leader, a1) > 105 && character.hp > 5000 ) {
+    if (a1 && distance(character, a1) > 80 && leader && distance(leader, a1) > 85 && character.hp > 4500 ) {
         return;  // Nếu a1 còn xa quá, không cần dùng scare
     }
 	
