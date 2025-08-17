@@ -1607,6 +1607,10 @@ const equipmentSets = {
         { itemName: "hhelmet", slot: "helmet", level: 7, },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
         { itemName: "lantern", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "t2stramulet", slot: "amulet", level: 3, l: "l"},
+
+		
     ],
     def_physical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
@@ -1614,15 +1618,20 @@ const equipmentSets = {
         { itemName: "hhelmet", slot: "helmet", level: 7, },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
+
     ],
     deff: [
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
+		
     ],
     nodeff: [
         { itemName: "mittens", slot: "gloves", level: 9, },
         { itemName: "fury", slot: "helmet", level: 4, },
         { itemName: "mcape", slot: "chest", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 4, l: "l" },
+        { itemName: "snring", slot: "amulet", level: 1, l: "l"},
 
 	    
     ],
