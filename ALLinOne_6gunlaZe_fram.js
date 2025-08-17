@@ -955,6 +955,14 @@ else if (current.target == character.name &&
     if (a1 && distance(character, a1) > 80 && leader && distance(leader, a1) > 85 && character.hp > 4500 ) {
         return;  // Nếu a1 còn xa quá, không cần dùng scare
     }
+
+	if (a1)
+	{
+    game_log('distance(character, a1): ' + distance(character, a1));
+    game_log('distance(leader, a1): ' + (leader ? distance(leader, a1) : 'no leader'));
+    game_log('character.hp: ' + character.hp);
+	}
+
 	
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
