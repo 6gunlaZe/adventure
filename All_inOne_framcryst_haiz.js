@@ -368,7 +368,7 @@ if (character.hp < 5000 ||  character.esize < 3 )parent.api_call("disconnect_cha
 if (character.rip && z < 250 ){
 	z = 250
 let toke21n = key_auto;  // Thay bằng token của bạn
-if (landaucheck == 0)ghichu(character.in, "14",toke21n)
+if (landaucheck == 0)ghichu(character.in, "full - 14",toke21n)
 	parent.api_call("disconnect_character", {name: "haiz"});
 }
 	
@@ -418,7 +418,7 @@ if (nguyehiemmmm.length >= 1 && character.hp < 7500)
 if (nguyehiemmmm.length >= 1 )
 {
 let toke21n1 = key_auto;  // Thay bằng token của bạn
-ghichu(character.in, "15",toke21n1)
+ghichu(character.in, "nguy hiem 15",toke21n1)
 }	
 
 const dangerNearby = (() => {
