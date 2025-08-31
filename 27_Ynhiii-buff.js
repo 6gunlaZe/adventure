@@ -851,14 +851,14 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 	
 	
 	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 1
-		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" )
+		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 30000 )
             {
                 use_skill("curse", target1xc);
 				// game_log("curse - low!!!!!!");
             }
 
 	
-		    if(currentTarget&& character.mp > 500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance")
+		    if(currentTarget&& character.mp > 500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 )
             {
                 use_skill("curse", currentTarget);
 				// game_log("curse - lowstart !!!!!!");
