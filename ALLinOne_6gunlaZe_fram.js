@@ -51,7 +51,11 @@ const locations = {
   { type: "farm", x: 400, y: -2650, map: "winterland" },
   { type: "safe", x: 400, y: -2450, map: "winterland" }
     ],
-    wolfie: [{ x: 113, y: -2014 }],
+    wolfie: [
+  { type: "farm", x: 62, y: -1974, map: "winterland" },
+  { type: "safe", x: -2, y: -1799, map: "winterland" }
+    ],
+	
     xscorpion: [{ x: -495, y: 685 }],
     odino: [
   { type: "farm", x: -20, y: 675, map: "mforest" },
@@ -60,7 +64,7 @@ const locations = {
 
 };
 
-const home = 'wolf';
+const home = 'wolfie';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
