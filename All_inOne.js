@@ -6,7 +6,6 @@ const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
     bscorpion: [{ x: -408, y: -1241 }],
-    boar: [{ x: 19, y: -1109 }],
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
@@ -14,6 +13,10 @@ const locations = {
     ghost: [
   { type: "farm", x: -400, y: -1650 },
   { type: "safe", x: -84, y: -1428 }
+    ],
+    boar: [
+  { type: "farm", x: -17, y: -1108, map: "winterland" },
+  { type: "safe", x: 6, y: -855, map: "winterland" }
     ],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
@@ -53,7 +56,7 @@ const locations = {
 
 };
 
-const home = 'wolfie';
+const home = 'boar';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
