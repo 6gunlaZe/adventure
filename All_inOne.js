@@ -2351,10 +2351,49 @@ function lootAllChests() {
 
 
 //////////////
-
-
 let checktimeparty = 0
 let partychecktime
+
+function autoPartyCheck(f1name, f2name, interval = 60000) {
+    // Lần chạy đầu tiên: set mốc thời gian
+    if (checktimeparty === 0) {
+        partychecktime = Date.now();
+        checktimeparty = 1;
+    }
+
+    // Mỗi interval ms mới chạy
+    if (Date.now() > partychecktime + interval) {
+        partychecktime = Date.now();
+
+        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe'];
+        const characterData = [
+            ["6gunlaZe", 33],
+            ["Ynhi", 27],
+            ["nhiY", 12],
+        ];
+
+        // Stop các char không phải f1/f2
+        playerNames.forEach(name => {
+            if (name !== f1name && name !== f2name) {
+                stop_character(name);
+            }
+        });
+
+        // Start lại char nếu là f1/f2 mà chưa có trong party_list
+        characterData.forEach(([name, level]) => {
+            if (name === f1name || name === f2name) {
+                if (!parent.party_list.includes(name)) {
+                    start_character(name, level);
+                }
+            }
+        });
+    }
+}
+
+
+
+//////////////
+
 function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
               Now_is_gobalevenrun = true
@@ -2446,40 +2485,7 @@ parent.api_call("disconnect_character", {name: "haiz"});
 }
 }	    
 ////////////////////////////////
-if ( checktimeparty == 0)
-{
-partychecktime = Date.now()
-checktimeparty = 1	
-}
-
-if (Date.now() > partychecktime + 60000){
-partychecktime = Date.now()
-const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe'];
-// Duyệt mảng và kiểm tra tên
-playerNames.forEach(name => {
-    if (name !== f1name && name !== f2name) {
-        stop_character(name);
-    }
-	});
-
-// checktimeparty = 0
-
-const characterData = [
-    ["6gunlaZe", 33],
-    ["Ynhi", 27],
-    ["nhiY", 12],
-];
-
-// Duyệt qua mảng characterData và kiểm tra nếu tên không có trong party_list
-characterData.forEach(([name, level]) => {
-	 if (name == f1name || name == f2name){
-    if (!parent.party_list.includes(name)) {
-        start_character(name, level);
-    }
-	 }
-});
-	
-}
+autoPartyCheck(f1name, f2name, 60000);
 //////////hút quái nếu đồng minh bị dí
 
 var targetf1	
