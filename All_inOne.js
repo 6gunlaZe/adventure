@@ -635,6 +635,8 @@ function framtaygame() {
 
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
+	
+autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime === null) {
