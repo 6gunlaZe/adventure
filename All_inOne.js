@@ -925,9 +925,11 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 
 function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
-		autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 
     if (parent?.S?.[eventType]) {
+		
+		autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+		
 	    if (callnguoi < 200)
 	    {
 		    send_cm("MuaBan",eventType)
