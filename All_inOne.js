@@ -273,8 +273,14 @@ function handleEvents() {
 */
 
 
+let startPartyCheckAt = Date.now() + 100000; // mốc 100s sau khi chạy
 
 async function handleHome() {
+
+    if (Date.now() >= startPartyCheckAt) { //để đảm bảo các logic check quái khác lúc đầu hoạt động bình thường
+        autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+    }
+	
     if (smart.moving) return;
     const tank = get_player("Ynhi");
 
@@ -508,6 +514,7 @@ function framXmage() {
 
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
+	autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 	
 if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
 	send_cm("6gunlaZe","mage")	
@@ -812,6 +819,9 @@ function getBossInfo(bossvip) {
 let bossvipWaitStart = 0; // Biến toàn cục, reset sau 2 phút nếu không thấy boss
 
 async function VIPBosses() {
+	
+	autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+	
     if (smart.moving || !bossvip) return;
 
     const info = getBossInfo(bossvip); // Lấy thông tin boss từ ID
@@ -1967,10 +1977,13 @@ if ( region == "EU" && serverIden == "I" )
 
 if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
 	
-if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	
-/////////////////	
+/////////////////	 ///tạm ngưng check cái này vì đã gọi check mỗi sự kiện khác nhau
+/*	
+if(!parent.party_list.includes("6gunlaZe") ) start_character("6gunlaZe", 33);
+
+	
 if (modeYnhi == 0 && prolive == 0)	 
 {
 if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
@@ -1983,9 +1996,10 @@ else if  (modeYnhi == 2 && prolive == 0)
 {
 if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
 }
+*/	
+///////////////
 
-
-}, 100000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login
+}, 100000); //40s trieu hoi 1 lan neu ko thay trong party, phai cho delay login 
 
 
 
