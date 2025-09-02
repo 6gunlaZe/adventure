@@ -605,7 +605,7 @@ const equipmentSets = {
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     heal: [
-        { itemName: "cupid", slot: "mainhand", level: 7, },
+        { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
     ],
     shot5: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
