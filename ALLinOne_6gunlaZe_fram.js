@@ -616,7 +616,8 @@ const equipmentSets = {
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
     franky: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
