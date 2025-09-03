@@ -825,7 +825,7 @@ let bossvipWaitStart = 0; // Biến toàn cục, reset sau 2 phút nếu không 
 
 async function VIPBosses() {
 	
-	autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+	autoPartyCheck(f1111, "6gunlaZe", 60000);
 	
     if (smart.moving || !bossvip) return;
 
