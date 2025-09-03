@@ -245,7 +245,7 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
-const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY"];
+const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
@@ -256,7 +256,10 @@ async function attackLoop() {
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
      const healerr = get_player("Ynhi");
+    const f1112 = get_player(f1111);
 
+
+	
 	let codame = true;
 if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
     codame = false;
@@ -291,7 +294,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 
 	 
-            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
+            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
 		weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
@@ -451,7 +454,7 @@ function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false)
 		for (let id in parent.party_list) {
 			let member = parent.party_list[id];
 			let entity = parent.entities[member];
-                        if (member === "MuaBan" || member === "6gunlaZe") continue; // ❌ Bỏ qua nếu là MuaBan hoặc 6gunlaZe
+                        if (member === "MuaBan" || member === "tienV") continue; // ❌ Bỏ qua nếu là MuaBan hoặc tienV vì không thể tự heal chính mình
 			if (member === character.name) entity = character;
 
 			if (entity && distance(character, entity) < character.range) {
@@ -1066,7 +1069,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 	{
 		var current=parent.entities[id];
 		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV"   ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
 	game_log("so luong nguoi choi kill boss la: " + target)
@@ -1271,7 +1274,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -1285,8 +1288,8 @@ const PVPInRange = Object.values(parent.entities)    //trả về các đối t�
 if(PVPInRange.length >= 1)
 {
 send_cm("haiz","stop")
-parent.api_call("disconnect_character", {name: "6gunlaZe"});
-stop_character("6gunlaZe")	
+parent.api_call("disconnect_character", {name: "tienV"});
+stop_character("tienV")	
 }
 
 
