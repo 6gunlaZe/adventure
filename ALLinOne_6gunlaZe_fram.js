@@ -256,7 +256,10 @@ async function attackLoop() {
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
      const healerr = get_player("Ynhi");
+    const f1112 = get_player(f1111);
 
+
+	
 	let codame = true;
 if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
     codame = false;
@@ -291,7 +294,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 
 	 
-            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
+            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
 		weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
