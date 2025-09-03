@@ -1335,7 +1335,7 @@ function Handelbossvip() {
     const info = bossVipInfo[bossvip];
     if (!info) return;
 
-    const f1 = get_player("Ynhi");
+    const f1 = get_player(f1111);
     const f2 = get_player("haiz");
 
     const target = get_target();
