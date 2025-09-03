@@ -1887,7 +1887,7 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
 
 
 
-let modeYnhi = 1 ///1 = Ynhi //2 = haiz1 // 0 == nhiY
+let modeYnhi = 2 ///1 = Ynhi //2 = tienV // 0 == nhiY
 let banktime 
 let bosstime = 0 
 let timekillboss
@@ -1932,7 +1932,7 @@ if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);
 }
 else if  (modeYnhi == 2)
 {
-if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);	
+if(!parent.party_list.includes("tienV")) start_character("tienV", 29);	
 }
 	  
   }
