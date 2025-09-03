@@ -398,7 +398,7 @@ if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && 
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -833,6 +833,8 @@ async function VIPBosses() {
     if (!info) return;
 
     send_cm("6gunlaZe", `bossvip${bossvip}`);
+	    send_cm("tienV", `bossvip${bossvip}`);
+
 
     // Tìm quái chưa có target
     const targetless = Object.values(parent.entities).find(mob =>
@@ -983,7 +985,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
 
 
-const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY"];
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV"];
 
 
 async function attackLoop() {
