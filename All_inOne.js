@@ -77,6 +77,11 @@ let angle = 0;
 const speed = 3; // normal 2 or .65
 let events = false;
 
+const f1111 = 'Ynhi';
+const f2222 = '6gunlaZe';
+
+
+
 const harpyRespawnTime = 410000; //400 seconds
 let harpyActive = false;
 const skeletorRespawnTime = 1151954; // Example time, adjust as needed
@@ -278,7 +283,7 @@ let startPartyCheckAt = Date.now() + 100000; // mốc 100s sau khi chạy
 async function handleHome() {
 
     if (Date.now() >= startPartyCheckAt) { //để đảm bảo các logic check quái khác lúc đầu hoạt động bình thường
-        autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+    autoPartyCheck(f1111, f2222, 60000);
     }
 	
     if (smart.moving) return;
@@ -928,8 +933,8 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
     if (parent?.S?.[eventType]) {
 		
-		autoPartyCheck("Ynhi", "6gunlaZe", 60000);
-		
+		    autoPartyCheck(f1111, f2222, 60000);
+
 	    if (callnguoi < 200)
 	    {
 		    send_cm("MuaBan",eventType)
