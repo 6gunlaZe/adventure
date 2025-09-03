@@ -615,9 +615,11 @@ const equipmentSets = {
 { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     def_fire: [
-{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },    ],
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },   
+	],
     orb: [
-        { itemName: "orbofdex", slot: "orb", level: 3, l: "l" }
+     //  { itemName: "orbofdex", slot: "orb", level: 3, l: "l" },
+		{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },   
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 12, l: "s" }
