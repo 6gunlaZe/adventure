@@ -291,10 +291,10 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 
 	 
-            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 63000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
+            if( (leader && leader.hp < 95000) || (healerr && healerr.hp < 63000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
 		weaponSet("heal");
 
-let healTargets = lowest_health_partymember(0.9, true);
+let healTargets = lowest_health_partymember(10.9, true);
 if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
 	 if(!codame)await use_skill("3shot", healTargets.slice(0, 3));
 	delay = ms_to_next_skill("attack");  
