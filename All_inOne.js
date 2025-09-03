@@ -1872,7 +1872,7 @@ use_hp_or_mp1()
 /////////////////////////////////////////////////////
 
 function on_party_request(name) {
-if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal") {
+if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal" || name == "tienV") {
             accept_party_request(name);
         }
         if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
@@ -2649,7 +2649,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 	{
 		var current=parent.entities[id];
 		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV"   ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
 	//game_log("so luong nguoi choi kill boss la: " + target)
