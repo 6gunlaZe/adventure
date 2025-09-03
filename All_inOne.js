@@ -1141,7 +1141,7 @@ async function skillLoop() {
         const zapperMobs = ["plantoid"];
         const stMaps = ["", "winter_cove", "arena", "",];
         const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland","tomb","crypt","cyberland"];
-        let tank = get_entity("Ynhi");
+        let tank = get_entity(f1111);
 	     let f1 = get_entity("6gunlaZe");
 
         if (character.ctype === "warrior") {
