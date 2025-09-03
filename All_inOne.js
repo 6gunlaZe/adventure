@@ -2393,10 +2393,11 @@ function autoPartyCheck(f1name, f2name, interval = 60000) {
     if (Date.now() > partychecktime + interval) {
         partychecktime = Date.now();
 
-        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe'];
+        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe', 'tienV'];
         const characterData = [
             ["6gunlaZe", 33],
             ["Ynhi", 27],
+            ["tienV", 45],
             ["nhiY", 12],
         ];
 
