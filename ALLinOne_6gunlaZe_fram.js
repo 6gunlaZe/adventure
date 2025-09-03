@@ -291,7 +291,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 
 	 
-            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
+            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 63000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7)  ){
 		weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
@@ -451,7 +451,7 @@ function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false)
 		for (let id in parent.party_list) {
 			let member = parent.party_list[id];
 			let entity = parent.entities[member];
-                        if (member === "MuaBan" || member === "6gunlaZe") continue; // ❌ Bỏ qua nếu là MuaBan hoặc 6gunlaZe
+                        if (member === "MuaBan" || member === "6gunlaZe11") continue; // ❌ Bỏ qua nếu là MuaBan hoặc 6gunlaZe
 			if (member === character.name) entity = character;
 
 			if (entity && distance(character, entity) < character.range) {
