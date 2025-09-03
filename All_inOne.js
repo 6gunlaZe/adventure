@@ -77,7 +77,7 @@ let angle = 0;
 const speed = 3; // normal 2 or .65
 let events = false;
 
-const f1111 = 'Ynhi';
+const f1111 = 'Ynhi';  ///tank fram haiz check f1 có mới ra chỗ fram 
 const f2222 = '6gunlaZe';
 
 
@@ -287,7 +287,7 @@ async function handleHome() {
     }
 	
     if (smart.moving) return;
-    const tank = get_player("Ynhi");
+    const tank = get_player(f1111);
 
     // 🩸 Nếu máu thấp thì disconnect
     if (character.hp < 4000 && !character.rip) {
