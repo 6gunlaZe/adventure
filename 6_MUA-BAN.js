@@ -591,8 +591,11 @@ function on_cm(name, data) {
 
 	}
 
- if(name == "haiz" && data != "mp" && data != "hp" && data != "full")send_cm("6gunlaZe",data)
+ if(name == "haiz" && data != "mp" && data != "hp" && data != "full"){
+	 send_cm("6gunlaZe",data)
+	 	 send_cm("tienV",data)
 
+ }
 
 	
 	
@@ -704,13 +707,13 @@ function on_cm(name, data) {
 	
 /////////////////////	
 /////////////////////		
-	    if(name == "haiz1")
+	    if(name == "tienV")
 	{
        if(data == "full") {
 		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
 		   {
-    smart_move(parent.party["haiz1"]); 
-			   game_log("go haiz1 !!!!!!");
+    smart_move(parent.party["tienV"]); 
+			   game_log("go tienV !!!!!!");
              vanchuyen = 1
 			   		 vanchuyenbank += 1
 		   }
@@ -720,7 +723,7 @@ function on_cm(name, data) {
 	
 	
 	
-	    if(name == "haiz1")
+	    if(name == "tienV")
 	{
        if(data == "hp") {
 		   if (vanchuyen == 0 && checktui == 0)
@@ -729,8 +732,8 @@ function on_cm(name, data) {
   checkbuyhp();
     });		   
 			   
-    smart_move(parent.party["haiz1"]); 
-			   game_log("go haiz1 !!!!!!");
+    smart_move(parent.party["tienV"]); 
+			   game_log("go tienV !!!!!!");
              vanchuyen = 1
 			   vanchuyenHPMP = 5
 		   }
@@ -742,8 +745,8 @@ function on_cm(name, data) {
   checkbuymp();
     });		   
 			   
-    smart_move(parent.party["haiz1"]); 
-			   game_log("go haiz1 !!!!!!");
+    smart_move(parent.party["tienV"]); 
+			   game_log("go tienV !!!!!!");
              vanchuyen = 1
 			   vanchuyenHPMP = 5
 		   }
@@ -790,7 +793,7 @@ setInterval(function() {
 	let lootMule21 = get_player("nhiY");
 	let lootMule31 = get_player("haiz");
 	let lootMule41 = get_player("Ynhi");
-	let lootMule51 = get_player("haiz1");
+	let lootMule51 = get_player("tienV");
 
 	
 
@@ -1016,7 +1019,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -2081,7 +2084,7 @@ setInterval(function() {
 	let lootMule2 = get_player("nhiY");
 	let lootMule3 = get_player("haiz");
 	let lootMule4 = get_player("Ynhi");
-	let lootMule5 = get_player("haiz1");
+	let lootMule5 = get_player("tienV");
 	
 	
 
