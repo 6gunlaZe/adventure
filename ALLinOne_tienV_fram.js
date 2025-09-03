@@ -590,48 +590,33 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
      singleAOE: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 7 },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     single: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 7 },
-	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     dead: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     boom: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        //{ itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     heal: [
-        { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "cupid", slot: "mainhand", level: 7, l: "l" },
     ],
     shot5: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
     franky: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
     ],
     def_fire: [
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
-    ],
+{ itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },    ],
     orb: [
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" }
+        { itemName: "orbofdex", slot: "orb", level: 3, l: "l" }
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 12, l: "s" }
