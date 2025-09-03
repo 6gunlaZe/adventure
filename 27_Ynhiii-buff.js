@@ -188,7 +188,7 @@ function on_cm(name, data) {
 
 
 /////////////////////		
-	    if(name == "haiz" || name == "6gunlaZe")
+	    if(name == "haiz" || name == "6gunlaZe" || name == "tienV")
 	{
        if(data == "bosshelp") {
 
@@ -796,7 +796,7 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
             score += 40;
         }
 
-        if (player.hp < 7000 || char_name == "6gunlaZe") {
+        if (player.hp < 7000 || char_name == "6gunlaZe" || char_name == "tienV") {
                 score += 50;
 		dungskill = true;
         }
@@ -971,7 +971,7 @@ handleZap();
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
