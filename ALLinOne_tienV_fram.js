@@ -294,7 +294,7 @@ const { targets, inRange: monstersInRangeList , characterRange:  monsterscharact
 
 
 	 
-            if( (leader && leader.hp < 9500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
+            if( (leader && leader.hp < 13500) || (healerr && healerr.hp < 6300) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
 		weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
