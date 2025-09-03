@@ -245,7 +245,7 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
-const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY"];
+const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
@@ -1069,7 +1069,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 	{
 		var current=parent.entities[id];
 		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV"   ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
 	game_log("so luong nguoi choi kill boss la: " + target)
@@ -1274,7 +1274,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
