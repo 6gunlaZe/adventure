@@ -804,8 +804,7 @@ setInterval(function() {
         return;
     }
 	
-	
-	
+if (smart.moving) return	
 	
 			
 if (lootMule11 != null) {
