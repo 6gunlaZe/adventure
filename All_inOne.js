@@ -1932,7 +1932,7 @@ if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);
 }
 else if  (modeYnhi == 2)
 {
-if(!parent.party_list.includes("tienV")) start_character("tienV", 29);	
+if(!parent.party_list.includes("tienV")) start_character("tienV", 45);	
 }
 	  
   }
