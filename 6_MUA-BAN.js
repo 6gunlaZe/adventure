@@ -1073,7 +1073,10 @@ function taskBoss() {
     // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 23 phút ===
     const elapsed25 = Math.floor(elapsed / 23);
     if (elapsed25 > lastBossvip12Time) {
-        const randomNum = Math.floor(Math.random() * 2) + 1;
+		
+       // const randomNum = Math.floor(Math.random() * 2) + 1;  /// random
+		const randomNum = 2;  /// mặc định 2, tắt stompy
+
 
         const doNext = () => {
             smart_move({ map: "main", x: -200, y: -110 }, open_stand);
