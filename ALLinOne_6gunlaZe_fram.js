@@ -1349,7 +1349,7 @@ function Handelbossvip() {
             if (
                 is_in_range(currentTarget1, "supershot") &&
                 character.mp > 500 &&
-                currentTarget1.hp > 10000 &&
+                currentTarget1.hp > 1 &&
                 !is_on_cooldown("supershot")
             ) {
                 use_skill("supershot", currentTarget1);
