@@ -1057,7 +1057,7 @@ function taskBoss() {
     const now = Date.now();
     const elapsed = (now - startTime) / 60000; // phút đã trôi qua
 
-    // === ⏱ Gọi bossvip3 tại phút 10 sau đăng nhập === ///đã xong nhiệm vụ đang tắt gọi boss3 mecamet khi có even lớn
+    // === ⏱ Gọi bossvip3 tại phút 10 sau đăng nhập === 
     const elapsed5 = Math.floor(elapsed / 10);
     if (elapsed5 > lastBossvip3Time && bossvip3Count < 1) {
         if (parent.party_list.includes("haiz")) {
@@ -1069,9 +1069,9 @@ function taskBoss() {
         return;
     }
 
-    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 23 phút ===
+    // === 🎲 Gọi bossvip1 hoặc bossvip2 mỗi 23 phút === ///đã xong nhiệm vụ đang tắt gọi boss
     const elapsed25 = Math.floor(elapsed / 23);
-    if (elapsed25 > lastBossvip12Time) {
+    if (elapsed25 > lastBossvip12Time && 1 > 2 ) {
 		
        // const randomNum = Math.floor(Math.random() * 2) + 1;  /// random
 		const randomNum = 2;  /// mặc định 2, tắt stompy
