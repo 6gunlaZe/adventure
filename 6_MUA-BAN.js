@@ -1135,7 +1135,7 @@ function timbosskill()
 		if (timboss1 == 4){
 		smart_move({ map: "halloween", x: -477, y: -389 }, () => {
  	var targetb= get_nearest_monster({type: "greenjr"});
-	if(targetb&& parent.party_list.includes("haiz") )send_cm(hostname,"boss8") 
+	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"boss8") 
 			timboss = Date.now()
 				smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
