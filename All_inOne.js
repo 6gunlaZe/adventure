@@ -12,7 +12,7 @@ const locations = {
     fireroamer: [{ x: 80, y: -830 }],
     ghost: [
   { type: "farm", x: -400, y: -1650 , map: "halloween" },
-  { type: "safe", x: -84, y: -1428 , map: "halloween" }
+  { type: "safe", x: -284, y: -1528 , map: "halloween" }
     ],
     boar: [
   { type: "farm", x: -17, y: -1108, map: "winterland" },
