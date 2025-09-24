@@ -25,7 +25,7 @@ const locations = {
     fireroamer: [{ x: -30, y: -800 }],
     ghost: [
   { type: "farm", x: -400, y: -1650 , map: "halloween" },
-  { type: "safe", x: -84, y: -1428 , map: "halloween" }
+  { type: "safe", x: -284, y: -1528 , map: "halloween" }
     ],
     gscorpion: [{ x: 390, y: -1422 }],
     iceroamer: [{ x: 823, y: -45 }],
