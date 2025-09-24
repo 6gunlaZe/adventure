@@ -11,8 +11,8 @@ const locations = {
     ent: [{ x: -420, y: -1960 }],
     fireroamer: [{ x: 80, y: -830 }],
     ghost: [
-  { type: "farm", x: -400, y: -1650 },
-  { type: "safe", x: -84, y: -1428 }
+  { type: "farm", x: -400, y: -1650 , map: "halloween" },
+  { type: "safe", x: -84, y: -1428 , map: "halloween" }
     ],
     boar: [
   { type: "farm", x: -17, y: -1108, map: "winterland" },
