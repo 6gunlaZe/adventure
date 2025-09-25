@@ -925,13 +925,6 @@ async function handleZap() {
                 is_in_range(entity, "zapperzap") &&
                 entity.visible && !entity.dead
             );
-
-            const entities1 = Object.values(parent.entities).filter(entity =>
-                entity && entity.type === "monster" && !entity.target &&
-                zapperMobs.includes(entity.mtype) &&
-                is_in_range(entity, "zapperzap") &&
-                entity.visible && !entity.dead
-            );
             //console.log("Entities:", entities.length, entities.map(e => e.mtype));  // For debugging
 			/*
             // Step 1: Equip the correct set based on mob presence
@@ -956,20 +949,6 @@ async function handleZap() {
                     }
                 }
             }
-			else if (entities1.length > 0 && entities.length == 0 && !is_on_cooldown("zapperzap") && character.targets == 0 && character.hp/character.max_hp > 0.85 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  )
-			{
-
-				
-for (const entity of entities1) {
-    if (!is_on_cooldown("zapperzap")) {
-        await use_skill("zapperzap", entity);  // Zap the first entity only
-        break; // Dừng sau khi đã dùng skill một lần
-    }
-}
-
-
-				
-			}
 		}
 			
         }
