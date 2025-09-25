@@ -77,7 +77,7 @@ let angle = 0;
 const speed = 3; // normal 2 or .65
 let events = false;
 
-const f1111 = 'tienV';  ///tank fram haiz check f1 có mới ra chỗ fram 
+const f1111 = 'Ynhi';  ///tank fram haiz check f1 có mới ra chỗ fram tienV
 const f2222 = '6gunlaZe';
 
 
