@@ -1887,7 +1887,7 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
 
 
 
-let modeYnhi = 2 ///1 = Ynhi //2 = tienV // 0 == nhiY
+let modeYnhi = 1 ///1 = Ynhi //2 = tienV // 0 == nhiY
 let banktime 
 let bosstime = 0 
 let timekillboss
