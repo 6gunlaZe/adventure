@@ -1364,7 +1364,7 @@ async function handleWarriorSkills(tank,f1) {
 
 
 
-const mobTypes = ["bat", "mole", "bigbird", "spider", "scorpion", "ghost", "wolf","boar"];
+const mobTypes = ["bat", "mole", "bigbird", "spider", "scorpion", "ghost1", "wolf","boar"];
 const mobsInRange = Object.values(parent.entities).filter(e =>
     mobTypes.includes(e.mtype) && e.level < 3 && // canh chỉnh level tùy theo quái mạnh yếu
     e.visible && !e.dead &&
