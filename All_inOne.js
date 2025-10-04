@@ -122,7 +122,7 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-               framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
+          //     framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
 		  //  framXmage()
 	} else if (bossvip > 0) {
             VIPBosses();
@@ -130,7 +130,7 @@ async function eventer() {
 
         } else {
            //safeawwait()
-		if (new Date().getHours() >= 6 && new Date().getHours() < 10 && locate_item("tombkey") !== -1)framtay = 1;
+		// if (new Date().getHours() >= 6 && new Date().getHours() < 10 && locate_item("tombkey") !== -1)framtay = 1;  ///tạm ngưng hầm ngục
 		handleHome();
         }
 	    
