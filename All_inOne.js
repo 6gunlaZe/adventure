@@ -2973,14 +2973,14 @@ async function checkCrabxx() {
 
 
 setInterval(() => {
-	checkCrabxx();
+//	checkCrabxx();  ///tạm ngưng
 }, 90000); // kiểm tra mỗi 30 giây
 
 
 
 // Check now, and every 10p
 setInterval(() => {
-	checkServersForMonsters(["franky"] ,["icegolem"] );
+ //	checkServersForMonsters(["franky"] ,["icegolem"] );  ///tạm ngưng
 
 }, 80000); // 60s check 1lan
 
