@@ -1941,16 +1941,17 @@ if(!parent.party_list.includes("tienV")) start_character("tienV", 45);
 ///////////////////////////
 
 
+let framjR = 0;
 
 setTimeout(function() {
-	if (parent.S.icegolem)return
+	if (parent.S.icegolem || framjR == 0 )return
 stop_character("6gunlaZe")
 start_character("nhiY", 12);	
 }, 10000); // 10000 milliseconds = 10 giây
 
 
 let intervalId = setInterval(function() {
-	if (parent.S.icegolem)return
+	if (parent.S.icegolem || framjR == 0 )return
     if (parent.party_list.includes("nhiY")) {
         send_cm("nhiY", "jr");
         clearInterval(intervalId);  // Dừng lại khi điều kiện đúng
