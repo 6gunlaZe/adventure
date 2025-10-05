@@ -44,8 +44,11 @@ const locations = {
     poisio: [{ x: -121, y: 1360 }],
     prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
     pppompom: [{ x: 292, y: -189 }],
-    plantoid: [{ x: -780, y: -387 }], // [{ x: -840, y: -340 }]
-    rat: [{ x: 6, y: 430 }],
+    plantoid: [
+  { type: "farm", x: -820, y: -400, map: "desertland" },
+  { type: "safe", x: -600, y: -180, map: "desertland" }
+    ],	
+	rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
     spider: [{ x: 1159, y: -154 }],
@@ -70,7 +73,7 @@ const locations = {
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'ghost';
+const home = 'plantoid';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
