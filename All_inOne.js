@@ -1899,7 +1899,7 @@ const Ten7MinutesInMs = 7 * 60 * 1000
 let bankk = 0
 let trieuhoi = 0
 
-
+let framjR = 0;
 
 setInterval(function() {
 	
@@ -1921,7 +1921,7 @@ if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
   if (trieuhoi == 0)
   {
 	  trieuhoi = 1
-//if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("6gunlaZe") && framjR == 0 ) start_character("6gunlaZe", 33);
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	  
 	  
@@ -1944,7 +1944,7 @@ if(!parent.party_list.includes("tienV")) start_character("tienV", 45);
 ///////////////////////////
 
 
-let framjR = 0;
+
 
 setTimeout(function() {
 	if (parent.S.icegolem || framjR == 0 )return
