@@ -850,8 +850,8 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
             }		
 	
 	
-	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 1
-		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 30000 )
+	var target1xc= get_nearest_monster1({comuctieu: 1 ,  nhonhat: 41000});  //nhonhat : 41000   lonnhat: 1
+		    if(target1xc&& character.mp > 500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 40000 )
             {
                 use_skill("curse", target1xc);
 				// game_log("curse - low!!!!!!");
@@ -1140,8 +1140,8 @@ function get_nearest_monster1(args)
 
         let c_dist = parent.distance(character, current);
 
-        // Tìm quái HP nhỏ nhất
-        if (args.nhonhat && current.hp < hpp) {
+        // Tìm quái HP nhỏ nhất nhưng lớn hơn giá trị đã đặt cho nhỏ nhất
+        if (args.nhonhat && current.hp < hpp && current.hp > args.nhonhat ) {
             hpp = current.hp;
             target = current;
             continue;
