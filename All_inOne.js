@@ -1632,7 +1632,7 @@ const equipmentSets = {
     ],
     home: [
         { itemName: "mittens", slot: "gloves", level: 9, },
-        { itemName: "fury", slot: "helmet", level: 4, },
+        { itemName: "fury", slot: "helmet", level: 7, },
     ],
     def_magical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
@@ -1661,7 +1661,7 @@ const equipmentSets = {
     ],
     nodeff: [
         { itemName: "mittens", slot: "gloves", level: 9, },
-        { itemName: "fury", slot: "helmet", level: 4, },
+        { itemName: "fury", slot: "helmet", level: 7, },
         { itemName: "mcape", slot: "chest", level: 8, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
