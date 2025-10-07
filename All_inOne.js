@@ -1151,7 +1151,7 @@ async function skillLoop() {
             try {
 				
 
-                if ( character.mp >= 170 && ( (f1 && f1.hp < f1.max_hp * 0.6 )  || (tank && tank.hp < tank.max_hp * 0.6 )  || (tank && tank.mp < 2500 && tank.ctype == "priest" )  || (tank && tank.mp < 5500 && tank.ctype == "priest" && character.mp > character.max_mp * 0.8  ) || character.hp < 12000 ) && character.map != "winter_instance"  ){
+                if ( character.mp >= 170 && ( (f1 && f1.hp < f1.max_hp * 0.6 )  || (tank && tank.hp < tank.max_hp * 0.6 )  || (tank && tank.mp < 4000 && tank.ctype == "priest" )  || (tank && tank.mp < 5500 && tank.ctype == "priest" && character.mp > character.max_mp * 0.8  ) || character.hp < 12000 ) && character.map != "winter_instance"  ){
                     //console.log("Calling handleStomp");
 					//game_log("1")
 
