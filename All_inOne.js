@@ -815,8 +815,8 @@ const bossData = {
     4: {
         name: "mrpumpkin",
         map: "halloween",
-        x: -161,
-        y: 769
+        x: -257,
+        y: 730
     },
     5: {
         name: "mrgreen",
@@ -873,7 +873,7 @@ async function VIPBosses() {
         bossvipWaitStart = 0;
 
 		//xác nhận thấy boss sắp chết
-		if (monster.hp < 20000)dathayboss = 1;
+		if (monster.hp < 50000)dathayboss = 1;
 
         if (monster.hp > 15000 && character.cc < 100) {
             equipSet("single");
@@ -883,12 +883,12 @@ async function VIPBosses() {
         }
     } else if (
         character.map === info.map &&
-        distance(character, { x: info.x, y: info.y }) <= 80 
+        distance(character, { x: info.x, y: info.y }) <= 100 
     ) {
 
 	    
 const teammate = get_player("6gunlaZe");
-const teammateNearby = teammate && distance(character, teammate) <= 50;
+const teammateNearby = teammate && distance(character, teammate) <= 80;
 
 if (teammateNearby) {
     game_log("❌ Không thấy boss nhưng 6gunlaZe đang ở gần → reset bossvip ngay.");
