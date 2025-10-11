@@ -1328,6 +1328,10 @@ const bossVipInfo = {
     1: { type: "stompy", map: "winterland", x: 434, y: -2557 },
     2: { type: "skeletor", map: "arena", x: 666, y: -555 },
     3: { type: "mechagnome", map: "cyberland", x: 0, y: 0 },
+    4: { type: "mrpumpkin", map: "halloween", x: -161, y: 769 },
+    5: { type: "mrgreen", map: "spookytown", x: 271, y: 1023 },
+
+	
     // Thêm boss mới ở đây
 };
 
@@ -1570,6 +1574,8 @@ if (name === "haiz") {
         bossvip1: () => { bossvip = 1; },
         bossvip2: () => { bossvip = 2; },
         bossvip3: () => { bossvip = 3; },
+        bossvip4: () => { bossvip = 4; },
+        bossvip5: () => { bossvip = 5; },		
         crabxx: () => { crab = 1; },
     };
 
