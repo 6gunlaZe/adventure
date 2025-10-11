@@ -1927,7 +1927,7 @@ var combineWhitelist =
 		wbookhs: 2,
 		cring: 3,
 		cearring: 3,
-		talkingskull: 3,
+		//talkingskull: 3,
 		t2intamulet: 2,
 		t2stramulet: 2,
 		t2dexamulet: 2,
