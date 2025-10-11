@@ -1209,7 +1209,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
     // === 1. Xác định danh sách quái vật "ưu tiên đặc biệt" ===
-    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx","a4"];
+    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx","a4","mrpumpkin","mrgreen"];
     const isPriorityMtype = (monster) => priorityMtypes.includes(monster.mtype);
 
     // === 2. Lọc tất cả các quái vật đang tấn công người trong party ===
@@ -1217,7 +1217,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
         .filter(monster =>
             monster.type === "monster" &&         // Chỉ lấy quái (loại entity là "monster")
             monster.target &&                     // Chỉ lấy quái đang có mục tiêu
-            targetNames.includes(monster.target)  // Mục tiêu đó phải là người trong party
+            (targetNames.includes(monster.target) || monster.cooperative === true )// Mục tiêu đó phải là người trong party hoặc quái vật dạng hợp tác
         )
 
         // === 3. Sắp xếp quái theo nhiều lớp ưu tiên ===
