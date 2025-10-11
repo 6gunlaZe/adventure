@@ -836,6 +836,7 @@ function getBossInfo(bossvip) {
 
 
 let bossvipWaitStart = 0; // Biến toàn cục, reset sau 2 phút nếu không thấy boss
+let dathayboss = 0 // biến xác nhận đánh boss
 
 async function VIPBosses() {
 	
@@ -871,6 +872,9 @@ async function VIPBosses() {
         // Có boss → reset thời gian chờ
         bossvipWaitStart = 0;
 
+		//xác nhận thấy boss sắp chết
+		if (monster.hp < 20000)dathayboss = 1;
+
         if (monster.hp > 15000 && character.cc < 100) {
             equipSet("single");
         } else if (character.cc < 100 && monster.target === character.name) {
@@ -879,7 +883,7 @@ async function VIPBosses() {
         }
     } else if (
         character.map === info.map &&
-        distance(character, { x: info.x, y: info.y }) <= 80
+        distance(character, { x: info.x, y: info.y }) <= 80 
     ) {
 
 	    
@@ -890,6 +894,7 @@ if (teammateNearby) {
     game_log("❌ Không thấy boss nhưng 6gunlaZe đang ở gần → reset bossvip ngay.");
     bossvip = 0;
     bossvipWaitStart = 0;
+	dathayboss = 0
     return;
 }
 
@@ -901,11 +906,20 @@ if (teammateNearby) {
             game_log("❌ Boss không xuất hiện sau 2 phút, reset bossvip.");
             bossvip = 0;
             bossvipWaitStart = 0;
+			dathayboss = 0
         }
     } else {
         // Không ở đúng vị trí → di chuyển tới boss
         bossvipWaitStart = 0;
-        if (!smart.moving) {
+
+		if (dathayboss == 1)
+		{
+			dathayboss = 0
+			bossvip = 0;
+		}
+
+		
+        if (!smart.moving && dathayboss == 0) {
             await smart_move({ map: info.map, x: info.x, y: info.y });
         }
     }
