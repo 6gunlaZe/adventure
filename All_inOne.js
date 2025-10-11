@@ -812,7 +812,18 @@ const bossData = {
         x: 0,
         y: 0
     },
-
+    4: {
+        name: "mrpumpkin",
+        map: "halloween",
+        x: -161,
+        y: 769
+    },
+    5: {
+        name: "mrgreen",
+        map: "spookytown",
+        x: 271,
+        y: 1023
+    },	
 	
     // Bạn có thể thêm boss khác vào đây dễ dàng
 };
