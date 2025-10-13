@@ -1664,7 +1664,7 @@ const equipmentSets = {
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
         { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
-        { itemName: "lantern", slot: "offhand", level: 3, l: "l" },
+        { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "t2stramulet", slot: "amulet", level: 3, l: "l"},
 
@@ -1696,7 +1696,7 @@ const equipmentSets = {
 
     single_Magic: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
-        { itemName: "lantern", slot: "offhand", level: 3, l: "l" },
+        { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
     ],
 
     single_physical: [
@@ -1708,7 +1708,7 @@ const equipmentSets = {
     ],
     def_fire: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
-        { itemName: "lantern", slot: "offhand", level: 3, l: "l" },
+        { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
         { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
         { itemName: "test_orb", slot: "orb", level: 0, l: "l" },
         { itemName: "hhelmet", slot: "helmet", level: 7, },
