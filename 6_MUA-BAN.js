@@ -2020,21 +2020,23 @@ var craftList = [ "intamulet","dexamulet","lantern","fallen","ink","cclaw","pmac
 function secondhands_handler(event) {
     for (const i in event) {
         const item = event[i];
-		///////////////
-			for(var index in craftList)
-	{
-		var craftName = craftList[index];
-	
-        if (item && item.name === craftName && character.esize > 10) {
-					game_log( craftName + " da mua !!!!!!");
-            parent.socket.emit("sbuy", {"rid": item.rid});
+		
+        // Kiểm tra level của item, chỉ xử lý nếu level < 1
+        const level = item?.level ? item.level : 0;		
+        if (level >= 1) continue;
+
+        for (var index in craftList) {
+            var craftName = craftList[index];
+			
+            // Kiểm tra tên item khớp và đủ chỗ trống
+            if (item && item.name === craftName && character.esize > 10) {
+                game_log(craftName + " da mua !!!!!!");
+                parent.socket.emit("sbuy", {"rid": item.rid});
+            }
         }
-		
-		
-	}
-		////////////////
     }
 }
+
 
 
 
