@@ -2023,7 +2023,7 @@ function secondhands_handler(event) {
 		
         // Kiểm tra level của item, chỉ xử lý nếu level < 1
         const level = item?.level ? item.level : 0;		
-        if (level >= 1) continue;
+        if (level >= 100) continue; // đang tắt chế độ lọc level cao cũng mua => vì level tính cả chi phí cuộn vào mà
 
         for (var index in craftList) {
             var craftName = craftList[index];
