@@ -2382,6 +2382,9 @@ if(character.map == "level2w" && character.hp < 2500  &&  !is_moving(character) 
 
 
 function crabxx() {
+
+return	//tạm ngưng
+	
 if (!parent.S.crabxx)crabxxmode = 0;	
 	
 if(vanchuyen == 0 && checktui == 0 && parent.S.crabxx &&  !is_moving(character) && !get_nearest_monster({type:'crabxx'}))
