@@ -1917,12 +1917,12 @@ var combineWhitelist =
 		//dexring: 4,
 		strring: 3,
 		dexamulet: 4,
-		//intamulet: 4,
-		stramulet: 4,
+		intamulet: 4,
+		//stramulet: 4,
 		ctristone:3,
 		dexbelt: 3,
 		intbelt: 3,
-		strbelt: 3,
+		//strbelt: 3,
 		orbg: 3,
 		wbookhs: 2,
 		cring: 3,
@@ -2013,7 +2013,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "lantern","fallen","ink","cclaw","pmace","dexamulet","stramulet","snowball","bowofthedead","pinkie","intbelt","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","strbelt","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "intamulet","dexamulet","lantern","fallen","ink","cclaw","pmace","snowball","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","intbelt","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
