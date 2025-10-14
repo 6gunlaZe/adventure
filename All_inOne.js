@@ -165,7 +165,7 @@ async function checkGameEvents() {
         let isEventValid = false;
         let procheck = false;
         if (event.type === 'specific') {
-		if (server.region == "US" && server.id == "II" )isEventValid = !!parent?.S?.[event.eventType];
+		if (server.region == "US" && server.id == "III" )isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
 		isEventValid = !!parent?.S?.[event.eventType]?.live;  
         } else if (event.type === 'pro') {
@@ -417,13 +417,13 @@ if(PVPInRange.length >= 1)
 
 let region = server.region;
 let serverIden = server.id
-if ( region == "US" && serverIden == "II" ) 
+if ( region == "US" && serverIden == "III" ) 
 {
 change_server("ASIA", "I");	
 }
 	else
 	{
-         change_server("US", "II");
+         change_server("US", "III");
 	}	
 }
 
@@ -2005,13 +2005,13 @@ let serverIden = server.id
 
 if (!parent.S.franky && !parent.S.icegolem && !parent.S.crabxx) //khong co su kien thi moi chuyen sv trở về nhà
 {
-if ( region == "US" && serverIden == "II" ) 
+if ( region == "US" && serverIden == "III" ) 
 {
 	game_log ("  SV  >>>>" + region + serverIden )
 }
 	else
 	{
-         if(character.hp > 8000)change_server("US", "II");
+         if(character.hp > 8000)change_server("US", "III");
 	//change_server("ASIA", "I");	
 	}
 }	
@@ -2082,11 +2082,11 @@ function waitForHPAndSwitch() {
         } else if (randomNumber > 20 && randomNumber < 30) {
             change_server("ASIA", "I");
         } else if (randomNumber > 30 && randomNumber < 60) {
-            change_server("US", "III");
+            change_server("US", "II");
         } else if (randomNumber > 60 && randomNumber < 80) {
             change_server("EU", "I");
         } else {
-            change_server("US", "II");
+            change_server("US", "III");
         }
     } else {
         game_log("Máu chưa đủ (" + character.hp + "). Đang chờ...");
@@ -2512,13 +2512,13 @@ if(eventType == "franky")
 if (eventType == "icegolem") {
 let region = server.region;
 let serverIden = server.id
-if ( region == "US" && serverIden == "II" ) 
+if ( region == "US" && serverIden == "III" ) 
 {
 change_server("ASIA", "I");	
 }
 	else
 	{
-         change_server("US", "II");
+         change_server("US", "III");
 	}
 }
 }
@@ -2528,13 +2528,13 @@ if(targetfk  && character.hp < 4500)
 if (eventType == "icegolem") {
 let region11 = server.region;
 let serverIden11 = server.id
-if ( region11 == "US" && serverIden11 == "II" ) 
+if ( region11 == "US" && serverIden11 == "III" ) 
 {
 change_server("ASIA", "I");	
 }
 	else
 	{
-         change_server("US", "II");
+         change_server("US", "III");
 	}
 }
 	else
