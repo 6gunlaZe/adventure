@@ -846,10 +846,11 @@ skillLoop();
 
 function handleSnowball() {
 	if(character.map != "crypt" && character.map != "tomb" && character.map != "winter_instance")return
-const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro"];
+const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","plantoid","jr","greenjr","mrgreen","mrpumpkin"];
 
 	    const leader = get_player("haiz");
-if ( (leader && leader.hp > 13000)  || !leader) return
+	const hoimau = get_player("Ynhi");
+if ( (leader && leader.hp > 13000 && hoimau && hoimau.hp > 10000 )  || !leader) return
 	
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
@@ -872,7 +873,7 @@ if ( (leader && leader.hp > 13000)  || !leader) return
       if (entity.mtype == "a7") continue;
       // Kiểm tra quái vật có bị đóng băng không
       if (entity.s["frozen"]) continue;
-      
+      if (entity.hp < 30000) continue; // máu quá ít cũng bỏ qua
       // Kiểm tra khoảng cách với quái vật có lớn hơn 200 không
       if (distance(character, entity) > 200) continue;
       
