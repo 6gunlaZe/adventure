@@ -2693,14 +2693,13 @@ async function moveLoop() {
     let delay = 1000;
     try {
 
-if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
+if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 500 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
 {
 	if (movesuper == 1)return	
 		xmove(
-			character.x+(gobaltaget.x-character.x)/2,
-			character.y+(gobaltaget.y-character.y)/2
+			gobaltaget.x,
+			gobaltaget.y
 			);
-		// Walk half the distance
 }
 else
 {
