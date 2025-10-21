@@ -907,7 +907,8 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 
 
 async function handleZap() {
-    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","crabx","hen","rooster","cutebee"];  // List of mobs to zap
+    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","crabx","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
+    const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion"];  // không quan tâm tới levl
     const delay = 200;
     let zap = true;
     const dead = character.rip;
@@ -920,8 +921,8 @@ async function handleZap() {
         if (!dead && zap && !smart.moving) {
             // Scan all mobs that are in the zapperMobs list
             const entities = Object.values(parent.entities).filter(entity =>
-                entity && entity.type === "monster" && !entity.target && entity.level < 4 &&
-                zapperMobs.includes(entity.mtype) &&
+                entity && entity.type === "monster" && !entity.target && 
+				( (entity.level < 4 && zapperMobs.includes(entity.mtype) )  ||  quaiyeu.includes(entity.mtype)  ) &&
                 is_in_range(entity, "zapperzap") &&
                 entity.visible && !entity.dead
             );
