@@ -141,8 +141,8 @@ setTimeout(eventer, 6000);
 
 
 
-
-const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
+const mode_follow_haiz = false;
+// const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
 
 async function handleHome() {
 if (smart.moving) return;
