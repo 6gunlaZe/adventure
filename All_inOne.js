@@ -1444,6 +1444,7 @@ else if (
     untargetedMobs.length > 0 &&
     !is_on_cooldown("taunt") &&
     tank && !tank.rip && tank.hp > 9500 &&
+	(  (tank.name == "Ynhi" &&  tank.mp < 3000 ) || tank.name != "Ynhi"    ) &&
     character.hp > 14000
 ) {
     const mob = untargetedMobs[0];
