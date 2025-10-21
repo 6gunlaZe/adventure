@@ -909,6 +909,7 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 async function handleZap() {
     const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","crabx","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
     const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion"];  // không quan tâm tới levl
+	const soluongTOIDA = 14; // thường quái mạnh để 8 thôi
     const delay = 200;
     let zap = true;
     const dead = character.rip;
@@ -940,7 +941,7 @@ async function handleZap() {
             }
             */
             // Step 2: Use zapper skill if conditions are met
-		if (character.targets <= 8 && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && gun )
+		if (character.targets <= soluongTOIDA && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && gun )
 		{
             if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > G?.skills?.zapperzap?.mp + 4550 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  ) {
                 for (const entity of entities) {
