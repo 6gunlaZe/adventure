@@ -328,7 +328,7 @@ async function handleHome() {
 
     // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm
         let center = locations[home][0];
-	const radius = 44;
+	const radius = 8;  //40
 
         const currentTime = performance.now();
         const deltaTime = currentTime - lastUpdateTime;
