@@ -52,7 +52,7 @@ const locations = {
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
     spider: [
-  { type: "farm", x: 1116, y: -72, map: "main" },
+  { type: "farm", x: 1297, y: -146, map: "main" },
   { type: "safe", x: 1290, y: -80, map: "main" }
     ],    squig: [{ x: -1175, y: 422 }],
     wolf: [
