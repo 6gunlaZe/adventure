@@ -41,7 +41,10 @@ const locations = {
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
     stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1290, y: -80 }],  // [{ x: 1180, y: -71 }], //vip3
+    spider: [
+  { type: "farm", x: 1290, y: -80, map: "main" },
+  { type: "safe", x: 1290, y: -80, map: "main" }
+    ],
     squig: [{ x: -1175, y: 422 }],
     wolf: [
   { type: "farm", x: 400, y: -2730, map: "winterland" },
@@ -59,7 +62,7 @@ const locations = {
 
 };
 
-const home = 'plantoid';
+const home = 'spider';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
