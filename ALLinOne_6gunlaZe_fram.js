@@ -288,7 +288,7 @@ if (healerr && distance(character, healerr) < 150 ) {
 
 var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
 	    if ( tagetskill.length == 1 && character.map != "winter_instance" )use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "boar", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
+var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
  var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
                                                                // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
 	    
