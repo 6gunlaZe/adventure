@@ -3017,6 +3017,13 @@ setInterval(() => {
 }, 80000); // 60s check 1lan
 
 
+setInterval(() => {
+ // checkServersForPumpkinGreen();
+}, 90000); // 90 giây kiểm tra 1 lần
+
+
+
+
 
 async function checkServersForMonsters(monsters,monsters1) {
   // Safety Checks
@@ -3126,7 +3133,93 @@ change_server(sR, sI);
  
 }
 
+/////////////////////////////////////////////////////
 
+async function checkServersForPumpkinGreen() {
+
+ if (events || framtay == 1) return	
+	
+  // Cấu hình ngưỡng HP riêng cho từng boss
+  const bossSettings = {
+    mrpumpkin: 35800000,   // ngưỡng HP tùy chỉnh
+    mrgreen: 35800000
+  };
+
+  // Danh sách boss cần kiểm tra
+  const bosses = Object.keys(bossSettings);
+
+  // Lưu danh sách server có boss phù hợp
+  let foundTargets = [];
+
+  // Kiểm tra từng boss
+  for (let boss of bosses) {
+    try {
+      const url = `https://aldata.earthiverse.ca/monsters/${boss}`;
+      const response = await fetch(url);
+      if (response.status !== 200) continue;
+
+      const data = await response.json();
+      const filtered = data.filter(obj =>
+        obj.hp !== undefined &&
+        obj.hp < bossSettings[boss] &&           // HP thấp hơn ngưỡng
+        obj.serverIdentifier !== "PVP"           // loại bỏ server PVP
+      );
+
+      if (filtered.length > 0) {
+        // chọn boss máu thấp nhất
+        const minHpObj = filtered.reduce((min, obj) => obj.hp < min.hp ? obj : min);
+        foundTargets.push({
+          name: boss,
+          hp: minHpObj.hp,
+          region: minHpObj.serverRegion,
+          server: minHpObj.serverIdentifier
+        });
+      }
+    } catch (e) {
+      game_log(`❌ Lỗi khi fetch dữ liệu boss ${boss}: ${e}`);
+    }
+  }
+
+  // Không tìm thấy boss phù hợp
+  if (foundTargets.length === 0) {
+    game_log("🌀 Không có boss phù hợp để chuyển.");
+    return;
+  }
+
+  // Ưu tiên theo vị trí hiện tại: nếu gần xscorpion thì chọn mrpumpkin trước
+  let nearScorpion = false;
+  const scorpion = get_nearest_monster({ type: "xscorpion" });
+  if (scorpion && distance(character, scorpion) < 1000) {
+    nearScorpion = true;
+  }
+
+  let targetBoss;
+  if (nearScorpion) {
+    targetBoss =
+      foundTargets.find(t => t.name === "mrpumpkin") ||
+      foundTargets[0];
+  } else {
+    // nếu không gần xscorpion, chọn boss HP thấp nhất
+    targetBoss = foundTargets.reduce((min, t) => t.hp < min.hp ? t : min);
+  }
+
+  // Nếu server khác server hiện tại thì chuyển
+  const currentRegion = server.region;
+  const currentId = server.id;
+
+  if (targetBoss.server !== "PVP" &&
+      !(targetBoss.region === currentRegion && targetBoss.server === currentId)) {
+    game_log(`🚀 Chuyển sang server ${targetBoss.region}${targetBoss.server} để săn ${targetBoss.name}`);
+    change_server(targetBoss.region, targetBoss.server);
+  } else {
+    game_log(`✅ Đã ở đúng server có ${targetBoss.name}`);
+  }
+}
+
+
+
+
+///////////////////////////////////////////////////////
 
 let check_ice = 0
 async function ICEcheckHPMYSv(monsters,HP) {
