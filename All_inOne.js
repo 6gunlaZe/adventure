@@ -3266,15 +3266,24 @@ async function checkServersForPumpkinGreen() {
     nearScorpion = true;
   }
 
-  let targetBoss;
-  if (nearScorpion) {
-    targetBoss =
-      foundTargets.find(t => t.name === "mrpumpkin") ||
-      foundTargets[0];
-  } else {
-    // nếu không gần xscorpion, chọn boss HP thấp nhất
-    targetBoss = foundTargets.reduce((min, t) => t.hp < min.hp ? t : min);
-  }
+
+ let targetBoss;
+	
+// 1. Ưu tiên boss đang ở server home US III
+const homeServer = foundTargets.find(t => t.region === "US" && t.server === "III");
+
+if (homeServer) {
+  targetBoss = homeServer;
+} else if (nearScorpion) {
+  // 2. Nếu gần Scorpion, ưu tiên MrPumpkin
+  targetBoss =
+    foundTargets.find(t => t.name === "mrpumpkin") ||
+    foundTargets[0];
+} else {
+  // 3. Nếu không gần Scorpion, chọn boss HP thấp nhất
+  targetBoss = foundTargets.reduce((min, t) => t.hp < min.hp ? t : min);
+}
+
 
   // Nếu server khác server hiện tại thì chuyển
   const currentRegion = server.region;
