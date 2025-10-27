@@ -1936,7 +1936,7 @@ var combineWhitelist =
 		orbofdex: 1,
 		orbofint: 1,
 		orba: 1,
-		ringsj: 4,
+		//ringsj: 4,
 
 
 		
