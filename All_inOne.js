@@ -3212,7 +3212,7 @@ setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000);
 
 async function checkServersForPumpkinGreen() {
 
- if (events || framtay == 1 || bossIncoming == 1 ) return	
+ if (events || framtay == 1 || bossIncoming == 1 || bossvip > 0 ) return	
 	
   // Cấu hình ngưỡng HP riêng cho từng boss
   const bossSettings = {
