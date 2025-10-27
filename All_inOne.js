@@ -158,6 +158,7 @@ async function checkGameEvents() {
     const events1 = [
        // { eventType: 'snowman', type: 'withJoin' },
 	//    { eventType: 'wabbit', type: 'withJoin' },
+		
         { eventType: 'goobrawl', type: 'specific' },
         { eventType: 'crabxx', type: 'pro' },
         { eventType: 'franky', type: 'pro' },
@@ -264,6 +265,8 @@ function handleEvents() {
 	    if(Now_is_gobalevenrun)return
 	  //  handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
 
+
+		
     }
 }
 
@@ -3017,9 +3020,16 @@ setInterval(() => {
 }, 80000); // 60s check 1lan
 
 
-setInterval(() => {
- // checkServersForPumpkinGreen();
-}, 90000); // 90 giây kiểm tra 1 lần
+// Chạy lần đầu sau 10 giây
+setTimeout(() => {
+  checkServersForPumpkinGreen();
+
+  // Sau đó chạy định kỳ mỗi 90 giây
+  setInterval(() => {
+    checkServersForPumpkinGreen();
+  }, 90000);
+
+}, 10000); // 10 giây
 
 
 
@@ -3135,9 +3145,72 @@ change_server(sR, sI);
 
 /////////////////////////////////////////////////////
 
+
+var bossIncoming = 0; // 0 = không có boss sắp spawn, 1 = có
+
+function watchBosses(bossNames) {
+  let found = false; // tạm để đánh dấu nếu có boss sắp spawn
+	
+
+// Chỉ chạy nếu đang ở US III
+if (server.region === "US" && server.id === "III") {
+    // Thực hiện check boss, để bossIncoming bình thường
+
+  for (let name of bossNames) {
+    const data = parent.S[name];
+    if (!data) continue;
+
+    if (data.live) {
+      game_log(`💥 ${name} đang sống!`);
+      found = true;
+    } else if (data.spawn) {
+      const spawnTime = new Date(data.spawn).getTime();
+      const diff = spawnTime - Date.now();
+      const mins = diff / 60000;
+
+      if (diff > 0) {
+        game_log(`⏰ ${name} spawn sau ${mins.toFixed(1)} phút`);
+        // nếu boss spawn trong 15 phút nữa → coi là sắp spawn
+        if (mins <= 15) found = true;
+      } else {
+        game_log(`✅ ${name} có thể đã spawn hoặc sắp xuất hiện!`);
+        found = true;
+      }
+    }
+  }
+
+  // cập nhật biến toàn cục
+  bossIncoming = found ? 1 : 0;
+
+	
+} else {
+    // Nếu không phải US III, reset bossIncoming
+    bossIncoming = 0;
+    return;
+}
+
+
+
+
+
+
+	
+	
+
+}
+
+setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000);
+
+
+
+
+
+/////////////////////////////////////////////////
+
+
 async function checkServersForPumpkinGreen() {
 
- if (events || framtay == 1) return	
+ if (events || framtay == 1 || bossIncoming == 1 ) return	
 	
   // Cấu hình ngưỡng HP riêng cho từng boss
   const bossSettings = {
@@ -3189,7 +3262,7 @@ async function checkServersForPumpkinGreen() {
   // Ưu tiên theo vị trí hiện tại: nếu gần xscorpion thì chọn mrpumpkin trước
   let nearScorpion = false;
   const scorpion = get_nearest_monster({ type: "xscorpion" });
-  if (scorpion && distance(character, scorpion) < 1000) {
+  if (scorpion && distance(character, scorpion) < 400) {
     nearScorpion = true;
   }
 
@@ -3213,6 +3286,11 @@ async function checkServersForPumpkinGreen() {
     change_server(targetBoss.region, targetBoss.server);
   } else {
     game_log(`✅ Đã ở đúng server có ${targetBoss.name}`);
+
+    // --- Thêm bossvip ở đây --- để bắt đầu di chuyển
+    if (targetBoss.name === "mrpumpkin") bossvip = 4;
+    else if (targetBoss.name === "mrgreen") bossvip = 5;
+	  
   }
 }
 
