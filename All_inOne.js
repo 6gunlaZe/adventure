@@ -3237,6 +3237,7 @@ async function checkServersForPumpkinGreen() {
       const filtered = data.filter(obj =>
         obj.hp !== undefined &&
         obj.hp < bossSettings[boss] &&           // HP thấp hơn ngưỡng
+		obj.hp > 10000000 &&                     //ít nhất phải lớn hơn 10tr máu mới đáng nhảy qua  
         obj.serverIdentifier !== "PVP"           // loại bỏ server PVP
       );
 
