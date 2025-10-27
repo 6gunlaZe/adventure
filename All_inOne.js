@@ -3156,28 +3156,30 @@ function watchBosses(bossNames) {
 if (server.region === "US" && server.id === "III") {
     // Thực hiện check boss, để bossIncoming bình thường
 
-  for (let name of bossNames) {
-    const data = parent.S[name];
-    if (!data) continue;
 
-    if (data.live) {
-      game_log(`💥 ${name} đang sống!`);
+for (let name of bossNames) {
+  const data = parent?.S?.[name];  // optional chaining
+  if (!data) continue;
+
+  if (data?.live) {
+    game_log(`💥 ${name} đang sống!`);
+    found = true;
+  } else if (data?.spawn) {
+    const spawnTime = new Date(data.spawn).getTime();
+    const diff = spawnTime - Date.now();
+    const mins = diff / 60000;
+
+    if (diff > 0) {
+      game_log(`⏰ ${name} spawn sau ${mins.toFixed(1)} phút`);
+      if (mins <= 15) found = true;
+    } else {
+      game_log(`✅ ${name} có thể đã spawn hoặc sắp xuất hiện!`);
       found = true;
-    } else if (data.spawn) {
-      const spawnTime = new Date(data.spawn).getTime();
-      const diff = spawnTime - Date.now();
-      const mins = diff / 60000;
-
-      if (diff > 0) {
-        game_log(`⏰ ${name} spawn sau ${mins.toFixed(1)} phút`);
-        // nếu boss spawn trong 15 phút nữa → coi là sắp spawn
-        if (mins <= 15) found = true;
-      } else {
-        game_log(`✅ ${name} có thể đã spawn hoặc sắp xuất hiện!`);
-        found = true;
-      }
     }
   }
+}
+
+
 
   // cập nhật biến toàn cục
   bossIncoming = found ? 1 : 0;
