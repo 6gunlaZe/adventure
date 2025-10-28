@@ -3024,7 +3024,7 @@ setInterval(() => {
 }, 80000); // 60s check 1lan
 
 
-// Chạy lần đầu sau 10 giây
+// Chạy lần đầu sau 7 giây
 setTimeout(() => {
   checkServersForPumpkinGreen();
 
@@ -3033,7 +3033,7 @@ setTimeout(() => {
     checkServersForPumpkinGreen();
   }, 90000);
 
-}, 10000); // 10 giây
+}, 7000); // 7 giây
 
 
 
