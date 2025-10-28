@@ -147,7 +147,11 @@ async function eventer() {
 
     setTimeout(eventer, delay);
 }
-eventer();
+
+setTimeout(() => {
+    eventer();
+}, 10000); // 10000ms = chạy sau 10 giây khởi động
+
 
 
 
