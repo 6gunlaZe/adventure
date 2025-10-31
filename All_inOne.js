@@ -3026,11 +3026,11 @@ setInterval(() => {
 
 // Chạy lần đầu sau 7 giây
 setTimeout(() => {
-  checkServersForPumpkinGreen();
+//  checkServersForPumpkinGreen();  //tạm ngưng
 
   // Sau đó chạy định kỳ mỗi 90 giây
   setInterval(() => {
-    checkServersForPumpkinGreen();
+ //   checkServersForPumpkinGreen();
   }, 90000);
 
 }, 7000); // 7 giây
