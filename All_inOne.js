@@ -43,7 +43,7 @@ const locations = {
     stoneworm: [{ x: 830, y: 7 }],
     spider: [
   { type: "farm", x: 1290, y: -80, map: "main" },
-  { type: "safe", x: 1290, y: -80, map: "main" }
+  { type: "safe", x: 1290, y: -90, map: "main" }
     ],
     squig: [{ x: -1175, y: 422 }],
     wolf: [
