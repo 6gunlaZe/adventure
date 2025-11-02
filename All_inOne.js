@@ -826,7 +826,8 @@ const bossData = {
         name: "mrpumpkin",
         map: "halloween",
         x: -257,
-        y: 730
+        y: 730,
+		equip: "aoe",
     },
     5: {
         name: "mrgreen",
