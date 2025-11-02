@@ -886,7 +886,8 @@ async function VIPBosses() {
 		if (monster.hp < 50000)dathayboss = 1;
 
         if (monster.hp > 15000 && character.cc < 100) {
-            equipSet("single");
+            const equipType = info.equip || "single";
+            equipSet(equipType);
         } else if (character.cc < 100 && monster.target === character.name) {
             equipSet("luck");
             setTimeout(waitAndUnluck, 5000);
