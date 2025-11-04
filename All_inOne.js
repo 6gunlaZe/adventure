@@ -406,6 +406,16 @@ if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && 
 
 
 
+/// bộ đếm số 
+let count = 0;
+setInterval(() => {
+    count++;
+    game_log(" [" + count + "]");
+}, 10000);
+
+
+
+
 
 
 function checkPVPandARENA() {
