@@ -899,6 +899,10 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 		set_message("Attacking");
 		attack(currentTarget);
 	}
+	else
+	{
+		heal(character);
+	}
 	
 
 },1000/4); // Loops every 1/4 seconds.
