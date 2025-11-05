@@ -893,7 +893,7 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 	{
 		// Walk half the distance
 	}
-	else if(can_attack(currentTarget) && currentTarget.target)
+	else if(can_attack(currentTarget) && currentTarget.target && (currentTarget.attack < 800   ||  character.mp/character.max_mp > 0.75   ) )  //ngăn chặn đánh quái vô nghĩa ảnh hưởng tốc độ hồi máu
 	{
 
 		set_message("Attacking");
