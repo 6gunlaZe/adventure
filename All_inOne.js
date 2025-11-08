@@ -128,7 +128,7 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-          //     framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
+         //   framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
 		  //  framXmage()
 	} else if (bossvip > 0) {
             VIPBosses();
@@ -261,13 +261,14 @@ function handleEvents() {
         //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
 	 //   if(Now_is_gobalevenrun)return
-     //   handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
+		
+        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
 	    if(Now_is_gobalevenrun)return
-	  // handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
+	   handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	     if(Now_is_gobalevenrun)return
-	  //  handlebossPro('franky', 'level2w', 14, 30, 10000, "Ynhi","6gunlaZe")
+	   handlebossPro('franky', 'level2w', 14, 30, 10000, "Ynhi","6gunlaZe")
 	    if(Now_is_gobalevenrun)return
-	  //  handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
+	    handlebossPro('icegolem', 'winterland', 820, 420, 50000, "nhiY","Ynhi")
 
 
 		
@@ -2067,8 +2068,8 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 
 
 
-//let autobuyPonty = 1; // bật auto chuyển sever
-let autobuyPonty = 0; // tắt auto chuyển sever
+let autobuyPonty = 1; // bật auto chuyển sever
+//let autobuyPonty = 0; // tắt auto chuyển sever
 
 let readyToSwitch = false;
 
@@ -3024,14 +3025,14 @@ async function checkCrabxx() {
 
 
 setInterval(() => {
-//	checkCrabxx();  ///tạm ngưng
+	checkCrabxx();  ///tạm ngưng
 }, 90000); // kiểm tra mỗi 30 giây
 
 
 
 // Check now, and every 10p
 setInterval(() => {
- //	checkServersForMonsters(["franky"] ,["icegolem"] );  ///tạm ngưng
+ 	checkServersForMonsters(["franky"] ,["icegolem"] );  ///tạm ngưng
 
 }, 80000); // 60s check 1lan
 
