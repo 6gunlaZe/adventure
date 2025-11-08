@@ -17,6 +17,18 @@ game_log("Game vs 1.1");
 smart_move({ map: "cave", x: -194, y: -1281 })
 start_character("MuaBan", 6);	
 
+
+/// bộ đếm số 
+let count = 0;
+setInterval(() => {
+    count++;
+    game_log(" [" + count + "]");
+}, 10000);
+
+
+
+
+
 setInterval(function() {
 
 if(!parent.party_list.includes("Ynhi") ) start_character("Ynhi", 28);
