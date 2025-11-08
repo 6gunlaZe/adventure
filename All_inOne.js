@@ -3049,7 +3049,7 @@ setTimeout(() => {
 }, 7000); // 7 giây
 
 
-
+// setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000); //check boss gần ra thì không cho đi
 
 
 async function checkServersForMonsters(monsters,monsters1) {
@@ -3218,7 +3218,7 @@ for (let name of bossNames) {
 
 }
 
-setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000);
+
 
 
 
