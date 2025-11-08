@@ -2383,7 +2383,7 @@ if(character.map == "level2w" && character.hp < 2500  &&  !is_moving(character) 
 
 function crabxx() {
 
-if (2 > 1) return;	//tạm ngưng
+// if (2 > 1) return;	//tạm ngưng
 	
 if (!parent.S.crabxx)crabxxmode = 0;	
 	
