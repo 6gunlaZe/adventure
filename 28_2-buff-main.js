@@ -641,17 +641,17 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 
 	if( currentTarget && !is_in_range(currentTarget))
 	{
-		move(
-			character.x+(currentTarget.x-character.x)/2,
-			character.y+(currentTarget.y-character.y)/2
-			);
-		// Walk half the distance
+     		heal(character);
 	}
-	else if(can_attack(currentTarget) && currentTarget.target)
+	else if(can_attack(currentTarget) && currentTarget.target  && (currentTarget.attack < 800   ||  character.mp/character.max_mp > 0.75   )     )
 	{
                     if (check_quai_A4_stop_attach() == 1) return
 		set_message("Attacking");
 		attack(currentTarget);
+	}
+		else
+	{
+		heal(character);
 	}
 	
 
