@@ -455,7 +455,7 @@ setInterval(function(){
     if (lowest_health != null && lowest_health.health_ratio < rateheal) {
         if ( distance(character,{x: lowest_health.real_x, y: lowest_health.real_y}) < character.range) {
             heal(lowest_health);
-				 game_log("hoi mau!!!!!");
+				// game_log("hoi mau!!!!!");
 
         }
 	}
@@ -463,7 +463,7 @@ setInterval(function(){
     if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && !is_on_cooldown("partyheal")
 	&& character.mp>= (G.skills.partyheal.mp + 180) ) {
                 use_skill("partyheal");
-				 game_log("hoi mau ALL !!!!!");
+				// game_log("hoi mau ALL !!!!!");
 
 	}
 
@@ -1258,12 +1258,12 @@ const equipmentSets = {
 
     ],
     gold: [
-        { itemName: "handofmidas", slot: "gloves", level: 7 },
+        { itemName: "handofmidas", slot: "gloves", level: 8 },
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
 	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
-        { itemName: "spookyamulet", slot: "amulet", l: "l"},
+        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "cdragon", slot: "chest", l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
