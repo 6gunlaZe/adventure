@@ -901,7 +901,9 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 	}
 	else
 	{
-		heal(character);
+		
+		if (character.hp < character.max_hp) heal(character);
+		
 	}
 	
 
