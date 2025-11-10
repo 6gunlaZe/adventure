@@ -282,6 +282,50 @@ const  angle = Math.PI / 9.5 ;
 
 
 
+
+function buff_khi_ranh() {
+	let party = [];
+
+	// Lấy các thành viên trong party nếu có
+	if (parent.party_list.length > 0) {
+		for (let id in parent.party_list) {
+			let member = parent.party_list[id];
+			let entity = parent.entities[member];
+
+			if (member == character.name) entity = character;
+
+			if (entity && distance(character, entity) < character.range) {
+				party.push({ name: member, entity });
+			}
+		}
+	} else {
+		// Không có party, thêm chính mình
+		party.push({ name: character.name, entity: character });
+	}
+
+	// Nếu có quái fieldgen0 bị thương nặng thì đưa vào danh sách
+	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+	if (fieldgen0 && fieldgen0.hp / fieldgen0.max_hp <= 0.6) {
+		party.push({ name: "fieldgen0", entity: fieldgen0 });
+	}
+
+	// Lọc ra những entity chưa full máu
+	party = party.filter(m => m.entity && m.entity.hp < m.entity.max_hp);
+	if (party.length === 0) return; // không ai cần buff
+
+	// Sắp xếp theo tỉ lệ máu tăng dần
+	party.sort((a, b) => (a.entity.hp / a.entity.max_hp) - (b.entity.hp / b.entity.max_hp));
+
+	// Heal người máu thấp nhất
+	heal(party[0].entity);
+}
+
+
+
+
+
+
+
 	let delayitem2 = Date.now()
 	let delayitem1 = Date.now()
 
@@ -641,7 +685,7 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 
 	if( currentTarget && !is_in_range(currentTarget))
 	{
-     		heal(character);
+     		buff_khi_ranh();
 	}
 	else if(can_attack(currentTarget) && currentTarget.target  && (currentTarget.attack < 800   ||  character.mp/character.max_mp > 0.75   )     )
 	{
@@ -651,7 +695,7 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
 	}
 		else
 	{
-		heal(character);
+		buff_khi_ranh();
 	}
 	
 
