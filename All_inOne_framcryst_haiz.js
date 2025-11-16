@@ -548,7 +548,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 
 		
 	}
-else if (mobsInRangeNobat.length == 0)
+else if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, member1) <= 300 && distance(character, member2) <= 300)
 {
 	//các mục tránh bỏ chạy khi không cần tiết
 
