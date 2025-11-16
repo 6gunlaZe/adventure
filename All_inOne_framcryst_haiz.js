@@ -548,15 +548,18 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 
 		
 	}
+else if (mobsInRangeNobat.length == 0)
+{
+	//các mục tránh bỏ chạy khi không cần tiết
+	backk = 0;
+	runn = 0;
+}
 else
 {
-	if (checka5.length == 1 && mobsInRange.length == 0)return
-	if (mobsInRangeNobat.length > 0 || character.hp < 8000) // chỉ chạy khi thật sự cần thiết
-	{
+	if (checka5.length == 1 && mobsInRange.length == 0)return	
 	backk = 1;
 	checkback++
 	runn = 0;	
-	}
 }
 
 
