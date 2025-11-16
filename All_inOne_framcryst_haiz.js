@@ -555,7 +555,7 @@ else if (mobsInRangeNobat.length == 0)
     var quaivbat = get_nearest_monster({type: "vbat"});
     if (quaivbat && distance(character, quaivbat) < 160 ) {
 
-     if (character.mp > 800) use_skill("taunt", quaivbat);
+     if (character.mp > 1300 && !is_on_cooldown("taunt") ) use_skill("taunt", quaivbat);
             
     backk = 0;
 	runn = 0; 
