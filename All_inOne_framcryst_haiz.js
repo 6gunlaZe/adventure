@@ -551,8 +551,22 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 else if (mobsInRangeNobat.length == 0)
 {
 	//các mục tránh bỏ chạy khi không cần tiết
-	backk = 0;
-	runn = 0;
+
+    var quaivbat = get_nearest_monster({type: "vbat"});
+    if (quaivbat && distance(character, quaivbat) < 160 ) {
+		
+    backk = 0;
+	runn = 0; 
+		
+    }
+	else
+	{
+            runn = 1;
+            backk = 0;
+	}
+
+	
+
 }
 else
 {
