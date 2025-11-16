@@ -414,6 +414,7 @@ const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.m
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
 const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
+const mobsInRangeNobat = mobsInRange.filter(monster => monster.mtype != "vbat"); 
 const nguyehiemoutngay = mobsInRange.filter(monster => 
     (monster.mtype === "a1" && monster.level > 2) ||
     (monster.mtype === "a6" && monster.level > 4) 
@@ -550,9 +551,12 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 else
 {
 	if (checka5.length == 1 && mobsInRange.length == 0)return
+	if (mobsInRangeNobat.length > 0 || character.hp < 8000) // chỉ chạy khi thật sự cần thiết
+	{
 	backk = 1;
 	checkback++
 	runn = 0;	
+	}
 }
 
 
