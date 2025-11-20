@@ -1294,7 +1294,7 @@ async function equipBatch(data) {
 const equipmentSets = {
 
     deff: [
-        { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
