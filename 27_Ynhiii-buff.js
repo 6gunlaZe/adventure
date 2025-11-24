@@ -656,7 +656,7 @@ changeitem({ slot: "gloves", name : "mittens", level : 9 });
 
 setInterval(function() {
 lootAllChests()
-}, 4000);
+}, 2000);
 
 function shifting() {
     shift(0, 'xpbooster');
@@ -675,7 +675,7 @@ function lootAllChests() {
 
         equipSet("gold");
 
-        // Đợi 150ms cho server cập nhật trang bị
+        // Đợi 250ms cho server cập nhật trang bị
         setTimeout(() => {
 
             if (character.slots.gloves && character.slots.gloves.name === "handofmidas") {
@@ -689,7 +689,7 @@ function lootAllChests() {
                 setTimeout(shifting, 300);
             }
 
-        }, 150); // delay nhỏ nhưng đủ
+        }, 250); // delay nhỏ nhưng đủ
     }
 }
 
