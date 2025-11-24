@@ -392,8 +392,13 @@ const maxAttempts = 5;
 // Góc phụ để thử nếu hướng chính bị chặn (theo độ lệch nhỏ hơn)
 const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
 
-function kite(taget, kite_range = 20) {
+function kite(taget, kite_range = 20, quai = null) {
     if (smart.moving || !taget) return;
+
+	if (quai) //dùng khi kite bscorpion
+	{
+     if ( !quai.dead && distance(character, quai) > 130 ) return 
+	}
 
     const originalPosition = {
         x: taget.real_x,
@@ -819,7 +824,7 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 let scorpion0 = get_nearest_monster({type: "bscorpion"});
 
 if (scorpion0) {
-    kiteCircle(scorpion0);
+    kite(cung1, 130, scorpion0);
 } else {
     kite(cung1, 30);
 }
@@ -841,7 +846,7 @@ if (currentTarget && cung && kitefram === 1) {
 
         if (scorpion) {
             // Ưu tiên kite theo vòng tròn với bọ cạp
-            kiteCircle(scorpion);
+            kite(cung, 130, scorpion);
         } else {
             // Nếu không có bscorpion → kite bình thường
             kite(cung, 25);
