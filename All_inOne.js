@@ -5,7 +5,10 @@ setTimeout(waitAndUnluck, 1000);
 const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
-    bscorpion: [{ x: -408, y: -1241 }],
+    bscorpion: [
+  { type: "farm", x: -427, y: -1235, map: "desertland" },
+  { type: "safe", x: -635, y: -1312, map: "desertland" }
+    ],	
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
@@ -62,7 +65,7 @@ const locations = {
 
 };
 
-const home = 'spider';
+const home = 'bscorpion';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
