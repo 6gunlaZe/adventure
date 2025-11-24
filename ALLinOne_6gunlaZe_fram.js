@@ -14,7 +14,10 @@ const locations = {
 	armadillo: [{ x: 617, y: 1784 }],
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
-    bscorpion: [{ x: -408, y: -1241 }],
+    bscorpion: [
+  { type: "farm", x: -427, y: -1235, map: "desertland" },
+  { type: "safe", x: -635, y: -1312, map: "desertland" }
+    ],	
     boar: [
   { type: "farm", x: -17, y: -1108, map: "winterland" },
   { type: "safe", x: 6, y: -855, map: "winterland" }
@@ -75,7 +78,7 @@ const locations = {
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'spider';
+const home = 'bscorpion';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
