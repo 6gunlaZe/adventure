@@ -327,8 +327,8 @@ let circleCenter = { x: -427, y: -1235 };   // đặt sau
 let circleRadius = 130;              // bán kính cố định
 let circleDirection = 1;             // 1 = clockwise, -1 = counter-clockwise
 let angleOnCircle = 0;               // góc hiện tại
-let triggerRange = 100;              // quái vào phạm vi này mới chạy
-let moveSpeed = 1.2;                 // tốc độ chạy trên vòng tròn
+let triggerRange = 150;              // quái vào phạm vi này mới chạy
+let moveSpeed = 2.2;                 // tốc độ chạy trên vòng tròn
 
 // ======================
 // KITE THEO VÒNG TRÒN CỐ ĐỊNH
