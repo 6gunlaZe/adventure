@@ -1356,7 +1356,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     } else {
         eTime = currentTime;
 		
-		if ( get_nearest_monster({type: "bscorpion",}) )
+		if ( home == 'bscorpion' )
 		{
 		equipSet('single');
 		}
