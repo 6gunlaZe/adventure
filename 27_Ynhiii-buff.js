@@ -763,7 +763,7 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
 
-		if (currentTarget.mtype == "bscorpion" )
+		if ( get_nearest_monster({type: "bscorpion",}) )
 		{
 		kite(cung1,100);
 		}
