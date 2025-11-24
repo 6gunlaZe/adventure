@@ -778,46 +778,58 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
-
 function getSupershotTarget() {
 	if (smart.moving) return null;
-    const ynhi = get_player("Ynhi");
-    const haiz = get_player("haiz");
-        if (!ynhi || (ynhi && distance(character, ynhi) > 150 ) ) return null;
-	
-    const validNames = ["wolf"]; // ✅ Chỉ bắn mấy quái đặc biệt này
+	const ynhi = get_player("Ynhi");
+	const haiz = get_player("haiz");
+	if (!ynhi || (ynhi && distance(character, ynhi) > 150)) return null;
 
-// Lọc các quái đủ điều kiện cơ bản
-let candidates = Object.values(parent.entities).filter(e =>
-    e.type === "monster" &&
-    !e.dead &&
-    validNames.includes(e.mtype) &&
-    e.hp > 10000 &&  e.level < 3 &&
-    is_in_range(e, "supershot") &&
-    distance(character, e) <= 450 &&
-    distance(character, e) > (character.range + 20) // ✅ Nằm ngoài tầm đánh một khoảng
-);
+	const validNames = ["wolf"]; // Quái chuẩn
+	const extraNames = ["bscorpion", "franky"]; // ✅ Quái mới với điều kiện đơn giản
 
+	// Lọc các quái đủ điều kiện cơ bản
+	let candidates = Object.values(parent.entities).filter(e => {
+		if (e.type !== "monster" || e.dead) return false;
 
-    // ✅ Lọc theo vị trí của Ynhi và Haiz
-    candidates = candidates.filter(mob => {
-        // Nếu có Ynhi, mà quái nằm TRONG tầm đánh của Ynhi → bỏ qua
-        if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
+		// Trường hợp quái "chuẩn" wolf
+		if (validNames.includes(e.mtype)) {
+			return e.hp > 10000 &&
+				e.level < 3 &&
+				is_in_range(e, "supershot") &&
+				distance(character, e) <= 450 &&
+				distance(character, e) > (character.range + 20);
+		}
 
-        // Nếu có Haiz, mà quái ở gần quá (< 200) → bỏ qua
-        if (haiz && distance(haiz, mob) <= 200) return false;
-
-        return true; // Chỉ giữ nếu không bị loại bởi 2 điều kiện trên
-    });
-
-    // ✅ Nếu còn quái hợp lệ, chọn quái xa nhất (ưu tiên kéo về)
-    if (candidates.length > 0) {
-        candidates.sort((a, b) => distance(character, b) - distance(character, a));
-        return candidates[0];
-    }
-
-    return null; // ❌ Không có mục tiêu phù hợp
+// Trường hợp quái mới, cần có target **và** trong tầm ngắm
+if (extraNames.includes(e.mtype)) {
+    return e.target && is_in_range(e, "supershot"); 
+    // ✅ chỉ giữ quái đã có target và nằm trong tầm bắn supershot
 }
+
+
+		return false;
+	});
+
+	// Lọc theo vị trí của Ynhi và Haiz
+	candidates = candidates.filter(mob => {
+		if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
+		if (haiz && distance(haiz, mob) <= 200) return false;
+		return true;
+	});
+
+	// Chọn quái xa nhất
+	if (candidates.length > 0) {
+		candidates.sort((a, b) => distance(character, b) - distance(character, a));
+		return candidates[0];
+	}
+
+	return null;
+}
+
+
+
+
+
 
 
 async function skillLoop() {
