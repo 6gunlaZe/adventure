@@ -324,7 +324,7 @@ else if (character.mp/character.max_mp < 0.9) {
 // CONFIG x: -427, y: -1235
 // ======================
 let circleCenter = { x: -427, y: -1235 };   // đặt sau
-let circleRadius = 130;              // bán kính cố định
+let circleRadius = 110;              // bán kính cố định
 let circleDirection = 1;             // 1 = clockwise, -1 = counter-clockwise
 let angleOnCircle = 0;               // góc hiện tại
 let triggerRange = 150;              // quái vào phạm vi này mới chạy
