@@ -765,7 +765,7 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 
 		if ( get_nearest_monster({type: "bscorpion",}) )
 		{
-		kite(cung1,100);
+		kite(cung1,150);
 		}
 		else
 		{
@@ -787,7 +787,7 @@ if ( currentTarget && cung && kitefram == 1) {
 
 		if ( get_nearest_monster({type: "bscorpion",}) )
 		{
-	if(!can_attack(currentTarget) )kite(cung,100);
+	if(!can_attack(currentTarget) )kite(cung,150);
 		}
 		else
 		{
