@@ -762,8 +762,18 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
    }
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
-		//game_log("🟡 Move 2: In Progress")
+
+		if (currentTarget.mtype == "bscorpion" )
+		{
+		kite(cung1,100);
+		}
+		else
+		{
 				kite(cung1,30);
+		}
+
+
+		
 	}
 	else
 {
