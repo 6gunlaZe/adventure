@@ -810,12 +810,17 @@ if (extraNames.includes(e.mtype)) {
 		return false;
 	});
 
-	// Lọc theo vị trí của Ynhi và Haiz
-	candidates = candidates.filter(mob => {
-		if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
-		if (haiz && distance(haiz, mob) <= 200) return false;
-		return true;
-	});
+
+
+// Lọc theo vị trí của Ynhi và Haiz, chỉ áp dụng cho quái chuẩn
+candidates = candidates.filter(mob => {
+    if (validNames.includes(mob.mtype)) { // ✅ chỉ áp dụng cho quái chuẩn
+        if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
+        if (haiz && distance(haiz, mob) <= 200) return false;
+    }
+    return true; // quái mới không bị chặn
+});
+
 
 	// Chọn quái xa nhất
 	if (candidates.length > 0) {
