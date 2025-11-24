@@ -623,7 +623,7 @@ function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
 
-    if ( ( chestIds.length > 10 ||  (get_nearest_monster({type: "bscorpion",}) && chestIds.length > 0)   )  && character.cc < 200  ) {
+    if ( ( chestIds.length > 10 ||  (crepp == "bscorpion" && chestIds.length > 0)   )  && character.cc < 200  ) {
         equipSet('gold');
 	    if (character.slots["gloves"] && character.slots["gloves"].name == "handofmidas"){
 	  shift(0, 'goldbooster');   
