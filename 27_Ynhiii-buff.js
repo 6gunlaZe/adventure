@@ -663,26 +663,35 @@ function shifting() {
 equipSet('nogold');
 }
 
+
 function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
+    let scorpionNearby = get_nearest_monster({type: "bscorpion"});
 
-    if ( ( chestIds.length > 10 ||  (crepp == "bscorpion" && chestIds.length > 0) && !get_nearest_monster({type: "bscorpion"})  )  && character.cc < 200  ) {
-        equipSet('gold');
-	    if (character.slots["gloves"] && character.slots["gloves"].name == "handofmidas"){
-	  shift(0, 'goldbooster');   
-        for (let id of chestIds) {
-            loot(id);
-        }
-	 setTimeout(shifting, 550);  
-	    }
-	 
+    // Điều kiện chính
+    if ((chestIds.length > 10 || (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby))
+        && character.cc < 200) {
+
+        equipSet("gold");
+
+        // Đợi 150ms cho server cập nhật trang bị
+        setTimeout(() => {
+
+            if (character.slots.gloves && character.slots.gloves.name === "handofmidas") {
+
+                shift(0, "goldbooster");  
+
+                // Loot
+                for (let id of chestIds) loot(id);
+
+                // Đổi lại gear sau khi loot xong
+                setTimeout(shifting, 300);
+            }
+
+        }, 150); // delay nhỏ nhưng đủ
     }
-    
 }
-
-
-
 
 
 
