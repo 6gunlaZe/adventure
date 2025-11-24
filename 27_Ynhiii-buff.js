@@ -397,7 +397,7 @@ function kite(taget, kite_range = 20, quai = null) {
 
 	if (quai) //dùng khi kite bscorpion
 	{
-     if ( !quai.dead && distance(character, quai) > 130 ) return 
+     if ( !quai.dead && distance(character, quai) > 120 ) return 
 	}
 
     const originalPosition = {
@@ -824,7 +824,7 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 let scorpion0 = get_nearest_monster({type: "bscorpion"});
 
 if (scorpion0) {
-    kite(cung1, 130, scorpion0);
+    kite(cung1, 120, scorpion0);
 } else {
     kite(cung1, 30);
 }
@@ -846,7 +846,7 @@ if (currentTarget && cung && kitefram === 1) {
 
         if (scorpion) {
             // Ưu tiên kite theo vòng tròn với bọ cạp
-            kite(cung, 130, scorpion);
+            kite(cung, 120, scorpion);
         } else {
             // Nếu không có bscorpion → kite bình thường
             kite(cung, 25);
