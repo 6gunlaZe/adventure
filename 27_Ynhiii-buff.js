@@ -320,6 +320,50 @@ else if (character.mp/character.max_mp < 0.9) {
 
 
 
+// ======================
+// CONFIG x: -427, y: -1235
+// ======================
+let circleCenter = { x: -427, y: -1235 };   // đặt sau
+let circleRadius = 130;              // bán kính cố định
+let circleDirection = 1;             // 1 = clockwise, -1 = counter-clockwise
+let angleOnCircle = 0;               // góc hiện tại
+let triggerRange = 100;              // quái vào phạm vi này mới chạy
+let moveSpeed = 1.2;                 // tốc độ chạy trên vòng tròn
+
+// ======================
+// KITE THEO VÒNG TRÒN CỐ ĐỊNH
+// ======================
+function kiteCircle(target) {
+    if (!target || smart.moving) return;
+
+    // Khoảng cách giữa quái và nhân vật
+    const dist = Math.hypot(character.real_x - target.real_x, character.real_y - target.real_y);
+
+    // Nếu quái còn xa → đứng yên, không chạy sớm
+    if (dist > triggerRange) {
+        return;
+    }
+
+    // Tính góc hiện tại của nhân vật trên vòng tròn (relative to center)
+    const dx = character.real_x - circleCenter.x;
+    const dy = character.real_y - circleCenter.y;
+    angleOnCircle = Math.atan2(dy, dx);
+
+    // Tăng góc để chạy theo vòng tròn mượt
+    angleOnCircle += circleDirection * moveSpeed * 0.05; // tốc độ quay
+
+    // Tính vị trí mới trên vòng tròn
+    const newX = circleCenter.x + circleRadius * Math.cos(angleOnCircle);
+    const newY = circleCenter.y + circleRadius * Math.sin(angleOnCircle);
+
+    // Nếu điểm này có thể đi đến → di chuyển
+    if (can_move_to(newX, newY)) {
+        move(newX, newY);
+    } else {
+        // Nếu đâm tường → đổi hướng vòng tròn
+        circleDirection *= -1;
+    }
+}
 
 
 
@@ -763,17 +807,14 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && 
 else if (cung1 && (distance(character,cung1) < 300 )  )
 	{
 
-		if ( get_nearest_monster({type: "bscorpion",}) )
-		{
-		kite(cung1,120);
-		}
-		else
-		{
-				kite(cung1,30);
-		}
+let scorpion0 = get_nearest_monster({type: "bscorpion"});
 
+if (scorpion0) {
+    kiteCircle(scorpion0);
+} else {
+    kite(cung1, 30);
+}
 
-		
 	}
 	else
 {
@@ -783,18 +824,23 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 
 
 	
-if ( currentTarget && cung && kitefram == 1) {
+if (currentTarget && cung && kitefram === 1) {
 
-		if ( get_nearest_monster({type: "bscorpion",}) )
-		{
-	if(!can_attack(currentTarget) )kite(cung,120);
-		}
-		else
-		{
-	if(!can_attack(currentTarget) )kite(cung,25);
-		}
-	
-   }
+    let scorpion = get_nearest_monster({ type: "bscorpion" });
+
+    if (!can_attack(currentTarget)) {
+
+        if (scorpion) {
+            // Ưu tiên kite theo vòng tròn với bọ cạp
+            kiteCircle(scorpion);
+        } else {
+            // Nếu không có bscorpion → kite bình thường
+            kite(cung, 25);
+        }
+
+    }
+}
+
 
 	
 	
