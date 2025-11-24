@@ -765,7 +765,7 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 
 		if ( get_nearest_monster({type: "bscorpion",}) )
 		{
-		kite(cung1,150);
+		kite(cung1,120);
 		}
 		else
 		{
@@ -787,7 +787,7 @@ if ( currentTarget && cung && kitefram == 1) {
 
 		if ( get_nearest_monster({type: "bscorpion",}) )
 		{
-	if(!can_attack(currentTarget) )kite(cung,150);
+	if(!can_attack(currentTarget) )kite(cung,120);
 		}
 		else
 		{
@@ -904,7 +904,13 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
                 use_skill("curse", target3);
 				// game_log("curse - lowstart !!!!!!");
             }		
-	
+
+	 	var target4= get_nearest_monster({type: "bscorpion",});
+		    if(target4&& character.mp > 4500 && !is_on_cooldown("curse") &&  !target4.s["cursed"] )
+            {
+                use_skill("curse", target4);
+				// game_log("curse - lowstart !!!!!!");
+            }		
 	
 	var target1xc= get_nearest_monster1({comuctieu: 1 ,  nhonhat: 25001});  //nhonhat : 41000   lonnhat: 1
 		    if(target1xc&& character.mp > 5500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 40 )
