@@ -397,7 +397,7 @@ function kite(taget, kite_range = 20, quai = null) {
 
 	if (quai) //dùng khi kite bscorpion
 	{
-     if ( !quai.dead && distance(character, quai) > 120 ) return 
+     if ( !quai.dead && distance(character, quai) > 110 ) return 
 	}
 
     const originalPosition = {
