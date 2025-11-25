@@ -2094,18 +2094,29 @@ setTimeout(() => {
 
 // Bước 2: kiểm tra máu liên tục khi đã sẵn sàng
 function waitForHPAndSwitch() {
+
+
+    if (autobuyPonty == 0 && character.hp > 10000 ) //chế độ tự reset khi không chuyển sever
+	{
+
+	}
+	
     if (!readyToSwitch || autobuyPonty != 1) return;
 
-    if (character.hp > 10000) {
-        // Không có sự kiện thì mới chuyển
-        if (prolive == 1 || events || framboss > 0 || bossvip > 0 || framtay > 0) return;
-        if (parent.S.franky || parent.S.icegolem) return;
-	    
+
     let chests = get_chests();
     let chestIds = Object.keys(chests);
         for (let id of chestIds) {
             loot(id);
-        }  
+        }
+
+	
+    if (character.hp > 10000 && chestIds.length == 0) {
+        // Không có sự kiện thì mới chuyển
+        if (prolive == 1 || events || framboss > 0 || bossvip > 0 || framtay > 0) return;
+        if (parent.S.franky || parent.S.icegolem) return;
+	    
+  
 
 	    
         let randomNumber = getRandom(1, 100);
