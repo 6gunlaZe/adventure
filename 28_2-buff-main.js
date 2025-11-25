@@ -980,6 +980,10 @@ function avoidance() {
 		   xmove(host.real_x, host.real_y);
 		               lastMove = new Date();
 	   }
+	   else if (host && !smart.moving && check && target && target.mtype == "a5" ){  //bỏ qua a5 cứ đi theo host
+		   xmove(host.real_x, host.real_y);
+		               lastMove = new Date();
+	   }
 	   else if (host && !smart.moving && new Date() - lastMove > 30000 ){
 		   xmove(host.real_x, host.real_y);
 		               lastMove = new Date();
