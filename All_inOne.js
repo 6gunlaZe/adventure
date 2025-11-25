@@ -2085,13 +2085,18 @@ let autobuyPonty = 0; // tắt auto chuyển sever
 
 let readyToSwitch = false;
 let autorelog = 0
+
+
+
 // Bước 1: đếm 2000s (33 phút)
-setTimeout(() => {
+setInterval(() => {
     game_log("Đã đủ 2000s. Đang chờ máu hồi để chuyển server...");
     readyToSwitch = true;
-	autorelog += 1;
+    autorelog += 1;
     waitForHPAndSwitch();
-}, 120000); // 2000 * 1000 ms
+}, 120000); // // 2000 * 1000 ms
+
+
 
 // Bước 2: kiểm tra máu liên tục khi đã sẵn sàng
 function waitForHPAndSwitch() {
