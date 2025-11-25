@@ -2107,6 +2107,11 @@ if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 1) {
 
     // Không có chest → reset server
     if (chestIds.length === 0) {
+		
+        // Không có sự kiện thì mới chuyển
+        if (prolive == 1 || events || framboss > 0 || bossvip > 0 || framtay > 0) return;
+        if (parent.S.franky || parent.S.icegolem) return;
+		
         parent.api_call("disconnect_character", { name: "haiz" });
         return;
     }
