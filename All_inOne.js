@@ -2091,7 +2091,7 @@ setTimeout(() => {
     readyToSwitch = true;
 	autorelog += 1;
     waitForHPAndSwitch();
-}, 2000000); // 2000 * 1000 ms
+}, 120000); // 2000 * 1000 ms
 
 // Bước 2: kiểm tra máu liên tục khi đã sẵn sàng
 function waitForHPAndSwitch() {
