@@ -2084,28 +2084,50 @@ if(!parent.party_list.includes("haiz1")) start_character("haiz1", 29);
 let autobuyPonty = 0; // tắt auto chuyển sever
 
 let readyToSwitch = false;
-
+let autorelog = 0
 // Bước 1: đếm 2000s (33 phút)
 setTimeout(() => {
     game_log("Đã đủ 2000s. Đang chờ máu hồi để chuyển server...");
     readyToSwitch = true;
+	autorelog += 1;
     waitForHPAndSwitch();
 }, 2000000); // 2000 * 1000 ms
 
 // Bước 2: kiểm tra máu liên tục khi đã sẵn sàng
 function waitForHPAndSwitch() {
 
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
+	
 
-    if (autobuyPonty == 0 && character.hp > 10000 ) //chế độ tự reset khi không chuyển sever
-	{
+// ----------------------------
+// Trường hợp autobuyPonty = 0 → Chế độ reset server
+// ----------------------------
+if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 1) {
 
-	}
+    // Không có chest → reset server
+    if (chestIds.length === 0) {
+        parent.api_call("disconnect_character", { name: "haiz" });
+        return;
+    }
+
+    // Có chest → loot rồi đợi 5s check lại
+    for (let id of chestIds) {
+        loot(id);
+    }
+
+    setTimeout(waitForHPAndSwitch, 5000);
+    return;
+}
+
+
+
+
 	
     if (!readyToSwitch || autobuyPonty != 1) return;
 
 
-    let chests = get_chests();
-    let chestIds = Object.keys(chests);
+
         for (let id of chestIds) {
             loot(id);
         }
