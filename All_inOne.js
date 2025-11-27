@@ -1391,7 +1391,7 @@ setInterval(() => {
 
 
     // CHỈ swap candy 1 lần, khi vừa đánh xong (ms lớn) và chưa swap lần này
-    if (ms < 30 ) {
+    if (ms < 30 && character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade" ) {
         if (character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade") {
 	   candySwapped = true
 			 setTimeout(() => {
@@ -1399,7 +1399,7 @@ setInterval(() => {
                     if (character.slots.mainhand?.name !== "candycanesword" || character.slots.offhand?.name !== "candycanesword") {
                         equipSet('candycanesword');
                     }
-			 }, 80);
+			 }, 100);
 
        }
 	}
