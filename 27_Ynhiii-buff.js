@@ -814,7 +814,8 @@ if (currentTarget && cung && kitefram === 1) {
 	
 	
 	////////////
-	if ( currentTarget && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
+	if ( currentTarget && currentTarget.mtype != "bscorpion" && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
+	if ( currentTarget && currentTarget.mtype == "bscorpion" && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] && currentTarget.hp > 200000 )use_skill('darkblessing')
 ///////////////////////////	
 
 const currentFarmMob = crepp; // 👈 loại quái đang farm
