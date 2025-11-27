@@ -1546,7 +1546,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 	if (currentTime - eTime < 120)return
 
- if (smart.moving) 
+ if (smart.moving && !get_nearest_monster({ type: "bscorpion" })) 
 	{
         eTime = currentTime;
         equipSet('nogold');	
