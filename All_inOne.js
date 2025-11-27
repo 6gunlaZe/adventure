@@ -1372,7 +1372,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 }
 
 
-
+/*
 let candySwapped = false;
 
 setInterval(() => {
@@ -1411,6 +1411,7 @@ setInterval(() => {
 
 }, 20); // tick loop 50ms
 
+*/
 
 
 
