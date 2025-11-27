@@ -1389,7 +1389,7 @@ setInterval(() => {
 
     // RESET flag khi chuẩn bị đánh tiếp (chuẩn bị đòn mới)
     // Khi ms nhỏ nghĩa là sắp đánh → reset để cho lần sau có thể swap lại
-    if (ms < 190) {
+    if (ms < 150) {
         candySwapped = false;
     }
 
@@ -1397,10 +1397,14 @@ setInterval(() => {
     // ms > 200: nằm trong vùng cooldown đầu (vừa đánh xong)
     if (ms > 200 && !candySwapped) {
         if (character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade") {
+
+			 setTimeout(() => {
                     // swap chỉ khi chưa cầm candy
                     if (character.slots.mainhand?.name !== "candycanesword" || character.slots.offhand?.name !== "candycanesword") {
                         equipSet('candycanesword');
                     }
+			 }, 60);
+
                     // đặt flag dù equip có bị ghi nhận hay không, tránh swap lại
                     candySwapped = true;
         } else {
