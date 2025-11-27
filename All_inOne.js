@@ -1385,7 +1385,7 @@ setInterval(() => {
 
 
     // Không swap khi có mob mạnh / đang bị giết / đang ở trạng thái boss đặc biệt
-    if (character.rip || isEquipping || character.ping > 1000 || character.s.sugarrush ||  character.cc > 100  ) return;
+    if (character.rip || isEquipping || character.ping > 1000 || character.s.sugarrush ||  character.cc > 100  || character.mp > 780 || !get_nearest_monster({ type: "bscorpion" }) ) return;
 
     if (ms > 180) candySwapped = false;
 
