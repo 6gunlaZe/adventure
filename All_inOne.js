@@ -1247,7 +1247,6 @@ setTimeout(function () {
 
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
-let candySwapped = false;
 
 
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
@@ -1369,6 +1368,14 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         
     }
 
+	
+}
+
+
+
+let candySwapped = false;
+
+setInterval(() => {
 
     // ───────────────────────────────────────────────
     // AUTO–SWAP FIREBLADE <-> CANDYCANE (1 lần sau mỗi đòn)
@@ -1378,7 +1385,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
 
     // Không swap khi có mob mạnh / đang bị giết / đang ở trạng thái boss đặc biệt
-    if (physicalMobs.length || magicalMobs.length || character.rip) return;
+    if (character.rip || isEquipping || character.ping > 1000 || character.s.sugarrush ||  character.cc > 100  ) return;
 
     // RESET flag khi chuẩn bị đánh tiếp (chuẩn bị đòn mới)
     // Khi ms nhỏ nghĩa là sắp đánh → reset để cho lần sau có thể swap lại
@@ -1390,18 +1397,12 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     // ms > 200: nằm trong vùng cooldown đầu (vừa đánh xong)
     if (ms > 200 && !candySwapped) {
         if (character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade") {
-            // delay 1 tick để chắc chắn server ghi nhận hit
-            setTimeout(() => {
-                // kiểm tra lại an toàn trước khi swap
-                if (!character.rip && !physicalMobs.length && !magicalMobs.length) {
                     // swap chỉ khi chưa cầm candy
                     if (character.slots.mainhand?.name !== "candycanesword" || character.slots.offhand?.name !== "candycanesword") {
                         equipSet('candycanesword');
                     }
                     // đặt flag dù equip có bị ghi nhận hay không, tránh swap lại
                     candySwapped = true;
-                }
-            }, 60);
         } else {
             // nếu không cầm fireblade lúc này (vd: set khác) thì vẫn set flag để không spam
             candySwapped = true;
@@ -1409,12 +1410,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     }
 ///////////////////////// AUTO–SWAP FIREBLADE <-> CANDYCANE DONE  ///////////////////////////////////////////
 
-
-
-	
-}
-
-
+}, 30); // tick loop 50ms
 
 
 
