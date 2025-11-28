@@ -1397,7 +1397,7 @@ function autoSwapCandy() {
    const ms = ms_to_next_skill("attack");
 
 	
-    if (ms < 50 && character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade" )
+    if ( character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade" )
 	{
 	
     // Swap sau 60–120ms sau đòn đánh (vị trí gọi đảm bảo đã attack xong)
