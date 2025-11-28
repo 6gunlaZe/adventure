@@ -1412,7 +1412,7 @@ function autoSwapCandy() {
         ) {
             equipSet("candycanesword");
         }
-    }, 40);
+    }, 30);
 	}
 }
 
