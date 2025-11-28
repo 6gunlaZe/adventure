@@ -1386,6 +1386,9 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
 
 function autoSwapCandy() {
+
+/// tạm ngưng do không hiệu quả 
+	return
     // Điều kiện NGĂN swap
     if (
         character.rip ||
