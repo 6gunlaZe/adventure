@@ -1372,47 +1372,37 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 }
 
 
-/*
-let candySwapped = false;
 
-setInterval(() => {
+function autoSwapCandy() {
+    // Điều kiện NGĂN swap
+    if (
+        character.rip ||
+        isEquipping ||
+        smart.moving ||
+        character.ping > 900 ||
+        character.s.sugarrush ||
+        character.cc > 100 ||
+        character.mp > 780 ||
+        !get_nearest_monster({ type: "bscorpion" }) 
+    ) return;
+	
+   const ms = ms_to_next_skill("attack");
 
-    // ───────────────────────────────────────────────
-    // AUTO–SWAP FIREBLADE <-> CANDYCANE (1 lần sau mỗi đòn)
-    // ───────────────────────────────────────────────
-
-    const ms = ms_to_next_skill("attack");
-
-
-    // Không swap khi có mob mạnh / đang bị giết / đang ở trạng thái boss đặc biệt
-    if (character.rip || isEquipping || character.ping > 1000 || character.s.sugarrush ||  character.cc > 100  || character.mp > 780 || !get_nearest_monster({ type: "bscorpion" }) ) return;
-
-    if (ms > 180) candySwapped = false;
-
-
-    // CHỈ swap candy 1 lần, khi vừa đánh xong (ms lớn) và chưa swap lần này
-    if (ms < 30 && character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade" ) {
-        if (character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade") {
-	   candySwapped = true
-			 setTimeout(() => {
-                    // swap chỉ khi chưa cầm candy
-                    if (character.slots.mainhand?.name !== "candycanesword" || character.slots.offhand?.name !== "candycanesword") {
-                        equipSet('candycanesword');
-                    }
-			 }, 100);
-
-       }
-	}
-	else
+	
+    if (ms < 50 && character.slots.mainhand?.name === "fireblade" && character.slots.offhand?.name === "fireblade" )
 	{
-	   candySwapped = false
+	
+    // Swap sau 60–120ms sau đòn đánh (vị trí gọi đảm bảo đã attack xong)
+    setTimeout(() => {
+        if (
+            character.slots.mainhand?.name !== "candycanesword" ||
+            character.slots.offhand?.name !== "candycanesword"
+        ) {
+            equipSet("candycanesword");
+        }
+    }, 100);
 	}
-///////////////////////// AUTO–SWAP FIREBLADE <-> CANDYCANE DONE  ///////////////////////////////////////////
-
-}, 20); // tick loop 50ms
-
-*/
-
+}
 
 
 let lastCleaveTime = 0;
