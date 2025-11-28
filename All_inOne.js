@@ -1408,7 +1408,7 @@ function autoSwapCandy() {
         ) {
             equipSet("candycanesword");
         }
-    }, 20);
+    }, 2);
 	}
 }
 
