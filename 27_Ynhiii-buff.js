@@ -778,7 +778,7 @@ else if (cung1 && (distance(character,cung1) < 300 )  )
 
 let scorpion0 = get_nearest_monster({type: "bscorpion"});
 
-if (scorpion0 && distance(character, scorpion0) < 250  ) {
+if (scorpion0 && crepp == "bscorpion" ) {
     kite(cung1, 120, scorpion0);
 } else {
     kite(cung1, 30);
