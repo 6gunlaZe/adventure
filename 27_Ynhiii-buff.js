@@ -1389,6 +1389,17 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
     ],
+    creepburn: [
+        //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+    ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
     ],
@@ -1554,13 +1565,20 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 	
-	if(get_nearest_monster({ type: "xmagefi" }))
+	if(get_nearest_monster({ type: "xmagefi" }) && lowHpMobs.length == 0)
 	{
-        eTime = currentTime;
+        eTime = currentTime; 
         equipSet('bossburn');	
 		return
 	}
 
+
+	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0)
+	{
+        eTime = currentTime; 
+        equipSet('creepburn');	
+		return
+	}
 	
 	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
