@@ -799,7 +799,7 @@ if (currentTarget && cung && kitefram === 1) {
 
     if (!can_attack(currentTarget)) {
 
-        if (scorpion) {
+        if (scorpion && crepp == "bscorpion") {
             // Ưu tiên kite theo vòng tròn với bọ cạp
             kite(cung, 120, scorpion);
         } else {
