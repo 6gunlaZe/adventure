@@ -350,7 +350,7 @@ const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
 function kite(taget, kite_range = 20, quai = null) {
     if (smart.moving || !taget) return;
 
-	if (quai) //dùng khi kite bscorpion
+	if (quai && distance(character, quai) < 250) //dùng khi kite bscorpion
 	{
      if ( !quai.dead && distance(character, quai) > 110 ) return 
 	}
