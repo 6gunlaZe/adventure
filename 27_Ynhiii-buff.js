@@ -1035,6 +1035,32 @@ async function handleZap() {
                     }
                 }
             }
+            else if (
+    entities.length === 0 &&
+    !is_on_cooldown("zapperzap") && character.hp/character.max_hp > 0.99 && character.targets == 0 &&
+    character.mp > G?.skills?.zapperzap?.mp + 4250 &&
+    (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")
+) {
+    // Lọc ra các quái hợp lệ
+    const entities1 = Object.values(parent.entities).filter(entity =>
+        entity && entity.mtype === crepp &&
+        entity.type === "monster" &&
+        !entity.dead &&
+        entity.visible &&
+        is_in_range(entity, "zapperzap")
+    );
+
+    if (entities1.length > 0) {
+        // Tìm quái gần nhất
+        const target = entities1.sort((a, b) => distance(character, a) - distance(character, b))[0];
+
+        if (target && !is_on_cooldown("zapperzap")) {
+            await use_skill("zapperzap", target);   // Zap đúng 1 lần
+        }
+    }
+        }
+
+			
 		}
 			
         }
