@@ -179,7 +179,8 @@ if (smart.moving) return;
     }
 
 
-    const tank = get_player(f1111);
+ //   const tank = get_player(f1111);
+	const tank = get_player("Ynhi");
 
     // Nếu chưa có tank, tank chết, hoặc tank quá xa → rút về điểm an toàn
     if (!tank || tank.rip || distance(character, tank) > 300) {
