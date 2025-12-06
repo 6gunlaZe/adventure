@@ -938,7 +938,7 @@ const hpThreshold = e.max_hp >= 800000 ? 45000 :
             }
 
 	
-		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 )
+		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && distance(character, currentTarget) < 40 )
             {
                 use_skill("curse", currentTarget);
 				// game_log("curse - lowstart !!!!!!");
