@@ -3242,7 +3242,7 @@ change_server(sR, sI);
 		
 }
 	
-else if (validObjects0.length > 0)	///cho doi nguoi qua kill frannky // qua trước kể cả khi frany full máu
+else if (validObjects0.length > 0 && 1 > 2 )	///cho doi nguoi qua kill frannky // qua trước kể cả khi frany full máu  // không cần qua trước làm gì nữa
 {	  
 
 let minHpObject = validObjects0.reduce((min, obj) => obj.hp < min.hp ? obj : min);
