@@ -12,9 +12,13 @@ const locations = {
     cgoo: [{ x: -221, y: -274 }],
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
-    fireroamer: [
+    fireroamer11111: [
   { type: "farm", x: 160, y: -830, map: "desertland" },
   { type: "safe", x: -30, y: -800, map: "desertland" }
+    ],	
+    fireroamer: [
+  { type: "farm", x: 280, y: -1017, map: "desertland" },
+  { type: "safe", x: 470, y: -960, map: "desertland" }
     ],	
     ghost: [
   { type: "farm", x: -400, y: -1650 , map: "halloween" },
