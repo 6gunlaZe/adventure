@@ -679,6 +679,7 @@ if (checkTimeBetweenCalls() === 1) return;
 	{
 		rateheal = 1 - (character.heal / character.max_hp);
 		if (rateheal < 0.72)rateheal = 0.75;
+		if (character.targets > 5 )rateheal = 0.92
 	}
 	
     //If we have a target to heal, heal them
