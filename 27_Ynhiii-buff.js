@@ -672,13 +672,15 @@ if (checkTimeBetweenCalls() === 1) return;
 	//	game_log(lowest_health.name +">>>>>  "+lowest_health.name );
 
 	
-	if (character.id == "angioseal"){
+	if (character.map == "winter_instance" ){
 		rateheal =0.9
 	}
 	else
 	{
-		rateheal = 0.93
+		rateheal = 1 - (character.heal / character.max_hp);
+		if (rateheal < 0.72)rateheal = 0.75;
 	}
+	
     //If we have a target to heal, heal them
     if (lowest_health != null && lowest_health.health_ratio < rateheal) {
         if ( distance(character,{x: lowest_health.real_x, y: lowest_health.real_y}) < character.range) {
