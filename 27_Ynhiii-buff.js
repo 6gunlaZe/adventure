@@ -992,7 +992,7 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 
 async function handleZap() {
     const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","crabx","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
-    const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion","bscorpion"];  // không quan tâm tới levl
+    const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion","bscorpion","gscorpion"];  // không quan tâm tới levl
 	const soluongTOIDA = 14; // thường quái mạnh để 8 thôi
     const delay = 200;
     let zap = true;
