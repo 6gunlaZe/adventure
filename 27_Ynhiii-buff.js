@@ -1374,6 +1374,14 @@ const equipmentSets = {
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
     ],
+
+    nodeffbrun: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },		
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
+		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+
+    ],
 	
     nodeff: [
 	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
@@ -1642,7 +1650,16 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
 	{
         eTime = currentTime;
+
+        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
+		{
+        equipSet('nodeffbrun');		
+		}
+		else
+		{
         equipSet('nodeff');		
+		}
+		
 	checkdef = 0	
 		return
 	}
