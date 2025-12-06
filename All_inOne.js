@@ -1501,7 +1501,7 @@ if (
     !is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&
     untargetedMobs.length >= 3 &&
-    (   ( tank && tank.name == "Ynhi" && !tank.rip && distance(character, tank) < 180 )  ||  (tank && f1 && tank.name != "Ynhi")     ) && 
+    (   ( tank && tank.name == "Ynhi" && !tank.rip && tank.hp > 12000 && tank.mp > 4000  && distance(character, tank) < 180 )  ||  (tank && f1 && tank.name != "Ynhi")     ) && 
     character.hp > 14000 && character.mp > 800
 ) {
     const porc = get_nearest_monster({ type: "porcupine" });
