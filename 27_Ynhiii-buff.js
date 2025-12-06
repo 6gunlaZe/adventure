@@ -1367,6 +1367,14 @@ const equipmentSets = {
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
 
     ],
+	
+    deffbrun: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+    ],
+	
     nodeff: [
 	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
@@ -1421,10 +1429,10 @@ const equipmentSets = {
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
-	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
     ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1618,7 +1626,17 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	{
 	checkdef = 1
         eTime = currentTime;
-        equipSet('deff');	
+		
+        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
+		{
+			equipSet('deffbrun');
+		}
+		else
+		{
+			equipSet('deff');
+		}
+		
+		
 		return
 	}
 	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
