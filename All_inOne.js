@@ -3216,8 +3216,8 @@ async function checkServersForMonsters(monsters,monsters1) {
 let validObjects0
 let validObjects
 let validObjects1
-	 let hpcheck =120000000
-	 let hpcheck1 =17000000
+	 let hpcheck =120000000   // máu của franky
+	 let hpcheck1 =10000000    // máu của icegolem
 
   // Query API
   const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
