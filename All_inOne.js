@@ -306,6 +306,15 @@ let startPartyCheckAt = Date.now() + 100000; // mốc 100s sau khi chạy
 
 async function handleHome() {
 
+
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!smart.moving) {
+            smart_move({ to: "town" }, () => {
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            });
+        }
+	}
+
     if (Date.now() >= startPartyCheckAt) { //để đảm bảo các logic check quái khác lúc đầu hoạt động bình thường
     autoPartyCheck(f1111, f2222, 60000);
     }
