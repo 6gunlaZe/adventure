@@ -157,6 +157,16 @@ setTimeout(eventer, 6000);
 async function handleHome() {
 if (smart.moving) return;
 
+
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!smart.moving) {
+            smart_move({ to: "town" }, () => {
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            });
+        }
+	}
+	
+
 	
 	var f1 = get_player("haiz"); 
     if ( f1 && get_nearest_monster({type: "franky"})) {
