@@ -665,6 +665,15 @@ setInterval(function(){
 	// loot();
 if (checkTimeBetweenCalls() === 1) return;
 
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!smart.moving) {
+            smart_move({ to: "town" }, () => {
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            });
+        }
+	}
+	
+
 ///////////////////////////////////////////////	hoi mau
 	let didHealParty = false;
 	    var lowest_health = lowest_health_partymember();
