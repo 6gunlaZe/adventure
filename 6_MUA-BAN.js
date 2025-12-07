@@ -170,6 +170,8 @@ harbringer: {bank: "items1", level: -1, quantity: 1},
 bcape: {bank: "items1", level: -1, quantity: 1},
 bowofthedead: {bank: "items1", level: -1, quantity: 1},
 oozingterror: {bank: "items1", level: -1, quantity: 1},	
+firebow: {bank: "items1", level: 8, quantity: 1},	
+
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
 	intamulet: {bank: "items7", level: -1, quantity: 1},
