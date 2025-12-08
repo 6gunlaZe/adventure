@@ -295,7 +295,8 @@ function on_draw(){  ///ham mac dinh game chay moi 60 lan 1s
 // Cấu hình danh sách item cho từng loot mule
 const muleItemsMap = {
     "6gunlaZe": ["snowball222"],
-    "haiz": ["tombkey111", "cryptkey"],
+    "Ynhi": ["elixirfires"],
+	"haiz": ["tombkey111", "cryptkey"],
 };
 
 // Hàm chính: xử lý gửi item cho toàn bộ mule trong cấu hình
