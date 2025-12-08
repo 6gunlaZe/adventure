@@ -1070,12 +1070,16 @@ async function attackLoop() {
 
         // Find the nearest monster based on the targetNames
         for (let i = 0; i < targetNames.length; i++) {
-            nearest = get_nearest_monster_v2({
-                target: targetNames[i],
-                check_max_hp: true,  // Checking for monster with max HP
-                max_distance: 50,  // Consider monsters within 50 units
-                statusEffects: ["cursed"], // Check for these debuffs
-            });
+
+nearest = get_nearest_monster_v2({
+    target: targetNames[i],
+    statusEffects: ["cursed"],
+    max_distance: 50,
+
+    check_low_hp: true,     // ưu tiên quái HP thấp
+    fallback_max_hp: true,  // nếu không có thì đánh quái HP cao nhất
+});
+			
             if (nearest) break;
         }
 
@@ -1882,10 +1886,12 @@ function ms_to_next_skill(skill) {
 }
 
 
-
 function get_nearest_monster_v2(args = {}) {
     let min_d = 999999, target = null;
-    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
+    let optimal_hp = args.check_max_hp ? 0 : 999999999;
+
+    let lowHpTarget = null;
+    let lowHpValue = 999999999; // con có HP thấp nhất trong nhóm low HP
 
     for (let id in parent.entities) {
         let current = parent.entities[id];
@@ -1893,47 +1899,73 @@ function get_nearest_monster_v2(args = {}) {
         if (args.type && current.mtype != args.type) continue;
         if (args.min_level !== undefined && current.level < args.min_level) continue;
         if (args.max_level !== undefined && current.level > args.max_level) continue;
-        if (args.target && !args.target.includes(current.target)) continue;
+        if (args.target && current.target !== args.target) continue;
         if (args.no_target && current.target && current.target != character.name) continue;
 
-        // Status effects (debuffs/buffs) check
         if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
 
-        // Min/max XP check
         if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
         if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
 
-        // Attack power limit
         if (args.max_att !== undefined && current.attack > args.max_att) continue;
 
-        // Path check
         if (args.path_check && !can_move_to(current)) continue;
 
-        // Distance calculation
         let c_dist = args.point_for_distance_check
             ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
             : parent.distance(character, current);
 
         if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
 
-        // Generalized HP check (min or max)
-        if (args.check_min_hp || args.check_max_hp) {
+        // ------------ NEW FEATURE: CHECK LOW HP ----------------
+        if (args.check_low_hp) {
+            // Tính threshold theo max_hp
+            const hpThreshold = current.max_hp >= 800000 ? 45000 :
+                                current.max_hp >= 200000 ? 20000 : 7000;
+
+            // Nếu quái HP dưới threshold → ưu tiên
+            if (current.hp <= hpThreshold) {
+                if (current.hp < lowHpValue) {
+                    lowHpValue = current.hp;
+                    lowHpTarget = current;
+                }
+            }
+            continue; // vẫn loop hết để tìm toàn bộ con HP thấp
+        }
+        // -------------------------------------------------------
+
+        // Nếu đang check max HP
+        if (args.check_max_hp) {
             let c_hp = current.hp;
-            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
+            if (c_hp > optimal_hp) {
                 optimal_hp = c_hp;
                 target = current;
             }
             continue;
         }
 
-        // If no specific HP check, choose the closest monster
+        // Mặc định: chọn quái gần nhất
         if (c_dist < min_d) {
             min_d = c_dist;
             target = current;
         }
     }
+
+    // Nếu bật check_low_hp → ưu tiên quái low HP trước
+    if (args.check_low_hp) {
+        if (lowHpTarget) return lowHpTarget;    // ưu tiên 1
+        if (args.fallback_max_hp) {
+            return get_nearest_monster_v2({     // fallback: quái HP cao nhất
+                ...args,
+                check_low_hp: false,
+                check_max_hp: true
+            });
+        }
+    }
+
     return target;
 }
+
 
 
 
