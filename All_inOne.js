@@ -1073,15 +1073,27 @@ async function attackLoop() {
 
 nearest = get_nearest_monster_v2({
     target: targetNames[i],
-    statusEffects: ["cursed"],
-    max_distance: 50,
-
-    check_low_hp: true,     // ưu tiên quái HP thấp
-    fallback_max_hp: true,  // nếu không có thì đánh quái HP cao nhất
+    max_distance: character.range,
+    check_low_hp: true
 });
+
 			
             if (nearest) break;
         }
+
+
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+					statusEffects: ["cursed"],
+                    max_distance: 50,
+                    check_max_hp: true,  // Checking for monster with max HP
+                });
+                if (nearest) break;
+            }
+        }
+		
 
 	    
         if (!nearest) {
@@ -1951,17 +1963,12 @@ function get_nearest_monster_v2(args = {}) {
         }
     }
 
-    // Nếu bật check_low_hp → ưu tiên quái low HP trước
-    if (args.check_low_hp) {
-        if (lowHpTarget) return lowHpTarget;    // ưu tiên 1
-        if (args.fallback_max_hp) {
-            return get_nearest_monster_v2({     // fallback: quái HP cao nhất
-                ...args,
-                check_low_hp: false,
-                check_max_hp: true
-            });
-        }
-    }
+// Nếu bật check_low_hp → chỉ lấy quái HP thấp, không fallback HP cao
+if (args.check_low_hp) {
+    if (lowHpTarget) return lowHpTarget;
+    return null;  // không có quái HP thấp thì trả null
+}
+
 
     return target;
 }
