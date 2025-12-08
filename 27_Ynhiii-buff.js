@@ -355,6 +355,27 @@ function kite(taget, kite_range = 20, quai = null) {
      if ( !quai.dead && distance(character, quai) > 110 ) return 
 	}
 
+	
+    // LẤY TÊN QUÁI GẦN NHẤT
+    // ------------------------------------
+    let nearMob = get_nearest_monster();
+
+    // Cấu hình khoảng cách riêng (chỉ áp dụng nếu có mob phù hợp)
+    const kiteConfig = {
+        "fireroamer": 40,
+
+        // không có default → để giữ nguyên giá trị truyền vào
+    };
+
+    if (nearMob && kiteConfig[nearMob.mtype] !== undefined) {
+        // chỉ ghi đè khi có cấu hình
+        kite_range = kiteConfig[nearMob.mtype];
+    }
+    // → nếu không tìm thấy quái hoặc không nằm trong config → giữ nguyên giá trị truyền từ ngoài vào
+    // ------------------------------------
+
+	
+
     const originalPosition = {
         x: taget.real_x,
         y: taget.real_y
