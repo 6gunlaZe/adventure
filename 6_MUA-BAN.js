@@ -36,11 +36,11 @@ let crabxxmode = 0;
 let icemode = 0
 let misstoe
 let misstoenum = 100  ///cai dat tren 100 la chay doi qua
-let misstoemode = 1
+let misstoemode = 0
 
 let candy
 let candynum = 50  ///cai dat tren 50 la chay doi qua
-let candymode = 1
+let candymode = 0
 
 let checkloi
 let checkloi1 = 0
@@ -153,7 +153,7 @@ snakeoil: {bank: "items5", level: -1, quantity: 1},
 essenceoffrostl: {bank: "items5", level: -1, quantity: 1},	
 eggnog: {bank: "items5", level: -1, quantity: 1},		
 feather0: {bank: "items5", level: -1, quantity: 1},
-candycane: {bank: "items5", level: -1, quantity: 1},
+//candycane: {bank: "items5", level: -1, quantity: 1},
 tombkey: {bank: "items5", level: -1, quantity: 1},
 //leather: {bank: "items5", level: -1, quantity: 1},
 shadowstone: {bank: "items5", level: -1, quantity: 1},
