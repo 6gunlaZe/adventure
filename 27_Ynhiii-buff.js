@@ -793,14 +793,14 @@ let scorpion0 = get_nearest_monster({type: "bscorpion"});
 if (scorpion0 && crepp == "bscorpion" ) {
     kite(cung1, 120, scorpion0);
 } else {
-    kite(cung1, 30);
+    kite(cung1, 35);
 }
 
 	}
 	else
 {
 			//game_log("🟡🟠 Move 7: In")
-				kite(cung1,25);
+				kite(cung1,35);
 }
 
 
@@ -816,7 +816,7 @@ if (currentTarget && cung && kitefram === 1) {
             kite(cung, 120, scorpion);
         } else {
             // Nếu không có bscorpion → kite bình thường
-            kite(cung, 25);
+            kite(cung, 35);
         }
 
     }
