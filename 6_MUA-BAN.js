@@ -173,7 +173,8 @@ oozingterror: {bank: "items1", level: -1, quantity: 1},
 firebow: {bank: "items1", level: 8, quantity: 1},	
 mshield: {bank: "items1", level: 6, quantity: 1},	
 supermittens: {bank: "items1", level: 4, quantity: 1},	
-
+orbofdex: {bank: "items1", level: 2, quantity: 1},	
+orbofstr: {bank: "items1", level: 2, quantity: 1},	
 	
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
