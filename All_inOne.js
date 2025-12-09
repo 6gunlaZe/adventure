@@ -13,7 +13,7 @@ const locations = {
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
     fireroamer: [
-  { type: "farm", x: 160, y: -830, map: "desertland" },
+  { type: "farm", x: 256, y: -888, map: "desertland" },
   { type: "safe", x: -30, y: -800, map: "desertland" }
     ],	
     fireroamer111111: [
