@@ -365,6 +365,11 @@ function kite(taget, kite_range = 20, quai = null) {
     // Cấu hình khoảng cách riêng (chỉ áp dụng nếu có mob phù hợp)
     const kiteConfig = {
         "fireroamer": 40,
+        "spider": 10,
+        "spiderr": 10,
+        "spiderbl": 10,
+        "spiderbr": 10,
+
 
         // không có default → để giữ nguyên giá trị truyền vào
     };
