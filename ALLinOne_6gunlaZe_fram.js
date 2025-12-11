@@ -1438,7 +1438,7 @@ function spider_game() {
 if (character.map != "spider_instance") return
 
     // Danh sách ưu tiên
-    let prio = ["spiderr","spiderbr","spiderbl"];
+    let prio = ["spiderbr","spiderr","spiderbl"];
     let target = null;
 
     // Tìm theo thứ tự ưu tiên
