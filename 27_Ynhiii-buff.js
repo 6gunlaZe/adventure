@@ -1043,7 +1043,7 @@ async function handleZap() {
 
     try {
 		// if (currentState === "looting") return;
-        if (!dead && zap && !smart.moving) {
+        if (!dead && zap && !smart.moving && character.map != "spider_instance" ) {
             // Scan all mobs that are in the zapperMobs list
             const entities = Object.values(parent.entities).filter(entity =>
                 entity && entity.type === "monster" && !entity.target && 
