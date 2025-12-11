@@ -134,19 +134,20 @@ async function eventer() {
     let tank = get_player("Ynhi");
 
     try {
-        if (events) {
+    if (events) {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
          //   framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
 		  //  framXmage()
+			spidergame()
 	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
 
         } else {
            //safeawwait()
-		// if (new Date().getHours() >= 6 && new Date().getHours() < 10 && locate_item("tombkey") !== -1)framtay = 1;  ///tạm ngưng hầm ngục
+		if (new Date().getHours() >= 6 && new Date().getHours() < 11 && locate_item("spiderkey") !== -1)framtay = 1;  ///tạm ngưng hầm ngục
 		handleHome();
         }
 	    
