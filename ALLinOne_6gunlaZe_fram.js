@@ -1605,12 +1605,15 @@ if (name === "haiz") {
         goo: "crypt",
         goo1: "tomb",
         goo2: "winter_instance",
+        goo3: "spider_instance",
+		
     };
 
     // Các lệnh gán biến trạng thái
     const flagCommands = {
         crypt: () => { cryts = 1; },
         tomb: () => { tomb = 1; },
+        spidergame: () => { tomb = 1; },
         mage: () => { tomb = 1; },
         landau1: () => { landaucyp = 1; },
         landau0: () => { landaucyp = 0; },
@@ -1753,7 +1756,7 @@ looting()
 function looting() {
 	    let chests = get_chests();
     let chestIds = Object.keys(chests);
-    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb" || character.map == "winter_instance") {
+    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb" || character.map == "winter_instance" || character.map == "spider_instance") {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);   
