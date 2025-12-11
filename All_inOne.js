@@ -910,7 +910,7 @@ if (monster && character.cc < 100) {
             equipSet("single_physical");
         } else {
             // Mặc định nếu không rõ loại (hoặc khác magic/physical)
-            equipSet("single");
+			equipSet('aoe');
         }
     }
 }
@@ -935,14 +935,16 @@ if ( character.map == "gateway" && distance(character, {x: -321, y: -194}) < 50 
 const steps = [
     { x: 0, y: -470, monster: "wait" },
     { x: 0, y: -750, monster: "spider" },
-    { x: 0, y: -1191, monster: "spiderr" },
-{ x: 0, y: -1191, monster: "spiderbr" },
-{ x: 0, y: -1191, monster: "spiderbl" },
-{ x: 0, y: -1191, monster: "spiderbl" },
+{ x: 0, y: -1191, monster: "wait" },
 	
-{ x: 0, y: -1191, monster: "spiderbl" },
-{ x: 0, y: -1191, monster: "spiderbl" },
-{ x: 0, y: -1191, monster: "spiderbl" },
+{ x: 196, y: -1538, monster: "spiderbr" }, 
+{ x: 0, y: -1516, monster: "spiderr" },
+{ x: -192, y: -1516, monster: "spiderbl" },
+{ x: -192, y: -1516, monster: "spiderbl" },
+	
+{ x: -192, y: -1516, monster: "spiderbl" },
+{ x: -192, y: -1516, monster: "spiderbl" },
+{ x: -192, y: -1516, monster: "spiderbl" },
 
 	
 ];
