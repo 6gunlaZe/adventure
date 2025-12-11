@@ -833,6 +833,176 @@ if (buoc == 11 || character.rip)
 }
 
 
+
+
+
+
+
+
+
+
+let startTime1 = null; // Thời gian bắt đầu đếm giờ
+let buoc1 = 0
+function spidergame() {
+
+ let member1 = get_player("6gunlaZe");
+ let member2 = get_player("Ynhi");
+	
+autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+
+  // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
+  if ((!member1 || !member2) && startTime1 === null) {
+    startTime1 = Date.now(); // Lưu lại thời gian bắt đầu
+  }
+
+  // Nếu cả 2 thành viên đã có mặt, reset lại startTime
+  if (member1 && member2) {
+    startTime1 = null; // Reset nếu có đủ 2 thành viên
+  }
+
+  // Kiểm tra nếu đã trôi qua 10 phút (600 giây)
+  if (startTime1 !== null && Date.now() - startTime1 >= 10 * 60 * 1000) {
+    // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
+	stop_character("Ynhi")	
+	stop_character("6gunlaZe")	
+	buoc1 = 0
+	framtay = 0
+	startTime1  = null
+  }
+
+
+	
+if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm("6gunlaZe","spider")	
+}
+
+if (character.map == "spider_instance" && (!member1 || !member2) )	
+{
+//send_cm("haiz1","goo3")
+send_cm("Ynhi","goo3")
+send_cm("6gunlaZe","goo3")
+
+
+//send_cm("haiz1",character.in)
+send_cm("Ynhi",character.in)
+send_cm("6gunlaZe",character.in)
+
+}
+
+if(smart.moving)return	
+var monster
+
+        monster = get_targeted_monster() 
+
+
+
+if (monster && character.cc < 100) {
+    // Ưu tiên trang bị luck nếu máu quái thấp
+    if (monster.hp < 15000) {
+        equipSet("luck");
+        setTimeout(waitAndUnluck, 5000);
+    } else {
+        // Phân loại theo damage_type của quái
+        if (monster.damage_type === "magical" && monster.attack > 3500) {
+            equipSet("single_Magic");
+        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
+            equipSet("single_physical");
+        } else {
+            // Mặc định nếu không rõ loại (hoặc khác magic/physical)
+            equipSet("single");
+        }
+    }
+}
+
+	
+
+/////////
+
+
+if ( character.map != "spider_instance")
+{
+	if ( character.map != "gateway")smart_move({ map: "gateway", x: -321, y: -194 })
+	if ( character.map == "gateway" && distance(character, {x: -321, y: -194}) >= 50 )smart_move({ map: "gateway", x: -321, y: -194 })
+
+}
+if ( character.map == "gateway" && distance(character, {x: -321, y: -194}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
+    enter("spider_instance");
+	buoc1 = 1;
+}
+
+// Danh sách bước đi kèm loại quái cần kiểm tra
+const steps = [
+    { x: 0, y: -470, monster: "wait" },
+    { x: 0, y: -750, monster: "spider" },
+    { x: 0, y: -1191, monster: "spiderr" },
+{ x: 0, y: -1191, monster: "spiderbr" },
+{ x: 0, y: -1191, monster: "spiderbl" },
+{ x: 0, y: -1191, monster: "spiderbl" },
+	
+{ x: 0, y: -1191, monster: "spiderbl" },
+{ x: 0, y: -1191, monster: "spiderbl" },
+{ x: 0, y: -1191, monster: "spiderbl" },
+
+	
+];
+
+
+if (character.map === "spider_instance" && buoc1 >= 1 && buoc1 <= steps.length) {
+    const step = steps[buoc1 - 1]; // Vì mảng bắt đầu từ 0
+    // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
+    const monster = get_nearest_monster({ type: step.monster });
+	
+    if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
+    else if ( monster && distance(character,monster) > 10 && character.hp > 4000 )xmove(monster.real_x, monster.real_y);
+
+
+	
+    if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
+        buoc1++;
+    }
+}
+
+	
+
+if (buoc1 == 8 || character.rip)
+{
+	stop_character("Ynhi")	
+	stop_character("6gunlaZe")	
+	buoc1 = 0
+	framtay = 0
+}
+
+
+///////////	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const bossData = {
     1: {
         name: "stompy",
