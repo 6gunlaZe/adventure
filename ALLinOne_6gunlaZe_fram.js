@@ -886,7 +886,7 @@ skillLoop();
 
 function handleSnowball() {
 //	if(character.map != "crypt" && character.map != "tomb" && character.map != "winter_instance")return
-const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","plantoid","jr","greenjr","mrgreen","mrpumpkin"];
+const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","plantoid","jr","greenjr","mrgreen","mrpumpkin","spiderr","spiderbr","spiderbl"];
 
 	    const leader = get_player("haiz");
 	const hoimau = get_player("Ynhi");
