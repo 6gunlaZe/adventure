@@ -145,11 +145,17 @@ async function eventer() {
             VIPBosses();
 	} else if (framboss > 0) {
 
-        } else {
+    } else {
            //safeawwait()
-		if (new Date().getHours() >= 6 && new Date().getHours() < 12 && locate_item("spiderkey") !== -1)framtay = 1;  ///tạm ngưng hầm ngục
+		if (new Date().getHours() >= 6 && new Date().getHours() < 12 && locate_item("spiderkey") !== -1)
+		{
+			framtay = 1;  ///tạm ngưng hầm ngục
+		}
+		else
+		{
 		handleHome();
-        }
+		}
+    }
 	    
 	    
     } catch (e) {
