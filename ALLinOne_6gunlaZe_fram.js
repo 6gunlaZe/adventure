@@ -891,7 +891,7 @@ const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skelet
 
 	    const leader = get_player("haiz");
 	const hoimau = get_player("Ynhi");
-if ( (leader && leader.hp > 13000 && hoimau && hoimau.hp > 8000 )  || !leader || character.mp < 350) return
+if ( (leader && leader.hp > 13000 && hoimau && hoimau.hp > 8000 && hoimau.mp > 4000 )  || !leader || character.mp < 350) return
 	
   if (can_use("snowball")) {
     const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
