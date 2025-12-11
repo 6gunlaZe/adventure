@@ -682,6 +682,7 @@ if (buoc == 8 || character.rip)
 	stop_character("6gunlaZe")	
 	buoc = 0
 	framtay = 0
+	smart_move({ map: "winterland", x: 1049, y: -2002 })
 }
 	
 }
