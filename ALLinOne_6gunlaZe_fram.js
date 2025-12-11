@@ -134,6 +134,7 @@ async function eventer() {
           crytsgame()
 	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
           Xmage()
+		  spider_game()
 	} else if (crab > 0) {
           crabgame()		
         } else {
@@ -1426,7 +1427,24 @@ function Handelbossvip() {
 
 
 function Xmage() {
+if (character.map != "winter_instance") return
+
+	
+	
 }
+
+
+function spider_game() {
+if (character.map != "spider_instance") return
+
+
+
+	
+	
+	
+}
+
+
 
 let delayboss = Date.now()
 function crytsgame() {
