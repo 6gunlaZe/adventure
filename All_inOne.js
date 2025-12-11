@@ -832,6 +832,7 @@ if (buoc == 11 || character.rip)
 	stop_character("6gunlaZe")	
 	buoc = 0
 	framtay = 0
+	smart_move({ map: "mansion", x: 0, y: -470 })
 }
 
 
@@ -979,6 +980,7 @@ if (buoc1 == 8 || character.rip)
 	stop_character("6gunlaZe")	
 	buoc1 = 0
 	framtay = 0
+	smart_move({ map: "gateway", x: -321, y: -194 })
 }
 
 
