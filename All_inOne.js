@@ -873,7 +873,7 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 
 	
 if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm("6gunlaZe","spider")	
+	send_cm("6gunlaZe","spidergame")	
 }
 
 if (character.map == "spider_instance" && (!member1 || !member2) )	
