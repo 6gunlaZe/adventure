@@ -865,7 +865,7 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
   }
 
   // Nếu cả 2 thành viên đã có mặt, reset lại startTime
-  if (member1 && member2) {
+  if (member1 && member2 && distance(character, member1) < 150  && distance(character, member2) < 150 ) {
     startTime1 = null; // Reset nếu có đủ 2 thành viên
   }
 
