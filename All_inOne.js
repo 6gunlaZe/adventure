@@ -147,7 +147,7 @@ async function eventer() {
 
     } else {
            //safeawwait()
-		if (new Date().getHours() >= 6 && new Date().getHours() < 12 && locate_item("spiderkey") !== -1)
+		if (new Date().getHours() >= 6 && new Date().getHours() < 19 && locate_item("spiderkey") !== -1)
 		{
 			framtay = 1;  ///tạm ngưng hầm ngục
 		}
