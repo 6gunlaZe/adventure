@@ -941,6 +941,7 @@ if ( character.map == "gateway" && distance(character, {x: -321, y: -194}) < 50 
 
 // Danh sách bước đi kèm loại quái cần kiểm tra
 const steps = [
+    { x: 0, y: -245, monster: "wait" },
     { x: 0, y: -470, monster: "wait" },
     { x: 0, y: -750, monster: "wait" },
 { x: 0, y: -1191, monster: "wait" },
