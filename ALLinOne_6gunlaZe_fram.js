@@ -1437,10 +1437,21 @@ if (character.map != "winter_instance") return
 function spider_game() {
 if (character.map != "spider_instance") return
 
+    // Danh sách ưu tiên
+    let prio = ["spiderr","spiderbr","spiderbl"];
+    let target = null;
 
+    // Tìm theo thứ tự ưu tiên
+    for (let name of prio) {
+        target = get_nearest_monster({ type: name });
+        if (target) break;
+    }
 
-	
-	
+    // Nếu có target thì bắn supershot
+    if (target && can_use("supershot")) {
+        use_skill("supershot", target);
+    }
+
 	
 }
 
