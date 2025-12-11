@@ -945,9 +945,9 @@ const steps = [
     { x: 0, y: -750, monster: "wait" },
 { x: 0, y: -1191, monster: "wait" },
 	
-{ x: 196, y: -1538, monster: "spiderbr" }, 
-{ x: 0, y: -1516, monster: "spiderr" },
-{ x: -192, y: -1516, monster: "spiderbl" },
+{ x: 220, y: -1495, monster: "spiderbr" }, 
+{ x: 24, y: -1495, monster: "spiderr" },
+{ x: -175, y: -1495, monster: "spiderbl" },
 { x: -192, y: -1516, monster: "spiderbl" },
 	
 { x: -192, y: -1516, monster: "spiderbl" },
