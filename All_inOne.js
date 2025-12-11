@@ -1241,19 +1241,22 @@ async function attackLoop() {
     try {
         let nearest = null;
 
+
+if (
+        character.map == mobMap &&
+        distance(character, { x: locations[home][0].x, y: locations[home][0].y }) < 250
+    ) 
+{	
         // Find the nearest monster based on the targetNames
         for (let i = 0; i < targetNames.length; i++) {
-
-nearest = get_nearest_monster_v2({
-    target: targetNames[i],
-    max_distance: character.range,
-    check_low_hp: true
-});
-
-			
+          nearest = get_nearest_monster_v2({
+          target: targetNames[i],
+           max_distance: character.range,
+         check_low_hp: true
+         });
             if (nearest) break;
         }
-
+}
 
         if (!nearest) {
             for (let i = 0; i < targetNames.length; i++) {
