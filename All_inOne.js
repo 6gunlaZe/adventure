@@ -1643,7 +1643,7 @@ const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
 function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland"];
+    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance"];
     const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
         type === "monster" &&
         visible &&
