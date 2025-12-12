@@ -852,7 +852,7 @@ if (buoc == 11 || character.rip)
 
 let startTime1 = null; // Thời gian bắt đầu đếm giờ
 let buoc1 = 0
-function spidergame() {
+function spidergame() {  /// đã check fix lỗi treo mạnh hơn tomb và Xgame
 
  let member1 = get_player("6gunlaZe");
  let member2 = get_player("Ynhi");
@@ -877,6 +877,7 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 	buoc1 = 0
 	framtay = 0
 	startTime1  = null
+	smart_move({ map: "gateway", x: -321, y: -194 })
   }
 
 
@@ -959,9 +960,11 @@ const steps = [
 ];
 
 
-if (character.map === "spider_instance" && buoc1 >= 1 && buoc1 <= steps.length) {
-    const step = steps[buoc1 - 1]; // Vì mảng bắt đầu từ 0
-    // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
+if (character.map === "spider_instance" && buoc1 >= 0 && buoc1 <= steps.length) {
+
+const index = Math.max(0, buoc1 - 1);
+const step = steps[index];
+
     const monster = get_nearest_monster({ type: step.monster });
 	
     if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
