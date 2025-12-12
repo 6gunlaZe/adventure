@@ -618,12 +618,12 @@ const equipmentSets = {
     ],
      singleAOE: [
         { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 7 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     single: [
         { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 7 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
    //	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
     ],
     dead: [
