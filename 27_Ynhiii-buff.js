@@ -290,7 +290,7 @@ setInterval(() => {
 
 	
 	if (started == undefined) started = Date.now()
-    if ( Date.now() < started + 1000) return
+    if ( Date.now() < started + 150) return
 	if(is_on_cooldown("use_hp")) return 
 if ((character.max_mp-character.mp) <300)use_skill("partyheal");
 
