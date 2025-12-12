@@ -691,7 +691,7 @@ var attack_mode=true
 setInterval(function(){
 
 	// loot();
-if (checkTimeBetweenCalls() === 1) return;
+// if (checkTimeBetweenCalls() === 1) return;
 
     if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
         if (!smart.moving) {
@@ -1025,7 +1025,7 @@ if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) /////
 	}
 	
 
-},1000/4); // Loops every 1/4 seconds.
+},1000/5); // Loops every 1/5 seconds.
 
 
 
