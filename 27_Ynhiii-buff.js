@@ -64,10 +64,17 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 
 
+
+// ================== GLOBAL STATE ==================
 let isRunning = false;
 let isMoving = false;
 let townUsed = false;
 
+// --- watchdog nhẹ ---
+let moveStart = 0;
+const MOVE_MAX = 55000; // 15s chống kẹt
+
+// ================== MAIN LOOP ==================
 setInterval(() => {
     if (!isRunning) {
         isRunning = true;
@@ -75,11 +82,29 @@ setInterval(() => {
     }
 }, 1000);
 
+// ================== MAIN LOGIC ==================
 async function mainLogic() {
     let leader = get_player("haiz");
     let tranferr = get_player("nhiY");
 
-    // Nếu đang ở winterland mà không thấy leader => về town (1 lần)
+    // ====== ANTI STUCK DI CHUYỂN (NHẸ) ======
+    // Sửa lệch trạng thái isMoving
+    if (isMoving && !smart.moving) {
+        isMoving = false;
+    }
+
+    // Nếu đang di chuyển → kiểm tra timeout
+    if (isMoving || smart.moving) {
+        if (Date.now() - moveStart > MOVE_MAX) {
+            console.log("MOVE STUCK → RESET");
+            isMoving = false;
+            smart.moving = false;
+        } else {
+            return;
+        }
+    }
+
+    // ====== WINTERLAND SAFETY ======
     if (
         character.map === "winterland" &&
         distance(character, { x: 800, y: 400 }) < 250 &&
@@ -96,23 +121,21 @@ async function mainLogic() {
         townUsed = false;
     }
 
-    // Tham gia party nếu chưa có
+    // ====== PARTY CONTROL ======
     if (!character.party) {
         send_party_request("haiz");
     }
 
-    // Rời party nếu đang ở party sai
     if (character.party && character.party !== "haiz") {
         leave_party();
     }
 
-    // Không làm gì nếu chưa vào party
     if (!character.party) return;
 
-    // Nếu có dữ liệu vị trí và đang ở gần mục tiêu => xmove nhẹ
+    // ====== XMOVE NHẸ KHI ĐÃ GẦN ======
     if (
         receivedData &&
-        typeof receivedData === 'object' &&
+        typeof receivedData === "object" &&
         receivedData.message === "location" &&
         tranferr
     ) {
@@ -124,7 +147,7 @@ async function mainLogic() {
         }
     }
 
-    // Xử lý framfocus nếu cần (giữ nguyên logic gốc)
+    // ====== FRAMFOCUS (GIỮ NGUYÊN LOGIC) ======
     let leaderfram = get_player(nhanvatfram);
     if (
         framfocus === 1 &&
@@ -139,36 +162,47 @@ async function mainLogic() {
         kitefram = 0;
     }
 
-    // Nếu đã gần leader thì không cần di chuyển
+    // Gần leader thì không cần di chuyển
     if (leader && distance(character, leader) < 130) return;
 
-    // Nếu đang di chuyển thì không làm gì
-    if (isMoving || smart.moving) return;
-
-    // Xử lý di chuyển đến vị trí nhận từ receivedData
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
+    // ====== DI CHUYỂN CHÍNH ======
+    if (
+        receivedData &&
+        typeof receivedData === "object" &&
+        receivedData.message === "location"
+    ) {
         const { map: targetMap, x: targetX, y: targetY } = receivedData;
 
+        // ---- KHÁC MAP → SMART MOVE ----
         if (character.map !== targetMap && character.map !== "crypt") {
+
             if (targetMap === "goobrawl") {
-                parent.socket.emit('join', { name: "goobrawl" });
+                parent.socket.emit("join", { name: "goobrawl" });
             }
 
             isMoving = true;
+            moveStart = Date.now();
+
             try {
                 await smart_move({ map: targetMap, x: targetX, y: targetY });
             } catch (err) {
                 console.log("Không thể đi tới điểm đến, dùng town.");
                 await use_skill("town");
+            } finally {
+                isMoving = false;
             }
-            isMoving = false;
-        } else {
+
+        }
+        // ---- CÙNG MAP → XMOVE ----
+        else {
             if (distance(character, { x: targetX, y: targetY }) > 10) {
                 xmove(targetX, targetY);
             }
         }
     }
 }
+
+
 
 
 
