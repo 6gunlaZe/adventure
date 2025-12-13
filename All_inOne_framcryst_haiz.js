@@ -12,6 +12,7 @@ let datahero
 let keyauto
 let checkback = 0
 let movesuper = 0
+let SieutocRun = 1  // 0 = chạy bình thường, 1 thì tùy chỉnh chỉ đánh Bat và quái a3
 game_log("Game vs 1.1");
 
 smart_move({ map: "cave", x: -194, y: -1281 })
@@ -594,7 +595,7 @@ else
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 if (z > 990)return
-if (  ( z == 98 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kill() >= 14 && targetkill.length == 0) || z > 130 || (checkback + z) > 235 ){
+if (  ( z == 98 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kill() >= 14 && targetkill.length == 0) || z > 130 || (checkback + z) > 235 || (SieutocRun == 1 && z == 46 && landaucheck == 1 ) ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
