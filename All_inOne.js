@@ -1993,7 +1993,7 @@ const equipmentSets = {
         { itemName: "candycanesword", slot: "offhand", level: 1, l: "s" },
     ],
     home: [
-        { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "supermittens", slot: "gloves", level: 8, },
         { itemName: "fury", slot: "helmet", level: 7, },
     ],
     def_magical: [
@@ -2022,7 +2022,7 @@ const equipmentSets = {
 		
     ],
     nodeff: [
-        { itemName: "mittens", slot: "gloves", level: 9, },
+        { itemName: "supermittens", slot: "gloves", level: 8, },
         { itemName: "fury", slot: "helmet", level: 7, },
         { itemName: "mcape", slot: "chest", level: 8, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
@@ -2756,7 +2756,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["spiderkey","candycanesword","elixirfires","hotchocolate","tombkey","elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","sweaterhs","tigerstone","rabbitsfoot"];
+    let itemsToExclude = ["spiderkey","candycanesword","elixirfires","hotchocolate","tombkey","elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "jacko","tracker","supermittens","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","sweaterhs","tigerstone","rabbitsfoot"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
