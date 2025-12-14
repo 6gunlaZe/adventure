@@ -240,7 +240,7 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 setInterval(function() {
 
-changeitem({ slot: "gloves", name : "mittens", level : 9 });
+changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 	
  if (character.rip) { ///////auto hoi sinh
     respawn();
@@ -257,7 +257,7 @@ setTimeout(function() {
 
 
 
-changeitem({ slot: "gloves", name : "mittens", level : 9 });
+changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 
 
@@ -1358,7 +1358,7 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "mittens", slot: "gloves", level: 9 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
     ],
     Unluck: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
