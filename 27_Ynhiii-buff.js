@@ -645,7 +645,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["elixirfires","hotchocolate","elixirluck","snowball","wbookhs","mittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","slimestaff","tigerstone","froststaff","wbook1"];
+    let itemsToExclude = ["elixirfires","hotchocolate","elixirluck","snowball","wbookhs","mittens","supermittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","harbringer","slimestaff","tigerstone","froststaff","wbook1"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
@@ -673,7 +673,7 @@ setTimeout(function() {
 
 
 
-changeitem({ slot: "gloves", name : "mittens", level : 9 });
+changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 
 setInterval(function() {
@@ -1527,7 +1527,7 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "mittens", slot: "gloves", level: 9 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
     ],
     Unluck: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
