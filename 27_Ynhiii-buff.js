@@ -93,6 +93,34 @@ async function mainLogic() {
         isMoving = false;
     }
 
+
+// ====== PRIORITY: HOLIDAY MOVE ======
+if (
+    parent?.S?.holidayseason &&
+    !character?.s?.holidayspirit
+) {
+    // nếu chưa di chuyển thì khởi động move
+    if (!isMoving && !smart.moving) {
+        isMoving = true;
+        moveStart = Date.now();
+
+        try {
+            await smart_move({ to: "town" });
+            parent.socket.emit("interaction", { type: "newyear_tree" });
+        } catch (e) {
+            console.log("Holiday move failed");
+        } finally {
+            isMoving = false;
+        }
+    }
+
+    // ƯU TIÊN TUYỆT ĐỐI → KHÔNG CHẠY LOGIC KHÁC
+    return;
+}
+
+
+
+	
     // Nếu đang di chuyển → kiểm tra timeout
     if (isMoving || smart.moving) {
         if (Date.now() - moveStart > MOVE_MAX) {
@@ -726,15 +754,6 @@ setInterval(function(){
 
 	// loot();
 // if (checkTimeBetweenCalls() === 1) return;
-
-    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
-        if (!smart.moving) {
-            smart_move({ to: "town" }, () => {
-                parent.socket.emit("interaction", { type: "newyear_tree" });
-            });
-        }
-	}
-	
 
 ///////////////////////////////////////////////	hoi mau
 	let didHealParty = false;
