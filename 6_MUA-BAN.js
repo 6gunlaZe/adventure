@@ -2022,7 +2022,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "shield","pants1","gcape","sparkstaff","candy1","candy0","carrot","dexamulet","fallen","ink","cclaw","pmace","snowball2222","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
+var craftList = [ "shield","gcape","sparkstaff","candy1","candy0","carrot","dexamulet","fallen","ink","cclaw","pmace","snowball2222","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "mittens", "ololipop" , "supermittens" , "sweaterhs" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" , "seashell"  ];
 
 
 function secondhands_handler(event) {
