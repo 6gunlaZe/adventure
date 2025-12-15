@@ -26,7 +26,7 @@ const locations = {
     crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
     fireroamer: [
-  { type: "farm", x: 80, y: -850, map: "desertland" },
+  { type: "farm", x: 114, y: -883, map: "desertland" },
   { type: "safe", x: -30, y: -800, map: "desertland" }
     ],	
     fireroamer11111: [
@@ -226,7 +226,7 @@ if (smart.moving) return;
 
     // Khi đang ở vị trí farm → quay vòng
     if (!smart.moving) {
-        const radius = 40;
+        const radius = 30;
         let center = locations[home][0];
         if (mode_follow_haiz) {
             const haiz = f1;
