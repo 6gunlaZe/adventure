@@ -2060,7 +2060,7 @@ function on_destroy() // called just before the CODE is destroyed
 
 setInterval(function() {
 
-if (is_moving(character) || !character.stand ) return	
+if (is_moving(character) ) return	
 	
 parent.socket.off("secondhands", secondhands_handler);
 parent.socket.on("secondhands", secondhands_handler);
