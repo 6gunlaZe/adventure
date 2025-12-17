@@ -1933,7 +1933,7 @@ var combineWhitelist =
 		intbelt: 3,
 		//strbelt: 3,
 		orbg: 3,
-		wbookhs: 2,
+		//wbookhs: 1,
 		cring: 2,
 		cearring: 2,
 		//talkingskull: 3,
