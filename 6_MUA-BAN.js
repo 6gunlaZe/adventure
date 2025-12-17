@@ -2073,7 +2073,7 @@ parent.socket.emit("secondhands");
 setInterval(function() {
 	
 if (pontylandau == 1)return
-if (is_moving(character) || !character.stand ) return	
+if (is_moving(character) ) return	
 pontylandau = 1	
 parent.socket.off("secondhands", secondhands_handler);
 parent.socket.on("secondhands", secondhands_handler);
