@@ -1782,7 +1782,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	
 
 
-	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0)
+	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 )
 	{
         eTime = currentTime; 
         equipSet('creepburn');	
@@ -1847,7 +1847,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 
-	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0 )
+	if(lowHpMobs.length == 0 && checkluckk > 0  )
 	{
         eTime = currentTime;
         // game_log("🎯 Unluck"); 	
