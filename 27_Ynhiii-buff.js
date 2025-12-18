@@ -1615,7 +1615,7 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+       // { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1762,6 +1762,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
+  if (character.slots.gloves && character.slots.gloves.name === "handofmidas" && goldcheck == 0)
+  	{
+        eTime = currentTime;
+        equipSet('nogold');	
+		return
+	}
+	
+
 	
 	if(get_nearest_monster({ type: "xmagefi" }) && lowHpMobs.length == 0)
 	{
@@ -1770,14 +1778,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0 )
-	{
-        eTime = currentTime;
-        // game_log("🎯 Unluck"); 	
-        equipSet('Unluck');	
-		checkluckk -= 1
-		return
-	}
+
 	
 
 
@@ -1846,7 +1847,16 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 
+	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0 )
+	{
+        eTime = currentTime;
+        // game_log("🎯 Unluck"); 	
+        equipSet('Unluck');	
+		checkluckk -= 1
+		return
+	}
 
+	
 
 if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0) {
 	eTime = currentTime;
