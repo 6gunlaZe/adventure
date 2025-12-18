@@ -747,7 +747,7 @@ async function lootAllChests() {
 
             game_log("HAND OF MIDAS ACTIVE");
 
-            setTimeout(shifting, 300);
+            setTimeout(shifting, 370);
 
         } catch (e) {
             game_log("Equip midas FAILED");
