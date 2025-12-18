@@ -732,14 +732,25 @@ function lootAllChests() {
 
                 // Loot
                 for (let id of chestIds) loot(id);
-             if (character.slots.gloves && character.slots.gloves.name === "handofmidas")game_log("handofmidas GOLD")
+             if (character.slots.gloves && character.slots.gloves.name === "handofmidas")
+			 {
+				 game_log("handofmidas GOLD YES")
+				 game_log("handofmidas GOLD YES")
+				 game_log("handofmidas GOLD YES")
+			 }
+			else
+			 {
+				 game_log("handofmidas NOOOOO")
+				 game_log("handofmidas NOOOOO")
+				 game_log("handofmidas NOOOOO")
+			 }
 
 			
                 // Đổi lại gear sau khi loot xong
                 setTimeout(shifting, 150);
             
 
-        }, 50); // delay nhỏ nhưng đủ
+        }, 140); // delay nhỏ nhưng đủ
     }
 }
 
