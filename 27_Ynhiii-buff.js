@@ -1572,7 +1572,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
-       // { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1601,7 +1601,7 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 		
-       // { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1631,7 +1631,7 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-       // { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1778,13 +1778,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-  if (character.slots.gloves && character.slots.gloves.name != "supermittens" && goldcheck == 0 && lowHpMobs.length == 0)
-  	{
-        eTime = currentTime;
-        equipSet('nogold');	
-		return
-	}
-	
+
 
 	
 	if(get_nearest_monster({ type: "xmagefi" }) && lowHpMobs.length == 0)
@@ -1798,7 +1792,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	
 
 
-	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 )
+	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0 )
 	{
         eTime = currentTime; 
         equipSet('creepburn');	
@@ -1863,7 +1857,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 
-	if(lowHpMobs.length == 0 && checkluckk > 0  )
+	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0  )
 	{
         eTime = currentTime;
         // game_log("🎯 Unluck"); 	
