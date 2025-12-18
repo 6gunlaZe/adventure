@@ -728,8 +728,6 @@ function lootAllChests() {
         // Đợi 50ms cho server cập nhật trang bị
         setTimeout(() => {
 
-            if (character.slots.gloves && character.slots.gloves.name === "handofmidas") {
-
                 shift(0, "goldbooster");  
 
                 // Loot
@@ -737,7 +735,7 @@ function lootAllChests() {
 
                 // Đổi lại gear sau khi loot xong
                 setTimeout(shifting, 300);
-            }
+            
 
         }, 50); // delay nhỏ nhưng đủ
     }
