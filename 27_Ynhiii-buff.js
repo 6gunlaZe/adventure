@@ -1762,7 +1762,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-  if (character.slots.gloves && character.slots.gloves.name === "handofmidas" && goldcheck == 0)
+  if (character.slots.gloves && character.slots.gloves.name != "supermittens" && goldcheck == 0 && lowHpMobs.length == 0)
   	{
         eTime = currentTime;
         equipSet('nogold');	
