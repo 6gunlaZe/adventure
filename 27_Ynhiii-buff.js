@@ -734,7 +734,7 @@ function lootAllChests() {
                 for (let id of chestIds) loot(id);
 
                 // Đổi lại gear sau khi loot xong
-                setTimeout(shifting, 300);
+                setTimeout(shifting, 500);
             
 
         }, 50); // delay nhỏ nhưng đủ
