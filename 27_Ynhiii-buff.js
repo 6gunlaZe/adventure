@@ -732,9 +732,11 @@ function lootAllChests() {
 
                 // Loot
                 for (let id of chestIds) loot(id);
+             if (character.slots.gloves && character.slots.gloves.name === "handofmidas")game_log("handofmidas GOLD")
 
+			
                 // Đổi lại gear sau khi loot xong
-                setTimeout(shifting, 500);
+                setTimeout(shifting, 150);
             
 
         }, 50); // delay nhỏ nhưng đủ
