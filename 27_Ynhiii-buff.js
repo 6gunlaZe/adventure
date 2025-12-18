@@ -721,11 +721,11 @@ function lootAllChests() {
 
     // Điều kiện chính
     if ((chestIds.length > 10 || (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby))
-        && character.cc < 200) {
+        && character.cc < 200 && isEquipping == false) {
 
         equipSet("gold");
 
-        // Đợi 250ms cho server cập nhật trang bị
+        // Đợi 50ms cho server cập nhật trang bị
         setTimeout(() => {
 
             if (character.slots.gloves && character.slots.gloves.name === "handofmidas") {
@@ -739,7 +739,7 @@ function lootAllChests() {
                 setTimeout(shifting, 300);
             }
 
-        }, 250); // delay nhỏ nhưng đủ
+        }, 50); // delay nhỏ nhưng đủ
     }
 }
 
