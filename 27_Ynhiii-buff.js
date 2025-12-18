@@ -711,8 +711,10 @@ lootAllChests()
 function shifting() {
     shift(0, 'xpbooster');
 equipSet('nogold');
+	goldcheck = 0
 }
 
+let goldcheck = 0
 
 function lootAllChests() {
     let chests = get_chests();
@@ -724,7 +726,7 @@ function lootAllChests() {
         && character.cc < 200 && isEquipping == false) {
 
         equipSet("gold");
-
+        goldcheck = 1;
         // Đợi 50ms cho server cập nhật trang bị
         setTimeout(() => {
 
@@ -750,7 +752,7 @@ function lootAllChests() {
                 setTimeout(shifting, 150);
             
 
-        }, 140); // delay nhỏ nhưng đủ
+        }, 20); // delay nhỏ nhưng đủ
     }
 }
 
@@ -1768,7 +1770,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-	if(lowHpMobs.length == 0 && checkluckk > 0)
+	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0 )
 	{
         eTime = currentTime;
         // game_log("🎯 Unluck"); 	
@@ -1779,7 +1781,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	
 
 
-	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0)
+	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0)
 	{
         eTime = currentTime; 
         equipSet('creepburn');	
