@@ -1541,7 +1541,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+       // { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1570,7 +1570,7 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 		
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+       // { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1755,6 +1755,16 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
+	if(lowHpMobs.length == 0 && checkluckk > 0)
+	{
+        eTime = currentTime;
+        // game_log("🎯 Unluck"); 	
+        equipSet('Unluck');	
+		checkluckk -= 1
+		return
+	}
+	
+
 
 	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0)
 	{
@@ -1820,14 +1830,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-	if(lowHpMobs.length == 0 && checkluckk > 0)
-	{
-        eTime = currentTime;
-        // game_log("🎯 Unluck"); 	
-        equipSet('Unluck');	
-		checkluckk -= 1
-		return
-	}
+
 
 
 if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0) {
@@ -1846,7 +1849,7 @@ if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp
 	}
 
 	
-	checkluckk =5
+	checkluckk =3
 	return
 }
 
