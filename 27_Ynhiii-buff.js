@@ -704,9 +704,13 @@ setTimeout(function() {
 changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 
-setInterval(function() {
-lootAllChests()
-}, 2000);
+async function lootLoop() {
+    await lootAllChests();
+    setTimeout(lootLoop, 2000);
+}
+
+lootLoop();
+
 
 function shifting() {
     shift(0, 'xpbooster');
@@ -716,46 +720,58 @@ equipSet('nogold');
 
 let goldcheck = 0
 
-function lootAllChests() {
+
+async function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
-    let scorpionNearby = get_nearest_monster({type: "bscorpion"});
+    let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
 
-    // Điều kiện chính
-    if ((chestIds.length > 10 || (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby))
-        && character.cc < 200 && isEquipping == false) {
-
-        equipSet("gold");
-        goldcheck = 1;
-        // Đợi 50ms cho server cập nhật trang bị
-        setTimeout(() => {
-
-                shift(0, "goldbooster");  
-
-                // Loot
-                for (let id of chestIds) loot(id);
-             if (character.slots.gloves && character.slots.gloves.name === "handofmidas")
-			 {
-				 game_log("handofmidas GOLD YES")
-				 game_log("handofmidas GOLD YES")
-				 game_log("handofmidas GOLD YES")
-			 }
-			else
-			 {
-				 game_log("handofmidas NOOOOO")
-				 game_log("handofmidas NOOOOO")
-				 game_log("handofmidas NOOOOO")
-			 }
-
+    if (
+        (chestIds.length > 10 ||
+        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
+        character.cc < 200 &&
+        isEquipping === false
+    ) {
+        try {
+            equipSet("gold");
+            goldcheck = 1;
+            shift(0, "goldbooster");
 			
-                // Đổi lại gear sau khi loot xong
-                setTimeout(shifting, 150);
+            await waitForMidas(); // 🔑 điểm mấu chốt
+
             
 
-        }, 20); // delay nhỏ nhưng đủ
+            for (let id of chestIds) {
+                loot(id);
+            }
+
+            game_log("HAND OF MIDAS ACTIVE");
+
+            setTimeout(shifting, 300);
+
+        } catch (e) {
+            game_log("Equip midas FAILED");
+        }
     }
 }
 
+
+
+function waitForMidas(timeout = 800) {
+    return new Promise((resolve, reject) => {
+        const start = Date.now();
+        const check = setInterval(() => {
+            if (character.slots.gloves?.name === "handofmidas") {
+                clearInterval(check);
+                resolve(true);
+            }
+            if (Date.now() - start > timeout) {
+                clearInterval(check);
+                reject("Equip timeout");
+            }
+        }, 40);
+    });
+}
 
 
 
