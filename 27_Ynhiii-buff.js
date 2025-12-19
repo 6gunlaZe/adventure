@@ -730,7 +730,7 @@ async function lootAllChests() {
         (chestIds.length > 10 ||
         (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
         character.cc < 200 &&
-        isEquipping === false
+        isEquipping === false && character.slots.gloves?.name === "supermittens"
     ) {
         try {
             equipSet("gold");
