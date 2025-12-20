@@ -215,7 +215,7 @@ async function checkGameEvents() {
 
     if (pro > 0) {
         prolive = 1;
-	ICEcheckHPMYSv(["icegolem"] , 17000000)
+	ICEcheckHPMYSv(["icegolem"] , 15000000)  // ĐỂ MÁU LÀ 15M TRÁNH TỰ ĐÁNH 1 MÌNH
 
     } else {
         prolive = 0; // khi boss đã chết
