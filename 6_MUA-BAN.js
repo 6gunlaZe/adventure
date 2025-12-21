@@ -2040,7 +2040,7 @@ function secondhands_handler(event) {
             var craftName = craftList[index];
 			
             // Kiểm tra tên item khớp và đủ chỗ trống
-            if (item && item.name === craftName && character.esize > 10) {
+            if (item && item.name === craftName && character.esize > 2) {  // mặc định để >10
                 game_log(craftName + " da mua !!!!!!");
                 parent.socket.emit("sbuy", {"rid": item.rid});
             }
@@ -2076,7 +2076,7 @@ parent.socket.emit("secondhands");
 setInterval(function() {
 	
 if (pontylandau == 1)return
-if (is_moving(character) ) return	
+// if (is_moving(character) ) return	
 pontylandau = 1	
 parent.socket.off("secondhands", secondhands_handler);
 parent.socket.on("secondhands", secondhands_handler);
