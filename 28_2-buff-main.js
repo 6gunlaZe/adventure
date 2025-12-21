@@ -298,7 +298,7 @@ async function lootAllChests() {
     game_log(`[lootAllChests] Chests: ${chestIds.length}, Gloves: ${character.slots.gloves?.name}, CC: ${character.cc}, isEquipping: ${isEquipping}`);
 
     if (
-        (chestIds.length > 0  &&   character.cc < 500 &&  isEquipping === false 
+        chestIds.length > 0  &&   character.cc < 500 &&  isEquipping === false 
     ) {
         try {
             game_log(`[lootAllChests] Equip gold & shift`);
