@@ -2064,11 +2064,12 @@ function on_destroy() // called just before the CODE is destroyed
 setInterval(function() {
 
 if (is_moving(character) ) return	
-	
+if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
+{
 parent.socket.off("secondhands", secondhands_handler);
 parent.socket.on("secondhands", secondhands_handler);
 parent.socket.emit("secondhands");
-
+}
 
 }, 60000); 
 
@@ -2076,12 +2077,14 @@ parent.socket.emit("secondhands");
 setInterval(function() {
 	
 if (pontylandau == 1)return
-// if (is_moving(character) ) return	
+// if (is_moving(character) ) return
+if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
+{	
 pontylandau = 1	
 parent.socket.off("secondhands", secondhands_handler);
 parent.socket.on("secondhands", secondhands_handler);
 parent.socket.emit("secondhands");
-
+}
 
 }, 10000); 
 
