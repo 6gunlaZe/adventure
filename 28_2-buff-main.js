@@ -268,7 +268,7 @@ let goldcheck = 0;
 
 // --- Vòng loot loop với log liên tục ---
 function lootLoop() {
-    game_log("[lootLoop] Bắt đầu vòng loot");
+   // game_log("[lootLoop] Bắt đầu vòng loot");
     
     // Chạy lootAllChests nhưng không await để log không bị chặn
     lootAllChests().catch(e => game_log(`[lootLoop] Lỗi lootAllChests: ${e}`));
@@ -280,7 +280,7 @@ lootLoop();
 
 // --- Shift về setup bình thường ---
 function shifting() {
-    game_log("[shifting] Shift về xpbooster & equipSet('nogold')");
+    // game_log("[shifting] Shift về xpbooster & equipSet('nogold')");
     shift(0, 'xpbooster');
     equipSet('nogold');
     goldcheck = 0;
@@ -320,7 +320,7 @@ async function lootAllChests() {
         game_log(`[lootAllChests] ERROR: ${e}`);
     } finally {
         looting = false; // 🔥 BẮT BUỘC PHẢI Ở ĐÂY
-        game_log("[lootAllChests] Reset looting = false");
+      //  game_log("[lootAllChests] Reset looting = false");
     }
 }
 
