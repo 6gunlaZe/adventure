@@ -570,7 +570,7 @@ var attack_mode=true
 
 setInterval(function(){
 
-	loot();
+	//loot();
 
 ///////////////////////////////////////////////	hoi mau
 	    var lowest_health = lowest_health_partymember();
