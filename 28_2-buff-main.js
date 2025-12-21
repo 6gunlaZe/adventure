@@ -262,6 +262,96 @@ changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 
 
+
+async function lootLoop() {
+    await lootAllChests();
+    setTimeout(lootLoop, 2000);
+}
+
+lootLoop();
+
+
+function shifting() {
+    shift(0, 'xpbooster');
+equipSet('nogold');
+	goldcheck = 0
+}
+
+let goldcheck = 0
+
+
+async function lootAllChests() {
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
+    let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
+
+    if (
+        (chestIds.length > 10 ||
+        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
+        character.cc < 200 &&
+        isEquipping === false && character.slots.gloves?.name === "supermittens"
+    ) {
+        try {
+            equipSet("gold");
+            goldcheck = 1;
+            shift(0, "goldbooster");
+			
+            await waitForMidas(); // 🔑 điểm mấu chốt
+
+            
+
+            for (let id of chestIds) {
+                loot(id);
+            }
+
+            game_log("HAND OF MIDAS ACTIVE");
+
+            setTimeout(shifting, 370);
+
+        } catch (e) {
+            game_log("Equip midas FAILED");
+        }
+    }
+}
+
+
+
+function waitForMidas(timeout = 800) {
+    return new Promise((resolve, reject) => {
+        const start = Date.now();
+        const check = setInterval(() => {
+            if (character.slots.gloves?.name === "handofmidas") {
+                clearInterval(check);
+                resolve(true);
+            }
+            if (Date.now() - start > timeout) {
+                clearInterval(check);
+                reject("Equip timeout");
+            }
+        }, 40);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function kite(taget, kite_range)
 {
 
@@ -1296,14 +1386,35 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+     //   { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+		
 
     ],
+	
+    deffbrun: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+    ],
+
+    nodeffbrun: [
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },		
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
+		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+
+    ],
+	
     nodeff: [
 	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
-       // { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-
+      //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
 
     ],
@@ -1319,11 +1430,35 @@ const equipmentSets = {
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
     ],
+
+    luckfull: [ 
+	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
+        { itemName: "oxhelmet", slot: "helmet", l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
+	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
+      //  { itemName: "cdragon", slot: "chest", l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
+        { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
+        { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
+        { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
+
+		
+    ],
+	
     healmax: [
 	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+
+     //   { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+		
     ],
     fram: [
 	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
@@ -1334,7 +1469,14 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "tigerstone", slot: "orb", level: 3},	
+		
+        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+		
     ],
     bossburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
@@ -1346,6 +1488,24 @@ const equipmentSets = {
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+    ],
+    creepburn: [
+        //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+	    { itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+		
+        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+		
     ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
@@ -1370,8 +1530,15 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+		
     ],
 };
+
 
 
 
@@ -1506,7 +1673,7 @@ function ChuyendoiITEM() {
      const damer = get_player("6gunlaZe");
 	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
-    entity.visible &&
+    entity.visible && entity.type=="monster" &&
     entity.target === character.name &&
     !entity.dead &&
     distance(character, entity) <= 100
@@ -1518,7 +1685,7 @@ const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
 const lowHpMobs = mobsInRange.filter(mob => {
     const hpThreshold = mob.max_hp >= 800000 ? 45000 :
-                        mob.max_hp >= 200000 ? 25000 : 7000;
+                        mob.max_hp >= 200000 ? 20000 : 7000;
     return (
         mob.hp < hpThreshold &&
         mob.target === character.name &&
@@ -1528,29 +1695,40 @@ const lowHpMobs = mobsInRange.filter(mob => {
         mob.mtype !== "nerfedbat"
     );
 });
-	
-if (character.map == "crypt"  && lowHpMobs.length >= 1)
-{
-crytsTank = 1
-}
-else
-{
-crytsTank = 0	
-}
-	
 
 
 	
-	if (currentTime - eTime < 50)return
+	
 
+	if (currentTime - eTime < 120)return
 
-	if(get_nearest_monster({ type: "xmagefi" }))
+ if (smart.moving && !get_nearest_monster({ type: "bscorpion" })) 
 	{
         eTime = currentTime;
+        equipSet('nogold');	
+		return
+	}
+
+
+
+	
+	if(get_nearest_monster({ type: "xmagefi" }) && lowHpMobs.length == 0)
+	{
+        eTime = currentTime; 
         equipSet('bossburn');	
 		return
 	}
 
+
+	
+
+
+	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0 )
+	{
+        eTime = currentTime; 
+        equipSet('creepburn');	
+		return
+	}
 	
 	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
@@ -1564,13 +1742,32 @@ crytsTank = 0
 	{
 	checkdef = 1
         eTime = currentTime;
-        equipSet('deff');	
+		
+        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
+		{
+			equipSet('deffbrun');
+		}
+		else
+		{
+			equipSet('deff');
+		}
+		
+		
 		return
 	}
 	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
 	{
         eTime = currentTime;
+
+        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
+		{
+        equipSet('nodeffbrun');		
+		}
+		else
+		{
         equipSet('nodeff');		
+		}
+		
 	checkdef = 0	
 		return
 	}
@@ -1590,38 +1787,55 @@ crytsTank = 0
 		return
 	}
 
-	if(lowHpMobs.length == 0 && checkluckk > 0)
+
+	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0  )
 	{
         eTime = currentTime;
-        game_log("🎯 Unluck"); 	
+        // game_log("🎯 Unluck"); 	
         equipSet('Unluck');	
 		checkluckk -= 1
 		return
 	}
 
+	
 
-if ( lowHpMobs.length >= 1 && character.map != "winter_instance" ) {
+if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0) {
 	eTime = currentTime;
-        game_log("🔄 luck") ;	
-        equipSet('luck');
-	checkluckk =5
+        // game_log("🔄 luck") ;	
+	let slot = locate_item("luckbooster");
+        if (slot == -1)shift(0, 'luckbooster')
+
+	if (character.hp/character.max_hp > 0.5)
+	{
+		        equipSet('luckfull'); 
+	}
+	else
+	{
+		        equipSet('luck'); 
+	}
+
+	
+	checkluckk =3
 	return
 }
 
-	
-if ( physicalMobs.length >= 1 && checkheall == 0 && checkdef == 0) {
+if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
+{
+        if ( physicalMobs.length >= 1 ) {
 	eTime = currentTime;
         equipSet('vatly');
-}
-else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.65) || character.map == "winter_instance" )
+        }
+        else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.68) || character.map == "winter_instance" )
 	{
 	eTime = currentTime;
         equipSet('phep');
 	}
+}
+
 
 }
 
-setInterval(ChuyendoiITEM, 70);
+setInterval(ChuyendoiITEM, 130);
 
 
 
