@@ -1786,7 +1786,7 @@ looting()
 function looting() {
 	    let chests = get_chests();
     let chestIds = Object.keys(chests);
-    if (chestIds.length > 20 || character.map == "crypt" || character.map == "tomb" || character.map == "winter_instance" || character.map == "spider_instance") {
+    if (chestIds.length > 20 ) {
 	  shift(0, 'goldbooster');   
         for (let id of chestIds) {
             loot(id);   
