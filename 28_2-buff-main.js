@@ -286,7 +286,7 @@ async function lootAllChests() {
     let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
 
     if (
-        (chestIds.length > 10 ||
+        (chestIds.length > 0 ||
         (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
         character.cc < 200 &&
         isEquipping === false && character.slots.gloves?.name === "supermittens"
