@@ -296,7 +296,7 @@ async function lootAllChests() {
         let chests = get_chests();
         let chestIds = Object.keys(chests);
 
-        game_log(`[lootAllChests] Chests: ${chestIds.length}`);
+        // game_log(`[lootAllChests] Chests: ${chestIds.length}`);
 
         if (chestIds.length === 0) return;
 
