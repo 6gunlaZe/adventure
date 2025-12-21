@@ -289,7 +289,8 @@ function shifting() {
 
 
 async function lootAllChests() {
-    if (looting) return;
+    if (looting ) return;
+	if ( isEquipping === true || character.slots.gloves?.name != "supermittens" ) return;
     looting = true;
 
     try {
