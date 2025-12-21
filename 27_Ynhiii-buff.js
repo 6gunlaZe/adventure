@@ -1409,7 +1409,7 @@ let isEquipping = false; // Flag kiểm soát trạng thái
 
 async function equipBatch(data) {
     if (isEquipping) {
-       game_log("equipBatch is already running. Skipping.");
+     //  game_log("equipBatch is already running. Skipping.");
         return;
     }
     isEquipping = true; // Đánh dấu đang chạy
