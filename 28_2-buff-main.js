@@ -688,7 +688,7 @@ if (character.party) {
 let dyingMobs = threats.filter(e => {
 	
 const hpThreshold = e.max_hp >= 800000 ? 45000 :
-                    e.max_hp >= 200000 ? 25000 : 15000;
+                    e.max_hp >= 200000 ? 29000 : 25000;
 	
     return e.hp < hpThreshold && e.max_hp > 8000 && e.mtype != "a6" && e.mtype != "a8" ;
 }).length;
