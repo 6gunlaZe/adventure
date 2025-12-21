@@ -1488,7 +1488,7 @@ const equipmentSets = {
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
@@ -1556,7 +1556,7 @@ const equipmentSets = {
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
 
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 		
@@ -1573,7 +1573,7 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
         { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
@@ -1602,7 +1602,7 @@ const equipmentSets = {
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 		
         { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
@@ -1632,7 +1632,7 @@ const equipmentSets = {
         { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
