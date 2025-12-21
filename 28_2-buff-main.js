@@ -263,58 +263,74 @@ changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 
 
+
+let looting = false; // ngăn trùng vòng
+
 async function lootLoop() {
+    game_log(`[lootLoop] Bắt đầu vòng loot`);
     await lootAllChests();
     setTimeout(lootLoop, 500);
 }
 
 lootLoop();
 
-
 function shifting() {
+    game_log(`[shifting] Shift về xpbooster & equipSet('nogold')`);
     shift(0, 'xpbooster');
-equipSet('nogold');
-	goldcheck = 0
+    equipSet('nogold');
+    goldcheck = 0;
 }
 
-let goldcheck = 0
-
+let goldcheck = 0;
 
 async function lootAllChests() {
+    if (looting) {
+        game_log(`[lootAllChests] Đang loot, bỏ qua vòng này`);
+        return;
+    }
+
+    looting = true;
+
     let chests = get_chests();
     let chestIds = Object.keys(chests);
     let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
 
+    game_log(`[lootAllChests] Chests: ${chestIds.length}, Gloves: ${character.slots.gloves?.name}, CC: ${character.cc}, isEquipping: ${isEquipping}`);
+
     if (
-        (chestIds.length > 0 ||
-        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
-        character.cc < 200 &&
-        isEquipping === false && character.slots.gloves?.name === "supermittens"
+        (chestIds.length > 0  &&   character.cc < 500 &&  isEquipping === false 
     ) {
         try {
+            game_log(`[lootAllChests] Equip gold & shift`);
             equipSet("gold");
             goldcheck = 1;
             shift(0, "goldbooster");
-			
-            await waitForMidas(); // 🔑 điểm mấu chốt
 
-            
+            game_log(`[lootAllChests] Đợi hand of midas...`);
+            await waitForMidas();
+            game_log(`[lootAllChests] Hand of Midas đã equip!`);
 
             for (let id of chestIds) {
+                game_log(`[lootAllChests] Loot rương ${id}`);
                 loot(id);
             }
 
             game_log("HAND OF MIDAS ACTIVE");
 
-            setTimeout(shifting, 370);
+            setTimeout(() => {
+                game_log(`[lootAllChests] Chạy shifting`);
+                shifting();
+            }, 370);
 
         } catch (e) {
-            game_log("Equip midas FAILED");
+            game_log(`[lootAllChests] Equip midas FAILED: ${e}`);
         }
+    } else {
+        game_log(`[lootAllChests] Không đủ điều kiện loot`);
     }
+
+    looting = false;
 }
-
-
 
 function waitForMidas(timeout = 800) {
     return new Promise((resolve, reject) => {
@@ -331,12 +347,6 @@ function waitForMidas(timeout = 800) {
         }, 40);
     });
 }
-
-
-
-
-
-
 
 
 
