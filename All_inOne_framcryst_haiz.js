@@ -1424,7 +1424,7 @@ setInterval(() => {
     for (let i = 0; i < chestIds.length; i++) {
         loot();
     }
-}, 4000);
+}, 5000);
 
 
 
