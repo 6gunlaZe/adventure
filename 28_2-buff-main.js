@@ -677,8 +677,8 @@ if (character.party) {
 	    
 let dyingMobs = threats.filter(e => {
 	
-const hpThreshold = e.max_hp >= 800000 ? 45000 :
-                    e.max_hp >= 200000 ? 29000 : 25000;
+const hpThreshold = e.max_hp >= 800000 ? 35000 :
+                    e.max_hp >= 200000 ? 23000 : 22000;
 	
     return e.hp < hpThreshold && e.max_hp > 8000 && e.mtype != "a6" && e.mtype != "a8" ;
 }).length;
@@ -1682,8 +1682,8 @@ const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
 const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
 const lowHpMobs = mobsInRange.filter(mob => {
-    const hpThreshold = mob.max_hp >= 800000 ? 45000 :
-                        mob.max_hp >= 200000 ? 29000 : 22000;
+    const hpThreshold = mob.max_hp >= 800000 ? 35000 :
+                        mob.max_hp >= 200000 ? 23000 : 22000;
     return (
         mob.hp < hpThreshold &&
         mob.target === character.name &&
