@@ -1414,6 +1414,27 @@ function on_party_request(name) {
             accept_party_request(name);
         }
     }
+
+
+
+setInterval(() => {
+    let chests = get_chests();
+    let chestIds = Object.keys(chests);
+
+    for (let i = 0; i < chestIds.length; i++) {
+        loot();
+    }
+}, 4000);
+
+
+
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////////
 var attack_mode= true
 
@@ -1421,7 +1442,7 @@ setInterval(function(){
 
 	//use_hp_or_mp();
 	use_hp_or_mp1();
-	loot();
+	//loot();
 	
 	//if(character.s["hardshell"] && is_moving(character) ) stop();
 	
