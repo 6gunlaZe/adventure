@@ -286,53 +286,46 @@ function shifting() {
     goldcheck = 0;
 }
 
-// --- Loot tất cả rương ---
+
+
 async function lootAllChests() {
-    if (looting) {
-        game_log("[lootAllChests] Vòng loot đang chạy, bỏ qua");
-        return;
-    }
+    if (looting) return;
     looting = true;
 
-    let chests = get_chests();
-    let chestIds = Object.keys(chests);
-    let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
+    try {
+        let chests = get_chests();
+        let chestIds = Object.keys(chests);
 
-    game_log(`[lootAllChests] Chests: ${chestIds.length}, CC: ${character.cc}, Gloves: ${character.slots.gloves?.name}, isEquipping: ${isEquipping}`);
+        game_log(`[lootAllChests] Chests: ${chestIds.length}`);
 
-    if (chestIds.length > 0 && character.cc < 500 && isEquipping === false) {
-        try {
-            game_log("[lootAllChests] Equip gold & shift");
-            equipSet("gold");
-            goldcheck = 1;
-            shift(0, "goldbooster");
+        if (chestIds.length === 0) return;
 
-            game_log("[lootAllChests] Đợi Hand of Midas...");
-            await waitForMidas(1200); // timeout 1.2s để tránh fail
+        game_log("[lootAllChests] Equip gold & shift");
+        equipSet("gold");
+        shift(0, "goldbooster");
 
-            game_log("[lootAllChests] Hand of Midas đã equip!");
+        game_log("[lootAllChests] Đợi Hand of Midas...");
+        await waitForMidas(1500);
 
-            for (let id of chestIds) {
-                game_log(`[lootAllChests] Loot rương ${id}`);
-                loot(id);
-            }
+        game_log("[lootAllChests] Loot bắt đầu");
 
-            game_log("HAND OF MIDAS ACTIVE");
-
-            setTimeout(() => {
-                game_log("[lootAllChests] Chạy shifting");
-                shifting();
-            }, 400);
-
-        } catch (e) {
-            game_log(`[lootAllChests] Equip Midas FAILED: ${e}`);
+        for (let id of chestIds) {
+            game_log(`[lootAllChests] Loot ${id}`);
+            loot(id);
         }
-    } else {
-        game_log("[lootAllChests] Không đủ điều kiện loot");
-    }
 
-    looting = false;
+        setTimeout(shifting, 400);
+
+    } catch (e) {
+        game_log(`[lootAllChests] ERROR: ${e}`);
+    } finally {
+        looting = false; // 🔥 BẮT BUỘC PHẢI Ở ĐÂY
+        game_log("[lootAllChests] Reset looting = false");
+    }
 }
+
+
+
 
 // --- Chờ hand of Midas equip ---
 function waitForMidas(timeout = 1200) {
