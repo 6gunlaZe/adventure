@@ -1693,7 +1693,7 @@ const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
 // Tách theo máu
 const lowHpMobs = mobsInRange.filter(mob => {
     const hpThreshold = mob.max_hp >= 800000 ? 45000 :
-                        mob.max_hp >= 200000 ? 22000 : 15000;
+                        mob.max_hp >= 200000 ? 29000 : 22000;
     return (
         mob.hp < hpThreshold &&
         mob.target === character.name &&
