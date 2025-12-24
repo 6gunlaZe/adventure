@@ -416,9 +416,9 @@ const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1");
 const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
 const mobsInRangeNobat = mobsInRange.filter(monster => monster.mtype != "vbat"); 
-const nguyehiemoutngay = mobsInRange.filter(monster => 
-    (monster.mtype === "a1" && monster.level > 2) ||
-    (monster.mtype === "a6" && monster.level > 4) 
+const nguyehiemoutngay = mobsInRange.filter(monster =>  /// đang cần chạy tốc độ nên cho out sớm mặc định a1 >2 , a6 > 4, và không có a8
+    (monster.mtype === "a1" && monster.level > 1) ||
+    (monster.mtype === "a6" && monster.level > 2) 
 );
 const nguyehiemmmm = mobsInRange.filter(monster => 
     (monster.mtype === "a8" && monster.level > 4 && character.hp < 10000)
