@@ -1314,7 +1314,7 @@ function checkbuymp()
 setInterval(function() {
 
 
-if (character.hp/character.max_hp< 0.8 && character.mp > 50) {
+if (character.hp/character.max_hp< 0.5 && character.mp > 50) {
    use_skill("use_hp");
 	
 } 
