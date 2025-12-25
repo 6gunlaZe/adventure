@@ -1897,6 +1897,7 @@ function get_nearest_monster_solobosskill(args) ///mod
 	if (current.mtype === "a3" && landaucheck == 1) continue;
         if (current.mtype === "a1" && current.level > 2) continue;
         if (current.mtype === "a6" && current.level > 4) continue;
+        if (current.mtype === "a8" && current.level > 6) continue;
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
 		if(args.min_xp && current.xp<args.min_xp) continue;
