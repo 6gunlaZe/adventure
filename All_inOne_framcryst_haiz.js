@@ -415,7 +415,15 @@ const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.m
 const MobisA1 = mobsInRange.filter(monster => monster.mtype == "a1"); 
 const MobisA3 = mobsInRange.filter(monster => monster.mtype == "a3"); 
 const mobsInRangeNoA4 = mobsInRange.filter(monster => monster.mtype != "a4"); 
-const mobsInRangeNobat = mobsInRange.filter(monster => monster.mtype != "vbat"); 
+	
+//const mobsInRangeNobat = mobsInRange.filter(monster => monster.mtype != "vbat"); 
+
+const mobsInRangeNobat = mobsInRange.filter(monster =>
+    monster.mtype !== "vbat" || monster.level >= 4
+);
+
+
+	
 
 const nguyehiemoutngay = mobsInRange.filter(monster =>
     distance(character, monster) <= 360 &&
