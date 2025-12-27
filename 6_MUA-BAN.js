@@ -1585,7 +1585,7 @@ if (am1 == 0 && itemSearch1 > 1 &&  moi == 0 )buy("mpot1",300);
 	if(parent != null && parent.socket != null)
 	{
 		
-		upgrade();
+		upgrade1();
 		 
 	}	
 	
@@ -1594,7 +1594,7 @@ if (am1 == 0 && itemSearch1 > 1 &&  moi == 0 )buy("mpot1",300);
 
 
 
-function upgrade() {
+function upgrade1() {
 	let a1 = soluongitem("scroll0")
 	let a2 = soluongitem("scroll1")
 	let a3 = soluongitem("scroll2")
