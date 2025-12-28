@@ -633,7 +633,7 @@ const equipmentSets = {
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
 
 		
-        { itemName: "mittens", slot: "gloves", level: 9 },
+       // { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     boom: [
@@ -649,7 +649,7 @@ const equipmentSets = {
     ],
     shot5: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
+      //  { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     stealth: [
@@ -661,7 +661,7 @@ const equipmentSets = {
 
        // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
        // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 9 },
+     //   { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     def_fire: [
