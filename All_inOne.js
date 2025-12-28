@@ -1993,8 +1993,8 @@ const equipmentSets = {
         { itemName: "candycanesword", slot: "offhand", level: 1, l: "s" },
     ],
     home: [
-        { itemName: "supermittens", slot: "gloves", level: 9, },
-        { itemName: "fury", slot: "helmet", level: 8, },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
     ],
     def_magical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
@@ -2022,8 +2022,8 @@ const equipmentSets = {
 		
     ],
     nodeff: [
-        { itemName: "supermittens", slot: "gloves", level: 9, },
-        { itemName: "fury", slot: "helmet", level: 8, },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "mcape", slot: "chest", level: 8, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
