@@ -617,22 +617,29 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
     ],
      singleAOE: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+      //  { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+
         { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     single: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 8 },
    //	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
     ],
     dead: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+        //{ itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+
+		
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     boom: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+       // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
        // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         //{ itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
@@ -641,7 +648,7 @@ const equipmentSets = {
         { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
     ],
     shot5: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
@@ -649,7 +656,10 @@ const equipmentSets = {
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
     franky: [
-        { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
+
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+
+       // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
        // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
