@@ -1527,7 +1527,8 @@ const equipmentSets = {
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 8, l: "l" },
-        { itemName: "cdragon", slot: "chest", l: "l" },
+        //{ itemName: "cdragon", slot: "chest", l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
     ],
@@ -1868,7 +1869,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 	
 
-if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0) {
+if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500) {
 	eTime = currentTime;
         // game_log("🔄 luck") ;	
 	let slot = locate_item("luckbooster");
