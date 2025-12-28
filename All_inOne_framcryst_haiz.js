@@ -2111,8 +2111,8 @@ const equipmentSets = {
     ],
     nodef: [    
         { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
-        { itemName: "supermittens", slot: "gloves", level: 8, },
-        { itemName: "fury", slot: "helmet", level: 7, },	
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },	
     ],
     orb: [
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
