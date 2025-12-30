@@ -1808,7 +1808,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 	
-	if(checkdef == 0 && character.hp/character.max_hp < 0.64)
+	if(checkdef == 0 && character.hp/character.max_hp < 0.55)
 	{
 	checkdef = 1
         eTime = currentTime;
