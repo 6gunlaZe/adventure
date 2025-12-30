@@ -178,7 +178,10 @@ orbofstr: {bank: "items1", level: 2, quantity: 1},
 wbookhs	: {bank: "items1", level: 1, quantity: 1},	
 starkillers: {bank: "items1", level: 3, quantity: 1},	
 xpants: {bank: "items1", level: 4, quantity: 1},	
-vgloves: {bank: "items1", level: 5, quantity: 1},		
+vgloves: {bank: "items1", level: 5, quantity: 1},	
+pants: {bank: "items1", level: 9, quantity: 1},		
+
+	
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
 	intamulet: {bank: "items7", level: -1, quantity: 1},
