@@ -565,7 +565,7 @@ function lowest_health_partymember() {
 			if (member == character.name) entity = character;
 
 			if (entity && distance(character, { x: entity.real_x, y: entity.real_y }) < character.range) {
-				party.push({ name: member, entity: entity });
+				party.push({ name: entity.id, entity: entity });
 			}
 		}
 	} else {
