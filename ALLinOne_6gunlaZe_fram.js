@@ -1052,7 +1052,7 @@ function use_hp_or_mp1()
 	
 	
 if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
+  else if (character.hp/character.max_hp< 0.6 && character.mp > 130 ) use_skill("use_hp");
   else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
 
 	
