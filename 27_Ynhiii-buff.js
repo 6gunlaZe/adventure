@@ -1501,6 +1501,9 @@ const equipmentSets = {
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+		
     ],
 
     nodeffbrun: [
@@ -1508,7 +1511,10 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
+		
     ],
 	
     nodeff: [
@@ -1517,6 +1523,8 @@ const equipmentSets = {
       //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
     ],
     gold: [
