@@ -1305,20 +1305,29 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
         return b.hp - a.hp;
     });
 
-    // === 3. CHÈN 1 QUÁI FINISHER VÀO VỊ TRÍ THỨ 2 ===
-    if (targets.length >= 2) {
-        const finisherIndex = targets.findIndex(m =>
-            m.hp >= 2000 &&
-            m.hp <= 7000 &&
-            !hasStatus(m, args.statusEffects || []) &&
-            !isPriorityMtype(m)
-        );
+// === 3. CHÈN QUÁI FINISHER ===
+if (targets.length >= 2) {
+    const finisherIndex = targets.findIndex(m =>
+        m.hp >= 1800 &&
+        m.hp <= 7000 &&
+        !hasStatus(m, args.statusEffects || []) &&
+        !isPriorityMtype(m)
+    );
 
-        if (finisherIndex > 1) {
-            const [finisher] = targets.splice(finisherIndex, 1);
-            targets.splice(1, 0, finisher); // CHỈ CHÈN VÀO SLOT 2
+    if (finisherIndex > 1) {
+        const [finisher] = targets.splice(finisherIndex, 1);
+
+        if (targets.length >= 2) {
+            // Có từ 3 quái ban đầu → chèn slot 2 & 3
+            targets.splice(1, 0, finisher);
+            targets.splice(2, 0, finisher);
+        } else {
+            // Chỉ có 2 quái → giữ như cũ
+            targets.splice(1, 0, finisher);
         }
     }
+}
+
 
     // === 4. Phân loại theo range ===
     const inRange = [];
