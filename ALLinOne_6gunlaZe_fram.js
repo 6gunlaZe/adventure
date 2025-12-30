@@ -314,7 +314,11 @@ var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohav
  var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
                                                                // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
 	    
-const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
+
+const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
+
+
+	 
 //game_log("monstersInRangeList.length" +monstersInRangeList.length)		
 //game_log("characterRange" +monsterscharacterRange.length)		
 	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
@@ -1260,68 +1264,86 @@ async function safeawwaitwalkInCircle() {
 
 
 
+function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
-    // === 1. Xác định danh sách quái vật "ưu tiên đặc biệt" ===
-    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx","a4","mrpumpkin","mrgreen"];
-    const isPriorityMtype = (monster) => priorityMtypes.includes(monster.mtype);
+    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx", "a4", "mrpumpkin", "mrgreen"];
+    const isPriorityMtype = (m) => priorityMtypes.includes(m.mtype);
+    const hasStatus = (m, effects) => m.s && effects.every(e => m.s[e]);
 
-    // === 2. Lọc tất cả các quái vật đang tấn công người trong party ===
-    const targets = Object.values(parent.entities)
-        .filter(monster =>
-            monster.type === "monster" &&         // Chỉ lấy quái (loại entity là "monster")
-            monster.target &&                     // Chỉ lấy quái đang có mục tiêu
-            (targetNames.includes(monster.target) || monster.cooperative === true )// Mục tiêu đó phải là người trong party hoặc quái vật dạng hợp tác
-        )
+    // === 1. Lọc quái đang đánh party ===
+    let targets = Object.values(parent.entities)
+        .filter(m =>
+            m.type === "monster" &&
+            m.target &&
+            (targetNames.includes(m.target) || m.cooperative === true)
+        );
 
-        // === 3. Sắp xếp quái theo nhiều lớp ưu tiên ===
-        .sort((a, b) => {
-            // --- Ưu tiên 1: Quái đặc biệt (boss, rare mob, v.v.) ---
-            const isPriorityA = isPriorityMtype(a) ? -1 : 0;
-            const isPriorityB = isPriorityMtype(b) ? -1 : 0;
-            if (isPriorityA !== isPriorityB) return isPriorityA - isPriorityB;
+    // === 2. SORT CHÍNH – phục vụ 2 phát mạnh ===
+    targets.sort((a, b) => {
 
-            // --- Ưu tiên 2: Quái đang tấn công người quan trọng hơn trong party ---
-            const priorityA = targetNames.indexOf(a.target);
-            const priorityB = targetNames.indexOf(b.target);
-            if (priorityA !== priorityB) return priorityA - priorityB;
+        // 1. cursed
+        const cursedA = hasStatus(a, args.statusEffects || []);
+        const cursedB = hasStatus(b, args.statusEffects || []);
+        if (cursedA !== cursedB) return cursedA ? -1 : 1;
 
-            // --- Ưu tiên 3: Quái gần vị trí home hơn ---
-            const distA = Math.hypot(a.x - homeX, a.y - homeY);
-            const distB = Math.hypot(b.x - homeX, b.y - homeY);
-            if (distA !== distB) return distA - distB;
+        // 2. boss
+        const bossA = isPriorityMtype(a);
+        const bossB = isPriorityMtype(b);
+        if (bossA !== bossB) return bossA ? -1 : 1;
 
-            // --- Ưu tiên 4: Quái yếu hơn (HP thấp hơn) ---
-            return a.hp - b.hp;
-        });
+        // 3. bảo vệ party
+        const pA = targetNames.indexOf(a.target);
+        const pB = targetNames.indexOf(b.target);
+        if (pA !== pB) return pA - pB;
 
-    // === 4. Phân loại quái vật theo phạm vi tấn công ===
-    const inRange = [];         // Trong phạm vi ưu tiên (rangeThreshold)
-    const characterRange = [];  // Trong phạm vi kỹ năng của nhân vật
-    const outOfRange = [];      // Ngoài cả 2 phạm vi
+        // 4. gần home
+        const dA = Math.hypot(a.x - homeX, a.y - homeY);
+        const dB = Math.hypot(b.x - homeX, b.y - homeY);
+        if (dA !== dB) return dA - dB;
 
-    for (const monster of targets) {
-        const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
+        // 5. quái trâu hơn đứng trước
+        return b.hp - a.hp;
+    });
 
-        if (distance <= rangeThreshold) {
-            inRange.push(monster);            // Quái trong phạm vi ưu tiên
-            characterRange.push(monster);     // Và cũng nằm trong tầm đánh
-        } else if (distance <= character.range) {
-            characterRange.push(monster);     // Trong tầm đánh, nhưng ngoài phạm vi ưu tiên
-        } else {
-            outOfRange.push(monster);         // Không đánh được
+    // === 3. CHÈN 1 QUÁI FINISHER VÀO VỊ TRÍ THỨ 2 ===
+    if (targets.length >= 2) {
+        const finisherIndex = targets.findIndex(m =>
+            m.hp >= 2000 &&
+            m.hp <= 7000 &&
+            !hasStatus(m, args.statusEffects || []) &&
+            !isPriorityMtype(m)
+        );
+
+        if (finisherIndex > 1) {
+            const [finisher] = targets.splice(finisherIndex, 1);
+            targets.splice(1, 0, finisher); // CHỈ CHÈN VÀO SLOT 2
         }
     }
 
-    // === 5. Trả về danh sách đầy đủ và ba nhóm riêng biệt ===
+    // === 4. Phân loại theo range ===
+    const inRange = [];
+    const characterRange = [];
+    const outOfRange = [];
+
+    for (const m of targets) {
+        const d = Math.hypot(m.x - homeX, m.y - homeY);
+        if (d <= rangeThreshold) {
+            inRange.push(m);
+            characterRange.push(m);
+        } else if (d <= character.range) {
+            characterRange.push(m);
+        } else {
+            outOfRange.push(m);
+        }
+    }
+
     return {
-        targets: [...inRange, ...outOfRange, ...characterRange], // Danh sách tổng hợp (ưu tiên inRange đầu tiên)
+        targets: [...inRange, ...outOfRange, ...characterRange],
         inRange,
         outOfRange,
         characterRange
     };
 }
-
 
 
 
