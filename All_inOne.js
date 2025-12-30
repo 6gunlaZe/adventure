@@ -2091,8 +2091,9 @@ function get_nearest_monster_v2(args = {}) {
     let min_d = 999999, target = null;
     let optimal_hp = args.check_max_hp ? 0 : 999999999;
 
-    let lowHpTarget = null;
-    let lowHpValue = 999999999; // con có HP thấp nhất trong nhóm low HP
+let lowHpValue = 0;
+let lowHpTarget = null;
+
 
     for (let id in parent.entities) {
         let current = parent.entities[id];
@@ -2118,22 +2119,31 @@ function get_nearest_monster_v2(args = {}) {
 
         if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
 
-        // ------------ NEW FEATURE: CHECK LOW HP ----------------
-        if (args.check_low_hp) {
-            // Tính threshold theo max_hp
-            const hpThreshold = current.max_hp >= 800000 ? 45000 :
-                                current.max_hp >= 200000 ? 20000 : 7000;
+// ------------ NEW FEATURE: CHECK LOW HP (ANTI OVERKILL) ----------------
+if (args.check_low_hp) {
 
-            // Nếu quái HP dưới threshold → ưu tiên
-            if (current.hp <= hpThreshold) {
-                if (current.hp < lowHpValue) {
-                    lowHpValue = current.hp;
-                    lowHpTarget = current;
-                }
-            }
-            continue; // vẫn loop hết để tìm toàn bộ con HP thấp
+    // 1. Xác định ngưỡng "sắp chết" theo max_hp của quái
+    const hpThreshold =
+        current.max_hp >= 800000 ? 45000 :
+        current.max_hp >= 200000 ? 20000 :
+                                   7000;
+
+    // 2. Chỉ xét quái:
+    //    - Đã vào vùng sắp chết (<= threshold)
+    //    - Nhưng chưa quá thấp máu (>= 1500) để tránh overkill
+    if (current.hp <= hpThreshold && current.hp >= 1500) {
+
+        // 3. Trong vùng này, chọn con có HP LỚN NHẤT
+        if (current.hp > lowHpValue) {
+            lowHpValue = current.hp;
+            lowHpTarget = current;
         }
-        // -------------------------------------------------------
+    }
+
+    // 4. Vẫn tiếp tục loop để quét hết toàn bộ mob
+    continue;
+}
+/////////////////////////
 
         // Nếu đang check max HP
         if (args.check_max_hp) {
