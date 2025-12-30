@@ -584,6 +584,12 @@ function lowest_health_partymember() {
 		let member = party[id];
 		if (member.entity) {
 			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
+			
+// không ưu tiên cho 6gunlaZe còn trên 70% máu sẽ không buff
+if (member.name === "6gunlaZe") {
+    member.entity.health_ratio += 0.3;
+}
+
 		} else {
 			member.entity = { health_ratio: 1 }; // giả lập
 		}
