@@ -810,7 +810,7 @@ setInterval(function(){
         }
 	}
 	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.6 && character.mp > 650) {
+    if (lowest_health1 != null && lowest_health1.health_ratio < 0.65 && character.mp > 650) {
 	    if ( Date.now() > delayaoe + 260)
 	    {
                 use_skill("partyheal");
