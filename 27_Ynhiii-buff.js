@@ -517,7 +517,7 @@ function buff_khi_ranh() {
 			if (member == character.name) entity = character;
 
 			if (entity && distance(character, entity) < character.range) {
-				party.push({ name: member, entity });
+				party.push({ name: entity.id, entity });
 			}
 		}
 	} else {
@@ -531,15 +531,29 @@ function buff_khi_ranh() {
 		party.push({ name: "fieldgen0", entity: fieldgen0 });
 	}
 
-	// Lọc ra những entity chưa full máu
-	party = party.filter(m => m.entity && m.entity.hp < m.entity.max_hp);
-	if (party.length === 0) return; // không ai cần buff
+// Tính health_ratio + ưu tiên
+party = party
+	.filter(m => m.entity && m.entity.hp < m.entity.max_hp)
+	.map(m => {
+		let ratio = m.entity.hp / m.entity.max_hp;
 
-	// Sắp xếp theo tỉ lệ máu tăng dần
-	party.sort((a, b) => (a.entity.hp / a.entity.max_hp) - (b.entity.hp / b.entity.max_hp));
+		// không ưu tiên 6gunlaZe khi còn trên ~70% máu
+		if (m.name === "6gunlaZe") {
+			ratio += 0.3;
+		}
 
-	// Heal người máu thấp nhất
-	heal(party[0].entity);
+		m.entity.health_ratio = ratio;
+		return m;
+	});
+
+if (party.length === 0) return;
+
+// Sort theo health_ratio
+party.sort((a, b) => a.entity.health_ratio - b.entity.health_ratio);
+
+// Heal mục tiêu ưu tiên nhất
+heal(party[0].entity);
+
 }
 
 
