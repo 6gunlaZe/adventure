@@ -541,6 +541,10 @@ party = party
 		if (m.name === "6gunlaZe") {
 			ratio += 0.3;
 		}
+		if (m.name === "haiz") {
+			ratio += 0.22;
+		}
+		
 
 		m.entity.health_ratio = ratio;
 		return m;
@@ -596,15 +600,18 @@ function lowest_health_partymember() {
 	// Tính tỉ lệ máu
 	for (let id in party) {
 		let member = party[id];
-		if (member.entity) {
+   if (member.entity) {
 			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
 			
-// không ưu tiên cho 6gunlaZe còn trên 70% máu sẽ không buff
-if (member.name === "6gunlaZe") {
-    member.entity.health_ratio += 0.3;
-}
-
-		} else {
+        // không ưu tiên cho 6gunlaZe còn trên 70% máu sẽ không buff
+        if (member.name === "6gunlaZe") {
+               member.entity.health_ratio += 0.3;
+        }
+		if (m.name === "haiz") {
+			ratio += 0.22;
+		}
+			
+	} else {
 			member.entity = { health_ratio: 1 }; // giả lập
 		}
 	}
