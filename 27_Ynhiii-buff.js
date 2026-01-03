@@ -607,7 +607,7 @@ function lowest_health_partymember() {
         if (member.name === "6gunlaZe") {
                member.entity.health_ratio += 0.3;
         }
-		if (m.name === "haiz") {
+		if (member.name === "haiz") {
 			ratio += 0.22;
 		}
 			
