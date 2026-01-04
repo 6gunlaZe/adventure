@@ -396,11 +396,11 @@ setInterval(resource_logic, 100);
 
 */
 
+
 let last_server_cast = 0;
 
 function resource_logic() {
 
-    // Chặn toàn bộ attempt trong cửa sổ cooldown server
     if (Date.now() - last_server_cast < 1900) return;
 
     let skill = null;
@@ -416,19 +416,23 @@ function resource_logic() {
 
     use_skill(skill);
 
-    const now = Date.now();
-    const delta = last_server_cast ? now - last_server_cast : 0;
+    // Chỉ xác nhận cast nếu server set cooldown
+    setTimeout(() => {
+        if (parent.next_skill && parent.next_skill[skill]) {
+            const now = Date.now();
+            const delta = last_server_cast ? now - last_server_cast : 0;
 
-    game_log(
-        `[POTION] ${skill} | Δ=${delta}ms (server cd)`,
-        "green"
-    );
+            game_log(
+                `[POTION] ${skill} | Δ=${delta}ms (server cd)`,
+                "green"
+            );
 
-    last_server_cast = now;
+            last_server_cast = now;
+        }
+    }, 0);
 }
 
 setInterval(resource_logic, 50);
-
 
 
 
