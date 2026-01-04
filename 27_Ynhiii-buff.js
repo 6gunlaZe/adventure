@@ -348,38 +348,54 @@ setInterval(() => {
 	delayThreshold = 220
 }
 	
-	
 
-	
-	if (started == undefined) started = Date.now()
-    if ( Date.now() < started + 150) return
-	if(is_on_cooldown("use_hp")) return 
-if ((character.max_mp-character.mp) <300)use_skill("partyheal");
-
-if (character.hp < 2100 && character.mp > 100) {
-     if(can_use("use_hp"))use_skill("use_hp");
-	        started = Date.now()
-	// game_log("use_hp");
-} 
-else if (character.mp/character.max_mp < 0.9) {
-	  if(can_use("use_mp"))use_skill("use_mp");
-	        started = Date.now()
-	// game_log("use_mp");
-}
-  else if (character.max_mp>character.mp && can_use("use_mp") ) 
-  {
-	 use_skill("regen_mp");      
-	started = Date.now();
-	  return
-  }
-  else if (character.max_mp>character.mp && can_use("use_mp") ) 
-  {
-	  use_skill("regen_mp");    
-	started = Date.now();
-	  return
-  }
-	
 }, 200);
+
+
+function partyheal_logic() {
+    if (!can_use("partyheal")) return;
+    if ((character.max_mp - character.mp) < 300)use_skill("partyheal");
+	
+}
+
+setInterval(partyheal_logic, 600);
+
+
+
+let last_cast_time = null;
+
+function resource_logic() {
+
+    let skill = null;
+
+    if (character.hp < 2100 && character.mp > 100 && can_use("use_hp")) {
+        skill = "use_hp";
+    }
+    else if (character.mp / character.max_mp < 0.9 && can_use("use_mp")) {
+        skill = "use_mp";
+    }
+    else if (character.mp < character.max_mp && can_use("regen_mp")) {
+        skill = "regen_mp";
+    }
+
+    if (!skill) return;
+
+    // CAST
+    use_skill(skill);
+
+    const now = Date.now();
+    const delta = last_cast_time ? now - last_cast_time : 0;
+
+    game_log(
+        `[CAST] ${skill} | Δ=${delta}ms (cd≈2000ms)`,
+        delta < 1800 ? "red" : "green"
+    );
+
+    last_cast_time = now;
+}
+
+setInterval(resource_logic, 200);
+
 
 
 
