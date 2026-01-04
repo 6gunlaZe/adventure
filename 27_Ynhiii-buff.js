@@ -374,9 +374,7 @@ function resource_logic() {
     else if (character.mp / character.max_mp < 0.9 && can_use("use_mp")) {
         skill = "use_mp";
     }
-    else if (character.mp < character.max_mp && can_use("regen_mp")) {
-        skill = "regen_mp";
-    }
+
 
     if (!skill) return;
 
