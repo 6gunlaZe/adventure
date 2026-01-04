@@ -1117,7 +1117,7 @@ const hpThreshold = e.max_hp >= 800000 ? 35000 :
             }		
 	
 	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 41000   lonnhat: 1    nhonhat : 25001 // dùng lớn nhất khi đã có tank mạnh và muốn tối ưu dps
-		    if(target1xc&& character.mp > 5500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 20 )
+		    if(target1xc&& character.mp > 5100 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 20 )
             {
                 use_skill("curse", target1xc);
 				// game_log("curse - low!!!!!!");
