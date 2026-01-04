@@ -392,7 +392,7 @@ function resource_logic() {
     last_cast_time = now;
 }
 
-setInterval(resource_logic, 200);
+setInterval(resource_logic, 100);
 
 
 
