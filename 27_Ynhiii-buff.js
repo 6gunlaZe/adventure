@@ -361,7 +361,7 @@ function partyheal_logic() {
 setInterval(partyheal_logic, 600);
 
 
-
+/*
 let last_cast_time = null;
 
 function resource_logic() {
@@ -394,8 +394,40 @@ function resource_logic() {
 
 setInterval(resource_logic, 100);
 
+*/
 
+let last_server_cast = 0;
 
+function resource_logic() {
+
+    // Chặn toàn bộ attempt trong cửa sổ cooldown server
+    if (Date.now() - last_server_cast < 1900) return;
+
+    let skill = null;
+
+    if (character.hp < 2100 && character.mp > 100) {
+        skill = "use_hp";
+    }
+    else if (character.mp / character.max_mp < 0.9) {
+        skill = "use_mp";
+    }
+
+    if (!skill) return;
+
+    use_skill(skill);
+
+    const now = Date.now();
+    const delta = last_server_cast ? now - last_server_cast : 0;
+
+    game_log(
+        `[POTION] ${skill} | Δ=${delta}ms (server cd)`,
+        "green"
+    );
+
+    last_server_cast = now;
+}
+
+setInterval(resource_logic, 50);
 
 
 
