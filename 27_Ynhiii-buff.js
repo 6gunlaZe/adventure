@@ -1092,18 +1092,26 @@ const hpThreshold = e.max_hp >= 800000 ? 35000 :
             }		
 	
 	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 41000   lonnhat: 1    nhonhat : 25001 // dùng lớn nhất khi đã có tank mạnh và muốn tối ưu dps
-		    if(target1xc&& character.mp > 5500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 40 )
+		    if(target1xc&& character.mp > 5500 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 20 )
             {
                 use_skill("curse", target1xc);
 				// game_log("curse - low!!!!!!");
             }
 
-	
-		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && distance(character, currentTarget) < 40 )
+	////phần quái của leader đang nhắm tới
+		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && distance(character, currentTarget) < 20 )
             {
                 use_skill("curse", currentTarget);
 				// game_log("curse - lowstart !!!!!!");
             }
+		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && currentTarget.mtype != crepp )
+            {
+                use_skill("curse", currentTarget);
+				// game_log("curse - lowstart !!!!!!");
+            }
+
+
+	
 	
  if(currentTarget)chuyendoithongminh(currentTarget)	
 ////////////////////////
