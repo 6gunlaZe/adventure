@@ -624,7 +624,7 @@ function lowest_health_partymember() {
                member.entity.health_ratio += 0.3;
         }
 		if (member.name === "haiz") {
-			ratio += 0.22;
+			 member.entity.health_ratio += 0.22;
 		}
 			
 	} else {
