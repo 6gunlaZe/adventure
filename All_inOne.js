@@ -170,6 +170,10 @@ setTimeout(() => {
 }, 10000); // 10000ms = chạy sau 10 giây khởi động
 
 
+setInterval(() => {
+    parent.socket.emit("send_updates", {});
+    game_log("🔁 Force refresh", "#AAAAFF");
+}, 60000); // mỗi 60 giây
 
 
 
