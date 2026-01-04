@@ -397,42 +397,31 @@ setInterval(resource_logic, 100);
 */
 
 
-let last_server_cast = 0;
 
-function resource_logic() {
 
-    if (Date.now() - last_server_cast < 1900) return;
+function use_hp_or_mp1()
+{
+	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
+	var used=true;
+	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
+	
 
-    let skill = null;
-
-    if (character.hp < 2100 && character.mp > 100) {
-        skill = "use_hp";
-    }
-    else if (character.mp / character.max_mp < 0.9) {
-        skill = "use_mp";
-    }
-
-    if (!skill) return;
-
-    use_skill(skill);
-
-    // Chỉ xác nhận cast nếu server set cooldown
-    setTimeout(() => {
-        if (parent.next_skill && parent.next_skill[skill]) {
-            const now = Date.now();
-            const delta = last_server_cast ? now - last_server_cast : 0;
-
-            game_log(
-                `[POTION] ${skill} | Δ=${delta}ms (server cd)`,
-                "green"
-            );
-
-            last_server_cast = now;
-        }
-    }, 0);
+    if (character.hp < 2100 && character.mp > 100)use_skill("use_hp");
+    else if (character.mp / character.max_mp < 0.9)use_skill("use_mp");
+	else used=false;
+	
+	if(used)
+		last_potion=new Date();
+	else
+		return resolving_promise({reason:"full",success:false,used:false});
 }
 
-setInterval(resource_logic, 50);
+setInterval(function() {
+use_hp_or_mp1()
+}, 200);
+
+
+
 
 
 
