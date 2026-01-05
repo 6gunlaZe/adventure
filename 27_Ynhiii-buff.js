@@ -862,9 +862,9 @@ setInterval(function(){
 	}
 	else
 	{
-		rateheal = 1 - (character.heal / character.max_hp);
-		if (rateheal < 0.72)rateheal = 0.75;
-		if (character.targets > 5 )rateheal = 0.92;
+		rateheal = 1 - (character.heal / character.max_hp);  /// tùy chỉnh rate theo sức mạnh quái vật
+		if (rateheal < 0.9)rateheal = 0.9;
+		if (character.targets > 5 )rateheal = 0.95;
 	}
 	
     //If we have a target to heal, heal them
