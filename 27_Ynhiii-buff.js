@@ -1303,7 +1303,7 @@ function tryAbsorb() {
     if (bestTarget && character.hp >= 8500) {
         use_skill("absorb", bestTarget);
         lastAbsorbTime = now;
-		game_log(`🛡 Absorb ${bestTarget} (score: ${highestThreat})`);
+        game_log(`🛡 Absorb ${bestTarget} (score: ${highestScore})`);
     }
 	 else {
             game_log(`❌ Không absorb - máu thấp`);
@@ -1554,6 +1554,7 @@ function tryHeal() {
 
 function emergencyHealParty() {
     if (!character.party) return false;
+if (is_on_cooldown("heal")) return false;
 
     const party = get_party();
     let target = null;
