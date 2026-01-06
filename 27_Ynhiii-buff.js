@@ -1524,7 +1524,7 @@ function tryHeal() {
         t2 &&
         t2.health_ratio < 0.65 &&
         character.mp > 650 &&
-        Date.now() > delayaoe + 260
+        Date.now() > delayaoe + 460
     ) {
         use_skill("partyheal");
         delayaoe = Date.now();
