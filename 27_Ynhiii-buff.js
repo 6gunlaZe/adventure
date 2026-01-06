@@ -1523,12 +1523,28 @@ function tryHeal() {
     if (
         t2 &&
         t2.health_ratio < 0.65 &&
-        character.mp > 650 &&
-        Date.now() > delayaoe + 460
+        character.mp > 650
     ) {
+
+    const maxRatio = 0.65;
+    const minRatio = 0.30;
+
+    const maxDelay = 460;
+    const minDelay = 120;
+
+    // Clamp ratio để tránh vượt biên
+    const r = Math.max(minRatio, Math.min(maxRatio, t2.health_ratio));
+
+    // Nội suy tuyến tính
+    const dynamicDelay =
+        minDelay +
+        (maxDelay - minDelay) * ((r - minRatio) / (maxRatio - minRatio));
+
+    if (Date.now() > delayaoe + dynamicDelay) {
         use_skill("partyheal");
         delayaoe = Date.now();
-        //return true;
+    }
+		
     }
 
     // Heal người chơi xung quanh
