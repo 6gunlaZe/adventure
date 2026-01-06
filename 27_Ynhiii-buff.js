@@ -1305,7 +1305,7 @@ function tryAbsorb() {
         game_log(`🛡 Absorb ${bestTarget} (score: ${highestScore})`);
     }
 	 else {
-            game_log(`❌ Không absorb - máu thấp`);
+            // game_log(`❌ Không absorb - máu thấp`);
         }
 	
 
