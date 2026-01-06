@@ -1568,22 +1568,31 @@ function tryHeal() {
 
 
 function emergencyHealParty() {
-    if (!character.party) return false;
-if (is_on_cooldown("heal")) return false;
+    if (is_on_cooldown("heal")) return false;
 
-    const party = get_party();
     let target = null;
     let lowestRatio = 1;
 
-    for (let name in party) {
-        const p = get_player(name);
-        if (!p || p.dead) continue;
-        if (distance(character, p) > character.range) continue;
+    // 1. Luôn xét bản thân trước
+    const selfRatio = character.hp / character.max_hp;
+    if (selfRatio < 0.5) {
+        target = character;
+        lowestRatio = selfRatio;
+    }
 
-        const ratio = p.hp / p.max_hp;
-        if (ratio < 0.5 && ratio < lowestRatio) {
-            lowestRatio = ratio;
-            target = p;
+    // 2. Nếu có party thì xét thêm đồng đội
+    if (character.party) {
+        const party = get_party();
+        for (let name in party) {
+            const p = get_player(name);
+            if (!p || p.dead) continue;
+            if (distance(character, p) > character.range) continue;
+
+            const ratio = p.hp / p.max_hp;
+            if (ratio < 0.5 && ratio < lowestRatio) {
+                lowestRatio = ratio;
+                target = p;
+            }
         }
     }
 
@@ -1594,6 +1603,7 @@ if (is_on_cooldown("heal")) return false;
 
     return false;
 }
+
 
 
 
