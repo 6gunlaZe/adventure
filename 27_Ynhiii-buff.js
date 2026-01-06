@@ -1413,8 +1413,8 @@ function kiteLogic(currentTarget) {
 function tryAttack(target) {
     if (
         target &&
-        can_attack(target) &&
-       // (target.attack < 800 || character.mp / character.max_mp > 0.75)
+        can_attack(target) 
+       // && (target.attack < 800 || character.mp / character.max_mp > 0.75)
     ) {
         attack(target);
         return true;
