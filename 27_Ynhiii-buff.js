@@ -1440,13 +1440,41 @@ function tryCurse(target, mpReq = 4500) {
 }
 
 function curseLogic(currentTarget) {
-
+  const leader = get_player("haiz");
     // === 1. Boss / quái nặng cố định ===
     const priorityTypes = ["franky", "icegolem", "crabxx", "bscorpion"];
     for (let type of priorityTypes) {
         const t = get_nearest_monster({ type });
         if (tryCurse(t)) return true;
     }
+
+// === 1.5. Quái quanh leader có HP lớn nhất (>40k) ===
+if (leader) {
+    let maxHpTarget = null;
+    let maxHp = 0;
+
+    for (let id in parent.entities) {
+        const m = parent.entities[id];
+        if (!m || m.type !== "monster" || m.dead) continue;
+
+        // quái gần leader
+        if (distance(m, leader) > 25) continue;
+
+        if (m.hp > maxHp) {
+            maxHp = m.hp;
+            maxHpTarget = m;
+        }
+    }
+
+    if (
+        maxHpTarget &&
+        maxHpTarget.hp > 40000 &&
+        distance(character, maxHpTarget) < 20
+    ) {
+        if (tryCurse(maxHpTarget)) return true;
+    }
+}
+
 
     // === 2. Quái lớn nhất (tối ưu DPS, cần nhiều MP) ===
     const bigTarget = get_nearest_monster1({ comuctieu: 1, lonnhat: 1 });
