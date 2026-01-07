@@ -1457,6 +1457,8 @@ if (leader) {
         const m = parent.entities[id];
         if (!m || m.type !== "monster" || m.dead) continue;
 
+        if (!m.target) continue; // chưa có target ai hết, bở qua
+
         // quái gần leader
         if (distance(m, leader) > 25) continue;
 
