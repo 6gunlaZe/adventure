@@ -463,9 +463,10 @@ function kite(taget, kite_range = 20, quai = null) {
     // ------------------------------------
     let nearMob = get_nearest_monster();
 
-    // Cấu hình khoảng cách riêng (chỉ áp dụng nếu có mob phù hợp)
+    // Cấu hình khoảng cách riêng (chỉ áp dụng nếu có mob phù hợp) gscorpion
     const kiteConfig = {
-        "fireroamer": 45,
+        "fireroamer": 50,
+        "gscorpion": 50,
         "spider": 10,
         "spiderr": 10,
         "spiderbl": 10,
