@@ -181,6 +181,7 @@ xpants: {bank: "items1", level: 4, quantity: 1},
 vgloves: {bank: "items1", level: 5, quantity: 1},	
 pants: {bank: "items1", level: 9, quantity: 1},		
 pants: {bank: "items1", level: 8, quantity: 1},		
+pants: {bank: "items1", level: 7, quantity: 1},		
 
 	
 	
