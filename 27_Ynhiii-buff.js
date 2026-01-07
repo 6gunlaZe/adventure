@@ -1448,7 +1448,7 @@ function curseLogic(currentTarget) {
         if (tryCurse(t)) return true;
     }
 
-// === 1.5. Quái quanh leader có HP lớn nhất (>40k) ===
+// === 2. Quái quanh leader có HP lớn nhất (>40k) ===
 if (leader) {
     let maxHpTarget = null;
     let maxHp = 0;
@@ -1477,16 +1477,6 @@ if (leader) {
     }
 }
 
-
-    // === 2. Quái lớn nhất (tối ưu DPS, cần nhiều MP) ===
-    const bigTarget = get_nearest_monster1({ comuctieu: 1, lonnhat: 1 });
-    if (
-        bigTarget &&
-        bigTarget.hp > 25000 &&
-        distance(character, bigTarget) < 20
-    ) {
-        if (tryCurse(bigTarget, 5300)) return true;
-    }
 
     // === 3. Quái leader đang tank (ưu tiên cao) ===
     if (
