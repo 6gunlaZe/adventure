@@ -67,8 +67,8 @@ let yeucaulevelmoi
 let fixmoi2
 
 let autoupgrapmoi = 1  // ngưng au tu up moi, 0 = auto up moi item 1
-item1 = "coat"
-item2 = "coat"
+item1 = "coat111111"
+item2 = "coat111111"
 yeucaulevelmoi = 6	
 fixmoi2 = 8
 
@@ -185,6 +185,7 @@ pants: {bank: "items1", level: 7, quantity: 1},
 coat: {bank: "items1", level: 9, quantity: 1},		
 coat: {bank: "items1", level: 8, quantity: 1},		
 coat: {bank: "items1", level: 7, quantity: 1},	
+xhelmet: {bank: "items1", level: 3, quantity: 1},			
 	
 	
 	stramulet: {bank: "items7", level: -1, quantity: 1} ,
@@ -1592,7 +1593,7 @@ if (am1 == 0 && itemSearch1 > 1 &&  moi == 0 )buy("mpot1",300);
 	if(parent != null && parent.socket != null)
 	{
 		
-		upgrade1();
+		//upgrade1();
 		 
 	}	
 	
