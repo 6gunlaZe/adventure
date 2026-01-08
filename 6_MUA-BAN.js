@@ -113,173 +113,147 @@ if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mus
 
 /////////
 var bankItems = {
-	//ItemID: {bank: banktabID, level: min level, quantity: min quantity}
-tigerhelmet: {bank: "items0", level: -1, quantity: 1},
-pleather: {bank: "items5", level: -1, quantity: 1},
-seashell: {bank: "items5", level: -1, quantity: 1} ,
-bfur: {bank: "items5", level: -1, quantity: 1},
-poison: {bank: "items5", level: -1, quantity: 1},
-cscale: {bank: "items5", level: -1, quantity: 1},
-forscroll: {bank: "items5", level: -1, quantity: 1},
-lotusf: {bank: "items5", level: -1, quantity: 1} ,
-btusk: {bank: "items5", level: -1, quantity: 1},
-gem0: {bank: "items5", level: -1, quantity: 1},
-weaponbox: {bank: "items5", level: -1, quantity: 1},
-armorbox: {bank: "items5", level: -1, quantity: 1},	
-offering: {bank: "items5", level: -1, quantity: 1} ,	
-ascale: {bank: "items5", level: -1, quantity: 1},
-x0: {bank: "items5", level: -1, quantity: 1} ,
-x1: {bank: "items5", level: -1, quantity: 1},
-x2: {bank: "items5", level: -1, quantity: 1},
-x3: {bank: "items5", level: -1, quantity: 1},
-x4: {bank: "items5", level: -1, quantity: 1},	
-x5: {bank: "items5", level: -1, quantity: 1} ,
-x6: {bank: "items5", level: -1, quantity: 1},
-x7: {bank: "items5", level: -1, quantity: 1},
-x8: {bank: "items5", level: -1, quantity: 1},
-cshell: {bank: "items5", level: -1, quantity: 1},	
-dstones: {bank: "items5", level: -1, quantity: 1},		
-smoke: {bank: "items5", level: -1, quantity: 1},	
-funtoken: {bank: "items5", level: -1, quantity: 1},		
-essenceoffrost: {bank: "items5", level: -1, quantity: 1},	
-snakeoil: {bank: "items5", level: -1, quantity: 1},	
-snakefang: {bank: "items5", level: -1, quantity: 1},		
-candy1: {bank: "items5", level: -1, quantity: 1},		
-candy0: {bank: "items5", level: -1, quantity: 1},		
-bwing: {bank: "items5", level: -1, quantity: 1},		
-pstem: {bank: "items5", level: -1, quantity: 1},		
-cryptkey: {bank: "items5", level: -1, quantity: 1},	
-snakeoil: {bank: "items5", level: -1, quantity: 1},	
-essenceoffrostl: {bank: "items5", level: -1, quantity: 1},	
-eggnog: {bank: "items5", level: -1, quantity: 1},		
-feather0: {bank: "items5", level: -1, quantity: 1},
-//candycane: {bank: "items5", level: -1, quantity: 1},
-tombkey: {bank: "items5", level: -1, quantity: 1},
-//leather: {bank: "items5", level: -1, quantity: 1},
-shadowstone: {bank: "items5", level: -1, quantity: 1},
-frozenkey: {bank: "items5", level: -1, quantity: 1},
-spiderkey: {bank: "items5", level: -1, quantity: 1},
-spidersilk: {bank: "items5", level: -1, quantity: 1},
-sstinger: {bank: "items5", level: -1, quantity: 1},
-gemfragment: {bank: "items5", level: -1, quantity: 1},
-	
-	
-fieldgen0: {bank: "items1", level: -1, quantity: 1},
-frankypants: {bank: "items1", level: -1, quantity: 1},
-harbringer: {bank: "items1", level: -1, quantity: 1},
-bcape: {bank: "items1", level: -1, quantity: 1},
-bowofthedead: {bank: "items1", level: -1, quantity: 1},
-oozingterror: {bank: "items1", level: -1, quantity: 1},	
-firebow: {bank: "items1", level: 8, quantity: 1},	
-mshield: {bank: "items1", level: 6, quantity: 1},	
-supermittens: {bank: "items1", level: 4, quantity: 1},	
-orbofdex: {bank: "items1", level: 2, quantity: 1},	
-orbofstr: {bank: "items1", level: 2, quantity: 1},	
-wbookhs	: {bank: "items1", level: 1, quantity: 1},	
-starkillers: {bank: "items1", level: 4, quantity: 1},	
-xpants: {bank: "items1", level: 4, quantity: 1},	
-vgloves: {bank: "items1", level: 5, quantity: 1},	
-pants: {bank: "items1", level: 9, quantity: 1},		
-pants: {bank: "items1", level: 8, quantity: 1},		
-pants: {bank: "items1", level: 7, quantity: 1},		
-coat: {bank: "items1", level: 9, quantity: 1},		
-coat: {bank: "items1", level: 8, quantity: 1},		
-coat: {bank: "items1", level: 7, quantity: 1},	
-xhelmet: {bank: "items1", level: 3, quantity: 1},			
-	
-	
-	stramulet: {bank: "items7", level: -1, quantity: 1} ,
-	intamulet: {bank: "items7", level: -1, quantity: 1},
-dexamulet: {bank: "items7", level: -1, quantity: 1},
-intearring: {bank: "items7", level: -1, quantity: 1},
-dexearring: {bank: "items7", level: -1, quantity: 1},
-		strearring: {bank: "items6", level: -1, quantity: 1} ,
-	intring: {bank: "items6", level: -1, quantity: 1},
-dexring: {bank: "items6", level: -1, quantity: 1},
-strring: {bank: "items6", level: -1, quantity: 1},
+  // ===== MATERIALS / MISC =====
+  tigerhelmet: [{ bank: "items0", level: -1, quantity: 1 }],
+  pleather: [{ bank: "items5", level: -1, quantity: 1 }],
+  seashell: [{ bank: "items5", level: -1, quantity: 1 }],
+  bfur: [{ bank: "items5", level: -1, quantity: 1 }],
+  poison: [{ bank: "items5", level: -1, quantity: 1 }],
+  cscale: [{ bank: "items5", level: -1, quantity: 1 }],
+  forscroll: [{ bank: "items5", level: -1, quantity: 1 }],
+  lotusf: [{ bank: "items5", level: -1, quantity: 1 }],
+  btusk: [{ bank: "items5", level: -1, quantity: 1 }],
+  gem0: [{ bank: "items5", level: -1, quantity: 1 }],
+  weaponbox: [{ bank: "items5", level: -1, quantity: 1 }],
+  armorbox: [{ bank: "items5", level: -1, quantity: 1 }],
+  offering: [{ bank: "items5", level: -1, quantity: 1 }],
+  ascale: [{ bank: "items5", level: -1, quantity: 1 }],
+  x0: [{ bank: "items5", level: -1, quantity: 1 }],
+  x1: [{ bank: "items5", level: -1, quantity: 1 }],
+  x2: [{ bank: "items5", level: -1, quantity: 1 }],
+  x3: [{ bank: "items5", level: -1, quantity: 1 }],
+  x4: [{ bank: "items5", level: -1, quantity: 1 }],
+  x5: [{ bank: "items5", level: -1, quantity: 1 }],
+  x6: [{ bank: "items5", level: -1, quantity: 1 }],
+  x7: [{ bank: "items5", level: -1, quantity: 1 }],
+  x8: [{ bank: "items5", level: -1, quantity: 1 }],
+  cshell: [{ bank: "items5", level: -1, quantity: 1 }],
+  dstones: [{ bank: "items5", level: -1, quantity: 1 }],
+  smoke: [{ bank: "items5", level: -1, quantity: 1 }],
+  funtoken: [{ bank: "items5", level: -1, quantity: 1 }],
+  essenceoffrost: [{ bank: "items5", level: -1, quantity: 1 }],
+  essenceoffrostl: [{ bank: "items5", level: -1, quantity: 1 }],
+  snakeoil: [{ bank: "items5", level: -1, quantity: 1 }],
+  snakefang: [{ bank: "items5", level: -1, quantity: 1 }],
+  candy0: [{ bank: "items5", level: -1, quantity: 1 }],
+  candy1: [{ bank: "items5", level: -1, quantity: 1 }],
+  bwing: [{ bank: "items5", level: -1, quantity: 1 }],
+  pstem: [{ bank: "items5", level: -1, quantity: 1 }],
+  cryptkey: [{ bank: "items5", level: -1, quantity: 1 }],
+  eggnog: [{ bank: "items5", level: -1, quantity: 1 }],
+  feather0: [{ bank: "items5", level: -1, quantity: 1 }],
+  tombkey: [{ bank: "items5", level: -1, quantity: 1 }],
+  shadowstone: [{ bank: "items5", level: -1, quantity: 1 }],
+  frozenkey: [{ bank: "items5", level: -1, quantity: 1 }],
+  spiderkey: [{ bank: "items5", level: -1, quantity: 1 }],
+  spidersilk: [{ bank: "items5", level: -1, quantity: 1 }],
+  sstinger: [{ bank: "items5", level: -1, quantity: 1 }],
+  gemfragment: [{ bank: "items5", level: -1, quantity: 1 }],
 
-	intbelt: {bank: "items6", level: -1, quantity: 1},
-dexbelt: {bank: "items6", level: -1, quantity: 1},
-strbelt: {bank: "items7", level: -1, quantity: 1},	
-cring: {bank: "items6", level: -1, quantity: 1},
-cearring: {bank: "items6", level: -1, quantity: 1},
-lostearring: {bank: "items7", level: -1, quantity: 1},
-ringsj: {bank: "items4", level: -1, quantity: 1},
+  // ===== GEAR =====
+  fieldgen0: [{ bank: "items1", level: -1, quantity: 1 }],
+  frankypants: [{ bank: "items1", level: -1, quantity: 1 }],
+  harbringer: [{ bank: "items1", level: -1, quantity: 1 }],
+  bcape: [{ bank: "items1", level: -1, quantity: 1 }],
+  bowofthedead: [{ bank: "items1", level: -1, quantity: 1 }],
+  oozingterror: [{ bank: "items1", level: -1, quantity: 1 }],
 
-	
+  firebow: [{ bank: "items1", level: 8, quantity: 1 }],
+  mshield: [{ bank: "items1", level: 6, quantity: 1 }],
+  supermittens: [{ bank: "items1", level: 4, quantity: 1 }],
+  orbofdex: [{ bank: "items1", level: 2, quantity: 1 }],
+  orbofstr: [{ bank: "items1", level: 2, quantity: 1 }],
+  wbookhs: [{ bank: "items1", level: 1, quantity: 1 }],
+  starkillers: [{ bank: "items1", level: 4, quantity: 1 }],
+  xpants: [{ bank: "items1", level: 4, quantity: 1 }],
+  vgloves: [{ bank: "items1", level: 5, quantity: 1 }],
+  xhelmet: [{ bank: "items1", level: 3, quantity: 1 }],
+
+  // ===== MULTI LEVEL ITEMS (FIX CHÍNH) =====
+  pants: [
+    { bank: "items1", level: 9, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 7, quantity: 1 },
+  ],
+  coat: [
+    { bank: "items1", level: 9, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 7, quantity: 1 },
+  ],
+
+  // ===== ACCESSORIES =====
+  stramulet: [{ bank: "items7", level: -1, quantity: 1 }],
+  intamulet: [{ bank: "items7", level: -1, quantity: 1 }],
+  dexamulet: [{ bank: "items7", level: -1, quantity: 1 }],
+  intearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  dexearring: [{ bank: "items7", level: -1, quantity: 1 }],
+
+  strearring: [{ bank: "items6", level: -1, quantity: 1 }],
+  intring: [{ bank: "items6", level: -1, quantity: 1 }],
+  dexring: [{ bank: "items6", level: -1, quantity: 1 }],
+  strring: [{ bank: "items6", level: -1, quantity: 1 }],
+
+  intbelt: [{ bank: "items6", level: -1, quantity: 1 }],
+  dexbelt: [{ bank: "items6", level: -1, quantity: 1 }],
+  strbelt: [{ bank: "items7", level: -1, quantity: 1 }],
+  cring: [{ bank: "items6", level: -1, quantity: 1 }],
+  cearring: [{ bank: "items6", level: -1, quantity: 1 }],
+  lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  ringsj: [{ bank: "items4", level: -1, quantity: 1 }],
 };
 
 
 
-function storeItems()
-{
-	if(character.map == "bank")
-	{
-		for(id in character.items)
-		{
-			var item = character.items[id];
-			
-			if(item != null)
-			{
-				var storeDef = bankItems[item.name]
+function storeItems() {
+  if (character.map !== "bank") return;
 
-				if(storeDef != null && (storeDef.level == -1 || item.level == storeDef.level))
-				{
-					/////
-					if (is_bank_pack_full_real(storeDef.bank) )
-					{
-						if (!is_bank_pack_full_real("items0") )
-						{
-								parent.socket.emit("bank", {
-										operation: "swap",
-										inv: id,
-										str: -1,
-										pack: "items0"
-									});	
-						}
-						else if (!is_bank_pack_full_real("items6") )
-						{
-								parent.socket.emit("bank", {
-										operation: "swap",
-										inv: id,
-										str: -1,
-										pack: "items6"
-									});	
-						}
-						else if (!is_bank_pack_full_real("items7") )
-						{
-								parent.socket.emit("bank", {
-										operation: "swap",
-										inv: id,
-										str: -1,
-										pack: "items7"
-									});	
-						}
+  for (let id in character.items) {
+    let item = character.items[id];
+    if (!item) continue;
 
-							
-                                                  else
-						{
-						}
-						
-						
-					}
-					else
-					{
-								parent.socket.emit("bank", {
-										operation: "swap",
-										inv: id,
-										str: -1,
-										pack: storeDef.bank
-									});
-					}
-					
-					
-					//////
-					break;
-				}
-			}
-		}
-	}
+    let defs = bankItems[item.name];
+    if (!Array.isArray(defs)) continue;
+
+    let storeDef = defs.find(d =>
+      d.level === -1 || item.level === d.level
+    );
+    if (!storeDef) continue;
+
+    let swapped = false;
+
+    if (is_bank_pack_full_real(storeDef.bank)) {
+      if (!is_bank_pack_full_real("items0")) {
+        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items0" });
+        swapped = true;
+      } else if (!is_bank_pack_full_real("items6")) {
+        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items6" });
+        swapped = true;
+      } else if (!is_bank_pack_full_real("items7")) {
+        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items7" });
+        swapped = true;
+      }
+    } else {
+      parent.socket.emit("bank", {
+        operation: "swap",
+        inv: id,
+        str: -1,
+        pack: storeDef.bank
+      });
+      swapped = true;
+    }
+
+    if (swapped) break;
+  }
 }
 
 /////////////////////////////////
@@ -357,12 +331,9 @@ setInterval(function() {
 
 
 setInterval(() => {
-
-	///////autobank
-	storeItems()
-   // game_log("move bank !!!!!!" + is_bank_pack_full("items7")  );
-	//////
+  if (character.map === "bank") storeItems();
 }, 300);
+
 
 
 function is_bank_pack_full(pack) {
