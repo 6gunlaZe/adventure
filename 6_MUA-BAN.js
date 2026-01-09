@@ -231,26 +231,31 @@ function storeItems() {
 
     let swapped = false;
 
-    if (is_bank_pack_full_real(storeDef.bank)) {
-      if (!is_bank_pack_full_real("items0")) {
-        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items0" });
-        swapped = true;
-      } else if (!is_bank_pack_full_real("items6")) {
-        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items6" });
-        swapped = true;
-      } else if (!is_bank_pack_full_real("items7")) {
-        parent.socket.emit("bank", { operation: "swap", inv: id, str: -1, pack: "items7" });
-        swapped = true;
-      }
-    } else {
+if (is_bank_pack_full_real(storeDef.bank)) {
+  const priorityPacks = ["items0", "items1", "items2", "items3", "items6", "items7"];
+
+  for (const pack of priorityPacks) {
+    if (!is_bank_pack_full_real(pack)) {
       parent.socket.emit("bank", {
         operation: "swap",
         inv: id,
         str: -1,
-        pack: storeDef.bank
+        pack: pack
       });
       swapped = true;
+      break;
     }
+  }
+} else {
+  parent.socket.emit("bank", {
+    operation: "swap",
+    inv: id,
+    str: -1,
+    pack: storeDef.bank
+  });
+  swapped = true;
+}
+
 
     if (swapped) break;
   }
