@@ -2389,7 +2389,7 @@ smart_move({ map: "main", x: -705, y: 1708 }, () => {
 var bossc = get_nearest_monster({type:'crabxx'})
 if( get_nearest_monster({type:'crabxx'})  &&  !is_moving(character)  )	
 {
-	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes("6gunlaZe") ){
+	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes("6gunlaZe") && bossc.hp < 888000 ){
 		send_cm("haiz","crabxx") 
 		crabxxmode = 1
 smart_move({ map: "main", x: -200, y: -110 }, () => {
