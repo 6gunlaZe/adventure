@@ -1435,7 +1435,7 @@ async function skillLoop() {
         let tank = get_entity(f1111);
 	     let f1 = get_entity("6gunlaZe");
 
-        if (character.ctype === "warrior") {
+        if (character.ctype === "warrior" && !dead) {
             try {
 				
 
