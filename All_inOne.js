@@ -3384,7 +3384,7 @@ async function BosscheckHPMYSv11(monsters, HP) {
 
 async function checkCrabxx() {
 	const monsters = ["crabxx"];
-	const hpThreshold = 930000;
+	const hpThreshold = 900000;
 
 	const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
 	const response = await fetch(url);
@@ -3842,7 +3842,7 @@ const rangeBuffer = 8;
 const calcRadius = 300;
 
 // Types of monsters we want to avoid
-const avoidTypes = ["crabxx","a1","a4","a6","a8","a9","a10"];
+const avoidTypes = ["a1","a4","a6","a8","a9","a10"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
