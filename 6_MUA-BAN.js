@@ -182,12 +182,12 @@ var bankItems = {
   // ===== MULTI LEVEL ITEMS (FIX CHÍNH) =====
   pants: [
     { bank: "items1", level: 9, quantity: 1 },
-    { bank: "items1", level: 8, quantity: 1 },
+   // { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
   coat: [
     { bank: "items1", level: 9, quantity: 1 },
-    { bank: "items1", level: 8, quantity: 1 },
+    //{ bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
 
