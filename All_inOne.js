@@ -1577,7 +1577,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     }
 
     // 👉 Chuyển sang deff nhẹ nếu máu thấp mà chưa bị mob mạnh
-    if (checkdef === 0 && character.hp < 10000) {
+    if (checkdef === 0 && character.hp < 11000) {
         eTime = currentTime;
         checkdef = 1;
         equipSet('deff');
@@ -1999,6 +1999,9 @@ const equipmentSets = {
     home: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+		
     ],
     def_magical: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
@@ -2027,6 +2030,9 @@ const equipmentSets = {
     deff: [
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+		
 		
     ],
     nodeff: [
