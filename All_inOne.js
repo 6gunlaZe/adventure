@@ -2004,10 +2004,12 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
         { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "t2stramulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+
 
 		
     ],
@@ -2015,9 +2017,11 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+
 
     ],
     deff: [
@@ -2028,7 +2032,8 @@ const equipmentSets = {
     nodeff: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
-        { itemName: "mcape", slot: "chest", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
 
@@ -2053,7 +2058,10 @@ const equipmentSets = {
         { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
         { itemName: "test_orb", slot: "orb", level: 0, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+
+		
     ],
 };
 
