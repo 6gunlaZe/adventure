@@ -2080,9 +2080,12 @@ game.on('death', function (data) {
 const equipmentSets = {
 
     def: [	    
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" } ,
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+
+		
     ],
     luck: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
@@ -2107,12 +2110,19 @@ const equipmentSets = {
     ],
     def1: [
         { itemName: "fireblade", slot: "mainhand", level: 9, l: "s" },	    
-        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	    
+        { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	   
+		
     ],
     nodef: [    
-        { itemName: "mcape", slot: "chest", level: 8, l: "l" } ,
+
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-        { itemName: "fury", slot: "helmet", level: 8, l: "l" },	
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "snring", slot: "amulet", level: 2, l: "l"},
+
+		
     ],
     orb: [
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
