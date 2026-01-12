@@ -1552,8 +1552,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     }
 
     // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
-    if ((checkdef === 1 || checkdef === 2) &&
-        character.hp > 14000 &&
+    if (character.hp > 15000 &&
         physicalMobs.length === 0 &&
         magicalMobs.length === 0) {
         
