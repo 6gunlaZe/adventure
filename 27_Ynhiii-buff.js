@@ -424,7 +424,9 @@ use_hp_or_mp1()
 
 
 setTimeout(() => {
+         if (character.rip) { ///////auto hoi sinh 10s khi khởi động
     respawn();
+  }
 }, 10000);
 
 
