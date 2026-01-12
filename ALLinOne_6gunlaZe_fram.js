@@ -1639,6 +1639,14 @@ setTimeout(function() {
 
 
 
+setTimeout(() => {
+     if (character.rip) { ///////auto hoi sinh 10s khi khởi động
+    respawn();
+  }
+}, 10000);
+
+
+
 
 setInterval(function() {
 
