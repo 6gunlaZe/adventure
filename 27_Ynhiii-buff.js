@@ -423,6 +423,9 @@ use_hp_or_mp1()
 
 
 
+setTimeout(() => {
+    respawn();
+}, 10000);
 
 
 
