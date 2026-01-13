@@ -1560,7 +1560,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         if (!defSafeSince) defSafeSince = currentTime;
 
         // Đủ thời gian an toàn → gỡ phòng thủ
-        if (currentTime - defSafeSince >= 3000) {
+        if (currentTime - defSafeSince >= 3000 && character.slots.helmet?.name === "xhelmet") {
             checkdef = 0;
             defSafeSince = null;
             eTime = currentTime;
@@ -1568,8 +1568,6 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
             return;
         }
 
-        // Chưa đủ 3 giây → chờ tiếp
-        return;
     } else {
         // Nếu có mob mạnh lại → reset đồng hồ an toàn
         defSafeSince = null;
