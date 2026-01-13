@@ -2,7 +2,7 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 
 /*************** CONFIG ***************/
-const HOME_SERVER = { region: "EU", id: "I" };
+const HOME_SERVER = { region: "EU", id: "II" };
 const RUN_SERVER = { region: "ASIA", id: "I" };
 
 const SERVER_RULES = [
@@ -87,7 +87,7 @@ const locations = {
 
 };
 
-const home = 'fireroamer';
+const home = 'plantoid';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
