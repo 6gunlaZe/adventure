@@ -55,7 +55,7 @@ const locations = {
     prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
     pppompom: [{ x: 292, y: -189 }],
     plantoid: [
-  { type: "farm", x: -820, y: -400, map: "desertland" },
+  { type: "farm", x: -686, y: -370, map: "desertland" },
   { type: "safe", x: -600, y: -180, map: "desertland" }
     ],	
 	rat: [{ x: 6, y: 430 }],
