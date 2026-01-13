@@ -1,5 +1,20 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
+
+/*************** CONFIG ***************/
+const HOME_SERVER = { region: "EU", id: "I" };
+const RUN_SERVER = { region: "ASIA", id: "I" };
+
+const SERVER_RULES = [
+    { region: "EU",   id: "I",   weight: 3 },
+    { region: "US",   id: "I",   weight: 2 },
+    { region: "ASIA", id: "I",   weight: 1 },
+    { region: "US",   id: "II",  weight: 2 },
+    { region: "US",   id: "III", weight: 2 },
+    { region: "EU",   id: "II",  weight: 3 }
+];
+
+
 let lastUpdateTime = performance.now();
 setTimeout(waitAndUnluck, 1000);
 const locations = {
@@ -194,7 +209,7 @@ async function checkGameEvents() {
         let isEventValid = false;
         let procheck = false;
         if (event.type === 'specific') {
-		if (server.region == "EU" && server.id == "I" )isEventValid = !!parent?.S?.[event.eventType];
+		if (server.region == HOME_SERVER.region && server.id == HOME_SERVER.id )isEventValid = !!parent?.S?.[event.eventType];
         } else if (event.type === 'withJoin') {
 		isEventValid = !!parent?.S?.[event.eventType]?.live;  
         } else if (event.type === 'pro') {
@@ -468,13 +483,13 @@ if(PVPInRange.length >= 1)
 
 let region = server.region;
 let serverIden = server.id
-if ( region == "EU" && serverIden == "I" ) 
+if ( region == HOME_SERVER.region && serverIden == HOME_SERVER.id ) 
 {
-change_server("ASIA", "I");	
+change_server(RUN_SERVER.region, RUN_SERVER.id);	
 }
 	else
 	{
-         change_server("EU", "I");
+         change_server(HOME_SERVER.region, HOME_SERVER.id);
 	}	
 }
 
@@ -2390,13 +2405,13 @@ let serverIden = server.id
 
 if (!parent.S.franky && !parent.S.icegolem && !parent.S.crabxx) //khong co su kien thi moi chuyen sv trở về nhà
 {
-if ( region == "EU" && serverIden == "I" ) 
+if ( region == HOME_SERVER.region && serverIden == HOME_SERVER.id ) 
 {
 	game_log ("  SV  >>>>" + region + serverIden )
 }
 	else
 	{
-         if(character.hp > 8000)change_server("EU", "I");
+         if(character.hp > 8000)change_server(HOME_SERVER.region, HOME_SERVER.id);
 	//change_server("ASIA", "I");	
 	}
 }	
@@ -2437,17 +2452,7 @@ let autorelog = 0
 
 
 
-/*************** CONFIG ***************/
-const HOME_SERVER = { region: "EU", id: "I" };
 
-const SERVER_RULES = [
-    { region: "EU",   id: "I",   weight: 3 },
-    { region: "US",   id: "I",   weight: 2 },
-    { region: "ASIA", id: "I",   weight: 1 },
-    { region: "US",   id: "II",  weight: 2 },
-    { region: "US",   id: "III", weight: 2 },
-    { region: "EU",   id: "II",  weight: 3 }
-];
 
 
 
@@ -2967,13 +2972,13 @@ if(eventType == "franky")
 if (eventType == "icegolem") {
 let region = server.region;
 let serverIden = server.id
-if ( region == "EU" && serverIden == "I" ) 
+if ( region == HOME_SERVER.region && serverIden == HOME_SERVER.id ) 
 {
-change_server("ASIA", "I");	
+change_server(RUN_SERVER.region, RUN_SERVER.id);	
 }
 	else
 	{
-         change_server("EU", "I");
+         change_server(HOME_SERVER.region, HOME_SERVER.id);
 	}
 }
 }
@@ -2983,13 +2988,13 @@ if(targetfk  && character.hp < 4500)
 if (eventType == "icegolem") {
 let region11 = server.region;
 let serverIden11 = server.id
-if ( region11 == "EU" && serverIden11 == "I" ) 
+if ( region11 == HOME_SERVER.region && serverIden11 == HOME_SERVER.id ) 
 {
-change_server("ASIA", "I");	
+change_server(RUN_SERVER.region, RUN_SERVER.id);	
 }
 	else
 	{
-         change_server("EU", "I");
+         change_server(HOME_SERVER.region, HOME_SERVER.id);
 	}
 }
 	else
@@ -3601,7 +3606,7 @@ function watchBosses(bossNames) {
 	
 
 // Chỉ chạy nếu đang ở HOME
-if (server.region === "EU" && server.id === "I") {
+if (server.region === HOME_SERVER.region && server.id === HOME_SERVER.id) {
     // Thực hiện check boss, để bossIncoming bình thường
 
 
@@ -3721,7 +3726,7 @@ async function checkServersForPumpkinGreen() {
  let targetBoss;
 	
 // 1. Ưu tiên boss đang ở server home 
-const homeServer = foundTargets.find(t => t.region === "EU" && t.server === "I");
+const homeServer = foundTargets.find(t => t.region === HOME_SERVER.region && t.server === HOME_SERVER.id);
 
 if (homeServer) {
   targetBoss = homeServer;
