@@ -1308,7 +1308,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
 // === 3. CHÈN QUÁI FINISHER ===
 if (targets.length >= 2) {
     const finisherIndex = targets.findIndex(m =>
-        m.hp >= 1800 &&
+        m.hp >= 2500 &&
         m.hp <= 7000 &&
         !hasStatus(m, args.statusEffects || []) &&
         !isPriorityMtype(m)
