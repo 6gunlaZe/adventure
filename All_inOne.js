@@ -2161,7 +2161,7 @@ if (args.check_low_hp) {
     // 2. Chỉ xét quái:
     //    - Đã vào vùng sắp chết (<= threshold)
     //    - Nhưng chưa quá thấp máu (>= 1500) để tránh overkill
-    if (current.hp <= hpThreshold && current.hp >= 3500) {
+    if (current.hp <= hpThreshold && current.hp >= 2800) {
 
         // 3. Trong vùng này, chọn con có HP LỚN NHẤT
         if (current.hp > lowHpValue) {
