@@ -2437,6 +2437,20 @@ let autorelog = 0
 
 
 
+/*************** CONFIG ***************/
+const HOME_SERVER = { region: "EU", id: "I" };
+
+const SERVER_RULES = [
+    { region: "EU",   id: "I",   weight: 3 },
+    { region: "US",   id: "I",   weight: 2 },
+    { region: "ASIA", id: "I",   weight: 1 },
+    { region: "US",   id: "II",  weight: 2 },
+    { region: "US",   id: "III", weight: 2 },
+    { region: "EU",   id: "II",  weight: 3 }
+];
+
+
+
 // Bước 1: đếm 2000s (33 phút)
 setInterval(() => {
     game_log("Đã đủ 2000s. Đang chờ máu hồi để chuyển server...");
@@ -2497,25 +2511,38 @@ if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 1) {
         if (prolive == 1 || events || framboss > 0 || bossvip > 0 || framtay > 0) return;
         if (parent.S.franky || parent.S.icegolem) return;
 	    
-  
+ 
+// BỎ HOME SERVER
+const targets = SERVER_RULES.filter(
+    s => !(s.region === HOME_SERVER.region && s.id === HOME_SERVER.id)
+);
 
-	    
-        let randomNumber = getRandom(1, 100);
-        game_log("Đủ điều kiện. Chuyển server với số ngẫu nhiên: " + randomNumber);
+if (targets.length === 0) return;
 
-        if (randomNumber < 20) {
-            change_server("US", "I");
-        } else if (randomNumber > 80) {
-            change_server("EU", "II");
-        } else if (randomNumber > 20 && randomNumber < 30) {
-            change_server("ASIA", "I");
-        } else if (randomNumber > 30 && randomNumber < 60) {
-            change_server("US", "II");
-        } else if (randomNumber > 60 && randomNumber < 80) {
-            change_server("US", "III");
-        } else {
-            change_server("EU", "I");
-        }
+// TÍNH TỔNG WEIGHT
+let total = 0;
+for (const s of targets) total += s.weight;
+
+// RANDOM
+let roll = getRandom(1, total);
+
+// CHỌN SERVER
+let acc = 0;
+for (const s of targets) {
+    acc += s.weight;
+    if (roll <= acc) {
+        change_server(s.region, s.id);
+        break;
+    }
+}
+
+
+
+
+		
+
+
+		
     } else {
         game_log("Máu chưa đủ (" + character.hp + "). Đang chờ...");
         setTimeout(waitForHPAndSwitch, 5000); // Kiểm tra lại sau 5s
