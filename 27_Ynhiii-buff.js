@@ -2080,6 +2080,8 @@ const equipmentSets = {
         { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
         { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
+		
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
 
 		
     ],
@@ -2172,6 +2174,8 @@ const equipmentSets = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+		
+        { itemName: "cring", slot: "ring1", level: 4, l: "l"  },
 
 		
     ],
