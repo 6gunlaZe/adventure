@@ -2813,7 +2813,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["spiderkey","candycanesword","elixirfires","hotchocolate","tombkey","elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "jacko","tracker","supermittens","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","tigerstone","rabbitsfoot"];
+    let itemsToExclude = ["spiderkey","candycanesword","elixirfires","hotchocolate","tombkey11","elixirluck","candypop","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "jacko","tracker","supermittens","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","tigerstone","rabbitsfoot"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
