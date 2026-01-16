@@ -14,6 +14,8 @@ let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
 var nhanvatfram = "haiz"
+var nhanvatphu = "6gunlaZe"
+
 let kitefram
 
 if (delayboss == undefined) delayboss = Date.now()
@@ -250,7 +252,7 @@ function on_cm(name, data) {
 
 
 /////////////////////		
-	    if(name == "haiz" || name == "6gunlaZe" || name == "tienV")
+	    if(name == "haiz" || name == "6gunlaZe" || name == "tienV" || name == "LyThanhThu" || name == nhanvatphu)
 	{
        if(data == "bosshelp") {
 
@@ -590,7 +592,9 @@ party = party
 		if (m.name === "haiz") {
 			ratio += 0.22;
 		}
-		
+		if (m.name === "LyThanhThu") {
+			ratio += 0.2;
+		}
 
 		m.entity.health_ratio = ratio;
 		return m;
@@ -656,6 +660,9 @@ function lowest_health_partymember() {
 		if (member.name === "haiz") {
 			 member.entity.health_ratio += 0.22;
 		}
+        if (member.name === "LyThanhThu") {
+               member.entity.health_ratio += 0.2;
+        }
 			
 	} else {
 			member.entity = { health_ratio: 1 }; // giả lập
@@ -849,349 +856,6 @@ function waitForMidas(timeout = 800) {
 
 
 
-
-/*
-setInterval(function(){
-
-	// loot();
-// if (checkTimeBetweenCalls() === 1) return;
-
-///////////////////////////////////////////////	hoi mau
-	let didHealParty = false;
-	    var lowest_health = lowest_health_partymember();
-	    var lowest_health1 = lowest_health_partymember1();
-	//	game_log(lowest_health.name +">>>>>  "+lowest_health.name );
-
-	
-	if (character.map == "winter_instance" ){
-		rateheal =0.9
-	}
-	else
-	{
-		rateheal = 1 - (character.heal / character.max_hp);  /// tùy chỉnh rate theo sức mạnh quái vật
-		if (rateheal < 0.9)rateheal = 0.9;
-		if (character.targets > 5 )rateheal = 0.95;
-	}
-	
-    //If we have a target to heal, heal them
-    if (lowest_health != null && lowest_health.health_ratio < rateheal) {
-        if ( distance(character,{x: lowest_health.real_x, y: lowest_health.real_y}) < character.range) {
-            heal(lowest_health);
-				// game_log("hoi mau!!!!!");
-                  didHealParty = true;
-        }
-	}
-	
-    if (lowest_health1 != null && lowest_health1.health_ratio < 0.65 && character.mp > 650) {
-	    if ( Date.now() > delayaoe + 260)
-	    {
-                use_skill("partyheal");
-		    delayaoe  = Date.now()
-				// game_log("hoi mau ALL !!!!!");
-	    }
-	}
-
-// hồi máu cho người chơi xung quanh
-if (!didHealParty) { 
-    const targetToHeal = Object.values(parent.entities)
-        .filter(entity =>
-            entity.player &&
-            entity.visible &&
-	    get_nearest_monster({type: "franky"}) &&
-            !entity.dead &&
-            entity.hp < entity.max_hp * 0.4 && 
-            distance(character, entity) <= 50
-        )
-        .reduce((lowest, mob) => (!lowest || mob.hp < lowest.hp) ? mob : lowest, null);
-
-    if (targetToHeal) {
-        heal(targetToHeal);
-       // game_log("heal mob!!! ");
-    }
-}
-
-
-
-	
-	
-if( character.rip || smart.moving) return;
-	
-	
-///////////////////////////	
-////	khong move gan leader se khong tim muc tieu tan cong	
-const leader1 = get_player('haiz');
-const range1 = character.range; // This may need tuning
-const dist1 = distance(character, leader1);
-/////////////////	
-
-if(!attack_mode || character.rip ) return;
-if (Date.now() < delayBug +1000 ) return	
-
-//	if (leader1 && dist1 < 200 && leader1.hp > 5000  && character.mp > 300 && character.targets >= 1 && !is_on_cooldown("absorb")   )use_skill("absorb", "haiz");
-
-	    // Party leader
-    
-    
-    // Current target and target of leader.
-    var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader1)
-    
-    // Change the target.
-    if (!currentTarget || currentTarget != leaderTarget){ 
-        // Current target is empty or other than the leader's.
-        change_target(leaderTarget);
-        currentTarget = get_targeted_monster();
-    }
-    
-		///////////
-		var cung1 = get_player("haiz"); 
-	var cung = get_player(nhanvatfram); 
-			//game_log("🟢🔵 Move 0: okeeeee!")
-if ( currentTarget && cung1 && (distance(character,cung1) < character.range) && kitefram == 0) {
-	if(!can_attack(currentTarget) )
-	{
-		// game_log("🟢 Move 1: Checked!")
-		if (currentTarget.mtype == "franky" || currentTarget.mtype == "nerfedmummy" )
-		{
-			//game_log("🔵 Move 3: Pending")
-		kite(cung1,30);
-		}
-		else
-		{
-			//game_log("🟠 Move 4: Completed")
-		kite(cung1,50);	
-		}
-	}
-	else
-	{
-		kite(cung1,40);
-	}
-   }
-else if (cung1 && (distance(character,cung1) < 300 )  )
-	{
-
-let scorpion0 = get_nearest_monster({type: "bscorpion"});
-
-if (scorpion0 && crepp == "bscorpion" ) {
-    kite(cung1, 120, scorpion0);
-} else {
-    kite(cung1, 35);
-}
-
-	}
-	else
-{
-			//game_log("🟡🟠 Move 7: In")
-				kite(cung1,35);
-}
-
-
-	
-if (currentTarget && cung && kitefram === 1) {
-
-    let scorpion = get_nearest_monster({ type: "bscorpion" });
-
-    if (!can_attack(currentTarget)) {
-
-        if (scorpion && crepp == "bscorpion") {
-            // Ưu tiên kite theo vòng tròn với bọ cạp
-            kite(cung, 120, scorpion);
-        } else {
-            // Nếu không có bscorpion → kite bình thường
-            kite(cung, 35);
-        }
-
-    }
-}
-
-
-	
-	
-	////////////
-	if ( currentTarget && currentTarget.mtype != "bscorpion" && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] )use_skill('darkblessing')
-	if ( currentTarget && currentTarget.mtype == "bscorpion" && character.mp > 1200 &&  !is_on_cooldown("darkblessing") && !character.s["darkblessing"] && currentTarget.hp > 200000 )use_skill('darkblessing')
-///////////////////////////	
-
-const currentFarmMob = crepp; // 👈 loại quái đang farm
-
-if (character.party) {
-    let party = get_party();
-    let bestTarget = null;
-    let highestThreat = 0;
-
-    for (let char_name in party) {
-        if (character.name == char_name) continue;
-
-        let player = get_player(char_name);
-        if (!player || player.rip) continue;
-
-        // Quái đang đánh người chơi
-        let threats = Object.values(parent.entities).filter(e =>
-            e.type === "monster" &&
-            e.target === char_name &&
-            !e.dead &&
-            distance(player, e) < 250
-        );
-
-        let threatCount = threats.length;
-        if (threatCount === 0) continue;
-
-        // ==== ƯU TIÊN ĐẶC BIỆT ====
-        let farmMobAround = threats.filter(e => e.mtype === currentFarmMob).length;
-	    
-let dyingMobs = threats.filter(e => {
-	
-const hpThreshold = e.max_hp >= 800000 ? 35000 :
-                    e.max_hp >= 200000 ? 25000 : 8000;
-	
-    return e.hp < hpThreshold && e.max_hp > 8000;
-}).length;
-
-	    
-        let score = threatCount * 2;
-        let dungskill = false;
-
-        if (farmMobAround >= 2 && character.hp > 10000) {
-            dungskill = true;
-            score += 20;
-        }
-
-        // ✅ Ưu tiên nếu có quái đang sắp chết → để cướp kill (tăng luck)
-        if (dyingMobs > 0) {
-	    dungskill = true;
-            score += 40;
-        }
-
-        if (player.hp < 7000 || char_name == "6gunlaZe" || char_name == "tienV") {
-                score += 50;
-		dungskill = true;
-        }
-	    
-	if (!dungskill) continue;
-        
-        if (distance(character, player) > 240) continue;
-
-        if (score > highestThreat) {
-            highestThreat = score;
-            bestTarget = char_name;
-        }
-    }
-
-    // Dùng absorb nếu hợp lệ
-    if (bestTarget && !is_on_cooldown("absorb")) {
-        if (character.hp >= 8500) {
-            log(`🛡 Absorb ${bestTarget} (score: ${highestThreat})`);
-            use_skill("absorb", bestTarget);
-        } else {
-            log(`❌ Không absorb - máu thấp (${character.hp}/${character.max_hp})`);
-        }
-    }
-}
-
-
-
-	
-
-//////////// dung skill
-	
-	 	var target1= get_nearest_monster({type: "franky",});
-		    if(target1&& character.mp > 4500 && !is_on_cooldown("curse") &&  !target1.s["cursed"] )
-            {
-                use_skill("curse", target1);
-				// game_log("curse - lowstart !!!!!!");
-            }	
-
-	 	var target2= get_nearest_monster({type: "icegolem",});
-		    if(target2&& character.mp > 4500 && !is_on_cooldown("curse") &&  !target2.s["cursed"] )
-            {
-                use_skill("curse", target2);
-				// game_log("curse - lowstart !!!!!!");
-            }		
-	
-	 	var target3= get_nearest_monster({type: "crabxx",});
-		    if(target3&& character.mp > 4500 && !is_on_cooldown("curse") &&  !target3.s["cursed"] )
-            {
-                use_skill("curse", target3);
-				// game_log("curse - lowstart !!!!!!");
-            }		
-
-	 	var target4= get_nearest_monster({type: "bscorpion",});
-		    if(target4&& character.mp > 4500 && !is_on_cooldown("curse") &&  !target4.s["cursed"] )
-            {
-                use_skill("curse", target4);
-				// game_log("curse - lowstart !!!!!!");
-            }		
-	
-	var target1xc= get_nearest_monster1({comuctieu: 1 ,  lonnhat: 1});  //nhonhat : 41000   lonnhat: 1    nhonhat : 25001 // dùng lớn nhất khi đã có tank mạnh và muốn tối ưu dps
-		    if(target1xc&& character.mp > 5300 && !is_on_cooldown("curse") &&  !target1xc.s["cursed"] && character.map != "winter_instance" && target1xc.hp > 25000 && distance(character, target1xc) < 20 )
-            {
-                use_skill("curse", target1xc);
-				// game_log("curse - low!!!!!!");
-            }
-
-	////phần quái của leader đang nhắm tới
-		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && distance(character, currentTarget) < 20 )
-            {
-                use_skill("curse", currentTarget);
-				// game_log("curse - lowstart !!!!!!");
-            }
-		    if(currentTarget&& character.mp > 4500 && !is_on_cooldown("curse") && currentTarget.target == "haiz" &&  !currentTarget.s["cursed"] && character.map != "winter_instance" && currentTarget.hp > 30000 && currentTarget.mtype != crepp )
-            {
-                use_skill("curse", currentTarget);
-				// game_log("curse - lowstart !!!!!!");
-            }
-
-
-	
-	
- if(currentTarget)chuyendoithongminh(currentTarget)	
-////////////////////////
-var checkvar = get_player("6gunlaZe"); 
-	
-var target11= get_nearest_monster1({type: crepp, subtype: "bigbird" , NO_target: 1});
-
-	if (checkvar && cung1 ){
-if (!target1 && character.targets <= 9 && target11 && character.mp > 2000 && character.hp/character.max_hp > 0.75 && cung1.hp > 12700 && cung1.mp > 200 && target11.level < 4 ) ////////////tùy chỉnh level theo độ mạnh của quái/////////////////hút quái cho framer
-{
-	change_target(target11)
-      if(can_attack(target11))attack(target11);
-       return
-}
-	}
-	else
-	{
-if (!target1 && character.targets <= 1 && target11 && character.hp > 4000) //////////////////////////////////////////////////////////////////////////////hút quái cho framer
-{
-	change_target(target11)
-      if(can_attack(target11))attack(target11);
-       return
-}
-	}
-	
-////////////////////////	
-	if( currentTarget && !is_in_range(currentTarget))
-	{
-		// Walk half the distance
-	}
-	else if(can_attack(currentTarget) && currentTarget.target && (currentTarget.attack < 800   ||  character.mp/character.max_mp > 0.75   ) )  //ngăn chặn đánh quái vô nghĩa ảnh hưởng tốc độ hồi máu
-	{
-
-		set_message("Attacking");
-		attack(currentTarget);
-	}
-	else
-	{
-		
-		buff_khi_ranh()
-		
-	}
-	
-
-},1000/5); // Loops every 1/5 seconds.
-
-*/
-
-
 let delayBug = Date.now();
 let attack_mode = true;
 
@@ -1271,7 +935,7 @@ function tryAbsorb() {
         let shouldAbsorb = false;
 
         // === Player yếu / quan trọng ===
-        if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV") {
+        if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu") {
             score += 50;
             shouldAbsorb = true;
         }
@@ -1324,7 +988,7 @@ function tryAbsorb() {
 
 function hutquaibangtay() {
     const leader = get_player("haiz");
-    const checker = get_player("6gunlaZe");
+    const checker = get_player(nhanvatphu);
     const target = get_nearest_monster1({
         type: crepp,
         subtype: "bigbird",
@@ -1644,7 +1308,7 @@ async function handleZap() {
     let zap = true;
     const dead = character.rip;
 	var haiz = get_player("haiz"); 
-	var gun = get_player("6gunlaZe"); 
+	var gun = get_player(nhanvatphu); 
 
 
     try {
@@ -1729,7 +1393,7 @@ handleZap();
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV", "LyThanhThu" , nhanvatphu];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -2280,7 +1944,7 @@ let checkluckk = 0;
 
 function ChuyendoiITEM() {
      const leader = get_player("haiz");
-     const damer = get_player("6gunlaZe");
+     const damer = get_player(nhanvatphu);
 	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
     entity.visible && entity.type=="monster" &&
@@ -2382,14 +2046,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4  )))
 	{
 	checkheall = 1
         eTime = currentTime;
         equipSet('healmax');
 		return
 	}
-	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp > 7000)) )
+	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp/damer.max_hp > 0.7)) )
 	{
         eTime = currentTime;
         equipSet('fram');
