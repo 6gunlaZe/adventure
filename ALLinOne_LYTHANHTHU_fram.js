@@ -675,7 +675,7 @@ async function skillLoop() {
         const target = get_target();
 
         // 1. Buff bản thân tàng hình
-        if (!is_on_cooldown("invis") && !character.s.invis && target) {
+        if (!is_on_cooldown("invis") && !character.s.invis && target && can_attack(target) ) {
             await use_skill("invis");
         }
 
