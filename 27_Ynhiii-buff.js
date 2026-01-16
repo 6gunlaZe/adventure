@@ -1297,7 +1297,23 @@ function emergencyHealParty() {
 
 
 
+function getOtherPartyMember() {
+    if (!parent.party_list || parent.party_list.length === 0) return null;
 
+    for (let i = 0; i < parent.party_list.length; i++) {
+        const member = parent.party_list[i];
+
+        if (member === "haiz") continue;
+        if (member === "muaban") continue;
+        if (member === character.name) continue;
+
+        const entity = parent.entities[member];
+        if (!entity) continue;
+
+        return entity;
+    }
+    return null;
+}
 
 
 async function handleZap() {
@@ -1308,7 +1324,7 @@ async function handleZap() {
     let zap = true;
     const dead = character.rip;
 	var haiz = get_player("haiz"); 
-	var gun = get_player(nhanvatphu); 
+	var gun = getOtherPartyMember();
 
 
     try {
@@ -1944,7 +1960,7 @@ let checkluckk = 0;
 
 function ChuyendoiITEM() {
      const leader = get_player("haiz");
-     const damer = get_player(nhanvatphu);
+     const damer = getOtherPartyMember();
 	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
     entity.visible && entity.type=="monster" &&
