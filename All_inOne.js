@@ -109,7 +109,7 @@ const speed = 3; // normal 2 or .65
 let events = false;
 
 const f1111 = 'Ynhi';  ///tank fram haiz check f1 có mới ra chỗ fram tienV
-const f2222 = '6gunlaZe';
+const f2222 = 'LyThanhThu';
 
 
 
@@ -2349,22 +2349,27 @@ if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
   if (trieuhoi == 0)
   {
 	  trieuhoi = 1
-if(!parent.party_list.includes("6gunlaZe") && framjR == 0 ) start_character("6gunlaZe", 33);
+if(!parent.party_list.includes("6gunlaZe") && framjR == 0 && f2222 == "6gunlaZe" ) start_character("6gunlaZe", 33);
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	  
-	  
-if (modeYnhi == 0)	 
-{
-if(!parent.party_list.includes("nhiY")) start_character("nhiY", 14);
-}
-else if  (modeYnhi == 1)
-{
-if(!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);	
-}
-else if  (modeYnhi == 2)
-{
-if(!parent.party_list.includes("tienV")) start_character("tienV", 45);	
-}
+const characterData = [
+    ["Ynhi", 27],
+    ["tienV", 45],
+    ["nhiY", 12],
+    ["LyThanhThu", 47],
+];
+
+const targets = [f1111, f2222];
+
+targets.forEach(name => {
+    if (!parent.party_list.includes(name)) {
+        const found = characterData.find(c => c[0] === name);
+        if (found) {
+            start_character(found[0], found[1]);
+        }
+    }
+});	  
+
 	  
   }
 
