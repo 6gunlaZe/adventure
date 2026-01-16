@@ -468,7 +468,7 @@ setInterval(() => {
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV","LyThanhThu"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -1261,7 +1261,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
 
 
-const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV"];
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV","LyThanhThu"];
 
 
 async function attackLoop() {
@@ -2303,7 +2303,7 @@ use_hp_or_mp1()
 /////////////////////////////////////////////////////
 
 function on_party_request(name) {
-if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal" || name == "tienV") {
+if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal" || name == "tienV" || name == "LyThanhThu" ) {
             accept_party_request(name);
         }
         if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
@@ -2368,7 +2368,7 @@ if(!parent.party_list.includes("tienV")) start_character("tienV", 45);
 	  
   }
 
-}, 1000); //trieu hoi 1 lan dau
+}, 1000); //trieu hoi 1 lan dau lần đầu
 ///////////////////////////
 
 
@@ -2879,12 +2879,14 @@ function autoPartyCheck(f1name, f2name, interval = 60000) {
     if (Date.now() > partychecktime + interval) {
         partychecktime = Date.now();
 
-        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe', 'tienV'];
+        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe', 'tienV' , 'LyThanhThu' ];
         const characterData = [
             ["6gunlaZe", 33],
             ["Ynhi", 27],
             ["tienV", 45],
             ["nhiY", 12],
+            ["LyThanhThu", 47],
+
         ];
 
         // Stop các char không phải f1/f2
@@ -3136,7 +3138,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 	{
 		var current=parent.entities[id];
 		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV"   ) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV" || current.id == "LyThanhThu"  ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
 	//game_log("so luong nguoi choi kill boss la: " + target)
