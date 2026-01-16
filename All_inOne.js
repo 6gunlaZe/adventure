@@ -1688,6 +1688,8 @@ let ignore = mpp > 4500 ? 5 :
              mpp > 3500 ? 3 :
              mpp > 2500 ? 1 : 0;
 
+if ( !get_nearest_monster({ type: home }) )	ignore = 0 /// chỉ có thể bỏ qua nếu đang đứng trong bãi fram thôi, tránh khi đánh boss v..v.v
+
 
 // Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu)
 let creeps = list.filter(m => m.mtype.includes(home))
