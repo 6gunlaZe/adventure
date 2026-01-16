@@ -587,24 +587,24 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 function framXmage() {
 
- let member1 = get_player("6gunlaZe");
+ let member1 = get_player(f2222);
  let member2 = get_player("Ynhi");
 	autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 	
-if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm("6gunlaZe","mage")	
+if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(f2222,"mage")	
 }
 
 if (character.map == "winter_instance" && (!member1 || !member2) )	
 {
 //send_cm("haiz1","goo2")
 send_cm("Ynhi","goo2")
-send_cm("6gunlaZe","goo2")
+send_cm(f2222,"goo2")
 
 
 //send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
-send_cm("6gunlaZe",character.in)
+send_cm(f2222,character.in)
 
 }
 
@@ -699,7 +699,7 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
 if (buoc == 8 || character.rip)
 {
 	stop_character("Ynhi")	
-	stop_character("6gunlaZe")	
+	stop_character(f2222)	
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "winterland", x: 1049, y: -2002 })
@@ -716,10 +716,10 @@ let fieldgen0_position = null;
 let buoc = 0
 function framtaygame() {
 
- let member1 = get_player("6gunlaZe");
+ let member1 = get_player(f2222);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+autoPartyCheck("Ynhi", f2222, 60000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime === null) {
@@ -735,7 +735,7 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
   if (startTime !== null && Date.now() - startTime >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
-	stop_character("6gunlaZe")	
+	stop_character(f2222)	
 	buoc = 0
 	framtay = 0
 	startTime  = null
@@ -743,20 +743,20 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 
 
 	
-if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm("6gunlaZe","tomb")	
+if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(f2222,"tomb")	
 }
 
 if (character.map == "tomb" && (!member1 || !member2) )	
 {
 //send_cm("haiz1","goo1")
 send_cm("Ynhi","goo1")
-send_cm("6gunlaZe","goo1")
+send_cm(f2222,"goo1")
 
 
 //send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
-send_cm("6gunlaZe",character.in)
+send_cm(f2222,character.in)
 
 }
 
@@ -850,7 +850,7 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
 if (buoc == 11 || character.rip)
 {
 	stop_character("Ynhi")	
-	stop_character("6gunlaZe")	
+	stop_character(f2222)	
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "mansion", x: 0, y: -470 })
@@ -874,10 +874,10 @@ let startTime1 = null; // Thời gian bắt đầu đếm giờ
 let buoc1 = 0
 function spidergame() {  /// đã check fix lỗi treo mạnh hơn tomb và Xgame
 
- let member1 = get_player("6gunlaZe");
+ let member1 = get_player(f2222);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+autoPartyCheck("Ynhi", f2222, 60000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime1 === null) {
@@ -893,7 +893,7 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
   if (startTime1 !== null && Date.now() - startTime1 >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
-	stop_character("6gunlaZe")	
+	stop_character(f2222)	
 	buoc1 = 0
 	framtay = 0
 	startTime1  = null
@@ -902,20 +902,20 @@ autoPartyCheck("Ynhi", "6gunlaZe", 60000);
 
 
 	
-if(parent.party_list.includes("6gunlaZe") && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm("6gunlaZe","spidergame")	
+if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(f2222,"spidergame")	
 }
 
 if (character.map == "spider_instance" && (!member1 || !member2) )	
 {
 //send_cm("haiz1","goo3")
 send_cm("Ynhi","goo3")
-send_cm("6gunlaZe","goo3")
+send_cm(f2222,"goo3")
 
 
 //send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
-send_cm("6gunlaZe",character.in)
+send_cm(f2222,character.in)
 
 }
 
@@ -1002,7 +1002,7 @@ const step = steps[index];
 if (buoc1 == 8 || character.rip)
 {
 	stop_character("Ynhi")	
-	stop_character("6gunlaZe")	
+	stop_character(f2222)	
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
@@ -1087,14 +1087,14 @@ let dathayboss = 0 // biến xác nhận đánh boss
 
 async function VIPBosses() {
 	
-	autoPartyCheck(f1111, "6gunlaZe", 60000);
+	autoPartyCheck(f1111, f2222, 60000);
 	
     if (smart.moving || !bossvip) return;
 
     const info = getBossInfo(bossvip); // Lấy thông tin boss từ ID
     if (!info) return;
 
-    send_cm("6gunlaZe", `bossvip${bossvip}`);
+    send_cm(f2222, `bossvip${bossvip}`);
 	    send_cm("tienV", `bossvip${bossvip}`);
 
 
@@ -1135,11 +1135,11 @@ async function VIPBosses() {
     ) {
 
 	    
-const teammate = get_player("6gunlaZe");
+const teammate = get_player(f2222);
 const teammateNearby = teammate && distance(character, teammate) <= 80;
 
 if (teammateNearby) {
-    game_log("❌ Không thấy boss nhưng 6gunlaZe đang ở gần → reset bossvip ngay.");
+    game_log("❌ Không thấy boss nhưng f2222 đang ở gần → reset bossvip ngay.");
     bossvip = 0;
     bossvipWaitStart = 0;
 	dathayboss = 0
@@ -1449,7 +1449,7 @@ async function skillLoop() {
         const stMaps = ["", "winter_cove", "arena", "",];
         const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland","tomb","crypt","cyberland"];
         let tank = get_entity(f1111);
-	     let f1 = get_entity("6gunlaZe");
+	     let f1 = get_entity(f2222); ///CUNG THỦ - MÁU GIẤY
 
         if (character.ctype === "warrior" && !dead) {
             try {
@@ -2630,22 +2630,16 @@ if (name == "MuaBan") {
 
     if (framboss > 0) return;
 
-    // Xử lý boss thường: boss1 → boss99
+    // Xử lý boss thường: boss1 → boss99 BOSS PHƯỢNG HOÀNG LỬA
     const bossMatch = data.match(/^boss(\d+)$/);
     if (bossMatch && !events && prolive !== 1 && bossvip === 0 && framtay === 0) {
         const bossNum = parseInt(bossMatch[1]);
         framboss = bossNum;
 
-        if (modeYnhi === 0) {
-            parent.api_call("disconnect_character", { name: "nhiY" });
-            stop_character("nhiY");
-        } else if (modeYnhi === 2) {
-            parent.api_call("disconnect_character", { name: "haiz1" });
-            stop_character("haiz1");
-        } else {
-            parent.api_call("disconnect_character", { name: "6gunlaZe" });
-            stop_character("6gunlaZe");
-        }
+
+            parent.api_call("disconnect_character", { name: f2222 });
+            stop_character(f2222);
+        
 
         bosstime = 1;
         timekillboss = Date.now();
