@@ -589,7 +589,7 @@ function framXmage() {
 
  let member1 = get_player(f2222);
  let member2 = get_player("Ynhi");
-	autoPartyCheck("Ynhi", "6gunlaZe", 60000);
+	autoPartyCheck("Ynhi", f2222, 60000);
 	
 if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
 	send_cm(f2222,"mage")	
@@ -2616,7 +2616,7 @@ function on_cm(name, data) {
  }
  if(name == "nhiY" && data == "stop"){
 stop_character("nhiY") 
-start_character("6gunlaZe", 33);
+// start_character("6gunlaZe", 33);
  }	
 /////////////////
 if (name == "MuaBan") {
@@ -2657,12 +2657,12 @@ if (name == "MuaBan") {
     // Boss không tank được, bật nhóm đánh riêng
     if (data === "franky" || data === "crabxx") {
         bosscantank = 1;
-        stop_character("angioseal");
-        stop_character("nhiY");
-        stop_character("haiz1");
+   //     stop_character("angioseal");
+   //     stop_character("nhiY");
+   //     stop_character("haiz1");
 
-        if (!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
-        if (!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);
+   //     if (!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+   //     if (!parent.party_list.includes("Ynhi")) start_character("Ynhi", 27);
     }
 }
 ///////////////
@@ -2913,7 +2913,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
               Now_is_gobalevenrun = true
 	    
-	    if(eventType == "crabxx")send_cm("6gunlaZe", "crabxx");   
+	    if(eventType == "crabxx")send_cm(f2222, "crabxx");   
 	    
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
@@ -3076,11 +3076,11 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
-function get_nearest_monster1(args) ///săn boss franky, ice
+function get_nearest_monster1(args) ///săn boss franky, ice, CABX
 {
  let checkkill = 0
 	var heal = get_player("Ynhi"); 
-	var heal1 = get_player("6gunlaZe"); 
+	var heal1 = get_player(f2222); 
 	var min_d=character.range + 225,target=null;
 // Nếu không có buff/heal và máu thấp thì bỏ qua việc đánh boss mạnh
 if (!heal && character.hp < 13000) return null;
@@ -3240,7 +3240,7 @@ if (targetsoloboss.length == 0) //danh xong
 		smart_move(destination, () => {
 		framboss = 0
 		 stop_character("nhiY")
-		if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
+		// if(!parent.party_list.includes("6gunlaZe")) start_character("6gunlaZe", 33);
                  bosstime = 0
 
     });	
@@ -3318,23 +3318,10 @@ if (prolive == 1 || events || bossvip > 0 || framtay > 0) return
   // Nếu tìm thấy boss có HP thấp nhất, di chuyển đến vị trí của boss
   if (bossLocation && framboss == 0) {
     framboss = 10;
-	  	  if (modeYnhi == 0)
-	  {
-		parent.api_call("disconnect_character", {name: "nhiY"});
-		stop_character("nhiY");
-	  }
-	  else if (modeYnhi == 2)
-	  {
-	  	parent.api_call("disconnect_character", {name: "haiz1"});
-		stop_character("haiz1");
-	  }
-	  else
-	  {
-		
-		parent.api_call("disconnect_character", {name: "6gunlaZe"});
-		stop_character("6gunlaZe");    
-  
-	  }
+
+		parent.api_call("disconnect_character", {name: f2222});
+		stop_character(f2222);
+
 	    bosstime = 1
 	    timekillboss = Date.now()
 	  start_character("nhiY", 12);
