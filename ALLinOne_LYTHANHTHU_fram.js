@@ -137,10 +137,8 @@ async function eventer() {
 		  spider_game()
 	} else if (crab > 0) {
           crabgame()		
-        } else {
+    } else {
 		 handleHome();
-                ///  walkInCircle(); // khi fram riêng
-		// safeawwaitwalkInCircle()  //khi fram chung
         }
     } catch (e) {
         console.error(e);
@@ -152,8 +150,8 @@ setTimeout(eventer, 6000);
 
 
 
-   const mode_follow_haiz = false;
- //const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
+ //  const mode_follow_haiz = false;
+     const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅
 
 async function handleHome() {
 if (smart.moving) return;
@@ -226,7 +224,7 @@ if (smart.moving) return;
 
     // Khi đang ở vị trí farm → quay vòng
     if (!smart.moving) {
-        const radius = 30;
+        const radius = 15;
         let center = locations[home][0];
         if (mode_follow_haiz) {
             const haiz = f1;
@@ -272,197 +270,11 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
-const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
+const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV","LyThanhThu"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
-	//if (character.moving)return
-    let delay = null; // Default delay
-    const now = performance.now();
-//game_log("m")
-    const rangeThreshold = 50; // phạm vi tấn công boom
-    const leader = get_player("haiz");
-     const healerr = get_player("Ynhi");
-    const f1112 = get_player(f1111);
 
-
-	
-	let codame = true;
-if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
-    codame = false;
-}
-
-
-	
-let X, Y;
-if (healerr && distance(character, healerr) < 150 ) {
-    X = healerr.x;
-    Y = healerr.y;
-} else {
-    X = character.x;
-    Y = character.y;
-}
-	
-    let stopAttack = (check_quai_A4_stop_attach() == 1);
-	
-    try {
- if (!stopAttack) {	    
-
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
-	    if ( tagetskill.length == 1 && character.map != "winter_instance" )use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
-                                                               // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
-	    
-
-const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
-
-
-	 
-//game_log("monstersInRangeList.length" +monstersInRangeList.length)		
-//game_log("characterRange" +monsterscharacterRange.length)		
-	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
-
-
-	 
-            if( (leader && leader.hp < 10500) || (healerr && healerr.hp < 8000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
-		weaponSet("heal");
-
-let healTargets = lowest_health_partymember(0.9, true);
-if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
-	 if(!codame)await use_skill("3shot", healTargets.slice(0, 3));
-	delay = ms_to_next_skill("attack");  
-} else if (healTargets.length >= 1) {
-	 if(!codame)await attack(healTargets[0]);
-	delay = ms_to_next_skill("attack");  
-}
-
-	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
-		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
-			weaponSet("single");
-               if(codame) await attack(KILLdauTien[0]);
-	           delay = ms_to_next_skill("attack");
-	    }else if (hutquai.length >= 1 && character.mp < 200 && character.targets <2 ){
-		    	weaponSet("dead");
-              if (codame) await attack(hutquai[0]);
-	           delay = ms_to_next_skill("attack");
-		    
-	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
-              //khi máu yếu và đang di chuyển thông minh không làm gì cả
-	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("boom");
-              if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("shot5");
-              if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("dead");
-		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
-                delay = ms_to_next_skill("attack");
-
-            } else if (monsterscharacterRange.length > 1) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("singleAOE");
-		if (codame)   await attack(monsterscharacterRange[0]);
-                delay = ms_to_next_skill("attack");
-            } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
-		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
-                           {
-		weaponSet("heal");
-            const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
-            let healTarget1 = getLowestHpPercentTarget(possibleTargets1);
-            await attack(healTarget1);
-            delay = ms_to_next_skill("attack");    
-                           }
-                       else
-                      {
-                weaponSet("single");
-                 if (codame)   await attack(monsterscharacterRange[0]);
-                delay = ms_to_next_skill("attack");
-		      }
-            }else
-	    {
-
-    // Current target and target of leader.
-    var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader)
-		    
-    if (leaderTarget && leaderTarget.target ){
-    // Change the target.
-    if (!currentTarget || currentTarget != leaderTarget){ 
-        // Current target is empty or other than the leader's.
-        change_target(leaderTarget);
-        currentTarget = get_targeted_monster();
-    }
-	if( currentTarget && is_in_range(currentTarget))
-	{
-		weaponSet("single");
-             if (codame)   await attack(currentTarget);
-                delay = ms_to_next_skill("attack");
-	}  
-    }
-	    }
-
-	    
-//if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
-if (targets.length == 0  && !leaderTarget )
-{		
-var targets1 = getBestTargets({ max_range: character.range, type: "quá mạnh", subtype: "scorpion", number: 1 }); // Hàm gọi quái vật fram chính // tùy chỉnh number: 3
-
-let check3shot = 0;
-let check5shot = 0;
-
-// Kiểm tra điều kiện cho "3shot"
-if (targets1.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
-    check3shot = 1;
-} else {
-    check3shot = 0;
-}
-
-// Kiểm tra điều kiện cho "5shot"
-if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
-    check5shot = 1;
-} else {
-    check5shot = 0;
-}
-
-// Sử dụng kỹ năng "5shot" nếu đủ điều kiện
-if (check5shot === 1) {
-	weaponSet("shot5");
-    await use_skill("5shot", targets1);
-	                delay = ms_to_next_skill("attack");
-
-}
-// Sử dụng kỹ năng "3shot" nếu không sử dụng "5shot" 
-else if (check3shot === 1 ) {
-	weaponSet("dead");
-    await use_skill("3shot", targets1);
-	                delay = ms_to_next_skill("attack");
-}
-else if (targets1.length < 3 && targets1.length > 0 )
-{
-	weaponSet("dead");
-                await attack(targets1[0]);
-                delay = ms_to_next_skill("attack");
-}
-
-	    
-}
-	    
-        } else {
-            // Dừng tấn công, có thể hồi phục hoặc đứng yên
-        }	    
 
     } catch (e) {
         //console.error(e);
@@ -474,57 +286,6 @@ attackLoop();
 
 
 
-
-function lowest_health_partymember(hp_threshold = 1.0, return_full_list = false) {
-
-
-	let party = [];
-
-	// Lấy các thành viên trong party nếu có
-	if (parent.party_list.length > 0) {
-		for (let id in parent.party_list) {
-			let member = parent.party_list[id];
-			let entity = parent.entities[member];
-                        if (member === "MuaBan" || member === "6gunlaZe") continue; // ❌ Bỏ qua nếu là MuaBan hoặc 6gunlaZe vì không thể tự heal chính mình
-			if (member === character.name) entity = character;
-
-			if (entity && distance(character, entity) < character.range) {
-				party.push({ name: member, entity });
-			}
-		}
-	} else {
-		// Không có party, thêm chính mình
-		party.push({ name: character.name, entity: character });
-	}
-
-	// Thêm fieldgen0 
-	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
-	if (fieldgen0 && distance(character, fieldgen0) < character.range ) {
-		party.push({ name: "fieldgen0", entity: fieldgen0 });
-	}
-
-	// Tính tỷ lệ máu
-	for (let member of party) {
-		if (member.entity && member.entity.max_hp > 0) {
-			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
-		} else {
-			member.entity.health_ratio = 1;
-		}
-	}
-
-	// Lọc nếu cần
-	party = party.filter(m => m.entity.health_ratio < hp_threshold);
-
-	// Sắp xếp tăng dần theo % máu
-	party.sort((a, b) => a.entity.health_ratio - b.entity.health_ratio);
-
-	// Trả về cả danh sách hay chỉ người thấp nhất
-	if (return_full_list) {
-		return party.map(p => p.entity); // trả về danh sách entity đã lọc và sort
-	} else {
-		return party.length > 0 ? party[0].entity : null;
-	}
-}
 
 
 
@@ -811,77 +572,14 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
-function getSupershotTarget() {
-	if (smart.moving) return null;
-	const ynhi = get_player("Ynhi");
-	const haiz = get_player("haiz");
-	if (!ynhi || (ynhi && distance(character, ynhi) > 150)) return null;
-
-	const validNames = ["wolf"]; // Quái chuẩn
-	const extraNames = ["bscorpion", "franky"]; // ✅ Quái mới với điều kiện đơn giản
-
-	// Lọc các quái đủ điều kiện cơ bản
-	let candidates = Object.values(parent.entities).filter(e => {
-		if (e.type !== "monster" || e.dead) return false;
-
-		// Trường hợp quái "chuẩn" wolf
-		if (validNames.includes(e.mtype)) {
-			return e.hp > 10000 &&
-				e.level < 3 &&
-				is_in_range(e, "supershot") &&
-				distance(character, e) <= 450 &&
-				distance(character, e) > (character.range + 20);
-		}
-
-// Trường hợp quái mới, cần có target **và** trong tầm ngắm
-if (extraNames.includes(e.mtype)) {
-    return e.target && is_in_range(e, "supershot"); 
-    // ✅ chỉ giữ quái đã có target và nằm trong tầm bắn supershot
-}
-
-
-		return false;
-	});
-
-
-
-// Lọc theo vị trí của Ynhi và Haiz, chỉ áp dụng cho quái chuẩn
-candidates = candidates.filter(mob => {
-    if (validNames.includes(mob.mtype)) { // ✅ chỉ áp dụng cho quái chuẩn
-        if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
-        if (haiz && distance(haiz, mob) <= 200) return false;
-    }
-    return true; // quái mới không bị chặn
-});
-
-
-	// Chọn quái xa nhất
-	if (candidates.length > 0) {
-		candidates.sort((a, b) => distance(character, b) - distance(character, a));
-		return candidates[0];
-	}
-
-	return null;
-}
-
-
-
-
 
 
 
 async function skillLoop() {
     try {
-        const target = getSupershotTarget();
 
-        if (
-            target &&
-            character.mp > 550 &&
-            !is_on_cooldown("supershot")
-        ) {
-            await use_skill("supershot", target);
-            game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
-        }
+
+		
     } catch (e) {
         //console.log("Skill loop error:", e);
     }
@@ -894,112 +592,6 @@ skillLoop();
 
 
 
-
-
-
-
-
-function handleSnowball() {
-//	if(character.map != "crypt" && character.map != "tomb" && character.map != "winter_instance")return
-const avoidTypes1 = ["a0","a2","a3","a6", "a7","a8","a9","vbat","stompy","skeletor","crabxx","gpurplepro","plantoid","jr","greenjr","mrgreen","mrpumpkin","spiderr","spiderbr","spiderbl"];
-
-	    const leader = get_player("haiz");
-	const hoimau = get_player("Ynhi");
-if ( (leader && leader.hp > 13000 && hoimau && hoimau.hp > 8000 && hoimau.mp > 4000 )  || !leader || character.mp < 350) return
-	
-  if (can_use("snowball")) {
-    const currentTime = new Date().getTime(); // Lấy thời gian hiện tại (ms)
-	  
-    for (const id in parent.entities) {
-      const entity = parent.entities[id];
-      
-      // Kiểm tra loại quái vật
-      if (entity.type !== "monster") continue;
-	    
-      // Kiểm tra xem mtype của quái vật có thuộc danh sách cần tránh không
-      if (!avoidTypes1.includes(entity.mtype)) continue;
-	    
-      // Kiểm tra xem quái vật có chết hoặc không thể thấy không
-      if (entity.dead || !entity.visible) continue;
-      if (!entity.target) continue;
-      // Kiểm tra mtype của quái vật có phải là "goo" không
-      if (entity.mtype == "vbat") continue;
-      if (entity.mtype == "a3") continue;
-      if (entity.mtype == "a7") continue;
-      // Kiểm tra quái vật có bị đóng băng không
-      if (entity.s["frozen"]) continue;
-      if (entity.hp < 30000) continue; // máu quá ít cũng bỏ qua
-      // Kiểm tra khoảng cách với quái vật có lớn hơn 200 không
-      if (distance(character, entity) > 200) continue;
-      
-      // Kiểm tra xem quái vật đã bị bắn tuyết
-      if (entity.snowballed) {
-        // Kiểm tra thời gian debuff đã hết 5 giây chưa
-        if (currentTime - entity.snowballedTime > 3700) {
-          // Debuff đã hết, cho phép bắn lại
-          entity.snowballed = false; // Xóa cờ snowballed
-        } else {
-          // Nếu debuff chưa hết, bỏ qua
-          continue;
-        }
-      }
-      
-      // Sử dụng kỹ năng snowball vào quái vật
-      use_skill("snowball", entity);
-      
-      // Đánh dấu quái vật là đã bị bắn tuyết và lưu thời gian bắn tuyết
-      entity.snowballed = true;
-      entity.snowballedTime = currentTime; // Lưu thời gian bắn tuyết (ms)
-      
-      // Dừng vòng lặp sau khi sử dụng kỹ năng vào một quái vật
-      break;
-    }
-  }
-}
-
-// Gọi hàm `handleSnowball` mỗi 100ms
-setInterval(handleSnowball, 100);
-
-
-
-function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung quanh để kiểm soát hp
-    // Kiểm tra mục tiêu đầu tiên
-    var zapper0 = getBestTargets({ max_range: 300, type: "zapper0", number: 1 }); 
-
-    // Nếu không có mục tiêu nào => return 0 luôn
-    if (zapper0.length === 0) return 0;
-
-    // Lấy thông tin 3 người chơi
-    const player1 = get_player("haiz");
-    const player2 = get_player("Ynhi");
-    const player3 = get_player("6gunlaZe");
-
-    // Kiểm tra nếu có bất kỳ ai máu thấp hơn ngưỡng
-    if (
-        (player1 && player1.hp < 12000) ||
-        (player2 && player2.hp < 9000) ||
-        (player3 && player3.hp < 7000) || (player2 && player2.mp < 4000)
-    ) {
-        return 1;
-    }
-
-    return 0;
-}
-// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
-
-function check_quai_A4_stop_attach() {
-    var quai = get_nearest_monster({type: "a4"});
-	//     if (quai && is_in_range(quai) && (check_viem_xung_quanh() == 1 || is_on_cooldown("scare") )) {
-
-    if ( (quai && is_in_range(quai) && check_viem_xung_quanh() == 1 ) || is_on_cooldown("scare") ) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
-
-
 function scare() {
     const slot = character.items.findIndex(i => i && i.name === "jacko");
     const orb = character.items.findIndex(i => !i);
@@ -1007,7 +599,6 @@ function scare() {
     let targetedForMoreThanOneSecond = false;
 	    const leader = get_player("haiz");
 	    const a1 = get_nearest_monster({type: "a1"});
-// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;  ///chỉ mở lại khi muốn kill a4
 	
     for (id in parent.entities) {
         var current = parent.entities[id];
@@ -1052,8 +643,8 @@ function use_hp_or_mp1()
 	
 	
 if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.6 && character.mp > 130 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
+  else if (character.hp/character.max_hp< 0.5 && character.mp > 130 ) use_skill("use_hp");
+  else if (character.mp/character.max_mp < 0.95) use_skill("use_mp");
 
 	
 	else used=false;
@@ -1072,76 +663,8 @@ use_hp_or_mp1()
 
 
 
-
-function get_nearest_monster1(args) ///săn boss franky, ice
-{
- let checkkill = 0
-	var heal = get_player("Ynhi"); 
-	var min_d=character.range + 225,target=null;
-  if(!heal) return target;
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-
-	    checkkill = get_nearest_playerV_noMyparty(current)
-	    if (checkkill < 2)continue
-
-
-		
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function get_nearest_playerV_noMyparty(currentTarget)
-{
-	// Just as an example
-	var min_d=2000,target=0;
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV"   ) continue;
-		if(current.target == currentTarget.id) target +=1;
-	}
-	game_log("so luong nguoi choi kill boss la: " + target)
-	return target;
-}
-
-
-
-
 async function moveLoop() {
-    let delay = 1000;
+    let delay = 500;
     try {
 
 if (!character.party)send_party_request("haiz");
@@ -1179,87 +702,6 @@ if (!folowhaizevents){
 }
 
 moveLoop();
-
-
-
-async function walkInCircle() {
-    if (!smart.moving) {
-        const center = locations[home][0];
-        const radius = 45;
-
-        // Calculate time elapsed since the last update
-        const currentTime = performance.now();
-        const deltaTime = currentTime - lastUpdateTime;
-        lastUpdateTime = currentTime;
-
-        // Calculate the new angle based on elapsed time and speed
-        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
-        angle = (angle + deltaAngle) % (2 * Math.PI);
-
-        const offsetX = Math.cos(angle) * radius;
-        const offsetY = Math.sin(angle) * radius;
-        const targetX = center.x + offsetX;
-        const targetY = center.y + offsetY;
-
-        if (!character.moving && lastUpdateTime > 100) {
-            await xmove(targetX, targetY);
-        }
-
-        // drawCirclesAndLines(center, radius);
-    }
-}
-
-
-let followHaizMode = true; // ✅ Công tắc follow haiz
-async function safeawwaitwalkInCircle() {
-    let tank = get_player("Ynhi");
-    let center;
-
-    if (!tank || tank.rip || ( tank && !tank.rip && distance(character, tank) > 170 ) ) {
-        if (!smart.moving) {
-            smart_move(safeDestination);
-        }
-        return;
-    }
-
-    if (smart.moving) return;
-
-    // ✅ Nếu chưa đúng map hoặc quá xa home → smart_move về
-    if (character.map !== mobMap || distance(character, { x: locations[home][0].x, y: locations[home][0].y }) > 50) {
-        smart_move(destination);
-        return;
-    }
-
-    // ✅ Chọn trung tâm quay
-    if (followHaizMode) {
-        let haiz = get_player("haiz");
-        if (haiz) {
-            center = { x: haiz.x, y: haiz.y };
-        } else {
-            center = locations[home][0]; // fallback nếu không thấy haiz
-        }
-    } else {
-        center = locations[home][0];
-    }
-
-    const radius = 45;
-    const currentTime = performance.now();
-    const deltaTime = currentTime - lastUpdateTime;
-    lastUpdateTime = currentTime;
-
-    // ✅ Tính góc mới
-    const deltaAngle = speed * (deltaTime / 1000);
-    angle = (angle + deltaAngle) % (2 * Math.PI);
-
-    const offsetX = Math.cos(angle) * radius;
-    const offsetY = Math.sin(angle) * radius;
-    const targetX = center.x + offsetX;
-    const targetY = center.y + offsetY;
-
-    if (!character.moving && deltaTime > 100) {
-        await xmove(targetX, targetY);
-    }
-}
 
 
 
@@ -1362,7 +804,7 @@ if (targets.length >= 2) {
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV","LyThanhThu"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -1376,8 +818,8 @@ const PVPInRange = Object.values(parent.entities)    //trả về các đối t�
 if(PVPInRange.length >= 1)
 {
 send_cm("haiz","stop")
-parent.api_call("disconnect_character", {name: "6gunlaZe"});
-stop_character("6gunlaZe")	
+parent.api_call("disconnect_character", {name: "LyThanhThu"});
+stop_character("LyThanhThu")	
 }
 
 
@@ -1438,15 +880,7 @@ function Handelbossvip() {
         const currentTarget1 = get_nearest_monster_solobosskill?.() ?? get_nearest_monster({ type: info.type });
 
         if (currentTarget1) {
-            if (
-                is_in_range(currentTarget1, "supershot") &&
-                character.mp > 500 &&
-                currentTarget1.hp > 1 &&
-                !is_on_cooldown("supershot")
-            ) {
-                use_skill("supershot", currentTarget1);
-                game_log("💥 Supershot!!");
-            }
+              /// skill ??
 
             if (!target) change_target(currentTarget1);
         }
@@ -1488,9 +922,9 @@ if (character.map != "spider_instance") return
         if (target) break;
     }
 
-    // Nếu có target thì bắn supershot
-    if (target && can_use("supershot")) {
-        use_skill("supershot", target);
+    // Nếu có target thì dùng skill
+    if (target ) {
+       // ??
     }
 
 	
@@ -1510,44 +944,9 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
     var currentTarget = get_targeted_monster();
 	if((!currentTarget || (currentTarget && distance(character, currentTarget) > character.range + 50) ) && host && distance(character, host) < 180 && healerr && distance(character, healerr) < 180  )
 	{
-		var currentTarget1 = get_nearest_monster_solobosskill()  ////đối tượng tổng không có a5
-		var currentTargeta5 = get_nearest_monster_solobosskilla5()  ///đối tượng a5
-                var currentTargeta4 = get_nearest_monster_solobosskilla4()  ///đối tượng a4
-                var checkzapper = getBestTargets({ max_range: 320, type: "zapper0", number: 1 }); // Hàm check hút quái
-                var checka4 = getBestTargets({ max_range: 300, type: "a4", number: 1 }); // Hàm check hút quái
 
-		if(currentTarget1 && checka4.length == 0) {
 
-                 if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
-                delayboss = Date.now()
-                use_skill("supershot", currentTarget1);
-                game_log("Supershot!!");
-                                    }
-
-		}
-		else if(currentTargeta5) { ///chưa đủ mạnh để giết khi nó đứng 1 mình
-
-                 if (is_in_range(currentTargeta5, "supershot") && character.mp > 500 && currentTargeta5.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
-                delayboss = Date.now()
-                use_skill("supershot", currentTargeta5);
-                game_log("Supershot!!");
-                                    }
-
-		}
-		else if(currentTargeta4 && checkzapper.length == 0) { ///chưa đủ mạnh để giết
-
-                 if (is_in_range(currentTargeta4, "supershot") && character.mp > 500 && currentTargeta4.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 10000 ) {
-                delayboss = Date.now()
-                use_skill("supershot", currentTargeta4);
-                game_log("Supershot!!");
-                                    }
-
-		}
-		else
-		{
-		currentTarget1 = getBestTargets({ max_range: character.range, type: "vbat", subtype: "frog11", number: 1 });
-		if(currentTarget1)use_skill("piercingshot", currentTarget1);	
-		}
+		//làm gì ở đây nhỉ
 
 
 	}
@@ -1584,7 +983,7 @@ async function moveToTargetLocation(receivedData) {
 
 
 
-// dùng cho các even quái yếu không nguy hiểm
+// dùng để mặc định trở về khi even kết thúc kiểm tra từng loại even phù hợp thao tác tham gia
 function handlebossPro(eventType) { 
 
 if (eventType === undefined || eventType === null) {
@@ -1631,11 +1030,6 @@ if (parent?.S?.[eventType]?.live) {
 
 
 
-setTimeout(function() {
-    if (get_nearest_monster({type: "phoenix"})  && distance(character, {x: 500, y: 1800}) < 350  && character.map == "main" ) {
- send_cm("MuaBan", "phoenix1");
-    }
-}, 10000);  // 10000 mili giây = 10 giây
 
 
 
@@ -1851,75 +1245,7 @@ function shifting() {
 //////////////////////////////////////////////////////////////////////////
 
 
-function get_nearest_monster_solobosskilla4(args) ///mod
-{
-	//args:
-	// max_att - max attack
-	// min_xp - min XP
-	// target: Only return monsters that target this "name" or player object
-	// no_target: Only pick monsters that don't have any target
-	// path_check: Checks if the character can move to the target
-	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
-	var min_d=450 ,target=null;
-        var bossarmy=["a444444"]; 
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
 
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
-		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
-}
-
-
-
-function get_nearest_monster_solobosskilla5(args) ///mod
-{
-	//args:
-	// max_att - max attack
-	// min_xp - min XP
-	// target: Only return monsters that target this "name" or player object
-	// no_target: Only pick monsters that don't have any target
-	// path_check: Checks if the character can move to the target
-	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
-	var min_d=450 ,target=null;
-        var bossarmy=["a555555555555"]; 
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
-		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
-}
 
 function get_nearest_monster_solobosskill(args) ///mod
 {
@@ -1961,52 +1287,6 @@ function get_nearest_monster_solobosskill(args) ///mod
 	return target;
 }
 
-
-///////
-function getBestTargets(options = {}) {
-    const entities = []
-	     let number = 0
-
-     var army=[options.subtype, options.type, "wabbit", "bbb", "cccc"];  
-  
-
-    for (const id in parent.entities) {
-        const entity = parent.entities[id]
-        if (entity.type !== "monster") continue
-        if (entity.dead || !entity.visible) continue
-
- if (options.max_range && distance(character, entity) > options.max_range) continue
-		
-if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
-if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
-			
-
-if (options.maxHP && entity.max_hp > options.maxHP) continue
-if (options.HP && entity.hp > options.HP) continue
-	    if (options.HPmin && entity.hp < options.HPmin) continue
- 		if (options.target && entity.target != options.target) continue
-		if (options.havetarget && !entity.target ) continue
-		if (options.Nohavetarget && entity.target ) continue
-		if (options.fire && entity.s.burned  ) continue
-	        if (options.cus && !entity.s["cursed"]  ) continue
-	    	if (options.NoMark && entity.s.marked ) continue
-		if (options.targetNO && entity.target == options.targetNO) continue     
- 		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
-	//  if(army.indexOf(entity.mtype) == -1) continue
-		///check list khong co se tra ve -1
-      //  !target2.s.marked 
-		
-		
-		if ( options.number &&   (number+1) > options.number ) return entities;
-		/// lon hon so luong thi bo qua
-			number = 1 + number
-        entities.push(entity)
-    }
-
-
-    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
-    return entities
-}
 
 
 
@@ -2056,7 +1336,7 @@ const rangeBuffer = 90;  // Thêm vào tầm đánh của quái để tránh xa 
 const calcRadius = 300;  // Bán kính xét quái để tránh
 
 // Types of monsters we want to avoid
-const avoidTypes = ["a0","a2","a3","a6", "a7","a8","a9","skeletor","crabxx","gpurplepro","gbluepro","gredpro","ggreenpro"];
+const avoidTypes = ["khong"];
 
 const avoidPlayers = false; // Set to false to not avoid players at all
 const playerBuffer = 0; // Additional range around players
@@ -2107,7 +1387,7 @@ function avoidance() {
         } else if (a1Nearby && is_in_range(a1Nearby)) {
            // game_log("⚠️ Phát hiện quái a1 gần — di chuyển theo host");
             xmove(host.real_x, host.real_y);
-        } else if (validTarget && distance(character, host) > (character.range - 30)) {
+        } else if (validTarget && distance(character, host) > 100 ) {
           //  game_log("📏 Quá xa host + có mục tiêu, di chuyển theo");
             isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
         } else if (!validTarget || !is_in_range(target)) {
