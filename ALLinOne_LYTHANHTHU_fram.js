@@ -270,17 +270,78 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
+
+
+
 const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV","LyThanhThu"];
 
-// không được để return trong hàm loop
+
 async function attackLoop() {
+	//if (character.moving)return
+    let delay = null; // Default delay
+
     try {
-        // logic attack ở đây
+        let nearest = null;
+
+
+if (
+        character.map == mobMap &&
+        distance(character, { x: locations[home][0].x, y: locations[home][0].y }) < 250
+    ) 
+{	
+        // Find the nearest monster based on the targetNames
+        for (let i = 0; i < targetNames.length; i++) {
+          nearest = get_nearest_monster_v2({
+          target: targetNames[i],
+           max_distance: character.range,
+         check_low_hp: true
+         });
+            if (nearest) break;
+        }
+}
+
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+					statusEffects: ["cursed"],
+                    max_distance: character.range,
+                    check_max_hp: true,  // Checking for monster with max HP
+                });
+                if (nearest) break;
+            }
+        }
+		
+
+	    
+        if (!nearest) {
+            for (let i = 0; i < targetNames.length; i++) {
+                nearest = get_nearest_monster_v2({
+                    target: targetNames[i],
+                    max_distance: character.range,
+                    check_max_hp: true,  // Checking for monster with max HP
+                });
+                if (nearest) break;
+            }
+        }
+
+	    
+	if ( nearest && !is_in_range(nearest))
+	{
+          gobaltaget = nearest;
+	}
+	    
+        // If a monster is found and is in range, execute the attack
+        if (nearest && is_in_range(nearest) && !smart.moving) {
+            await attack(nearest); // Initiate attack
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+        }
+
+	    
     } catch (e) {
         //console.error(e);
     }
-
-    setTimeout(attackLoop, 250);
+	 setTimeout(attackLoop, delay/2 || 250); // Default delay if undefined
 }
 
 attackLoop();
@@ -522,7 +583,11 @@ function ms_to_next_skill(skill) {
 
 function get_nearest_monster_v2(args = {}) {
     let min_d = 999999, target = null;
-    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
+    let optimal_hp = args.check_max_hp ? 0 : 999999999;
+
+let lowHpValue = 0;
+let lowHpTarget = null;
+
 
     for (let id in parent.entities) {
         let current = parent.entities[id];
@@ -530,49 +595,76 @@ function get_nearest_monster_v2(args = {}) {
         if (args.type && current.mtype != args.type) continue;
         if (args.min_level !== undefined && current.level < args.min_level) continue;
         if (args.max_level !== undefined && current.level > args.max_level) continue;
-        if (args.target && !args.target.includes(current.target)) continue;
+        if (args.target && current.target !== args.target) continue;
         if (args.no_target && current.target && current.target != character.name) continue;
 
-        // Status effects (debuffs/buffs) check
         if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
 
-        // Min/max XP check
         if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
         if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
 
-        // Attack power limit
         if (args.max_att !== undefined && current.attack > args.max_att) continue;
 
-        // Path check
         if (args.path_check && !can_move_to(current)) continue;
 
-        // Distance calculation
         let c_dist = args.point_for_distance_check
             ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
             : parent.distance(character, current);
 
         if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
 
-        // Generalized HP check (min or max)
-        if (args.check_min_hp || args.check_max_hp) {
+// ------------ NEW FEATURE: CHECK LOW HP (ANTI OVERKILL) ----------------
+if (args.check_low_hp) {
+
+    // 1. Xác định ngưỡng "sắp chết" theo max_hp của quái
+    const hpThreshold =
+        current.max_hp >= 800000 ? 45000 :
+        current.max_hp >= 200000 ? 20000 :
+                                   7000;
+
+    // 2. Chỉ xét quái:
+    //    - Đã vào vùng sắp chết (<= threshold)
+    //    - Nhưng chưa quá thấp máu (>= 1500) để tránh overkill
+    if (current.hp <= hpThreshold && current.hp >= 2800) {
+
+        // 3. Trong vùng này, chọn con có HP LỚN NHẤT
+        if (current.hp > lowHpValue) {
+            lowHpValue = current.hp;
+            lowHpTarget = current;
+        }
+    }
+
+    // 4. Vẫn tiếp tục loop để quét hết toàn bộ mob
+    continue;
+}
+/////////////////////////
+
+        // Nếu đang check max HP
+        if (args.check_max_hp) {
             let c_hp = current.hp;
-            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
+            if (c_hp > optimal_hp) {
                 optimal_hp = c_hp;
                 target = current;
             }
             continue;
         }
 
-        // If no specific HP check, choose the closest monster
+        // Mặc định: chọn quái gần nhất
         if (c_dist < min_d) {
             min_d = c_dist;
             target = current;
         }
     }
-    return target;
+
+// Nếu bật check_low_hp → chỉ lấy quái HP thấp, không fallback HP cao
+if (args.check_low_hp) {
+    if (lowHpTarget) return lowHpTarget;
+    return null;  // không có quái HP thấp thì trả null
 }
 
 
+    return target;
+}
 
 
 
