@@ -24,7 +24,30 @@ game_log(" press 'D' doi hop qua - gem.");
 game_log(" press 'F' mua do cua Fonty");
 game_log(" press 'G' vua D + A");
 var hostname = "haiz"
-var nhanvatphu = "LyThanhThu"  // nhân vật ngoài haiz và Ynhi
+
+
+var nhanvatphu = null;   // sẽ tự động cập nhật
+const PARTY_EXCLUDE = ["haiz", "Ynhi"];
+function updateNhanVatPhu() {
+    if (!parent.party_list || parent.party_list.length === 0) {
+        nhanvatphu = null;
+        return;
+    }
+
+    for (const name of parent.party_list) {
+        if (PARTY_EXCLUDE.includes(name)) continue;
+        if (name === character.name) continue;
+
+        nhanvatphu = name;
+        return;
+    }
+
+    nhanvatphu = null;
+}
+setInterval(updateNhanVatPhu, 500);
+
+
+
 const TenMinutesInMs11 = 130 * 1000  // thoi gian tim boss
 const TenMinutesInMs111 = 5 * 60 * 1000  //thoi gian doi qua
 
