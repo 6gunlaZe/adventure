@@ -24,7 +24,7 @@ game_log(" press 'D' doi hop qua - gem.");
 game_log(" press 'F' mua do cua Fonty");
 game_log(" press 'G' vua D + A");
 var hostname = "haiz"
-var nhanvatphu = "6gunlaZe"  // nhân vật ngoài haiz và Ynhi
+var nhanvatphu = "LyThanhThu"  // nhân vật ngoài haiz và Ynhi
 const TenMinutesInMs11 = 130 * 1000  // thoi gian tim boss
 const TenMinutesInMs111 = 5 * 60 * 1000  //thoi gian doi qua
 
