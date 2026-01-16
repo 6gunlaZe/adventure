@@ -153,7 +153,8 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-         //   framtaygame(); ///tạm ngưng hầm ngục tomb đã hoạt động tốt
+		// chỉ chạy được 1 hầm ngục 1 lần
+         //  framtaygame(); 
 		  //  framXmage()
 			spidergame()
 	} else if (bossvip > 0) {
@@ -162,7 +163,7 @@ async function eventer() {
 
     } else {
            //safeawwait()
-		if (new Date().getHours() >= 6 && new Date().getHours() < 19 && locate_item("spiderkey") !== -1 && 1 > 2 ) ///tạm ngưng hầm ngục
+		if (new Date().getHours() >= 7 && new Date().getHours() < 19 && locate_item("spiderkey") !== -1 ) // chỉ chạy được 1 hầm ngục 1 lần tùy chỉnh theo key
 		{
 			framtay = 1;  
 		}
@@ -3461,14 +3462,14 @@ async function checkCrabxx() {
 
 
 setInterval(() => {
-	checkCrabxx();  ///tạm ngưng
+	checkCrabxx();  
 }, 90000); // kiểm tra mỗi 30 giây
 
 
 
-// Check now, and every 10p
+
 setInterval(() => {
- 	checkServersForMonsters(["franky"] ,["icegolem"] );  ///tạm ngưng
+ 	checkServersForMonsters(["franky"] ,["icegolem"] );  
 
 }, 80000); // 60s check 1lan
 
@@ -3502,7 +3503,7 @@ let validObjects0
 let validObjects
 let validObjects1
 	 let hpcheck =120000000   // máu của franky
-	 let hpcheck1 =10000000    // máu của icegolem
+	 let hpcheck1 =13000000    // máu của icegolem
 
   // Query API
   const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
