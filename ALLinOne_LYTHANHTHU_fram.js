@@ -680,7 +680,7 @@ async function skillLoop() {
         }
 
         // 2. Buff rspeed cho party member gần mình
-        if (!is_on_cooldown("rspeed") && parent.party_list && ) {
+        if (!is_on_cooldown("rspeed") && parent.party_list ) {
             for (let id in parent.party_list) {
                 let entity = parent.entities[id];
 
