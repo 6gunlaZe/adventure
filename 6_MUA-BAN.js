@@ -24,6 +24,7 @@ game_log(" press 'D' doi hop qua - gem.");
 game_log(" press 'F' mua do cua Fonty");
 game_log(" press 'G' vua D + A");
 var hostname = "haiz"
+var nhanvatphu = "6gunlaZe"  // nhân vật ngoài haiz và Ynhi
 const TenMinutesInMs11 = 130 * 1000  // thoi gian tim boss
 const TenMinutesInMs111 = 5 * 60 * 1000  //thoi gian doi qua
 
@@ -587,7 +588,7 @@ function on_cm(name, data) {
 	}
 
  if(name == "haiz" && data != "mp" && data != "hp" && data != "full"){
-	 send_cm("6gunlaZe",data)
+	 send_cm(nhanvatphu,data)
 	 	 send_cm("tienV",data)
 
  }
@@ -596,13 +597,13 @@ function on_cm(name, data) {
 	
 
 ///////////////////////////	
-		    if(name == "6gunlaZe")
+		    if(name == nhanvatphu)
 	{
        if(data == "full") {
 		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
 		   {
-    smart_move(parent.party["6gunlaZe"]); 
-			   game_log("go 6gunlaZe !!!!!!");
+    smart_move(parent.party[nhanvatphu]); 
+			   game_log("go nhanvatphu !!!!!!");
              vanchuyen = 1
 			   		 vanchuyenbank += 1
 		   }
@@ -614,7 +615,7 @@ function on_cm(name, data) {
 		
 	}
 	
-	if(name == "6gunlaZe")
+	if(name == nhanvatphu)
 	{
        if(data == "hp") {
 		   if (vanchuyen == 0 && checktui == 0)
@@ -623,8 +624,8 @@ function on_cm(name, data) {
   checkbuyhp();
     });		   
 			   
-    smart_move(parent.party["6gunlaZe"]); 
-			   game_log("go 6gunlaZe !!!!!!");
+    smart_move(parent.party[nhanvatphu]); 
+			   game_log("go nhanvatphu !!!!!!");
              vanchuyen = 1
 			   vanchuyenHPMP = 1
 		   }
@@ -637,8 +638,8 @@ function on_cm(name, data) {
   checkbuymp();
     });		   
 			   
-    smart_move(parent.party["6gunlaZe"]); 
-			   game_log("go 6gunlaZe !!!!!!");
+    smart_move(parent.party[nhanvatphu]); 
+			   game_log("go nhanvatphu !!!!!!");
              vanchuyen = 1
 			   vanchuyenHPMP = 1
 		   }
@@ -784,7 +785,7 @@ setInterval(mluckallifNOMLuck, 1000);
 ///////gap nhau xong la ve thanh lien
 
 setInterval(function() {
-    let lootMule11 = get_player("6gunlaZe");
+    let lootMule11 = get_player(nhanvatphu);
 	let lootMule21 = get_player("nhiY");
 	let lootMule31 = get_player("haiz");
 	let lootMule41 = get_player("Ynhi");
@@ -1013,7 +1014,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe", "tienV", nhanvatphu];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -2083,7 +2084,7 @@ parent.socket.emit("secondhands");
 
 
 setInterval(function() {
-    let lootMule = get_player("6gunlaZe");
+    let lootMule = get_player(nhanvatphu);
 	let lootMule2 = get_player("nhiY");
 	let lootMule3 = get_player("haiz");
 	let lootMule4 = get_player("Ynhi");
@@ -2334,9 +2335,9 @@ if(parent.S.icegolem)
 function franky() {
 if (!parent.S.franky)frankymode = 0;	
 
-if (frankymode == 1 && parent.party_list.includes("6gunlaZe"))
+if (frankymode == 1 && parent.party_list.includes(nhanvatphu))
 {
-		send_cm("6gunlaZe","franky")
+		send_cm(nhanvatphu,"franky")
 }
 	
 if(vanchuyen == 0 && checktui == 0 && parent.S.franky && frankymode ==0 &&  !is_moving(character) && !get_nearest_monster({type:'franky'}))
@@ -2349,7 +2350,7 @@ smart_move({ map: "level2w", x: -123, y: -65 }, () => {
 if( get_nearest_monster({type:'franky'})  &&  !is_moving(character)  )	
 {
 	if(get_nearest_playerV() >=2 && parent.party_list.includes("haiz") ){
-		send_cm("6gunlaZe","franky")
+		send_cm(nhanvatphu,"franky")
 		send_cm("haiz","franky") 
 		frankymode = 1
 smart_move({ map: "main", x: -200, y: -110 }, () => {
@@ -2394,7 +2395,7 @@ smart_move({ map: "main", x: -705, y: 1708 }, () => {
 var bossc = get_nearest_monster({type:'crabxx'})
 if( get_nearest_monster({type:'crabxx'})  &&  !is_moving(character)  )	
 {
-	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes("6gunlaZe") && bossc.hp < 888000 ){
+	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes(nhanvatphu) && bossc.hp < 888000 ){
 		send_cm("haiz","crabxx") 
 		crabxxmode = 1
 smart_move({ map: "main", x: -200, y: -110 }, () => {
