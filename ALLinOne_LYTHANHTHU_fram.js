@@ -274,15 +274,18 @@ const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV","LyThanhThu"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
-
-
+    try {
+        // logic attack ở đây
     } catch (e) {
         //console.error(e);
     }
-	setTimeout(attackLoop, delay || 250); // Default delay if undefined
+
+    setTimeout(attackLoop, 250);
 }
 
 attackLoop();
+
+
 
 
 
