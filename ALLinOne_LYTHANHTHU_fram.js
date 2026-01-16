@@ -679,26 +679,33 @@ async function skillLoop() {
             await use_skill("invis");
         }
 
-        // 2. Buff rspeed cho party member gần mình
-        if (!is_on_cooldown("rspeed") && parent.party_list ) {
-            for (let id in parent.party_list) {
-                let entity = parent.entities[id];
+// 2. Buff rspeed cho party member gần mình
+if (!is_on_cooldown("rspeed") && parent.party_list) {
+    for (let id in parent.party_list) {
+        const member = parent.party_list[id];
+        let entity = parent.entities[member];
 
-                if (id === character.name) {
-                    entity = character;
-                }
-
-                if (
-                    entity && character.mp > 500 &&
-                    distance(character, entity) <= 300 &&
-                    (!entity.s.rspeed || entity.s.rspeed.ms < 2.1e6)
-                ) {
-                    await use_skill("rspeed", entity);
-                    break;
-                }
-            }
+        if (member === character.name) {
+            entity = character;
         }
 
+        if (
+            entity &&
+            character.mp > 500 &&
+            distance(character, { x: entity.real_x, y: entity.real_y }) < 300 &&
+            (!entity.s.rspeed || entity.s.rspeed.ms < 3e5)
+        ) {
+            await use_skill("rspeed", entity);
+            break;
+        }
+    }
+}
+
+
+
+//////////////////////
+
+		
     } catch (e) {}
 
     setTimeout(skillLoop, 100);
