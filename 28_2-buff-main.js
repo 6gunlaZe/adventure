@@ -11,7 +11,7 @@ let delayitem
 let stopgiudo = 0  // 1 = stop
 let cryts = 0
 let crytsTank = 0
-
+var nhanvatphu = "6gunlaZe"
 let receivedData
 
 if (delayboss == undefined) delayboss = Date.now()
@@ -698,7 +698,7 @@ const hpThreshold = e.max_hp >= 800000 ? 35000 :
             score += 40;
         }
 
-        if (player.hp < 7000 || char_name == "6gunlaZe") {
+        if (player.hp < 7000 || char_name == "6gunlaZe" || char_name == "LyThanhThu") {
                 score += 50;
 		dungskill = true;
         }
@@ -1603,13 +1603,13 @@ function check_viem_xung_quanh() {  ///chỉ áp dụng khi có zapper0 xung qua
     // Lấy thông tin 3 người chơi
     const player1 = get_player("haiz");
     const player2 = get_player("Ynhi");
-    const player3 = get_player("6gunlaZe");
+    const player3 = get_player(nhanvatphu);
 
     // Kiểm tra nếu có bất kỳ ai máu thấp hơn ngưỡng
     if (
         (player1 && player1.hp < 12000) ||
         (player2 && player2.hp < 9000) ||
-        (player3 && player3.hp < 7000) || (player2 && player2.mp < 4000)
+        (player3 && player3.hp/player3.max_hp < 0.7) || (player2 && player2.mp < 4000)
     ) {
         return 1;
     }
@@ -1668,7 +1668,7 @@ let checkluckk = 0;
 
 function ChuyendoiITEM() {
      const leader = get_player("haiz");
-     const damer = get_player("6gunlaZe");
+     const damer = get_player(nhanvatphu);
 	const currentTime = performance.now();
 const mobsInRange = Object.values(parent.entities).filter(entity => 
     entity.visible && entity.type=="monster" &&
@@ -1770,14 +1770,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
-	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp < 5000)))
+	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4)))
 	{
 	checkheall = 1
         eTime = currentTime;
         equipSet('healmax');
 		return
 	}
-	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp > 7000)) )
+	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp/damer.max_hp > 0.7)) )
 	{
         eTime = currentTime;
         equipSet('fram');
