@@ -672,17 +672,40 @@ if (args.check_low_hp) {
 
 async function skillLoop() {
     try {
+        const target = get_target();
 
+        // 1. Buff bản thân tàng hình
+        if (!is_on_cooldown("invis") && !character.s.invis && target) {
+            await use_skill("invis");
+        }
 
-		
-    } catch (e) {
-        //console.log("Skill loop error:", e);
-    }
+        // 2. Buff rspeed cho party member gần mình
+        if (!is_on_cooldown("rspeed") && parent.party_list && ) {
+            for (let id in parent.party_list) {
+                let entity = parent.entities[id];
 
-    setTimeout(skillLoop, 2000); // lặp 2s
+                if (id === character.name) {
+                    entity = character;
+                }
+
+                if (
+                    entity && character.mp > 500 &&
+                    distance(character, entity) <= 300 &&
+                    (!entity.s.rspeed || entity.s.rspeed.ms < 2.1e6)
+                ) {
+                    await use_skill("rspeed", entity);
+                    break;
+                }
+            }
+        }
+
+    } catch (e) {}
+
+    setTimeout(skillLoop, 100);
 }
-
 skillLoop();
+
+
 
 
 
