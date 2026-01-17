@@ -668,48 +668,64 @@ if (args.check_low_hp) {
 
 
 
-
+const QUICK_DAGGERS = ["daggerofthedead", "vdagger"];
+const QUICK_FISTS   = ["cclaw", "pclaw"];
 
 async function skillLoop() {
     try {
         const target = get_target();
+        const inRange =
+            target &&
+            distance(character, target) <
+            character.range + (character.xrange || 0);
 
-        // 1. Buff bản thân tàng hình
-        if (!is_on_cooldown("invis") && !character.s.invis && target && distance(character,target) < character.range ) {
-            await use_skill("invis");
+        // 1. Invis
+        if (!is_on_cooldown("invis") && !character.s.invis && inRange) {
+            use_skill("invis");
         }
 
-// 2. Buff rspeed cho party member gần mình
-if (!is_on_cooldown("rspeed") && parent.party_list) {
-    for (let id in parent.party_list) {
-        const member = parent.party_list[id];
-        let entity = parent.entities[member];
+        // 2. Rspeed party
+        if (!is_on_cooldown("rspeed") && parent.party_list) {
+            for (let id in parent.party_list) {
+                const member = parent.party_list[id];
+                let entity = parent.entities[member];
+                if (member === character.name) entity = character;
 
-        if (member === character.name) {
-            entity = character;
+                if (
+                    entity &&
+                    character.mp > 500 &&
+                    distance(character, entity) < 300 &&
+                    (!entity.s?.rspeed || entity.s.rspeed.ms < 300000)
+                ) {
+                    use_skill("rspeed", entity);
+                    break;
+                }
+            }
         }
+
+        // 3. Quick attack
+        let quickSkill = null;
+        const mhName = character.slots.mainhand?.name;
+
+        if (QUICK_DAGGERS.includes(mhName)) quickSkill = "quickstab";
+        else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
 
         if (
-            entity &&
-            character.mp > 500 &&
-            distance(character, { x: entity.real_x, y: entity.real_y }) < 300 &&
-            (!entity.s.rspeed || entity.s.rspeed.ms < 3e5)
+            quickSkill &&
+            inRange &&
+            !is_on_cooldown(quickSkill) &&
+            character.mp > 500
         ) {
-            await use_skill("rspeed", entity);
-            break;
+            await use_skill(quickSkill, target);
         }
+
+    } catch (e) {
+        console.log("skillLoop error:", e);
     }
-}
-
-
-
-//////////////////////
-
-		
-    } catch (e) {}
 
     setTimeout(skillLoop, 100);
 }
+
 skillLoop();
 
 
