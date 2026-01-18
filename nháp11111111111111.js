@@ -250,3 +250,122 @@ stopFlashing(winTitle) {
 
     
 
+
+
+
+
+UI check dame boss
+
+/************************************************
+ * PARTY DAMAGE BAR - FINAL VERIFIED WORKING
+ ************************************************/
+(function () {
+    const G = (typeof parent !== 'undefined' && parent.entities) ? parent : window;
+    if (!G || !G.entities) return;
+
+    const $ = G.$;
+    const UI_ID = "monster_damage_container";
+    const BAR_ID = "monster_damage_bar";
+    const HP_TEXT_ID = "monster_hp_info";
+    const DETAILS_ID = "monster_damage_details";
+    const COLORS = ["#ff5555","#55ff55","#5599ff","#ffaa00","#aa66ff","#00ffff","#e67e22","#f1c40f"];
+
+    if (!G.party_damage_data) G.party_damage_data = {}; 
+    const DAMAGE = G.party_damage_data;
+
+    function getParty() {
+        let p = [character.name];
+        if (G.party_list) p = p.concat(G.party_list);
+        return [...new Set(p)];
+    }
+
+    function initUI() {
+        $(`#${UI_ID}`).remove();
+        $("body").append(`
+            <div id="${UI_ID}" style="position:fixed; top:12px; left:50%; transform:translateX(-50%); width:85%; max-width:850px; background:rgba(0,0,0,0.9); border:2px solid #555; border-radius:8px; padding:10px; z-index:9999; pointer-events:none; font-family:sans-serif;">
+                <div id="${HP_TEXT_ID}" style="text-align:center; font-size:15px; font-weight:bold; color:#fff; margin-bottom:8px;"></div>
+                <div style="height:14px; background:#1a1a1a; border-radius:7px; overflow:hidden; display:flex; border:1px solid #333;">
+                    <div id="${BAR_ID}" style="display:flex; width:100%; height:100%;"></div>
+                </div>
+                <div id="${DETAILS_ID}" style="display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:8px; font-size:12px; font-weight:bold;"></div>
+            </div>
+        `);
+    }
+
+    function onHit(data) {
+        try {
+            // Logic đảo ngược đã xác nhận chạy đúng cho game
+            const targetId = data.actor || data.id; 
+            const sourceId = data.target || data.hid;
+
+            if (!sourceId || !targetId) return;
+
+            let attackerName = null;
+            if (sourceId === character.id) attackerName = character.name;
+            else if (G.entities[sourceId]) attackerName = G.entities[sourceId].name;
+
+            const targetEntity = G.entities[targetId];
+
+            if (attackerName && getParty().includes(attackerName)) {
+                if (targetEntity && targetEntity.type === "monster") {
+                    
+                    let dmg = (data.damage || 0) + (data.adr || 0);
+                    if (!data.damage && data.amount) dmg = data.amount;
+                    
+                    if (dmg > 0 && !data.heal) {
+                        if (!DAMAGE[targetId]) DAMAGE[targetId] = { lastUpdate: Date.now() };
+                        DAMAGE[targetId][attackerName] = (DAMAGE[targetId][attackerName] || 0) + dmg;
+                        DAMAGE[targetId].lastUpdate = Date.now();
+                    }
+                }
+            }
+        } catch (e) {}
+    }
+
+    function renderUI() {
+        const targetId = character.target;
+        const m = G.entities[targetId];
+        if (!targetId || !m || m.type !== "monster") { $(`#${UI_ID}`).hide(); return; }
+        $(`#${UI_ID}`).show();
+
+        const data = DAMAGE[targetId] || {};
+        let total = 0;
+        const players = Object.keys(data).filter(p => p !== 'lastUpdate');
+        players.forEach(p => total += data[p]);
+
+        $(`#${HP_TEXT_ID}`).html(`<span style="color:#f1c40f">${m.mtype.toUpperCase()}</span> | <span style="color:#ff5555">${m.hp.toLocaleString()}</span> / ${m.max_hp.toLocaleString()}`);
+        $(`#${BAR_ID}`).empty();
+        $(`#${DETAILS_ID}`).empty();
+
+        if (total > 0) {
+            players.sort((a, b) => data[b] - data[a]).forEach((p, i) => {
+                const dmg = data[p];
+                const pct = (dmg / total * 100).toFixed(1);
+                const color = COLORS[i % COLORS.length];
+                $(`#${BAR_ID}`).append(`<div style="width:${pct}%; background:${color}; height:100%;"></div>`);
+                $(`#${DETAILS_ID}`).append(`<div style="color:${color}; background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:4px;">${p}: <span style="color:#fff">${Math.round(dmg).toLocaleString()}</span> (${pct}%)</div>`);
+            });
+        }
+    }
+
+    G.socket.off("hit", onHit);
+    G.socket.on("hit", onHit);
+
+    setInterval(() => {
+        const now = Date.now();
+        for (let id in DAMAGE) {
+            if (!G.entities[id] || G.entities[id].hp < 10 || (now - DAMAGE[id].lastUpdate > 20000)) delete DAMAGE[id];
+        }
+    }, 1000);
+
+    initUI();
+    setInterval(renderUI, 150);
+})();
+
+
+
+
+
+
+
+
