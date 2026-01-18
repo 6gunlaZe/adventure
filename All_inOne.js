@@ -1456,7 +1456,7 @@ let scythe = 0;
 let eTime = 0;
 let basher = 0;
 async function skillLoop() {
-    let delay = 10;
+    let delay = 30;
     try {
         let zap = false;
         const dead = character.rip;
@@ -1474,16 +1474,26 @@ async function skillLoop() {
             try {
 				
 
-                if ( character.mp >= 170 && ( (f1 && f1.hp < f1.max_hp * 0.6 )  || (tank && tank.hp < tank.max_hp * 0.6 )  || (tank && tank.mp < 4000 && tank.ctype == "priest" )  || (tank && tank.mp < 5500 && tank.ctype == "priest" && character.mp > character.max_mp * 0.8  ) || character.hp < 12000 ) && character.map != "winter_instance"  ){
-                    //console.log("Calling handleStomp");
-					//game_log("1")
+if (
+    character.mp >= 170 &&
+    character.map !== "winter_instance" &&
+    (
+        (f1 && f1.hp < f1.max_hp * 0.6) ||
+        (tank && tank.hp < tank.max_hp * 0.6) ||
+        (tank && tank.ctype === "priest" && tank.mp < 4000) ||
+        (tank && tank.ctype === "priest" && tank.mp < 5500 && character.mp > character.max_mp * 0.8) ||
+        character.hp < 12000
+    )
+) {
+    handleStomp(Mainhand, stMaps, aoeMaps, tank);
+}
 
-                    handleStomp(Mainhand, stMaps, aoeMaps, tank);
-                }
+				
+
                 if (character.ctype === "warrior") {
                     //console.log("Calling handleCleave");
                     handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
-                    //console.log("Calling handleWarriorSkills");
+                   
                     handleWarriorSkills(tank,f1);
                 }
             } catch (e) {
@@ -1800,7 +1810,13 @@ if (
     tank.hp < 6000 &&
     character.hp > 10000
 ) {
-    const mob = mobsTargetingTank[0];
+	
+    const mob = mobsTargetingTank.reduce((best, e) => {
+    if (!best) return e;
+    return (e.attack || 0) > (best.attack || 0) ? e : best;
+}, null);  //chọn ra quái attack cao nhất
+
+
     if (is_in_range(mob, "taunt")) {
         await use_skill("taunt", mob.id);
         game_log(`🛡 Taunted quái đánh ${tank.name}: ${mob.mtype}`, "#AA00FF");
