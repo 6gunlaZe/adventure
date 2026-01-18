@@ -183,6 +183,10 @@ var bankItems = {
   spidersilk: [{ bank: "items5", level: -1, quantity: 1 }],
   sstinger: [{ bank: "items5", level: -1, quantity: 1 }],
   gemfragment: [{ bank: "items5", level: -1, quantity: 1 }],
+  cocoon: [{ bank: "items5", level: -1, quantity: 1 }],
+  troll: [{ bank: "items5", level: -1, quantity: 1 }],
+
+	
 
   // ===== GEAR =====
   fieldgen0: [{ bank: "items1", level: -1, quantity: 1 }],
