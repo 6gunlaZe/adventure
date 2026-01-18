@@ -888,12 +888,15 @@ if (buoc == 11 || character.rip)
 
 let startTime1 = null; // Thời gian bắt đầu đếm giờ
 let buoc1 = 0
+const spiderlayer = '6gunlaZe';
+
+
 function spidergame() {  /// đã check fix lỗi treo mạnh hơn tomb và Xgame
 
- let member1 = get_player(f2222);
+ let member1 = get_player(spiderlayer);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", f2222, 60000);
+autoPartyCheck("Ynhi", spiderlayer, 60000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime1 === null) {
@@ -909,7 +912,7 @@ autoPartyCheck("Ynhi", f2222, 60000);
   if (startTime1 !== null && Date.now() - startTime1 >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
-	stop_character(f2222)	
+	stop_character(spiderlayer)	
 	buoc1 = 0
 	framtay = 0
 	startTime1  = null
@@ -918,20 +921,20 @@ autoPartyCheck("Ynhi", f2222, 60000);
 
 
 	
-if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm(f2222,"spidergame")	
+if(parent.party_list.includes(spiderlayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(spiderlayer,"spidergame")	
 }
 
 if (character.map == "spider_instance" && (!member1 || !member2) )	
 {
 //send_cm("haiz1","goo3")
 send_cm("Ynhi","goo3")
-send_cm(f2222,"goo3")
+send_cm(spiderlayer,"goo3")
 
 
 //send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
-send_cm(f2222,character.in)
+send_cm(spiderlayer,character.in)
 
 }
 
@@ -1018,7 +1021,7 @@ const step = steps[index];
 if (buoc1 == 8 || character.rip)
 {
 	stop_character("Ynhi")	
-	stop_character(f2222)	
+	stop_character(spiderlayer)	
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
