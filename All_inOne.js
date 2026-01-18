@@ -158,7 +158,7 @@ async function eventer() {
 
 if (locate_item("tombkey") !== -1) {
     // có tombkey → đánh tomb
-    framtaygame();
+    framTOMBgame();
 
 } else if (locate_item("spiderkey") !== -1) {
     // có spiderkey → đánh spider
@@ -730,7 +730,7 @@ let buoc = 0
 const tomplayer = '6gunlaZe';
 
 
-function framtaygame() {
+function framTOMBgame() {
 
  let member1 = get_player(tomplayer);
  let member2 = get_player("Ynhi");
@@ -790,9 +790,9 @@ if (monster && character.cc < 100) {
         setTimeout(waitAndUnluck, 5000);
     } else {
         // Phân loại theo damage_type của quái
-        if (monster.damage_type === "magical" && monster.attack > 3500) {
+        if (monster.damage_type === "magical" && monster.attack > 3500 && monster.target == character.name) {
             equipSet("single_Magic");
-        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
+        } else if (monster.damage_type === "physical" && monster.attack > 3500 && monster.target == character.name) {
             equipSet("single_physical");
         } else {
             // Mặc định nếu không rõ loại (hoặc khác magic/physical)
