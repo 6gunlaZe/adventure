@@ -808,7 +808,8 @@ async function lootAllChests() {
 
     if (
         (chestIds.length > 10 || character.map == "tomb" || character.map == "winter_instance" || character.map == "spider_instance" ||
-        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&
+        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&  
+		chestIds.length > 0  &&
         character.cc < 200 &&
         isEquipping === false && character.slots.gloves?.name === "supermittens"
     ) {
