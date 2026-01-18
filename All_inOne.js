@@ -947,14 +947,14 @@ var monster
 
 if (monster && character.cc < 100) {
     // Ưu tiên trang bị luck nếu máu quái thấp
-    if (monster.hp < 15000) {
+    if (monster.hp < 15000 && monster.target == character.name) {
         equipSet("luck");
         setTimeout(waitAndUnluck, 5000);
     } else {
         // Phân loại theo damage_type của quái
-        if (monster.damage_type === "magical" && monster.attack > 3500) {
+        if (monster.damage_type === "magical" && monster.attack > 3500 && monster.target == character.name) {
             equipSet("single_Magic");
-        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
+        } else if (monster.damage_type === "physical" && monster.attack > 3500 && monster.target == character.name) {
             equipSet("single_physical");
         } else {
             // Mặc định nếu không rõ loại (hoặc khác magic/physical)
