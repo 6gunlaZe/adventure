@@ -175,11 +175,18 @@ if (locate_item("tombkey") !== -1) {
 	} else if (framboss > 0) {
 
     } else {
-           //safeawwait()
-		if (new Date().getHours() >= 7 && new Date().getHours() < 24 && (locate_item("tombkey") !== -1 || locate_item("spiderkey") !== -1 || locate_item("frozenkey11") !== -1) ) 
-		{
-			framtay = 1;  
-		}
+
+          const h = new Date().getHours();
+        if (
+            (
+              (h >= 6 && h < 11) || (h >= 13 && h < 21)
+            ) &&
+            (
+                 locate_item("tombkey") !== -1 || locate_item("spiderkey") !== -1 || locate_item("frozenkey11") !== -1
+            )
+        ) {
+             framtay = 1;
+        }
 		else
 		{
 		handleHome();
