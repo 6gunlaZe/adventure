@@ -207,6 +207,7 @@ var bankItems = {
   vgloves: [{ bank: "items1", level: 5, quantity: 1 }],
   xhelmet: [{ bank: "items1", level: 3, quantity: 1 }],
   orba: [{ bank: "items1", level: 1, quantity: 1 }],
+  spikedhelmet: [{ bank: "items1", level: 0, quantity: 1 }],
 
   // ===== MULTI LEVEL ITEMS (FIX CHÍNH) =====
   pants: [
