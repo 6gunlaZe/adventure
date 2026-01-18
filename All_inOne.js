@@ -1807,8 +1807,8 @@ if (
     mobsTargetingTank.length > 0 &&
     !is_on_cooldown("taunt") &&
     tank && !tank.rip &&
-    tank.hp < 6000 &&
-    character.hp > 10000
+    tank.hp < 8000 &&
+    character.hp > 11000
 ) {
 	
     const mob = mobsTargetingTank.reduce((best, e) => {
@@ -1822,7 +1822,7 @@ if (
         game_log(`🛡 Taunted quái đánh ${tank.name}: ${mob.mtype}`, "#AA00FF");
     }
 } 
-// 🧲 Nếu không thì taunt mob chưa có target (hút về để tiết kiệm mana)
+// 🧲 Nếu không thì taunt mob chưa có target (hút về để tiết kiệm mana) điều kiện thêm MP ynhi thấp hay nhân vật khác
 else if (
     untargetedMobs.length > 0 &&
     !is_on_cooldown("taunt") &&
