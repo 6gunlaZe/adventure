@@ -870,6 +870,7 @@ if (buoc == 11 || character.rip)
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "mansion", x: 0, y: -470 })
+	if (character.rip)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
@@ -1025,6 +1026,7 @@ if (buoc1 == 8 || character.rip)
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
+	if (character.rip)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
