@@ -2920,7 +2920,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
               Now_is_gobalevenrun = true
 	    
-	    if(eventType == "crabxx")send_cm(f2222, "crabxx");   
+	    if(eventType == "crabxx")send_cm(f2name, "crabxx");   
 	    
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
