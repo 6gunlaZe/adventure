@@ -153,7 +153,7 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-		// chỉ chạy được 1 hầm ngục 1 lần
+		// chỉ chạy được 1 hầm ngục 1 lần tombkey  spiderkey
           framtaygame(); 
 		  //  framXmage()
 			// spidergame()
@@ -163,7 +163,7 @@ async function eventer() {
 
     } else {
            //safeawwait()
-		if (new Date().getHours() >= 7 && new Date().getHours() < 19 && locate_item("spiderkey") !== -1 ) // chỉ chạy được 1 hầm ngục 1 lần tùy chỉnh theo key
+		if (new Date().getHours() >= 7 && new Date().getHours() < 24 && locate_item("tombkey") !== -1 ) // chỉ chạy được 1 hầm ngục 1 lần tùy chỉnh theo key
 		{
 			framtay = 1;  
 		}
