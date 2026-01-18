@@ -727,12 +727,15 @@ if (buoc == 8 || character.rip)
 let startTime = null; // Thời gian bắt đầu đếm giờ
 let fieldgen0_position = null;
 let buoc = 0
+const tomplayer = '6gunlaZe';
+
+
 function framtaygame() {
 
- let member1 = get_player(f2222);
+ let member1 = get_player(tomplayer);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", f2222, 60000);
+autoPartyCheck("Ynhi", tomplayer, 60000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime === null) {
@@ -748,7 +751,7 @@ autoPartyCheck("Ynhi", f2222, 60000);
   if (startTime !== null && Date.now() - startTime >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
-	stop_character(f2222)	
+	stop_character(tomplayer)	
 	buoc = 0
 	framtay = 0
 	startTime  = null
@@ -756,20 +759,20 @@ autoPartyCheck("Ynhi", f2222, 60000);
 
 
 	
-if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm(f2222,"tomb")	
+if(parent.party_list.includes(tomplayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(tomplayer,"tomb")	
 }
 
 if (character.map == "tomb" && (!member1 || !member2) )	
 {
 //send_cm("haiz1","goo1")
 send_cm("Ynhi","goo1")
-send_cm(f2222,"goo1")
+send_cm(tomplayer,"goo1")
 
 
 //send_cm("haiz1",character.in)
 send_cm("Ynhi",character.in)
-send_cm(f2222,character.in)
+send_cm(tomplayer,character.in)
 
 }
 
@@ -782,7 +785,7 @@ var monster
 
 if (monster && character.cc < 100) {
     // Ưu tiên trang bị luck nếu máu quái thấp
-    if (monster.hp < 15000) {
+    if (monster.hp < 15000 && monster.target == character.name) {
         equipSet("luck");
         setTimeout(waitAndUnluck, 5000);
     } else {
@@ -863,7 +866,7 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
 if (buoc == 11 || character.rip)
 {
 	stop_character("Ynhi")	
-	stop_character(f2222)	
+	stop_character(tomplayer)	
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "mansion", x: 0, y: -470 })
