@@ -153,17 +153,30 @@ async function eventer() {
             handleEvents();
 		framtay = 0
 	} else if (framtay > 0) {
-		// chỉ chạy được 1 hầm ngục 1 lần tombkey  spiderkey
-          framtaygame(); 
-		  //  framXmage()
-			// spidergame()
+
+// chỉ chạy được 1 hầm ngục / 1 lần / 1 key
+
+if (locate_item("tombkey") !== -1) {
+    // có tombkey → đánh tomb
+    framtaygame();
+
+} else if (locate_item("spiderkey") !== -1) {
+    // có spiderkey → đánh spider
+    spidergame();
+
+} else if (locate_item("frozenkey") !== -1) {
+    // có frozenkey → đánh winter
+    framXmage();
+}
+/////////
+
 	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
 
     } else {
            //safeawwait()
-		if (new Date().getHours() >= 7 && new Date().getHours() < 24 && locate_item("tombkey") !== -1 ) // chỉ chạy được 1 hầm ngục 1 lần tùy chỉnh theo key
+		if (new Date().getHours() >= 7 && new Date().getHours() < 24 && (locate_item("tombkey") !== -1 || locate_item("spiderkey") !== -1 || locate_item("frozenkey11") !== -1) ) 
 		{
 			framtay = 1;  
 		}
