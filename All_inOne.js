@@ -154,9 +154,9 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
 		// chỉ chạy được 1 hầm ngục 1 lần
-         //  framtaygame(); 
+          framtaygame(); 
 		  //  framXmage()
-			spidergame()
+			// spidergame()
 	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
