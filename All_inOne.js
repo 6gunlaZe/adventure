@@ -1115,7 +1115,7 @@ async function VIPBosses() {
     const targetless = Object.values(parent.entities).find(mob =>
         mob?.mtype === info.name &&
         !mob.dead &&
-        (!mob.target || mob.target !== character.name) &&
+        !mob.target &&
         distance(character, mob) <= 200
     );
 
@@ -1369,7 +1369,7 @@ for (var i = 0; i < mob.length; i++) {
           gobaltaget = target1;
 	}
 	
-        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && target1.target != character.name ) {
+        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && !target1.target) {
             await use_skill("taunt", target1); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
 		 break;
         }
@@ -1836,12 +1836,12 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 }
 
 
-let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagefn","xmagex",];  // Mảng chứa các tên quái vật cần kiểm tra
+let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagefn","xmagex",];  // Mảng chứa các tên quái vật mạnh cần kiểm tra để share dame với tank piest
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.hp > 32000 && current.target && current.target != character.name && f1 && character.hp >9400 && distance(character, f1) < 150 )  {
+    if (monstersAgo.includes(current.mtype) && current.hp > 32000 && current.target && current.target != character.name && f1 && character.hp >12000 && distance(character, f1) < 150 && tank && !tank.rip && tank.hp < 9000 && distance(character, tank) )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
