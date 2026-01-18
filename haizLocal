@@ -1,0 +1,51 @@
+​
+let codemode = 0
+​
+///////////////
+const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPgc'; // Thay YOUR_BOT_TOKEN bằng token của bạn
+// Các mẫu cú pháp (dễ dàng thay đổi tại đây)
+const syntaxExamples = [
+  { key: 'reset', value: '1' },
+  { key: 'fram', value: '1' },
+  { key: 'bank', value: '1' },
+  { key: 'crypt', value: '1' }
+];
+​
+let lastUpdateId = 0;  // Biến để lưu trữ ID của bản cập nhật cuối cùng
+const messageTimeout = 10 * 1000; // 10 giây (tính bằng milliseconds)
+const initialDelay = 30 * 1000;  // 30 giây (tính bằng milliseconds)
+const callbackTimeout = 10 * 1000; // 10 giây cho thời gian nhấn nút
+​
+let callbackQueryTimes = new Map();  // Lưu trữ thời gian nút callback query
+​
+// Hàm lấy các bản cập nhật từ Telegram
+async function getUpdates() {
+  const url = `https://api.telegram.org/bot${botToken}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`;
+​
+  console.log('Fetching updates...');  // Debug log: Đang gọi API
+​
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    console.log('Data received:', data);  // Debug log: Xem dữ liệu trả về từ API
+​
+    if (data.ok && data.result.length > 0) {
+      for (let update of data.result) {
+        lastUpdateId = update.update_id;
+        const message = update.message;
+​
+        if (message) {
+          const messageTime = new Date(message.date * 1000);  // Convert timestamp to Date object
+          const currentTime = new Date();
+          const timeDiff = currentTime - messageTime;  // Tính sự chênh lệch thời gian (milliseconds)
+​
+          // Chỉ xử lý tin nhắn nếu nó được gửi trong vòng 10 giây
+          if (timeDiff <= messageTimeout) {
+            console.log('Processing message:', message);  // Debug log: Xử lý tin nhắn
+            analyzeMessage(message.text, message.chat.id);
+          } else {
+Beta
+0 / 0
+used queries
+1
