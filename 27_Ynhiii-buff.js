@@ -1400,6 +1400,73 @@ handleZap();
 
 
 
+// Biến toàn cục để theo dõi trạng thái của haiz
+let haizLastPos = { x: 0, y: 0, time: Date.now() };
+
+async function handleBossZap() {
+    // Thứ tự trong mảng này chính là thứ tự ưu tiên (Stompy cao nhất)
+    const bossList = ["stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin"];
+    const delay = 5000;
+    const haiz = get_player("haiz");
+    const gun = getOtherPartyMember();
+
+    try {
+        if (!character.rip && !smart.moving && haiz && gun) {
+            
+            let now = Date.now();
+            let moveDist = distance(haiz, haizLastPos);
+            
+            // 1. CẬP NHẬT TRẠNG THÁI HAIZ
+            const monstersAroundHaiz = Object.values(parent.entities).filter(e => 
+                e && e.type === "monster" && !e.dead && e.visible &&
+                distance(haiz, e) <= (haiz.range || 100)
+            ).length;
+
+            const isHaizLonely = monstersAroundHaiz === 0;
+
+            if (moveDist > 10 || !isHaizLonely) {
+                haizLastPos = { x: haiz.x, y: haiz.y, time: now };
+            }
+
+            let isHaizStandingStill = (now - haizLastPos.time) >= 20000;
+
+            // 2. TÌM BOSS THEO THỨ TỰ ƯU TIÊN
+            let targetBoss = null;
+            for (let bossType of bossList) {
+                // Tìm con Boss cụ thể theo loại (mtype) đang ở gần
+                const found = Object.values(parent.entities).find(entity => 
+                    entity && entity.mtype === bossType && 
+                    entity.type === "monster" && 
+                    !entity.dead && entity.visible &&
+                    is_in_range(entity, "zapperzap")
+                );
+                
+                if (found) {
+                    targetBoss = found;
+                    break; // Tìm thấy con ưu tiên cao nhất rồi thì dừng vòng lặp
+                }
+            }
+
+            // 3. THỰC HIỆN ZAP
+            if (targetBoss && isHaizStandingStill && isHaizLonely) {
+                const hasZapperEquipped = character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper";
+                const canZap = !is_on_cooldown("zapperzap") && character.mp > 6000 && hasZapperEquipped;
+
+                if (canZap) {
+                    console.log(`%c[PRIORITY-ZAP] Đang zap ưu tiên: ${targetBoss.mtype}`, "color: #00ff00; font-weight: bold;");
+                    await use_skill("zapperzap", targetBoss);
+                    haizLastPos.time = Date.now(); 
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Lỗi trong handleBossZap:", e);
+    }
+
+    setTimeout(handleBossZap, delay);
+}
+
+handleBossZap();
 
 
 
