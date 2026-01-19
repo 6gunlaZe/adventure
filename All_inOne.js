@@ -2656,7 +2656,7 @@ let framboss1 = 0
 
 function on_cm(name, data) {
 
- if(name == "nhiY" && data == "hardreset")parent.api_call("disconnect_character", {name: "haiz"});
+ if(name == "Ynhi" && data == "hardreset")parent.api_call("disconnect_character", {name: "haiz"});
 
 
 ////////////////////
