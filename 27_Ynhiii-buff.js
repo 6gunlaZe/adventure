@@ -1429,6 +1429,7 @@ async function handleBossZap() {
             }
 
             let isHaizStandingStill = (now - haizLastPos.time) >= 30000;
+            let hardreset = (now - haizLastPos.time) >= 60000;
 
             // 2. TÌM BOSS THEO THỨ TỰ ƯU TIÊN
             let targetBoss = null;
@@ -1458,6 +1459,10 @@ async function handleBossZap() {
                     haizLastPos.time = Date.now(); 
                 }
             }
+			else if (!targetBoss && isHaizStandingStill && isHaizLonely && hardreset)send_cm("haiz", "hardreset");
+
+
+			
         }
     } catch (e) {
         console.error("Lỗi trong handleBossZap:", e);
