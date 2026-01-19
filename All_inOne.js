@@ -2508,7 +2508,7 @@ let autorelog = 0
 
 
 
-// Bước 1: đếm 2000s (33 phút)
+// Bước 1: đếm 2000s (33 phút) reset sever
 setInterval(() => {
     game_log("Đã đủ 2000s. Đang chờ máu hồi để chuyển server...");
     readyToSwitch = true;
@@ -2526,9 +2526,9 @@ function waitForHPAndSwitch() {
 	
 
 // ----------------------------
-// Trường hợp autobuyPonty = 0 → Chế độ reset server / thời gian reset 2h = autorelog > 1 và + 1 mỗi tăng 1 giời
+// Trường hợp autobuyPonty = 0 → Chế độ reset server / thời gian reset 2h = autorelog > 1 và nếu muốn tăng thì  + 1 mỗi tăng 1 giời reset sever ví dụ > 2 thì reset sau 3g
 // ----------------------------
-if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 14) {
+if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 1) {
 
     // Không có chest → reset server
     if (chestIds.length === 0) {
