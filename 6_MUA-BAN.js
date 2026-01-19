@@ -163,7 +163,7 @@ var bankItems = {
   x8: [{ bank: "items5", level: -1, quantity: 1 }],
   cshell: [{ bank: "items5", level: -1, quantity: 1 }],
   dstones: [{ bank: "items5", level: -1, quantity: 1 }],
-  smoke: [{ bank: "items5", level: -1, quantity: 1 }],
+  smoke111: [{ bank: "items5", level: -1, quantity: 1 }],
   funtoken: [{ bank: "items5", level: -1, quantity: 1 }],
   essenceoffrost: [{ bank: "items5", level: -1, quantity: 1 }],
   essenceoffrostl: [{ bank: "items5", level: -1, quantity: 1 }],
