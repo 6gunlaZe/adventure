@@ -1429,7 +1429,7 @@ async function handleBossZap() {
             }
 
             let isHaizStandingStill = (now - haizLastPos.time) >= 30000;
-            let hardreset = (now - haizLastPos.time) >= 60000;
+            let hardreset = (now - haizLastPos.time) >= 90000;
 
             // 2. TÌM BOSS THEO THỨ TỰ ƯU TIÊN
             let targetBoss = null;
