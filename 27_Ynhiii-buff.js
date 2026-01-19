@@ -1406,7 +1406,7 @@ let haizLastPos = { x: 0, y: 0, time: Date.now() };
 async function handleBossZap() {
     // Thứ tự trong mảng này chính là thứ tự ưu tiên (Stompy cao nhất)
     const bossList = ["stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin"];
-    const delay = 5000;
+    const delay = 1000;
     const haiz = get_player("haiz");
     const gun = getOtherPartyMember();
 
@@ -1428,7 +1428,7 @@ async function handleBossZap() {
                 haizLastPos = { x: haiz.x, y: haiz.y, time: now };
             }
 
-            let isHaizStandingStill = (now - haizLastPos.time) >= 20000;
+            let isHaizStandingStill = (now - haizLastPos.time) >= 30000;
 
             // 2. TÌM BOSS THEO THỨ TỰ ƯU TIÊN
             let targetBoss = null;
