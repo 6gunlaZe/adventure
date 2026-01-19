@@ -1475,7 +1475,7 @@ handleBossZap();
 
 
 async function ZapCase() {
-    const quaiyeu = ["crabxx","snowman"]; /// những quái mà chỉ nhận dame 1
+    const quaiyeu = ["crabxx","snowman","wabbit"]; /// những quái mà chỉ nhận dame 1
     const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro"]; // Danh sách tự động hút khi đủ có team
 
     const delay = 350;
@@ -1483,7 +1483,7 @@ async function ZapCase() {
     var gun = getOtherPartyMember();
 
     try {
-        if (!character.rip && !smart.moving && character.map != "spider_instance") {
+        if (!character.rip) {
             
             // MODULE: Check đủ 3 người (Check haiz và gun trong tầm)
             const isFullTeam = (haiz && gun && distance(character, haiz) < 150 && distance(character, gun) < 250);
