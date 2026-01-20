@@ -787,10 +787,19 @@ if(smart.moving)return
 var monster
 
         monster = get_targeted_monster() 
-
+	
+// Đếm số lượng quái vật trong tầm đánh
+let nearby_monsters_count = 0;
+for (let id in parent.entities) {
+    let entity = parent.entities[id];
+    if (entity.type === "monster" && distance(character, entity) < character.range && entity.visible) {
+        nearby_monsters_count++;
+    }
+}
 
 
 if (monster && character.cc < 100) {
+	
     // Ưu tiên trang bị luck nếu máu quái thấp
     if (monster.hp < 15000 && monster.target == character.name) {
         equipSet("luck");
@@ -802,8 +811,13 @@ if (monster && character.cc < 100) {
         } else if (monster.damage_type === "physical" && monster.attack > 3500 && monster.target == character.name) {
             equipSet("single_physical");
         } else {
-            // Mặc định nếu không rõ loại (hoặc khác magic/physical)
-            equipSet("single");
+            if (nearby_monsters_count >= 3) {
+                        equipSet('aoe'); 
+            }
+            else 
+			{
+				equipSet("single");
+			}
         }
     }
 }
