@@ -716,7 +716,7 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
     }
 }
 
-if (buoc == 8 || character.rip)
+if (buoc == 8 || character.hp < 2000)
 {
 	stop_character("Ynhi")	
 	stop_character(f2222)	
@@ -898,7 +898,7 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     }
 }
 
-if (buoc == 12 || character.rip) // Tăng lên 12 vì đã thêm 1 bước vào mảng
+if (buoc == 12 || character.hp < 2000) // Tăng lên 12 vì đã thêm 1 bước vào mảng
 {
 	stop_character("Ynhi")	
 	stop_character(tomplayer)	
@@ -906,7 +906,7 @@ if (buoc == 12 || character.rip) // Tăng lên 12 vì đã thêm 1 bước vào 
 	framtay = 0
     waitStartTime = null
 	smart_move({ map: "mansion", x: 0, y: -470 })
-	if (character.rip)parent.api_call("disconnect_character", {name: "haiz"});
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
@@ -1067,14 +1067,14 @@ const step = steps[index];
 
 	
 
-if (buoc1 == 8 || character.rip)
+if (buoc1 == 8 || character.hp < 2000)
 {
 	stop_character("Ynhi")	
 	stop_character(spiderlayer)	
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
-	if (character.rip)parent.api_call("disconnect_character", {name: "haiz"});
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
