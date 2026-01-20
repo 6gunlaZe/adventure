@@ -322,7 +322,7 @@ function on_draw(){  ///ham mac dinh game chay moi 60 lan 1s
 const muleItemsMap = {
     "6gunlaZe": ["snowball222"],
     "Ynhi": ["elixirfires"],
-	"haiz": ["tombkey111", "cryptkey","spiderkey"],
+	"haiz": ["tombkey", "cryptkey","spiderkey"],
 };
 
 // Hàm chính: xử lý gửi item cho toàn bộ mule trong cấu hình
