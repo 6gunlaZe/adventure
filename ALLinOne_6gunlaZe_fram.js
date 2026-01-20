@@ -2056,7 +2056,7 @@ setInterval(() => sendItems("haiz"), 30000);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 90;  // Thêm vào tầm đánh của quái để tránh xa hơn một chút
+const rangeBuffer = 70;  // Thêm vào tầm đánh của quái để tránh xa hơn một chút
 
 // How far away we want to consider monsters
 const calcRadius = 300;  // Bán kính xét quái để tránh
@@ -2262,7 +2262,7 @@ function getRange(entity) {
         
         calculatedRange = (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
         ////tùy chỉnh lại cho tay dài
-        if (calculatedRange > (character.range - 15)) {
+        if (calculatedRange > (character.range - 45)) {
             return character.range - 40;
         }
         return calculatedRange;
