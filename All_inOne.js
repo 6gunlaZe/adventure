@@ -714,16 +714,18 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
     if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
         buoc++;
     }
+
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
+
 }
 
-if (buoc == 8 || character.hp < 2000)
+if (buoc == 8)
 {
 	stop_character("Ynhi")	
 	stop_character(f2222)	
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "winterland", x: 1049, y: -2002 })
-	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 	
 }
@@ -897,9 +899,13 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
         buoc++;
     }
+	
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
+
+	
 }
 
-if (buoc == 12 || character.hp < 2000) // Tăng lên 12 vì đã thêm 1 bước vào mảng
+if (buoc == 12) // Tăng lên 12 vì đã thêm 1 bước vào mảng
 {
 	stop_character("Ynhi")	
 	stop_character(tomplayer)	
@@ -907,7 +913,6 @@ if (buoc == 12 || character.hp < 2000) // Tăng lên 12 vì đã thêm 1 bước
 	framtay = 0
     waitStartTime = null
 	smart_move({ map: "mansion", x: 0, y: -470 })
-	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
@@ -1064,18 +1069,20 @@ const step = steps[index];
     if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
         buoc1++;
     }
+	
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
+
 }
 
 	
 
-if (buoc1 == 8 || character.hp < 2000)
+if (buoc1 == 8)
 {
 	stop_character("Ynhi")	
 	stop_character(spiderlayer)	
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
-	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 
 
