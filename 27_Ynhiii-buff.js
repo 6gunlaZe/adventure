@@ -1505,7 +1505,7 @@ async function ZapCase() {
              entities.sort((a, b) => (a.target ? 1 : -1));
 
             // Thực hiện Zap (Điều kiện an toàn của bạn)
-            if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && gun) {
+            if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 ) {
                 if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > 4500 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")) {
                     for (const entity of entities) {
                         if (!is_on_cooldown("zapperzap")) {
