@@ -180,7 +180,7 @@ if (locate_item("tombkey") !== -1) {
         if (
             (
               (h >= 6 && h < 11) || (h >= 13 && h < 21)
-            ) && character.esize > 10 &&
+            ) && character.esize > 3 &&
             (
                  locate_item("tombkey") !== -1 || locate_item("spiderkey") !== -1 || locate_item("frozenkey11") !== -1
             )
