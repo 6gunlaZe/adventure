@@ -223,7 +223,7 @@ var bankItems = {
   ],
   pouchbow: [
     { bank: "items1", level: 9, quantity: 1 },
-   // { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
   // ===== ACCESSORIES =====
