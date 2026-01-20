@@ -723,6 +723,7 @@ if (buoc == 8 || character.hp < 2000)
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "winterland", x: 1049, y: -2002 })
+	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
 }
 	
 }
