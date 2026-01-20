@@ -729,9 +729,8 @@ if (buoc == 8 || character.rip)
 
 
 
-
-
 let startTime = null; // Thời gian bắt đầu đếm giờ
+let waitStartTime = null; // Biến thêm mới để tính 3 phút chờ
 let fieldgen0_position = null;
 let buoc = 0
 const tomplayer = '6gunlaZe';
@@ -744,29 +743,30 @@ function framTOMBgame() {
 	
 autoPartyCheck("Ynhi", tomplayer, 60000);
 
-  // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
-  if ((!member1 || !member2) && startTime === null) {
+ // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
+ if ((!member1 || !member2) && startTime === null) {
     startTime = Date.now(); // Lưu lại thời gian bắt đầu
-  }
+ }
 
-  // Nếu cả 2 thành viên đã có mặt, reset lại startTime
-  if (member1 && member2) {
+ // Nếu cả 2 thành viên đã có mặt, reset lại startTime
+ if (member1 && member2) {
     startTime = null; // Reset nếu có đủ 2 thành viên
-  }
+ }
 
-  // Kiểm tra nếu đã trôi qua 10 phút (600 giây)
-  if (startTime !== null && Date.now() - startTime >= 10 * 60 * 1000) {
+ // Kiểm tra nếu đã trôi qua 10 phút (600 giây)
+ if (startTime !== null && Date.now() - startTime >= 10 * 60 * 1000) {
     // Nếu quá 20 phút và vẫn thiếu thành viên, thực hiện hành động
 	stop_character("Ynhi")	
 	stop_character(tomplayer)	
 	buoc = 0
 	framtay = 0
 	startTime  = null
-  }
+    waitStartTime = null // Reset thời gian chờ
+ }
 
 
 	
-if(parent.party_list.includes(tomplayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+if(parent.party_list.includes(tomplayer) && (!member1 || get_nearest_monster({ type: "home" }) ) ){
 	send_cm(tomplayer,"tomb")	
 }
 
@@ -822,10 +822,12 @@ if ( character.map != "tomb")
 if ( character.map == "mansion" && distance(character, {x: 0, y: -470}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
     enter("tomb");
 	buoc = 1;
+    waitStartTime = null; // Reset khi vào map mới
 }
 
 // Danh sách bước đi kèm loại quái cần kiểm tra
 const steps = [
+    { x: 5, y: -32, monster: "waiting_area" }, // Bước 1 mới thêm
     { x: 312, y: -187, monster: "gbluepro" },
     { x: -231, y: 154, monster: "ggreenpro" },
     { x: -292, y: -312, monster: "gredpro" },
@@ -844,15 +846,27 @@ const steps = [
 
 if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
+    
+    // Xử lý riêng cho bước chờ 3 phút
+    if (step.monster === "waiting_area") {
+        if (distance(character, {x: step.x, y: step.y}) > 15) {
+            xmove(step.x, step.y);
+        } else {
+            if (waitStartTime === null) waitStartTime = Date.now();
+            if (Date.now() - waitStartTime >= 3 * 60 * 1000) {
+                buoc++;
+                waitStartTime = null;
+            }
+        }
+        return; // Dừng tại đây khi đang chờ
+    }
+
     // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
     const monster = get_nearest_monster({ type: step.monster });
 	
     if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
     else if (fieldgen0_position && monster && distance(character,monster) < character.range && monster.target && monster.target == character.name )kite_around_fieldgen(fieldgen0_position, 20);
     else if ( monster && distance(character,monster) > 10 && character.hp > 4000 )xmove(monster.real_x, monster.real_y);
-
-
-
 
 	
     if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
@@ -870,12 +884,13 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
     }
 }
 
-if (buoc == 11 || character.rip)
+if (buoc == 12 || character.rip) // Tăng lên 12 vì đã thêm 1 bước vào mảng
 {
 	stop_character("Ynhi")	
 	stop_character(tomplayer)	
 	buoc = 0
 	framtay = 0
+    waitStartTime = null
 	smart_move({ map: "mansion", x: 0, y: -470 })
 	if (character.rip)parent.api_call("disconnect_character", {name: "haiz"});
 }
@@ -884,7 +899,6 @@ if (buoc == 11 || character.rip)
 ///////////	
 	
 }
-
 
 
 
