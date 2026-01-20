@@ -203,7 +203,7 @@ var bankItems = {
   orbofdex: [{ bank: "items1", level: 2, quantity: 1 }],
   orbofstr: [{ bank: "items1", level: 2, quantity: 1 }],
   wbookhs: [{ bank: "items1", level: 1, quantity: 1 }],
-  starkillers: [{ bank: "items1", level: 4, quantity: 1 }],
+  starkillers: [{ bank: "items1", level: 0, quantity: 1 }],
   xpants: [{ bank: "items1", level: 4, quantity: 1 }],
   vgloves: [{ bank: "items1", level: 5, quantity: 1 }],
   xhelmet: [{ bank: "items1", level: 3, quantity: 1 }],
@@ -2044,7 +2044,7 @@ function compound_items() {
 /////////////////////////////////////////
 // autobuyponty
 
-var craftList = [ "smoke","cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8","cshell","shield","gcape","sparkstaff","candy1","candy0","carrot","dexamulet","fallen","ink","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "ololipop" , "supermittens" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "t2quiver" , "gem0" , "ornament" , "candycane" , "mistletoe" ,  ];
+var craftList = [ "smoke","cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8","cshell","shield","gcape","sparkstaff","candy1","candy0","carrot","dexamulet","fallen","ink","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "ololipop" , "supermittens" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "gem0" , "ornament" , "candycane" , "mistletoe" ,  ];
 
 
 function secondhands_handler(event) {
