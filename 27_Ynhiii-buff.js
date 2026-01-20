@@ -247,43 +247,38 @@ function on_magiport(name){
 }
 
 
-//////////////
+
+
 function on_cm(name, data) {
+    // 1. Phản hồi kỹ thuật (Heal) cho nhóm
+    if (["haiz", "6gunlaZe", "tienV", "LyThanhThu", nhanvatphu].includes(name)) {
+        if (data === "bosshelp") {
+            if (!is_on_cooldown("partyheal") && character.mp > 550) use_skill("partyheal");
+        }
+    }
 
+    // 2. Chỉ nhận lệnh từ Leader "haiz"
+    if (name === "haiz") {
+        // Lệnh vào cổng (Instance)
+        if (data === "goo" && character.map !== "crypt") enter("crypt", idmap);
+        if (data === "goo1" && character.map !== "tomb") enter("tomb", idmap);
+        if (data === "goo2" && character.map !== "winter_instance") enter("winter_instance", idmap);
+        if (data === "goo3" && character.map !== "spider_instance") enter("spider_instance", idmap);
 
-/////////////////////		
-	    if(name == "haiz" || name == "6gunlaZe" || name == "tienV" || name == "LyThanhThu" || name == nhanvatphu)
-	{
-       if(data == "bosshelp") {
+        // Lệnh cập nhật ID Map (nếu data là chuỗi đơn thuần)
+        if (typeof data === 'string' && !["goo", "goo1", "goo2", "goo3"].includes(data)) {
+            idmap = data;
+        }
 
- if (!is_on_cooldown("partyheal") && character.mp > 550)use_skill("partyheal");
-
-		 }
-
-	}
-///////////////////
-    if(name == "haiz"){
-
-		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
-		if (data == "goo1" && character.map != "tomb")enter("tomb",idmap);
-		if (data == "goo2" && character.map != "winter_instance")enter("winter_instance",idmap);
-		if (data == "goo3" && character.map != "spider_instance")enter("spider_instance",idmap);
-
-
-	}
-	
-	 if(name == "haiz" && data != "goo" && data != "goo1" && data != "goo2" && data != "goo3" && typeof data === 'string' ){
-     idmap = data
-
-	}
-	
-	 if(name == "haiz" && data != "goo" && data != "goo1" && data != "goo2" && data != "goo3"){
-     receivedData = data
-
-	}
-	
-	
+        // CẬP NHẬT TỌA ĐỘ: Chỉ nhận khi đúng là message: "location"
+        if (typeof data === 'object' && data.message === "location") {
+            receivedData = data; 
+        }
+    }
 }
+
+
+
 ////////////////////////////////
 /// check boss khi fram
 setInterval(function() {
