@@ -132,11 +132,11 @@ async function eventer() {
           Handelbossvip()
 	} else if (cryts > 0) {
           crytsgame()
+	} else if (crab > 0) {
+          crabgame()	
 	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
           Xmage()
-		  spider_game()
-	} else if (crab > 0) {
-          crabgame()		
+		  spider_game()	
     } else {
 		 handleHome();
         }
