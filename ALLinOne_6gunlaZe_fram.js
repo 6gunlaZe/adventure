@@ -1724,8 +1724,8 @@ if (name === "haiz") {
     else if (typeof data === "string" && !knownKeys.includes(data)) {
         idmap = data;
     }
-    // Mặc định: lưu vào receivedData
-    else {
+    // Chỉ lưu vào receivedData nếu data đúng là một object tọa độ
+    else if (typeof data === "object" && data.message === "location") {
         receivedData = data;
     }
 }
