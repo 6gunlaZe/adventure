@@ -645,13 +645,13 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
     }
 
     // --- CHIẾN THUẬT GỬI LỆNH ---
-    if (boss_fz && Date.now() - last_sent_cm > 15000) {
+    if (boss_fz && Date.now() - last_sent_cm > 25000) {
         send_cm("muaban", "assist_xmage");
         last_sent_cm = Date.now();
     }
 
     if (boss_fi && member1 && character.map === "winter_instance") {
-        if (Date.now() - last_sent_cm > 5000) {
+        if (Date.now() - last_sent_cm > 15000) {
             send_cm(Xmagelayer, "get_out"); 
             last_sent_cm = Date.now();
         }
