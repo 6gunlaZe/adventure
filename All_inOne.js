@@ -212,75 +212,79 @@ setInterval(() => {
 }, 60000); // mỗi 60 giây
 
 
+
 /************************************************
- * FRAMTAY FORCE SWITCH - NO CONFLICT VERSION
+ * FRAMTAY TOGGLE - COMPATIBLE VERSION
  ************************************************/
 (function () {
     const G = (typeof parent !== 'undefined' && parent.entities) ? parent : window;
-    const FT_BTN_ID = "ft_force_switch_unique"; // ID riêng biệt
-    
-    // Sử dụng bộ nhớ game để lưu trạng thái
-    if (G.ft_manual_on === undefined) G.ft_manual_on = false;
+    if (!G || !G.$) return;
 
-    function ft_render_button() {
-        $(`#${FT_BTN_ID}`).remove();
-        
-        // Vị trí top: 240px (để nằm giữa nút DMG 180px và các nút khác)
+    const $ = G.$;
+    const FT_ID = "framtay_manual_switch";
+    
+    // Lưu trạng thái vào G để không mất khi load lại script
+    if (G.ft_active === undefined) G.ft_active = false;
+
+    function buildFramtayUI() {
+        // Xóa cũ tạo mới
+        $(`#${FT_ID}`).remove();
+
+        // Tạo nút bấm nằm ở dưới nút DMG (top: 240px vì nút kia 180px + 50px + 10px cách)
         $("body").append(`
-            <div id="${FT_BTN_ID}" style="
-                position: fixed; 
-                top: 240px; 
-                right: 10px; 
-                width: 50px; 
-                height: 50px;
-                background: ${G.ft_manual_on ? '#e67e22' : 'rgba(0,0,0,0.85)'};
-                border: 3px solid ${G.ft_manual_on ? '#fff' : '#888'};
-                border-radius: 50%; 
-                color: #fff; 
-                display: flex; 
-                flex-direction: column;
-                align-items: center; 
-                justify-content: center; 
-                cursor: pointer; 
-                z-index: 10005;
-                font-family: sans-serif;
-                font-weight: bold; 
-                font-size: 10px; 
-                text-align: center; 
-                box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-                user-select: none;
+            <div id="${FT_ID}" style="
+                position:fixed; 
+                top:240px; 
+                right:10px; 
+                width:50px; 
+                height:50px; 
+                background:rgba(0,0,0,0.85); 
+                border:3px solid ${G.ft_active ? '#e67e22' : '#888'}; 
+                border-radius:50%; 
+                color:#fff; 
+                display:flex; 
+                flex-direction:column;
+                align-items:center; 
+                justify-content:center; 
+                cursor:pointer; 
+                z-index:10001; 
+                font-weight:bold; 
+                user-select:none;
+                box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                transition: all 0.2s;
             ">
-                <span style="font-size: 7px; opacity: 0.8;">FT</span>
-                <span id="ft_label_text" style="font-size: 11px;">${G.ft_manual_on ? 'ON' : 'OFF'}</span>
+                <span style="font-size:8px; opacity:0.7;">FT</span>
+                <span id="ft_state_text" style="font-size:15px; color:${G.ft_active ? '#e67e22' : '#fff'}">
+                    ${G.ft_active ? 'ON' : 'OFF'}
+                </span>
             </div>
         `);
 
-        $(`#${FT_BTN_ID}`).click(() => {
-            G.ft_manual_on = !G.ft_manual_on;
-            const isOn = G.ft_manual_on;
-            
-            // Cập nhật giao diện
-            $(`#${FT_BTN_ID}`).css({
-                "background": isOn ? "#e67e22" : "rgba(0,0,0,0.85)",
-                "border-color": isOn ? "#fff" : "#888"
-            });
-            $(`#ft_label_text`).text(isOn ? "ON" : "OFF");
+        // Xử lý click
+        $(`#${FT_ID}`).click(function() {
+            G.ft_active = !G.ft_active;
+            const active = G.ft_active;
 
-            // THỰC THI GÁN GIÁ TRỊ ĐÚNG 1 LẦN KHI CLICK
-            if (isOn) {
-                framtay = 1;
-                if(typeof game_log !== 'undefined') game_log("Framtay: Forced ON", "#55ff55");
+            // Cập nhật giao diện theo style của Damage Bar
+            $(this).css("border-color", active ? "#e67e22" : "#888");
+            $("#ft_state_text").text(active ? "ON" : "OFF").css("color", active ? "#e67e22" : "#fff");
+
+            // THỰC THI: Gán đúng 1 lần duy nhất khi bấm
+            if (active) {
+                G.framtay = 1; 
+                if (typeof framtay !== 'undefined') framtay = 1;
+                game_log("Framtay: Manual ON", "#e67e22");
             } else {
-                framtay = 0;
-                if(typeof game_log !== 'undefined') game_log("Framtay: Forced OFF", "#ff5555");
+                G.framtay = 0;
+                if (typeof framtay !== 'undefined') framtay = 0;
+                game_log("Framtay: Manual OFF", "#888");
             }
         });
     }
 
-    // Khởi tạo nút (đã đổi tên hàm thành ft_render_button để tránh trùng)
-    ft_render_button();
+    // Chạy hàm khởi tạo riêng (không trùng với initUI)
+    buildFramtayUI();
 })();
-
 
 
 async function checkGameEvents() {
