@@ -602,17 +602,47 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 
 
-
-
+const Xmagelayer = '6gunlaZe';
+let startTimeX = null; // Biến này để canh giờ cho Xmage
 
 function framXmage() {
 
- let member1 = get_player(f2222);
+ let member1 = get_player(Xmagelayer);
  let member2 = get_player("Ynhi");
-	autoPartyCheck("Ynhi", f2222, 60000);
+	autoPartyCheck("Ynhi", Xmagelayer, 60000);
+
+
+// 1. Nếu thiếu 1 trong 2 người, bắt đầu đếm giờ (nếu chưa đếm)
+ if ((!member1 || !member2) && startTimeX === null) {
+    startTimeX = Date.now(); 
+ }
+
+ // 2. Nếu đã đủ cả 2 người, reset đồng hồ về null
+ if (member1 && member2) {
+    startTimeX = null; 
+ }
+
+ // 3. Kiểm tra nếu đồng hồ đã chạy quá 10 phút (10 * 60 * 1000 miligiây)
+ if (startTimeX !== null && Date.now() - startTimeX >= 10 * 60 * 1000) {
+    
+    // Hành động khi quá thời gian:
+    stop_character("Ynhi");
+    stop_character(Xmagelayer);
+    buoc = 0; // Reset bước đi về 0
+    startTimeX = null; // Reset đồng hồ sau khi đã xử lý xong
+    
+    // Lệnh di chuyển về vị trí an toàn
+    smart_move({ map: "winterland", x: 1049, y: -2002 });
+    
+    return; // Dừng hàm tại đây, không chạy các lệnh đánh quái bên dưới nữa
+ }
+
+
+
 	
-if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm(f2222,"mage")	
+	
+if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(Xmagelayer,"mage")	
 }
 
 
@@ -625,14 +655,14 @@ if (character.map == "winter_instance" && (!member1 || !member2) ) {
         // Bước 1: Gửi ID map sau 1 giây
         setTimeout(function() {
             send_cm("Ynhi", character.in);
-            send_cm(f2222, character.in);
+            send_cm(Xmagelayer, character.in);
             // console.log("Sent ID: " + character.in);
         }, 1000);
         
         // Bước 2: Gửi lệnh vào map sau 2.5 giây
         setTimeout(function() {
             send_cm("Ynhi", "goo2");
-            send_cm(f2222, "goo2");
+            send_cm(Xmagelayer, "goo2");
             // console.log("Sent Command: goo1");
         }, 2500);
     }
@@ -733,7 +763,7 @@ if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
 if (buoc == 8)
 {
 	stop_character("Ynhi")	
-	stop_character(f2222)	
+	stop_character(Xmagelayer)	
 	buoc = 0
 	framtay = 0
 	smart_move({ map: "winterland", x: 1049, y: -2002 })
