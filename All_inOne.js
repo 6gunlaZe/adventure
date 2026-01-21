@@ -615,18 +615,29 @@ if(parent.party_list.includes(f2222) && (!member1 || get_nearest_monster({ type:
 	send_cm(f2222,"mage")	
 }
 
-if (character.map == "winter_instance" && (!member1 || !member2) )	
-{
-//send_cm("haiz1","goo2")
-send_cm("Ynhi","goo2")
-send_cm(f2222,"goo2")
 
+if (character.map == "winter_instance" && (!member1 || !member2) ) {
+    // Tăng lên 5 giây để chắc chắn các setTimeout trước đó đã chạy xong
+    if (Date.now() - last_sent_cm > 5000) {
+        
+        last_sent_cm = Date.now(); // Cập nhật ngay để chặn các lần gọi trùng lặp trong 5s tới
 
-//send_cm("haiz1",character.in)
-send_cm("Ynhi",character.in)
-send_cm(f2222,character.in)
-
+        // Bước 1: Gửi ID map sau 1 giây
+        setTimeout(function() {
+            send_cm("Ynhi", character.in);
+            send_cm(f2222, character.in);
+            // console.log("Sent ID: " + character.in);
+        }, 1000);
+        
+        // Bước 2: Gửi lệnh vào map sau 2.5 giây
+        setTimeout(function() {
+            send_cm("Ynhi", "goo2");
+            send_cm(f2222, "goo2");
+            // console.log("Sent Command: goo1");
+        }, 2500);
+    }
 }
+	
 
 if(smart.moving)return	
 var monster
