@@ -126,7 +126,7 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","vitearring","hbow","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff", "throwingstars","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","vitearring","hbow","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbreeches","wgloves",  "wshoes" , "wcap","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
