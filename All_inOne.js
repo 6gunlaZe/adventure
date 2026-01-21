@@ -602,9 +602,139 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 
 
-const Xmagelayer = '6gunlaZe';
-let startTimeX = null; // Biến này để canh giờ cho Xmage
 
+
+const Xmagelayer = '6gunlaZe';
+let startTimeX = null;
+
+function framXmage() {
+    let member1 = get_player(Xmagelayer);
+    let member2 = get_player("Ynhi");
+
+// Nếu nhân vật phụ có trong party mà không thấy trên màn hình, hoặc nó đang ở nhà (map main)
+if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+	send_cm(Xmagelayer,"mage")	
+}
+	
+	
+    // Check các loại Boss hiện diện
+    let boss_fz = get_nearest_monster({ type: "xmagefz" }); // Stage 1
+    let boss_fi = get_nearest_monster({ type: "xmagefi" }); // Stage 2
+    let boss_fn = get_nearest_monster({ type: "xmagefn" }); // Stage 3
+    let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
+    
+    let current_boss = boss_fz || boss_fi || boss_fn || boss_x;
+
+    autoPartyCheck("Ynhi", Xmagelayer, 60000);
+
+    // --- LOGIC TIMEOUT 10 PHÚT (Bỏ qua nếu là Stage 2) ---
+    if ((!member1 || !member2) && !boss_fi && startTimeX === null) {
+        startTimeX = Date.now();
+    }
+    if ((member1 && member2) || boss_fi) {
+        startTimeX = null; 
+    }
+    if (startTimeX !== null && Date.now() - startTimeX >= 10 * 60 * 1000) {
+        stop_character("Ynhi"); stop_character(Xmagelayer);
+        buoc = 0; startTimeX = null;
+        smart_move({ map: "winterland", x: 1049, y: -2002 });
+        return;
+    }
+
+    // --- CHIẾN THUẬT GỬI LỆNH ---
+    if (boss_fz && Date.now() - last_sent_cm > 15000) {
+        send_cm("muaban", "assist_xmage");
+        last_sent_cm = Date.now();
+    }
+
+    if (boss_fi && member1 && character.map === "winter_instance") {
+        if (Date.now() - last_sent_cm > 5000) {
+            send_cm(Xmagelayer, "get_out"); 
+            last_sent_cm = Date.now();
+        }
+    }
+
+    // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---
+    if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
+        if (Date.now() - last_sent_cm > 5000) {
+            last_sent_cm = Date.now();
+            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(Xmagelayer, character.in); }, 1000);
+            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(Xmagelayer, "goo2"); }, 2500);
+        }
+    }
+
+    if (smart.moving) return;
+
+    // --- TRANG BỊ THEO QUÁI ---
+    let target = get_targeted_monster();
+    if (target && character.cc < 100) {
+
+            if (character.s.burned || target.mtype === "xmagefi") equipSet("def_fire");
+            else if (target.damage_type === "magical" && target.attack > 3500 ) equipSet("single_Magic");
+			else if (target.damage_type === "physical" && target.attack > 3500 && target.target == character.name)	equipSet("single_physical");
+            else equipSet("single");
+        
+    }
+
+
+
+
+
+	
+
+    // --- DI CHUYỂN NGOÀI MAP ---> tới vị trí hầm ngục
+    if (character.map != "winter_instance") {
+        if (character.map != "winterland") {
+            smart_move({ map: "winterland", x: 1049, y: -2002 });
+        } else {
+            if (distance(character, { x: 1049, y: -2002 }) < 50) {
+                if (member1 && member2) enter("winter_instance");
+            } else {
+                xmove(1049, -2002);
+            }
+        }
+        return;
+    }
+
+    // --- LOGIC CHIẾN ĐẤU TRONG INSTANCE ---
+    if (character.map === "winter_instance") {
+        
+        // Ưu tiên Stage 4: Dùng Fieldgen0 ngay lập tức
+        if (boss_x) {
+            let gen = get_nearest_monster({ type: "fieldgen0" });
+            if (!gen) {
+                let fg_item = locate_item("fieldgen0");
+                if (fg_item !== -1) use(fg_item);
+            }
+            if (gen && distance(character, boss_x) < character.range) {
+                kite_around_fieldgen(gen, 30);
+            }
+        }
+
+        // Tấn công Boss hiện có
+        if (current_boss) {
+            if (distance(character, current_boss) > character.range) {
+                xmove(current_boss.real_x, current_boss.real_y);
+            }
+        } else {
+            // Nếu không thấy boss nào, đi tới điểm tập trung
+            if (distance(character, { x: -8, y: 68 }) > 20) {
+                xmove(-8, 68);
+            } else {
+                // Nếu đã đứng ở điểm tập trung mà không có boss -> Xong instance
+                if (buoc < 4) buoc++; 
+                if (buoc >= 4) { // Đã quét qua các stage
+                   smart_move({ map: "winterland", x: 1049, y: -2002 });
+                   buoc = 0;
+                }
+            }
+        }
+
+        if (character.hp < 2000) parent.api_call("disconnect_character", { name: character.name });
+    }
+}
+
+/*
 function framXmage() {
 
  let member1 = get_player(Xmagelayer);
@@ -771,6 +901,8 @@ if (buoc == 8)
 	
 }
 
+
+*/
 
 
 let startTime = null; // Thời gian bắt đầu đếm giờ
