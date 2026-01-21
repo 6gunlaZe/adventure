@@ -212,60 +212,74 @@ setInterval(() => {
 }, 60000); // mỗi 60 giây
 
 
-
+/************************************************
+ * FRAMTAY FORCE SWITCH - NO CONFLICT VERSION
+ ************************************************/
 (function () {
     const G = (typeof parent !== 'undefined' && parent.entities) ? parent : window;
-    const BTN_ID = "framtay_trigger_btn";
+    const FT_BTN_ID = "ft_force_switch_unique"; // ID riêng biệt
     
-    // Trạng thái nút
-    if (G.is_framtay_on === undefined) G.is_framtay_on = false;
+    // Sử dụng bộ nhớ game để lưu trạng thái
+    if (G.ft_manual_on === undefined) G.ft_manual_on = false;
 
-    function initUI() {
-        $(`#${BTN_ID}`).remove();
+    function ft_render_button() {
+        $(`#${FT_BTN_ID}`).remove();
+        
+        // Vị trí top: 240px (để nằm giữa nút DMG 180px và các nút khác)
         $("body").append(`
-            <div id="${BTN_ID}" style="
-                position: fixed; top: 300px; right: 10px; width: 55px; height: 55px;
-                background: ${G.is_framtay_on ? '#e67e22' : '#333'};
-                border: 3px solid ${G.is_framtay_on ? '#fff' : '#888'};
-                border-radius: 50%; color: #fff; display: flex; flex-direction: column;
-                align-items: center; justify-content: center; cursor: pointer; z-index: 10005;
-                font-family: sans-serif; font-weight: bold; font-size: 10px; text-align: center;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.5); user-select: none;
+            <div id="${FT_BTN_ID}" style="
+                position: fixed; 
+                top: 240px; 
+                right: 10px; 
+                width: 50px; 
+                height: 50px;
+                background: ${G.ft_manual_on ? '#e67e22' : 'rgba(0,0,0,0.85)'};
+                border: 3px solid ${G.ft_manual_on ? '#fff' : '#888'};
+                border-radius: 50%; 
+                color: #fff; 
+                display: flex; 
+                flex-direction: column;
+                align-items: center; 
+                justify-content: center; 
+                cursor: pointer; 
+                z-index: 10005;
+                font-family: sans-serif;
+                font-weight: bold; 
+                font-size: 10px; 
+                text-align: center; 
+                box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+                user-select: none;
             ">
-                <span style="font-size: 8px; opacity: 0.8;">FRAMTAY</span>
-                <span id="ft_label" style="font-size: 12px;">${G.is_framtay_on ? 'ON' : 'OFF'}</span>
+                <span style="font-size: 7px; opacity: 0.8;">FT</span>
+                <span id="ft_label_text" style="font-size: 11px;">${G.ft_manual_on ? 'ON' : 'OFF'}</span>
             </div>
         `);
 
-        $(`#${BTN_ID}`).click(() => {
-            G.is_framtay_on = !G.is_framtay_on;
-            const isOn = G.is_framtay_on;
+        $(`#${FT_BTN_ID}`).click(() => {
+            G.ft_manual_on = !G.ft_manual_on;
+            const isOn = G.ft_manual_on;
             
-            // 1. Cập nhật giao diện
-            $(`#${BTN_ID}`).css({
-                "background": isOn ? "#e67e22" : "#333",
+            // Cập nhật giao diện
+            $(`#${FT_BTN_ID}`).css({
+                "background": isOn ? "#e67e22" : "rgba(0,0,0,0.85)",
                 "border-color": isOn ? "#fff" : "#888"
             });
-            $(`#ft_label`).text(isOn ? "ON" : "OFF");
+            $(`#ft_label_text`).text(isOn ? "ON" : "OFF");
 
-            // 2. THỰC THI ĐÚNG 1 LẦN KHI BẤM
+            // THỰC THI GÁN GIÁ TRỊ ĐÚNG 1 LẦN KHI CLICK
             if (isOn) {
                 framtay = 1;
-                game_log("Framtay: Forced ON", "#55ff55");
+                if(typeof game_log !== 'undefined') game_log("Framtay: Forced ON", "#55ff55");
             } else {
                 framtay = 0;
-                game_log("Framtay: Forced OFF", "#ff5555");
+                if(typeof game_log !== 'undefined') game_log("Framtay: Forced OFF", "#ff5555");
             }
         });
     }
 
-    // KHÔNG dùng setInterval để gán framtay nữa 
-    // để tránh việc nó ép giá trị liên tục, làm logic của bạn bị "tù".
-
-    initUI();
+    // Khởi tạo nút (đã đổi tên hàm thành ft_render_button để tránh trùng)
+    ft_render_button();
 })();
-
-
 
 
 
