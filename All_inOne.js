@@ -3726,6 +3726,10 @@ async function BosscheckHPMYSv11(monsters, HP) {
 
 
 async function checkCrabxx() {
+
+   if (events || framtay == 1) return	
+
+	
 	const monsters = ["crabxx"];
 	const hpThreshold = 900000;
 
