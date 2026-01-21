@@ -606,6 +606,8 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 const Xmagelayer = '6gunlaZe';
 let startTimeX = null;
+let boss_wait_start = null; // Biến lưu thời gian bắt đầu chờ boss// chống mấy dấu khi boss bay
+
 
 function framXmage() {
     let member1 = get_player(Xmagelayer);
@@ -636,7 +638,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
     }
     if (startTimeX !== null && Date.now() - startTimeX >= 10 * 60 * 1000) {
         stop_character("Ynhi"); stop_character(Xmagelayer);
-        buoc = 0; startTimeX = null;
+        startTimeX = null;
         smart_move({ map: "winterland", x: 1049, y: -2002 });
         return;
     }
@@ -711,24 +713,41 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
             }
         }
 
-        // Tấn công Boss hiện có
-        if (current_boss) {
+// Nếu không thấy boss nào (current_boss là null)
+        if (!current_boss) {
+            // 1/ Di chuyển tới điểm tập trung nếu đang ở xa
+            if (distance(character, { x: -8, y: 68 }) > 20) {
+                xmove(-8, 68);
+                boss_wait_start = null; // Reset thời gian chờ khi đang di chuyển
+            } 
+            else {
+                // Đã đứng tại điểm tập trung, bắt đầu đếm giờ nếu chưa đếm
+                if (boss_wait_start === null) {
+                    boss_wait_start = Date.now();
+                }
+
+                // Tính thời gian đã trôi qua
+                let seconds_passed = (Date.now() - boss_wait_start) / 1000;
+
+                // 2/ Nếu sau 5 giây mà vẫn không có boss -> Xong instance
+                if (seconds_passed >= 5) {
+                    smart_move({ map: "winterland", x: 1049, y: -2002 });
+                   	stop_character("Ynhi")	
+	                stop_character(Xmagelayer)	
+	                framtay = 0
+                    boss_wait_start = null; // Reset biến chờ
+                }
+            }
+        } else {
+            // Nếu Boss xuất hiện, reset lại biến chờ để dùng cho lần sau (stage tiếp theo)
+            boss_wait_start = null;
+            
+            // Tấn công Boss như cũ
             if (distance(character, current_boss) > character.range) {
                 xmove(current_boss.real_x, current_boss.real_y);
             }
-        } else {
-            // Nếu không thấy boss nào, đi tới điểm tập trung
-            if (distance(character, { x: -8, y: 68 }) > 20) {
-                xmove(-8, 68);
-            } else {
-                // Nếu đã đứng ở điểm tập trung mà không có boss -> Xong instance
-                if (buoc < 4) buoc++; 
-                if (buoc >= 4) { // Đã quét qua các stage
-                   smart_move({ map: "winterland", x: 1049, y: -2002 });
-                   buoc = 0;
-                }
-            }
         }
+		
 
         if (character.hp < 2000) parent.api_call("disconnect_character", { name: character.name });
     }
