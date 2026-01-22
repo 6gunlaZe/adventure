@@ -1472,7 +1472,7 @@ function Xmage() {
 if (character.map != "winter_instance" )return
 
 const host = get_player("haiz");
-	if (host && distance(character, host) > 100 ) smart_move({ map: "winter_instance", x: -8, y: 68 });;
+	if (host && distance(character, host) > 100 ) smart_move({ map: "winter_instance", x: host.real_x, y: host.real_y });;
 	
 	
 
