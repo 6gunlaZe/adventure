@@ -512,286 +512,70 @@ vanchuyenHPMP = 0
 
 
 
-
-
-////////////// nhan lenh giui tu cac nhan vat khác 
 function on_cm(name, data) {
+    // 1. Cập nhật bảng ID ngay khi nhận tin nhắn để lấy giá trị nhanvatphu mới nhất
+    const transport_ids = { 
+        "nhiY": 2, 
+        "haiz": 3, 
+        "Ynhi": 4, 
+        "tienV": 5 
+    };
+    
+    // Nếu nhanvatphu tồn tại, gán ID là 1
+    if (nhanvatphu) {
+        transport_ids[nhanvatphu] = 1;
+    }
 
-    if(name == "nhiY")
-	{
-       if(data == "full") {
-		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
-		   {
-    smart_move(parent.party["nhiY"]); 
-			   game_log("go nhii !!!!!!");
-             vanchuyen = 1
-			   		 vanchuyenbank += 1
-		   }
-		 }
+    const collectors = Object.keys(transport_ids);
 
-	}
-	
-	if(name == "nhiY")
-	{
-       if(data == "hp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuyhp();
-    });		   
-			   
-    smart_move(parent.party["nhiY"]); 
-			   game_log("go nhiY !!!!!!");
-             vanchuyen = 1
-			  vanchuyenHPMP = 2
-		   }
-		 }
-		
-		if(data == "mp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuymp();
-    });		   
-			   
-    smart_move(parent.party["nhiY"]); 
-			   game_log("go nhiY !!!!!!");
-             vanchuyen = 1
-			  vanchuyenHPMP = 2
-		   }
-		 }
-		
-		
-		
-		
-		
+    // 2. Logic vận chuyển
+    if (collectors.includes(name)) {
+        if (data == "full") {
+            if (vanchuyen == 0 && checktui == 0 && !is_moving(character)) {
+                smart_move(parent.party[name]);
+                game_log("Đang đến lấy đồ từ " + name);
+                vanchuyen = 1;
+                vanchuyenbank += 1;
+            }
+        }
 
-	}
-	
-	
-/////////////////////		
-	    if(name == "haiz")
-	{
-       if(data == "full") {
-		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
-		   {
-    smart_move(parent.party["haiz"]); 
-			   game_log("go haiz !!!!!!");
-             vanchuyen = 1
-			   		 vanchuyenbank += 1
-		   }
-		 }
+        if (data == "hp" || data == "mp") {
+            if (vanchuyen == 0 && checktui == 0) {
+                smart_move({ map: "main", x: -200, y: -110 }, () => {
+                    if (data == "hp") checkbuyhp();
+                    else checkbuymp();
+                    smart_move(parent.party[name]); 
+                });
+                game_log("Mua và tiếp tế cho " + name);
+                vanchuyen = 1;
+                vanchuyenHPMP = transport_ids[name];
+            }
+        }
+    }
 
-	}
-	
-	
-	
-	    if(name == "haiz")
-	{
-       if(data == "hp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuyhp();
-    });		   
-			   
-    smart_move(parent.party["haiz"]); 
-			   game_log("go haiz !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 3
-		   }
-		 }
-		
-	       if(data == "mp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuymp();
-    });		   
-			   
-    smart_move(parent.party["haiz"]); 
-			   game_log("go haiz !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 3
-		   }
-		 }	
-		
-		
-		
+    // 3. Logic riêng cho "haiz" (Forwarding + assist_xmage)
+    if (name == "haiz") {
+        if (!["mp", "hp", "full"].includes(data)) {
+            
+            // Xử lý lệnh chiến thuật
+            if (data == "assist_xmage") {
+                game_log("Hỗ trợ Boss Xmage theo lệnh haiz!");
+                // Thêm hành động của bạn ở đây nếu cần (vd: chạy tới hang tuyết)
+            }
 
-	}
+            // Chuyển tiếp lệnh
+            if (nhanvatphu) send_cm(nhanvatphu, data);
+            send_cm("tienV", data);
+        }
+    }
 
- if(name == "haiz" && data != "mp" && data != "hp" && data != "full"){
-	 send_cm(nhanvatphu,data)
-	 	 send_cm("tienV",data)
-
- }
-
-	
-	
-
-///////////////////////////	
-		    if(name == nhanvatphu)
-	{
-       if(data == "full") {
-		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
-		   {
-    smart_move(parent.party[nhanvatphu]); 
-			   game_log("go nhanvatphu !!!!!!");
-             vanchuyen = 1
-			   		 vanchuyenbank += 1
-		   }
-		 }
-
-
-
-        if(data == "phoenix1")send_cm(hostname,"boss5") 
-		
-	}
-	
-	if(name == nhanvatphu)
-	{
-       if(data == "hp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuyhp();
-    });		   
-			   
-    smart_move(parent.party[nhanvatphu]); 
-			   game_log("go nhanvatphu !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 1
-		   }
-		 }
-
-	       if(data == "mp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuymp();
-    });		   
-			   
-    smart_move(parent.party[nhanvatphu]); 
-			   game_log("go nhanvatphu !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 1
-		   }
-		 }	
-		
-		
-		
-		
-	}	
-	
-///////////////////////////	
-    if(name == "Ynhi")
-	{
-       if(data == "full") {
-		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
-		   {
-    smart_move(parent.party["Ynhi"]); 
-			   game_log("go Ynhi !!!!!!");
-             vanchuyen = 1
-			   		 vanchuyenbank += 1
-		   }
-		 }
-
-	}
-	
-	if(name == "Ynhi")
-	{
-       if(data == "hp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuyhp();
-    });		   
-			   
-    smart_move(parent.party["Ynhi"]); 
-			   game_log("go Ynhi !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 4
-		   }
-		 }
-	  if(data == "mp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuymp();
-    });		   
-			   
-    smart_move(parent.party["Ynhi"]); 
-			   game_log("go Ynhi !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 4
-		   }
-		 }	
-		
-		
-		
-		
-
-	}
-	
-	
-/////////////////////	
-/////////////////////		
-	    if(name == "tienV")
-	{
-       if(data == "full") {
-		   if (vanchuyen == 0 && checktui == 0 && !is_moving(character) )
-		   {
-    smart_move(parent.party["tienV"]); 
-			   game_log("go tienV !!!!!!");
-             vanchuyen = 1
-			   		 vanchuyenbank += 1
-		   }
-		 }
-
-	}
-	
-	
-	
-	    if(name == "tienV")
-	{
-       if(data == "hp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuyhp();
-    });		   
-			   
-    smart_move(parent.party["tienV"]); 
-			   game_log("go tienV !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 5
-		   }
-		 }
-	       if(data == "mp") {
-		   if (vanchuyen == 0 && checktui == 0)
-		   {
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-  checkbuymp();
-    });		   
-			   
-    smart_move(parent.party["tienV"]); 
-			   game_log("go tienV !!!!!!");
-             vanchuyen = 1
-			   vanchuyenHPMP = 5
-		   }
-		 }	
-		
-		
-		
-
-	}	
-	
-
-///////////////////////////		
-	
-		
+    // 4. Logic đặc biệt của nhanvatphu (sử dụng biến động)
+    if (nhanvatphu && name == nhanvatphu && data == "phoenix1") {
+        send_cm(hostname, "boss5");
+    }
 }
+
+
 
 
 function mluckallifNOMLuck() {
