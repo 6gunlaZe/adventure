@@ -1466,17 +1466,15 @@ function Handelbossvip() {
 
 
 
-let out_instance_Xmage = false;
 
 function Xmage() {
 	
 if (character.map != "winter_instance" )return
+
+const host = get_player("haiz");
+	if (host)kite(host, 30);
 	
-    let boss_fire = get_nearest_monster({ type: "xmagefi" });
-// 1. Nếu nhận lệnh rút lui (thường là ở Stage 2 Boss Lửa)
-    if (out_instance_Xmage && character.map === "winter_instance" && boss_fire ) {
-            smart_move({ map: "winterland", x: 1049, y: -2002 }); // Chạy ra ngoài
-    }
+	
 
 }
 
@@ -1707,7 +1705,6 @@ if (name === "haiz") {
         bossvip4: () => { bossvip = 4; },
         bossvip5: () => { bossvip = 5; },		
         crabxx: () => { crab = 1; },
-        get_out: () => { out_instance_Xmage = true; },
 		// cứ thêm lệnh mới -> gán biến là xài đc
 
 
