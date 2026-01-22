@@ -512,7 +512,6 @@ vanchuyenHPMP = 0
 
 
 
-let XmageSP = 0
 function on_cm(name, data) {
     // 1. Cấu hình ID vận chuyển động (Lấy nhanvatphu mới nhất từ Party)
     const transport_ids = { "nhiY": 2, "haiz": 3, "Ynhi": 4, "tienV": 5 };
@@ -535,7 +534,6 @@ function on_cm(name, data) {
                     if (distance(character, { x: 1049, y: -2002 }) < 50) {
                         game_log("Đang vào đúng hầm ngục của Haiz...");
                         enter("winter_instance", dungeon_key); 
-						XmageSP = 1;
                     } else {
                         game_log("không đúng vị trí");
                     }
@@ -593,32 +591,31 @@ function on_cm(name, data) {
 
 
 
-// Khai báo biến toàn cục (Global)
+// hỗ trợ thoát Xmage khi xong việc
 var no_boss_timer = 0;
 
 setInterval(() => {
 
     if (character.map === "winter_instance") {
  
-        let boss = get_nearest_monster({ name: "Xmage" });
+        let boss = get_nearest_monster({ type: "xmagefz" });
         
         if (!boss) {
             no_boss_timer++;
-            // Đợi 5 giây (5 lần lặp) không thấy boss mới thoát
-            if (no_boss_timer >= 5) {
+            // Đợi 2 giây (2 lần lặp) không thấy boss mới thoát
+            if (no_boss_timer >= 2) {
                 game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
                 
-                parent.leave_instance();
-                
+             smart_move({ map: "winterland", x: 1049, y: -2002 });                
                 // TẮT TRẠNG THÁI: Cho phép các script khác chạy lại
-                XmageSP = 0; 
                 no_boss_timer = 0;
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
         }
 
-    } 
+    }
+
 
 }, 1000); // Vòng lặp chạy mỗi 1 giây
 
