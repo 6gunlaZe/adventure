@@ -156,15 +156,15 @@ async function eventer() {
 
 // chỉ chạy được 1 hầm ngục / 1 lần / 1 key
 
-if (locate_item("tombkey") !== -1) {
+if (count_item("tombkey") > 0) {
     // có tombkey → đánh tomb
     framTOMBgame();
 
-} else if (locate_item("spiderkey") !== -1) {
+} else if (count_item("spiderkey") > 0) {
     // có spiderkey → đánh spider
     spidergame();
 
-} else if (locate_item("frozenkey") !== -1) {
+} else if (count_item("frozenkey") > 0) {
     // có frozenkey → đánh winter
     framXmage();
 }
@@ -182,7 +182,7 @@ if (locate_item("tombkey") !== -1) {
               (h >= 6 && h < 11) || (h >= 13 && h < 21)
             ) && character.esize > 3 &&
             (
-                 locate_item("tombkey") !== -1 || locate_item("spiderkey") !== -1 || locate_item("frozenkey11") !== -1
+                 count_item("tombkey") > 1 || count_item("spiderkey") > 1 || count_item("frozenkey111") > 1
             )
         ) {
              framtay = 1;
@@ -598,7 +598,16 @@ function kite_around_fieldgen(fieldgen_pos, radius = 60) {
 
 
 
-
+function count_item(itemName) {
+    let count = 0;
+    for (let i = 0; i < character.items.length; i++) {
+        let item = character.items[i];
+        if (item && item.name === itemName) {
+            count += (item.q || 1); // item.q là số lượng (quantity) nếu item có cộng dồn
+        }
+    }
+    return count;
+}
 
 
 
