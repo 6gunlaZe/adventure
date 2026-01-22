@@ -154,23 +154,21 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
 
-// 1. Lấy số lượng các loại key
-    const keys = [
-        { name: "tomb", count: count_item("tombkey"), action: framTOMBgame },
-        { name: "spider", count: count_item("spiderkey"), action: spidergame },
-        { name: "frozen", count: count_item("frozenkey"), action: framXmage }
-    ];
+         const keys = [
+        { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
+        { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
+        { name: "frozen", count: count_item("frozenkey"), action: framXmage, map: "winter_instance" }
+        ].sort((a, b) => b.count - a.count);
 
-    // 2. Sắp xếp mảng theo số lượng giảm dần (thằng nào nhiều nhất lên đầu)
-    keys.sort((a, b) => b.count - a.count);
+    const curMap = character.map;
+    const currentJob = keys.find(k => k.map === curMap);
 
-    // 3. Chọn thằng đầu tiên nếu nó có ít nhất 1 key
     if (keys[0].count > 0) {
-        keys[0].action(); 
+        keys[0].action();
     } else {
-        // Nếu đã hết sạch key thì tắt framtay để quay về handleHome
-        framtay = 0;
+        currentJob ? currentJob.action() : framtay = 0;
     }
+		
 
 	} else if (bossvip > 0) {
             VIPBosses();
