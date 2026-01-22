@@ -154,21 +154,23 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
 
-// chỉ chạy được 1 hầm ngục / 1 lần / 1 key
+// 1. Lấy số lượng các loại key
+    const keys = [
+        { name: "tomb", count: count_item("tombkey"), action: framTOMBgame },
+        { name: "spider", count: count_item("spiderkey"), action: spidergame },
+        { name: "frozen", count: count_item("frozenkey"), action: framXmage }
+    ];
 
-if (count_item("tombkey") > 0) {
-    // có tombkey → đánh tomb
-    framTOMBgame();
+    // 2. Sắp xếp mảng theo số lượng giảm dần (thằng nào nhiều nhất lên đầu)
+    keys.sort((a, b) => b.count - a.count);
 
-} else if (count_item("spiderkey") > 0) {
-    // có spiderkey → đánh spider
-    spidergame();
-
-} else if (count_item("frozenkey") > 0) {
-    // có frozenkey → đánh winter
-    framXmage();
-}
-/////////
+    // 3. Chọn thằng đầu tiên nếu nó có ít nhất 1 key
+    if (keys[0].count > 0) {
+        keys[0].action(); 
+    } else {
+        // Nếu đã hết sạch key thì tắt framtay để quay về handleHome
+        framtay = 0;
+    }
 
 	} else if (bossvip > 0) {
             VIPBosses();
@@ -182,7 +184,7 @@ if (count_item("tombkey") > 0) {
               (h >= 6 && h < 11) || (h >= 13 && h < 21)
             ) && character.esize > 3 &&
             (
-                 count_item("tombkey") > 1 || count_item("spiderkey") > 1 || count_item("frozenkey111") > 1
+                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || count_item("frozenkey111") > 0
             )
         ) {
              framtay = 1;
