@@ -602,8 +602,8 @@ setInterval(() => {
         
         if (!boss) {
             no_boss_timer++;
-            // Đợi 2 giây (2 lần lặp) không thấy boss mới thoát
-            if (no_boss_timer >= 2) {
+            // Đợi 2 giây (20 lần lặp) không thấy boss mới thoát
+            if (no_boss_timer >= 20) {
                 game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
                 
              smart_move({ map: "winterland", x: 1049, y: -2002 });                
@@ -612,12 +612,13 @@ setInterval(() => {
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
+			xmove(boss.real_x, boss.real_y);
         }
 
     }
 
 
-}, 1000); // Vòng lặp chạy mỗi 1 giây
+}, 100); // Vòng lặp chạy mỗi 1 giây
 
 
 
