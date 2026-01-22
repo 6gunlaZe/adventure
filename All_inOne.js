@@ -613,7 +613,7 @@ function count_item(itemName) {
 
 
 
-
+const XmagelayerFire = 'nhiY';
 const Xmagelayer = '6gunlaZe';
 let startTimeX = null;
 let boss_wait_start = null; // Biến lưu thời gian bắt đầu chờ boss// chống mấy dấu khi boss bay
@@ -636,7 +636,9 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
     let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
     
     let current_boss = boss_fz || boss_fi || boss_fn || boss_x;
-
+   // Chế độ cho thêm pháp sư  
+   // if (boss_fi)autoPartyCheck("Ynhi", XmagelayerFire, 60000)
+   // else autoPartyCheck("Ynhi", Xmagelayer, 60000);
     autoPartyCheck("Ynhi", Xmagelayer, 60000);
 
     // --- LOGIC TIMEOUT 10 PHÚT (Bỏ qua nếu là Stage 2) ---
@@ -661,13 +663,10 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
         });
         last_sent_cm = Date.now();
     }
-
-    if (boss_fi && member1 && character.map === "winter_instance") {
-        if (Date.now() - last_sent_cm > 15000) {
-            send_cm(Xmagelayer, "get_out"); 
-            last_sent_cm = Date.now();
-        }
-    }
+	
+    // cho dừng luôn
+    if (boss_fi && member1 && character.map === "winter_instance")stop_character(Xmagelayer);
+    
 
     // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---
     if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
