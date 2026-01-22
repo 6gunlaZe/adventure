@@ -145,7 +145,7 @@ if(kiltargetfk && get_nearest_playerV_noMyparty(kiltargetfk) > 2 && character.hp
 
 let framtay = 0
 async function eventer() {
-    const delay = 500;
+    const delay = 350;
     let tank = get_player("Ynhi");
 
     try {
@@ -671,10 +671,10 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
 
     // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---
     if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
-        if (Date.now() - last_sent_cm > 5000) {
+        if (Date.now() - last_sent_cm > 400) {
             last_sent_cm = Date.now();
-            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(Xmagelayer, character.in); }, 1000);
-            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(Xmagelayer, "goo2"); }, 2500);
+            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(Xmagelayer, character.in); }, 400);
+            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(Xmagelayer, "goo2"); }, 800);
         }
     }
 
