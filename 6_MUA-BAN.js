@@ -2290,54 +2290,6 @@ if( get_nearest_monster({type:'crabx'}) && !get_nearest_monster({type:'crabxx'})
 /////////////////////////////////////
 
 
-async function checkServersForMonsters(monsters) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
-
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
-
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-    parent.S2 = data;
-
-////////////	  
-const firstMainMapObject = data.find(item => !item.hasOwnProperty("hp454"));
-
-if (firstMainMapObject) {
-let sR =firstMainMapObject.serverRegion;
-let sI =firstMainMapObject.serverIdentifier;
-//game_log ("chuyen" + sR + sI )
-	
-let region = server.region;
-	let serverIden = server.id
-//game_log ("chuyen1  :" + serverIden)
-if (sR != region && sI != serverIden && serverIden != "PVP" )
-{
-//	change_server(sR, sI)
-}
-}
-	  else
-	  {
-	  game_log ("khong tim thay doi tuong")
-	  }
-///////////////////////	  
-    return data;
-  }
-}
-
-
-// Check now, and every 30s
-setInterval(() => {
-  checkServersForMonsters(["phoenix"]);
-}, 10000);
-
-
-
-
-
 
 
 
