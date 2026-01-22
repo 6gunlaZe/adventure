@@ -704,7 +704,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
             smart_move({ map: "winterland", x: 1049, y: -2002 });
         } else {
             if (distance(character, { x: 1049, y: -2002 }) < 50) {
-                if (member1 && member2) enter("winter_instance");
+                if (member1 && member2 && distance(character,member1) < 40 && distance(character,member2) < 40 ) enter("winter_instance");
             } else {
                 xmove(1049, -2002);
             }
