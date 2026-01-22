@@ -1832,14 +1832,24 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         mob.mtype == "xmagefi"
     );
 	
-    const physicalMobs = mobsInRange.filter(mob =>
-        mob.damage_type === "physical" && mob.attack > 3500
-    );
 
-    const magicalMobs = mobsInRange.filter(mob =>
-        mob.damage_type === "magical" && mob.attack > 3500
-    );
 
+const physicalMobs = mobsInRange.filter(mob => {
+    if (character.hp < 8000) {
+        return mob.damage_type === "physical"; // Bỏ điều kiện 3500
+    }
+    return mob.damage_type === "physical" && mob.attack > 3500;
+});
+
+const magicalMobs = mobsInRange.filter(mob => {
+    if (character.hp < 8000) {
+        return mob.damage_type === "magical"; // Bỏ điều kiện 3500
+    }
+    return mob.damage_type === "magical" && mob.attack > 3500;
+});
+
+
+	
     const lowHpMobs = mobsInRange.filter(mob =>
         mob.hp < 6000 &&
         mob.attack > 500 &&
