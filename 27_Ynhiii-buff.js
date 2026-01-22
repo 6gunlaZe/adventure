@@ -590,6 +590,9 @@ party = party
 		if (m.name === "LyThanhThu") {
 			ratio += 0.2;
 		}
+		if (m.name === "MuaBan") {
+			ratio += 0.4;
+		}
 
 		m.entity.health_ratio = ratio;
 		return m;
@@ -657,6 +660,9 @@ function lowest_health_partymember() {
 		}
         if (member.name === "LyThanhThu") {
                member.entity.health_ratio += 0.2;
+        }
+        if (member.name === "MuaBan") {
+               member.entity.health_ratio += 0.4;
         }
 			
 	} else {
