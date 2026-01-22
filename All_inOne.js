@@ -657,7 +657,10 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
 
     // --- CHIẾN THUẬT GỬI LỆNH ---
     if (boss_fz && Date.now() - last_sent_cm > 25000) {
-        send_cm("muaban", "assist_xmage");
+       send_cm("muaban", {
+            command: "assist_xmage",
+            instance_key: character.in  // Gửi cái mã nhiều ký tự này đi
+        });
         last_sent_cm = Date.now();
     }
 
