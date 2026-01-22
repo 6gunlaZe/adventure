@@ -632,7 +632,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ 
     // Check các loại Boss hiện diện
     let boss_fz = get_nearest_monster({ type: "xmagefz" }); // Stage 1
     let boss_fi = get_nearest_monster({ type: "xmagefi" }); // Stage 2
-    let boss_fn = get_nearest_monster({ type: "xmagefn" }); // Stage 3
+    let boss_fn = get_nearest_monster({ type: "xmagen" }); // Stage 3
     let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
     
     let current_boss = boss_fz || boss_fi || boss_fn || boss_x;
@@ -878,7 +878,7 @@ enter("winter_instance");
 const steps = [
     { x: -8, y: 68, monster: "xmagefz" },
     { x: -8, y: 68, monster: "xmagefi" },
-    { x: -8, y: 68, monster: "xmagefn" },
+    { x: -8, y: 68, monster: "xmagen" },
     { x: -8, y: 68, monster: "xmagex" },
     { x: -8, y: 68, monster: "xmagex" },
     { x: -8, y: 68, monster: "xmagex" },
@@ -1624,7 +1624,7 @@ if (
 	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
 	    	    var mob=["phoenix111", "jr","greenjr", "mvampire","snowman","bgoo","rgoo","wabbit"];
-                    var mob2=["stompy", "skeletor", "xmagefz","xmagefi","xmagefn","xmagex","mrgreen","mrpumpkin", ]; //boss mạnh cần có healter
+                    var mob2=["stompy", "skeletor", "xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin", ]; //boss mạnh cần có healter
     
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
@@ -2152,7 +2152,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 }
 
 
-let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagefn","xmagex",];  // Mảng chứa các tên quái vật mạnh cần kiểm tra để share dame với tank piest
+let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagen","xmagex",];  // Mảng chứa các tên quái vật mạnh cần kiểm tra để share dame với tank piest
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
