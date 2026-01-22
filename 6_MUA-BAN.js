@@ -612,13 +612,14 @@ setInterval(() => {
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
+			stop()
 			xmove(boss.real_x, boss.real_y);
         }
 
     }
 
 
-}, 100); // Vòng lặp chạy mỗi 1 giây
+}, 150); // Vòng lặp chạy mỗi 1 giây
 
 
 
