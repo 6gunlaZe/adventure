@@ -512,68 +512,117 @@ vanchuyenHPMP = 0
 
 
 
+let XmageSP = 0
 function on_cm(name, data) {
-    // 1. Cập nhật bảng ID ngay khi nhận tin nhắn để lấy giá trị nhanvatphu mới nhất
-    const transport_ids = { 
-        "nhiY": 2, 
-        "haiz": 3, 
-        "Ynhi": 4, 
-        "tienV": 5 
-    };
-    
-    // Nếu nhanvatphu tồn tại, gán ID là 1
-    if (nhanvatphu) {
-        transport_ids[nhanvatphu] = 1;
-    }
-
+    // 1. Cấu hình ID vận chuyển động (Lấy nhanvatphu mới nhất từ Party)
+    const transport_ids = { "nhiY": 2, "haiz": 3, "Ynhi": 4, "tienV": 5 };
+    if (nhanvatphu) { transport_ids[nhanvatphu] = 1; }
     const collectors = Object.keys(transport_ids);
 
-    // 2. Logic vận chuyển
-    if (collectors.includes(name)) {
-        if (data == "full") {
-            if (vanchuyen == 0 && checktui == 0 && !is_moving(character)) {
-                smart_move(parent.party[name]);
-                game_log("Đang đến lấy đồ từ " + name);
-                vanchuyen = 1;
-                vanchuyenbank += 1;
-            }
-        }
+    // 2. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Dành cho lệnh chiến thuật có Instance Key)
+    if (typeof data === "object" && data !== null) {
+        
+        // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
+        if (name === "haiz" && data.command === "assist_xmage") {
+            const dungeon_key = data.instance_key; // Đây là mã character.in từ Haiz
 
-        if (data == "hp" || data == "mp") {
-            if (vanchuyen == 0 && checktui == 0) {
-                smart_move({ map: "main", x: -200, y: -110 }, () => {
-                    if (data == "hp") checkbuyhp();
-                    else checkbuymp();
-                    smart_move(parent.party[name]); 
+            if (dungeon_key) {
+                game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
+                
+                // Di chuyển đến cửa hang
+                smart_move({ map: "winterland", x: 1049, y: -2002 }, () => {
+                    // Kiểm tra có chìa khóa mới vào
+                    if (distance(character, { x: 1049, y: -2002 }) < 50) {
+                        game_log("Đang vào đúng hầm ngục của Haiz...");
+                        enter("winter_instance", dungeon_key); 
+						XmageSP = 1;
+                    } else {
+                        game_log("không đúng vị trí");
+                    }
                 });
-                game_log("Mua và tiếp tế cho " + name);
-                vanchuyen = 1;
-                vanchuyenHPMP = transport_ids[name];
             }
+
+
+            return; // Kết thúc xử lý Object
         }
     }
 
-    // 3. Logic riêng cho "haiz" (Forwarding + assist_xmage)
-    if (name == "haiz") {
-        if (!["mp", "hp", "full"].includes(data)) {
-            
-            // Xử lý lệnh chiến thuật
-            if (data == "assist_xmage") {
-                game_log("Hỗ trợ Boss Xmage theo lệnh haiz!");
-                // Thêm hành động của bạn ở đây nếu cần (vd: chạy tới hang tuyết)
+    // 3. XỬ LÝ DỮ LIỆU DẠNG CHUỖI (String - Lệnh vận chuyển và Forwarding)
+    if (typeof data === "string") {
+        
+        // --- Nhóm lệnh vận chuyển (Full, HP, MP) ---
+        if (collectors.includes(name)) {
+            // Lệnh Full: Đến lấy đồ
+            if (data === "full") {
+                if (vanchuyen === 0 && checktui === 0 && !is_moving(character)) {
+                    smart_move(parent.party[name]);
+                    game_log("Đi lấy đồ từ " + name);
+                    vanchuyen = 1;
+                    vanchuyenbank += 1;
+                }
             }
 
-            // Chuyển tiếp lệnh
+            // Lệnh tiếp tế HP/MP
+            if (data === "hp" || data === "mp") {
+                if (vanchuyen === 0 && checktui === 0) {
+                    smart_move({ map: "main", x: -200, y: -110 }, () => {
+                        if (data === "hp") checkbuyhp();
+                        else checkbuymp();
+                        smart_move(parent.party[name]); 
+                    });
+                    game_log("Tiếp tế " + data.toUpperCase() + " cho " + name);
+                    vanchuyen = 1;
+                    vanchuyenHPMP = transport_ids[name];
+                }
+            }
+        }
+
+        // --- Logic Forwarding (Chuyển tiếp lệnh từ Haiz cho người khác) ---
+        if (name === "haiz" && !["mp", "hp", "full"].includes(data)) {
             if (nhanvatphu) send_cm(nhanvatphu, data);
             send_cm("tienV", data);
         }
-    }
 
-    // 4. Logic đặc biệt của nhanvatphu (sử dụng biến động)
-    if (nhanvatphu && name == nhanvatphu && data == "phoenix1") {
-        send_cm(hostname, "boss5");
+        // --- Logic đặc biệt Phoenix (Chỉ dành cho nhanvatphu) ---
+        if (nhanvatphu && name === nhanvatphu && data === "phoenix1") {
+            send_cm(hostname, "boss5");
+        }
     }
 }
+
+
+
+
+// Khai báo biến toàn cục (Global)
+var no_boss_timer = 0;
+
+setInterval(() => {
+
+    if (character.map === "winter_instance") {
+ 
+        let boss = get_nearest_monster({ name: "Xmage" });
+        
+        if (!boss) {
+            no_boss_timer++;
+            // Đợi 5 giây (5 lần lặp) không thấy boss mới thoát
+            if (no_boss_timer >= 5) {
+                game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
+                
+                parent.leave_instance();
+                
+                // TẮT TRẠNG THÁI: Cho phép các script khác chạy lại
+                XmageSP = 0; 
+                no_boss_timer = 0;
+            }
+        } else {
+            no_boss_timer = 0; // Thấy boss thì reset bộ đếm
+        }
+
+    } 
+
+}, 1000); // Vòng lặp chạy mỗi 1 giây
+
+
 
 
 
