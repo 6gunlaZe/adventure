@@ -917,72 +917,83 @@ function tryAbsorb() {
     let bestTarget = null;
     let highestScore = 0;
 
-    for (let name in party) {
-        if (name === character.name) continue;
-
-        const player = get_player(name);
-        if (!player || player.rip) continue;
-        if (distance(character, player) > 240) continue;
-
-        const threats = Object.values(parent.entities).filter(e =>
-            e.type === "monster" &&  e.mtype != "xmagen" &&
-            e.target === name &&
-            !e.dead &&
-            distance(player, e) < 250
-        );
-
-        if (threats.length === 0) continue;
-
-        let score = threats.length * 2;
-        let shouldAbsorb = false;
-
-        // === Player yếu / quan trọng ===
-        if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu") {
-            score += 50;
-            shouldAbsorb = true;
-        }
-
-        // === Farm mob ưu tiên ===
-        if (typeof crepp !== "undefined") {
-            const farmCount = threats.filter(m => m.mtype === crepp).length;
-            if (farmCount >= 2 && character.hp > 10000) {
-                score += 20;
-                shouldAbsorb = true;
-            }
-        }
-
-        // === Quái sắp chết (cướp kill) ===
-        const dyingMobs = threats.filter(e => {
-            const hpThreshold =
-                e.max_hp >= 800000 ? 35000 :
-                e.max_hp >= 200000 ? 25000 : 8000;
-            return e.hp < hpThreshold && e.max_hp > 8000;
-        }).length;
-
-        if (dyingMobs > 0) {
-            score += 40;
-            shouldAbsorb = true;
-        }
-
-        if (!shouldAbsorb) continue;
-
-        if (score > highestScore) {
-            highestScore = score;
-            bestTarget = name;
+    // --- KIỂM TRA ƯU TIÊN XMAGEN ---
+    // Tìm xmagen trong thực thể xung quanh
+    const xmagen = Object.values(parent.entities).find(e => e.mtype === "xmagen" && !e.dead);
+    
+    // Nếu xmagen đang đánh ai đó KHÔNG PHẢI mình và người đó ở gần
+    if (xmagen && xmagen.target && xmagen.target !== character.name) {
+        const targetPlayer = get_player(xmagen.target);
+        if (targetPlayer && !targetPlayer.rip && distance(character, targetPlayer) <= 240) {
+            bestTarget = xmagen.target;
+            highestScore = 9999; // Điểm số tối thượng để bỏ qua các logic khác
         }
     }
 
+    // Nếu không tìm thấy xmagen cần can thiệp, chạy logic party bình thường
+    if (!bestTarget) {
+        for (let name in party) {
+            if (name === character.name) continue;
+
+            const player = get_player(name);
+            if (!player || player.rip) continue;
+            if (distance(character, player) > 240) continue;
+
+            const threats = Object.values(parent.entities).filter(e =>
+                e.type === "monster" &&  
+                e.target === name &&
+                !e.dead &&
+                distance(player, e) < 250
+            );
+
+            if (threats.length === 0) continue;
+
+            let score = threats.length * 2;
+            let shouldAbsorb = false;
+
+            // === Player yếu / quan trọng ===
+            if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu") {
+                score += 50;
+                shouldAbsorb = true;
+            }
+
+            // === Farm mob ưu tiên ===
+            if (typeof crepp !== "undefined") {
+                const farmCount = threats.filter(m => m.mtype === crepp).length;
+                if (farmCount >= 2 && character.hp > 10000) {
+                    score += 20;
+                    shouldAbsorb = true;
+                }
+            }
+
+            // === Quái sắp chết (cướp kill) ===
+            const dyingMobs = threats.filter(e => {
+                const hpThreshold =
+                    e.max_hp >= 800000 ? 35000 :
+                    e.max_hp >= 200000 ? 25000 : 8000;
+                return e.hp < hpThreshold && e.max_hp > 8000;
+            }).length;
+
+            if (dyingMobs > 0) {
+                score += 40;
+                shouldAbsorb = true;
+            }
+
+            if (!shouldAbsorb) continue;
+
+            if (score > highestScore) {
+                highestScore = score;
+                bestTarget = name;
+            }
+        }
+    }
+
+    // Thực hiện Absorb
     if (bestTarget && character.hp >= 8500) {
         use_skill("absorb", bestTarget);
         lastAbsorbTime = now;
         game_log(`🛡 Absorb ${bestTarget} (score: ${highestScore})`);
     }
-	 else {
-            // game_log(`❌ Không absorb - máu thấp`);
-        }
-	
-
-	
 }
 
 
