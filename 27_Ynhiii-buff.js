@@ -754,7 +754,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["elixirfires","hotchocolate","elixirluck","snowball","supermittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "tracker","harbringer","slimestaff","tigerstone","froststaff","wbook1"];
+    let itemsToExclude = ["elixirpnres","elixirfires","hotchocolate","elixirluck","snowball","supermittens","handofmidas","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirint2","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "tracker","harbringer","slimestaff","tigerstone","froststaff","wbook1"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
@@ -1925,6 +1925,8 @@ const equipmentSets = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
+        { itemName: "cring", slot: "ring1", level: 4, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
 		
     ],
     bossburn: [
@@ -1938,6 +1940,23 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
     ],
+
+    bossDOC: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+		
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
+
+		
+    ],
+
+	
     creepburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
@@ -1954,6 +1973,7 @@ const equipmentSets = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "cring", slot: "ring1", level: 4, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
 
 		
     ],
@@ -1987,7 +2007,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 		
         { itemName: "cring", slot: "ring1", level: 4, l: "l"  },
-
+        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
 		
     ],
 };
@@ -2140,8 +2160,13 @@ const lowHpMobs = mobsInRange.filter(mob => {
 		return
 	}
 
+	if( (get_nearest_monster({ type: "xmagen" }) ||  get_nearest_monster({ type: "xmagex" })  ) && lowHpMobs.length == 0)
+	{
+        eTime = currentTime; 
+        equipSet('bossDOC');	
+		return
+	}
 
-	
 
 
 	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0 )
