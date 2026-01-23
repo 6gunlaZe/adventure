@@ -525,7 +525,7 @@ function on_cm(name, data) {
         if (name === "haiz" && data.command === "assist_xmage") {
             const dungeon_key = data.instance_key; // Đây là mã character.in từ Haiz
               
-            if (dungeon_key) {
+            if (dungeon_key && character.map != "winter_instance" ) {
                 game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
                 
                 // Di chuyển đến cửa hang
