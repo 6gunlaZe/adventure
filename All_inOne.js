@@ -1845,8 +1845,8 @@ const physicalMobs = mobsInRange.filter(mob => {
 const magicalMobs = mobsInRange.filter(mob => {
     if (mob.mtype === "xmagex") return true;
     if (mob.damage_type !== "magical") return false;
-    if (character.hp < 8000) return mob.attack > 1000;
-    if (character.hp < 15000) return mob.attack > 2000;
+    if (character.hp < 12000) return mob.attack > 1000;
+    if (character.hp < 14000) return mob.attack > 2000;
     return mob.attack > 3500;
 });
 
