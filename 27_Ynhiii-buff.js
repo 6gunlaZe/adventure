@@ -925,7 +925,7 @@ function tryAbsorb() {
         if (distance(character, player) > 240) continue;
 
         const threats = Object.values(parent.entities).filter(e =>
-            e.type === "monster" &&
+            e.type === "monster" &&  e.mtype != "xmagen" &&
             e.target === name &&
             !e.dead &&
             distance(player, e) < 250
