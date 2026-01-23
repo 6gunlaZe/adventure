@@ -643,7 +643,7 @@ const equipmentSets = {
     boom: [
 
        // { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "pouchbow", slot: "mainhand", level: 10, l: "l" },
        // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
         //{ itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
         { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
