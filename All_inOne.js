@@ -157,7 +157,7 @@ async function eventer() {
          const keys = [
         { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
         { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
-        { name: "frozen", count: count_item("frozenkey"), action: framXmage, map: "winter_instance" }
+        { name: "frozen", count: count_item("frozenkey1111"), action: framXmage, map: "winter_instance" }
         ].sort((a, b) => b.count - a.count);
 
     const curMap = character.map;
