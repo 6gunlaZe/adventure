@@ -1835,27 +1835,21 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
 
 const physicalMobs = mobsInRange.filter(mob => {
-    if (character.hp < 8000) {
-        return mob.damage_type === "physical"; // Bỏ điều kiện 3500
-    }
-    return mob.damage_type === "physical" && mob.attack > 3500;
+    if (mob.damage_type !== "physical") return false;
+    if (character.hp < 8000) return mob.attack > 1000;
+    if (character.hp < 15000) return mob.attack > 2000;
+    return mob.attack > 3500;
 });
 
+	
 const magicalMobs = mobsInRange.filter(mob => {
-    // BƯỚC 1: Kiểm tra "ngoại lệ" cho xmagen
-    if (mob.mtype === "xmagex") {
-        return true; // Lấy con này luôn, không cần xét thêm gì nữa
-    }
-
-    // BƯỚC 2: Xét "mấy con khác" theo đúng logic cũ của bạn
-    if (character.hp < 8000) {
-        // Nếu máu bạn thấp, chỉ lấy mấy con hệ phép
-        return mob.damage_type === "magical"; 
-    }
-
-    // Nếu máu bạn ổn, chỉ lấy mấy con hệ phép có dame > 3500
-    return mob.damage_type === "magical" && mob.attack > 3500;
+    if (mob.mtype === "xmagex") return true;
+    if (mob.damage_type !== "magical") return false;
+    if (character.hp < 8000) return mob.attack > 1000;
+    if (character.hp < 15000) return mob.attack > 2000;
+    return mob.attack > 3500;
 });
+
 
 
 	
