@@ -2085,7 +2085,7 @@ const mobsInRange = Object.values(parent.entities).filter(e =>
 
 const untargetedMobs = mobsInRange.filter(e => !e.target);
 const mobsTargetingTank = Object.values(parent.entities).filter(e =>
-    e.type === "monster" &&
+    e.type === "monster" &&  e.mtype != "xmagen" &&
     !e.dead &&
     e.target === tank?.name && e.hp > 15000 &&
     distance(character, e) <= 250
@@ -2162,7 +2162,7 @@ if (!is_on_cooldown("hardshell") && character.hp < 12000 &&  mobstype.length >= 
 }
 
 
-let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagen","xmagex",];  // Mảng chứa các tên quái vật mạnh cần kiểm tra để share dame với tank piest
+let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagex",];  // Mảng chứa các tên quái vật mạnh cần kiểm tra để share dame với tank piest
 for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
@@ -2176,18 +2176,7 @@ for (let id in parent.entities) {
         }
     }
 	
-    /// luôn lôi kéo xmagen vì nó có độc
-    if (current.mtype === "xmagen" && current.target !== character.name && current.type === "monster") {
-        
-        // Kiểm tra khoảng cách và thời gian hồi chiêu của kỹ năng taunt
-        if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
-            use_skill("taunt", current.id);
-            game_log("Đang kéo xmagen: " + current.id, "#FF4500");
-        }
-    }
 
-
-	
 }
 
 
