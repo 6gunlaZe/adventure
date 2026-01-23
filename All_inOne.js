@@ -2165,6 +2165,19 @@ for (let id in parent.entities) {
             game_log("Taunting " + current.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
         }
     }
+	
+    /// luôn lôi kéo xmagen vì nó có độc
+    if (current.mtype === "xmagen" && current.target !== character.name && current.type === "monster") {
+        
+        // Kiểm tra khoảng cách và thời gian hồi chiêu của kỹ năng taunt
+        if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
+            use_skill("taunt", current.id);
+            game_log("Đang kéo xmagen: " + current.id, "#FF4500");
+        }
+    }
+
+
+	
 }
 
 
