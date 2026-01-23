@@ -482,7 +482,6 @@ async function attackLoop() {
 	//if (character.moving)return
     let delay = null; // Default delay
     const now = performance.now();
-//game_log("m")
     const rangeThreshold = 50; // phạm vi tấn công boom
     const leader = get_player("haiz");
      const healerr = get_player("Ynhi");
@@ -493,6 +492,7 @@ async function attackLoop() {
 const isCupid = character.slots.mainhand?.name === "cupid";
 const codame = !isCupid;
 
+const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
 
 
 	
@@ -527,7 +527,7 @@ const { targets, inRange: monstersInRangeList, characterRange: monsterscharacter
 
 
 	 
-            if( (leader && leader.hp < 10500) || (healerr && healerr.hp < 8000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
+            if( (leader && leader.hp < 10500 + mapHealBonus) || (healerr && healerr.hp < 8000 + mapHealBonus) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
 		weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
