@@ -612,7 +612,7 @@ setInterval(() => {
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
-			if (boss && distance(character, boss) > 20)smart_move({ map: "winter_instance", x: boss.real_x, y: boss.real_y });
+			if (boss && distance(character, boss) > 20) xmove(boss.real_x, boss.real_y);
         }
 
     }
