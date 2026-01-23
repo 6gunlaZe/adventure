@@ -624,7 +624,7 @@ function framXmage() {
     let member2 = get_player("Ynhi");
 
 // Nếu nhân vật phụ có trong party mà không thấy trên màn hình, hoặc nó đang ở nhà (map main)
-if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "winter_instance" || get_nearest_monster({ type: home }) ) ){
 	send_cm(Xmagelayer,"mage")	
 }
 	
@@ -974,7 +974,7 @@ autoPartyCheck("Ynhi", tomplayer, 60000);
 
 
 	
-if(parent.party_list.includes(tomplayer) && (!member1 || get_nearest_monster({ type: "home" }) ) ){
+if(parent.party_list.includes(tomplayer) && (!member1 || character.map != "tomb"  || get_nearest_monster({ type: "home" }) ) ){
 	send_cm(tomplayer,"tomb")	
 }
 
@@ -1177,7 +1177,7 @@ autoPartyCheck("Ynhi", spiderlayer, 60000);
 
 
 	
-if(parent.party_list.includes(spiderlayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
+if(parent.party_list.includes(spiderlayer) && (!member1 || character.map != "spider_instance"  || get_nearest_monster({ type: home }) ) ){
 	send_cm(spiderlayer,"spidergame")	
 }
 
