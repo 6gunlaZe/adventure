@@ -295,9 +295,9 @@ if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
 
 	
 let X, Y;
-if (healerr && distance(character, healerr) < 150 ) {
-    X = healerr.x;
-    Y = healerr.y;
+if (leader && get_nearest_monster({ type: home }) ) {
+    X = leader.x;
+    Y = leader.y;
 } else {
     X = character.x;
     Y = character.y;
