@@ -1843,7 +1843,7 @@ const physicalMobs = mobsInRange.filter(mob => {
 
 const magicalMobs = mobsInRange.filter(mob => {
     // BƯỚC 1: Kiểm tra "ngoại lệ" cho xmagen
-    if (mob.mtype === "xmagen") {
+    if (mob.mtype === "xmagex") {
         return true; // Lấy con này luôn, không cần xét thêm gì nữa
     }
 
@@ -2357,6 +2357,9 @@ const equipmentSets = {
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "pants", slot: "pants", level: 10, l: "l" },
+
+        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
+        { itemName: "strring", slot: "ring2", level: 4, l: "l" },
 		
     ],
     def_magical: [
@@ -2369,7 +2372,8 @@ const equipmentSets = {
         { itemName: "t2stramulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "xpants", slot: "pants", level: 8, l: "l" },
 
-
+        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
+        { itemName: "ringsj", slot: "ring2", level: 5, l: "l" },
 		
     ],
     def_physical: [
@@ -2398,7 +2402,9 @@ const equipmentSets = {
         { itemName: "pants", slot: "pants", level: 10, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
-
+		
+        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
+        { itemName: "strring", slot: "ring2", level: 4, l: "l" },
 	    
     ],
 
