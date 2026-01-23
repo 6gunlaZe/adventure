@@ -272,6 +272,8 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
+/*
+
 const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
 // không được để return trong hàm loop
@@ -471,6 +473,136 @@ else if (targets1.length < 3 && targets1.length > 0 )
 }
 
 attackLoop();
+
+*/
+
+const targetNames = ["6gunlaZe", "Ynhi", "haiz", "nhiY", "tienV"];
+
+async function attackLoop() {
+    let delay = 100; // Chạy vòng lặp tốc độ cao (100ms) để phản xạ tức thì
+    const now = performance.now();
+    
+    const rangeThreshold = 50;
+    const leader = get_player("haiz");
+    const healerr = get_player("Ynhi");
+    const f1112 = get_player(typeof f1111 !== 'undefined' ? f1111 : ""); // Tránh lỗi nếu f1111 chưa định nghĩa
+
+    // 1. XỬ LÝ BIẾN CODAME (Kiểm tra vũ khí hiện tại)
+    let current_weapon = character.slots.mainhand ? character.slots.mainhand.name : "";
+    let codame = (current_weapon !== "cupid");
+
+    let X = (leader && get_nearest_monster({ type: "home" })) ? leader.x : character.x;
+    let Y = (leader && get_nearest_monster({ type: "home" })) ? leader.y : character.y;
+    
+    let stopAttack = (typeof check_quai_A4_stop_attach === 'function' && check_quai_A4_stop_attach() == 1);
+    
+    try {
+        // KIỂM TRA COOLDOWN TRƯỚC KHI VÀO LOGIC CHÍNH
+        if (!stopAttack && !is_on_cooldown("attack")) {
+            
+            // Lấy danh sách mục tiêu
+            var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus: 1, NoMark: 1, number: 1, HPmin: 20000 });
+            if (tagetskill.length == 1 && character.map != "winter_instance" && !is_on_cooldown("huntersmark")) {
+                use_skill("huntersmark", tagetskill[0]);
+            }
+
+            var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget: 1, number: 1 });
+            var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5", number: 1 });
+            const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
+            let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+
+            // LOGIC TẤN CÔNG / HỒI MÁU
+            // Ưu tiên 1: Hồi máu (Sử dụng Cupid)
+            if ((leader && leader.hp < 10500) || (healerr && healerr.hp < 8000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp / f1112.max_hp < 0.65)) {
+                weaponSet("heal");
+                let healTargets = lowest_health_partymember(0.9, true);
+                
+                if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
+                    await use_skill("3shot", healTargets.slice(0, 3));
+                } else if (healTargets.length >= 1) {
+                    // Chỉ attack nếu can_attack (tránh khựng khi đổi vũ khí chưa xong)
+                    if (can_attack(healTargets[0])) {
+                        await attack(healTargets[0]);
+                    }
+                }
+            } 
+            // Ưu tiên 2: Kill quái nguy hiểm (Cần Dame)
+            else if (KILLdauTien.length >= 1 && character.mp > 100) {
+                weaponSet("single");
+                if (codame && can_attack(KILLdauTien[0])) await attack(KILLdauTien[0]);
+            } 
+            // Ưu tiên 3: Hút quái (Cần Dame)
+            else if (hutquai.length >= 1 && character.mp < 200 && character.targets < 2) {
+                weaponSet("dead");
+                if (codame && can_attack(hutquai[0])) await attack(hutquai[0]);
+            } 
+            // Ưu tiên 4: Đánh diện rộng (AOE)
+            else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
+                (get_nearest_monster({ type: "franky" }) && leader.hp < 16000) ? weaponSet("franky") : weaponSet("boom");
+                if (codame && !is_on_cooldown("5shot")) await use_skill("5shot", monstersInRangeList.slice(0, 5));
+            } 
+            else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
+                (get_nearest_monster({ type: "franky" }) && leader.hp < 16000) ? weaponSet("franky") : weaponSet("shot5");
+                if (codame && !is_on_cooldown("5shot")) await use_skill("5shot", monsterscharacterRange.slice(0, 5));
+            } 
+            else if (monsterscharacterRange.length >= 3 && character.mp > 430 && leader && leader.hp > 10000) {
+                (get_nearest_monster({ type: "franky" }) && leader.hp < 16000) ? weaponSet("franky") : weaponSet("dead");
+                if (codame && !is_on_cooldown("3shot")) await use_skill("3shot", monsterscharacterRange.slice(0, 3));
+            } 
+            // Ưu tiên 5: Đánh đơn mục tiêu
+            else if (monsterscharacterRange.length > 0) {
+                if (monsterscharacterRange.length < 3 && ((leader && leader.hp < 13000) || (healerr && healerr.hp < 6000))) {
+                    weaponSet("heal");
+                    const possibleTargets1 = [leader, healerr].filter(t => t);
+                    let healTarget1 = getLowestHpPercentTarget(possibleTargets1);
+                    if (can_attack(healTarget1)) await attack(healTarget1);
+                } else {
+                    monsterscharacterRange.length > 1 ? weaponSet("singleAOE") : weaponSet("single");
+                    if (codame && can_attack(monsterscharacterRange[0])) await attack(monsterscharacterRange[0]);
+                }
+            } 
+            // Hỗ trợ target của Leader
+            else {
+                var leaderTarget = get_target_of(leader);
+                if (leaderTarget && leaderTarget.target) {
+                    if (get_targeted_monster() !== leaderTarget) change_target(leaderTarget);
+                    let currentTarget = get_targeted_monster();
+                    if (currentTarget && is_in_range(currentTarget)) {
+                        weaponSet("single");
+                        if (codame && can_attack(currentTarget)) await attack(currentTarget);
+                    }
+                }
+            }
+
+            // FARM QUÁI PHỤ (Nếu không có mục tiêu chính)
+            if (targets.length == 0 && (!leaderTarget || !leaderTarget.target)) {
+                var targets1 = getBestTargets({ max_range: character.range, type: "quá mạnh", subtype: "scorpion", number: 5 });
+                if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
+                    weaponSet("shot5");
+                    await use_skill("5shot", targets1);
+                } else if (targets1.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
+                    weaponSet("dead");
+                    await use_skill("3shot", targets1);
+                } else if (targets1.length > 0) {
+                    weaponSet("dead");
+                    if (can_attack(targets1[0])) await attack(targets1[0]);
+                }
+            }
+        }
+    } catch (e) {
+        // Tránh log lỗi liên tục
+    }
+
+    // Luôn tính toán delay dựa trên thực tế cooldown để lặp lại
+    let next_attack = ms_to_next_skill("attack");
+    // Nếu đang trong cooldown, đợi 50ms rồi check lại, tối đa không quá 100ms để giữ độ nhạy
+    setTimeout(attackLoop, Math.max(50, Math.min(next_attack, 100)));
+}
+
+// Khởi chạy
+attackLoop();
+
+
 
 
 
