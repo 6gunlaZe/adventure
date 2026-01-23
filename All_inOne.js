@@ -1841,9 +1841,18 @@ const physicalMobs = mobsInRange.filter(mob => {
 });
 
 const magicalMobs = mobsInRange.filter(mob => {
-    if (character.hp < 8000) {
-        return mob.damage_type === "magical"; // Bỏ điều kiện 3500
+    // BƯỚC 1: Kiểm tra "ngoại lệ" cho xmagen
+    if (mob.mtype === "xmagen") {
+        return true; // Lấy con này luôn, không cần xét thêm gì nữa
     }
+
+    // BƯỚC 2: Xét "mấy con khác" theo đúng logic cũ của bạn
+    if (character.hp < 8000) {
+        // Nếu máu bạn thấp, chỉ lấy mấy con hệ phép
+        return mob.damage_type === "magical"; 
+    }
+
+    // Nếu máu bạn ổn, chỉ lấy mấy con hệ phép có dame > 3500
     return mob.damage_type === "magical" && mob.attack > 3500;
 });
 
