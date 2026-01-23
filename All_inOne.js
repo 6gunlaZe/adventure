@@ -656,7 +656,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     }
 
     // --- CHIẾN THUẬT GỬI LỆNH ---
-    if (boss_fz && Date.now() - last_sent_cm > 25000) {
+    if (boss_fz && Date.now() - last_sent_cm > 4000 && !get_player("MuaBan") ) {
        send_cm("MuaBan", {
             command: "assist_xmage",
             instance_key: character.in  // Gửi cái mã nhiều ký tự này đi
