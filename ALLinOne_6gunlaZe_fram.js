@@ -567,16 +567,23 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
-                
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("dead");
+		    else
+			{	
+				if (monstersInRangeList.length >= 3)weaponSet("boom");
+					else weaponSet("dead");
+			}	
 		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
 
             } else if (monsterscharacterRange.length > 1) {
                 
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("singleAOE");
+		    else
+			{	
+				if (monstersInRangeList.length >= 3)weaponSet("boom");
+					else weaponSet("dead");
+			}
 		if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
@@ -670,13 +677,6 @@ else if (targets1.length < 3 && targets1.length > 0 )
     } catch (e) {
         //console.error(e);
     }
-
-
-// Fallback an toàn cho mọi trường hợp
-if (!delay || delay > 300 || isNaN(delay)) {
-    delay = 300;
-}
-
 
 	
 	setTimeout(attackLoop, delay || 250); // Default delay if undefined
