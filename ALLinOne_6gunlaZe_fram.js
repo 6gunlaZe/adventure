@@ -673,8 +673,8 @@ else if (targets1.length < 3 && targets1.length > 0 )
 
 
 // Fallback an toàn cho mọi trường hợp
-if (!delay || delay > 500 || isNaN(delay)) {
-    delay = 250;
+if (!delay || delay > 300 || isNaN(delay)) {
+    delay = 300;
 }
 
 
