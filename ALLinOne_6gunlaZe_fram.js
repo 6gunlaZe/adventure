@@ -1692,10 +1692,10 @@ const host = get_player("haiz");
 	if (host && distance(character, host) > 100 ) xmove(host.real_x, host.real_y );
 
 
-// 2. Logic sử dụng kỹ năng Poison Arrow
+// 2. Logic sử dụng kỹ năng Poison Arrow QUÊN MẤT KHÔNG DÙNG ĐƯỢC, XMAGE KHÁNG TẤT CẢ MÀ
     const target = get_target();
     
-    if (target && can_use("poisonarrow") && target.mtype === "xmagen" &&  locate_item("poison") !== -1  ) {
+    if (target && can_use("poisonarrow") && target.mtype === "xmagen" &&  locate_item("poison") !== -1 && 1 > 2 ) {
         // Kiểm tra khoảng cách bắn (thường là range của nhân vật hoặc kỹ năng)
         if (distance(character, target) <= character.range) {
             use_skill('poisonarrow', target);
