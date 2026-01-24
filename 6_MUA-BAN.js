@@ -612,7 +612,9 @@ setInterval(() => {
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
-			if (boss && distance(character, boss) > 5) xmove(boss.real_x, boss.real_y);
+			if (boss && distance(character, boss) > 10) xmove(boss.real_x, boss.real_y);
+            if (boss && distance(character, boss) <= 10 && smart.moving) stop();
+			
         }
 
     }
