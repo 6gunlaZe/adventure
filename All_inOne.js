@@ -693,8 +693,8 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     if (boss_fn && member1 && member1.id == XmagelayerFire && character.map === "winter_instance")stop_character(XmagelayerFire);
 
 	
-    // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---
-    if (character.map == "winter_instance" && (!member1 || !member2)) {
+    // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---vì nhiY đã có logic vào tương tự MuaBan
+    if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
         if (Date.now() - last_sent_cm > 400) {
             last_sent_cm = Date.now();
             setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1.id, character.in); }, 400);
