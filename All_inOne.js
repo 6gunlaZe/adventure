@@ -154,20 +154,29 @@ async function eventer() {
 		framtay = 0
 	} else if (framtay > 0) {
 
-         const keys = [
-        { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
-        { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
-        { name: "frozen", count: count_item("frozenkey11111"), action: framXmage, map: "winter_instance" }
-        ].sort((a, b) => b.count - a.count);
+		
+const hasFieldGen = locate_item("fieldgen0") !== -1;
 
-    const curMap = character.map;
-    const currentJob = keys.find(k => k.map === curMap);
-
-    if (keys[0].count > 0) {
-        keys[0].action();
-    } else {
-        currentJob ? currentJob.action() : framtay = 0;
+const keys = [
+    { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
+    { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
+    { 
+        name: "frozen",
+        count: hasFieldGen ? count_item("frozenkey") : 0,
+        action: framXmage,
+        map: "winter_instance"
     }
+].sort((a, b) => b.count - a.count);
+
+const curMap = character.map;
+const currentJob = keys.find(k => k.map === curMap);
+
+if (keys[0].count > 0) {
+    keys[0].action();
+} else {
+    currentJob ? currentJob.action() : (framtay = 0);
+}
+
 		
 
 	} else if (bossvip > 0) {
@@ -182,7 +191,7 @@ async function eventer() {
               (h >= 6 && h < 11) || (h >= 13 && h < 21)
             ) && character.esize > 3 &&
             (
-                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || count_item("frozenkey111") > 0
+                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
             )
         ) {
              framtay = 1;
