@@ -2257,6 +2257,8 @@ const ITEM_WHITELIST = [
     "orboffrost",
     "orbofplague",
     "orbofresolve",
+    "fieldgen0",
+
 
 ];
 
