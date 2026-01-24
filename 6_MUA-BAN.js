@@ -440,7 +440,8 @@ setInterval(function() {
 
     }
 	
-
+if (character.map == "winter_instance" )return
+	
 	if(character.stand && character.map == "main" && checktui == 0 ){
        vanchuyen = 0
 		vanchuyenHPMP = 0
@@ -605,10 +606,9 @@ setInterval(() => {
             // Đợi 2 giây (20 lần lặp) không thấy boss mới thoát
             if (no_boss_timer >= 20) {
                 game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
-                
-             smart_move({ map: "winterland", x: 1049, y: -2002 });                
-                // TẮT TRẠNG THÁI: Cho phép các script khác chạy lại
                 no_boss_timer = 0;
+				if (smart.moving) return	
+             smart_move({ map: "winterland", x: 1049, y: -2002 });                
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
