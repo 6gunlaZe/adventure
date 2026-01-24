@@ -527,7 +527,7 @@ const { targets, inRange: monstersInRangeList, characterRange: monsterscharacter
 
 
 	 
-            if(( (leader && leader.hp < 10500 + mapHealBonus) || (healerr && healerr.hp < 8000 + mapHealBonus) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)) && !is_on_cooldown("3shot")  ){
+            if(( (leader && leader.hp < 10500 + mapHealBonus) || (healerr && healerr.hp < 8000 + mapHealBonus) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65))  ){
 		if(codame)weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
