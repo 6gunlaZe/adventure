@@ -668,18 +668,25 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 	
 	
 	
-	//////buff xa thu
-	 rangerObj = parent.entities["6gunlaZe"]
-     if (is_in_range(rangerObj, "energize")) {
-    let amount = rangerObj.max_mp - rangerObj.mp;
-    	 if(character.mp > (rangerObj.max_mp - rangerObj.mp + 200)     
-                   && !rangerObj.rip
-			&& rangerObj.mp < 300
-                  && !is_on_cooldown("energize")){
-                use_skill("energize", rangerObj.name, amount);
-                game_log("Mage energized " + rangerObj.name);
-           }
+////// buff xạ thủ – có chế độ nguy cấp
+let rangerObj = parent.entities["Ynhi"];
+
+if (rangerObj && is_in_range(rangerObj, "energize") && !rangerObj.rip && !is_on_cooldown("energize")) {
+
+    let mp_cap = rangerObj.max_mp - 800;          // trần MP cho ranger
+    let ranger_need = mp_cap - rangerObj.mp;      // ranger còn thiếu bao nhiêu
+    let mage_can_give = character.mp - 300;       // mage giữ 200 MP đệm
+    let amount = 0;
+
+        amount = Math.min(ranger_need, mage_can_give);
+
+
+    if (amount > 0) {
+        use_skill("energize", rangerObj.name, amount);
+    }
 }
+
+
 
 	
 	
