@@ -528,7 +528,7 @@ const { targets, inRange: monstersInRangeList, characterRange: monsterscharacter
 
 	 
             if( (leader && leader.hp < 10500 + mapHealBonus) || (healerr && healerr.hp < 8000 + mapHealBonus) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
-		weaponSet("heal");
+		if(codame)weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
 if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
@@ -538,6 +538,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 	 if(!codame)await attack(healTargets[0]);
 	delay = ms_to_next_skill("attack");  
 }
+		 if(codame)delay = 50;		
 
 	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
 		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
@@ -670,10 +671,6 @@ else if (targets1.length < 3 && targets1.length > 0 )
         //console.error(e);
     }
 
-// ===== FIX CUPID DELAY =====
-if (isCupid) {
-    delay = 220; // delay cố định, loop mượt
-}
 
 // Fallback an toàn cho mọi trường hợp
 if (!delay || delay > 500 || isNaN(delay)) {
