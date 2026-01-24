@@ -570,7 +570,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
 		    else
 			{	
-				if (monstersInRangeList.length >= 3)weaponSet("boom");
+				if (monstersInRangeList.length >= 5)weaponSet("boom");
 					else weaponSet("dead");
 			}	
 		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
@@ -581,7 +581,7 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
 		    else
 			{	
-				if (monstersInRangeList.length >= 3)weaponSet("boom");
+				if (monstersInRangeList.length >= 5)weaponSet("boom");
 					else weaponSet("dead");
 			}
 		if (codame)   await attack(monsterscharacterRange[0]);
