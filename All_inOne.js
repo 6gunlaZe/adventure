@@ -2936,7 +2936,7 @@ setInterval(function() {
 	 framtay = 0
     respawn();
   }
-}, 420000);
+}, 220000);
 
 function on_magiport(name){
     if(name == "nhiY"){
