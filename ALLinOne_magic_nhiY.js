@@ -475,6 +475,44 @@ function on_cm(name, data) {
 }
 
 
+
+// hỗ trợ thoát Xmage khi xong việc
+var no_boss_timer = 0;
+
+setInterval(() => {
+
+    if (character.map === "winter_instance") {
+ 
+        let boss = get_nearest_monster({ type: "xmagefi" });
+        
+        if (!boss) {
+            no_boss_timer++;
+            // Đợi 2 giây (20 lần lặp) không thấy boss mới thoát
+            if (no_boss_timer >= 20) {
+                game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
+                no_boss_timer = 0;
+				if (smart.moving) return	
+             smart_move({ map: "winterland", x: 1049, y: -2002 });                
+            }
+        } else {
+            no_boss_timer = 0; // Thấy boss thì reset bộ đếm
+			if (boss && distance(character, boss) > 70) xmove(boss.real_x, boss.real_y);
+            if (boss && distance(character, boss) <= 70 && smart.moving) stop();
+			
+        }
+
+    }
+
+
+}, 150); // Vòng lặp chạy mỗi 1 giây
+
+
+
+
+
+
+
+
 setInterval(function() {
 
  if (character.rip) { ///////auto hoi sinh
