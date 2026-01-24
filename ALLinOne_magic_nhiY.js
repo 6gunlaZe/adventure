@@ -416,43 +416,62 @@ function on_draw(){
 
 //////////////
 function on_cm(name, data) {
+    // 1. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Dành cho lệnh chiến thuật có Instance Key)
+    if (typeof data === "object" && data !== null) {
+        game_log("Lệnh nhận được: " + (data.command || "Object"));
 
+        // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
+        if (name === "haiz" && data.command === "assist_xmage1") {
+            if (!smart.moving && character.map !== "winter_instance") {
+                const dungeon_key = data.instance_key;
 
-/////////////////////		
+                if (dungeon_key) {
+                    game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
+                    
+                    // Di chuyển đến cửa hang
+                    smart_move({ map: "winterland", x: 1049, y: -2002 }, () => {
+                        // Kiểm tra khoảng cách sau khi đến nơi
+                        if (distance(character, { x: 1049, y: -2002 }) < 50) {
+                            game_log("Đang vào đúng hầm ngục của Haiz...");
+                            enter("winter_instance", dungeon_key);
+                        } else {
+                            game_log("Không đến được vị trí cổng vào");
+                        }
+                    });
+                }
+            }
+            return; // Dừng xử lý các logic string bên dưới
+        }
 
-///////////////////
-    if(name == "haiz"){
+        // Xử lý các object khác (ví dụ: location)
+        if (name === "haiz" && data.message === "location") {
+            receivedData = data;
+            return;
+        }
+        
+        // Nếu là object khác mà không phải các lệnh trên thì gán vào datasmart
+        if (name === "haiz") datasmart = data;
+        return;
+    }
 
-		if (data == "goo" && character.map != "crypt")enter("crypt",idmap);
-
-	}
-	
-	 if(name == "haiz" && data != "goo" && typeof data === 'string' ){
-     idmap = data
-
-	}
-	
-	
-	if(name == "haiz" && data == "back" ){
-    back = 1
-		
-	}
-
-	 if(name == "haiz" && data != "goo" && data != "back" && data != "foxmode" && data != "jr"){
-		 if (data.message === "location")receivedData = data
-		else datasmart = data
-
-	}
-
-
-	if(name == "haiz" && data == "foxmode" ){
-           foxmode = 1
-	}
-	if(name == "haiz" && data == "jr" ){
-           jrmode = 1
-	}
-	
-	
+    // 2. XỬ LÝ DỮ LIỆU DẠNG STRING/PRIMITIVE (Code cũ của bạn)
+    if (name === "haiz") {
+        if (data === "goo") {
+            if (character.map != "crypt") enter("crypt", idmap);
+        } 
+        else if (data === "back") {
+            back = 1;
+        } 
+        else if (data === "foxmode") {
+            foxmode = 1;
+        } 
+        else if (data === "jr") {
+            jrmode = 1;
+        } 
+        else if (typeof data === 'string') {
+            idmap = data;
+        }
+    }
 }
 
 
