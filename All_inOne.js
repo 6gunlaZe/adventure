@@ -629,7 +629,15 @@ let boss_wait_start = null; // Biến lưu thời gian bắt đầu chờ boss//
 
 
 function framXmage() {
-    let member1 = get_player(Xmagelayer);
+
+    // Check các loại Boss hiện diện
+    let boss_fz = get_nearest_monster({ type: "xmagefz" }); // Stage 1
+    let boss_fi = get_nearest_monster({ type: "xmagefi" }); // Stage 2
+    let boss_fn = get_nearest_monster({ type: "xmagen" }); // Stage 3
+    let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
+
+let member1_name = boss_fi ? "XmagelayerFire" : "Xmagelayer";
+let member1 = get_player(member1_name);
     let member2 = get_player("Ynhi");
 
 // Nếu nhân vật phụ có trong party mà không thấy trên màn hình, hoặc nó đang ở nhà (map main)
@@ -638,17 +646,13 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 }
 	
 	
-    // Check các loại Boss hiện diện
-    let boss_fz = get_nearest_monster({ type: "xmagefz" }); // Stage 1
-    let boss_fi = get_nearest_monster({ type: "xmagefi" }); // Stage 2
-    let boss_fn = get_nearest_monster({ type: "xmagen" }); // Stage 3
-    let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
+
     
     let current_boss = boss_fz || boss_fi || boss_fn || boss_x;
    // Chế độ cho thêm pháp sư  
-   // if (boss_fi)autoPartyCheck("Ynhi", XmagelayerFire, 60000)
-   // else autoPartyCheck("Ynhi", Xmagelayer, 60000);
-    autoPartyCheck("Ynhi", Xmagelayer, 60000);
+    if (boss_fi)autoPartyCheck("Ynhi", XmagelayerFire, 60000);
+    else autoPartyCheck("Ynhi", Xmagelayer, 60000);
+    //autoPartyCheck("Ynhi", Xmagelayer, 60000);
 
     // --- LOGIC TIMEOUT 10 PHÚT (Bỏ qua nếu là Stage 2) ---
     if ((!member1 || !member2) && !boss_fi && startTimeX === null) {
@@ -664,7 +668,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
         return;
     }
 
-    // --- CHIẾN THUẬT GỬI LỆNH ---
+    // --- CHIẾN THUẬT GỬI LỆNH vòng 1---
     if (boss_fz && Date.now() - last_sent_cm > 14000 && !get_player("MuaBan") ) {
        send_cm("MuaBan", {
             command: "assist_xmage",
@@ -672,17 +676,29 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
         });
         last_sent_cm = Date.now();
     }
+
+    // --- CHIẾN THUẬT GỬI LỆNH vòng 2---
+    if (boss_fi && Date.now() - last_sent_cm > 14000 && !get_player("nhiY") ) {
+       send_cm("nhiY", {
+            command: "assist_xmage1",
+            instance_key: character.in  // Gửi cái mã nhiều ký tự này đi
+        });
+        last_sent_cm = Date.now();
+    }
+
+	
 	
     // cho dừng luôn
-    if (boss_fi && member1 && character.map === "winter_instance")stop_character(Xmagelayer);
-    
+    if (boss_fi && member1 && member1.id == Xmagelayer && character.map === "winter_instance")stop_character(Xmagelayer);
+    if (boss_fn && member1 && member1.id == XmagelayerFire && character.map === "winter_instance")stop_character(XmagelayerFire);
 
+	
     // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---
-    if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
+    if (character.map == "winter_instance" && (!member1 || !member2)) {
         if (Date.now() - last_sent_cm > 400) {
             last_sent_cm = Date.now();
-            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(Xmagelayer, character.in); }, 400);
-            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(Xmagelayer, "goo2"); }, 800);
+            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1.id, character.in); }, 400);
+            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(member1.id, "goo2"); }, 800);
         }
     }
 
