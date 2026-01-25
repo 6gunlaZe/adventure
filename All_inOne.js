@@ -723,13 +723,32 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 
 	
 
-    // --- DI CHUYỂN NGOÀI MAP ---> tới vị trí hầm ngục
+// --- LOGIC DI CHUYỂN NGOÀI MAP ---> tới vị trí hầm ngục
     if (character.map != "winter_instance") {
         if (character.map != "winterland") {
             smart_move({ map: "winterland", x: 1049, y: -2002 });
         } else {
-            if (distance(character, { x: 1049, y: -2002 }) < 50) {
-                if (member1 && member2 && member2.hp > 15000 && distance(character,member1) < 40 && distance(character,member2) < 40 ) enter("winter_instance");
+            let dist_to_gate = distance(character, { x: 1049, y: -2002 });
+            
+            if (dist_to_gate < 50) {
+                // LOG KIỂM TRA ĐIỀU KIỆN VÀO CỔNG
+                if (!member1 || !member2) {
+                    console.log(`%c [WAIT] Thiếu người: ${member1_name}: ${member1 ? "OK" : "VẮNG"} | Ynhi: ${member2 ? "OK" : "VẮNG"}`, "color: orange");
+                } else {
+                    let d1 = distance(character, member1);
+                    let d2 = distance(character, member2);
+                    let hp2 = member2.hp;
+
+                    console.log(`%c [CHECK] Khoảng cách: ${member1_name}: ${d1.toFixed(0)}px | Ynhi: ${d2.toFixed(0)}px | HP Ynhi: ${hp2}`, "color: cyan");
+
+                    if (hp2 > 15000 && d1 < 40 && d2 < 40) {
+                        console.log("%c [ACTION] ĐỦ ĐIỀU KIỆN - ĐANG VÀO!", "color: green; font-weight: bold");
+                        enter("winter_instance");
+                    } else {
+                        if (hp2 <= 15000) console.log("%c -> Thất bại: Ynhi thiếu máu (>15k mới vào)", "color: red");
+                        if (d1 >= 40 || d2 >= 40) console.log("%c -> Thất bại: Khoảng cách quá xa (<40px mới vào)", "color: red");
+                    }
+                }
             } else {
                 xmove(1049, -2002);
             }
