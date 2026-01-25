@@ -523,7 +523,7 @@ function on_cm(name, data) {
     if (typeof data === "object" && data !== null) {
         game_log("Lệnh nhận được: " + data.command)
         // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
-        if (name === "haiz" && data.command === "assist_xmage" && !smart.moving) {
+        if (name === "haiz" && data.command === "assist_xmage") {
             const dungeon_key = data.instance_key; // Đây là mã character.in từ Haiz
 
             if (dungeon_key && character.map != "winter_instance" ) {
