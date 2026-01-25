@@ -1690,29 +1690,29 @@ function Handelbossvip() {
 
 
 function Xmage() {
-	
-if (character.map != "winter_instance" )return
+    if (character.map != "winter_instance") return;
 
-const host = get_player("haiz");
-	if (host && distance(character, host) > 100 ){
-		smart_move({ map: "winter_instance", x: host.real_x, host.real_y });  
-		xmove(host.real_x, host.real_y );
-	}
-	
-    if (!host)smart_move({ map: "winterland", x: 1049, y: -2002 });
+    const host = get_player("haiz");
 
-// 2. Logic sử dụng kỹ năng Poison Arrow QUÊN MẤT KHÔNG DÙNG ĐƯỢC, XMAGE KHÁNG TẤT CẢ MÀ
+    if (host) {
+        if (distance(character, host) > 100) {
+            smart_move({ map: "winter_instance", x: host.real_x, y: host.real_y });
+            xmove(host.real_x, host.real_y);
+        }
+    } else {
+        // Nếu không thấy host, quay về điểm tập kết
+        smart_move({ map: "winterland", x: 1049, y: -2002 });
+    }
+
+    // Logic kỹ năng
     const target = get_target();
-    
-    if (target && can_use("poisonarrow") && target.mtype === "xmagen" &&  locate_item("poison") !== -1 && 1 > 2 ) {
-        // Kiểm tra khoảng cách bắn (thường là range của nhân vật hoặc kỹ năng)
+
+    // "1 > 2" để script ko chạy vì  quái đó kháng hiệu ứng
+    if (target && can_use("poisonarrow") && target.mtype === "xmagen" && locate_item("poison") !== -1 && 1 > 2) {
         if (distance(character, target) <= character.range) {
             use_skill('poisonarrow', target);
         }
     }
-
-	
-
 }
 
 
