@@ -4506,9 +4506,51 @@ function distanceToPoint(x1, y1, x2, y2) {
 
 
 
+//////////////////////////////////
 
+// ===== CONFIG =====
+const KEEP_AMOUNT = 3; // Số lượng món đồ muốn giữ lại trong túi
+const MULE_NAME = "MuaBan";
 
+const ITEM_WHITELIST = [
+    "fieldgen0",
+];
 
+// ===== SEND FUNCTION =====
+function sendItems(name) {
+    let lootMule = get_player(name);
+    if (!lootMule || distance(character, lootMule) > 250) return;
+
+    // Duyệt qua từng loại item trong danh sách trắng
+    ITEM_WHITELIST.forEach(itemName => {
+        // Lấy tất cả các ô đồ có chứa item này và không bị khóa/seal
+        let itemsOfThisType = character.items
+            .map((item, index) => ({...item, index}))
+            .filter(item => item && item.name === itemName && !item.l && !item.s);
+
+        // Tính tổng số lượng hiện có
+        let totalCount = itemsOfThisType.reduce((sum, item) => sum + (item.q ?? 1), 0);
+
+        // Nếu tổng số lượng lớn hơn mức cần giữ lại
+        if (totalCount > KEEP_AMOUNT) {
+            let amountToSend = totalCount - KEEP_AMOUNT;
+            console.log(`Đang gửi ${amountToSend} ${itemName} cho ${name} (Giữ lại ${KEEP_AMOUNT})`);
+
+            // Bắt đầu gửi từ các ô đồ
+            for (let item of itemsOfThisType) {
+                if (amountToSend <= 0) break;
+
+                let qInSlot = item.q ?? 1;
+                let sendQty = Math.min(qInSlot, amountToSend);
+
+                send_item(lootMule, item.index, sendQty);
+                amountToSend -= sendQty;
+            }
+        }
+    });
+}
+
+setInterval(() => sendItems(MULE_NAME), 30000);
 
 
 
