@@ -129,7 +129,10 @@ async function eventer() {
     let tank = get_player("Ynhi");
 
     try {
-        if (folowhaizevents) {
+
+	if (character.map == "winter_instance" ){
+		Xmage()
+    } else if (folowhaizevents) {
              handlebossPro(evenmuaban)
 	} else if (framboss > 0) {
 		
@@ -1691,8 +1694,12 @@ function Xmage() {
 if (character.map != "winter_instance" )return
 
 const host = get_player("haiz");
-	if (host && distance(character, host) > 100 && !smart.moving ) xmove(host.real_x, host.real_y );
-
+	if (host && distance(character, host) > 100 ){
+		smart_move({ map: "winter_instance", x: host.real_x, host.real_y });  
+		xmove(host.real_x, host.real_y );
+	}
+	
+    if (!host)smart_move({ map: "winterland", x: 1049, y: -2002 });
 
 // 2. Logic sử dụng kỹ năng Poison Arrow QUÊN MẤT KHÔNG DÙNG ĐƯỢC, XMAGE KHÁNG TẤT CẢ MÀ
     const target = get_target();
