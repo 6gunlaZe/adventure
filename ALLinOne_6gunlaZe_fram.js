@@ -1205,7 +1205,7 @@ function check_quai_A4_stop_attach() {
     var quai = get_nearest_monster({type: "a4"});
 	//     if (quai && is_in_range(quai) && (check_viem_xung_quanh() == 1 || is_on_cooldown("scare") )) {
 
-    if ( (quai && is_in_range(quai) && check_viem_xung_quanh() == 1 ) || scaaaa == 1 ) {
+    if ( (quai && is_in_range(quai) && check_viem_xung_quanh() == 1 ) || is_on_cooldown("scare") ) {
         return 1;
     } else {
         return 0;
@@ -1213,7 +1213,7 @@ function check_quai_A4_stop_attach() {
 }
 // if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 
-let scaaaa = 0;
+
 function scare() {
     const slot = character.items.findIndex(i => i && i.name === "jacko");
     const orb = character.items.findIndex(i => !i);
@@ -1244,21 +1244,15 @@ else if (current.target == character.name &&
 
     if ((mobnum > 0 && targetedForMoreThanOneSecond) || mobnum > 2 ){
         if (!is_on_cooldown("scare")) {
-			scaaaa = 1;
             setTimeout(() => {
                 if (!is_on_cooldown("scare")) {
                     equip(slot);
                     use("scare");
                     equip(slot);
                 }
-            }, 400); // 1000 milliseconds = 1 second
+            }, 200); // 1000 milliseconds = 1 second
         }
     }
-	else
-		{
-			scaaaa = 0;
-		}
-	
 }
 setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
