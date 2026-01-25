@@ -85,7 +85,7 @@ setInterval(() => {
         isRunning = true;
         mainLogic().finally(() => isRunning = false);
     }
-}, 500); // Chạy mỗi 0.5s để phản xạ nhanh hơn
+}, 1000); // Chạy mỗi 0.5s để phản xạ nhanh hơn
 
 // ================== MAIN LOGIC ==================
 async function mainLogic() {
