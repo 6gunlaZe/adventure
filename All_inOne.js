@@ -697,8 +697,8 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
         if (Date.now() - last_sent_cm > 400) {
             last_sent_cm = Date.now();
-            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1.name, character.in); }, 400);
-            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(member1.name, "goo2"); }, 800);
+            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1_name, character.in); }, 400);  // dùng member1_name thay member1.name vì khi vào hầm ngục trước sẽ không còn member1 vì nó không có thấy.
+            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(member1_name, "goo2"); }, 800);
         }
     }
 
