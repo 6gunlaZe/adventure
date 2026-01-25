@@ -636,7 +636,7 @@ function framXmage() {
     let boss_fn = get_nearest_monster({ type: "xmagen" }); // Stage 3
     let boss_x = get_nearest_monster({ type: "xmagex" });   // Stage 4
 
-let member1_name = boss_fi ? "XmagelayerFire" : "Xmagelayer";
+let member1_name = boss_fi ? XmagelayerFire : Xmagelayer;
 let member1 = get_player(member1_name);
     let member2 = get_player("Ynhi");
 
