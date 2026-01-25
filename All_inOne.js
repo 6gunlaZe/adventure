@@ -689,7 +689,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 	
 	
     // cho dừng luôn
-    if (boss_fi && member1 && member1.name == Xmagelayer && character.map === "winter_instance")
+    if ( ((boss_fz && boss_fz.hp < 5000) || boss_fi) && member1 && member1.name == Xmagelayer && character.map === "winter_instance")
 	{
 		stop_character(Xmagelayer);
 		stop_character("MuaBan");
