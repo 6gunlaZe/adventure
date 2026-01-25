@@ -672,7 +672,7 @@ if (smart.moving) return
 			
 if (lootMule11 != null) {
   const dist11 = distance(character, lootMule11);
-  if (dist11 < 180)
+  if (dist11 < 180 && character.map != "winter_instance" )
 	{
 		  use_skill("mluck", lootMule11);
    use_skill("town")
@@ -687,7 +687,7 @@ if (lootMule11 != null) {
 
 if (lootMule21 != null) {
   const dist21 = distance(character, lootMule21);
-  if (dist21 < 180)
+  if (dist21 < 180 && character.map != "winter_instance" )
 	{
 		  use_skill("mluck", lootMule21);
    use_skill("town")
@@ -702,7 +702,7 @@ if (lootMule21 != null) {
 			
 if (lootMule31 != null) {
   const dist31 = distance(character, lootMule31);
-  if (dist31 < 180)
+  if (dist31 < 180 && character.map != "winter_instance" )
 	{
 		  use_skill("mluck", lootMule31);
    use_skill("town")
@@ -716,7 +716,7 @@ if (lootMule31 != null) {
 	
 if (lootMule41 != null) {
   const dist41 = distance(character, lootMule41);
-  if (dist41 < 180)
+  if (dist41 < 180 && character.map != "winter_instance" )
 	{
 		  use_skill("mluck", lootMule41);
    use_skill("town")
@@ -731,7 +731,7 @@ if (lootMule41 != null) {
 
 if (lootMule51 != null) {
   const dist51 = distance(character, lootMule51);
-  if (dist51 < 180)
+  if (dist51 < 180 && character.map != "winter_instance" )
 	{
 		  use_skill("mluck", lootMule51);
    use_skill("town")
@@ -1193,7 +1193,7 @@ else if (character.mp/character.max_mp < 0.7) {
 
 
 setInterval(function() {
-    if (!smart.moving && character.esize < 1) {
+    if (!smart.moving && character.esize < 1 && character.map != "winter_instance" ) {
         if(character.map != "main") use_skill("town")
 smart_move({ map: "main", x: -200, y: -110 }, () => {
   open_stand();
