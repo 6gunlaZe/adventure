@@ -155,26 +155,37 @@ async function eventer() {
 	} else if (framtay > 0) {
 
 		
+const curMap = character.map;
 const hasFieldGen = locate_item("fieldgen0") !== -1;
 
-const keys = [
+const keyData = [
     { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
     { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
     { 
-        name: "frozen",
-        count: hasFieldGen ? count_item("frozenkey") : 0,
-        action: framXmage,
-        map: "winter_instance"
+        name: "frozen", 
+        count: hasFieldGen ? count_item("frozenkey") : 0, 
+        action: framXmage, 
+        map: "winter_instance" 
     }
-].sort((a, b) => b.count - a.count);
+];
 
-const curMap = character.map;
-const currentJob = keys.find(k => k.map === curMap);
+// 1. Tìm xem map hiện tại có nằm trong danh sách farm không
+const currentJob = keyData.find(k => k.map === curMap);
 
-if (keys[0].count > 0) {
-    keys[0].action();
+if (currentJob) {
+    // ƯU TIÊN HÀNG ĐẦU: Nếu đang ở map đó, cứ thực hiện action của map đó
+    // (Bất kể count > 0 hay count == 0 theo yêu cầu của bạn)
+    currentJob.action();
 } else {
-    currentJob ? currentJob.action() : (framtay = 0);
+    // 2. Nếu map hiện tại không trùng key nào, tìm key có số lượng nhiều nhất
+    const topKey = [...keyData].sort((a, b) => b.count - a.count)[0];
+
+    if (topKey && topKey.count > 0) {
+        topKey.action();
+    } else {
+        // 3. Nếu không còn key nào cả
+        framtay = 0;
+    }
 }
 
 		
