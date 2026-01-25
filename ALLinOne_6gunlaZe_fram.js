@@ -1253,13 +1253,12 @@ else if (current.target == character.name &&
                 }
             }, 400); // 1000 milliseconds = 1 second
         }
-		else
+    }
+	else
 		{
 			scaaaa = 0;
 		}
-
-		
-    }
+	
 }
 setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
