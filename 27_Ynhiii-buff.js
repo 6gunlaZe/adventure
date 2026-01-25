@@ -225,7 +225,7 @@ if (
         }
         // ---- CÙNG MAP → XMOVE ----
         else {
-            if (distance(character, { x: targetX, y: targetY }) > 10) {
+            if (distance(character, { x: targetX, y: targetY }) > 10 && !smart.moving) {
                 xmove(targetX, targetY);
             }
         }
