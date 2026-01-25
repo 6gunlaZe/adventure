@@ -66,15 +66,18 @@ function checkTimeBetweenCalls(setMoc = 0) {
 
 
 
-
-// ================== GLOBAL STATE ==================
+// ================== CẤU HÌNH & BIẾN KHỞI TẠO ==================
 let isRunning = false;
 let isMoving = false;
+let moveStart = Date.now();
+const MOVE_MAX = 15000; // 15 giây reset nếu kẹt
 let townUsed = false;
 
-// --- watchdog nhẹ ---
-let moveStart = 0;
-const MOVE_MAX = 55000; // 15s chống kẹt
+// Giả sử các biến này bạn đã định nghĩa ở đâu đó, nếu chưa hãy uncomment:
+// var nhanvatfram = "LeaderName"; 
+// var crepp = "bee"; 
+// var framfocus = 0;
+// var receivedData = null; 
 
 // ================== MAIN LOOP ==================
 setInterval(() => {
@@ -82,129 +85,92 @@ setInterval(() => {
         isRunning = true;
         mainLogic().finally(() => isRunning = false);
     }
-}, 1000);
+}, 500); // Chạy mỗi 0.5s để phản xạ nhanh hơn
 
 // ================== MAIN LOGIC ==================
 async function mainLogic() {
     let leader = get_player("haiz");
     let tranferr = get_player("nhiY");
 
-    // ====== ANTI STUCK DI CHUYỂN (NHẸ) ======
-    // Sửa lệch trạng thái isMoving
-    if (isMoving && !smart.moving) {
+    // 1. CẬP NHẬT TRẠNG THÁI DI CHUYỂN
+    // Nếu smart.moving của game dừng, ta cũng reset biến isMoving
+    if (!smart.moving) {
         isMoving = false;
     }
 
+    // 2. ƯU TIÊN TUYỆT ĐỐI: HOLIDAY EVENT
+    if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
+        if (!isMoving && !smart.moving) {
+            isMoving = true;
+            moveStart = Date.now();
+            try {
+                console.log("Đang đi lấy Buff Holiday...");
+                await smart_move({ to: "town" });
+                parent.socket.emit("interaction", { type: "newyear_tree" });
+            } catch (e) {
+                console.log("Holiday move failed");
+            } finally {
+                isMoving = false;
+            }
+        }
+        return; 
+    }
 
-// ====== PRIORITY: HOLIDAY MOVE ======
-if (
-    parent?.S?.holidayseason &&
-    !character?.s?.holidayspirit
-) {
-    // nếu chưa di chuyển thì khởi động move
-    if (!isMoving && !smart.moving) {
-        isMoving = true;
-        moveStart = Date.now();
-
-        try {
-            await smart_move({ to: "town" });
-            parent.socket.emit("interaction", { type: "newyear_tree" });
-        } catch (e) {
-            console.log("Holiday move failed");
-        } finally {
+    // 3. KIỂM TRA STUCK (CHỐNG KẸT)
+    if (isMoving || smart.moving) {
+        if (Date.now() - moveStart > MOVE_MAX) {
+            console.log("PHÁT HIỆN KẸT → RESET DI CHUYỂN");
+            stop(); // Dừng mọi hành động di chuyển hiện tại
             isMoving = false;
+        } else {
+            return; // Đang di chuyển bình thường, thoát để không đè lệnh xmove
         }
     }
 
-    // ƯU TIÊN TUYỆT ĐỐI → KHÔNG CHẠY LOGIC KHÁC
-    return;
-}
-
-
-
-	
-    // Nếu đang di chuyển → kiểm tra timeout
-    if (isMoving || smart.moving) {
-        if (Date.now() - moveStart > MOVE_MAX) {
-            console.log("MOVE STUCK → RESET");
-            isMoving = false;
-            smart.moving = false;
-        } else {
+    // 4. WINTERLAND SAFETY
+    if (character.map === "winterland" && distance(character, { x: 800, y: 400 }) < 250) {
+        if (!leader && !townUsed) {
+            townUsed = true;
+            await use_skill("town");
             return;
         }
     }
-
-    // ====== WINTERLAND SAFETY ======
-    if (
-        character.map === "winterland" &&
-        distance(character, { x: 800, y: 400 }) < 250 &&
-        !leader &&
-        !townUsed
-    ) {
-        townUsed = true;
-        await use_skill("town");
-        return;
-    }
-
-    // Reset townUsed nếu đã về town hoặc bank
     if (character.map === "main" || character.map === "bank") {
         townUsed = false;
     }
 
-    // ====== PARTY CONTROL ======
+    // 5. PARTY CONTROL
     if (!character.party) {
         send_party_request("haiz");
-    }
-
-    if (character.party && character.party !== "haiz") {
+    } else if (character.party !== "haiz") {
         leave_party();
     }
-
     if (!character.party) return;
 
-    // ====== XMOVE NHẸ KHI ĐÃ GẦN ======
-    if (
-        receivedData &&
-        typeof receivedData === "object" &&
-        receivedData.message === "location" &&
-        tranferr
-    ) {
-        const { map: Map, x: X, y: Y } = receivedData;
-        if (character.map === Map && distance(character, { x: X, y: Y }) < 150) {
-            if (distance(character, { x: X, y: Y }) > 10) {
-                xmove(X, Y);
-            }
-        }
-    }
-
-    // ====== FRAMFOCUS (GIỮ NGUYÊN LOGIC) ======
-    let leaderfram = get_player(nhanvatfram);
-    if (
-        framfocus === 1 &&
-        leaderfram &&
-        distance(character, leaderfram) < 230 &&
-        distance(character, leader) < 230 &&
-        get_nearest_monster({ type: crepp })
-    ) {
+    // 6. LOGIC CHIẾN ĐẤU / FARM FOCUS (GIỮ NGUYÊN)
+    let leaderfram = (typeof nhanvatfram !== 'undefined') ? get_player(nhanvatfram) : null;
+    if (typeof framfocus !== 'undefined' && framfocus === 1 && leaderfram && 
+        distance(character, leaderfram) < 230 && distance(character, leader) < 230) {
+        // Có thể thêm logic tấn công ở đây
         kitefram = 1;
-        return;
+        return; 
     } else {
         kitefram = 0;
     }
 
-    // Gần leader thì không cần di chuyển
-    if (leader && distance(character, leader) < 130) return;
-
-    // ====== DI CHUYỂN CHÍNH ======
-    if (
-        receivedData &&
-        typeof receivedData === "object" &&
-        receivedData.message === "location"
-    ) {
+    // 7. DI CHUYỂN THEO DỮ LIỆU NHẬN ĐƯỢC (receivedData)
+    if (receivedData && typeof receivedData === "object" && receivedData.message === "location") {
         const { map: targetMap, x: targetX, y: targetY } = receivedData;
+        const dist = distance(character, { x: targetX, y: targetY });
 
-        // ---- KHÁC MAP → SMART MOVE ----
-        if (character.map !== targetMap && character.map !== "crypt") {
+        // Nếu cùng Map và đã ở gần (trong tầm 50px) -> Dừng di chuyển
+        if (character.map === targetMap && dist < 50) {
+            return;
+        }
+
+        // TRƯỜNG HỢP 1: KHÁC MAP HOẶC QUÁ XA (> 500px) -> DÙNG SMART MOVE
+        if (character.map !== targetMap || dist > 500) {
+            if (character.map === "crypt") return; // An toàn cho map crypt
 
             if (targetMap === "goobrawl") {
                 parent.socket.emit("join", { name: "goobrawl" });
@@ -212,27 +178,24 @@ if (
 
             isMoving = true;
             moveStart = Date.now();
-
             try {
                 await smart_move({ map: targetMap, x: targetX, y: targetY });
             } catch (err) {
-                console.log("Không thể đi tới điểm đến, dùng town.");
+                console.log("Smart move lỗi, dùng Town");
                 await use_skill("town");
             } finally {
                 isMoving = false;
             }
-
-        }
-        // ---- CÙNG MAP → XMOVE ----
+        } 
+        // TRƯỜNG HỢP 2: CÙNG MAP & KHOẢNG CÁCH VỪA PHẢI -> DÙNG XMOVE
         else {
-            if (distance(character, { x: targetX, y: targetY }) > 10 && !smart.moving) {
+            // Không set isMoving = true ở đây để vòng lặp sau không bị 'return' ở bước 3
+            if (!smart.moving) {
                 xmove(targetX, targetY);
             }
         }
     }
 }
-
-
 
 
 
