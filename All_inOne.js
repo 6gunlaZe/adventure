@@ -689,16 +689,16 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 	
 	
     // cho dừng luôn
-    if (boss_fi && member1 && member1.id == Xmagelayer && character.map === "winter_instance")stop_character(Xmagelayer);
-    if (boss_fn && member1 && member1.id == XmagelayerFire && character.map === "winter_instance")stop_character(XmagelayerFire);
+    if (boss_fi && member1 && member1.name == Xmagelayer && character.map === "winter_instance")stop_character(Xmagelayer);
+    if (boss_fn && member1 && member1.name == XmagelayerFire && character.map === "winter_instance")stop_character(XmagelayerFire);
 
 	
     // --- RECHECK khi đã ở trong, thì gọi vào (Chỉ gọi khi không phải Stage 2) ---vì nhiY đã có logic vào tương tự MuaBan
     if (character.map == "winter_instance" && !boss_fi && (!member1 || !member2)) {
         if (Date.now() - last_sent_cm > 400) {
             last_sent_cm = Date.now();
-            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1.id, character.in); }, 400);
-            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(member1.id, "goo2"); }, 800);
+            setTimeout(() => { send_cm("Ynhi", character.in); send_cm(member1.name, character.in); }, 400);
+            setTimeout(() => { send_cm("Ynhi", "goo2"); send_cm(member1.name, "goo2"); }, 800);
         }
     }
 
