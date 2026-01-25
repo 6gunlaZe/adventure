@@ -1440,7 +1440,7 @@ async function handleBossZap() {
             if (targetBoss && isHaizStandingStill && isHaizLonely) {
                 const hasZapperEquipped = character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper";
                 const canZap = !is_on_cooldown("zapperzap") && character.mp > 6000 && hasZapperEquipped;
-
+                 if (!hasZapperEquipped)equipSet('fram');
                 if (canZap) {
                     console.log(`%c[PRIORITY-ZAP] Đang zap ưu tiên: ${targetBoss.mtype}`, "color: #00ff00; font-weight: bold;");
                     await use_skill("zapperzap", targetBoss);
