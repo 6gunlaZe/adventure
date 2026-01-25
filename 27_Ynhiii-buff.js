@@ -880,20 +880,33 @@ function tryAbsorb() {
     let bestTarget = null;
     let highestScore = 0;
 
-    // --- KIỂM TRA ƯU TIÊN XMAGEN ---
-    // Tìm xmagen trong thực thể xung quanh
-    const xmagen = Object.values(parent.entities).find(e => e.mtype === "xmagen" && !e.dead);
-    
-    // Nếu xmagen đang đánh ai đó KHÔNG PHẢI mình và người đó ở gần
-    if (xmagen && xmagen.target && xmagen.target !== character.name) {
-        const targetPlayer = get_player(xmagen.target);
-        if (targetPlayer && !targetPlayer.rip && distance(character, targetPlayer) <= 240) {
-            bestTarget = xmagen.target;
-            highestScore = 9999; // Điểm số tối thượng để bỏ qua các logic khác
-        }
-    }
 
-    // Nếu không tìm thấy xmagen cần can thiệp, chạy logic party bình thường
+
+// --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM ---
+const priority_mobs = ["xmagen", "xmagefi"];
+
+// Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
+const boss_entity = Object.values(parent.entities).find(e => 
+    priority_mobs.includes(e.mtype) && !e.dead
+);
+
+if (boss_entity && boss_entity.target && boss_entity.target !== character.name) {
+    const teammate = get_player(boss_entity.target);
+    
+    // Nếu đồng đội đang bị Boss đánh và ở trong tầm hỗ trợ (240px)
+    if (teammate && !teammate.rip && distance(character, teammate) <= 240) {
+        
+        // Mục tiêu lúc này là ĐỒNG ĐỘI để thực hiện Buff/Hỗ trợ
+        bestTarget = boss_entity.target; 
+        highestScore = 9999; // điểm số ưu tiên
+
+    }
+}
+
+
+
+	
+    // Nếu không tìm thấy BOSS cần can thiệp, chạy logic party bình thường
     if (!bestTarget) {
         for (let name in party) {
             if (name === character.name) continue;
