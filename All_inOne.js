@@ -1814,7 +1814,7 @@ async function skillLoop() {
         const cc = character.cc < 235;
         const zapperMobs = ["plantoid"];
         const stMaps = ["", "winter_cove", "arena", "",];
-        const aoeMaps = ["halloween", "goobrawl", "spookytown", "tunnel", "main", "winterland", "cave", "level2n", "level2w", "desertland","tomb","crypt","cyberland"];
+        const aoeMaps = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance"];
         let tank = get_entity(f1111);
 	     let f1 = get_entity(f2222); ///CUNG THỦ - MÁU GIẤY
 
@@ -2054,7 +2054,7 @@ const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
 function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance"];
+    const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance"];
     const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
         type === "monster" &&
         visible &&
