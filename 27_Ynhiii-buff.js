@@ -2156,6 +2156,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
         equipSet('creepburn');	
 		return
 	}
+
+	if(get_nearest_monster({ type: crepp }) && lowHpMobs.length == 0 && goldcheck == 0 && character.hp/character.max_hp > 0.98)
+	{
+        eTime = currentTime; 
+        equipSet('fram');	
+		return
+	}
+	
 	
 	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
