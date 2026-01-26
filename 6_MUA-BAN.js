@@ -455,7 +455,7 @@ if (character.map == "winter_instance" )return
 	}
 	if ( is_moving(character) && checkloi1 == 1 )checkloi1 = 0
 	
-if ( !is_moving(character) && checkloi1 == 1 &&  Date.now() > (checkloi + 20000) )
+if ( !is_moving(character) && checkloi1 == 1 &&  Date.now() > (checkloi + 20000) && character.map != "winter_instance" )
 {
 checkloi1 = 0
 vanchuyen = 0
@@ -490,7 +490,7 @@ vanchuyenHPMP = 0
 	
 	
 
-	if (checktui == 1 && (Date.now() > (delaybank + ten3sec)) )
+	if (checktui == 1 && (Date.now() > (delaybank + ten3sec)) && character.map != "winter_instance" )
 	{
        checktui = 0;
 	smart_move({ map: "main", x: -200, y: -110 }, () => {
@@ -915,7 +915,7 @@ let lastBossvip12Time = 0;
 let bossvip3Count = 0; // ✅ đếm số lần gọi bossvip3
 
 function taskBoss() {
-    if (frankymode == 1 || icemode == 1 || crabxxmode == 1) return;
+    if (frankymode == 1 || icemode == 1 || crabxxmode == 1 || character.map == "winter_instance") return;
 
     const now = Date.now();
     const elapsed = (now - startTime) / 60000; // phút đã trôi qua
