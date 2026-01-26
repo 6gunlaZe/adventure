@@ -519,14 +519,28 @@ function on_cm(name, data) {
     if (nhanvatphu) { transport_ids[nhanvatphu] = 1; }
     const collectors = Object.keys(transport_ids);
 
+
+	
+
     // 2. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Dành cho lệnh chiến thuật có Instance Key)
     if (typeof data === "object" && data !== null) {
+
+    const targetPos = { map: "winterland", x: 1049, y: -2002 };
+    // Check an toàn: Nếu smart tồn tại và đang di chuyển
+    // Nếu smart là null, isGoingToCorrectPlace sẽ là false
+    const isGoingToCorrectPlace = smart && 
+                                  smart.moving && 
+                                  smart.map === targetPos.map && 
+                                  smart.x === targetPos.x && 
+                                  smart.y === targetPos.y;
+		
+		
         game_log("Lệnh nhận được: " + data.command)
         // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
         if (name === "haiz" && data.command === "assist_xmage") {
             const dungeon_key = data.instance_key; // Đây là mã character.in từ Haiz
 
-            if (dungeon_key && character.map != "winter_instance" ) {
+            if (dungeon_key && character.map != "winter_instance" && (!isGoingToCorrectPlace || !smart.moving) ) {
                 game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
                 
                 // Di chuyển đến cửa hang
