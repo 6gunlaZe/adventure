@@ -883,14 +883,14 @@ function tryAbsorb() {
 
 
 // --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM ---
-const priority_mobs = ["xmagen", "xmagefi"];
+const priority_mobs = ["xmagen", "xmagefi", "xmagex"];
 
 // Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
 const boss_entity = Object.values(parent.entities).find(e => 
     priority_mobs.includes(e.mtype) && !e.dead
 );
 
-if (boss_entity && boss_entity.target && boss_entity.target !== character.name) {
+if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 10000 && character.mp > 700) {
     const teammate = get_player(boss_entity.target);
     
     // Nếu đồng đội đang bị Boss đánh và ở trong tầm hỗ trợ (240px)
