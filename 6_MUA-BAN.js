@@ -1103,61 +1103,58 @@ function timbosskill()
 }	
 ////////////////////////////////////////	/
 
+let lastBuyHP = 0;
+let lastBuyMP = 0;
 
+const BUY_DELAY = 15000; // 5 giây giữa các lần mua
 
 function checkbuyhp()
-{	
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
+{
+    let soluonghp = 0;
 
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
+    for (let i = 0; i < character.isize; i++) {
+        const item = character.items[i];
+        if (!item) continue;
 
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
+        if (item.name === "hpot1") {
+            soluonghp += item.q;
+        }
+    }
 
-            }				
-			}
-	/////////	
-	if ( soluonghp < 7000 )buy("hpot1",9999);
+    if (soluonghp < 7000) {
+        const now = Date.now();
 
+        if (now - lastBuyHP > BUY_DELAY) {
+            buy("hpot1", 9999);
+            lastBuyHP = now;
+            game_log("BUY HP POTION: " + soluonghp);
+        }
+    }
 }
 
 
 function checkbuymp()
-{	
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
+{
+    let soluongmp = 0;
 
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
+    for (let i = 0; i < character.isize; i++) {
+        const item = character.items[i];
+        if (!item) continue;
 
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
+        if (item.name === "mpot1") {
+            soluongmp += item.q;
+        }
+    }
 
-            }				
-			}
-	/////////	
-	if ( soluongmp < 7000 )buy("mpot1",9999);
+    if (soluongmp < 7000) {
+        const now = Date.now();
 
+        if (now - lastBuyMP > BUY_DELAY) {
+            buy("mpot1", 9999);
+            lastBuyMP = now;
+            game_log("BUY MP POTION: " + soluongmp);
+        }
+    }
 }
 
 
