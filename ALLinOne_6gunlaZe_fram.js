@@ -1695,10 +1695,7 @@ function Xmage() {
     const host = get_player("haiz");
 
     if (host) {
-        if (distance(character, host) > 100) {
-            smart_move({ map: "winter_instance", x: host.real_x, y: host.real_y });
-            xmove(host.real_x, host.real_y);
-        }
+      kite(host, character.range)
     } else {
         // Nếu không thấy host, quay về điểm tập kết
         smart_move({ map: "winterland", x: 1049, y: -2002 });
