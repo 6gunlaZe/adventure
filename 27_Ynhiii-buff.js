@@ -867,7 +867,7 @@ setInterval(() => {
 
 let lastAbsorbTime = 0;
 const ABSORB_DELAY = 700; // ms
-const ABSORB_DELAY_BOSS = 1700; // ms
+const ABSORB_DELAY_BOSS = 1200; // ms
 
 function tryAbsorb() {
     if (!character.party) return;
@@ -891,11 +891,11 @@ const boss_entity = Object.values(parent.entities).find(e =>
     priority_mobs.includes(e.mtype) && !e.dead
 );
 
-if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 10000 && character.mp > 700 && (now - lastAbsorbTime) > ABSORB_DELAY_BOSS ) {
+if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 8500 && character.mp > 500 && (now - lastAbsorbTime) > ABSORB_DELAY_BOSS ) {
     const teammate = get_player(boss_entity.target);
     
     // Nếu đồng đội đang bị Boss đánh và ở trong tầm hỗ trợ (240px)
-    if (teammate && !teammate.rip && distance(character, teammate) <= 240) {
+    if (teammate && !teammate.rip && distance(character, teammate) <= 240 && teammate.hp / teammate.max_hp < 0.85 ) {
         
         // Mục tiêu lúc này là ĐỒNG ĐỘI để thực hiện Buff/Hỗ trợ
         bestTarget = boss_entity.target; 
