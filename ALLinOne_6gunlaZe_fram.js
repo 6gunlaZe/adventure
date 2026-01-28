@@ -1691,18 +1691,18 @@ function Handelbossvip() {
 
 function Xmage() {
     if (character.map != "winter_instance") return;
-
+	
+    const target = get_target();
     const host = get_player("haiz");
 
-    if (host) {
-      kite(host, character.range)
+    if (host && target) {
+      kite(target, character.range)
     } else {
         // Nếu không thấy host, quay về điểm tập kết
-        smart_move({ map: "winterland", x: 1049, y: -2002 });
+         if (!host)smart_move({ map: "winterland", x: 1049, y: -2002 });
     }
 
     // Logic kỹ năng
-    const target = get_target();
 
     // "1 > 2" để script ko chạy vì  quái đó kháng hiệu ứng
     if (target && can_use("poisonarrow") && target.mtype === "xmagen" && locate_item("poison") !== -1 && 1 > 2) {
