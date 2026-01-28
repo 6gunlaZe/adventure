@@ -1814,7 +1814,7 @@ const equipmentSets = {
 	
     deffbrun: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "orba", slot: "orb", level: 3, l: "l"},	    
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -1918,7 +1918,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
 	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "orba", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
     ],
@@ -1946,7 +1946,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
 	    { itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "orba", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 		
