@@ -495,7 +495,8 @@ async function attackLoop() {
      const healerr = get_player("Ynhi");
     const f1112 = get_player(f1111);
 
-
+	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 300;
+	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 300;
 	
 const isCupid = character.slots.mainhand?.name === "cupid";
 const codame = !isCupid;
@@ -539,7 +540,7 @@ const { targets, inRange: monstersInRangeList, characterRange: monsterscharacter
 		if(codame)weaponSet("heal");
 
 let healTargets = lowest_health_partymember(0.9, true);
-if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
+if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   ) {
 	 if(!codame)await use_skill("3shot", healTargets.slice(0, 3));
 	delay = ms_to_next_skill("attack");  
 } else if (healTargets.length >= 1) {
@@ -560,21 +561,21 @@ if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   
 		    
 	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
               //khi máu yếu và đang di chuyển thông minh không làm gì cả
-	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
+	    }else if (monstersInRangeList.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
                 
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
 		    else weaponSet("boom");
               if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
                 
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
 		    else weaponSet("shot5");
               if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 3 && character.mp > mp3  && leader && leader.hp > 10000) {
 		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
 		    else
 			{	
