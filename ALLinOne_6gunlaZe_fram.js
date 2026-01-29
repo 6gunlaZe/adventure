@@ -495,8 +495,8 @@ async function attackLoop() {
      const healerr = get_player("Ynhi");
     const f1112 = get_player(f1111);
 
-	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 300;
-	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 300;
+	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 500;
+	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 500;
 	
 const isCupid = character.slots.mainhand?.name === "cupid";
 const codame = !isCupid;
