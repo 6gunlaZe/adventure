@@ -924,7 +924,7 @@ if (boss_entity && boss_entity.target && boss_entity.target !== character.name &
                 e.type === "monster" &&  
                 e.target === name &&
                 !e.dead &&
-                distance(player, e) < 250 && !NO_ABSORB_MOBS.includes(e.mtype) // 🚫 chặn quái trong list
+                distance(player, e) < 250 && !NO_ABSORB_MOBS.includes(e.mtype)
             );
 
             if (threats.length === 0) continue;
@@ -1326,7 +1326,7 @@ async function handleZap() {
         if (!dead && zap && !smart.moving && character.map != "spider_instance" ) {
             // Scan all mobs that are in the zapperMobs list
             const entities = Object.values(parent.entities).filter(entity =>
-                entity && entity.type === "monster" && !entity.target && 
+                entity && entity.type === "monster" && !entity.target && !NO_ABSORB_MOBS.includes(e.mtype) &&
 				( (entity.level < 4 && zapperMobs.includes(entity.mtype) )  ||  quaiyeu.includes(entity.mtype)  ) &&
                 is_in_range(entity, "zapperzap") &&
                 entity.visible && !entity.dead
