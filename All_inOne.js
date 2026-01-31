@@ -2090,7 +2090,7 @@ let creeps = list.filter(m => m.mtype.includes(home))
                  .sort((a,b)=> distance(character, a) - distance(character, b));
 
 
-const hasStrongCreep = creeps.some(c => c.tattack > 800);
+const hasStrongCreep = creeps.some(c => c.attack > 800);
 // Quái cần quan tâm thật sự:
 //   - Giữ toàn bộ quái không phải creep
 //   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
