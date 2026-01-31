@@ -88,10 +88,14 @@ const locations = {
   { type: "farm", x: 406, y: -351, map: "mforest" },
   { type: "safe", x: 252, y: -220, map: "mforest" }
     ],
+    pppompom: [
+  { type: "farm", x: 275, y: -188, map: "level2n" },
+  { type: "safe", x: 46, y: -127, map: "level2n" }
+    ],
 
 };
 
-const home = 'dryad';
+const home = 'pppompom';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
