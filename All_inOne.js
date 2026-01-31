@@ -2069,7 +2069,7 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
 
 
 // Quái trong range nhưng chưa có target + HP ≥ 4000
-let list = monstersInRange.filter(m => !m.target && m.hp >= 4000 && m.attack < 1000);
+let list = monstersInRange.filter(m => !m.target && m.hp >= 4000);
 
 // Lấy MP của Ynhi (đồng đội / nhân vật phụ)
 let ynhi = get_player("Ynhi");
@@ -2089,12 +2089,19 @@ if ( !get_nearest_monster({ type: home }) )	ignore = 0 /// chỉ có thể bỏ 
 let creeps = list.filter(m => m.mtype.includes(home))
                  .sort((a,b)=> distance(character, a) - distance(character, b));
 
+
+const hasStrongCreep = creeps.some(c => c.tattack > 800);
 // Quái cần quan tâm thật sự:
 //   - Giữ toàn bộ quái không phải creep
 //   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
 const untargetedMonsters = list
-    .filter(m => !m.mtype.includes(home))
-    .concat(creeps.slice(ignore));
+  .filter(m => !m.mtype.includes(home))
+  .concat(
+    hasStrongCreep
+      ? creeps                // có creep mạnh → lấy hết
+      : creeps.slice(ignore)  // không có → bỏ qua X con
+  );
+
 
 
 //const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
