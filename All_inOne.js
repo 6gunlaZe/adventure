@@ -2211,7 +2211,7 @@ else if (
 // 🐷 Pppompom chưa có target → chủ động đánh skill
 else if (
     !is_on_cooldown("taunt") && tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
-    character.hp > 16000
+    character.hp > 17000 && character.mp > 1000
 ) {
     const pppompom = get_nearest_monster1({
         type: "pppompom",
