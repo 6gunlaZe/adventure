@@ -84,7 +84,7 @@ const locations = {
   { type: "safe", x: 252, y: -220, map: "mforest" }
     ],
     pppompom: [
-  { type: "farm", x: 70, y: -133, map: "level2n" },
+  { type: "farm", x: 46, y: -127, map: "level2n" },
   { type: "safe", x: 46, y: -127, map: "level2n" }
     ],
 
