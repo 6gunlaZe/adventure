@@ -864,6 +864,10 @@ setInterval(() => {
 
 
 
+// ❌ Quái không bao giờ được absorb vào target của nó
+const NO_ABSORB_MOBS = [
+    "pppompom",
+];
 
 let lastAbsorbTime = 0;
 const ABSORB_DELAY = 700; // ms
@@ -920,7 +924,7 @@ if (boss_entity && boss_entity.target && boss_entity.target !== character.name &
                 e.type === "monster" &&  
                 e.target === name &&
                 !e.dead &&
-                distance(player, e) < 250
+                distance(player, e) < 250 && !NO_ABSORB_MOBS.includes(e.mtype) // 🚫 chặn quái trong list
             );
 
             if (threats.length === 0) continue;
