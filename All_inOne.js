@@ -3514,24 +3514,59 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
+
+let priorityTargets = ["6gunlaZe"];
 let bossarmycheckkill=["icegolem", "franky" , "crabxx" ]; 
-function get_nearest_monster1(args) ///săn boss franky, ice, CABX
+
+function get_nearest_monster1(args)
 {
- let checkkill = 0
+	let checkkill = 0;
 	var heal = get_player("Ynhi"); 
 	var heal1 = get_player(f2222); 
-	var min_d=character.range + 225,target=null;
-// Nếu không có buff/heal và máu thấp thì bỏ qua việc đánh boss mạnh
-if (!heal && character.hp < 13000) return null;
-if (!heal && !heal1) return null;	
+
+	if (!heal && character.hp < 13000) return null;
+	if (!heal && !heal1) return null;	
+
 	if(!args) args={};
 	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
+
+	let min_d = character.range + 225;
+	let target = null;
+
+	// ==============================
+	// 🔥 PASS 1: Ưu tiên quái đang target người chỉ định
+	// ==============================
+	for(id in parent.entities)
+	{
+		let current = parent.entities[id];
+		if(current.type!="monster" || !current.visible || current.dead) continue;
+
+		if(!priorityTargets.includes(current.target)) continue;
+
+		if (bossarmycheckkill.includes(current.mtype)) {
+			checkkill = get_nearest_playerV_noMyparty(current);
+			if (checkkill < 2) continue;
+		}
+
+		let c_dist = parent.distance(character, current);
+		if(c_dist < min_d) {
+			min_d = c_dist;
+			target = current;
+		}
+	}
+
+	// Nếu đã tìm được → trả luôn
+	if(target) return target;
+
+	// ==============================
+	// PASS 2: Logic cũ (gần nhất)
+	// ==============================
+	min_d = character.range + 225;
+	target = null;
 
 	for(id in parent.entities)
 	{
-		var current=parent.entities[id];
+		let current = parent.entities[id];
 		if(current.type!="monster" || !current.visible || current.dead) continue;
 		if(args.type && current.mtype!=args.type) continue;
 		if(args.min_xp && current.xp<args.min_xp) continue;
@@ -3540,21 +3575,22 @@ if (!heal && !heal1) return null;
 		if(args.no_target && current.target && current.target!=character.name) continue;
 		if(args.NO_target && current.target) continue;
 
-// 🔐 Chỉ check kill-steal với boss army // khhi có nhiều người đánh boss thì nó mới trả boss cho mình đánh
-if (bossarmycheckkill.includes(current.mtype)) {
-    checkkill = get_nearest_playerV_noMyparty(current);
-    if (checkkill < 2) continue;
-}
+		if (bossarmycheckkill.includes(current.mtype)) {
+			checkkill = get_nearest_playerV_noMyparty(current);
+			if (checkkill < 2) continue;
+		}
 
-
-
-		
 		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
+
+		let c_dist = parent.distance(character,current);
+		if(c_dist < min_d) {
+			min_d = c_dist;
+			target = current;
+		}
 	}
 	return target;
 }
+
 
 
 
