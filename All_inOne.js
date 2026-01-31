@@ -2208,6 +2208,21 @@ else if (
         game_log(`🧲 Taunted ${mob.mtype}`, "#AA00FF");
     }
 }
+// 🐷 Pppompom chưa có target → chủ động đánh skill
+else if (
+    !is_on_cooldown("taunt") && tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
+    character.hp > 16000
+) {
+    const pppompom = get_nearest_monster1({
+        type: "pppompom",
+        NO_target: true,      // ❗ chưa có target
+    });
+
+    if (pppompom && is_in_range(pppompom, "taunt")) {
+        await use_skill("taunt", pppompom.id);
+        game_log(`🐷 Taunt pppompom (free pull)`, "#FF8800");
+    }
+}
 
 
 
