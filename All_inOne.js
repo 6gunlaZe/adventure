@@ -3514,7 +3514,7 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 
 
-
+let bossarmycheckkill=["icegolem", "franky" , "crabxx" ]; 
 function get_nearest_monster1(args) ///săn boss franky, ice, CABX
 {
  let checkkill = 0
@@ -3540,8 +3540,12 @@ if (!heal && !heal1) return null;
 		if(args.no_target && current.target && current.target!=character.name) continue;
 		if(args.NO_target && current.target) continue;
 
-	    checkkill = get_nearest_playerV_noMyparty(current)
-	    if (checkkill < 2)continue
+// 🔐 Chỉ check kill-steal với boss army // khhi có nhiều người đánh boss thì nó mới trả boss cho mình đánh
+if (bossarmycheckkill.includes(current.mtype)) {
+    checkkill = get_nearest_playerV_noMyparty(current);
+    if (checkkill < 2) continue;
+}
+
 
 
 		
