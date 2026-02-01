@@ -79,13 +79,18 @@ const locations = {
   { type: "farm", x: -20, y: 675, map: "mforest" },
   { type: "safe", x: -240, y: 700, map: "mforest" }
     ],
+    ent: [
+  { type: "farm", x: -39, y: -1953, map: "desertland" },
+  { type: "safe", x: -66, y: -1862, map: "desertland" }
+    ],	
+	
 
 };
 
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'fireroamer';
+const home = 'ent';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
