@@ -2213,6 +2213,21 @@ else if (
         game_log(`🧲 Taunted ${mob.mtype}`, "#AA00FF");
     }
 }
+// 🐷 ent chưa có target → chủ động đánh skill
+else if (
+    !is_on_cooldown("taunt") && tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
+    character.hp > 17000 && character.mp > 1000 && !character.target && get_nearest_monster({ type: "ent" })
+) {
+    const ent = get_nearest_monster1({
+        type: "ent",
+        NO_target: true,      // ❗ chưa có target
+    });
+
+    if (ent && is_in_range(ent, "taunt")) {
+        await use_skill("taunt", ent.id);
+        game_log(`🐷 Taunt ent (free pull)`, "#FF8800");
+    }
+}	
 // 🐷 Pppompom chưa có target → chủ động đánh skill
 else if (
     !is_on_cooldown("taunt") && tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
