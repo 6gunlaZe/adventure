@@ -4029,6 +4029,7 @@ if ( sI != "PVP" && !(sR == region  && sI == serverIden) )
 {
 change_server(sR, sI);
 }
+	else  bosscantank = 1;  //không cầm Muban ra check rồi mới qua mà qua luôn
 
 }
 	
