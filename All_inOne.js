@@ -349,9 +349,9 @@ function handleEvents() {
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
-        //handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
+        handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
         //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
-	 //   if(Now_is_gobalevenrun)return
+	    if(Now_is_gobalevenrun)return
 		
         handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
 	    if(Now_is_gobalevenrun)return
@@ -1557,6 +1557,9 @@ let callnguoi = 0
 //hpThreshold = ngưỡng sắp chết đổi item luck
 function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
     if (parent?.S?.[eventType]?.live) {
+
+				    autoPartyCheck(f1111, f2222, 60000);
+
 	    if (callnguoi < 200)
 	    {
 		    send_cm("MuaBan",eventType)
@@ -1570,7 +1573,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 if (character.cc < 100) {
                     equipSet('single');
                 }
-            } else if (character.cc < 100) {
+            } else if (character.cc < 100 && monster.target == "haiz") {
                 equipSet('luck');
 		    setTimeout(waitAndUnluck, 5000);
             }
@@ -1610,7 +1613,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
                 if (character.cc < 100) {
                     equipSet('single');
                 }
-            } else if (character.cc < 100) {
+            } else if (character.cc < 100 && monster.target == "haiz") {
                 equipSet('luck');
 		    setTimeout(waitAndUnluck, 5000);
             }
@@ -3388,7 +3391,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
 			}
                    
                 }
-            } else if (character.cc < 100) {
+            } else if (character.cc < 100 && monster.target == "haiz") {
                 equipSet('luck');
 		    setTimeout(waitAndUnluck, 5000);
             }
