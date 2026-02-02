@@ -253,6 +253,7 @@ async function checkGameEvents() {
     const events1 = [
        // { eventType: 'snowman', type: 'withJoin' },
 	//    { eventType: 'wabbit', type: 'withJoin' },
+        { eventType: 'dragold', type: 'withJoin' },
 		
         { eventType: 'goobrawl', type: 'specific' },
         { eventType: 'crabxx', type: 'pro' },
@@ -3958,7 +3959,7 @@ setInterval(() => {
 
 
 setInterval(() => {
- 	checkServersForMonsters(["franky"] ,["icegolem"] );  
+ 	checkServersForMonsters(["franky"] ,["icegolem"],["dragold"]);  
 
 }, 80000); // 60s check 1lan
 
@@ -3977,115 +3978,102 @@ setTimeout(() => {
 
 // setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000); //check boss gần ra thì không cho đi
 
+//////////////////////////////////////////////////
 
-async function checkServersForMonsters(monsters,monsters1) {
-  // Safety Checks
-  if (!Array.isArray(monsters)) return;
-  if (monsters.length == 0) return;
-  if (!Array.isArray(monsters1)) return;
-  if (monsters1.length == 0) return;
-   if (events || framtay == 1) return	
+async function checkServersForMonsters(monsters, monsters1, monsters2) {
 
-	
-	
-let validObjects0
-let validObjects
-let validObjects1
-	 let hpcheck =120000000   // máu của franky
-	 let hpcheck1 =13000000    // máu của icegolem
+  // ================= SAFETY CHECKS =================
+  if (!Array.isArray(monsters) || monsters.length === 0) return;
+  if (!Array.isArray(monsters1) || monsters1.length === 0) return;
+  if (!Array.isArray(monsters2) || monsters2.length === 0) return;
+  if (events || framtay == 1) return;
 
-  // Query API
-  const url = "https://aldata.earthiverse.ca/monsters/" + monsters.join(",");
+  // ================= BOSS CONFIG =================
+  const BOSS_CONFIG = [
+    {
+      name: "franky",
+      monsters: monsters,
+      hpMax: 120000000,
+      hpDelta: 18000000,
+      setCantank: true, //không cần chờ muaban tới xác nhận
+      priority: 3
+    },
+    {
+      name: "icegolem",
+      monsters: monsters1,
+      hpMax: 13000000,
+      hpDelta: 0,
+      setCantank: false,
+      priority: 2
+    },
+    {
+      name: "dragold",
+      monsters: monsters2,
+      hpMax: 25600000,
+      hpDelta: 600000,
+      setCantank: false,
+      priority: 1
+    }
+  ];
 
-  const response = await fetch(url);
-  if (response.status == 200) {
-    const data = await response.json();
-  //  parent.S2 = data;
-validObjects0 = data.filter(obj => obj.hp !== undefined  && obj.serverIdentifier != "PVP" );	
-validObjects = data.filter(obj => obj.hp !== undefined && obj.hp < (hpcheck-18000000 )    && obj.serverIdentifier != "PVP" );	  	  
+  // ================= FETCH HELPER =================
+  async function fetchBoss(monsterList, hpMax, hpDelta) {
+    if (!Array.isArray(monsterList) || monsterList.length === 0) return [];
+
+    const url = "https://aldata.earthiverse.ca/monsters/" + monsterList.join(",");
+    const res = await fetch(url);
+    if (res.status !== 200) return [];
+
+    const data = await res.json();
+
+    return data.filter(obj =>
+      obj.hp !== undefined &&
+      obj.serverIdentifier !== "PVP" &&
+      obj.hp < (hpMax - hpDelta)
+    );
   }
-  // Query API1
-  const url1 = "https://aldata.earthiverse.ca/monsters/" + monsters1.join(",");
 
-  const response1 = await fetch(url1);
-  if (response1.status == 200) {
-    const data1 = await response1.json();
-  //  parent.S3 = data1;
+  // ================= MAIN LOGIC =================
+  for (const boss of BOSS_CONFIG.sort((a, b) => a.priority - b.priority)) {
 
-validObjects1 = data1.filter(obj => obj.hp !== undefined && obj.hp < hpcheck1  && obj.serverIdentifier != "PVP");
+    const validObjects = await fetchBoss(
+      boss.monsters,
+      boss.hpMax,
+      boss.hpDelta
+    );
 
+    if (validObjects.length === 0) continue;
+
+    // chọn boss máu thấp nhất
+    const minHpObject = validObjects.reduce(
+      (min, obj) => (obj.hp < min.hp ? obj : min)
+    );
+
+    const sR = minHpObject.serverRegion;
+    const sI = minHpObject.serverIdentifier;
+
+    game_log("chuyen " + boss.name + " SV >>>> " + sR + sI);
+
+    const region = server.region;
+    const serverIden = server.id;
+
+    if (sI !== "PVP" && !(sR === region && sI === serverIden)) {
+      change_server(sR, sI);
+    }
+    else if (boss.setCantank) {
+      bosscantank = 1;
+    }
+
+    return; // ⚠ GIỮ ĐÚNG HÀNH VI else-if cũ
   }
-///////////////////////////////////////////////////////	  
-if (validObjects.length > 0) // co nguoi dang kill franky
-{
-  let minHpObject = validObjects.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen fr  SV  >>>>" + sR + sI )
 
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
+  // ================= NOTHING FOUND =================
+  game_log("khong tim thay doi tuong");
 }
-	else  bosscantank = 1;  //không cầm Muban ra check rồi mới qua mà qua luôn
 
-}
-	
-else if (validObjects1.length > 0)	///co nguoi dang kill icegolem
-{
 
-let minHpObject = validObjects1.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen ice  SV  >>>>" + sR + sI )
 
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}
-		
-}
-	
-else if (validObjects0.length > 0 && 1 > 2 )	///cho doi nguoi qua kill frannky // qua trước kể cả khi frany full máu  // không cần qua trước làm gì nữa
-{	  
 
-let minHpObject = validObjects0.reduce((min, obj) => obj.hp < min.hp ? obj : min);
-	
-let sR =minHpObject.serverRegion;
-let sI =minHpObject.serverIdentifier;
-game_log ("chuyen wait SV  >>>>" + sR + sI )
-
-let region = server.region;
-let serverIden = server.id	
-	
-	
-if ( sI != "PVP" && !(sR == region  && sI == serverIden) ) 
-{
-change_server(sR, sI);
-}		
-
-	
-}
-	  else
-	  {
-	  	  game_log ("khong tim thay doi tuong")
-	  }
-	  
-	  
-/////////////////////////////////  
- 
- 
-}
 
 /////////////////////////////////////////////////////
 
