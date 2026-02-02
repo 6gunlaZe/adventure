@@ -223,6 +223,7 @@ if (currentJob) {
 		else
 		{
 		handleHome();
+			callnguoi = 0;
 		}
     }
 	    
