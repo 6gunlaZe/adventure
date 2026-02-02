@@ -9,7 +9,7 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = "pppompom1111"
+var crepp = "plantoid"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
