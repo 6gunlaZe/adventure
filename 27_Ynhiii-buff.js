@@ -1322,28 +1322,15 @@ async function handleZap() {
 
 
     try {
-		// if (currentState === "looting") return;
         if (!dead && zap && !smart.moving && character.map != "spider_instance" ) {
             // Scan all mobs that are in the zapperMobs list
             const entities = Object.values(parent.entities).filter(entity =>
-                entity && entity.type === "monster" && !entity.target && !NO_ABSORB_MOBS.includes(e.mtype) &&
+                entity && entity.type === "monster" && !entity.target && !NO_ABSORB_MOBS.includes(entity.mtype) &&
 				( (entity.level < 4 && zapperMobs.includes(entity.mtype) )  ||  quaiyeu.includes(entity.mtype)  ) &&
                 is_in_range(entity, "zapperzap") &&
                 entity.visible && !entity.dead
             );
-            //console.log("Entities:", entities.length, entities.map(e => e.mtype));  // For debugging
-			/*
-            // Step 1: Equip the correct set based on mob presence
-            if (entities.length > 0 && character.cc < 175 && character.slots.ring2?.name !== "zapper") {
-                // Equip the zapOn set if there are zapable mobs
-                equipSet("zapOn");
-                //console.log("Equipped zapper set.");
-            } else if (entities.length === 0 && character.cc < 175 && character.slots.ring2?.name !== "ringofluck") {
-                // Equip the zapOff set if all mobs are targeted, dead, or invisible
-                equipSet("zapOff");
-                //console.log("Equipped luck ring set.");
-            }
-            */
+
             // Step 2: Use zapper skill if conditions are met
 		if (character.targets <= soluongTOIDA && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && gun )
 		{
