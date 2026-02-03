@@ -2612,8 +2612,8 @@ let lowHpTarget = null;
 
         if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
 
-// ------------ NEW FEATURE: CHECK LOW HP (ANTI OVERKILL) ----------------
-if (args.check_low_hp) {
+// ------------ NEW FEATURE: CHECK LOW HP (ANTI OVERKILL) chỉ dùng cho quái home fram----------------
+if (args.check_low_hp && current.mtype == home ) {
 
     // 1. Xác định ngưỡng "sắp chết" theo max_hp của quái
     const hpThreshold =
