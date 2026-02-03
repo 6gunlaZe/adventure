@@ -15,6 +15,11 @@ const SERVER_RULES = [
 ];
 
 
+ if (character.rip) { ///////auto hoi sinh KHI KHỞI ĐỘNG
+    respawn();
+  }
+
+
 let lastUpdateTime = performance.now();
 setTimeout(waitAndUnluck, 1000);
 const locations = {
