@@ -3967,7 +3967,7 @@ setInterval(() => {
 setInterval(() => {
  	checkServersForMonsters(["franky"] ,["icegolem"],["dragold"]);  
 
-}, 80000); // 60s check 1lan
+}, 20000); 
 
 
 // Chạy lần đầu sau 7 giây
@@ -3985,99 +3985,66 @@ setTimeout(() => {
 // setInterval(() => watchBosses(["mrpumpkin", "mrgreen"]), 16000); //check boss gần ra thì không cho đi
 
 //////////////////////////////////////////////////
-
 async function checkServersForMonsters(monsters, monsters1, monsters2) {
+  // 1. Kiểm tra nhanh điều kiện cơ bản
+if (events || framtay == 1) return;
 
-  // ================= SAFETY CHECKS =================
-  if (!Array.isArray(monsters) || monsters.length === 0) return;
-  if (!Array.isArray(monsters1) || monsters1.length === 0) return;
-  if (!Array.isArray(monsters2) || monsters2.length === 0) return;
-  if (events || framtay == 1) return;
-
-  // ================= BOSS CONFIG =================
   const BOSS_CONFIG = [
-    {
-      name: "franky",
-      monsters: monsters,
-      hpMax: 120000000,
-      hpDelta: 18000000,
-      setCantank: true, //không cần chờ muaban tới xác nhận
-      priority: 3
-    },
-    {
-      name: "icegolem",
-      monsters: monsters1,
-      hpMax: 13000000,
-      hpDelta: 0,
-      setCantank: false,
-      priority: 2
-    },
-    {
-      name: "dragold",
-      monsters: monsters2,
-      hpMax: 25600000,
-      hpDelta: 600000,
-      setCantank: false,
-      priority: 1
-    }
+    { name: "franky", list: monsters, hpMax: 120000000, hpDelta: 4000000, setCantank: true, priority: 3 },
+    { name: "icegolem", list: monsters1, hpMax: 14000000, hpDelta: 0, setCantank: false, priority: 2 },
+    { name: "dragold", list: monsters2, hpMax: 25700000, hpDelta: 0, setCantank: false, priority: 1 }
   ];
 
-  // ================= FETCH HELPER =================
-  async function fetchBoss(monsterList, hpMax, hpDelta) {
-    if (!Array.isArray(monsterList) || monsterList.length === 0) return [];
+  // Gom tên quái để gọi 1 lần
+  const allNames = [...new Set([...monsters, ...monsters1, ...monsters2])];
+  if (allNames.length === 0) return;
 
-    const url = "https://aldata.earthiverse.ca/monsters/" + monsterList.join(",");
-    const res = await fetch(url);
-    if (res.status !== 200) return [];
+  try {
+    const res = await fetch("https://aldata.earthiverse.ca/monsters/" + allNames.join(","));
+    if (res.status !== 200) return;
+    const allData = await res.json();
 
-    const data = await res.json();
+    // Sắp xếp ưu tiên (Priority 1 chạy trước)
+    const sortedConfigs = BOSS_CONFIG.sort((a, b) => a.priority - b.priority);
 
-    return data.filter(obj =>
-      obj.hp !== undefined &&
-      obj.serverIdentifier !== "PVP" &&
-      obj.hp < (hpMax - hpDelta)
-    );
-  }
+    for (const boss of sortedConfigs) {
+      // LỌC THÔNG MINH:
+      // - Phải có thuộc tính 'hp' (nghĩa là nó đang sống)
+      // - Phải đúng loại type trong list của boss đó
+      // - Không tính server PVP
+      // - Máu phải thấp hơn mức quy định (hpMax - hpDelta)
+      const liveBosses = allData.filter(obj => 
+        obj.hp !== undefined && 
+        boss.list.includes(obj.type) &&
+        obj.serverIdentifier !== "PVP" &&
+        obj.hp < (boss.hpMax - boss.hpDelta)
+      );
 
-  // ================= MAIN LOGIC =================
-  for (const boss of BOSS_CONFIG.sort((a, b) => a.priority - b.priority)) {
+      if (liveBosses.length === 0) continue;
 
-    const validObjects = await fetchBoss(
-      boss.monsters,
-      boss.hpMax,
-      boss.hpDelta
-    );
+      // Chọn con ít máu nhất trong đám đang sống
+      const target = liveBosses.reduce((min, obj) => (obj.hp < min.hp ? obj : min));
 
-    if (validObjects.length === 0) continue;
+      const sR = target.serverRegion;
+      const sI = target.serverIdentifier;
 
-    // chọn boss máu thấp nhất
-    const minHpObject = validObjects.reduce(
-      (min, obj) => (obj.hp < min.hp ? obj : min)
-    );
+      game_log(`Target: ${boss.name} | HP: ${target.hp} | SV: ${sR} ${sI}`);
 
-    const sR = minHpObject.serverRegion;
-    const sI = minHpObject.serverIdentifier;
+      // Thực hiện chuyển server hoặc set biến
+      if (!(sR === server.region && sI === server.id)) {
+        change_server(sR, sI);
+      } else if (boss.setCantank) {
+        bosscantank = 1;
+      }
 
-    game_log("chuyen " + boss.name + " SV >>>> " + sR + sI);
-
-    const region = server.region;
-    const serverIden = server.id;
-
-    if (sI !== "PVP" && !(sR === region && sI === serverIden)) {
-      change_server(sR, sI);
-    }
-    else if (boss.setCantank) {
-      bosscantank = 1;
+      return; // Tìm thấy boss ưu tiên cao nhất rồi thì nghỉ, không check boss thấp hơn
     }
 
-    return; // ⚠ GIỮ ĐÚNG HÀNH VI else-if cũ
+    game_log("Khong tim thay doi tuong nao hop le.");
+  } catch (e) {
+    game_log("Lỗi hệ thống check boss: " + e.message);
   }
-
-  // ================= NOTHING FOUND =================
-  game_log("khong tim thay doi tuong");
 }
-
-
 
 
 
