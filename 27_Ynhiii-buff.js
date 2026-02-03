@@ -544,7 +544,7 @@ party = party
 		let ratio = m.entity.hp / m.entity.max_hp;
 
 		// không ưu tiên 6gunlaZe khi còn trên ~70% máu
-		if (m.name === "6gunlaZe") {
+		if (m.name === "6gunlaZe" && get_nearest_monster({ type: crepp }) ) {
 			ratio += 0.3;
 		}
 		if (m.name === "haiz") {
@@ -615,7 +615,7 @@ function lowest_health_partymember() {
 			member.entity.health_ratio = member.entity.hp / member.entity.max_hp;
 			
         // không ưu tiên cho 6gunlaZe còn trên 70% máu sẽ không buff
-        if (member.name === "6gunlaZe") {
+        if (member.name === "6gunlaZe" && get_nearest_monster({ type: crepp }) ) {
                member.entity.health_ratio += 0.3;
         }
 		if (member.name === "haiz") {
