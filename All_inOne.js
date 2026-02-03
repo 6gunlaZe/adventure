@@ -2083,8 +2083,8 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
 
 
 
-// Quái trong range nhưng chưa có target + HP ≥ 4000
-let list = monstersInRange.filter(m => !m.target && m.hp >= 4000);
+// Quái trong range nhưng chưa có target + HP ≥ 10000
+let list = monstersInRange.filter(m => !m.target && m.hp >= 10000);
 
 // Lấy MP của Ynhi (đồng đội / nhân vật phụ)
 let ynhi = get_player("Ynhi");
