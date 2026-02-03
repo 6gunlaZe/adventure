@@ -1495,7 +1495,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx", "a4", "mrpumpkin", "mrgreen"];
+    const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx", "a4", "mrpumpkin", "mrgreen","dragold"];
     const isPriorityMtype = (m) => priorityMtypes.includes(m.mtype);
     const hasStatus = (m, effects) => m.s && effects.every(e => m.s[e]);
 
