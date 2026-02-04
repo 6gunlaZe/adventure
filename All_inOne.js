@@ -1723,7 +1723,7 @@ for (var i = 0; i < bossarmy.length; i++) {
         if (target && is_in_range(target)) {
 			autoSwapCandy();
             await attack(target); // Initiate attack
-			
+			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
 			
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack      
 			break;  // Nếu tìm thấy thì thoát vòng lặp
@@ -1750,7 +1750,8 @@ for (var i = 0; i < mob.length; i++) {
         if (target1 && is_in_range(target1)) {
 			autoSwapCandy();
             await attack(target1); // Initiate attack
-			
+			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
+
 
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
 			        break;  // Nếu tìm thấy thì thoát vòng lặp
@@ -1772,7 +1773,8 @@ for (var i = 0; i < mob2.length; i++) {
         if (target2 && is_in_range(target2) && character.hp > 7000) {
 			autoSwapCandy();
             await attack(target2); // Initiate attack
-			
+			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
+
 
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
 			        break;  // Nếu tìm thấy thì thoát vòng lặp
@@ -1788,7 +1790,7 @@ for (var i = 0; i < mob2.length; i++) {
 
 if (!nearest){
 	const entity1 = get_entity(character.target) //target mặc định hiện có, bỏ qua các boss
-	if (entity1 && !["franky", "icegolem", "crabxx","stompy", "skeletor"].includes(entity.mtype)) {
+	if (entity1 && !["franky", "icegolem", "crabxx","stompy", "skeletor"].includes(entity1.mtype)) {
 		nearest = entity1
 	}
 }
@@ -1802,7 +1804,8 @@ if (!nearest){
         if (nearest && is_in_range(nearest) && !smart.moving) {
 			autoSwapCandy();
             await attack(nearest); // Initiate attack
-			
+			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
+
 
             delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
         }
