@@ -2589,11 +2589,18 @@ function get_nearest_monster_v2(args = {}) {
 
 let lowHpValue = 0;
 let lowHpTarget = null;
-
+// --- LOGIC ƯU TIÊN ĐẶC BIỆT CHO MOB2 ---
+    const mob2 = ["dragold", "stompy", "skeletor", "xmagefz", "xmagefi", "xmagen", "xmagex", "mrgreen", "mrpumpkin"];
 
     for (let id in parent.entities) {
         let current = parent.entities[id];
         if (current.type != "monster" || !current.visible || current.dead) continue;
+
+// Nếu là Boss trong mob2 + bị Cursed + đang có Target -> TRẢ VỀ NGAY LẬP TỨC
+        if (mob2.includes(current.mtype) && current.s && current.s.cursed && current.target) {
+            return current; 
+        }
+		
         if (args.type && current.mtype != args.type) continue;
         if (args.min_level !== undefined && current.level < args.min_level) continue;
         if (args.max_level !== undefined && current.level > args.max_level) continue;
