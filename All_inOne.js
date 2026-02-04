@@ -3964,10 +3964,17 @@ setInterval(() => {
 
 
 
-setInterval(() => {
- 	checkServersForMonsters(["franky"] ,["icegolem"],["dragold"]);  
+setTimeout(() => {
+    // chạy lần đầu sau 3s
+    checkServersForMonsters(["franky"], ["icegolem"], ["dragold"]);
 
-}, 20000); 
+    // sau đó chạy mỗi 20s
+    setInterval(() => {
+        checkServersForMonsters(["franky"], ["icegolem"], ["dragold"]);
+    }, 20000);
+
+}, 3000);
+
 
 
 // Chạy lần đầu sau 7 giây
