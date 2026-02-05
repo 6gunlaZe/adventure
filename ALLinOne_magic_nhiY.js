@@ -475,6 +475,10 @@ function on_cm(name, data) {
 }
 
 
+function Xmage() {
+
+}
+
 
 // hỗ trợ thoát Xmage khi xong việc
 var no_boss_timer = 0;
