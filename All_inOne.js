@@ -1689,7 +1689,32 @@ if (
             }
         }
 		
+         var mob2=["dragold","stompy", "skeletor", "xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","franky", ]; //boss mạnh cần có healter rồi mới chạy ra đánh nó
+	     let target2 = null;
+if (!nearest && buff && distance(character, buff) < 170){	    
+for (var i = 0; i < mob2.length; i++) {
+     target2= get_nearest_monster({type: mob2[i]});
+		  if(target2)change_target(target2);
+	if ( target2 && !is_in_range(target2) && mob2[i] != "skeletor" && mob2[i] != "stompy" )
+	{
+         gobaltaget = target2;
+	}
+        // If a monster is found and is in range, execute the attack
+        if (target2 && is_in_range(target2) && character.hp > 7000) {
+			autoSwapCandy();
+            await attack(target2); // Initiate attack
+			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
 
+
+            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
+			        break;  // Nếu tìm thấy thì thoát vòng lặp
+
+        }
+
+}
+}
+
+		
 	    
         if (!nearest) {
             for (let i = 0; i < targetNames.length; i++) {
@@ -1704,10 +1729,8 @@ if (
 
 	            let target = null;
 	    let target1 = null;
-	     let target2 = null;
 	    var bossarmy=["icegolem", "franky" , "crabxx" ]; 
 	    	    var mob=["phoenix111", "jr","greenjr", "mvampire","snowman","bgoo","rgoo","wabbit"];
-                    var mob2=["dragold","stompy", "skeletor", "xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin", ]; //boss mạnh cần có healter
     
 // Kiểm tra xem target có thuộc trong bossarmy không
 if (!nearest && events){	  
@@ -1742,7 +1765,7 @@ for (var i = 0; i < mob.length; i++) {
           gobaltaget = target1;
 	}
 	
-        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && !target1.target) {
+        if (target1 && is_in_range(target1, "taunt") && !is_on_cooldown("taunt") && !target1.target && character.mp >= 500 ) {
             await use_skill("taunt", target1); // Sử dụng kỹ năng "taunt" để gây sự chú ý của quái vật vào nhân vật
 		 break;
         }
@@ -1761,31 +1784,8 @@ for (var i = 0; i < mob.length; i++) {
 }
 }
 
-if (!target1 && !target && !nearest && buff && distance(character, buff) < 170){	    
-for (var i = 0; i < mob2.length; i++) {
-     target2= get_nearest_monster({type: mob2[i]});
-		  if(target2)change_target(target2);
-	if ( target2 && !is_in_range(target2) && mob2[i] != "skeletor" && mob2[i] != "stompy" )
-	{
-         gobaltaget = target2;
-	}
-        // If a monster is found and is in range, execute the attack
-        if (target2 && is_in_range(target2) && character.hp > 7000) {
-			autoSwapCandy();
-            await attack(target2); // Initiate attack
-			return setTimeout(attackLoop, Math.max(ms_to_next_skill("attack"), 10)); // Thoát sớm
 
 
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
-			        break;  // Nếu tìm thấy thì thoát vòng lặp
-
-        }
-
-}
-}
-
-
-	    
 
 
 if (!nearest){
