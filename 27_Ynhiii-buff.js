@@ -1106,7 +1106,7 @@ function tryCurse(target, mpReq = 4500) {
 function curseLogic(currentTarget) {
   const leader = get_player("haiz");
     // === 1. Boss / quái nặng cố định ===
-    const priorityTypes = ["franky", "icegolem", "crabxx", "bscorpion"];
+    const priorityTypes = ["franky", "icegolem", "crabxx", "bscorpion","mrgreen","mrpumpkin","dragold","stompy", "skeletor",];
     for (let type of priorityTypes) {
         const t = get_nearest_monster({ type });
         if (tryCurse(t)) return true;
