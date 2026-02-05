@@ -413,7 +413,7 @@ function on_draw(){
   }
 }
 
-
+let keywinter = null;  
 //////////////
 function on_cm(name, data) {
     // 1. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Dành cho lệnh chiến thuật có Instance Key)
@@ -424,7 +424,7 @@ function on_cm(name, data) {
         if (name === "haiz" && data.command === "assist_xmage1" && !smart.moving) {
             if (!smart.moving && character.map !== "winter_instance") {
                 const dungeon_key = data.instance_key;
-
+                keywinter = data.instance_key;
                 if (dungeon_key && character.map != "winter_instance" ) {
                     game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
                     
@@ -495,20 +495,25 @@ setInterval(() => {
             if (no_boss_timer >= 20) {
                 game_log("Boss đã chết. Đang thoát và quay lại làm việc cũ...");
                 no_boss_timer = 0;
-				if (smart.moving) return	
-             smart_move({ map: "winterland", x: 1049, y: -2002 });                
+                if (!smart.moving) {
+                smart_move({ map: "winterland", x: 1049, y: -2002 });
+                }
+           
             }
         } else {
             no_boss_timer = 0; // Thấy boss thì reset bộ đếm
 			if (boss && distance(character, boss) > character.range) xmove(boss.real_x, boss.real_y);
             if (boss && distance(character, boss) <= 70 && smart.moving) stop();
-			
+			if (boss && character.mp < 1300 && !smart.moving)smart_move({ map: "winterland", x: 1049, y: -2002 });  // tự thoát khi hết tác dụng, ra ngoài chờ hồi đủ mana
         }
 
     }
+	else if (character.map === "winterland" && distance(character, { x: 1049, y: -2002 }) < 20  && character.mp > 5300 && character.hp > 5300 && keywinter ) {  // đủ điều kiện vô map đánh nhau rồi
+             enter("winter_instance", keywinter);
+	}
 
 
-}, 150); // Vòng lặp chạy mỗi 1 giây
+}, 150);
 
 
 
