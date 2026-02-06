@@ -835,7 +835,10 @@ setInterval(() => {
 	
     const leader = get_player("haiz");
     if (!leader) return;
+	
+    const ms = ms_to_next_skill("attack");
 
+	
     let currentTarget = get_targeted_monster();
     const leaderTarget = get_target_of(leader);
 
@@ -853,14 +856,33 @@ setInterval(() => {
     tryDarkBlessing(currentTarget);
     curseLogic(currentTarget);
 
-    // ===== A. GLOBAL COOLDOWN (CHỈ 1 ACTION) =====
+    // 🚀 GCD sắp mở → canh nhanh
+    if (ms > 0 && ms < 160 && !gcdFastTimer) {
+        gcdFastTimer = setTimeout(() => {
+            gcdFastTimer = null;
+
+            const t = get_targeted_monster();
+            if (!t) return;
+
+            if (tryHeal()) return;
+            if (hutquaibangtay()) return;
+            if (tryAttack(t)) return;
+
+        }, ms);
+        return;
+    }
+
+    // GCD chưa mở → thôi
+    if (ms > 0) return;
+
+    // ===== GCD ACTION (fallback) =====
     if (tryHeal()) return;
-	if (hutquaibangtay()) return;
+    if (hutquaibangtay()) return;
     if (tryAttack(currentTarget)) return;
 
     buff_khi_ranh();
 
-}, 1000 / 6);
+}, 200);
 
 
 
