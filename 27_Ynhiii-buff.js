@@ -824,6 +824,7 @@ function waitForMidas(timeout = 800) {
 let delayBug = Date.now();
 let attack_mode = true;
 
+let gcdFastTimer = null;
 
 
 setInterval(() => {
