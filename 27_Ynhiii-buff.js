@@ -2034,7 +2034,7 @@ function handleEquipBatchError(message) {
 function ms_to_next_skill(skill) {
     const next_skill = parent.next_skill[skill]
     if (next_skill == undefined) return 0
-    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) + 15;
     return ms < 0 ? 0 : ms;
 }
 
