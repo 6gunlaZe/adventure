@@ -1845,7 +1845,7 @@ function attackLoop() {
 
         const ms = ms_to_next_skill("attack");
 
-        if (ms < Math.max(10, character.ping / 4) && is_in_range(t)) {
+        if (ms < Math.max(10, character.ping / 10) && is_in_range(t)) {
             autoSwapCandy();
             attack(t);
         }
