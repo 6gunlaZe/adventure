@@ -1850,7 +1850,8 @@ function attackLoop() {
             attack(t);
         }
 
-        if (ms > 200) delay = 40;
+        if (ms > 200) delay = 80;
+        else if (ms > 100) delay = 40;
         else if (ms > 60) delay = 20;
         else delay = 5;
 
@@ -1914,6 +1915,19 @@ function targetLoop() {
                 }
             }
         }
+
+        // 3.5 Ưu tiên quái ở gần
+        if (!nearest) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    max_distance: character.range,
+                    check_max_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
 
         // 4️⃣ Event boss
         if (!nearest && events) {
