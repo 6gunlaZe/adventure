@@ -1649,6 +1649,8 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
 const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV","LyThanhThu"];
 
+/*
+
 
 async function attackLoop() {
 	//if (character.moving)return
@@ -1818,6 +1820,152 @@ if (!nearest){
 }
 
 attackLoop();
+
+
+*/
+
+
+function attackLoop() {
+    let delay = 20;
+
+    try {
+        // === TARGET STALE CHECK ===
+        if (
+            combatState.target &&
+            Date.now() - combatState.lastUpdate > 5000
+        ) {
+            combatState.target = null;
+        }
+
+        const t = combatState.target;
+
+        if (!t || smart.moving || is_disabled(character)) {
+            return setTimeout(attackLoop, 40);
+        }
+
+        const ms = ms_to_next_skill("attack");
+
+        if (ms < Math.max(10, character.ping / 4) && is_in_range(t)) {
+            autoSwapCandy();
+            attack(t);
+        }
+
+        if (ms > 200) delay = 40;
+        else if (ms > 60) delay = 20;
+        else delay = 5;
+
+    } catch (e) {}
+
+    setTimeout(attackLoop, delay);
+}
+
+
+// ================= GLOBAL STATE =================
+let combatState = {
+    target: null,
+    targetType: null, // "normal" | "boss" | "danger"
+    lastUpdate: 0
+};
+
+
+function targetLoop() {
+    try {
+        let nearest = null;
+
+        // 1️⃣ Ưu tiên targetNames gần nhà
+        if (
+            character.map === mobMap &&
+            distance(character, locations[home][0]) < 250
+        ) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    max_distance: character.range,
+                    check_low_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
+        // 2️⃣ Ưu tiên cursed
+        if (!nearest) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    statusEffects: ["cursed"],
+                    max_distance: 50,
+                    check_max_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
+        // 3️⃣ Boss mạnh – cần buff
+        const buff = get_player("Ynhi");
+        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","franky"];
+
+        if (!nearest && buff && distance(character, buff) < 170) {
+            for (const m of bossDanger) {
+                const t = get_nearest_monster({ type: m });
+                if (t) {
+                    nearest = t;
+                    combatState.targetType = "danger";
+                    break;
+                }
+            }
+        }
+
+        // 4️⃣ Event boss
+        if (!nearest && events) {
+            for (const m of ["icegolem", "franky", "crabxx"]) {
+                const t = get_nearest_monster1({ type: m });
+                if (t) {
+                    nearest = t;
+                    combatState.targetType = "boss";
+                    break;
+                }
+            }
+        }
+
+        // 5️⃣ Mob thường
+        if (!nearest) {
+            for (const m of ["phoenix111","jr","greenjr","mvampire","snowman","bgoo","rgoo","wabbit"]) {
+                const t = get_nearest_monster({ type: m });
+                if (t) {
+                    nearest = t;
+                    combatState.targetType = "normal";
+                    break;
+                }
+            }
+        }
+
+        // 6️⃣ Fallback: target hiện tại
+        if (!nearest) {
+            const e = get_entity(character.target);
+            if (e && !["franky","icegolem","crabxx","stompy","skeletor"].includes(e.mtype)) {
+                nearest = e;
+            }
+        }
+
+        combatState.target = nearest;
+        combatState.lastUpdate = Date.now();
+
+        if (nearest && !is_in_range(nearest)) {
+            gobaltaget = nearest;
+        }
+
+    } catch (e) {}
+
+    setTimeout(targetLoop, 250);
+}
+
+
+
+
+
+targetLoop();
+attackLoop();
+
 
 
 
