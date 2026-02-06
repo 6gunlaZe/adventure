@@ -802,7 +802,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
                 if (fg_item !== -1) use(fg_item);
             }
             if (gen && distance(character, boss_x) < character.range) {
-                kite_around_fieldgen(gen, 30);
+                kite_around_fieldgen(gen, 1);
             }
         }
 
