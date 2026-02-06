@@ -3056,7 +3056,7 @@ if ( region == HOME_SERVER.region && serverIden == HOME_SERVER.id )
 	}
 }	
 
-if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
+// if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
 	
 if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
 	
