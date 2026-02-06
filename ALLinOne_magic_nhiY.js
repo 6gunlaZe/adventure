@@ -735,8 +735,15 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 	
 	
 ////// buff xạ thủ – có chế độ nguy cấp
-let rangerObj = parent.entities["Ynhi"];
+let rangerObj = ["arena","winter_instance"].includes(character.map)
+    ? ( get_player("Ynhi")
+        || get_player("6gunlaZe")
+        || get_player("haiz") )
+    : ( get_player("6gunlaZe")
+        || get_player("haiz")
+        || get_player("Ynhi") );
 
+	
 if (rangerObj && is_in_range(rangerObj, "energize") && !rangerObj.rip && !is_on_cooldown("energize")) {
 
     let mp_cap = rangerObj.max_mp - 800;          // trần MP cho ranger
