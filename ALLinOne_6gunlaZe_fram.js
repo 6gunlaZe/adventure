@@ -405,8 +405,8 @@ async function attackLoop() {
         if (ms > 300) delay = 200;
         else if (ms > 200) delay = 120;
         else if (ms > 100) delay = 50;
-        else if (ms > 50) delay = 20;
-        else delay = 5;
+        else if (ms > 50) delay = 30;
+        else delay = 10;
 			
          setTimeout(attackLoop, delay);
             return;
@@ -414,8 +414,8 @@ async function attackLoop() {
 
         if (ms > 200) delay = 130;
         else if (ms > 100) delay = 50;
-        else if (ms > 50) delay = 20;
-        else delay = 5;
+        else if (ms > 50) delay = 30;
+        else delay = 10;
       
         // ===== CONTEXT =====
         const leader = get_player("haiz");
