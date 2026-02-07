@@ -408,20 +408,12 @@ async function attackLoop() {
         return setTimeout(attackLoop, 40);
         }
 
-        const ms = ms_to_next_skill("attack");
-
-        //chặn chạy quá sớm
-        if (ms >= Math.max(10, character.ping / 10)){
-
-        if (ms > 300) delay = 200;
-        else if (ms > 200) delay = 120;
-        else if (ms > 100) delay = 50;
-        else if (ms > 50) delay = 30;
-        else delay = 10;
-			 game_log("quá sớm OUT");
-         setTimeout(attackLoop, delay);
-            return;
-        }
+const ms = ms_to_next_skill("attack");
+if (ms > 20) {
+    // Nếu chưa hồi chiêu, chỉ việc đợi, đừng log gì cả để tránh nghẽn buffer
+    setTimeout(attackLoop, Math.max(20, ms-20)); 
+    return;
+}
 
         if (ms > 200) delay = 130;
         else if (ms > 100) delay = 50;
@@ -468,7 +460,7 @@ async function attackLoop() {
             allMonsters.length >= 5 &&
             character.mp > mp5 &&
             leader && leader.hp > 10000 &&
-            !is_on_cooldown("5shot")
+            !is_on_cooldown("5shot") && Date.now() - last_uses_skill > 300
         ) {
 			 game_log("AOE");
             combatState.fsm = FSM.AOE;
@@ -477,7 +469,7 @@ async function attackLoop() {
             allMonsters.length >= 3 &&
             character.mp > mp3 &&
             leader && leader.hp > 10000 &&
-            !is_on_cooldown("3shot")
+            !is_on_cooldown("3shot") && Date.now() - last_uses_skill > 300
         ) {
 			 game_log("AOE");
             combatState.fsm = FSM.AOE;
