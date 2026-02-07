@@ -393,7 +393,6 @@ function targetLoop() {
 			 game_log("Re checkkk");
     } catch (e) {}
 
-    setTimeout(targetLoop, 250);
 }
 
 
@@ -404,16 +403,18 @@ async function attackLoop() {
     let delay = 40;
 
     try {
-        if (character.rip || is_disabled(character) || Date.now() - combatState.lastUpdate > 5000 ){
+        if (character.rip || is_disabled(character) ){
         return setTimeout(attackLoop, 40);
         }
-
+		
 const ms = ms_to_next_skill("attack");
 if (ms > 20) {
     // Nếu chưa hồi chiêu, chỉ việc đợi, đừng log gì cả để tránh nghẽn buffer
     setTimeout(attackLoop, Math.max(20, ms-20)); 
     return;
 }
+		
+targetLoop()
 
         if (ms > 200) delay = 130;
         else if (ms > 100) delay = 50;
@@ -580,7 +581,7 @@ if (ms > 20) {
 
 
 
-targetLoop();
+//targetLoop();
 attackLoop();
 
 
