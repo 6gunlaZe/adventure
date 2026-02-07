@@ -509,11 +509,11 @@ async function attackLoop() {
             if (character.mp > mp5 && !is_on_cooldown("5shot")) {
                 // Ưu tiên 1: Bắn cụm quái quanh Leader (aoeMonsters)
                 if (aoeMonsters.length >= 5) {
-                   await use_skill("5shot", aoeMonsters.slice(0, 5).map(m => m.id));
+                   await use_skill("5shot", aoeMonsters.slice(0, 5));
                 } 
                 // Ưu tiên 2: Nếu quanh Leader không đủ 5, nhưng quanh mình đủ 5 thì vẫn bắn
                 else if (allMonsters.length >= 5) {
-                   await use_skill("5shot", allMonsters.slice(0, 5).map(m => m.id));
+                   await use_skill("5shot", allMonsters.slice(0, 5));
                 }
             }
 
@@ -521,11 +521,11 @@ async function attackLoop() {
             if (!is_on_cooldown("3shot") && character.mp > mp3) {
                 // Ưu tiên 1: Bắn cụm quanh Leader
                 if (aoeMonsters.length >= 3) {
-                  await  use_skill("3shot", aoeMonsters.slice(0, 3).map(m => m.id));
+                  await  use_skill("3shot", aoeMonsters.slice(0, 3));
                 }
                 // Ưu tiên 2: Bắn cụm quanh mình
                 else if (allMonsters.length >= 3) {
-                  await  use_skill("3shot", allMonsters.slice(0, 3).map(m => m.id));
+                  await  use_skill("3shot", allMonsters.slice(0, 3));
                 }
             }
         }
