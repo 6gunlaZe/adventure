@@ -288,6 +288,9 @@ function getLowestHpPercentTarget(targets) {
 }
 
 
+/*
+
+
 
 function check_heal(threshold = 0.9) {
     const targets = lowest_health_partymember(threshold, true);
@@ -597,10 +600,10 @@ if (ms > 20) {
 //targetLoop();
 attackLoop();
 
+*/
 
 
 
-/*
 // không được để return trong hàm loop
 async function attackLoop() {
 	//if (character.moving)return
@@ -808,8 +811,6 @@ else if (targets1.length < 3 && targets1.length > 0 )
 }
 
 attackLoop();
-
-*/
 
 
 
