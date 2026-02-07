@@ -288,8 +288,8 @@ async function attackLoop() {
 
             case FSM.AOE: {
               
-               if (aoeMonsters.length >= 5)smart_equip("boomm")
-               else smart_equip("fire");
+               if (aoeMonsters.length >= 5)smart_equip("pouchbow")
+               else smart_equip("firebow");
 
                if (character.slots.mainhand?.name == "cupid") break;
               
@@ -310,8 +310,8 @@ async function attackLoop() {
 
             case FSM.SINGLE: {
               
-               if (aoeMonsters.length >= 5)smart_equip("boomm")
-               else smart_equip("fire");
+               if (aoeMonsters.length >= 5)smart_equip("pouchbow")
+               else smart_equip("firebow");
               
                 if (aoeMonsters.length > 0) {
                      attack(aoeMonsters[0]);
