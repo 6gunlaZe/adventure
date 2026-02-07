@@ -103,7 +103,21 @@ if (character.name == "Geoffriel") {
 
 
 
+function smart_equip(itemName, slot = "mainhand") {
+    // 1. Kiểm tra xem món đồ đã mặc đúng chỗ chưa
+    if (character.slots[slot]?.name === itemName) return true;
 
+    // 2. Tìm vị trí (index) của món đồ trong hành trang
+    const index = character.items.findIndex(i => i && i.name === itemName);
+
+    // 3. Nếu tìm thấy và khác với thứ đang mặc, gửi lệnh lên server
+    if (index !== -1) {
+        parent.socket.emit("equip", { num: index, slot: slot });
+        return true; 
+    }
+
+    return false; // Không có đồ trong túi
+}
 
 
 const FSM = {
@@ -118,7 +132,6 @@ let combatState = {
     monstersCharRange: [],    // character.range
     leaderTarget: null,
     lastUpdate: 0,
-    slot: -1,
     fsm: FSM.IDLE
 };
 
@@ -128,7 +141,6 @@ function targetLoop() {
     try {
         const rangeThreshold = 50;
         const leader = get_player("haiz");
-        const slotcupi = character.items.findIndex(i => i && i.name === "cupid");
         const X = leader ? leader.x : character.x;
         const Y = leader ? leader.y : character.y;
 
@@ -147,7 +159,6 @@ function targetLoop() {
         combatState.monstersCharRange = monsterscharacterRange;
         combatState.leaderTarget = leader ? get_target_of(leader) : null;
         combatState.lastUpdate = Date.now();
-        if (slotcupi >= 0)combatState.slot = slotcupi;
 
     } catch (e) {}
 
@@ -184,7 +195,6 @@ async function attackLoop() {
         const leader = get_player("haiz");
         const healer = get_player("Ynhi");
         const f1112 = get_player(f1111);
-        const isCupid = character.slots.mainhand?.name === "cupid";
 
         const aoeMonsters = combatState.monstersAOERange;
         const allMonsters = combatState.monstersCharRange;
@@ -209,7 +219,7 @@ async function attackLoop() {
             combatState.fsm = FSM.HEAL;
         }
         else if (
-            aoeMonsters.length >= 5 &&
+            allMonsters.length >= 5 &&
             character.mp > mp5 &&
             leader && leader.hp > 10000 &&
             !is_on_cooldown("5shot")
@@ -217,7 +227,7 @@ async function attackLoop() {
             combatState.fsm = FSM.AOE;
         }
         else if (
-            aoeMonsters.length >= 3 &&
+            allMonsters.length >= 3 &&
             character.mp > mp3 &&
             leader && leader.hp > 10000 &&
             !is_on_cooldown("3shot")
@@ -225,7 +235,6 @@ async function attackLoop() {
             combatState.fsm = FSM.AOE;
         }
         else if (
-            aoeMonsters.length > 0 ||
             allMonsters.length > 0 ||
             (leaderTarget && is_in_range(leaderTarget))
         ) {
@@ -237,7 +246,8 @@ async function attackLoop() {
         switch (combatState.fsm) {
 
             case FSM.HEAL: {
-                if(!isCupid && combatState.slot >= 0)equip(combatState.slot) //trang bị nhanh ô vũ khí cupid đã lưu
+              
+               if (!smart_equip("cupid")) break;
                 const healTargets = lowest_health_partymember(0.9, true);
                 if (!healTargets.length) break;
 
@@ -247,20 +257,32 @@ async function attackLoop() {
             }
 
             case FSM.AOE: {
-                weaponSet("boom"); // hoặc shot5
+              
+               if (aoeMonsters.length >= 5)smart_equip("boomm")
+               else smart_equip("fire");
 
+               if (character.slots.mainhand?.name == "cupid") break;
+              
                 if (aoeMonsters.length >= 5 && character.mp > mp5) {
                      use_skill("5shot", aoeMonsters.slice(0, 5));
                 }
                 else if (aoeMonsters.length >= 3 && character.mp > mp3) {
                      use_skill("3shot", aoeMonsters.slice(0, 3));
                 }
+                else if (allMonsters.length >= 5 && character.mp > mp5) {
+                     use_skill("5shot", allMonsters.slice(0, 5));
+                }
+                else if (allMonsters.length >= 3 && character.mp > mp3) {
+                     use_skill("3shot", allMonsters.slice(0, 3));
+                }
                 break;
             }
 
             case FSM.SINGLE: {
-                weaponSet("single");
-
+              
+               if (aoeMonsters.length >= 5)smart_equip("boomm")
+               else smart_equip("fire");
+              
                 if (aoeMonsters.length > 0) {
                      attack(aoeMonsters[0]);
                 }
