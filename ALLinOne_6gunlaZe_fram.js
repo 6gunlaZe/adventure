@@ -321,20 +321,22 @@ function smart_heal(threshold = 0.9, force_single = 0) {
 }
 
 
+// Thêm biến toàn cục để quản lý việc đổi đồ, tránh spam
+let last_equip_time = 0;
+
 function smart_equip(itemName, slot = "mainhand") {
-    // 1. Kiểm tra xem món đồ đã mặc đúng chỗ chưa
     if (character.slots[slot]?.name === itemName) return true;
+    
+    // Chỉ cho phép đổi đồ sau mỗi 80ms để tránh bị diss
+    if (Date.now() - last_equip_time < 80) return false;
 
-    // 2. Tìm vị trí (index) của món đồ trong hành trang
     const index = character.items.findIndex(i => i && i.name === itemName);
-
-    // 3. Nếu tìm thấy và khác với thứ đang mặc, gửi lệnh lên server
     if (index !== -1) {
-        parent.socket.emit("equip", { num: index, slot: slot });
+        last_equip_time = Date.now();
+        equip(index, slot); // Sử dụng hàm equip chuẩn của game
         return true; 
     }
-
-    return false; // Không có đồ trong túi
+    return false;
 }
 
 
