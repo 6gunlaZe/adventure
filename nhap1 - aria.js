@@ -107,24 +107,27 @@ function check_heal(threshold = 0.9) {
     return targets.length > 0 ? targets[0] : null;
 }
 
-function smart_heal(threshold = 0.9) {
+function smart_heal(threshold = 0.9, force_single = 0) {
 
-    // 2. Tìm danh sách đồng đội cần hồi máu
+    if (character.slots.mainhand?.name != "cupid") return false;
+
+    // 1. Tìm danh sách đồng đội cần hồi máu
     const targets = lowest_health_partymember(threshold, true);
     if (targets.length === 0) return false;
 
-    const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 300; // Buffer MP nhẹ
+    const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 300; 
 
-    // 3. Ưu tiên hồi máu đa mục tiêu (3shot)
-    if (targets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")) {
+    // 2. Ưu tiên hồi máu đa mục tiêu (3shot)
+    // Thêm điều kiện: CHỈ chạy nếu force_single KHÔNG phải là 1
+    if (!force_single && targets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")) {
         use_skill("3shot", targets.slice(0, 3));
         return true;
     } 
     
-    // 4. Hồi máu đơn mục tiêu (attack thường)
+    // 3. Hồi máu đơn mục tiêu (attack thường)
     if (targets.length >= 1) {
-        attack(targets[0]);
-        return true;
+            attack(targets[0]);
+            return true;
     }
 
     return false;
@@ -321,7 +324,7 @@ async function attackLoop() {
                         change_target(leaderTarget);
                      attack(leaderTarget);
                 }
-                else if ( check_heal(0.6) && smart_equip("cupid") )smart_heal(0.7);
+                else if ( check_heal(0.6) && smart_equip("cupid") )smart_heal(0.7,1);
                 break;
             }
 
