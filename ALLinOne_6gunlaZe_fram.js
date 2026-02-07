@@ -390,7 +390,7 @@ function targetLoop() {
         combatState.monstersCharRange = monsterscharacterRange;
         combatState.leaderTarget = leader ? get_target_of(leader) : null;
         combatState.lastUpdate = Date.now();
-
+			 game_log("Re checkkk");
     } catch (e) {}
 
     setTimeout(targetLoop, 250);
@@ -404,7 +404,7 @@ async function attackLoop() {
     let delay = 40;
 
     try {
-        if (character.rip || smart.moving || is_disabled(character) || Date.now() - combatState.lastUpdate > 5000 ){
+        if (character.rip || is_disabled(character) || Date.now() - combatState.lastUpdate > 5000 ){
         return setTimeout(attackLoop, 40);
         }
 
