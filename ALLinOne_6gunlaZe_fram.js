@@ -433,7 +433,7 @@ async function attackLoop() {
 
 // ===== LOG ĐỂ KIỂM TRA (Có thể xóa sau khi tìm ra lỗi) =====
         if (allMonsters.length > 0) {
-            game_log(`[DEBUG] Quái trong tầm: ${allMonsters.length} | MP: ${Math.round(character.mp)}/${mp3} | CD 3shot: ${is_on_cooldown("3shot")}`);
+            game_log(`[DEBUG] Quái trong tầm: ${allMonsters.length} |  Quái AOE: ${aoeMonsters.length} | MP: ${Math.round(character.mp)}/${mp3} | CD 5shot: ${is_on_cooldown("5shot")}`);
         }
 		
         // ===== FSM DECISION =====
