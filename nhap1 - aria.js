@@ -106,19 +106,190 @@ if (character.name == "Geoffriel") {
 
 
 
+const FSM = {
+    HEAL: "HEAL",
+    AOE: "AOE",
+    SINGLE: "SINGLE",
+    IDLE: "IDLE"
+};
+
+let combatState = {
+    monstersAOERange: [],     // inRange (radius 50)
+    monstersCharRange: [],    // character.range
+    leaderTarget: null,
+    lastUpdate: 0,
+    slot: -1,
+    fsm: FSM.IDLE
+};
+
+
+
+function targetLoop() {
+    try {
+        const rangeThreshold = 50;
+        const leader = get_player("haiz");
+        const slotcupi = character.items.findIndex(i => i && i.name === "cupid");
+        const X = leader ? leader.x : character.x;
+        const Y = leader ? leader.y : character.y;
+
+        const {
+            targets, // giữ lại nếu bạn dùng sau
+            inRange: monstersInRangeList,
+            characterRange: monsterscharacterRange
+        } = getPrioritizedTargets(
+            targetNames,
+            X, Y,
+            rangeThreshold,
+            { statusEffects: ["cursed"] }
+        );
+
+        combatState.monstersAOERange = monstersInRangeList;
+        combatState.monstersCharRange = monsterscharacterRange;
+        combatState.leaderTarget = leader ? get_target_of(leader) : null;
+        combatState.lastUpdate = Date.now();
+        if (slotcupi >= 0)combatState.slot = slotcupi;
+
+    } catch (e) {}
+
+    setTimeout(targetLoop, 250);
+}
 
 
 
 
+async function attackLoop() {
+    let delay = 40;
+
+    try {
+        if (character.rip || smart.moving || is_disabled(character) || Date.now() - combatState.lastUpdate > 5000 ){
+        return setTimeout(attackLoop, 40);
+        }
+
+        const ms = ms_to_next_skill("attack");
+
+        //chặn chạy quá sớm
+        if (ms >= Math.max(10, character.ping / 10)){
+            setTimeout(attackLoop, Math.min(ms-50, 180));
+            return;
+        }
+      
+
+        if (ms > 200) delay = 90;
+        else if (ms > 100) delay = 40;
+        else if (ms > 60) delay = 20;
+        else delay = 5;
+
+
+        // ===== CONTEXT =====
+        const leader = get_player("haiz");
+        const healer = get_player("Ynhi");
+        const f1112 = get_player(f1111);
+        const isCupid = character.slots.mainhand?.name === "cupid";
+
+        const aoeMonsters = combatState.monstersAOERange;
+        const allMonsters = combatState.monstersCharRange;
+        const leaderTarget = combatState.leaderTarget;
+
+        const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
+
+        const mp5 = (G.skills["5shot"]?.mp || 0) * 1.1 + 500;
+        const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 500;
+
+        // ===== FSM DECISION =====
+        combatState.fsm = FSM.IDLE;
+
+        const fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+
+        if (
+            (leader && leader.hp < 10500 + mapHealBonus) ||
+            (healer && healer.hp < 8000 + mapHealBonus) ||
+            (f1112 && f1112.hp / f1112.max_hp < 0.5) ||
+            (fieldgen0 && fieldgen0.hp / fieldgen0.max_hp < 0.7)
+        ) {
+            combatState.fsm = FSM.HEAL;
+        }
+        else if (
+            aoeMonsters.length >= 5 &&
+            character.mp > mp5 &&
+            leader && leader.hp > 10000 &&
+            !is_on_cooldown("5shot")
+        ) {
+            combatState.fsm = FSM.AOE;
+        }
+        else if (
+            aoeMonsters.length >= 3 &&
+            character.mp > mp3 &&
+            leader && leader.hp > 10000 &&
+            !is_on_cooldown("3shot")
+        ) {
+            combatState.fsm = FSM.AOE;
+        }
+        else if (
+            aoeMonsters.length > 0 ||
+            allMonsters.length > 0 ||
+            (leaderTarget && is_in_range(leaderTarget))
+        ) {
+            combatState.fsm = FSM.SINGLE;
+        }
+
+        // ===== FSM EXECUTION =====
+
+        switch (combatState.fsm) {
+
+            case FSM.HEAL: {
+                if(!isCupid && combatState.slot >= 0)equip(combatState.slot) //trang bị nhanh ô vũ khí cupid đã lưu
+                const healTargets = lowest_health_partymember(0.9, true);
+                if (!healTargets.length) break;
+
+                attack(healTargets[0]);
+
+                break;
+            }
+
+            case FSM.AOE: {
+                weaponSet("boom"); // hoặc shot5
+
+                if (aoeMonsters.length >= 5 && character.mp > mp5) {
+                     use_skill("5shot", aoeMonsters.slice(0, 5));
+                }
+                else if (aoeMonsters.length >= 3 && character.mp > mp3) {
+                     use_skill("3shot", aoeMonsters.slice(0, 3));
+                }
+                break;
+            }
+
+            case FSM.SINGLE: {
+                weaponSet("single");
+
+                if (aoeMonsters.length > 0) {
+                     attack(aoeMonsters[0]);
+                }
+                else if (allMonsters.length > 0) {
+                     attack(allMonsters[0]);
+                }
+                else if (leaderTarget && is_in_range(leaderTarget) && !leaderTarget.dead) {
+                    if (get_targeted_monster() !== leaderTarget)
+                        change_target(leaderTarget);
+                     attack(leaderTarget);
+                }
+                break;
+            }
+
+            case FSM.IDLE:
+            default:
+                break;
+        }
+
+    } catch (e) {}
+
+    setTimeout(attackLoop, delay);
+}
 
 
 
 
-
-
-
-
-
+targetLoop();
+attackLoop();
 
 
 
