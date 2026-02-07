@@ -418,7 +418,7 @@ async function attackLoop() {
         else if (ms > 100) delay = 50;
         else if (ms > 50) delay = 30;
         else delay = 10;
-			
+			 game_log("quá sớm OUT");
          setTimeout(attackLoop, delay);
             return;
         }
@@ -458,6 +458,7 @@ async function attackLoop() {
             (f1112 && f1112.hp / f1112.max_hp < 0.5) ||
             (fieldgen0 && fieldgen0.hp / fieldgen0.max_hp < 0.7)
         ) {
+			 game_log("HEAL");
             combatState.fsm = FSM.HEAL;
         }
         else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
@@ -469,6 +470,7 @@ async function attackLoop() {
             leader && leader.hp > 10000 &&
             !is_on_cooldown("5shot")
         ) {
+			 game_log("AOE");
             combatState.fsm = FSM.AOE;
         }
         else if (
@@ -477,12 +479,14 @@ async function attackLoop() {
             leader && leader.hp > 10000 &&
             !is_on_cooldown("3shot")
         ) {
+			 game_log("AOE");
             combatState.fsm = FSM.AOE;
         }
         else if (
             (allMonsters.length > 0 ||
             (leaderTarget && is_in_range(leaderTarget))) && Date.now() - last_uses_skill > 300
         ) {
+			 game_log("SINGLE");
             combatState.fsm = FSM.SINGLE;
         }
 
@@ -501,7 +505,7 @@ async function attackLoop() {
               
 // 1. Xác định vũ khí dựa trên danh sách quái quanh Leader (aoeMonsters)
     let targetWeapon = aoeMonsters.length >= 5 ? "pouchbow" : "firebow";
-    
+			 game_log("ZÔ AOE");
     // 2. Đợi mặc đồ xong để tránh lỗi lặp trang bị
     if (smart_equip(targetWeapon)) { 
         if (character.slots.mainhand?.name !== "cupid") {
@@ -510,6 +514,7 @@ async function attackLoop() {
             if (character.mp > mp5 && !is_on_cooldown("5shot")) {
                 // Ưu tiên 1: Bắn cụm quái quanh Leader (aoeMonsters)
                 if (aoeMonsters.length >= 5) {
+								 game_log("AOE 5 BOOM");
                     use_skill("5shot", aoeMonsters.slice(0, 5).map(m => m.id));
 				setTimeout(attackLoop, 270); 
 				last_uses_skill = Date.now();
@@ -517,6 +522,7 @@ async function attackLoop() {
                 } 
                 // Ưu tiên 2: Nếu quanh Leader không đủ 5, nhưng quanh mình đủ 5 thì vẫn bắn
                 else if (allMonsters.length >= 5) {
+								 game_log("AOE 5");
                     use_skill("5shot", allMonsters.slice(0, 5).map(m => m.id));
 				setTimeout(attackLoop, 270); 
 				last_uses_skill = Date.now();
@@ -528,6 +534,7 @@ async function attackLoop() {
                 else if (!is_on_cooldown("3shot") && character.mp > mp3) {
                 // Ưu tiên 1: Bắn cụm quanh Leader
                 if (aoeMonsters.length >= 3) {
+								 game_log("AOE 3 X");
                     use_skill("3shot", aoeMonsters.slice(0, 3).map(m => m.id));
 				setTimeout(attackLoop, 270); 
 				last_uses_skill = Date.now();
@@ -535,6 +542,7 @@ async function attackLoop() {
                 }
                 // Ưu tiên 2: Bắn cụm quanh mình
                 else if (allMonsters.length >= 3) {
+								 game_log("AOE 3");
                     use_skill("3shot", allMonsters.slice(0, 3).map(m => m.id));
 				setTimeout(attackLoop, 270); 
 				last_uses_skill = Date.now();
