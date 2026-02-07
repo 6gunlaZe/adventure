@@ -1728,7 +1728,7 @@ function targetLoop() {
 
         // 3️⃣ Boss mạnh – cần buff
         const buff = get_player("Ynhi");
-        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","franky"];
+        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","icegolem","franky"];
 
         if (!nearest && buff && distance(character, buff) < 170) {
             for (const m of bossDanger) {
@@ -1781,7 +1781,7 @@ function targetLoop() {
         // 6️⃣ Fallback: target hiện tại
         if (!nearest) {
             const e = get_entity(character.target);
-            if (e && !["franky","icegolem","crabxx","stompy","skeletor"].includes(e.mtype)) {
+            if (e && !["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","icegolem","franky"].includes(e.mtype)) {
                 nearest = e;
             }
         }
