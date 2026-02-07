@@ -103,6 +103,31 @@ if (character.name == "Geoffriel") {
 
 
 
+
+async function smart_heal(threshold = 0.9) {
+
+    // 2. Tìm danh sách đồng đội cần hồi máu
+    const targets = lowest_health_partymember(threshold, true);
+    if (targets.length === 0) return false;
+
+    const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 300; // Buffer MP nhẹ
+
+    // 3. Ưu tiên hồi máu đa mục tiêu (3shot)
+    if (targets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")) {
+        use_skill("3shot", targets.slice(0, 3));
+        return true;
+    } 
+    
+    // 4. Hồi máu đơn mục tiêu (attack thường)
+    if (targets.length >= 1) {
+        attack(targets[0]);
+        return true;
+    }
+
+    return false;
+}
+
+
 function smart_equip(itemName, slot = "mainhand") {
     // 1. Kiểm tra xem món đồ đã mặc đúng chỗ chưa
     if (character.slots[slot]?.name === itemName) return true;
@@ -217,6 +242,9 @@ async function attackLoop() {
             (fieldgen0 && fieldgen0.hp / fieldgen0.max_hp < 0.7)
         ) {
             combatState.fsm = FSM.HEAL;
+        }
+        else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
+              //khi máu yếu và đang di chuyển thông minh không làm gì cả 
         }
         else if (
             allMonsters.length >= 5 &&
