@@ -413,8 +413,10 @@ if (ms > 20) {
     setTimeout(attackLoop, Math.max(20, ms-20)); 
     return;
 }
+
+
 		
-targetLoop()
+		
 
         if (ms > 200) delay = 130;
         else if (ms > 100) delay = 50;
@@ -422,13 +424,24 @@ targetLoop()
         else delay = 10;
       
         // ===== CONTEXT =====
-        const leader = get_player("haiz");
-        const healer = get_player("Ynhi");
+
         const f1112 = get_player(f1111);
 
-        const aoeMonsters = combatState.monstersAOERange;
-        const allMonsters = combatState.monstersCharRange;
-        const leaderTarget = combatState.leaderTarget;
+
+
+// 2. Cập nhật mục tiêu ngay lập tức (Thay thế targetLoop)
+        const rangeThreshold = 50;
+        const leader = get_player("haiz");
+        const healer = get_player("Ynhi");
+        const X = leader ? leader.x : character.x;
+        const Y = leader ? leader.y : character.y;
+
+        // Lấy danh sách quái (Giả định hàm getPrioritizedTargets của bạn hoạt động đúng)
+        const pTargets = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
+        const aoeMonsters = pTargets.inRange || []; // Quái quanh Leader
+        const allMonsters = pTargets.characterRange || []; // Quái quanh mình
+
+        const leaderTarget = leader ? get_target_of(leader) : null;
 
         const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
 
