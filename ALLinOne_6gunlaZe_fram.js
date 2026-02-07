@@ -287,211 +287,255 @@ function getLowestHpPercentTarget(targets) {
     return lowest;
 }
 
-/*
+
+
+function check_heal(threshold = 0.9) {
+    const targets = lowest_health_partymember(threshold, true);
+    return targets.length > 0 ? targets[0] : null;
+}
+
+function smart_heal(threshold = 0.9, force_single = 0) {
+
+    if (character.slots.mainhand?.name != "cupid") return false;
+
+    // 1. Tìm danh sách đồng đội cần hồi máu
+    const targets = lowest_health_partymember(threshold, true);
+    if (targets.length === 0) return false;
+
+    const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 300; 
+
+    // 2. Ưu tiên hồi máu đa mục tiêu (3shot)
+    // Thêm điều kiện: CHỈ chạy nếu force_single KHÔNG phải là 1
+    if (!force_single && targets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")) {
+        use_skill("3shot", targets.slice(0, 3));
+        return true;
+    } 
+    
+    // 3. Hồi máu đơn mục tiêu (attack thường)
+    if (targets.length >= 1) {
+            attack(targets[0]);
+            return true;
+    }
+
+    return false;
+}
+
+
+function smart_equip(itemName, slot = "mainhand") {
+    // 1. Kiểm tra xem món đồ đã mặc đúng chỗ chưa
+    if (character.slots[slot]?.name === itemName) return true;
+
+    // 2. Tìm vị trí (index) của món đồ trong hành trang
+    const index = character.items.findIndex(i => i && i.name === itemName);
+
+    // 3. Nếu tìm thấy và khác với thứ đang mặc, gửi lệnh lên server
+    if (index !== -1) {
+        parent.socket.emit("equip", { num: index, slot: slot });
+        return true; 
+    }
+
+    return false; // Không có đồ trong túi
+}
+
+
+const FSM = {
+    HEAL: "HEAL",
+    AOE: "AOE",
+    SINGLE: "SINGLE",
+    IDLE: "IDLE"
+};
+
+let combatState = {
+    monstersAOERange: [],     // inRange (radius 50)
+    monstersCharRange: [],    // character.range
+    leaderTarget: null,
+    lastUpdate: 0,
+    fsm: FSM.IDLE
+};
 
 const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
-// không được để return trong hàm loop
-async function attackLoop() {
-	//if (character.moving)return
-    let delay = null; // Default delay
-    const now = performance.now();
-//game_log("m")
-    const rangeThreshold = 50; // phạm vi tấn công boom
-    const leader = get_player("haiz");
-     const healerr = get_player("Ynhi");
-    const f1112 = get_player(f1111);
 
-
-	
-	let codame = true;
-if (character.slots["mainhand"] && character.slots["mainhand"].name == "cupid"){
-    codame = false;
-}
-
-
-	
-let X, Y;
-if (leader && get_nearest_monster({ type: home }) ) {
-    X = leader.x;
-    Y = leader.y;
-} else {
-    X = character.x;
-    Y = character.y;
-}
-	
-    let stopAttack = (check_quai_A4_stop_attach() == 1);
-	
+function targetLoop() {
     try {
- if (!stopAttack) {	    
+        const rangeThreshold = 50;
+        const leader = get_player("haiz");
+        const X = leader ? leader.x : character.x;
+        const Y = leader ? leader.y : character.y;
 
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
-	    if ( tagetskill.length == 1 && character.map != "winter_instance" )use_skill("huntersmark", tagetskill);
-var hutquai = getBestTargets({ max_range: character.range, type: "spider", Nohavetarget:1,  number: 1 }); // Hàm check hút quái
- var KILLdauTien = getBestTargets({ max_range: character.range, type: "a1111111", subtype: "a5",  number: 1 }); // Hàm check hút quái
-                                                               // không cần ưu tiên a1 vì trong getPrioritizedTargets đã có ưu tiên boss
-	    
+        const {
+            targets, // giữ lại nếu bạn dùng sau
+            inRange: monstersInRangeList,
+            characterRange: monsterscharacterRange
+        } = getPrioritizedTargets(
+            targetNames,
+            X, Y,
+            rangeThreshold,
+            { statusEffects: ["cursed"] }
+        );
 
-const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
+        combatState.monstersAOERange = monstersInRangeList;
+        combatState.monstersCharRange = monsterscharacterRange;
+        combatState.leaderTarget = leader ? get_target_of(leader) : null;
+        combatState.lastUpdate = Date.now();
 
+    } catch (e) {}
 
-	 
-//game_log("monstersInRangeList.length" +monstersInRangeList.length)		
-//game_log("characterRange" +monsterscharacterRange.length)		
-	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
-
-
-	 
-            if( (leader && leader.hp < 10500) || (healerr && healerr.hp < 8000) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.65)  ){
-		weaponSet("heal");
-
-let healTargets = lowest_health_partymember(0.9, true);
-if (healTargets.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")   ) {
-	 if(!codame)await use_skill("3shot", healTargets.slice(0, 3));
-	delay = ms_to_next_skill("attack");  
-} else if (healTargets.length >= 1) {
-	 if(!codame)await attack(healTargets[0]);
-	delay = ms_to_next_skill("attack");  
+    setTimeout(targetLoop, 250);
 }
 
-	   }else if (KILLdauTien.length >= 1 && character.mp > 100 ){
-		    // ưu tiên kill những quái vật nguy hiem trong tầm bắn.
-			weaponSet("single");
-               if(codame) await attack(KILLdauTien[0]);
-	           delay = ms_to_next_skill("attack");
-	    }else if (hutquai.length >= 1 && character.mp < 200 && character.targets <2 ){
-		    	weaponSet("dead");
-              if (codame) await attack(hutquai[0]);
-	           delay = ms_to_next_skill("attack");
-		    
-	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
-              //khi máu yếu và đang di chuyển thông minh không làm gì cả
-	    }else if (monstersInRangeList.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("boom");
-              if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 530 && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("shot5");
-              if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 430  && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("dead");
-		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
-                delay = ms_to_next_skill("attack");
 
-            } else if (monsterscharacterRange.length > 1) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("singleAOE");
-		if (codame)   await attack(monsterscharacterRange[0]);
-                delay = ms_to_next_skill("attack");
-            } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
-		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
-                           {
-		weaponSet("heal");
-            const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
-            let healTarget1 = getLowestHpPercentTarget(possibleTargets1);
-            await attack(healTarget1);
-            delay = ms_to_next_skill("attack");    
-                           }
-                       else
-                      {
-                weaponSet("single");
-                 if (codame)   await attack(monsterscharacterRange[0]);
-                delay = ms_to_next_skill("attack");
-		      }
-            }else
-	    {
 
-    // Current target and target of leader.
-    var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader)
-		    
-    if (leaderTarget && leaderTarget.target ){
-    // Change the target.
-    if (!currentTarget || currentTarget != leaderTarget){ 
-        // Current target is empty or other than the leader's.
-        change_target(leaderTarget);
-        currentTarget = get_targeted_monster();
-    }
-	if( currentTarget && is_in_range(currentTarget))
-	{
-		weaponSet("single");
-             if (codame)   await attack(currentTarget);
-                delay = ms_to_next_skill("attack");
-	}  
-    }
-	    }
 
-	    
-//if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
-if (targets.length == 0  && !leaderTarget )
-{		
-var targets1 = getBestTargets({ max_range: character.range, type: "quá mạnh", subtype: "scorpion", number: 1 }); // Hàm gọi quái vật fram chính // tùy chỉnh number: 3
+async function attackLoop() {
+    let delay = 40;
 
-let check3shot = 0;
-let check5shot = 0;
+    try {
+        if (character.rip || smart.moving || is_disabled(character) || Date.now() - combatState.lastUpdate > 5000 ){
+        return setTimeout(attackLoop, 40);
+        }
 
-// Kiểm tra điều kiện cho "3shot"
-if (targets1.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
-    check3shot = 1;
-} else {
-    check3shot = 0;
+        const ms = ms_to_next_skill("attack");
+
+        //chặn chạy quá sớm
+        if (ms >= Math.max(10, character.ping / 10)){
+            setTimeout(attackLoop, Math.min(ms-50, 180));
+            return;
+        }
+      
+
+        if (ms > 200) delay = 90;
+        else if (ms > 100) delay = 40;
+        else if (ms > 60) delay = 20;
+        else delay = 5;
+
+
+        // ===== CONTEXT =====
+        const leader = get_player("haiz");
+        const healer = get_player("Ynhi");
+        const f1112 = get_player(f1111);
+
+        const aoeMonsters = combatState.monstersAOERange;
+        const allMonsters = combatState.monstersCharRange;
+        const leaderTarget = combatState.leaderTarget;
+
+        const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
+
+        const mp5 = (G.skills["5shot"]?.mp || 0) * 1.1 + 500;
+        const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 500;
+
+        // ===== FSM DECISION =====
+        combatState.fsm = FSM.IDLE;
+
+        const fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+
+        if (
+            (leader && leader.hp < 10500 + mapHealBonus) ||
+            (healer && healer.hp < 8000 + mapHealBonus) ||
+            (f1112 && f1112.hp / f1112.max_hp < 0.5) ||
+            (fieldgen0 && fieldgen0.hp / fieldgen0.max_hp < 0.7)
+        ) {
+            combatState.fsm = FSM.HEAL;
+        }
+        else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
+              //khi máu yếu và đang di chuyển thông minh không làm gì cả 
+        }
+        else if (
+            allMonsters.length >= 5 &&
+            character.mp > mp5 &&
+            leader && leader.hp > 10000 &&
+            !is_on_cooldown("5shot")
+        ) {
+            combatState.fsm = FSM.AOE;
+        }
+        else if (
+            allMonsters.length >= 3 &&
+            character.mp > mp3 &&
+            leader && leader.hp > 10000 &&
+            !is_on_cooldown("3shot")
+        ) {
+            combatState.fsm = FSM.AOE;
+        }
+        else if (
+            allMonsters.length > 0 ||
+            (leaderTarget && is_in_range(leaderTarget))
+        ) {
+            combatState.fsm = FSM.SINGLE;
+        }
+
+        // ===== FSM EXECUTION =====
+
+        switch (combatState.fsm) {
+
+            case FSM.HEAL: {
+              
+               if (!smart_equip("cupid")) break;
+                smart_heal(0.9);
+                break;
+            }
+
+            case FSM.AOE: {
+              
+               if (aoeMonsters.length >= 5)smart_equip("pouchbow")
+               else smart_equip("firebow");
+
+               if (character.slots.mainhand?.name == "cupid") break;
+              
+                if (aoeMonsters.length >= 5 && character.mp > mp5) {
+                     use_skill("5shot", aoeMonsters.slice(0, 5));
+                }
+                else if (aoeMonsters.length >= 3 && character.mp > mp3) {
+                     use_skill("3shot", aoeMonsters.slice(0, 3));
+                }
+                else if (allMonsters.length >= 5 && character.mp > mp5) {
+                     use_skill("5shot", allMonsters.slice(0, 5));
+                }
+                else if (allMonsters.length >= 3 && character.mp > mp3) {
+                     use_skill("3shot", allMonsters.slice(0, 3));
+                }
+                break;
+            }
+
+            case FSM.SINGLE: {
+              
+               if (aoeMonsters.length >= 5)smart_equip("pouchbow")
+               else smart_equip("firebow");
+              
+                if (aoeMonsters.length > 0) {
+                     attack(aoeMonsters[0]);
+                }
+                else if (allMonsters.length > 0) {
+                     attack(allMonsters[0]);
+                }
+                else if (leaderTarget && is_in_range(leaderTarget) && !leaderTarget.dead) {
+                    if (get_targeted_monster() !== leaderTarget)
+                        change_target(leaderTarget);
+                     attack(leaderTarget);
+                }
+                else if ( check_heal(0.6) && smart_equip("cupid") )smart_heal(0.7,1);
+                break;
+            }
+
+            case FSM.IDLE:
+            default:
+                break;
+        }
+
+    } catch (e) {}
+
+    setTimeout(attackLoop, delay);
 }
 
-// Kiểm tra điều kiện cho "5shot"
-if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
-    check5shot = 1;
-} else {
-    check5shot = 0;
-}
 
-// Sử dụng kỹ năng "5shot" nếu đủ điều kiện
-if (check5shot === 1) {
-	weaponSet("shot5");
-    await use_skill("5shot", targets1);
-	                delay = ms_to_next_skill("attack");
 
-}
-// Sử dụng kỹ năng "3shot" nếu không sử dụng "5shot" 
-else if (check3shot === 1 ) {
-	weaponSet("dead");
-    await use_skill("3shot", targets1);
-	                delay = ms_to_next_skill("attack");
-}
-else if (targets1.length < 3 && targets1.length > 0 )
-{
-	weaponSet("dead");
-                await attack(targets1[0]);
-                delay = ms_to_next_skill("attack");
-}
 
-	    
-}
-	    
-        } else {
-            // Dừng tấn công, có thể hồi phục hoặc đứng yên
-        }	    
-
-    } catch (e) {
-        //console.error(e);
-    }
-	setTimeout(attackLoop, delay || 250); // Default delay if undefined
-}
-
+targetLoop();
 attackLoop();
 
-*/
-const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
+
+
+/*
 // không được để return trong hàm loop
 async function attackLoop() {
 	//if (character.moving)return
@@ -700,7 +744,7 @@ else if (targets1.length < 3 && targets1.length > 0 )
 
 attackLoop();
 
-
+*/
 
 
 
