@@ -556,7 +556,7 @@ async function attackLoop() {
             }
 
             case FSM.SINGLE: {
-              
+								 game_log("0NE KILLLL");
                if (aoeMonsters.length >= 5)smart_equip("pouchbow")
                else smart_equip("firebow");
               
