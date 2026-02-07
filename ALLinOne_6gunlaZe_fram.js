@@ -398,6 +398,7 @@ function targetLoop() {
 
 
 
+let last_uses_skill = 0;
 
 async function attackLoop() {
     let delay = 40;
@@ -479,8 +480,8 @@ async function attackLoop() {
             combatState.fsm = FSM.AOE;
         }
         else if (
-            allMonsters.length > 0 ||
-            (leaderTarget && is_in_range(leaderTarget))
+            (allMonsters.length > 0 ||
+            (leaderTarget && is_in_range(leaderTarget))) && Date.now() - last_uses_skill > 300
         ) {
             combatState.fsm = FSM.SINGLE;
         }
@@ -510,13 +511,15 @@ async function attackLoop() {
                 // Ưu tiên 1: Bắn cụm quái quanh Leader (aoeMonsters)
                 if (aoeMonsters.length >= 5) {
                     use_skill("5shot", aoeMonsters.slice(0, 5));
-				setTimeout(attackLoop, 170); 
+				setTimeout(attackLoop, 270); 
+				last_uses_skill = Date.now();
                 return;
                 } 
                 // Ưu tiên 2: Nếu quanh Leader không đủ 5, nhưng quanh mình đủ 5 thì vẫn bắn
                 else if (allMonsters.length >= 5) {
                     use_skill("5shot", allMonsters.slice(0, 5));
-				setTimeout(attackLoop, 170); 
+				setTimeout(attackLoop, 270); 
+				last_uses_skill = Date.now();
                 return;
                 }
             }
@@ -526,13 +529,15 @@ async function attackLoop() {
                 // Ưu tiên 1: Bắn cụm quanh Leader
                 if (aoeMonsters.length >= 3) {
                     use_skill("3shot", aoeMonsters.slice(0, 3));
-				setTimeout(attackLoop, 170); 
+				setTimeout(attackLoop, 270); 
+				last_uses_skill = Date.now();
                 return;
                 }
                 // Ưu tiên 2: Bắn cụm quanh mình
                 else if (allMonsters.length >= 3) {
                     use_skill("3shot", allMonsters.slice(0, 3));
-				setTimeout(attackLoop, 170); 
+				setTimeout(attackLoop, 270); 
+				last_uses_skill = Date.now();
                 return;
                 }
             }
