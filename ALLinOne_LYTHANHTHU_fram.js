@@ -276,7 +276,7 @@ function getLowestHpPercentTarget(targets) {
 }
 
 
-
+/*
 
 const targetNames = ["haiz","6gunlaZe","nhiY","tienV","Ynhi","LyThanhThu1"];
 
@@ -377,8 +377,121 @@ if (
 
 attackLoop();
 
+*/
 
 
+const targetNames = ["haiz", "6gunlaZe", "nhiY", "tienV", "Ynhi", "LyThanhThu1"];
+
+// ================= GLOBAL STATE =================
+let combatState = {
+    target: null,
+    lastUpdate: 0
+};
+
+// ================= TARGET LOOP (Chuyên tìm mục tiêu) =================
+function targetLoop() {
+    try {
+        let nearest = null;
+
+        // 1️⃣ Ưu tiên gần nhà
+        if (character.map === mobMap && distance(character, locations[home][0]) < 250) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    max_distance: character.range,
+                    check_low_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
+        // 2️⃣ Ưu tiên quái bị Cursed
+        if (!nearest) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    statusEffects: ["cursed"],
+                    max_distance: character.range,
+                    check_max_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
+        // 3️⃣ Ưu tiên theo đồng đội (Logic cũ của bạn)
+        if (!nearest) {
+            for (const name of targetNames) {
+                const player = get_player(name);
+                if (player) {
+                    const t = get_target_of(player);
+                    if (t && !t.dead && distance(character, t) <= character.range ) {
+                        nearest = t;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 4️⃣ Quái thường theo targetNames
+        if (!nearest) {
+            for (const name of targetNames) {
+                nearest = get_nearest_monster_v2({
+                    target: name,
+                    max_distance: character.range,
+                    check_max_hp: true
+                });
+                if (nearest) break;
+            }
+        }
+
+        combatState.target = nearest;
+        combatState.lastUpdate = Date.now();
+
+        // Cập nhật biến global di chuyển nếu ngoài tầm
+        if (nearest && !is_in_range(nearest)) {
+            gobaltaget = nearest;
+        }
+
+    } catch (e) {}
+    setTimeout(targetLoop, 250); // Kiểm tra mục tiêu mỗi 250ms
+}
+
+// ================= ATTACK LOOP (Chuyên thực hiện đánh) =================
+function attackLoop() {
+    let delay = 20;
+
+    try {
+        // Kiểm tra target cũ quá 5s thì bỏ
+        if (combatState.target && Date.now() - combatState.lastUpdate > 5000) {
+            combatState.target = null;
+        }
+
+        const t = combatState.target;
+
+        if (!t || smart.moving || is_disabled(character)) {
+            return setTimeout(attackLoop, 40);
+        }
+
+        const ms = ms_to_next_skill("attack");
+
+        // Tấn công tối ưu dựa trên Ping và Cooldown
+        if (ms < Math.max(10, character.ping / 10) && is_in_range(t)) {
+            attack(t);
+        }
+
+        // Tính toán delay vòng lặp tiếp theo cực nhanh
+        if (ms > 200) delay = 80;
+        else if (ms > 100) delay = 40;
+        else if (ms > 60) delay = 20;
+        else delay = 5;
+
+    } catch (e) {}
+    setTimeout(attackLoop, delay);
+}
+
+// Chạy cả 2 vòng lặp
+targetLoop();
+attackLoop();
 
 
 
