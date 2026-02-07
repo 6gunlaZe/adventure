@@ -428,8 +428,8 @@ async function attackLoop() {
 
         const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
 
-        const mp5 = (G.skills["5shot"]?.mp || 0) * 1.1 + 500;
-        const mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 500;
+	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 500;
+	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 500;
 
         // ===== FSM DECISION =====
         combatState.fsm = FSM.IDLE;
