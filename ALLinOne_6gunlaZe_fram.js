@@ -399,17 +399,22 @@ async function attackLoop() {
 
         //chặn chạy quá sớm
         if (ms >= Math.max(10, character.ping / 10)){
-            setTimeout(attackLoop, Math.min(ms-50, 180));
+
+        if (ms > 300) delay = 200;
+        else if (ms > 200) delay = 120;
+        else if (ms > 100) delay = 50;
+        else if (ms > 50) delay = 20;
+        else delay = 5;
+			
+         setTimeout(attackLoop, delay);
             return;
         }
-      
 
-        if (ms > 200) delay = 90;
-        else if (ms > 100) delay = 40;
-        else if (ms > 60) delay = 20;
+        if (ms > 200) delay = 130;
+        else if (ms > 100) delay = 50;
+        else if (ms > 50) delay = 20;
         else delay = 5;
-
-
+      
         // ===== CONTEXT =====
         const leader = get_player("haiz");
         const healer = get_player("Ynhi");
