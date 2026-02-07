@@ -431,6 +431,11 @@ async function attackLoop() {
 	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 500;
 	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 500;
 
+// ===== LOG ĐỂ KIỂM TRA (Có thể xóa sau khi tìm ra lỗi) =====
+        if (allMonsters.length > 0) {
+            game_log(`[DEBUG] Quái trong tầm: ${allMonsters.length} | MP: ${Math.round(character.mp)}/${mp3} | CD 3shot: ${is_on_cooldown("3shot")}`);
+        }
+		
         // ===== FSM DECISION =====
         combatState.fsm = FSM.IDLE;
 
