@@ -498,24 +498,40 @@ async function attackLoop() {
 
             case FSM.AOE: {
               
-               if (aoeMonsters.length >= 5)smart_equip("pouchbow")
-               else smart_equip("firebow");
+// 1. Xác định vũ khí dựa trên danh sách quái quanh Leader (aoeMonsters)
+    let targetWeapon = aoeMonsters.length >= 5 ? "pouchbow" : "firebow";
+    
+    // 2. Đợi mặc đồ xong để tránh lỗi lặp trang bị
+    if (smart_equip(targetWeapon)) { 
+        if (character.slots.mainhand?.name !== "cupid") {
 
-               if (character.slots.mainhand?.name == "cupid") break;
-              
-                if (aoeMonsters.length >= 5 && character.mp > mp5) {
-                     use_skill("5shot", aoeMonsters.slice(0, 5));
+            // --- KIỂM TRA ĐIỀU KIỆN 5-SHOT ---
+            if (character.mp > mp5 && !is_on_cooldown("5shot")) {
+                // Ưu tiên 1: Bắn cụm quái quanh Leader (aoeMonsters)
+                if (aoeMonsters.length >= 5) {
+                    use_skill("5shot", aoeMonsters.slice(0, 5).map(m => m.id));
+                } 
+                // Ưu tiên 2: Nếu quanh Leader không đủ 5, nhưng quanh mình đủ 5 thì vẫn bắn
+                else if (allMonsters.length >= 5) {
+                    use_skill("5shot", allMonsters.slice(0, 5).map(m => m.id));
                 }
-                else if (aoeMonsters.length >= 3 && character.mp > mp3) {
-                     use_skill("3shot", aoeMonsters.slice(0, 3));
+            }
+
+            // --- KIỂM TRA ĐIỀU KIỆN 3-SHOT (Nếu 5-shot chưa dùng hoặc đang hồi) ---
+            if (!is_on_cooldown("3shot") && character.mp > mp3) {
+                // Ưu tiên 1: Bắn cụm quanh Leader
+                if (aoeMonsters.length >= 3) {
+                    use_skill("3shot", aoeMonsters.slice(0, 3).map(m => m.id));
                 }
-                else if (allMonsters.length >= 5 && character.mp > mp5) {
-                     use_skill("5shot", allMonsters.slice(0, 5));
+                // Ưu tiên 2: Bắn cụm quanh mình
+                else if (allMonsters.length >= 3) {
+                    use_skill("3shot", allMonsters.slice(0, 3).map(m => m.id));
                 }
-                else if (allMonsters.length >= 3 && character.mp > mp3) {
-                     use_skill("3shot", allMonsters.slice(0, 3));
-                }
-                break;
+            }
+        }
+    }
+    break;
+				
             }
 
             case FSM.SINGLE: {
