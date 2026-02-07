@@ -102,9 +102,12 @@ if (character.name == "Geoffriel") {
 
 
 
+function check_heal(threshold = 0.9) {
+    const targets = lowest_health_partymember(threshold, true);
+    return targets.length > 0 ? targets[0] : null;
+}
 
-
-async function smart_heal(threshold = 0.9) {
+function smart_heal(threshold = 0.9) {
 
     // 2. Tìm danh sách đồng đội cần hồi máu
     const targets = lowest_health_partymember(threshold, true);
@@ -276,11 +279,7 @@ async function attackLoop() {
             case FSM.HEAL: {
               
                if (!smart_equip("cupid")) break;
-                const healTargets = lowest_health_partymember(0.9, true);
-                if (!healTargets.length) break;
-
-                attack(healTargets[0]);
-
+                smart_heal(0.9);
                 break;
             }
 
@@ -322,6 +321,7 @@ async function attackLoop() {
                         change_target(leaderTarget);
                      attack(leaderTarget);
                 }
+                else if ( check_heal(0.6) && smart_equip("cupid") )smart_heal(0.7);
                 break;
             }
 
