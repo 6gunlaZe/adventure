@@ -516,7 +516,7 @@ async function attackLoop() {
                 if (aoeMonsters.length >= 5) {
 								 game_log("AOE 5 BOOM");
                     use_skill("5shot", aoeMonsters.slice(0, 5).map(m => m.id));
-				setTimeout(attackLoop, 270); 
+				setTimeout(attackLoop, 570); 
 				last_uses_skill = Date.now();
                 return;
                 } 
@@ -524,7 +524,7 @@ async function attackLoop() {
                 else if (allMonsters.length >= 5) {
 								 game_log("AOE 5");
                     use_skill("5shot", allMonsters.slice(0, 5).map(m => m.id));
-				setTimeout(attackLoop, 270); 
+				setTimeout(attackLoop, 570); 
 				last_uses_skill = Date.now();
                 return;
                 }
@@ -536,7 +536,7 @@ async function attackLoop() {
                 if (aoeMonsters.length >= 3) {
 								 game_log("AOE 3 X");
                     use_skill("3shot", aoeMonsters.slice(0, 3).map(m => m.id));
-				setTimeout(attackLoop, 270); 
+				setTimeout(attackLoop, 570); 
 				last_uses_skill = Date.now();
                 return;
                 }
@@ -544,7 +544,7 @@ async function attackLoop() {
                 else if (allMonsters.length >= 3) {
 								 game_log("AOE 3");
                     use_skill("3shot", allMonsters.slice(0, 3).map(m => m.id));
-				setTimeout(attackLoop, 270); 
+				setTimeout(attackLoop, 570); 
 				last_uses_skill = Date.now();
                 return;
                 }
