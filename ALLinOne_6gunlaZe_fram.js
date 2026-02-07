@@ -321,31 +321,31 @@ function smart_heal(threshold = 0.9, force_single = 0) {
 }
 
 
+let is_eput = false; // Biến flag kiểm tra đang mặc đồ
 let last_equip_time = 0;
-let expected_weapon = ""; // Ghi nhớ vũ khí chúng ta muốn mặc
 
 function smart_equip(itemName, slot = "mainhand") {
-    // 1. Nếu đồ đã mặc đúng rồi, reset biến chờ và trả về true
+    // 1. Nếu đã mặc đúng món đồ, giải phóng flag và trả về true
     if (character.slots[slot]?.name === itemName) {
-        expected_weapon = ""; 
+        is_eput = false;
         return true;
     }
 
-    // 2. Chống spam: Nếu đang trong quá trình mặc món này rồi thì đợi, không gửi thêm lệnh
-    if (expected_weapon === itemName && Date.now() - last_equip_time < 500) {
-        return false; 
+    // 2. Chống spam: Nếu đang mặc (is_eput = true) và chưa quá 300ms thì đợi
+    if (is_eput && Date.now() - last_equip_time < 300) {
+        return false;
     }
 
     // 3. Tìm đồ trong túi
     const index = character.items.findIndex(i => i && i.name === itemName);
     if (index !== -1) {
-        console.log(`[EQUIP] Đang mặc: ${itemName}`);
-        expected_weapon = itemName;
+        is_eput = true;
         last_equip_time = Date.now();
         parent.socket.emit("equip", { num: index, slot: slot });
-        return false; // Trả về false vì server chưa xác nhận mặc xong
+        return false; 
     }
 
+    is_eput = false; // Không tìm thấy đồ thì cũng nhả flag
     return false;
 }
 
