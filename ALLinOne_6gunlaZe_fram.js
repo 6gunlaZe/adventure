@@ -1495,17 +1495,27 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
+    // Danh sách quái cần có Ynhi mới dám đánh
+    const dangerBosses = ["franky", "stompy", "dragold", "icegolem"];
+	
     const priorityMtypes = ["franky", "a1", "fvampire", "stompy", "crabxx", "a4", "mrpumpkin", "mrgreen","dragold"];
     const isPriorityMtype = (m) => priorityMtypes.includes(m.mtype);
     const hasStatus = (m, effects) => m.s && effects.every(e => m.s[e]);
 
     // === 1. Lọc quái đang đánh party ===
     let targets = Object.values(parent.entities)
-        .filter(m =>
-            m.type === "monster" &&
-            m.target &&
-            (targetNames.includes(m.target) || m.cooperative === true)
-        );
+        .filter(m => {
+            if (m.type !== "monster" || !m.target) return false;
+
+            // Kiểm tra nếu là boss nguy hiểm thì phải có Ynhi ở gần (trong tầm 200)
+            if (dangerBosses.includes(m.mtype)) {
+                const ynhi = get_player("Ynhi");
+                if (!ynhi || distance(character, ynhi) > 200) return false;
+            }
+
+            // Nếu không phải boss hoặc có Ynhi ở gần, mới xét tiếp điều kiện này
+            return (targetNames.includes(m.target) || m.cooperative === true);
+        });
 
     // === 2. SORT CHÍNH – phục vụ 2 phát mạnh ===
     targets.sort((a, b) => {
