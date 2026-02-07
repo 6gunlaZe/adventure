@@ -2063,6 +2063,10 @@ function ms_to_next_skill(skill) {
 
 
 
+function ms_penalty_cd() {
+    const ms = character?.s?.penalty_cd?.ms ?? 0;
+    return ms < 0 ? 0 : ms;
+}
 
 
 
@@ -2108,7 +2112,9 @@ let checkluckk = 0;
 function ChuyendoiITEM() {
      const leader = get_player("haiz");
      const damer = getOtherPartyMember();
-	const currentTime = performance.now();
+	 const currentTime = performance.now();
+     const penalty = ms_penalty_cd();
+	
 const mobsInRange = Object.values(parent.entities).filter(entity => 
     entity.visible && entity.type=="monster" &&
     entity.target === character.name &&
@@ -2249,19 +2255,19 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 	
 
-if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500) {
+if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500 && checkluckk <= 2) {
 	eTime = currentTime;
         // game_log("🔄 luck") ;	
 	let slot = locate_item("luckbooster");
         if (slot == -1)shift(0, 'luckbooster')
 
-	if (character.hp/character.max_hp > 0.5)
+	if (character.hp/character.max_hp < 0.5 || penalty > 1000 )
 	{
-		        equipSet('luckfull'); 
+		        equipSet('luck'); 
 	}
 	else
 	{
-		        equipSet('luck'); 
+		        equipSet('luckfull'); 
 	}
 
 	
