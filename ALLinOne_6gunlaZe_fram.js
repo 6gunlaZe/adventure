@@ -2479,9 +2479,13 @@ setInterval(avoidance, 80);
 
 
 let checkwwall = 1;
+let last_kite_time = 0;
 
 function kite(taget, kite_range) {
 
+// 1. Chỉ ra lệnh kite mới sau mỗi 300ms để tránh spam server
+    if (Date.now() - last_kite_time < 330) return;
+	
 // 1. Xác định radius dựa trên map
     let radius;
     const currentMap = character.map;
@@ -2496,7 +2500,8 @@ function kite(taget, kite_range) {
 
 	
 	if (smart.moving || !taget) return;
-
+    last_kite_time = Date.now();
+	
 	const angle = Math.PI / 3.5 * checkwwall;
 	const reverseAngle = Math.PI / 3.5 * -checkwwall;
 
