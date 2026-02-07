@@ -1863,31 +1863,31 @@ const equipmentSets = {
         { itemName: "handofmidas", slot: "gloves", level: 8 },
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
-	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
-        { itemName: "oxhelmet", slot: "helmet", l: "l" },
-        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
-	{ itemName: "mshield", slot: "offhand", level: 8, l: "l" },
-        //{ itemName: "cdragon", slot: "chest", l: "l" },
+	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
-        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
+        { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
+        { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
+
+		
     ],
 
     luckfull: [ 
-	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
-        { itemName: "oxhelmet", slot: "helmet", l: "l" },
-        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
-      //  { itemName: "cdragon", slot: "chest", l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
-        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
-        { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
 		
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
+	    { itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
+        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
+        { itemName: "oxhelmet", slot: "helmet", l: "l" },
+
 
 		
     ],
