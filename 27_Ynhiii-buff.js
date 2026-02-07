@@ -2261,7 +2261,7 @@ if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp
 	let slot = locate_item("luckbooster");
         if (slot == -1)shift(0, 'luckbooster')
 
-	if (character.hp/character.max_hp < 0.5 || penalty > 1000 )
+	if (character.hp/character.max_hp < 0.5 || penalty > 1000 || character.mp < 2500 )
 	{
 		        equipSet('luck'); 
 	}
