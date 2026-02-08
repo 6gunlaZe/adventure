@@ -1686,6 +1686,19 @@ function attackLoop() {
 }
 
 
+function findByNames(opts) {
+    for (const name of targetNames) {
+        const t = get_nearest_monster_v2({
+            target: name,
+            ...opts
+        });
+        if (t) return t;   // ✅ dừng sớm
+    }
+    return null;
+}
+
+
+
 // ================= GLOBAL STATE =================
 let combatState = {
     target: null,
@@ -1703,27 +1716,19 @@ function targetLoop() {
             character.map === mobMap &&
             distance(character, locations[home][0]) < 250
         ) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    max_distance: character.range,
-                    check_low_hp: true
-                });
-                if (nearest) break;
-            }
+    nearest = findByNames({
+        max_distance: character.range,
+        check_low_hp: true
+    });
         }
 
         // 2️⃣ Ưu tiên cursed
         if (!nearest) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    statusEffects: ["cursed"],
-                    max_distance: 50,
-                    check_max_hp: true
-                });
-                if (nearest) break;
-            }
+    nearest = findByNames({
+        statusEffects: ["cursed"],
+        max_distance: 50,
+        check_max_hp: true
+    });
         }
 
         // 3️⃣ Boss mạnh – cần buff
@@ -1743,14 +1748,10 @@ function targetLoop() {
 
         // 3.5 Ưu tiên quái ở gần
         if (!nearest) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    max_distance: character.range,
-                    check_max_hp: true
-                });
-                if (nearest) break;
-            }
+    nearest = findByNames({
+        max_distance: character.range,
+        check_max_hp: true
+    });
         }
 
 
