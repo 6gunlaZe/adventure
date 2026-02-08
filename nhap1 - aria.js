@@ -389,17 +389,17 @@ if (leader && get_nearest_monster({ type: home }) ) {
     let stopAttack = (check_quai_A4_stop_attach() == 1);
 	
     try {
- if (!stopAttack) {	    
+const ms = ms_to_next_skill('attack');
 
+		
+ if (!stopAttack && ms < character.ping / 10) {	    
+
+		if (is_disabled(character)) return setTimeout(attackLoop, 25);
 
 
 const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
-
-
-	 
-//game_log("monstersInRangeList.length" +monstersInRangeList.length)		
-//game_log("characterRange" +monsterscharacterRange.length)		
-	let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
+	
+let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 
 
 	 
@@ -420,54 +420,48 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
 	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
               //khi máu yếu và đang di chuyển thông minh không làm gì cả
 	    }else if (monstersInRangeList.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
-                
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("boom");
+		      weaponSet("boom");
               if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
                 
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else weaponSet("shot5");
+		      weaponSet("shot5");
               if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
             } else if (monsterscharacterRange.length >= 3 && character.mp > mp3  && leader && leader.hp > 10000) {
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else
-			{	
+	
 				if (monstersInRangeList.length >= 5)weaponSet("boom");
 					else weaponSet("dead");
-			}	
-		if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
+	
+		        if (codame)  await use_skill("3shot", monsterscharacterRange.slice(0, 3));
                 delay = ms_to_next_skill("attack");
 
             } else if (monsterscharacterRange.length > 1) {
                 
-		    if ( get_nearest_monster({ type: "franky" }) && leader && leader.hp < 16000 ) weaponSet("franky")
-		    else
-			{	
 				if (monstersInRangeList.length >= 5)weaponSet("boom");
-					else weaponSet("dead");
-			}
-		if (codame)   await attack(monsterscharacterRange[0]);
+				else weaponSet("dead");
+			
+	        	if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
+	
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
 		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
                            {
-		weaponSet("heal");
+		    weaponSet("heal");
             const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
             let healTarget1 = getLowestHpPercentTarget(possibleTargets1);
-            await attack(healTarget1);
-            delay = ms_to_next_skill("attack");    
+            if(!codame)await attack(healTarget1);
+            delay = ms_to_next_skill("attack"); 
+		   if(codame)delay = 20;		
                            }
-                       else
-                      {
+                          else
+                          {
                 weaponSet("single");
                  if (codame)   await attack(monsterscharacterRange[0]);
                 delay = ms_to_next_skill("attack");
-		      }
+		                 }
             }else
 	    {
 
@@ -485,22 +479,44 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
 	if( currentTarget && is_in_range(currentTarget))
 	{
 		weaponSet("single");
-             if (codame)   await attack(currentTarget);
-                delay = ms_to_next_skill("attack");
+        if (codame)   await attack(currentTarget);
+        delay = ms_to_next_skill("attack");
 	}  
     }
 	    }
 
-	    
 
+if (delay > 300) {
+    delay = 200;
+} else if (delay > 170) {
+    delay = 120;
+} else if (delay > 80) {
+    delay = 30;
+} else if (delay > 20) {
+    delay = 7;
+} else {
+    delay = 5;
+}
+	 
 	    
-        } else {
+        } 
+        else {
             // Dừng tấn công, có thể hồi phục hoặc đứng yên
+if (ms > 200) {
+    delay = 100;
+} else if (ms > 100) {
+    delay = 70;
+} else if (ms > 50) {
+    delay = 20;
+} else {
+    delay = 7;
+}
+			////
         }	    
 
     } catch (e) {
-        //console.error(e);
-    }
+            delay = 10;
+		    }
 
 	
 	setTimeout(attackLoop, delay || 250); // Default delay if undefined
