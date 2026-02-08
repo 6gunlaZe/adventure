@@ -2668,6 +2668,88 @@ if (args.check_low_hp) {
 
 
 
+
+// =========================
+// CONFIG
+// =========================
+const TEMPORAL_RADIUS = 320;   // bán kính tính quái quanh người
+const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
+const TEMPORAL_DELAY = 900;    // delay trước khi cast
+
+// =========================
+// STATE
+// =========================
+let temporalMaxMonsters = 0;
+let lastMap = character.map;
+
+// =========================
+// HELPER: đếm quái quanh người
+// =========================
+function countNearbyMonsters(radius) {
+    let count = 0;
+    for (let id in parent.entities) {
+        const e = parent.entities[id];
+        if (
+            e.type === "monster" &&
+            distance(character, e) <= radius
+        ) {
+            count++;
+        }
+    }
+    return count;
+}
+
+// =========================
+// MAIN: temporalsurge logic
+// =========================
+function temporalSurgeLogic() {
+    // cooldown / safety
+    if (is_on_cooldown("temporalsurge")) return;
+    if (smart.moving) return;
+
+    // reset khi đổi map
+    if (character.map !== lastMap) {
+        temporalMaxMonsters = 0;
+        lastMap = character.map;
+        return;
+    }
+
+    const currentCount = countNearbyMonsters(TEMPORAL_RADIUS);
+
+    // cập nhật max
+    if (currentCount > temporalMaxMonsters) {
+        temporalMaxMonsters = currentCount;
+        return; // vừa cập nhật max thì chưa cần dùng skill
+    }
+
+    // điều kiện dùng skill
+    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP) {
+        const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
+        if (orbSlot === -1) return;
+
+        setTimeout(() => {
+            if (is_on_cooldown("temporalsurge")) return;
+
+            equip(orbSlot);
+            use_skill("temporalsurge");
+            equip(orbSlot);
+        }, TEMPORAL_DELAY);
+    }
+}
+
+// =========================
+// LOOP
+// =========================
+setInterval(temporalSurgeLogic, 1200);
+
+
+
+
+
+
+
+
+
 function scare() {
 
     if ( is_on_cooldown("scare") ) return;
