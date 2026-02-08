@@ -1675,12 +1675,13 @@ function attackLoop() {
             attack(t);
         }
 
-        if (ms > 300) delay = 200;
-        else if (ms > 200) delay = 140;
-        else if (ms > 100) delay = 60;
-        else if (ms > 50) delay = 30;
-        else if (ms > 25) delay = 10;
-        else delay = 5;
+delay = 5;
+if (ms > 25)  delay = 10;
+if (ms > 50)  delay = 30;
+if (ms > 100) delay = 60;
+if (ms > 200) delay = 140;
+if (ms > 300) delay = 200;
+
 
     } catch (e) {}
 
