@@ -2723,7 +2723,7 @@ function temporalSurgeLogic() {
     }
 
     // điều kiện dùng skill
-    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP) {
+    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP && character.mp > 1100) {
         const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
         if (orbSlot === -1) return;
 
