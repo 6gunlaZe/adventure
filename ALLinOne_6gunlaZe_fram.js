@@ -920,7 +920,7 @@ if ( tagetskill.length == 1 && character.map != "winter_instance" && character.m
         //console.log("Skill loop error:", e);
     }
 
-    setTimeout(skillLoop, 2000); // lặp 2s
+    setTimeout(skillLoop, 1000); // lặp 1s
 }
 
 skillLoop();
