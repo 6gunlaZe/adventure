@@ -2402,9 +2402,15 @@ setInterval(avoidance, 80);
 
 
 let checkwwall = 1;
+let lastKiteTime = 0;
+const KITE_INTERVAL = 300; // ms
 
 function kite(taget, kite_range) {
 
+    const now = performance.now();
+    if (now - lastKiteTime < KITE_INTERVAL) return;
+    lastKiteTime = now;
+	
 // 1. Xác định radius dựa trên map
     let radius;
     const currentMap = character.map;
