@@ -2403,7 +2403,7 @@ setInterval(avoidance, 80);
 
 let checkwwall = 1;
 let lastKiteTime = 0;
-const KITE_INTERVAL = 350; // ms
+const KITE_INTERVAL = 450; // ms
 
 function kite(taget, kite_range) {
 
