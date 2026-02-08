@@ -348,8 +348,29 @@ attackLoop();
 
 
 
+function normalizeDelay(d) {
+    if (d > 300) return 200;
+    if (d > 170) return 120;
+    if (d > 80)  return 30;
+    if (d > 20)  return 7;
+    return 5;
+}
 
 
+
+let cachedTargets = null;
+let lastTargetCalc = 0;
+// lưu trữ đối tượng tạm thời 80ms nếu lặp quá nhanh
+function getTargetsCached(targetNames, X, Y, rangeThreshold, args) {
+    const now = performance.now();
+    if (!cachedTargets || now - lastTargetCalc > 80) {
+        cachedTargets = getPrioritizedTargets(
+            targetNames, X, Y, rangeThreshold, args
+        );
+        lastTargetCalc = now;
+    }
+    return cachedTargets;
+}
 
 
 
@@ -359,6 +380,14 @@ const targetNames = ["6gunlaZe","Ynhi","haiz","nhiY","tienV"];
 
 // không được để return trong hàm loop
 async function attackLoop() {
+
+const ms = ms_to_next_skill('attack');
+// Nếu còn xa → loop nhẹ
+if (ms > 120) {
+    setTimeout(attackLoop, 60);
+    return;
+}
+	
 	//if (character.moving)return
     let delay = null; // Default delay
     const now = performance.now();
@@ -389,15 +418,14 @@ if (leader && get_nearest_monster({ type: home }) ) {
     let stopAttack = (check_quai_A4_stop_attach() == 1);
 	
     try {
-const ms = ms_to_next_skill('attack');
-
+		
 		
  if (!stopAttack && ms < character.ping / 10) {	    
 
 		if (is_disabled(character)) return setTimeout(attackLoop, 25);
 
 
-const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
+const { targets, inRange: monstersInRangeList, characterRange: monsterscharacterRange } = getTargetsCached(targetNames, X, Y, rangeThreshold, { statusEffects: ["cursed"] });
 	
 let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 
@@ -467,7 +495,7 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
 
     // Current target and target of leader.
     var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader)
+    var leaderTarget = leader ? get_target_of(leader) : null;
 		    
     if (leaderTarget && leaderTarget.target ){
     // Change the target.
@@ -486,31 +514,12 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
 	    }
 
 
-if (delay > 300) {
-    delay = 200;
-} else if (delay > 170) {
-    delay = 120;
-} else if (delay > 80) {
-    delay = 30;
-} else if (delay > 20) {
-    delay = 7;
-} else {
-    delay = 5;
-}
-	 
+        delay = normalizeDelay(delay);
 	    
         } 
         else {
             // Dừng tấn công, có thể hồi phục hoặc đứng yên
-if (ms > 200) {
-    delay = 100;
-} else if (ms > 100) {
-    delay = 70;
-} else if (ms > 50) {
-    delay = 20;
-} else {
-    delay = 7;
-}
+        delay = normalizeDelay(ms);
 			////
         }	    
 
@@ -519,7 +528,7 @@ if (ms > 200) {
 		    }
 
 	
-	setTimeout(attackLoop, delay || 250); // Default delay if undefined
+	setTimeout(attackLoop, delay ?? 250);
 }
 
 attackLoop();
