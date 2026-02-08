@@ -415,8 +415,16 @@ const maxAttempts = 5;
 // Góc phụ để thử nếu hướng chính bị chặn (theo độ lệch nhỏ hơn)
 const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
 
+let lastKiteTime = 0;
+const KITE_INTERVAL = 300; // ms
+
+
 function kite(taget, kite_range = 20, quai = null) {
     if (smart.moving || !taget) return;
+
+    const now = performance.now();
+    if (now - lastKiteTime < KITE_INTERVAL) return;
+    lastKiteTime = now;
 
 	if (quai && distance(character, quai) < 250) //dùng khi kite bscorpion
 	{
