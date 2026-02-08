@@ -380,6 +380,20 @@ attackLoop();
 */
 
 
+
+function findByNames(opts) {
+    for (const name of targetNames) {
+        const t = get_nearest_monster_v2({
+            target: name,
+            ...opts
+        });
+        if (t) return t;   // ✅ dừng sớm
+    }
+    return null;
+}
+
+
+
 const targetNames = ["haiz", "6gunlaZe", "nhiY", "tienV", "Ynhi", "LyThanhThu1"];
 
 // ================= GLOBAL STATE =================
@@ -393,29 +407,24 @@ function targetLoop() {
     try {
         let nearest = null;
 
-        // 1️⃣ Ưu tiên gần nhà
-        if (character.map === mobMap && distance(character, locations[home][0]) < 250) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    max_distance: character.range,
-                    check_low_hp: true
-                });
-                if (nearest) break;
-            }
+        // 1️⃣ Ưu tiên targetNames gần nhà
+        if (
+            character.map === mobMap &&
+            distance(character, locations[home][0]) < 250
+        ) {
+    nearest = findByNames({
+        max_distance: character.range,
+        check_low_hp: true
+    });
         }
 
-        // 2️⃣ Ưu tiên quái bị Cursed
+        // 2️⃣ Ưu tiên cursed
         if (!nearest) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    statusEffects: ["cursed"],
-                    max_distance: character.range,
-                    check_max_hp: true
-                });
-                if (nearest) break;
-            }
+    nearest = findByNames({
+        statusEffects: ["cursed"],
+        max_distance: 50,
+        check_max_hp: true
+    });
         }
 
         // 3️⃣ Ưu tiên theo đồng đội (Logic cũ của bạn)
@@ -434,14 +443,10 @@ function targetLoop() {
 
         // 4️⃣ Quái thường theo targetNames
         if (!nearest) {
-            for (const name of targetNames) {
-                nearest = get_nearest_monster_v2({
-                    target: name,
-                    max_distance: character.range,
-                    check_max_hp: true
-                });
-                if (nearest) break;
-            }
+    nearest = findByNames({
+        max_distance: character.range,
+        check_max_hp: true
+    });
         }
 
         combatState.target = nearest;
