@@ -2704,6 +2704,7 @@ function countNearbyMonsters(radius) {
 // =========================
 function temporalSurgeLogic() {
     // cooldown / safety
+    if (character.mp < 2000) return;
     if (is_on_cooldown("temporalsurge")) return;
     if (smart.moving) return;
 
@@ -2723,7 +2724,7 @@ function temporalSurgeLogic() {
     }
 
     // điều kiện dùng skill
-    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP && character.mp > 1100) {
+    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP && character.mp > 1300) {
         const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
         if (orbSlot === -1) return;
 
