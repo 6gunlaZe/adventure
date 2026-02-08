@@ -339,8 +339,6 @@ if (ms > 120) {
     const healerr = get_player("Ynhi");
     const f1112 = get_player(f1111);
 
-	const mp5 = (G.skills['5shot']?.mp || 0)*1.1 + 500;
-	const mp3 = (G.skills['3shot']?.mp || 0)*1.1 + 500;
 	
 const isCupid = character.slots.mainhand?.name === "cupid";
 const codame = !isCupid;
@@ -372,6 +370,13 @@ const { targets, inRange: monstersInRangeList, characterRange: monsterscharacter
 	
 let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 
+let mp5 = (G.skills["5shot"]?.mp || 0) * 1.1 + 500;
+let mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 500;
+
+if (monstersInRangeList.length < 5) {
+    mp5 += 800;
+    mp3 += 800;
+}
 
 	 
 if(( (leader && leader.hp < 10500 + mapHealBonus) || (healerr && healerr.hp < 8000 + mapHealBonus) || (fieldgen0 && (fieldgen0.hp / fieldgen0.max_hp) <= 0.7) || (f1112 && f1112.hp/f1112.max_hp < 0.5))  ){
