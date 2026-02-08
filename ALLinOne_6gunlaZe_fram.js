@@ -373,7 +373,7 @@ let fieldgen0 = get_nearest_monster({ type: "fieldgen0" });
 let mp5 = (G.skills["5shot"]?.mp || 0) * 1.1 + 500;
 let mp3 = (G.skills["3shot"]?.mp || 0) * 1.1 + 500;
 
-if (monstersInRangeList.length < 5) {
+if (monstersInRangeList.length < 5) {  //chừa mana dồn skill khi quái đông
     mp5 += 800;
     mp3 += 800;
 }
