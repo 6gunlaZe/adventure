@@ -2113,7 +2113,7 @@ function countNearbyMonsters(radius) {
 // =========================
 function temporalSurgeLogic() {
     // cooldown / safety
-    if (character.mp < 5000) return;
+    if (character.mp < 6000) return;
     if (is_on_cooldown("temporalsurge")) return;
     if (smart.moving) return;
 
