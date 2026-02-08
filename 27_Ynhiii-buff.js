@@ -416,7 +416,7 @@ const maxAttempts = 5;
 const extraAngles = [20, 35, 70].map(degToRad); // + (rồi đảo thành - sau)
 
 let lastKiteTime = 0;
-const KITE_INTERVAL = 300; // ms
+const KITE_INTERVAL = 400; // ms
 
 
 function kite(taget, kite_range = 20, quai = null) {
