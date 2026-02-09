@@ -1155,7 +1155,7 @@ if (leader) {
         if (!m.target) continue; // chưa có target ai hết, bở qua
 
         // quái gần leader
-        if (distance(m, leader) > 25) continue;
+        if (distance(m, leader) > 15) continue;
 
         if (m.hp > maxHp) {
             maxHp = m.hp;
@@ -1180,7 +1180,7 @@ if (leader) {
         currentTarget.hp > 30000
     ) {
         // gần thì curse luôn
-        if (distance(character, currentTarget) < 20) {
+        if (distance(character, currentTarget) < 15) {
             if (tryCurse(currentTarget)) return true;
         }
 
