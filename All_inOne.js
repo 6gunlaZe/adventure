@@ -21,7 +21,7 @@ const SERVER_RULES = [
 
 
 let lastUpdateTime = performance.now();
-setTimeout(waitAndUnluck, 1000);
+setTimeout(startLuckTimer, 1000);
 const locations = {
     bat: [{ x: 1200, y: -782 }],
     bigbird: [{ x: 1343, y: 248 }],
@@ -565,13 +565,24 @@ change_server(RUN_SERVER.region, RUN_SERVER.id);
 setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
 
 
+let unluckTimer = null;
+
+function startLuckTimer() {
+    if (unluckTimer) return;   // đã chạy rồi thì thôi
+
+    equipSet('luck');
+    unluckTimer = setTimeout(waitAndUnluck, 5000);
+}
+
 function waitAndUnluck() {
     if (character.cc < 100) {
         equipSet('UNluck');
+        unluckTimer = null;    // kết thúc vòng
     } else {
-        setTimeout(waitAndUnluck, 5000);
+        unluckTimer = setTimeout(waitAndUnluck, 5000);
     }
 }
+
 
 
 
@@ -1100,7 +1111,7 @@ if (monster && character.cc < 100) {
     // Ưu tiên trang bị luck nếu máu quái thấp
     if (monster.hp < 15000 && monster.target == character.name) {
         equipSet("luck");
-        setTimeout(waitAndUnluck, 5000);
+        setTimeout(startLuckTimer, 5000);
     } else {
         // Phân loại theo damage_type của quái
         if (monster.damage_type === "magical" && monster.attack > 3500 && monster.target == character.name) {
@@ -1305,7 +1316,7 @@ if (monster && character.cc < 100) {
     // Ưu tiên trang bị luck nếu máu quái thấp
     if (monster.hp < 15000 && monster.target == character.name) {
         equipSet("luck");
-        setTimeout(waitAndUnluck, 5000);
+        setTimeout(startLuckTimer, 5000);
     } else {
         // Phân loại theo damage_type của quái
         if (monster.damage_type === "magical" && monster.attack > 3500 && monster.target == character.name) {
@@ -1510,7 +1521,7 @@ async function VIPBosses() {
             equipSet(equipType);
         } else if (character.cc < 100 && monster.target === character.name) {
             equipSet("luck");
-            setTimeout(waitAndUnluck, 5000);
+            setTimeout(startLuckTimer, 5000);
         }
     } else if (
         character.map === info.map &&
@@ -1582,7 +1593,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 }
             } else if (character.cc < 100 && monster.target != "haiz" && eventType == "dragold" ) {  // tăng luck khi là quái trong chế độ hợp tác
                 equipSet('luck');
-		    //setTimeout(waitAndUnluck, 5000);
+		    //setTimeout(startLuckTimer, 5000);
             }
         }
 	    else
@@ -1622,7 +1633,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
                 }
             } else if (character.cc < 100 && monster.target == "haiz") {
                 equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
+		    setTimeout(startLuckTimer, 5000);
             }
         }
 	 else
@@ -3490,7 +3501,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
                 }
             } else if (character.cc < 100 && monster.target == "haiz") {
                 equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
+		    setTimeout(startLuckTimer, 5000);
             }
         }
 	    else
