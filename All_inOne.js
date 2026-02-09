@@ -356,7 +356,7 @@ function handleEvents() {
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
-        handleSpecificEvent('dragold', 'cave', 1190, -810, 500000, 900);
+        handleSpecificEvent('dragold', 'cave', 1190, -810, 70000, 900);
         //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
 	    if(Now_is_gobalevenrun)return
 		
@@ -1580,9 +1580,9 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 if (character.cc < 100) {
                     equipSet('single');
                 }
-            } else if (character.cc < 100 && monster.target == "haiz") {
+            } else if (character.cc < 100 && monster.target != "haiz" && eventType == "dragold" ) {  // tăng luck khi là quái trong chế độ hợp tác
                 equipSet('luck');
-		    setTimeout(waitAndUnluck, 5000);
+		    //setTimeout(waitAndUnluck, 5000);
             }
         }
 	    else
@@ -2439,7 +2439,7 @@ const equipmentSets = {
     ],
     luck: [
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 1, } 
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
     ],
     UNluck: [
         { itemName: "orbofstr", slot: "orb", level: 4, l: "l" },
