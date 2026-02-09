@@ -1894,18 +1894,26 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
     if (currentTime - eTime < 50) return;
 
-    // Mob xung quanh
-    const mobsInRange = Object.values(parent.entities).filter(entity =>
-        entity.visible &&
-        entity.target === character.name &&
-        !entity.dead &&
-        distance(character, entity) <= 100
-    );
+// Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
+const mobsInRange = Object.values(parent.entities).filter(entity =>
+    entity.visible &&
+    !entity.dead &&
+    distance(character, entity) <= 100 &&
+    (
+        entity.target === character.name ||
+        entity.cooperative === true
+    )
+);
 
     const FireMobs = mobsInRange.filter(mob =>
         mob.mtype == "xmagefi"
     );
 	
+const hasLowHP_CoopMob = mobsInRange.some(mob =>
+    mob.cooperative === true &&
+    mob.hp != null &&
+    mob.hp < 100000
+);
 
 
 const physicalMobs = mobsInRange.filter(mob => {
@@ -1968,8 +1976,8 @@ const magicalMobs = mobsInRange.filter(mob => {
         return;
     }
 
-    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
-    if (character.hp > 15000 &&
+    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY và không có quái co-op sắp chết
+    if (character.hp > 15000 && !hasLowHP_CoopMob &&
         physicalMobs.length === 0 &&
         magicalMobs.length === 0) {
         
@@ -1990,7 +1998,7 @@ const magicalMobs = mobsInRange.filter(mob => {
         defSafeSince = null;
     }
 
-    // 👉 Chuyển sang deff nhẹ nếu máu thấp mà chưa bị mob mạnh
+    // 👉 Chuyển sang deff nếu máu thấp mà chưa bị mob mạnh
     if (checkdef === 0 && character.hp < 11000) {
         eTime = currentTime;
         checkdef = 1;
