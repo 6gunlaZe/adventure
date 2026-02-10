@@ -356,7 +356,7 @@ function handleEvents() {
     } else {
 	    Now_is_gobalevenrun = false ///check xem đang có even nào thì thực thi 1 even thôi
         // Handle standard events
-        handleSpecificEvent('dragold', 'cave', 1190, -810, 70000, 900);
+        handleSpecificEvent('dragold', 'cave', 1190, -810, 130000, 900);
         //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
 	    if(Now_is_gobalevenrun)return
 		
