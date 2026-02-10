@@ -2106,9 +2106,20 @@ function looting() {
             loot(id);   
 	    }
     }
-    setTimeout(shifting, 550);
+    else if (get_nearest_monster({ type: home }) )
+   {    
+	 setTimeout(shifting, 550);  
+    }
+	else
+    {
+	    shift(0, 'luckbooster')
+    }
+	
 
 }
+
+
+
 function shifting() {
     shift(0, 'xpbooster');
 }
