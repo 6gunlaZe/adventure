@@ -843,38 +843,23 @@ const equipmentSets = {
         { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
         { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
     ],
-    luck: [
-        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
-        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
-    ],
      singleAOE: [
-      //  { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-
         { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     single: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 8 },
-   //	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
     ],
     dead: [
         //{ itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
 
-		
-       // { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     boom: [
 
-       // { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
         { itemName: "pouchbow", slot: "mainhand", level: 11, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+
     ],
     heal: [
         { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
@@ -891,43 +876,66 @@ const equipmentSets = {
 
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
 
-       // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-     //   { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     def_fire: [
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
+      //  { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
-    orb: [
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" }
+    dame: [
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
-    stat: [
-        { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    def: [
+      //  { itemName: "coat", slot: "chest", level: 12, l: "s" }
     ],
+    luck: [
+        { itemName: "mshield", slot: "offhand", level: 3, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+    ],
+
+
+
+	
 };
 
 
 function ChuyendoiITEM() {
-    const mobsInRange = Object.values(parent.entities).filter(entity =>
-        entity.visible &&
-        entity.target === character.name &&
-        !entity.dead &&
-        distance(character, entity) <= 400
-    );
+    let needFireDef = false;
+    let needNormalDef = false;
+    let needluck = false;
 
-    const FireMobs = mobsInRange.filter(mob =>
-        mob.mtype === "xmagefi"
-    );
 
-    if (FireMobs.length > 0) {
+    for (const e of Object.values(parent.entities)) {
+        if (!e.visible || e.dead || distance(character, e) > 400) continue;
+
+        // Nguy hiểm cao nhất
+        if (e.mtype === "xmagefi") {
+            needFireDef = true;
+            break; //vì là điều kiện cao nhất, chỉ cần tìm tới quái phù hợp => nên có thể bỏ qua các con quái khác không kiểm tra nữa
+        }
+
+		// cần LUCK khi thấy quái co-op gần hết máu
+        if ( e.cooperative && e.hp < 150000) {
+            needluck = true;
+        }
+
+        // Nguy hiểm thường
+        if ( e.target === character.name && character.hp < 4500) {
+            needNormalDef = true;
+        }
+    }
+
+    if (needFireDef) {
         equipSet('def_fire');
+    } else if (needluck) {
+        equipSet('luck');
+    } else if (needNormalDef) {
+        equipSet('def');
     } else {
-        equipSet('orb');
+        equipSet('dame');
     }
 }
 
-setInterval(ChuyendoiITEM, 700);
+setInterval(ChuyendoiITEM, 700); //chỉ áp cho trang bị chứ không áp lên vũ khí chính
 
 
 
