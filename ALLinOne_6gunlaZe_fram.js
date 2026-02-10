@@ -1779,7 +1779,7 @@ if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)sma
 		var currentTargeta5 = get_nearest_monster_solobosskilla5()  ///đối tượng a5
                 var currentTargeta4 = get_nearest_monster_solobosskilla4()  ///đối tượng a4
                 var checkzapper = getBestTargets({ max_range: 320, type: "zapper0", number: 1 }); // Hàm check hút quái
-                var checka4 = getBestTargets({ max_range: 300, type: "a4", number: 1 }); // Hàm check hút quái
+                var checka4 = getBestTargets({ max_range: 100, type: "a4", number: 1 }); // Hàm check hút quái
 
 		if(currentTarget1 && checka4.length == 0) {
 
