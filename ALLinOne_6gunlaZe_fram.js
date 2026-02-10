@@ -423,7 +423,7 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
                 delay = ms_to_next_skill("attack");
 	
             } else if (monsterscharacterRange.length > 0 && monsterscharacterRange.length < 3 ) {
-		       if ( (leader && leader.hp < 13000) || (healerr && healerr.hp < 6000) )
+		       if ( (leader && leader.hp < 11000) || (healerr && healerr.hp < 6000) )
                            {
 		    weaponSet("heal");
             const possibleTargets1 = [leader, healerr].filter(t => t); // bỏ null
