@@ -3499,7 +3499,7 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
 			}
                    
                 }
-            } else if (character.cc < 100 && monster.target != "haiz") {
+            } else if (character.cc < 100) {
                 equipSet('luck');
 		    setTimeout(startLuckTimer, 30000);
             }
