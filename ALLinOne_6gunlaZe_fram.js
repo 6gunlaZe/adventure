@@ -901,8 +901,7 @@ const equipmentSets = {
 function ChuyendoiITEM() {
     let needFireDef = false;
     let needNormalDef = false;
-    let needluck = false;
-
+    let needLuck = false;
 
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
@@ -910,33 +909,32 @@ function ChuyendoiITEM() {
         // Nguy hiểm cao nhất
         if (e.mtype === "xmagefi") {
             needFireDef = true;
-            break; //vì là điều kiện cao nhất, chỉ cần tìm tới quái phù hợp => nên có thể bỏ qua các con quái khác không kiểm tra nữa
+            break;
         }
 
-		// cần LUCK khi thấy quái co-op gần hết máu
-        if ( e.cooperative && e.hp < 150000) {
-            needluck = true;
+        // Coop gần chết → ưu tiên luck
+        if (e.cooperative && e.hp < 150000) {
+            needLuck = true;
         }
 
-        // Nguy hiểm thường
-        if ( e.target === character.name && character.hp < 4500) {
+        // Bị đánh + máu thấp → cần def
+        if (e.target === character.name && character.hp < 4500) {
             needNormalDef = true;
         }
     }
 
     if (needFireDef) {
         equipSet('def_fire');
-    } else if (needluck) {
-        equipSet('luck');
     } else if (needNormalDef) {
         equipSet('def');
+    } else if (needLuck) {
+        equipSet('luck');
     } else {
         equipSet('dame');
     }
 }
 
-setInterval(ChuyendoiITEM, 700); //chỉ áp cho trang bị chứ không áp lên vũ khí chính
-
+setInterval(ChuyendoiITEM, 700); // chỉ áp cho trang bị
 
 
 
