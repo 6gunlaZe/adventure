@@ -1041,18 +1041,17 @@ function get_nearest_monster_v2(args = {}) {
 
 function getSupershotTarget() {
 	if (smart.moving) return null;
+
 	const ynhi = get_player("Ynhi");
-	const haiz = get_player("haiz");
-	if (!ynhi || (ynhi && distance(character, ynhi) > 150)) return null;
+	if (!ynhi || distance(character, ynhi) > 150) return null;
 
-	const validNames = ["wolf"]; // Quái chuẩn
-	const extraNames = ["bscorpion", "franky"]; // ✅ Quái mới với điều kiện đơn giản
+	const validNames = ["wolf"];
+	const extraNames = ["bscorpion", "franky"];
 
-	// Lọc các quái đủ điều kiện cơ bản
 	let candidates = Object.values(parent.entities).filter(e => {
 		if (e.type !== "monster" || e.dead) return false;
 
-		// Trường hợp quái "chuẩn" wolf
+		// 1️⃣ Quái chuẩn
 		if (validNames.includes(e.mtype)) {
 			return e.hp > 10000 &&
 				e.level < 3 &&
@@ -1061,29 +1060,19 @@ function getSupershotTarget() {
 				distance(character, e) > (character.range + 20);
 		}
 
-// Trường hợp quái mới, cần có target **và** trong tầm ngắm
-if (extraNames.includes(e.mtype)) {
-    return e.target && is_in_range(e, "supershot"); 
-    // ✅ chỉ giữ quái đã có target và nằm trong tầm bắn supershot
-}
+		// 2️⃣ Quái extra theo tên
+		if (extraNames.includes(e.mtype)) {
+			return e.target && is_in_range(e, "supershot");
+		}
 
+		// 3️⃣ Quái đang combat + bị cursed (bất kể mtype) dễ dàng bao trùm tất cả trường hợp
+		if (e.target && e.s && e.s.cursed e.hp > 15000) {
+			return is_in_range(e, "supershot");
+		}
 
 		return false;
 	});
 
-
-
-// Lọc theo vị trí của Ynhi và Haiz, chỉ áp dụng cho quái chuẩn
-candidates = candidates.filter(mob => {
-    if (validNames.includes(mob.mtype)) { // ✅ chỉ áp dụng cho quái chuẩn
-        if (ynhi && distance(ynhi, mob) <= ynhi.range) return false;
-        if (haiz && distance(haiz, mob) <= 200) return false;
-    }
-    return true; // quái mới không bị chặn
-});
-
-
-	// Chọn quái xa nhất
 	if (candidates.length > 0) {
 		candidates.sort((a, b) => distance(character, b) - distance(character, a));
 		return candidates[0];
@@ -1091,6 +1080,7 @@ candidates = candidates.filter(mob => {
 
 	return null;
 }
+
 
 
 
