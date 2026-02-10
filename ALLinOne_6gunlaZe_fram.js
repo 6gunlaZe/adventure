@@ -888,7 +888,7 @@ const equipmentSets = {
       //  { itemName: "coat", slot: "chest", level: 12, l: "s" }
     ],
     luck: [
-        { itemName: "mshield", slot: "offhand", level: 3, l: "l" },
+     //   { itemName: "mshield", slot: "offhand", level: 3, l: "l" }, // cung không đeo được
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
     ],
 
