@@ -1066,7 +1066,7 @@ function getSupershotTarget() {
 		}
 
 		// 3️⃣ Quái đang combat + bị cursed (bất kể mtype) dễ dàng bao trùm tất cả trường hợp
-		if (e.target && e.s && e.s.cursed e.hp > 15000) {
+		if (e.target && e.s && e.s.cursed && e.hp > 15000) {
 			return is_in_range(e, "supershot");
 		}
 
