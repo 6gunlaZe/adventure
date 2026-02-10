@@ -1593,7 +1593,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
                 }
             } else if (character.cc < 100 && monster.target != "haiz" && eventType == "dragold" ) {  // tăng luck khi là quái trong chế độ hợp tác
                 equipSet('luck');
-		    //setTimeout(startLuckTimer, 5000);
+		        setTimeout(startLuckTimer, 50000);
             }
         }
 	    else
