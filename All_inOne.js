@@ -1923,7 +1923,7 @@ const mobsInRange = Object.values(parent.entities).filter(entity =>
 const hasLowHP_CoopMob = mobsInRange.some(mob =>
     mob.cooperative === true &&
     mob.hp != null &&
-    mob.hp < 100000
+    mob.hp < 180000
 );
 
 
