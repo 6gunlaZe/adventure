@@ -841,12 +841,12 @@ async function skillLoop() {
     try {
         const target = get_target();
         const inRange =
-            target &&
+            target && !target.dead && 
             distance(character, target) <
             character.range + (character.xrange || 0);
 
         // 1. Invis
-        if (!is_on_cooldown("invis") && !character.s.invis && inRange) {
+        if (!is_on_cooldown("invis") && !character.s.invis && inRange && !smart.moving ) {
             use_skill("invis");
         }
 
