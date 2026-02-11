@@ -2614,7 +2614,7 @@ function get_nearest_monster_v2(args = {}) {
 let lowHpValue = 0;
 let lowHpTarget = null;
 // --- LOGIC ƯU TIÊN ĐẶC BIỆT CHO MOB2 ---
-    const mob2 = ["dragold", "stompy", "skeletor", "xmagefz", "xmagefi", "xmagen", "xmagex", "mrgreen", "mrpumpkin"];
+    const mob2 = ["dragold1", "stompy", "skeletor", "xmagefz1", "xmagefi1", "xmagen1", "xmagex1", "mrgreen", "mrpumpkin"];
 
     for (let id in parent.entities) {
         let current = parent.entities[id];
