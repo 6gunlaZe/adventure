@@ -337,10 +337,26 @@ else
 	
 }
 
-// Tạo vòng lặp 10s để gọi checkGameEvents()
-const intervalId1 = setInterval(() => {
+// 5s
+setTimeout(() => {
     checkGameEvents();
-}, 10000); // 1000 ms = 1 giây
+}, 5000);
+
+// 7s
+setTimeout(() => {
+    checkGameEvents();
+}, 7000);
+
+// 9s
+setTimeout(() => {
+    checkGameEvents();
+}, 9000);
+
+// Sau đó 10s/lần như cũ
+setTimeout(() => {
+    setInterval(checkGameEvents, 10000);
+}, 9000);
+
 
 
 
