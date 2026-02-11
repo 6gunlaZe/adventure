@@ -427,6 +427,22 @@ function targetLoop() {
     });
         }
 
+
+        // 2️⃣.5 Boss mạnh – cần buff
+        const buff = get_player("Ynhi");
+        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","icegolem","franky"];
+
+        if (!nearest && buff && distance(character, buff) < 170) {
+            for (const m of bossDanger) {
+                const t = get_nearest_monster({ type: m });
+                if (t) {
+                    nearest = t;
+                    break;
+                }
+            }
+        }
+
+		
         // 3️⃣ Ưu tiên đánh theo mục tiêu của đồng đội khi có quái mạnh với máu lúc full > 50k
         if (!nearest) {
             for (const name of targetNames) {
