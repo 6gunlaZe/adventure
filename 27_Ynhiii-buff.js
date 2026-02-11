@@ -558,7 +558,7 @@ party = party
 		if (m.name === "haiz") {
 			ratio += 0.22;
 		}
-		if (m.name === "LyThanhThu") {
+		if (m.name === "LyThanhThu"  && get_nearest_monster({ type: crepp }) ) {
 			ratio += 0.2;
 		}
 		if (m.name === "MuaBan") {
@@ -629,7 +629,7 @@ function lowest_health_partymember() {
 		if (member.name === "haiz") {
 			 member.entity.health_ratio += 0.22;
 		}
-        if (member.name === "LyThanhThu") {
+        if (member.name === "LyThanhThu" && get_nearest_monster({ type: crepp }) ) {
                member.entity.health_ratio += 0.2;
         }
         if (member.name === "MuaBan") {
