@@ -1123,6 +1123,214 @@ function mssince(time) {
 
 
 
+function ChuyendoiITEM() {
+    let needFireDef = false;
+    let needNormalDef = false;
+    let needLuck = false;
+
+    for (const e of Object.values(parent.entities)) {
+        if (!e.visible || e.dead || distance(character, e) > 400) continue;
+
+        // Nguy hiểm cao nhất
+        if (e.mtype === "xmagefi") {
+            needFireDef = true;
+            break;
+        }
+
+        // Coop gần chết → ưu tiên luck
+        if (e.cooperative && e.hp < 150000) {
+            needLuck = true;
+        }
+
+        // Bị đánh + máu thấp → cần def
+        if (e.target === character.name && character.hp < 4500) {
+            needNormalDef = true;
+        }
+    }
+
+    if (needFireDef) {
+        equipSet('def_fire');
+    } else if (needNormalDef) {
+        equipSet('def');
+    } else if (needLuck) {
+        equipSet('luck');
+    } else {
+        equipSet('dame');
+    }
+}
+
+setInterval(ChuyendoiITEM, 700); // chỉ áp cho trang bị
+
+
+
+
+
+function equipSet(setName) {
+    const set = equipmentSets[setName];
+    if (set) {
+        equipBatch(set);
+    } else {
+        console.error(`Set "${setName}" not found.`);
+    }
+}
+
+
+
+
+
+
+//l: "l"  == L lock
+let isEquipping = false; // Flag kiểm soát trạng thái
+
+async function equipBatch(data) {
+    if (isEquipping) {
+       // game_log("equipBatch is already running. Skipping.");
+        return;
+    }
+    isEquipping = true; // Đánh dấu đang chạy
+
+    if (!Array.isArray(data)) {
+        game_log("Can't equipBatch non-array");
+        isEquipping = false;
+        return handleEquipBatchError("Invalid input: not an array");
+    }
+    if (data.length > 15) {
+        game_log("Can't equipBatch more than 15 items");
+        isEquipping = false;
+        return handleEquipBatchError("Too many items");
+    }
+
+    let validItems = [];
+
+    for (let i = 0; i < data.length; i++) {
+        let itemName = data[i].itemName;
+        let slot = data[i].slot;
+        let level = data[i].level;
+        let l = data[i].l;
+
+        if (!itemName) {
+            game_log("Item name not provided. Skipping.");
+            continue;
+        }
+
+        let found = false;
+        if (parent.character.slots[slot]) {
+            let slotItem = parent.character.items[parent.character.slots[slot]];
+            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
+                found = true;
+            }
+        }
+
+        if (found) {
+            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
+            continue;
+        }
+
+        for (let j = 0; j < parent.character.items.length; j++) {
+            const item = parent.character.items[j];
+            if (item && item.name === itemName && item.level === level && item.l === l) {
+                validItems.push({ num: j, slot: slot });
+                break;
+            }
+        }
+    }
+
+    if (validItems.length === 0) {
+        isEquipping = false;
+        return; // Không có vật phẩm hợp lệ
+    }
+
+    try {
+        parent.socket.emit("equip_batch", validItems);
+        await parent.push_deferred("equip_batch");
+    } catch (error) {
+        console.error("Error in equipBatch:", error);
+        handleEquipBatchError("Failed to equip items");
+    }
+
+    isEquipping = false; // Reset flag khi hoàn tất
+}
+
+
+
+
+
+
+const equipmentSets = {
+
+
+    def_fire: [
+      //  { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
+    ],
+    dame: [
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+    ],
+    def: [
+      //  { itemName: "coat", slot: "chest", level: 12, l: "s" }
+    ],
+    luck: [
+     //   { itemName: "mshield", slot: "offhand", level: 3, l: "l" }, // cung không đeo được
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+    ],
+
+
+
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
