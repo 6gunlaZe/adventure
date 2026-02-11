@@ -14,7 +14,7 @@ let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
 var nhanvatfram = "haiz"
-var nhanvatphu = 'LyThanhThu';   // LyThanhThu  6gunlaZe
+var nhanvatphu = '6gunlaZe';   // LyThanhThu  6gunlaZe
 
 let kitefram
 
