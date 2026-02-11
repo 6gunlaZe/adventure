@@ -655,25 +655,42 @@ const equipmentSets = {
 
 
 function ChuyendoiITEM() {
-    const mobsInRange = Object.values(parent.entities).filter(entity =>
-        entity.visible &&
-        entity.target === character.name &&
-        !entity.dead &&
-        distance(character, entity) <= 400
-    );
+    let needFireDef = false;
+    let needNormalDef = false;
+    let needLuck = false;
 
-    const FireMobs = mobsInRange.filter(mob =>
-        mob.mtype === "xmagefi"
-    );
+    for (const e of Object.values(parent.entities)) {
+        if (!e.visible || e.dead || distance(character, e) > 400) continue;
 
-    if (FireMobs.length > 0) {
-        equipSet('def_fire');
+        // Nguy hiểm cao nhất
+        if (e.mtype === "xmagefi") {
+            needFireDef = true;
+            break;
+        }
+
+        // Coop gần chết → ưu tiên luck
+        if (e.cooperative && e.hp < 150000) {
+            needLuck = true;
+        }
+
+        // Bị đánh + máu thấp → cần def
+        if (e.target === character.name && character.hp < 4500) {
+            needNormalDef = true;
+        }
+    }
+
+    if (needFireDef) {
+      //  equipSet('def_fire');
+    } else if (needNormalDef) {
+      //  equipSet('def');
+    } else if (needLuck) {
+      //  equipSet('luck');
     } else {
-        equipSet('orb');
+      //  equipSet('dame');
     }
 }
 
-setInterval(ChuyendoiITEM, 700);
+setInterval(ChuyendoiITEM, 700); // chỉ áp cho trang bị
 
 
 
