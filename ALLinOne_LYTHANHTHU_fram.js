@@ -407,7 +407,7 @@ function targetLoop() {
     try {
         let nearest = null;
 
-        // 1️⃣ Ưu tiên targetNames gần nhà
+        // 1️⃣ Ưu tiên targetNames gần nhà và sắp chết
         if (
             character.map === mobMap &&
             distance(character, locations[home][0]) < 250
@@ -427,13 +427,13 @@ function targetLoop() {
     });
         }
 
-        // 3️⃣ Ưu tiên theo đồng đội (Logic cũ của bạn)
+        // 3️⃣ Ưu tiên đánh theo mục tiêu của đồng đội khi có quái mạnh với máu lúc full > 50k
         if (!nearest) {
             for (const name of targetNames) {
                 const player = get_player(name);
                 if (player) {
                     const t = get_target_of(player);
-                    if (t && !t.dead && distance(character, t) <= character.range ) {
+                    if (t && !t.dead && t.type == "monster"  && t.max_hp > 50000  && distance(character, t) <= character.range ) {
                         nearest = t;
                         break;
                     }
