@@ -880,7 +880,7 @@ async function skillLoop() {
             quickSkill &&
             inRange &&
             !is_on_cooldown(quickSkill) &&
-            character.mp > 500
+            character.mp > 750
         ) {
             await use_skill(quickSkill, target);
         }
