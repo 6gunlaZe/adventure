@@ -1120,53 +1120,48 @@ function timbosskill()
 let lastBuyHP = 0;
 let lastBuyMP = 0;
 
-const BUY_DELAY = 15000; // 5 giây giữa các lần mua
+const BUY_DELAY = 15000; 
+const TARGET_AMOUNT = 5000;
 
-function checkbuyhp()
-{
-    let soluonghp = 0;
+function countItem(name) {
+    let total = 0;
 
     for (let i = 0; i < character.isize; i++) {
         const item = character.items[i];
-        if (!item) continue;
-
-        if (item.name === "hpot1") {
-            soluonghp += item.q;
+        if (item && item.name === name) {
+            total += item.q;
         }
     }
 
-    if (soluonghp < 7000) {
+    return total;
+}
+
+function checkbuyhp() {
+    const current = countItem("hpot1");
+
+    if (current < TARGET_AMOUNT) {
         const now = Date.now();
 
         if (now - lastBuyHP > BUY_DELAY) {
-            buy("hpot1", 9999);
+            const need = TARGET_AMOUNT - current;
+            buy("hpot1", need);
             lastBuyHP = now;
-            game_log("BUY HP POTION: " + soluonghp);
+            game_log("BUY HP POTION: +" + need + " (had " + current + ")");
         }
     }
 }
 
+function checkbuymp() {
+    const current = countItem("mpot1");
 
-function checkbuymp()
-{
-    let soluongmp = 0;
-
-    for (let i = 0; i < character.isize; i++) {
-        const item = character.items[i];
-        if (!item) continue;
-
-        if (item.name === "mpot1") {
-            soluongmp += item.q;
-        }
-    }
-
-    if (soluongmp < 7000) {
+    if (current < TARGET_AMOUNT) {
         const now = Date.now();
 
         if (now - lastBuyMP > BUY_DELAY) {
-            buy("mpot1", 9999);
+            const need = TARGET_AMOUNT - current;
+            buy("mpot1", need);
             lastBuyMP = now;
-            game_log("BUY MP POTION: " + soluongmp);
+            game_log("BUY MP POTION: +" + need + " (had " + current + ")");
         }
     }
 }
