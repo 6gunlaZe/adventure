@@ -1736,9 +1736,28 @@ setInterval(avoidance, 80);
 
 
 let checkwwall = 1;
+let lastKiteTime = 0;
+const KITE_INTERVAL = 450; // ms
 
 function kite(taget, kite_range) {
-	const radius = kite_range;
+
+    const now = performance.now();
+    if (now - lastKiteTime < KITE_INTERVAL) return;
+    lastKiteTime = now;
+	
+// 1. Xác định radius dựa trên map
+    let radius;
+    const currentMap = character.map;
+
+    if (currentMap === "winter_instance") { // Thay "mapA" bằng tên code thực tế của map
+        radius = character.range;
+    } else if (currentMap === "mapB") {
+        radius = 60;
+    } else {
+        radius = kite_range; // Nếu ở map khác thì dùng giá trị truyền vào
+    }
+
+	
 	if (smart.moving || !taget) return;
 
 	const angle = Math.PI / 3.5 * checkwwall;
@@ -1766,6 +1785,8 @@ function kite(taget, kite_range) {
 		checkwwall = -checkwwall;
 	}
 }
+
+
 
 
 
