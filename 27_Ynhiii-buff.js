@@ -278,12 +278,12 @@ setInterval(function() {
 			}
 	/////////		
 	
-	if( (soluonghp < 7000 ) )
+	if( (soluonghp < 4000 ) )
 	{
 		send_cm("MuaBan", "hp");
 		game_log("re filll !!!!!!");
 	}
-		if( ( soluongmp < 7000) )
+		if( ( soluongmp < 4000) )
 	{
 		send_cm("MuaBan", "mp");
 		game_log("re filll !!!!!!");
