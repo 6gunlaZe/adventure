@@ -1261,17 +1261,28 @@ const equipmentSets = {
 
     def_fire: [
       //  { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "xgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+
     ],
     dame: [
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
+        { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+
+
+		
     ],
     def: [
-      //  { itemName: "coat", slot: "chest", level: 12, l: "s" }
+        { itemName: "xgloves", slot: "gloves", level: 7, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 7, l: "l" },
+		
     ],
     luck: [
      //   { itemName: "mshield", slot: "offhand", level: 3, l: "l" }, // cung không đeo được
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
     ],
 
 
