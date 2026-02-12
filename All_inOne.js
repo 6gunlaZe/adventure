@@ -2,7 +2,7 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 
 /*************** CONFIG ***************/
-const HOME_SERVER = { region: "US", id: "II" };
+const HOME_SERVER = { region: "US", id: "I" };
 const RUN_SERVER = { region: "ASIA", id: "I" };
 
 const SERVER_RULES = [
