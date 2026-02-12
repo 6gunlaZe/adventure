@@ -163,7 +163,8 @@ async function eventer() {
 
     setTimeout(eventer, delay1);
 }
-setTimeout(eventer, 6000);
+
+setTimeout(eventer, 10000);
 
 
 
