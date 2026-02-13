@@ -836,11 +836,13 @@ let gcdFastTimer = null;
 
 
 setInterval(() => {
-    if (character.rip || smart.moving) return;
     if (!attack_mode) return;
     if (Date.now() < delayBug + 1000) return;
 	
     if (emergencyHealParty()) return;
+
+    if (character.rip || smart.moving) return;
+
 	
     const leader = get_player("haiz");
     if (!leader) return;
