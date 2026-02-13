@@ -1604,7 +1604,8 @@ let callnguoi = 0
 function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0) {
     if (parent?.S?.[eventType]?.live) {
 
-				    autoPartyCheck(f1111, f2222, 60000);
+		          if (eventType == "dragold") autoPartyCheckByCurrentServer(); // tối ưu hóa drop theo home sever
+		          else autoPartyCheck(f1111, f2222, 60000);
 
 	    if (callnguoi < 200)
 	    {
