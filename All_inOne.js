@@ -14,6 +14,18 @@ const SERVER_RULES = [
     { region: "EU",   id: "II",  weight: 3 }
 ];
 
+// SERVER → PARTY MAP
+///////////////////////
+
+const SERVER_PARTY_MAP = [
+    { region: "EU",   id: "I",   f1: "6gunlaZe",   f2: "tienV" },
+ //   { region: "US",   id: "I",   f1: "Ynhi",       f2: "nhiY" },
+    { region: "ASIA", id: "I",   f1: "LyThanhThu", f2: "tienV" },
+ //   { region: "US",   id: "II",  f1: "6gunlaZe",   f2: "Ynhi" },
+ //   { region: "US",   id: "III", f1: "nhiY",       f2: "LyThanhThu" },
+ //   { region: "EU",   id: "II",  f1: "tienV",      f2: "Ynhi" }
+];
+
 
  if (character.rip) { ///////auto hoi sinh KHI KHỞI ĐỘNG
     respawn();
@@ -3448,7 +3460,40 @@ function lootAllChests() {
 }
 
 
-//////////////
+
+///////////////////////////////
+
+let currentServerParty = null;
+// CẬP NHẬT PARTY THEO SERVER ĐANG ĐỨNG
+///////////////////////
+
+function updateServerParty() {
+    currentServerParty = SERVER_PARTY_MAP.find(s =>
+        s.region === server.region &&
+        s.id === server.id
+    ) || null;
+}
+
+// Đổi nhân vật THEO HOME SERVER MAP đã khai báo lúc đầu
+///////////////////////
+
+function autoPartyCheckByCurrentServer(interval = 60000) {
+
+    updateServerParty();
+
+    if (!currentServerParty) return; // server không cấu hình
+
+    autoPartyCheck(
+        currentServerParty.f1,
+        currentServerParty.f2,
+        interval
+    );
+}
+
+
+
+
+//////////////////////////////
 let checktimeparty = 0
 let partychecktime
 
