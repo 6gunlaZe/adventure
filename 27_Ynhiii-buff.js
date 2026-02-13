@@ -905,7 +905,7 @@ const ABSORB_DELAY = 700; // ms
 const ABSORB_DELAY_BOSS = 1200; // ms
 
 function tryAbsorb() {
-    if (!character.party) return;
+    if (!character.party || smart.moving ) return;
     if (is_on_cooldown("absorb")) return;
     if (character.hp < 8500) return;
 
