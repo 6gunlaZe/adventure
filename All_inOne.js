@@ -18,9 +18,9 @@ const SERVER_RULES = [
 ///////////////////////
 
 const SERVER_PARTY_MAP = [
-    { region: "EU",   id: "I",   f1: "6gunlaZe",   f2: "tienV" },
+    { region: "EU",   id: "I",   f1: "Ynhi",   f2: "nhiY" },
  //   { region: "US",   id: "I",   f1: "Ynhi",       f2: "nhiY" },
-    { region: "ASIA", id: "I",   f1: "LyThanhThu", f2: "tienV" },
+    { region: "ASIA", id: "I",   f1: "Ynhi", f2: "LyThanhThu" },
  //   { region: "US",   id: "II",  f1: "6gunlaZe",   f2: "Ynhi" },
  //   { region: "US",   id: "III", f1: "nhiY",       f2: "LyThanhThu" },
  //   { region: "EU",   id: "II",  f1: "tienV",      f2: "Ynhi" }
