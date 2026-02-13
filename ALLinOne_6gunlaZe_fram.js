@@ -357,7 +357,7 @@ if (leader && get_nearest_monster({ type: home }) ) {
     Y = character.y;
 }
 	
-    let stopAttack = (check_quai_A4_stop_attach() == 1);
+    let stopAttack = (check_quai_A4_stop_attach() == 1 || !leader ); // không tấn công khi không có haiz
 	
     try {
 		
