@@ -846,11 +846,9 @@ const equipmentSets = {
     ],
      singleAOE: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
     ],
     single: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
     ],
     dead: [
         //{ itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
@@ -867,7 +865,6 @@ const equipmentSets = {
     ],
     shot5: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-      //  { itemName: "mittens", slot: "gloves", level: 9 },
 	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
     ],
     stealth: [
