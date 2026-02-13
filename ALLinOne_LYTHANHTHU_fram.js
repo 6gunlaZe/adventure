@@ -612,6 +612,16 @@ const equipmentSets = {
     def_fire: [
         { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
+    dame: [
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+        { itemName: "coat1", slot: "chest", level: 9, l: "l" },	    
+        { itemName: "pants1", slot: "pants", level: 9, l: "l" },
+		
+    ],
 
 };
 
@@ -631,7 +641,7 @@ function ChuyendoiITEM() {
         }
 
         // Coop gần chết → ưu tiên luck
-        if (e.cooperative && e.hp < 150000) {
+        if (e.cooperative && e.hp < 350000) {
             needLuck = true;
         }
 
