@@ -890,6 +890,12 @@ const equipmentSets = {
     ],
     luck: [
      //   { itemName: "mshield", slot: "offhand", level: 3, l: "l" }, // cung không đeo được
+        { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "wcap", slot: "helmet", level: 9, l: "l" },
+        { itemName: "wgloves", slot: "gloves", level: 8, l: "l" },
+        { itemName: "wattire", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "wbreeches", slot: "pants", level: 2, l: "l" },
+
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
     ],
 
