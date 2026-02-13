@@ -2409,6 +2409,76 @@ setInterval(ChuyendoiITEM, 100);
 
 
 
+let lastElixirSwap = 0;
+const ELIXIR_SWAP_DELAY = 30000; // 30 giây
+
+function elixirUsage() {
+    try {
+        const now = Date.now();
+        const currentElixir = character.slots.elixir?.name;
+
+        const hasXmagefi = get_nearest_monster({ type: "xmagefi" });
+        const hasXmagen = get_nearest_monster({ type: "xmagen" });
+        const hasFireroamer = get_nearest_monster({ type: "fireroamer" });
+
+        let targetElixir = null;
+
+        // =============================
+        // ƯU TIÊN THEO THỨ TỰ
+        // =============================
+
+        // 1️⃣ xmagefi → elixirfires
+        if (hasXmagefi) {
+            targetElixir = "elixirfires";
+        }
+
+        // 2️⃣ xmagen + HP < 8000 → elixirpnres
+        else if (hasXmagen && character.hp < 8000) {
+            targetElixir = "elixirpnres";
+        }
+
+        // 3️⃣ winter_instance → hotchocolate
+        else if (character.map === "winter_instance") {
+            targetElixir = "hotchocolate";
+        }
+
+        // 4️⃣ HP thấp + fireroamer → elixirfires
+        else if (character.hp < 6000 && hasFireroamer) {
+            targetElixir = "elixirfires";
+        }
+
+        // 5️⃣ Default → chỉ dùng luck nếu KHÔNG phải elixirfires
+        else if (currentElixir !== "elixirfires") {
+            targetElixir = "elixirluck";
+        }
+
+        // =============================
+        // ĐỔI ELIXIR (có cooldown)
+        // =============================
+
+        if (
+            targetElixir &&
+            currentElixir !== targetElixir &&
+            now - lastElixirSwap >= ELIXIR_SWAP_DELAY
+        ) {
+            const itemSlot = locate_item(targetElixir);
+            if (itemSlot != null) {
+                use(itemSlot);
+                lastElixirSwap = now;
+            }
+        }
+
+    } catch (e) {
+        console.error("Error in elixirUsage:", e);
+    }
+}
+
+setInterval(elixirUsage, 2000);
+
+
+
+
+
 
 
 
