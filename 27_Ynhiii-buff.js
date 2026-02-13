@@ -2199,35 +2199,59 @@ let checkheall = 0;
 let checkluckk = 0;
 
 function ChuyendoiITEM() {
-     const leader = get_player("haiz");
-     const damer = getOtherPartyMember();
-	 const currentTime = performance.now();
-     const penalty = ms_penalty_cd();
+
 	
-const mobsInRange = Object.values(parent.entities).filter(entity => 
-    entity.visible && entity.type=="monster" &&
-    entity.target === character.name &&
-    !entity.dead &&
-    distance(character, entity) <= 100
-);
+    const leader = get_player("haiz");
+    const damer = getOtherPartyMember();
+    const currentTime = performance.now();
+    const penalty = ms_penalty_cd();
 
-// Tách theo loại damage
-const physicalMobs = mobsInRange.filter(mob => mob.damage_type === "physical");
-const magicalMobs = mobsInRange.filter(mob => mob.damage_type === "magical");
-// Tách theo máu
-const lowHpMobs = mobsInRange.filter(mob => {
-    const hpThreshold = mob.max_hp >= 800000 ? 35000 :
-                        mob.max_hp >= 200000 ? 20000 : 8000;
-    return (
-        mob.hp < hpThreshold &&
-        mob.target === character.name &&
-        leader &&
-        distance(character, leader) <= 250 &&
-        mob.mtype !== "nerfedmummy" &&
-        mob.mtype !== "nerfedbat"
-    );
-});
+    const RANGE = 100;
+    const RANGE_SQ = RANGE * RANGE;
 
+    const cx = character.x;
+    const cy = character.y;
+
+    let hasLowHp = false;
+    let hasPhysical = false;
+    let hasMagical = false;
+
+for (const id in parent.entities) {
+    const e = parent.entities[id];
+
+    if (!e.visible || e.dead) continue;
+    if (e.type !== "monster") continue;
+
+    const isTargetingMe = (e.target === character.name);
+    const isCoop = e.cooperative;
+
+    if (!isTargetingMe && !isCoop) continue;
+
+    const dx = cx - e.x;
+    const dy = cy - e.y;
+    if (dx*dx + dy*dy > RANGE_SQ) continue;
+
+    // 🔹 Damage type chỉ tính nếu đang đánh mình
+    if (isTargetingMe) {
+        if (e.damage_type === "physical") hasPhysical = true;
+        if (e.damage_type === "magical")  hasMagical = true;
+    }
+
+    // 🔹 Low HP logic
+    if (!hasLowHp) {
+        if (isCoop) {
+            if (e.hp < 150000) hasLowHp = true;
+        } else if (isTargetingMe) {
+            let threshold = 8000;
+            if (e.max_hp >= 800000) threshold = 35000;
+            else if (e.max_hp >= 200000) threshold = 20000;
+
+            if (e.hp < threshold) hasLowHp = true;
+        }
+    }
+
+    if (hasLowHp && hasPhysical && hasMagical) break;
+}
 
 	
 	
@@ -2244,14 +2268,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 
 	
-	if(get_nearest_monster({ type: "xmagefi" }) && lowHpMobs.length == 0)
+	if(get_nearest_monster({ type: "xmagefi" }) && !hasLowHp)
 	{
         eTime = currentTime; 
         equipSet('bossburn');	
 		return
 	}
 
-	if( (get_nearest_monster({ type: "xmagen" }) ||  get_nearest_monster({ type: "xmagex" })  ) && lowHpMobs.length == 0)
+	if( (get_nearest_monster({ type: "xmagen" }) ||  get_nearest_monster({ type: "xmagex" })  ) && !hasLowHp)
 	{
         eTime = currentTime; 
         equipSet('bossDOC');	
@@ -2260,14 +2284,14 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 
 
-	if(get_nearest_monster({ type: "fireroamer" }) && lowHpMobs.length == 0 && goldcheck == 0 )
+	if(get_nearest_monster({ type: "fireroamer" }) && !hasLowHp && goldcheck == 0 )
 	{
         eTime = currentTime; 
         equipSet('creepburn');	
 		return
 	}
 
-	if(get_nearest_monster({ type: crepp }) && lowHpMobs.length == 0 && goldcheck == 0 && character.hp/character.max_hp > 0.98)
+	if(get_nearest_monster({ type: crepp }) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.98)
 	{
         eTime = currentTime; 
         equipSet('fram');	
@@ -2275,7 +2299,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 	
 	
-	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && lowHpMobs.length == 0) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
+	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && !hasLowHp) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
 	{
         eTime = currentTime;
         equipSet('fram');	
@@ -2333,7 +2357,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 	}
 
 
-	if(lowHpMobs.length == 0 && checkluckk > 0 && goldcheck == 0  )
+	if(!hasLowHp && checkluckk > 0 && goldcheck == 0  )
 	{
         eTime = currentTime;
         // game_log("🎯 Unluck"); 	
@@ -2344,7 +2368,7 @@ const lowHpMobs = mobsInRange.filter(mob => {
 
 	
 
-if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
+if ( hasLowHp && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
 	eTime = currentTime;
         // game_log("🔄 luck") ;	
 	let slot = locate_item("luckbooster");
@@ -2366,11 +2390,11 @@ if ( lowHpMobs.length >= 1 && character.map != "winter_instance" && character.hp
 
 if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
 {
-        if ( physicalMobs.length >= 1 ) {
+        if ( hasPhysical ) {
 	eTime = currentTime;
         equipSet('vatly');
         }
-        else if ((magicalMobs.length >= 1 && character.hp/character.max_hp < 0.68) || character.map == "winter_instance" )
+        else if ((hasMagical && character.hp/character.max_hp < 0.68) || character.map == "winter_instance" )
 	{
 	eTime = currentTime;
         equipSet('phep');
@@ -2380,7 +2404,7 @@ if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
 
 }
 
-setInterval(ChuyendoiITEM, 130);
+setInterval(ChuyendoiITEM, 100);
 
 
 
