@@ -1868,7 +1868,10 @@ const equipmentSets = {
 
     ],
     gold: [
-        { itemName: "handofmidas", slot: "gloves", level: 8 },
+        { itemName: "handofmidas", slot: "gloves", level: 8 },  
+        { itemName: "horsecapeg", slot: "cape", level: 7, l: "l" },  
+
+		
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
 	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
@@ -1992,7 +1995,9 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "supermittens", slot: "gloves", level: 8 }, 
+        { itemName: "gcape", slot: "cape", level: 8, l: "l" },  
+
     ],
     Unluck: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
