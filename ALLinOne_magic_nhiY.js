@@ -1138,7 +1138,7 @@ function ChuyendoiITEM() {
         }
 
         // Coop gần chết → ưu tiên luck
-        if (e.cooperative && e.hp < 150000) {
+        if (e.cooperative && e.hp < 350000) {
             needLuck = true;
         }
 
@@ -1272,7 +1272,9 @@ const equipmentSets = {
         { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
-
+        { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
 		
     ],
     def: [
@@ -1282,6 +1284,12 @@ const equipmentSets = {
     ],
     luck: [
      //   { itemName: "mshield", slot: "offhand", level: 3, l: "l" }, // cung không đeo được
+        { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+        { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+        { itemName: "wattire", slot: "chest", level: 2, l: "l" },	    
+        { itemName: "wbreeches", slot: "pants", level: 2, l: "l" },
+		
         { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
     ],
 
