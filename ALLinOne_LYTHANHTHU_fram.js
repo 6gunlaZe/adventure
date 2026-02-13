@@ -599,75 +599,20 @@ async function equipBatch(data) {
 
 const equipmentSets = {
 
-    dps: [
-        { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
-        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
-        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
-        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
-    ],
+
     luck: [
-        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
-        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
-    ],
-     singleAOE: [
-      //  { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+        { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+        { itemName: "wattire", slot: "chest", level: 2, l: "l" },	    
+        { itemName: "wbreeches", slot: "pants", level: 2, l: "l" },
 
-        { itemName: "supermittens", slot: "gloves", level: 8 },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
-    ],
-    single: [
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8 },
-   //	{ itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
-    ],
-    dead: [
-        //{ itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-
-		
-       // { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
-    ],
-    boom: [
-
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-       // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        //{ itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
-    ],
-    heal: [
-        { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
-    ],
-    shot5: [
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-      //  { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
-    ],
-    stealth: [
-        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
-    ],
-    franky: [
-
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-
-       // { itemName: "bowofthedead", slot: "mainhand", level: 9, l: "l" },
-       // { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-     //   { itemName: "mittens", slot: "gloves", level: 9 },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
     ],
     def_fire: [
         { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
-    orb: [
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" }
-    ],
-    stat: [
-        { itemName: "coat", slot: "chest", level: 12, l: "s" }
-    ],
+
 };
 
 
@@ -701,9 +646,9 @@ function ChuyendoiITEM() {
     } else if (needNormalDef) {
       //  equipSet('def');
     } else if (needLuck) {
-      //  equipSet('luck');
+        equipSet('luck');
     } else {
-      //  equipSet('dame');
+        equipSet('dame');
     }
 }
 
