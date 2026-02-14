@@ -748,7 +748,7 @@ if (rangerObj && is_in_range(rangerObj, "energize") && !rangerObj.rip && !is_on_
 
     let mp_cap = rangerObj.max_mp - 800;          // trần MP cho ranger
     let ranger_need = mp_cap - rangerObj.mp;      // ranger còn thiếu bao nhiêu
-    let mage_can_give = character.mp - 300;       // mage giữ 200 MP đệm
+    let mage_can_give = character.mp - 400;       // mage giữ 400 MP đệm
     let amount = 0;
 
         amount = Math.min(ranger_need, mage_can_give);
