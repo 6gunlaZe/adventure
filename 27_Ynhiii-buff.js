@@ -1871,7 +1871,7 @@ const equipmentSets = {
     ],
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 8 },  
-        { itemName: "horsecapeg", slot: "cape", level: 7, l: "l" },  
+        { itemName: "horsecapeg", slot: "cape", level: 8, l: "l" },  
 
 		
     ],
