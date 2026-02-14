@@ -193,7 +193,7 @@ const keyData = [
     { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
     { 
         name: "frozen", 
-        count: hasFieldGen ? count_item("frozenkey") : 0, 
+        count: hasFieldGen ? count_item("frozenkey111") : 0,  // tạm ngưng xmagex
         action: framXmage, 
         map: "winter_instance" 
     }
@@ -4730,7 +4730,7 @@ function distanceToPoint(x1, y1, x2, y2) {
 //////////////////////////////////
 
 // ===== CONFIG =====
-const KEEP_AMOUNT = 3; // Số lượng món đồ muốn giữ lại trong túi
+const KEEP_AMOUNT = 2; // Số lượng món đồ muốn giữ lại trong túi
 const MULE_NAME = "MuaBan";
 
 const ITEM_WHITELIST = [
