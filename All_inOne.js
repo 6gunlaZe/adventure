@@ -232,7 +232,7 @@ if (currentJob) {
               (h >= 6 && h < 11) || (h >= 13 && h < 21)
             ) && character.esize > 3 &&
             (
-                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
+                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey1111") > 0 &&  locate_item("fieldgen0") !== -1 )
             )
         ) {
              framtay = 1;
