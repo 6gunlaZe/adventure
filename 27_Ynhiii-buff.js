@@ -1293,7 +1293,7 @@ function emergencyHealParty() {
 
     // 1. Luôn xét bản thân trước
     const selfRatio = character.hp / character.max_hp;
-    if (selfRatio < 0.5) {
+    if (selfRatio < 0.6) {
         target = character;
         lowestRatio = selfRatio;
     }
