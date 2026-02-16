@@ -1126,18 +1126,6 @@ let lastBuyMP = 0;
 const BUY_DELAY = 15000; 
 const TARGET_AMOUNT = 5000;
 
-function countItem(name) {
-    let total = 0;
-
-    for (let i = 0; i < character.isize; i++) {
-        const item = character.items[i];
-        if (item && item.name === name) {
-            total += item.q;
-        }
-    }
-
-    return total;
-}
 
 function checkbuyhp() {
     const current = countItem("hpot1");
@@ -1884,70 +1872,92 @@ function compound_items() {
 
 //////////////////////////////////////////////
 /////////////////////////////////////////
-// autobuyponty
+// ==========================
+// AUTO PONTY BUY - LIMITED VERSION
+// ==========================
 
-var craftList = [ "wattire", "wcap", "wbreeches","wgloves", "wshoes", "smoke111","cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8","cshell","shield","gcape","sparkstaff","candy1","candy0","carrot","dexamulet","fallen","ink","bowofthedead","pinkie","strring","dexearring","egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8","dexbelt","cryptkey","essenceofgreed","sshield","vdagger","vhammer","scythe","bataxe","rabbitsfoot","bfangamulet","suckerpunch","cdarktristone","powerglove","xarmor","tshirt9","fury","xhelmet","lostearring", "ololipop" , "supermittens" , "xhelmet" , "xgloves" , "starkillers" , "wbookhs" , "crossbow" ,  "mcape" , "gem0" , "ornament" , "candycane" , "mistletoe" ,  ];
+// ====== DANH SÁCH ITEM MUỐN MUA ======
+var craftList = [
+    "wattire","wcap","wbreeches","wgloves","wshoes","smoke111",
+    "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
+    "cshell","shield","gcape","sparkstaff",
+    "candy1","candy0","carrot",
+    "dexamulet","fallen","ink","bowofthedead",
+    "pinkie","strring","dexearring",
+    "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
+    "dexbelt","cryptkey","essenceofgreed",
+    "sshield","vdagger","vhammer","scythe","bataxe",
+    "rabbitsfoot","bfangamulet","suckerpunch","cdarktristone",
+    "powerglove","xarmor","tshirt9","fury",
+    "xhelmet","lostearring","ololipop","supermittens",
+    "xgloves","starkillers","wbookhs","crossbow",
+    "mcape","gem0","ornament","candycane","mistletoe","snowball"
+];
 
+const craftSet = new Set(craftList);
 
+// ====== GIỚI HẠN TỪNG ITEM ======
+const itemLimits = {
+    snowball: 51,
+};
+
+// ====== HÀM ĐẾM ITEM ======
+function countItem(name) {
+    let total = 0;
+    for (let i = 0; i < character.isize; i++) {
+        const item = character.items[i];
+        if (!item) continue;
+        if (item.name === name) {
+            total += item.q ? item.q : 1;
+        }
+    }
+    return total;
+}
+
+// ====== HANDLER PONTY ======
 function secondhands_handler(event) {
     for (const i in event) {
         const item = event[i];
-		
-        // Kiểm tra level của item, chỉ xử lý nếu level < 1
-        const level = item?.level ? item.level : 0;		
-        if (level >= 100) continue; // đang tắt chế độ lọc level cao cũng mua => vì level tính cả chi phí cuộn vào mà
+        if (!item) continue;
+        if (!craftSet.has(item.name)) continue;
 
-        for (var index in craftList) {
-            var craftName = craftList[index];
-			
-            // Kiểm tra tên item khớp và đủ chỗ trống
-            if (item && item.name === craftName && character.esize > 2) {  // mặc định để >10
-                game_log(craftName + " da mua !!!!!!");
-                parent.socket.emit("sbuy", {"rid": item.rid});
-            }
+        const currentAmount = countItem(item.name);
+
+        if (itemLimits.hasOwnProperty(item.name)) {
+            const limit = itemLimits[item.name];
+            if (limit !== null && currentAmount >= limit) continue;
         }
+
+        game_log("Mua: " + item.name);
+        parent.socket.emit("sbuy", { rid: item.rid });
     }
 }
 
+// ====== GỌI PONTY ======
+function checkPonty() {
+    if (is_moving(character)) return;
+    if (character.map !== "main") return;
+    if (distance(character, { x: 0, y: 0 }) >= 400) return;
 
-
-
-function on_destroy() // called just before the CODE is destroyed
-{
-	 parent.socket.removeListener("secondhands", secondhands_handler);
-	clear_drawings();
-	clear_buttons();
+    parent.socket.off("secondhands", secondhands_handler);
+    parent.socket.on("secondhands", secondhands_handler);
+    parent.socket.emit("secondhands");
 }
 
-
-
-
-setInterval(function() {
-
-if (is_moving(character) ) return	
-if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
-{
-parent.socket.off("secondhands", secondhands_handler);
-parent.socket.on("secondhands", secondhands_handler);
-parent.socket.emit("secondhands");
+// ====== DỌN DẸP ======
+function on_destroy() {
+    parent.socket.removeListener("secondhands", secondhands_handler);
 }
 
-}, 60000); 
+// ====== CHẠY LẦN ĐẦU SAU 10 GIÂY ======
+setTimeout(function () {
+    checkPonty();
+}, 10000);
 
-
-setInterval(function() {
-	
-if (pontylandau == 1)return
-// if (is_moving(character) ) return
-if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
-{	
-pontylandau = 1	
-parent.socket.off("secondhands", secondhands_handler);
-parent.socket.on("secondhands", secondhands_handler);
-parent.socket.emit("secondhands");
-}
-
-}, 10000); 
+// ====== SAU ĐÓ CHẠY MỖI 60s ======
+setInterval(function () {
+    checkPonty();
+}, 60000);
 
 ///////////////////////////////////
 ///////////////////////////////////
