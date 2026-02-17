@@ -1894,7 +1894,7 @@ const equipmentSets = {
         { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
 		
-	    { itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
+	    { itemName: "lmace", slot: "mainhand", level: 8, l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
