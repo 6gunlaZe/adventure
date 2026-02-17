@@ -1615,7 +1615,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 	    Now_is_gobalevenrun = true
 	    
         const monster = get_nearest_monster({ type: eventType }); 
-        if (monster) {
+        if (monster && distance(character, monster) <= 180 ) {
             if (monster.hp > hpThreshold ) {
                 if (character.cc < 100) {
                     equipSet('single');
