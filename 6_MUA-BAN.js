@@ -1878,7 +1878,7 @@ function compound_items() {
 
 // ====== DANH SÁCH ITEM MUỐN MUA ======
 var craftList = [
-    "wattire","wcap","wbreeches","wgloves","wshoes","smoke111",
+    "smoke111",
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
     "cshell","shield","gcape","sparkstaff",
     "candy1","candy0","carrot",
