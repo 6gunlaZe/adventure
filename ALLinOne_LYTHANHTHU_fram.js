@@ -1690,58 +1690,74 @@ function avoidance() {
 setInterval(avoidance, 80);
 
 
-
 let checkwwall = 1;
 let lastKiteTime = 0;
 const KITE_INTERVAL = 450; // ms
-
+//phiên bản tay ngăn
 function kite(taget, kite_range) {
 
     const now = performance.now();
     if (now - lastKiteTime < KITE_INTERVAL) return;
     lastKiteTime = now;
-	
-// 1. Xác định radius dựa trên map
+
     let radius;
     const currentMap = character.map;
 
-    if (currentMap === "winter_instance") { // Thay "mapA" bằng tên code thực tế của map
+    if (currentMap === "winter_instance") {
         radius = character.range;
     } else if (currentMap === "mapB") {
         radius = 60;
     } else {
-        radius = kite_range; // Nếu ở map khác thì dùng giá trị truyền vào
+        radius = kite_range;
     }
 
-	
-	if (smart.moving || !taget) return;
+    if (smart.moving || !taget) return;
 
-	const angle = Math.PI / 3.5 * checkwwall;
-	const reverseAngle = Math.PI / 3.5 * -checkwwall;
+    let currentTarget = get_targeted_monster();
 
-	const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+    const angle = Math.PI / 3.5 * checkwwall;
+    const reverseAngle = -angle;
 
-	const endGoal = {
-		x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + angle),
-		y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + angle)
-	};
+    const angleFromCenterToCurrent =
+        Math.atan2(character.y - taget.real_y,
+                   character.x - taget.real_x);
 
-	const endGoal1 = {
-		x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + reverseAngle),
-		y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + reverseAngle)
-	};
+    const endGoal = {
+        x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + angle),
+        y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + angle)
+    };
 
-	if (can_move_to(endGoal.x, endGoal.y)) {
-		xmove(endGoal.x, endGoal.y);
-	} else if (can_move_to(endGoal1.x, endGoal1.y)) {
-		xmove(endGoal1.x, endGoal1.y);
-		checkwwall = -checkwwall;
-	} else {
-		xmove(taget.real_x, taget.real_y); // fallback, dù đây không phải kite
-		checkwwall = -checkwwall;
-	}
+    const endGoal1 = {
+        x: taget.real_x + radius * Math.cos(angleFromCenterToCurrent + reverseAngle),
+        y: taget.real_y + radius * Math.sin(angleFromCenterToCurrent + reverseAngle)
+    };
+
+    // ===== FUNCTION CHECK RANGE (chỉ dùng khi có quái) =====
+    function inAttackRange(pos) {
+        if (!currentTarget) return true; // không có quái → luôn hợp lệ
+        const dx = pos.x - currentTarget.real_x;
+        const dy = pos.y - currentTarget.real_y;
+        return (dx * dx + dy * dy) <= (character.range - 5) * (character.range - 5);
+    }
+
+    const canMain = can_move_to(endGoal.x, endGoal.y) && inAttackRange(endGoal);
+    const canReverse = can_move_to(endGoal1.x, endGoal1.y) && inAttackRange(endGoal1);
+
+    // 1️⃣ Ưu tiên hướng chính
+    if (canMain) {
+        xmove(endGoal.x, endGoal.y);
+    }
+    // 2️⃣ Thử hướng ngược
+    else if (canReverse) {
+        xmove(endGoal1.x, endGoal1.y);
+        checkwwall = -checkwwall;
+    }
+    // 3️⃣ Fallback: lao về leader
+    else {
+        xmove(taget.real_x, taget.real_y);
+        checkwwall = -checkwwall;
+    }
 }
-
 
 
 
