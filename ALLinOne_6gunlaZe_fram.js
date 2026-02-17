@@ -2439,7 +2439,7 @@ function kite(taget, kite_range) {
     const currentMap = character.map;
 
     if (currentMap === "winter_instance") { // Thay "mapA" bằng tên code thực tế của map
-        radius = character.range;
+        radius = character.range - 20;
     } else if (currentMap === "mapB") {
         radius = 60;
     } else {
