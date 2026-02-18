@@ -1607,11 +1607,12 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 		          if (eventType == "dragold") autoPartyCheckByCurrentServer(); // tối ưu hóa drop theo home sever
 		          else autoPartyCheck(f1111, f2222, 60000);
 
-	    if (callnguoi < 200)
-	    {
-		    send_cm("MuaBan",eventType)
-		   callnguoi += 1 
-	    }
+callnguoi++;
+
+if (callnguoi < 2000 && callnguoi % 20 === 0) {
+    send_cm("MuaBan", eventType);
+}
+
 	    Now_is_gobalevenrun = true
 	    
         const monster = get_nearest_monster({ type: eventType }); 
@@ -1639,11 +1640,14 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 		
 		    autoPartyCheck(f1111, f2222, 60000);
 
-	    if (callnguoi < 200)
-	    {
-		    send_cm("MuaBan",eventType)
-		   callnguoi += 1 
-	    }
+callnguoi++;
+
+if (callnguoi < 2000 && callnguoi % 20 === 0) {
+    send_cm("MuaBan", eventType);
+}
+
+
+		
 	    Now_is_gobalevenrun = true
 	    
         if (character.map !== mapName && !smart.moving ) {  ////!smart.moving một số lý do chưa kịp tới vị trí mặc định đã tạo 1 lệnh mới nên lỗi
