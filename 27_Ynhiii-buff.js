@@ -2392,15 +2392,19 @@ if ( hasLowHp && character.map != "winter_instance" && character.hp/character.ma
 
 if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
 {
-        if ( hasPhysical ) {
-	eTime = currentTime;
-        equipSet('vatly');
-        }
-        else if ((hasMagical && character.hp/character.max_hp < 0.68) || character.map == "winter_instance" )
-	{
-	eTime = currentTime;
+
+
+        if ( hasMagical || character.map == "winter_instance" ) {
+     	eTime = currentTime;
         equipSet('phep');
-	}
+        }
+        else if (  (hasPhysical && character.hp/character.max_hp < 0.68)  )
+	    {
+	    eTime = currentTime;
+        equipSet('vatly');
+     	}
+
+	
 }
 
 
