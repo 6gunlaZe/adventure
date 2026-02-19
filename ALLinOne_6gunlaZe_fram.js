@@ -130,6 +130,8 @@ let folowhaiz = 0
 let gobaltaget = null;
 let bossvip = 0
 
+const priorityEvents = ["dragold",]; //ưu tiên chạy tới trước khi thấy boss live mà không chờ haiz
+
 
 async function eventer() {
     const delay1 = 500;
@@ -152,6 +154,11 @@ async function eventer() {
 	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
           Xmage()
 		  spider_game()
+		
+    } else if (priorityEvents.some(e => parent?.S?.[e]?.live)) {
+			     folowhaizevents = true;
+    // const activeEvent = priorityEvents.find(e => parent?.S?.[e]?.live);
+		
     } else {
 		 handleHome();
                 ///  walkInCircle(); // khi fram riêng
@@ -164,7 +171,7 @@ async function eventer() {
     setTimeout(eventer, delay1);
 }
 
-setTimeout(eventer, 23000);
+setTimeout(eventer, 5000);
 
 
 
