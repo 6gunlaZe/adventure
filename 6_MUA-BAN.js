@@ -1898,7 +1898,7 @@ const craftSet = new Set(craftList);
 
 // ====== GIỚI HẠN TỪNG ITEM ======
 const itemLimits = {
-    snowball: 51,
+    snowball: 1,
 };
 
 // ====== HÀM ĐẾM ITEM ======
