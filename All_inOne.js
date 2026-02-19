@@ -1609,9 +1609,27 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
 
 callnguoi++;
 
-if (callnguoi < 2000 && callnguoi % 20 === 0) {
-    send_cm("MuaBan", eventType);
+if (callnguoi < 2000) {
+
+    // 30s đầu ~ 100 vòng
+    if (callnguoi <= 80) {
+
+        // mỗi 2 vòng ~ 0.6s
+        if (callnguoi % 2 === 0) {
+            send_cm("MuaBan", eventType);
+        }
+
+    } else {
+
+        // sau đó mỗi 20 vòng ~ 6s
+        if (callnguoi % 20 === 0) {
+            send_cm("MuaBan", eventType);
+        }
+
+    }
+
 }
+
 
 	    Now_is_gobalevenrun = true
 	    
