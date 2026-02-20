@@ -184,7 +184,8 @@ var bankItems = {
   sstinger: [{ bank: "items5", level: -1, quantity: 1 }],
   gemfragment: [{ bank: "items5", level: -1, quantity: 1 }],
   cocoon: [{ bank: "items5", level: -1, quantity: 1 }],
-  troll: [{ bank: "items5", level: -1, quantity: 1 }],
+  troll: [{ bank: "items5", level: -1, quantity: 1 }],  
+  emptyheart: [{ bank: "items5", level: -1, quantity: 1 }],  
 
 	
 
