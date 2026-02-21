@@ -874,10 +874,19 @@ setInterval(() => {
 
             const t = get_targeted_monster();
             if (!t) return;
+			
+             tryPartyHeal();
+			
+            //Heal đơn party trước
+            if (trySingleHeal()) return;
 
-            if (tryHeal()) return;
+            //Nếu chưa dùng heal cooldown thì mới heal người ngoài
+            if (tryNearbyHeal()) return;
+			
             if (hutquaibangtay()) return;
             if (tryAttack(t)) return;
+
+			
 
         }, ms);
         return;
@@ -887,7 +896,15 @@ setInterval(() => {
     if (ms > 0) return;
 
     // ===== GCD ACTION (fallback) =====
-    if (tryHeal()) return;
+	
+    tryPartyHeal();
+			
+            //Heal đơn party trước
+    if (trySingleHeal()) return;
+
+            //Nếu chưa dùng heal cooldown thì mới heal người ngoài
+    if (tryNearbyHeal()) return;
+	
     if (hutquaibangtay()) return;
     if (tryAttack(currentTarget)) return;
 
@@ -1214,6 +1231,115 @@ function tryDarkBlessing(target) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+let delayNearbyHeal = 0;
+
+function tryNearbyHeal() {
+
+    if (is_on_cooldown("heal")) return false;
+
+    const nearby = Object.values(parent.entities)
+        .filter(e =>
+            e.player &&
+            e.visible &&
+            !e.dead &&
+            e.hp < e.max_hp * 0.4 &&
+            distance(character, e) <= character.range
+        )
+        .sort((a, b) => a.hp - b.hp)[0];
+
+    if (
+        nearby &&
+        Date.now() > delayNearbyHeal
+    ) {
+        heal(nearby);
+        delayNearbyHeal = Date.now() + 50; // chống spam
+        return true;
+    }
+
+    return false;
+}
+
+let delayHeal = 0;
+function trySingleHeal() {
+
+    if (is_on_cooldown("heal")) return false;
+
+    let rateheal;
+
+    if (character.map === "winter_instance") {
+        rateheal = 0.9;
+    } else {
+        rateheal = 1 - (character.heal / character.max_hp);
+        if (rateheal < 0.9) rateheal = 0.9;
+        if (character.targets > 5) rateheal = 0.95;
+    }
+
+    const target = lowest_health_partymember();
+
+    if (
+        target &&
+        target.health_ratio < rateheal &&
+        distance(character, target) <= character.range &&
+        Date.now() > delayHeal
+    ) {
+        heal(target);
+        delayHeal = Date.now() + 50; // chống spam vòng lặp
+        return true;
+    }
+
+    return false;
+}
+
+let delayParty = 0;
+function tryPartyHeal() {
+
+    if (is_on_cooldown("partyheal")) return false;
+
+    const target = lowest_health_partymember();
+
+    if (!target) return false;
+
+    if (target.health_ratio >= 0.65) return false;
+    if (character.mp <= 650) return false;
+
+    const maxRatio = 0.65;
+    const minRatio = 0.30;
+
+    const maxDelay = 460;
+    const minDelay = 120;
+
+    const r = Math.max(minRatio, Math.min(maxRatio, target.health_ratio));
+
+    const dynamicDelay =
+        minDelay +
+        (maxDelay - minDelay) *
+        ((r - minRatio) / (maxRatio - minRatio));
+
+    if (Date.now() > delayParty + dynamicDelay) {
+        use_skill("partyheal");
+        delayParty = Date.now();
+        return true;
+    }
+
+    return false;
+}
+
+
+
+//hàm tạm ngưng
 function tryHeal() {
     let rateheal;
 
