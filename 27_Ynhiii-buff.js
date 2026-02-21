@@ -916,7 +916,7 @@ setInterval(() => {
 
 // ❌ Quái không bao giờ được absorb vào target của nó
 const NO_ABSORB_MOBS = [
-    "pppompom",
+    "pppompom","oneeye",
 ];
 
 let lastAbsorbTime = 0;
