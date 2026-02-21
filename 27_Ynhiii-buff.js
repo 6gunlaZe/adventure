@@ -1312,8 +1312,8 @@ function tryPartyHeal() {
 
     if (!target) return false;
 
-    if (target.health_ratio >= 0.65) return false;
-    if (character.mp <= 650) return false;
+    if (target.health_ratio >= 0.55) return false;
+    if (character.mp <= 750) return false;
 
     const maxRatio = 0.65;
     const minRatio = 0.30;
