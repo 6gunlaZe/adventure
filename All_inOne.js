@@ -2142,12 +2142,20 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
     const mapsToInclude = ["desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance"];
-    const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
-        type === "monster" &&
-        visible &&
-        !dead &&
-        distance(character, { x, y }) <= (G.skills.cleave.range + 10)
-    );
+	
+// Map cần tăng range check để an toàn
+const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
+
+// Range cleave theo map
+const cleaveRange = G.skills.cleave.range + 
+    (extraRangeMaps.includes(character.map) ? 30 : 10);
+
+const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
+    type === "monster" &&
+    visible &&
+    !dead &&
+    distance(character, { x, y }) <= cleaveRange
+);
 
 
 
