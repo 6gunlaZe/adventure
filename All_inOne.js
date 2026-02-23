@@ -1879,6 +1879,12 @@ let basher = 0;
 async function skillLoop() {
     let delay = 30;
     try {
+
+        // ===== SKIP nếu không nên dùng skill =====
+        if (smart.moving || is_disabled(character)) {
+            return setTimeout(skillLoop, 50);
+        }
+		
         let zap = false;
         const dead = character.rip;
         const Mainhand = character.slots?.mainhand?.name;
