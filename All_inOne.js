@@ -3860,6 +3860,12 @@ async function moveLoop() {
     let delay = 1000;
     try {
 
+        // ===== SKIP nếu không di chuyển đc =====
+        if (smart.moving || is_disabled(character)) {
+            return setTimeout(moveLoop, 150);
+        }
+		
+
 if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 500 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
 {
 	if (movesuper == 1)return	
