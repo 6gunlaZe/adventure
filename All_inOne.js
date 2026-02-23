@@ -3873,6 +3873,14 @@ else
 	gobaltaget = null;
 }
 
+// điều hướng khi đang ở franky
+const franky = get_nearest_monster({ type: "franky" });
+
+if (franky && franky.target === character.name && distance(character, { x: 14, y: 30 } ) > 30 ) {
+    xmove(14, 30);
+}
+		
+
 	    
 if (!events || prolive == 0){
 
