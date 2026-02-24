@@ -210,7 +210,8 @@ var bankItems = {
   xhelmet: [{ bank: "items1", level: 3, quantity: 1 }],
   orba: [{ bank: "items1", level: 1, quantity: 1 }],
   spikedhelmet: [{ bank: "items1", level: 0, quantity: 1 }],  
-  horsecapeg: [{ bank: "items1", level: 4, quantity: 1 }],  
+  horsecapeg: [{ bank: "items1", level: -1, quantity: 1 }],  
+  lmace: [{ bank: "items1", level: -1, quantity: 1 }],  
 
 	
 
