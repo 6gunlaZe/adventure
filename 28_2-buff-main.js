@@ -849,7 +849,6 @@ function changeitem(options = {}) {
     }
 	
 
-//	changeitem({ slot: "mainhand", name : "firebow", level : 6 });
 }
 
 
@@ -870,14 +869,6 @@ function changeitem(options = {}) {
 function chuyendoithongminh(taget)
 {
 ///////////////////////////////////	 
-if (taget && !taget.s["frozen"])
-{	
-// changeitem({ slot: "mainhand", name : "froststaff", level : 8 });
-}
-	else
-	{
-if (character.id == "Ynhi")changeitem({ slot: "mainhand", name : "harbringer", level : 9 });		
-	}
 
 //////////////////////////////
 }
@@ -1384,7 +1375,6 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
@@ -1398,11 +1388,9 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
     ],
 
     nodeffbrun: [
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },		
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -1410,7 +1398,6 @@ const equipmentSets = {
     ],
 	
     nodeff: [
-	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
       //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
@@ -1421,7 +1408,6 @@ const equipmentSets = {
         { itemName: "handofmidas", slot: "gloves", level: 8 },
     ],
     luck: [ //quái đang mạnh quá sức nên giảm luck
-	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	{ itemName: "mshield", slot: "offhand", level: 8, l: "l" },
@@ -1431,7 +1417,6 @@ const equipmentSets = {
     ],
 
     luckfull: [ 
-	{ itemName: "lmace", slot: "mainhand", level: 7, l: "l" },
         { itemName: "oxhelmet", slot: "helmet", l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
@@ -1448,7 +1433,6 @@ const equipmentSets = {
     ],
 	
     healmax: [
-	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
@@ -1460,7 +1444,6 @@ const equipmentSets = {
 		
     ],
     fram: [
-	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
       //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
@@ -1483,7 +1466,6 @@ const equipmentSets = {
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
-	{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -1494,7 +1476,6 @@ const equipmentSets = {
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
-	    { itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -1524,7 +1505,6 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-	{ itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
