@@ -1000,9 +1000,9 @@ if (boss_entity && boss_entity.target && boss_entity.target !== character.name &
             // === Quái sắp chết (cướp kill) ===
             const dyingMobs = threats.filter(e => {
                 const hpThreshold =
-                    e.max_hp >= 800000 ? 35000 :
-                    e.max_hp >= 200000 ? 25000 : 8000;
-                return e.hp < hpThreshold && e.max_hp > 8000;
+                    e.max_hp >= 800000 ? 38000 :
+                    e.max_hp >= 200000 ? 25000 : 9000;
+                return e.hp < hpThreshold && e.max_hp > 9000;
             }).length;
 
             if (dyingMobs > 0) {
@@ -2370,9 +2370,9 @@ for (const id in parent.entities) {
         if (isCoop) {
             if (e.hp < 150000) hasLowHp = true;
         } else if (isTargetingMe) {
-            let threshold = 8000;
-            if (e.max_hp >= 800000) threshold = 35000;
-            else if (e.max_hp >= 200000) threshold = 20000;
+            let threshold = 9000;
+            if (e.max_hp >= 800000) threshold = 38000;
+            else if (e.max_hp >= 200000) threshold = 25000;
 
             if (e.hp < threshold) hasLowHp = true;
         }
