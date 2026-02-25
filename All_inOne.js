@@ -1986,6 +1986,7 @@ const hasLowHP_CoopMob = mobsInRange.some(mob =>
 
 
 const physicalMobs = mobsInRange.filter(mob => {
+    if (mob.mtype === "crabxx") return false;
     if (mob.damage_type !== "physical") return false;
     if (character.hp < 8000) return mob.attack > 1000;
     if (character.hp < 15000) return mob.attack > 2000;
