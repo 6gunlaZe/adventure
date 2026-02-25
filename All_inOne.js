@@ -1799,7 +1799,7 @@ function targetLoop() {
 
         // 3️⃣ Boss mạnh – cần buff
         const buff = get_player("Ynhi");
-        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","icegolem","franky"];
+        const bossDanger = ["dragold","stompy","skeletor","xmagefz","xmagefi","xmagen","xmagex","mrgreen","mrpumpkin","icegolem","franky","crabxx"];
 
         if (!nearest && buff && distance(character, buff) < 170) {
             for (const m of bossDanger) {
