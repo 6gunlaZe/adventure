@@ -1178,7 +1178,6 @@ if ( character.map == "mansion" && distance(character, {x: 0, y: -470}) < 50 && 
 // Danh sách bước đi kèm loại quái cần kiểm tra
 const steps = [
     { x: 5, y: -32, monster: "waiting_area" }, // Bước 1 mới thêm
-    { x: 117, y: -295, monster: "waiting_area" }, // Bước 1 mới thêm
     { x: 312, y: -187, monster: "gbluepro" },
     { x: -231, y: 154, monster: "ggreenpro" },
     { x: -292, y: -312, monster: "gredpro" },
