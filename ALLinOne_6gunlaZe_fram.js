@@ -1515,7 +1515,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy"];
 
     // Danh sách quái cần có Ynhi mới dám đánh
     const dangerBosses = ["franky", "stompy", "dragold", "icegolem"];
