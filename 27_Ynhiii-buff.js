@@ -1470,7 +1470,7 @@ function getOtherPartyMember() {
 
 
 async function handleZap() {
-    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","crabx","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
+    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
     const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion","bscorpion","gscorpion"];  // không quan tâm tới levl
 	const soluongTOIDA = 14; // thường quái mạnh để 8 thôi
     const delay = 200;
@@ -1615,7 +1615,7 @@ handleBossZap();
 
 async function ZapCase() {
     const quaiyeu = ["crabxx","snowman","wabbit"]; /// những quái mà chỉ nhận dame 1
-    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro"]; // Danh sách tự động hút khi đủ có team
+    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro", "gpurplepro"]; // Danh sách tự động hút khi đủ có team
 
     const delay = 350;
     var haiz = get_player("haiz");
