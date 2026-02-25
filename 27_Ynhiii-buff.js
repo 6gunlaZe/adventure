@@ -1615,7 +1615,7 @@ handleBossZap();
 
 async function ZapCase() {
     const quaiyeu = ["crabxx","snowman","wabbit"]; /// những quái mà chỉ nhận dame 1
-    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro", "gpurplepro"]; // Danh sách tự động hút khi đủ có team
+    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro",]; // Danh sách tự động hút khi đủ có team
 
     const delay = 350;
     var haiz = get_player("haiz");
