@@ -2096,7 +2096,7 @@ if (character.map == "crypt") return
 		send_cm("MuaBan", "hp");
 		game_log("re filll !!!!!!");
 	}
-		if( ( soluongmp < 4000) )
+		if( ( soluongmp < 9999) )
 	{
 		send_cm("MuaBan", "mp");
 		game_log("re filll !!!!!!");
