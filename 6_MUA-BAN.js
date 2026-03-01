@@ -1126,7 +1126,7 @@ let lastBuyHP = 0;
 let lastBuyMP = 0;
 
 const BUY_DELAY = 15000; 
-const TARGET_AMOUNT = 5000;
+const TARGET_AMOUNT = 4999;
 
 
 function checkbuyhp() {
