@@ -2149,7 +2149,7 @@ const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
 // Range cleave theo map
 const cleaveRange = G.skills.cleave.range + 
-    (extraRangeMaps.includes(character.map) ? 30 : 10);
+    (extraRangeMaps.includes(character.map) ? 40 : 10);
 
 const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
     type === "monster" &&
