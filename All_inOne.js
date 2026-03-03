@@ -3540,7 +3540,7 @@ let partychecktime
 function autoPartyCheck(f1name, f2name, interval = 60000) {
     // Lần chạy đầu tiên: set mốc thời gian
     if (checktimeparty === 0) {
-        partychecktime = Date.now();
+        partychecktime = Date.now() - interval; // lần đầu tiên gọi hàm là chạy luôn -> nhanh chóng tới vị trí fram even
         checktimeparty = 1;
     }
 
