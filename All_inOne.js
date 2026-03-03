@@ -432,7 +432,7 @@ async function handleHome() {
 	}
 
     if (Date.now() >= startPartyCheckAt) { //để đảm bảo các logic check quái khác lúc đầu hoạt động bình thường
-    autoPartyCheck(f1111, f2222, 60000);
+    autoPartyCheck(f1111, f2222, 50000);
     }
 	
     if (smart.moving) return;
@@ -720,8 +720,8 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     
     let current_boss = boss_fz || boss_fi || boss_fn || boss_x;
    // Chế độ cho thêm pháp sư  
-    if (boss_fi)autoPartyCheck("Ynhi", XmagelayerFire, 60000);
-    else autoPartyCheck("Ynhi", Xmagelayer, 60000);
+    if (boss_fi)autoPartyCheck("Ynhi", XmagelayerFire, 50000);
+    else autoPartyCheck("Ynhi", Xmagelayer, 50000);
     //autoPartyCheck("Ynhi", Xmagelayer, 60000);
 
     // --- LOGIC TIMEOUT 10 PHÚT (Bỏ qua nếu là Stage 2) ---
@@ -1068,7 +1068,7 @@ function framTOMBgame() {
  let member1 = get_player(tomplayer);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", tomplayer, 60000);
+autoPartyCheck("Ynhi", tomplayer, 50000);
 
  // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
  if ((!member1 || !member2) && startTime === null) {
@@ -1271,7 +1271,7 @@ function spidergame() {  /// đã check fix lỗi treo mạnh hơn tomb và Xgam
  let member1 = get_player(spiderlayer);
  let member2 = get_player("Ynhi");
 	
-autoPartyCheck("Ynhi", spiderlayer, 60000);
+autoPartyCheck("Ynhi", spiderlayer, 50000);
 
   // Nếu thiếu thành viên và chưa bắt đầu đếm giờ
   if ((!member1 || !member2) && startTime1 === null) {
@@ -1509,7 +1509,7 @@ let dathayboss = 0 // biến xác nhận đánh boss
 
 async function VIPBosses() {
 	
-	autoPartyCheck(f1111, f2222, 60000);
+	autoPartyCheck(f1111, f2222, 50000);
 	
     if (smart.moving || !bossvip) return;
 
@@ -1605,7 +1605,7 @@ function handleSpecificEvent(eventType, mapName, x, y, hpThreshold, skillMs = 0)
     if (parent?.S?.[eventType]?.live) {
 
 		          if (eventType == "dragold") autoPartyCheckByCurrentServer(); // tối ưu hóa drop theo home sever
-		          else autoPartyCheck(f1111, f2222, 60000);
+		          else autoPartyCheck(f1111, f2222, 50000);
 
 callnguoi++;
 
@@ -1656,7 +1656,7 @@ function handleSpecificEventWithJoin(eventType, mapName, x, y, hpThreshold) {
 
     if (parent?.S?.[eventType]) {
 		
-		    autoPartyCheck(f1111, f2222, 60000);
+		    autoPartyCheck(f1111, f2222, 50000);
 
 callnguoi++;
 
@@ -3517,7 +3517,7 @@ function updateServerParty() {
 // Đổi nhân vật THEO HOME SERVER MAP đã khai báo lúc đầu
 ///////////////////////
 
-function autoPartyCheckByCurrentServer(interval = 60000) {
+function autoPartyCheckByCurrentServer(interval = 50000) {
 
     updateServerParty();
 
