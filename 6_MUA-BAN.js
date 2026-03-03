@@ -254,6 +254,43 @@ var bankItems = {
 
 
 
+let moveBANKStatus = 0;
+
+setInterval(function () {
+  moveBANKStatus = checkFilteredItemSlots(5);
+}, 20000); // vòng lặp check bank là 25s vậy thì của mình cập nhật mỗi 20s là đủ rồi
+
+
+function checkFilteredItemSlots(threshold = 5) {
+  let slotCount = 0;
+
+  for (let item of character.items) {
+    if (!item) continue;
+
+    const rules = bankItems[item.name];
+    if (!rules) continue; // không thuộc danh sách
+
+    for (let rule of rules) {
+
+      const levelMatch =
+        rule.level === -1 || item.level === rule.level;
+
+      const quantityMatch =
+        !rule.quantity || (item.q || 1) >= rule.quantity;
+
+      if (levelMatch && quantityMatch) {
+        slotCount++;
+
+        if (slotCount > threshold) return 1; // đủ rồi thì thoát sớm
+        break; // tránh 1 item bị đếm nhiều lần
+      }
+    }
+  }
+
+  return 0;
+}
+
+
 function storeItems() {
   if (character.map !== "bank") return;
 
@@ -473,7 +510,7 @@ vanchuyenHPMP = 0
 	
 	
 ////// tu dong vo bank khi tui do day
-	if(character.stand && character.map == "main" && character.esize < 5 && !smart.moving && checktui == 0 && vanchuyen == 0){
+	if(character.stand && character.map == "main" && (character.esize < 5 || moveBANKStatus == 1 ) && !smart.moving && checktui == 0 && vanchuyen == 0){
 		checktui = 1
 		smart_move('bank')
 	delaybank = Date.now()
