@@ -52,7 +52,7 @@ const TenMinutesInMs11 = 130 * 1000  // thoi gian tim boss
 const TenMinutesInMs111 = 5 * 60 * 1000  //thoi gian doi qua
 
 const TenMinutesInMs = 5 * 60 * 1000
-const ten3sec = 30 * 1000
+const ten3sec = 10 * 1000 // 10s là đủ để cất đồ trong bank rồi
 
 let evenNoel = 0 // bat tu dong doi do khi chuyen sang 1
 let frankymode = 0
