@@ -2508,13 +2508,13 @@ for (const id in parent.entities) {
 
 	
 
-if ( hasLowHp && character.map != "winter_instance" && character.hp/character.max_hp > 0.69 && checkdef == 0 && character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
+if ( hasLowHp && character.map != "winter_instance" && character.hp/character.max_hp > 0.45 && checkdef == 0 && character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
 	eTime = currentTime;
         // game_log("🔄 luck") ;	
 	let slot = locate_item("luckbooster");
         if (slot == -1)shift(0, 'luckbooster')
 
-	if (character.hp/character.max_hp < 0.5 || penalty > 1000 || character.mp < 2500 )
+	if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2500 )
 	{
 		        equipSet('luck'); 
 	}
