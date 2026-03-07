@@ -510,7 +510,7 @@ vanchuyenHPMP = 0
 	
 	
 ////// tu dong vo bank khi tui do day
-	if(character.stand && character.map == "main" && (character.esize < 5 || moveBANKStatus == 1 ) && !smart.moving && checktui == 0 && vanchuyen == 0){
+	if( (character.stand || character.esize < 1  ) && character.map == "main" && (character.esize < 5 || moveBANKStatus == 1 ) && !smart.moving && checktui == 0 && vanchuyen == 0){
 		checktui = 1
 		smart_move('bank')
 	delaybank = Date.now()
