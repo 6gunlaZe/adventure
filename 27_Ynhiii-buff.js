@@ -1303,17 +1303,37 @@ function trySingleHeal() {
     return false;
 }
 
+
+
 let delayParty = 0;
+
 function tryPartyHeal() {
 
     if (is_on_cooldown("partyheal")) return false;
 
     const target = lowest_health_partymember();
-
     if (!target) return false;
 
-    if (target.health_ratio >= 0.55) return false;
     if (character.mp <= 750) return false;
+
+    // MODE 0: cứu nguy spike damage (double heal)
+    if (target.health_ratio < 0.25) {
+        use_skill("partyheal");
+        delayParty = Date.now();
+        return true;
+    }
+
+    // MODE 2: heal phụ khi mana dư
+    if (character.mp > 6000 && target.health_ratio < 0.50) {
+        if (Date.now() > delayParty + 1000) {
+            use_skill("partyheal");
+            delayParty = Date.now();
+            return true;
+        }
+    }
+
+    // MODE 1: heal thông minh
+    if (target.health_ratio >= 0.55) return false;
 
     const maxRatio = 0.65;
     const minRatio = 0.30;
