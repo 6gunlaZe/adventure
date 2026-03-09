@@ -959,6 +959,29 @@ if (boss_entity && boss_entity.target && boss_entity.target !== character.name &
 }
 
 
+// --- LOGIC KIỂM TRA FRANKY ---
+
+if ( character.map == "level2w") {	
+const franky_entity = Object.values(parent.entities).find(e =>
+    e.mtype === "franky" && !e.dead
+);
+
+if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && franky_entity.target !== character.name) {
+
+    const teammateFranky = get_player(franky_entity.target);
+
+    const frankyInSafeZone = distance(franky_entity, { x: 14, y: 30 }) < 70;
+
+    // nếu franky đang ở ngoài safe
+    if (teammateFranky && !character.rip && !frankyInSafeZone && character.hp > 12000 ) {
+        bestTarget = franky_entity.target;
+        highestScore = 9998;
+
+    }
+}
+}
+
+
 
 	
     // Nếu không tìm thấy BOSS cần can thiệp, chạy logic party bình thường
