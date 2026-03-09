@@ -3886,6 +3886,10 @@ const franky = get_nearest_monster({ type: "franky" });
 if (franky && franky.target === character.name && distance(character, { x: 14, y: 30 } ) > 30 ) {
     xmove(14, 30);
 }
+else if (franky && franky.target === "Ynhi" && distance(franky, { x: 14, y: 30 } ) > 70  ){
+if ( distance(character, { x: 14, y: 30 } ) > 30 ) xmove(14, 30);
+use_skill("taunt", franky.id);	
+}
 		
 
 	    
