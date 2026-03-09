@@ -196,7 +196,7 @@ var bankItems = {
   bcape: [{ bank: "items1", level: -1, quantity: 1 }],
   bowofthedead: [{ bank: "items1", level: -1, quantity: 1 }],
   oozingterror: [{ bank: "items1", level: -1, quantity: 1 }],
-  fireblade: [{ bank: "items1", level: 7, quantity: 1 }],
+  // fireblade: [{ bank: "items1", level: 7, quantity: 1 }],
 
   firebow: [{ bank: "items1", level: 7, quantity: 1 }],
   mshield: [{ bank: "items1", level: 6, quantity: 1 }],
@@ -218,7 +218,7 @@ var bankItems = {
   // ===== MULTI LEVEL ITEMS (FIX CHÍNH) =====
   pants: [
     { bank: "items1", level: 9, quantity: 1 },
-   // { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
   coat: [
@@ -231,6 +231,13 @@ var bankItems = {
     { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
+	
+  fireblade: [
+    { bank: "items1", level: 9, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 7, quantity: 1 },
+  ],
+	
   // ===== ACCESSORIES =====
   stramulet: [{ bank: "items7", level: -1, quantity: 1 }],
   intamulet: [{ bank: "items7", level: -1, quantity: 1 }],
