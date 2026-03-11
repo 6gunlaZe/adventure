@@ -1700,7 +1700,7 @@ async function ZapCase() {
 
             // Thực hiện Zap (Điều kiện an toàn của bạn)
             if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 ) {
-                if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > 4500 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")) {
+                if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > 6300 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")) {
                     for (const entity of entities) {
                         if (!is_on_cooldown("zapperzap")) {
                             await use_skill("zapperzap", entity);
