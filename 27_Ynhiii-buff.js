@@ -839,15 +839,23 @@ setInterval(() => {
     if (!attack_mode) return;
     if (Date.now() < delayBug + 1000) return;
 	
-    if (emergencyHealParty()) return;
 
+    const leader = get_player("haiz");
+
+
+	 if (smart.moving || !leader)
+	 {
+	 tryPartyHeal();
+     if (emergencyHealParty()) return;
+	 }
+	
+    if (!leader) return;
+
+	
     if (character.rip || smart.moving) return;
 
 	
-    const leader = get_player("haiz");
-    if (!leader) return;
-	
-    const ms = ms_to_next_skill("attack");
+	const ms = ms_to_next_skill("attack");
 
 	
     let currentTarget = get_targeted_monster();
