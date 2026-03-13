@@ -2420,7 +2420,8 @@ function avoidance() {
             kite(host, 30);
         } else {
          //   game_log("🚶 Đứng yên nhưng không có gì đặc biệt, bám host");
-            isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
+         //   isInCrypt ? xmove(host.real_x, host.real_y) : kite(host, 20);
+			kite(host, 20);
         }
     }
 
