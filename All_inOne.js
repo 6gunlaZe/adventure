@@ -4788,7 +4788,7 @@ function distanceToPoint(x1, y1, x2, y2) {
 
 // ===== CONFIG =====
 const KEEP_AMOUNT = 2; // Số lượng món đồ muốn giữ lại trong túi
-const MULE_NAME = "MuaBan";
+const MULE_NAME = "6gunlaZe";
 
 const ITEM_WHITELIST = [
     "fieldgen0",
