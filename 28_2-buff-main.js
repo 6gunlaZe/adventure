@@ -354,7 +354,7 @@ function waitForMidas(timeout = 1200) {
 
 let kiteDir = 1;
 let lastKiteTime = 0;
-const KITE_DELAY = 350;
+const KITE_DELAY = 650;
 
 function kite(taget, kite_range)
 {
