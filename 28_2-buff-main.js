@@ -1108,7 +1108,7 @@ function avoidance() {
     }
 
 }
-setInterval(avoidance, 70);
+setInterval(avoidance, 90);
 
 
 function avoidMobs() {
