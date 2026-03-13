@@ -352,22 +352,56 @@ function waitForMidas(timeout = 1200) {
 
 
 
+let kiteDir = 1;
+let lastKiteTime = 0;
+const KITE_DELAY = 350;
+
 function kite(taget, kite_range)
 {
+    if (!taget) return;
 
-	const radius = kite_range ;
-const  angle = Math.PI / 9.5 ;
+    const now = Date.now();
+    if (now - lastKiteTime < KITE_DELAY) return;
+    lastKiteTime = now;
+
+    const radius = kite_range;
+    const angle = Math.PI / 9.5;
+
+    const angleFromCenterToCurrent =
+        Math.atan2(character.y - taget.real_y, character.x - taget.real_x);
+
+    // ===== hướng chính =====
+    let endGoalAngle = angleFromCenterToCurrent + angle * kiteDir;
+
+    let endGoal = {
+        x: taget.real_x + radius * Math.cos(endGoalAngle),
+        y: taget.real_y + radius * Math.sin(endGoalAngle)
+    };
+
+    if (can_move_to(endGoal.x, endGoal.y)) {
+        move(endGoal.x, endGoal.y);
+        return;
+    }
+
+    // ===== thử quay ngược =====
+    kiteDir *= -1;
+
+    endGoalAngle = angleFromCenterToCurrent + angle * kiteDir;
+
+    endGoal = {
+        x: taget.real_x + radius * Math.cos(endGoalAngle),
+        y: taget.real_y + radius * Math.sin(endGoalAngle)
+    };
+
+    if (can_move_to(endGoal.x, endGoal.y)) {
+        move(endGoal.x, endGoal.y);
+        return;
+    }
+
+    // ===== fallback → chạy về target =====
     if (can_move_to(taget.real_x, taget.real_y)) {
-        const angleFromCenterToCurrent = Math.atan2(character.y - taget.real_y, character.x - taget.real_x)
-        const endGoalAngle = angleFromCenterToCurrent + angle
-        const endGoal = { x: taget.real_x + radius * Math.cos(endGoalAngle), y: taget.real_y + radius * Math.sin(endGoalAngle) }
-        move(endGoal.x, endGoal.y)
-
-	
-	}
- 
-	
-
+        move(taget.real_x, taget.real_y);
+    }
 }
 
 
@@ -635,8 +669,8 @@ if(!attack_mode || character.rip ) return;
     
 		///////////
 		var cung1 = get_player("haiz"); 
-if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
-	//if(!can_attack(currentTarget) )kite(cung1,50);
+if ( cung1 && (distance(character,cung1) < 10) ) {
+	kite(cung1,20);
    }
 	
 
