@@ -4788,7 +4788,7 @@ function distanceToPoint(x1, y1, x2, y2) {
 
 // ===== CONFIG =====
 const KEEP_AMOUNT = 2; // Số lượng món đồ muốn giữ lại trong túi
-const MULE_NAME = "6gunlaZe";
+const MULE_NAME = "MuaBan";
 
 const ITEM_WHITELIST = [
     "fieldgen0",
@@ -4828,7 +4828,7 @@ function sendItems(name) {
     });
 }
 
-setInterval(() => sendItems(MULE_NAME), 30000);
+setInterval(() => sendItems(MULE_NAME), 10000);
 
 
 
