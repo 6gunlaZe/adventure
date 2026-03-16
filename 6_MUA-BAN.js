@@ -1930,7 +1930,7 @@ function compound_items() {
 
 // ====== DANH SÁCH ITEM MUỐN MUA ======
 var craftList = [
-    "smoke111","throwingstars",
+    "smoke","throwingstars",
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
     "cshell","shield","gcape","sparkstaff",
     "candy1","candy0","carrot",
@@ -1951,6 +1951,8 @@ const craftSet = new Set(craftList);
 // ====== GIỚI HẠN TỪNG ITEM ======
 const itemLimits = {
     snowball: 1,
+    smoke: 1,
+
 };
 
 // ====== HÀM ĐẾM ITEM ======
