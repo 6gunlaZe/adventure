@@ -2098,7 +2098,7 @@ const equipmentSets = {
     ],
     single: [
         { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
-        { itemName: "fireblade", slot: "offhand", level: 9, l: "l" },
+        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
     
     ],
     aoe: [
