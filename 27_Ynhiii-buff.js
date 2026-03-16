@@ -2638,7 +2638,7 @@ function elixirUsage() {
         }
 
         // 4️⃣ HP thấp + fireroamer → elixirfires
-        else if (character.hp < 6000 && hasFireroamer) {
+        else if (character.hp < 8000 && hasFireroamer) {
             targetElixir = "elixirfires";
         }
 
