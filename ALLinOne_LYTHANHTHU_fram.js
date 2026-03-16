@@ -626,8 +626,8 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
-        { itemName: "coat1", slot: "chest", level: 9, l: "l" },	    
-        { itemName: "pants1", slot: "pants", level: 9, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
 		
     ],
 
