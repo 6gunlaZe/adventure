@@ -238,6 +238,12 @@ var bankItems = {
     { bank: "items1", level: 7, quantity: 1 },
   ],
 	
+  firestars: [
+    { bank: "items1", level: 9, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
+    { bank: "items1", level: 7, quantity: 1 },
+  ],
+	
   // ===== ACCESSORIES =====
   stramulet: [{ bank: "items7", level: -1, quantity: 1 }],
   intamulet: [{ bank: "items7", level: -1, quantity: 1 }],
