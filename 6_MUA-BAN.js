@@ -186,7 +186,7 @@ var bankItems = {
   cocoon: [{ bank: "items5", level: -1, quantity: 1 }],
   troll: [{ bank: "items5", level: -1, quantity: 1 }],  
   emptyheart: [{ bank: "items5", level: -1, quantity: 1 }],  
-
+  vblood: [{ bank: "items5", level: -1, quantity: 1 }],  
 	
 
   // ===== GEAR =====
