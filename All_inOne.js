@@ -2537,7 +2537,7 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
     ],
     aoe: [
-        { itemName: "vhammer", slot: "mainhand", level: 7, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 8, l: "l" },
         { itemName: "vhammer", slot: "offhand", level: 8, l: "s" },
     ],
     candycanesword: [
