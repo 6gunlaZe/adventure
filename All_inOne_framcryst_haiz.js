@@ -428,9 +428,9 @@ const mobsInRangeNobat = mobsInRange.filter(monster =>
 const nguyehiemoutngay = mobsInRange.filter(monster =>
     distance(character, monster) <= 360 &&
     (
-        (monster.mtype === "a1" && monster.level > 1) ||
-        (monster.mtype === "a8" && monster.level > 2) ||
-        (monster.mtype === "a6" && monster.level > 2)
+        (monster.mtype === "a1" && monster.level > 2) ||
+        (monster.mtype === "a8" && monster.level > 4) ||
+        (monster.mtype === "a6" && monster.level > 4)
     )
 );
 
@@ -438,17 +438,20 @@ const nguyehiemmmm = mobsInRange.filter(monster =>
     (monster.mtype === "a8" && monster.level > 4 && character.hp < 10000)
 );
 
-if (nguyehiemmmm.length >= 1 && character.hp < 7500)
-{
 
-	parent.api_call("disconnect_character", {name: "haiz"});
-}
+	
 if (nguyehiemmmm.length >= 1 )
 {
 let toke21n1 = key_auto;  // Thay bằng token của bạn
 ghichu(character.in, "nguy hiem 15",toke21n1)
 }	
 
+if (nguyehiemmmm.length >= 1 && character.hp < 7500)
+{
+
+	parent.api_call("disconnect_character", {name: "haiz"});
+}
+	
 const dangerNearby = (() => {
     // Tìm a1 gần trong bán kính 150
     const hasA1Nearby = mobsInRange.some(mob =>
