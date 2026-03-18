@@ -1268,7 +1268,7 @@ const equipmentSets = {
     ],
     dame: [
         { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
-        { itemName: "exoarm", slot: "offhand", level: 1, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
