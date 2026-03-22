@@ -2161,7 +2161,9 @@ const monstersInRange = Object.values(parent.entities).filter(({ type, visible, 
     distance(character, { x, y }) <= cleaveRange
 );
 
-
+// Biến riêng: true nếu có ít nhất 1 quái trong tầm đánh thường
+const hasNearbyMonster = monstersInRange.some(m => distance(character, m) <= character.range);
+	
 
 // Quái trong range nhưng chưa có target + HP ≥ 10000
 let list = monstersInRange.filter(m => !m.target && m.hp >= 10000);
@@ -2202,7 +2204,7 @@ const untargetedMonsters = list
 //const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
 
 
-    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters)) {
+    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) ) {
         if (Mainhand !== "bataxe") {
             scytheSet(); // Equip the bataxe
         }
@@ -2215,7 +2217,7 @@ const untargetedMonsters = list
     handleWeaponSwap(stMaps, aoeMaps);
 }
 
-function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters) {
+function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) {
     return (
         !smart.moving // Don't cleave if moving smartly
         && cc // CC check: Ensure you have CC up
@@ -2226,7 +2228,7 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
         && mapsToInclude.includes(character.map) // Map check (optional, clarify if needed)
         && tank // Ensure tank (priest) is around
         && !is_on_cooldown("cleave") // Ensure cleave is not on cooldown
-        && ms_to_next_skill("attack") > 75 // Ensure attack isn't about to be ready
+        && (ms_to_next_skill("attack") > 75  || !hasNearbyMonster )// Ensure attack isn't about to be ready
     );
 }
 
