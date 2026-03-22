@@ -113,11 +113,14 @@ const locations = {
   { type: "farm", x: -39, y: -1953, map: "desertland" },
   { type: "safe", x: -66, y: -1862, map: "desertland" }
     ],	
-
+    bbpompom: [
+  { type: "farm", x: -80, y: -954, map: "winter_cave" },
+  { type: "safe", x: 60, y: -843, map: "winter_cave" }
+    ],
 	
 };
 
-const home = 'fireroamer';
+const home = 'bbpompom';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
