@@ -1363,6 +1363,16 @@ function tryPartyHeal() {
         }
     }
 
+    // MODE 2.5: heal phụ khi mana dư mức cao
+    if (   (character.max_mp - character.mp) < 1500  && target.health_ratio < 0.75) {
+        if (Date.now() > delayParty + 1000) {
+            use_skill("partyheal");
+            delayParty = Date.now();
+            return true;
+        }
+    }
+	
+
     // MODE 1: heal thông minh
     if (target.health_ratio >= 0.55) return false;
 
