@@ -97,7 +97,7 @@ const locations = {
     ],
     prat: [
   { type: "farm", x: 80, y: 100, map: "level1" },
-  { type: "safe", x: 164, y: 96, map: "level1" }
+  { type: "safe", x: 119, y: 285, map: "level1" }
     ],
 	
 
