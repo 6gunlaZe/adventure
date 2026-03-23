@@ -95,13 +95,18 @@ const locations = {
   { type: "farm", x: 0, y: -954, map: "winter_cave" },
   { type: "safe", x: 60, y: -843, map: "winter_cave" }
     ],
+    prat: [
+  { type: "farm", x: 80, y: 100, map: "level1" },
+  { type: "safe", x: 164, y: 96, map: "level1" }
+    ],
+	
 
 };
 
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'fireroamer';
+const home = 'prat';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
