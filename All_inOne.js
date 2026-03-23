@@ -2269,9 +2269,10 @@ const mobsInRange = Object.values(parent.entities).filter(e =>
 
 const untargetedMobs = mobsInRange.filter(e => !e.target);
 
+const ignoreMobs = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
 	
 const mobsTargetingTank = Object.values(parent.entities).filter(e =>
-    e.type === "monster" &&  e.mtype != "xmagen" &&
+    e.type === "monster" &&  !ignoreMobs.includes(e.mtype) &&
     !e.dead &&
     e.target === tank?.name && e.hp > 15000 &&
     distance(character, e) <= 250
@@ -2292,7 +2293,7 @@ if (
     }
 }
 
-// 🛡 Ưu tiên taunt quái đang đánh tank yếu
+// 🛡 Ưu tiên taunt quái đang đánh tank yếu, áp dụng khi fram, loại trừ đi boss siêu mạnh
 if (
     mobsTargetingTank.length > 0 &&
     !is_on_cooldown("taunt") &&
@@ -2383,7 +2384,7 @@ for (let id in parent.entities) {
     let current = parent.entities[id];  // Lấy thực thể hiện tại trong vòng lặp
 
     // Kiểm tra nếu thực thể là quái vật trong mảng và nó chưa nhắm vào nhân vật
-    if (monstersAgo.includes(current.mtype) && current.hp > 32000 && current.target && current.target != character.name && f1 && character.hp >12000 && distance(character, f1) < 150 && tank && !tank.rip && tank.hp < 9000 && distance(character, tank) < 150 )  {
+    if (monstersAgo.includes(current.mtype) && current.hp > 32000 && current.target && current.target != character.name && f1 && character.hp >12000 && distance(character, f1) < 150 && tank && !tank.rip && tank.hp < 6000 && distance(character, tank) < 150 )  {
         
         // Kiểm tra nếu quái vật ở trong phạm vi kỹ năng "taunt" và kỹ năng này không đang trong thời gian hồi chiêu
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
