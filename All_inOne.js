@@ -1862,6 +1862,15 @@ function targetLoop() {
         combatState.target = nearest;
         combatState.lastUpdate = Date.now();
 
+		if (character.map == "winter_instance" )
+		{
+        let xmagefzboss = get_nearest_monster({ type: "xmagefz" });
+        let Ynhiboss = get_player("Ynhi");
+			if (Ynhiboss && is_disabled(Ynhiboss) && xmagefzboss && xmagefzboss.hp < 15000)combatState.target = null;
+
+		}
+		
+
         if (nearest && !is_in_range(nearest)) {
             gobaltaget = nearest;
         }
