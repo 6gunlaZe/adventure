@@ -1999,9 +1999,16 @@ const physicalMobs = mobsInRange.filter(mob => {
     return mob.attack > 3500;
 });
 
+
+const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+
+const MobMagicNeedORB = mobsInRange.filter(m =>
+    specialORB.includes(m.mtype)
+);
+
 	
 const magicalMobs = mobsInRange.filter(mob => {
-    if (mob.mtype === "xmagex") return true;
+   // if (mob.mtype === "xmagex") return true;
     if (mob.damage_type !== "magical") return false;
     if (character.hp < 12000) return mob.attack > 1000;
     if (character.hp < 15000) return mob.attack > 2000;
@@ -2028,8 +2035,16 @@ const magicalMobs = mobsInRange.filter(mob => {
         return;
     }
 
-	
-    if (magicalMobs.length >= 1) {  
+
+
+	if (MobMagicNeedORB.length >= 1) {  
+        defSafeSince = null;
+        eTime = currentTime;
+        equipSet('def_magic_ORB');
+        checkdef = 2;
+        return;
+    }
+	else if (magicalMobs.length >= 1) {  
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
@@ -2632,6 +2647,25 @@ const equipmentSets = {
 
 		
     ],
+	
+    def_magic_ORB: [
+        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
+        { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "t2stramulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+        { itemName: "orba", slot: "orb", level: 3, l: "l" },
+
+        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
+        { itemName: "ringsj", slot: "ring2", level: 5, l: "l" },
+		
+    ],
+
+
+	
 };
 
 
