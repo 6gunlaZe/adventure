@@ -74,7 +74,6 @@ const locations = {
     oneeye: [{ x: -270, y: 160 }],
     pinkgoblin: [{ x: 366, y: 377 }],
     poisio: [{ x: -121, y: 1360 }],
-    prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
     pppompom: [{ x: 292, y: -189 }],
     plantoid: [
   { type: "farm", x: -800, y: -366, map: "desertland" },
@@ -117,10 +116,15 @@ const locations = {
   { type: "farm", x: -80, y: -954, map: "winter_cave" },
   { type: "safe", x: 60, y: -843, map: "winter_cave" }
     ],
+    prat: [
+  { type: "farm", x: 0, y: 105, map: "level1" },
+  { type: "safe", x: 164, y: 96, map: "level1" }
+    ],
+	
 	
 };
 
-const home = 'fireroamer';
+const home = 'prat';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
