@@ -946,7 +946,7 @@ function tryAbsorb() {
 
 
 // --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM ---
-const priority_mobs = ["xmagen", "xmagefi", "xmagex"];
+const priority_mobs = ["xmagefz","xmagen", "xmagefi", "xmagex"];
 
 // Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
 const boss_entity = Object.values(parent.entities).find(e => 
