@@ -2621,7 +2621,7 @@ const equipmentSets = {
         { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
         { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
-        { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
+        { itemName: "orba", slot: "orb", level: 3, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
         { itemName: "xpants", slot: "pants", level: 8, l: "l" },
