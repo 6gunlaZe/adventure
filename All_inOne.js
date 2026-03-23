@@ -236,7 +236,7 @@ if (currentJob) {
           const h = new Date().getHours();
         if (
             (
-              (h >= 6 && h < 11) || (h >= 13)
+              (h >= 6 && h < 11) || (h >= 13 && h < 24)
             ) && character.esize > 3 &&
             (
                  count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
@@ -766,7 +766,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 	
 	
     // cho dừng luôn
-    if ( ( boss_fi && member1 && member1.name == Xmagelayer && character.map === "winter_instance")
+    if ( boss_fi && member1 && member1.name == Xmagelayer && character.map === "winter_instance")
 	{
 		stop_character(Xmagelayer);
 		stop_character("MuaBan");
