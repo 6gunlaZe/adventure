@@ -363,9 +363,25 @@ const codame = !isCupid;
 const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
 
 
+let xmagefzboss = null;
+let homeMob = null;
+
+for (let id in parent.entities) {
+    let e = parent.entities[id];
+
+    if (e.type !== "monster" || e.dead || !e.visible) continue;
+
+    if (!xmagefzboss && e.mtype === "xmagefz")
+        xmagefzboss = e;
+
+    if (!homeMob && e.mtype === home)
+        homeMob = e;
+}
+
 	
 let X, Y;
-if (leader && get_nearest_monster({ type: home }) ) {
+
+if (leader && homeMob) {
     X = leader.x;
     Y = leader.y;
 } else {
@@ -373,7 +389,7 @@ if (leader && get_nearest_monster({ type: home }) ) {
     Y = character.y;
 }
 	
-    let stopAttack = (check_quai_A4_stop_attach() == 1 || !leader ); // không tấn công khi không có haiz
+    let stopAttack = (check_quai_A4_stop_attach() == 1 || !leader || (healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
 	
     try {
 		
