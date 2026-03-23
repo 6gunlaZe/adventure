@@ -352,24 +352,41 @@ if (ms > 120) {
     let delay = null; // Default delay
     const now = performance.now();
     const rangeThreshold = 50; // phạm vi tấn công boom
-    const leader = get_player("haiz");
-    const healerr = get_player("Ynhi");
-    const f1112 = get_player(f1111);
 
-	
-const isCupid = character.slots.mainhand?.name === "cupid";
-const codame = !isCupid;
 
-const mapHealBonus = character.map === "winter_instance" ? 6000 : 0;
+const leaderName = "haiz";
+const healerName = "Ynhi";
+const fName = f1111;
 
+let leader = null;
+let healerr = null;
+let f1112 = null;
 
 let xmagefzboss = null;
 let homeMob = null;
 
 for (let id in parent.entities) {
-    let e = parent.entities[id];
 
-    if (e.type !== "monster" || e.dead || !e.visible) continue;
+    let e = parent.entities[id];
+    if (!e || e.dead) continue;
+
+    // ---- player ----
+    if (e.type === "character") {
+
+        if (!leader && e.name === leaderName)
+            leader = e;
+
+        if (!healerr && e.name === healerName)
+            healerr = e;
+
+        if (!f1112 && e.name === fName)
+            f1112 = e;
+
+        continue;
+    }
+
+    // ---- monster ----
+    if (e.type !== "monster" || !e.visible || e.dead ) continue;
 
     if (!xmagefzboss && e.mtype === "xmagefz")
         xmagefzboss = e;
@@ -378,7 +395,14 @@ for (let id in parent.entities) {
         homeMob = e;
 }
 
-	
+
+const isCupid = character.slots.mainhand?.name === "cupid";
+const codame = !isCupid;
+
+const mapHealBonus =
+    character.map === "winter_instance" ? 6000 : 0;
+
+
 let X, Y;
 
 if (leader && homeMob) {
@@ -388,6 +412,10 @@ if (leader && homeMob) {
     X = character.x;
     Y = character.y;
 }
+
+	
+
+	
 	
     let stopAttack = (check_quai_A4_stop_attach() == 1 || !leader || (healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
 	
