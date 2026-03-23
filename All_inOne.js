@@ -789,10 +789,10 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     let target = get_targeted_monster();
     if (target && character.cc < 100) {
 
-            if (character.s.burned || target.mtype === "xmagefi") equipSet("def_fire");
-            else if (target.damage_type === "magical" && target.attack > 3500 ) equipSet("single_Magic");
+            if (character.s.burned || (target.mtype === "xmagefi" && target.target == character.name )) equipSet("def_fire");
+            else if (target.damage_type === "magical" && target.attack > 3500 && target.target == character.name ) equipSet("single_Magic");
             else if (target.damage_type === "magical" && character.hp < 10000 ) equipSet("single_Magic");
-            else if (target.damage_type === "magical" && boss_fn ) equipSet("single_Magic");
+            else if (target.damage_type === "magical" && boss_fn && target.target == character.name ) equipSet("single_Magic");
 			else if (target.damage_type === "physical" && target.attack > 3500 && target.target == character.name)	equipSet("single_physical");
             else equipSet("single");
         
