@@ -1953,7 +1953,7 @@ if (
 skillLoop()
 
 async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
-    if (!is_on_cooldown("stomp") ) {
+    if (!is_on_cooldown("stomp") && character.mp > 300) {
         if (Mainhand !== "basher" && performance.now() - basher > 5000) {
             basher = performance.now();
             basherSet();
