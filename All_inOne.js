@@ -1905,7 +1905,7 @@ async function skillLoop() {
         const dead = character.rip;
         const Mainhand = character.slots?.mainhand?.name;
         const offhand = character.slots?.offhand?.name;
-        const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 30;
+        const aoe = character.mp >= character.mp_cost * 2 + G.skills.cleave.mp + 130;
         const cc = character.cc < 235;
         const zapperMobs = ["plantoid"];
         const stMaps = ["", "winter_cove", "arena", "",];
