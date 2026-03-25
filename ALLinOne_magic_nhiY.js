@@ -734,28 +734,38 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 	
 	
 	
-////// buff xạ thủ – có chế độ nguy cấp
-let rangerObj = ["arena","winter_instance"].includes(character.map)
-    ? ( get_player("Ynhi")
-        || get_player("6gunlaZe")
-        || get_player("haiz") )
-    : ( get_player("6gunlaZe")
-        || get_player("haiz")
-        || get_player("Ynhi") );
+////// buff xạ thủ – có chế độ nguy cấp (multi target)
 
-	
-if (rangerObj && is_in_range(rangerObj, "energize") && !rangerObj.rip && !is_on_cooldown("energize")) {
-
-    let mp_cap = rangerObj.max_mp - 800;          // trần MP cho ranger
-    let ranger_need = mp_cap - rangerObj.mp;      // ranger còn thiếu bao nhiêu
-    let mage_can_give = character.mp - 400;       // mage giữ 400 MP đệm
-    let amount = 0;
-
-        amount = Math.min(ranger_need, mage_can_give);
+let rangerList = ["arena","winter_instance"].includes(character.map)
+    ? ["Ynhi", "6gunlaZe", "haiz"]
+    : ["6gunlaZe", "haiz", "Ynhi"];
 
 
-    if (amount > 0) {
-        use_skill("energize", rangerObj.name, amount);
+if (!is_on_cooldown("energize")) {
+
+    for (let name of rangerList) {
+
+        let rangerObj = get_player(name);
+        if (!rangerObj) continue;
+
+        if (!is_in_range(rangerObj, "energize")) continue;
+        if (rangerObj.rip) continue;
+
+        let mp_cap = rangerObj.max_mp - 800;
+        let ranger_need = mp_cap - rangerObj.mp;
+
+        let mage_can_give = character.mp - 400;
+
+        if (mage_can_give <= 0) break;
+
+        let amount = Math.min(ranger_need, mage_can_give);
+
+        if (amount > 0) {
+
+            use_skill("energize", rangerObj.name, amount);
+
+            break; // ⚠️ mỗi tick chỉ buff 1 người
+        }
     }
 }
 
