@@ -239,7 +239,7 @@ if (currentJob) {
           const h = new Date().getHours();
         if (
             (
-              (h >= 6 && h < 9) || (h >= 13 && h < 21)
+              (h >= 0 && h < 3) || (h >= 6 && h < 9) || (h >= 13 && h < 21)
             ) && character.esize > 3 &&
             (
                  count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
