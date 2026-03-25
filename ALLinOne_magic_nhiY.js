@@ -751,7 +751,7 @@ if (!is_on_cooldown("energize")) {
         if (!is_in_range(rangerObj, "energize")) continue;
         if (rangerObj.rip) continue;
 
-        let mp_cap = rangerObj.max_mp - 800;
+        let mp_cap = rangerObj.max_mp - 1500;
         let ranger_need = mp_cap - rangerObj.mp;
 
         let mage_can_give = character.mp - 400;
