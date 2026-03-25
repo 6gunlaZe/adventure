@@ -2272,7 +2272,7 @@ async function handleWarriorSkills(tank,f1) {
 
 
 
-const mobTypes = ["bat11",]; //list auto hút quái xung quanh của war ==> Tạm ngưng
+const mobTypes = ["bat11","mummy","booboo"]; //list auto hút quái xung quanh của war ==> Tạm ngưng
 const mobsInRange = Object.values(parent.entities).filter(e =>
     mobTypes.includes(e.mtype) && e.level < 3 && // canh chỉnh level tùy theo quái mạnh yếu
     e.visible && !e.dead &&
