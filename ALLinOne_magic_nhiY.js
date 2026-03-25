@@ -508,7 +508,7 @@ setInterval(() => {
         }
 
     }
-	else if (character.map === "winterland" && distance(character, { x: 1049, y: -2002 }) < 100  && character.mp > 5300 && character.hp > 5300 && keywinter ) {  // đủ điều kiện vô map đánh nhau rồi
+	else if (character.map === "winterland" && distance(character, { x: 1049, y: -2002 }) < 100  && character.mp > (character.max_mp - 300) && character.hp > 5300 && keywinter ) {  // đủ điều kiện vô map đánh nhau rồi
              enter("winter_instance", keywinter);
 	}
 
@@ -636,11 +636,11 @@ function use_hp_or_mp1()
 ///////
 
 
-if (character.hp/character.max_hp< 0.7) {
+if (character.hp/character.max_hp< 0.5) {
    use_skill("use_hp");
 	numHP += 1
 } 
-else if (character.mp/character.max_mp < 0.9) {
+else if (character.mp/character.max_mp < 0.999) {
 	use_skill("use_mp");
 	numMP += 1
 }
