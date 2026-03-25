@@ -431,7 +431,7 @@ function on_cm(name, data) {
                     // Di chuyển đến cửa hang
                     smart_move({ map: "winterland", x: 1049, y: -2002 }, () => {
                         // Kiểm tra khoảng cách sau khi đến nơi
-                        if (distance(character, { x: 1049, y: -2002 }) < 50) {
+                        if (distance(character, { x: 1049, y: -2002 }) < 100) {
                             game_log("Đang vào đúng hầm ngục của Haiz...");
                             enter("winter_instance", dungeon_key);
                         } else {
@@ -508,7 +508,7 @@ setInterval(() => {
         }
 
     }
-	else if (character.map === "winterland" && distance(character, { x: 1049, y: -2002 }) < 20  && character.mp > 5300 && character.hp > 5300 && keywinter ) {  // đủ điều kiện vô map đánh nhau rồi
+	else if (character.map === "winterland" && distance(character, { x: 1049, y: -2002 }) < 100  && character.mp > 5300 && character.hp > 5300 && keywinter ) {  // đủ điều kiện vô map đánh nhau rồi
              enter("winter_instance", keywinter);
 	}
 
