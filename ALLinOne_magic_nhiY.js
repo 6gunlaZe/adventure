@@ -1302,6 +1302,53 @@ const equipmentSets = {
 
 
 
+let lastElixirSwap = 0;
+const ELIXIR_SWAP_DELAY = 30000; // 30 giây
+
+function elixirUsage() {
+    try {
+        const now = Date.now();
+        const currentElixir = character.slots.elixir?.name;
+
+        const hasXmagefi = get_nearest_monster({ type: "xmagefi" });
+
+        let targetElixir = null;
+
+        // =============================
+        // ƯU TIÊN THEO THỨ TỰ
+        // =============================
+
+        // 1️⃣ xmagefi → elixirfires
+        if (hasXmagefi) {
+            targetElixir = "elixirfires";
+        }
+
+
+
+        // =============================
+        // ĐỔI ELIXIR (có cooldown)
+        // =============================
+
+        if (
+            targetElixir &&
+            currentElixir !== targetElixir &&
+            now - lastElixirSwap >= ELIXIR_SWAP_DELAY
+        ) {
+            const itemSlot = locate_item(targetElixir);
+            if (itemSlot != null) {
+                use(itemSlot);
+                lastElixirSwap = now;
+            }
+        }
+
+    } catch (e) {
+        console.error("Error in elixirUsage:", e);
+    }
+}
+
+setInterval(elixirUsage, 2000);
+
+
 
 
 
