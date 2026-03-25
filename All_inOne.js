@@ -120,11 +120,14 @@ const locations = {
   { type: "farm", x: 0, y: 105, map: "level1" },
   { type: "safe", x: 164, y: 96, map: "level1" }
     ],
-	
+    mummy: [
+  { type: "farm", x: 257, y: -1048, map: "spookytown" },
+  { type: "safe", x: 440, y: -999, map: "spookytown" }
+    ],
 	
 };
 
-const home = 'prat';
+const home = 'mummy';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
