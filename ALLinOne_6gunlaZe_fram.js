@@ -1574,7 +1574,8 @@ async function safeawwaitwalkInCircle() {
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
     const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo"];
-
+    const topPriorityMtypes = ["a5","booboo","crabx"]; //ưu tiên lên trên đầu khi đánh
+	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
     const dangerBosses = ["franky", "stompy", "dragold", "icegolem","bbpompom","booboo"];
 	
@@ -1602,6 +1603,11 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
     // === 2. SORT CHÍNH – phục vụ 2 phát mạnh ===
     targets.sort((a, b) => {
 
+       // 0. TOP PRIORITY (ưu tiên tuyệt đối)
+       const topA = topPriorityMtypes.includes(a.mtype);
+       const topB = topPriorityMtypes.includes(b.mtype);
+       if (topA !== topB) return topA ? -1 : 1;
+		
         // 1. cursed
         const cursedA = hasStatus(a, args.statusEffects || []);
         const cursedB = hasStatus(b, args.statusEffects || []);
