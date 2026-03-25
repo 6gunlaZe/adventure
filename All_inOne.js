@@ -203,7 +203,7 @@ const keyData = [
     { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
     { 
         name: "frozen", 
-        count: hasFieldGen ? count_item("frozenkey1111") : 0,  // tạm ngưng xmagex
+        count: hasFieldGen ? count_item("frozenkey") : 0,  // tạm ngưng xmagex
         action: framXmage, 
         map: "winter_instance" 
     }
@@ -242,7 +242,7 @@ if (currentJob) {
               (h >= 6 && h < 11) || (h >= 13 && h < 22)
             ) && character.esize > 3 &&
             (
-                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey1111") > 0 &&  locate_item("fieldgen0") !== -1 )
+                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
             )
         ) {
              framtay = 1;
