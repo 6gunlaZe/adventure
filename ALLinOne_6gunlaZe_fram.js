@@ -1573,7 +1573,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo"];
 
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
     const dangerBosses = ["franky", "stompy", "dragold", "icegolem","bbpompom"];
