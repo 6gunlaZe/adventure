@@ -439,6 +439,8 @@ function kite(taget, kite_range = 20, quai = null) {
     // Cấu hình khoảng cách riêng (chỉ áp dụng nếu có mob phù hợp) gscorpion
     const kiteConfig = {
         "fireroamer": 50,
+        "booboo": 50,
+        "mummy": 50,
         "plantoid": 40,
         "gscorpion": 50,
         "spider": 10,
