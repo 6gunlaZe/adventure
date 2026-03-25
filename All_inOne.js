@@ -759,7 +759,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 
     // --- CHIẾN THUẬT GỬI LỆNH vòng 2--- //tạm ngưng do ynhi chưa đủ đồ, cần thêm orb, và thuốc lửa
     if (boss_fi && Date.now() - last_sent_cm > 14000 && !get_player("nhiY") ) {
-       send_cm("nhiY1111", {
+       send_cm("nhiY", {
             command: "assist_xmage1",
             instance_key: character.in  // Gửi cái mã nhiều ký tự này đi
         });
