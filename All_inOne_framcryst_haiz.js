@@ -2316,7 +2316,7 @@ function avoidance() {
     if (drawDebug) {
         clear_drawings();
     }
-    avoidTypes = landau == 1 ? ["a10000"] : ["a6", "a8"];
+    avoidTypes = landau == 1 ? ["a10000"] : ["a61111", "a81111"];
 
     // Try to avoid monsters
     const avoiding = avoidMobs();
