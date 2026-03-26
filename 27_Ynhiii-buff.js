@@ -760,7 +760,7 @@ changeitem({ slot: "gloves", name : "supermittens", level : 8 });
 
 async function lootLoop() {
     await lootAllChests();
-    setTimeout(lootLoop, 2000);
+    setTimeout(lootLoop, 1000);
 }
 
 lootLoop();
