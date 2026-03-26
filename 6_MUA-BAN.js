@@ -1835,7 +1835,7 @@ var combineWhitelist =
 		ctristone:3,
 		dexbelt: 3,
 		intbelt: 3,
-		//strbelt: 3,
+		strbelt: 3,
 		orbg: 3,
 		//wbookhs: 1,
 		cring: 2,
