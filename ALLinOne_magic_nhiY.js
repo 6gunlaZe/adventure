@@ -419,6 +419,8 @@ function on_cm(name, data) {
     // 1. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Dành cho lệnh chiến thuật có Instance Key)
     if (typeof data === "object" && data !== null) {
         game_log("Lệnh nhận được: " + (data.command || "Object"));
+		
+        if (name === "haiz" && data.command === "assist_xmage1" )keywinter = data.instance_key;
 
         // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
         if (name === "haiz" && data.command === "assist_xmage1" && !smart.moving) {
