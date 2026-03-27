@@ -2281,7 +2281,7 @@ const mobsInRange = Object.values(parent.entities).filter(e =>
 
 const untargetedMobs = mobsInRange.filter(e => !e.target);
 
-const ignoreMobs = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+const ignoreMobs = ["xmagex", "xmagefi", "xmagefz"];
 	
 const mobsTargetingTank = Object.values(parent.entities).filter(e =>
     e.type === "monster" &&  !ignoreMobs.includes(e.mtype) &&
@@ -3936,8 +3936,9 @@ else
 	gobaltaget = null;
 }
 
-// điều hướng khi đang ở franky
+// điều hướng khi đang ở franky hoặc xmagen
 const franky = get_nearest_monster({ type: "franky" });
+const xmagen = get_nearest_monster({ type: "xmagen" });
 
 if (franky && franky.target === character.name && distance(character, { x: 14, y: 30 } ) > 30 ) {
     xmove(14, 30);
@@ -3946,7 +3947,10 @@ else if (franky && franky.target === "Ynhi" && distance(franky, { x: 14, y: 30 }
 if ( distance(character, { x: 14, y: 30 } ) > 30 ) xmove(14, 30);
 use_skill("taunt", franky.id);	
 }
-		
+
+if (xmagen && xmagen.target != character.name ) {
+use_skill("taunt", xmagen.id);	
+}		
 
 	    
 if (!events || prolive == 0){
