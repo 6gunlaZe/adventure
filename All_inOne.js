@@ -843,14 +843,14 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     // --- LOGIC CHIẾN ĐẤU TRONG INSTANCE ---
     if (character.map === "winter_instance") {
         
-        // Ưu tiên Stage 4: Dùng Fieldgen0 ngay lập tức
-        if (boss_x) {
+        // Ưu tiên Stage 4: Dùng Fieldgen0 ngay lập tức, dùng sớm hơn 1 chút ở vòng 3 để an toàn
+        if (boss_x || (boss_fn && boss_fn.hp < 150000) ) {
             let gen = get_nearest_monster({ type: "fieldgen0" });
             if (!gen) {
                 let fg_item = locate_item("fieldgen0");
                 if (fg_item !== -1) use(fg_item);
             }
-            if (gen && distance(character, boss_x) < character.range) {
+            if (gen && boss_x && distance(character, boss_x) < character.range) {
                 kite_around_fieldgen(gen, 3);
             }
         }
