@@ -3938,7 +3938,7 @@ else
 
 // điều hướng khi đang ở franky hoặc xmagen
 const franky = get_nearest_monster({ type: "franky" });
-const xmagen = get_nearest_monster({ type: "xmagen" });
+const xmagen = get_nearest_monster({ type: "xmagen111" });
 
 if (franky && franky.target === character.name && distance(character, { x: 14, y: 30 } ) > 30 ) {
     xmove(14, 30);
