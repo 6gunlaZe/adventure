@@ -926,7 +926,7 @@ setInterval(() => {
 
 // ❌ Quái không bao giờ được absorb vào target của nó
 const NO_ABSORB_MOBS = [
-    "pppompom","oneeye","xmagen",
+    "pppompom","oneeye","xmagen1111",
 ];
 
 let lastAbsorbTime = 0;
@@ -948,7 +948,7 @@ function tryAbsorb() {
 
 
 // --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM ---
-const priority_mobs = ["xmagefz", "xmagefi", "xmagex"];
+const priority_mobs = ["xmagefz", "xmagefi", "xmagex","xmagen"];
 
 // Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
 const boss_entity = Object.values(parent.entities).find(e => 
