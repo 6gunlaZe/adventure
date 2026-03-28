@@ -702,6 +702,34 @@ function count_item(itemName) {
 
 
 
+let xmageStop_lastTime = 0;
+let xmageStop_delay = 50;
+// giúp stop nhanh tránh nhân vật bị die
+function checkStopXmage() {
+    if (character.map !== "winter_instance") return;
+
+    let boss_fz = get_nearest_monster({ type: "xmagefz" });
+    let boss_fi = get_nearest_monster({ type: "xmagefi" });
+
+    if (!(boss_fi || (boss_fz && boss_fz.hp < 50))) {
+        xmageStop_delay = 50;
+        return;
+    }
+
+    let now = Date.now();
+    if (now - xmageStop_lastTime >= xmageStop_delay) {
+
+        if (get_player("6gunlaZe")) stop_character("6gunlaZe");
+        if (get_player("MuaBan")) stop_character("MuaBan");
+
+        xmageStop_lastTime = now;
+        if (xmageStop_delay < 500) xmageStop_delay += 50;
+    }
+}
+
+setInterval(checkStopXmage, 50);
+
+
 const XmagelayerFire = 'nhiY';
 const Xmagelayer = '6gunlaZe';
 let startTimeX = null;
