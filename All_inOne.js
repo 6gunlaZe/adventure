@@ -857,13 +857,8 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
 
 // Nếu không thấy boss nào (current_boss là null)
         if (!current_boss) {
-            // 1/ Di chuyển tới điểm tập trung nếu đang ở xa
-            if (distance(character, { x: -8, y: 68 }) > 20) {
-                xmove(-8, 68);
-                boss_wait_start = null; // Reset thời gian chờ khi đang di chuyển
-            } 
-            else {
-                // Đã đứng tại điểm tập trung, bắt đầu đếm giờ nếu chưa đếm
+
+                // bắt đầu đếm giờ nếu chưa đếm
                 if (boss_wait_start === null) {
                     boss_wait_start = Date.now();
                 }
@@ -871,15 +866,15 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
                 // Tính thời gian đã trôi qua
                 let seconds_passed = (Date.now() - boss_wait_start) / 1000;
 
-                // 2/ Nếu sau 5 giây mà vẫn không có boss -> Xong instance
-                if (seconds_passed >= 5) {
+                // 2/ Nếu sau 8 giây mà vẫn không có boss -> Xong instance
+                if (seconds_passed >= 8) {
                     smart_move({ map: "winterland", x: 1049, y: -2002 });
                    	stop_character("Ynhi")	
 	                stop_character(Xmagelayer)	
 	                framtay = 0
                     boss_wait_start = null; // Reset biến chờ
                 }
-            }
+         
         } else {
             // Nếu Boss xuất hiện, reset lại biến chờ để dùng cho lần sau (stage tiếp theo)
             boss_wait_start = null;
