@@ -100,7 +100,7 @@ const locations = {
   { type: "safe", x: 119, y: 285, map: "level1" }
     ],
     mummy: [
-  { type: "farm", x: 336, y: -944, map: "spookytown" },
+  { type: "farm", x: 301, y: -1003, map: "spookytown" },
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
 	
