@@ -35,15 +35,11 @@ const SERVER_PARTY_MAP = [
 let lastUpdateTime = performance.now();
 setTimeout(startLuckTimer, 1000);
 const locations = {
-    bat: [{ x: 1200, y: -782 }],
-    bigbird: [{ x: 1343, y: 248 }],
+
     bscorpion: [
   { type: "farm", x: -427, y: -1235, map: "desertland" },
   { type: "safe", x: -635, y: -1312, map: "desertland" }
     ],	
-    cgoo: [{ x: -221, y: -274 }],
-    crab: [{ x: -11840, y: -37 }],
-    ent: [{ x: -420, y: -1960 }],
     fireroamer: [
   { type: "farm", x: 256, y: -888, map: "desertland" },
   { type: "safe", x: -30, y: -800, map: "desertland" }
@@ -60,21 +56,6 @@ const locations = {
   { type: "farm", x: -17, y: -1108, map: "winterland" },
   { type: "safe", x: 6, y: -855, map: "winterland" }
     ],
-    gscorpion: [{ x: 390, y: -1422 }],
-    iceroamer: [{ x: 823, y: -45 }],
-    mechagnome: [
-  { type: "farm", x: 0, y: 0 },
-  { type: "safe", x: -152, y: 2 }
-    ],
-    mole: [{ x: 4, y: -282 }],  //-282
-    booboo: [
-  { type: "farm", x: 350, y: -675 },
-  { type: "safe", x: 158, y: -660 }
-    ],
-    oneeye: [{ x: -270, y: 160 }],
-    pinkgoblin: [{ x: 366, y: 377 }],
-    poisio: [{ x: -121, y: 1360 }],
-    pppompom: [{ x: 292, y: -189 }],
     plantoid: [
   { type: "farm", x: -800, y: -366, map: "desertland" },
   { type: "safe", x: -600, y: -180, map: "desertland" }
@@ -124,6 +105,11 @@ const locations = {
   { type: "farm", x: 254, y: -1091, map: "spookytown" }, //257 -1048
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
+    booboo: [
+  { type: "farm", x: 254, y: -1091, map: "spookytown" }, //257 -1048
+  { type: "safe", x: 440, y: -999, map: "spookytown" }
+    ],
+	
 	
 };
 
