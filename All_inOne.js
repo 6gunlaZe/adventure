@@ -102,18 +102,18 @@ const locations = {
   { type: "safe", x: 164, y: 96, map: "level1" }
     ],
     mummy: [
-  { type: "farm", x: 254, y: -1091, map: "spookytown" }, //257 -1048
+  { type: "farm", x: 254, y: -1091, map: "spookytown" }, 
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
     booboo: [
-  { type: "farm", x: 254, y: -1091, map: "spookytown" }, //257 -1048
+  { type: "farm", x: 355, y: -893, map: "spookytown" }, 
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
 	
 	
 };
 
-const home = 'mummy';
+const home = 'booboo';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
