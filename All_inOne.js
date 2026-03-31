@@ -884,7 +884,8 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
                 if (seconds_passed >= 8) {
                     smart_move({ map: "winterland", x: 1049, y: -2002 });
                    	stop_character("Ynhi")	
-	                stop_character(Xmagelayer)	
+	                stop_character(Xmagelayer);	
+					stop_character("MuaBan"); 
 	                framtay = 0
                     boss_wait_start = null; // Reset biến chờ
                 }
@@ -904,175 +905,7 @@ if(parent.party_list.includes(Xmagelayer) && (!member1  || character.map != "win
     }
 }
 
-/*
-function framXmage() {
 
- let member1 = get_player(Xmagelayer);
- let member2 = get_player("Ynhi");
-	autoPartyCheck("Ynhi", Xmagelayer, 60000);
-
-
-// 1. Nếu thiếu 1 trong 2 người, bắt đầu đếm giờ (nếu chưa đếm)
- if ((!member1 || !member2) && startTimeX === null) {
-    startTimeX = Date.now(); 
- }
-
- // 2. Nếu đã đủ cả 2 người, reset đồng hồ về null
- if (member1 && member2) {
-    startTimeX = null; 
- }
-
- // 3. Kiểm tra nếu đồng hồ đã chạy quá 10 phút (10 * 60 * 1000 miligiây)
- if (startTimeX !== null && Date.now() - startTimeX >= 10 * 60 * 1000) {
-    
-    // Hành động khi quá thời gian:
-    stop_character("Ynhi");
-    stop_character(Xmagelayer);
-    buoc = 0; // Reset bước đi về 0
-    startTimeX = null; // Reset đồng hồ sau khi đã xử lý xong
-    
-    // Lệnh di chuyển về vị trí an toàn
-    smart_move({ map: "winterland", x: 1049, y: -2002 });
-    
-    return; // Dừng hàm tại đây, không chạy các lệnh đánh quái bên dưới nữa
- }
-
-
-
-	
-	
-if(parent.party_list.includes(Xmagelayer) && (!member1 || get_nearest_monster({ type: home }) ) ){
-	send_cm(Xmagelayer,"mage")	
-}
-
-
-if (character.map == "winter_instance" && (!member1 || !member2) ) {
-    // Tăng lên 5 giây để chắc chắn các setTimeout trước đó đã chạy xong
-    if (Date.now() - last_sent_cm > 5000) {
-        
-        last_sent_cm = Date.now(); // Cập nhật ngay để chặn các lần gọi trùng lặp trong 5s tới
-
-        // Bước 1: Gửi ID map sau 1 giây
-        setTimeout(function() {
-            send_cm("Ynhi", character.in);
-            send_cm(Xmagelayer, character.in);
-            // console.log("Sent ID: " + character.in);
-        }, 1000);
-        
-        // Bước 2: Gửi lệnh vào map sau 2.5 giây
-        setTimeout(function() {
-            send_cm("Ynhi", "goo2");
-            send_cm(Xmagelayer, "goo2");
-            // console.log("Sent Command: goo1");
-        }, 2500);
-    }
-}
-	
-
-if(smart.moving)return	
-var monster
-
-        monster = get_targeted_monster() 
-
-
-
-if (monster && character.cc < 100) {
-    // Ưu tiên trang bị luck nếu máu quái thấp
-    if (monster.hp < 15000) {
-        equipSet("luck");
-        setTimeout(waitAndUnluck, 5000);
-    } else {
-        // Phân loại theo damage_type của quái
-        if (monster.damage_type === "magical" && monster.attack > 3500) {
-            equipSet("single_Magic");
-        } else if (monster.damage_type === "physical" && monster.attack > 3500) {
-            equipSet("single_physical");
-        } else if (character.s.burned) {
-            equipSet("def_fire");
-	} else {
-            // Mặc định nếu không rõ loại (hoặc khác magic/physical)
-            equipSet("single");
-        }
-    }
-}
-
-	
-
-/////////
-
-
-if ( character.map != "winter_instance")
-{
-	if ( character.map != "winterland")smart_move({ map: "winterland", x: 1049, y: -2002 })
-	if ( character.map == "winterland" && distance(character, {x: 1049, y: -2002}) >= 50 )smart_move({ map: "winterland", x: 1049, y: -2002 })
-
-}
-if ( character.map == "winterland" && distance(character, {x: 1049, y: -2002}) < 50 && member1 && member2 && distance(character,member1) < 50 && distance(character,member2) < 50 ){
-enter("winter_instance");
-	buoc = 1;
-}
-
-// Danh sách bước đi kèm loại quái cần kiểm tra
-const steps = [
-    { x: -8, y: 68, monster: "xmagefz" },
-    { x: -8, y: 68, monster: "xmagefi" },
-    { x: -8, y: 68, monster: "xmagen" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-    { x: -8, y: 68, monster: "xmagex" },
-
-	
-];
-
-
-if (character.map === "winter_instance" && buoc >= 1 && buoc <= steps.length) {
-    const step = steps[buoc - 1]; // Vì mảng bắt đầu từ 0
-    // Kiểm tra khoảng cách và sự tồn tại của quái vật tương ứng
-    const monster = get_nearest_monster({ type: step.monster });
-	
-    if (distance(character, {x: step.x, y: step.y}) > 30 && ( !monster || (monster && distance(character,monster) > 200  ))) xmove(step.x, step.y);
-    else if (fieldgen0_position && monster && distance(character,monster) < character.range && monster.target && monster.target == character.name )kite_around_fieldgen(fieldgen0_position, 20);
-    else if ( monster && distance(character,monster) > 10 && character.hp > 7000 )xmove(monster.real_x, monster.real_y);
-
-
-
-
-	
-   // if (buoc > 8 && monster) buoc = 8; //fix bug quái vật nhảy, dịch chuyển nó không nhận dạng được
-	
-    if (step.monster == "xmagex" && distance(character,monster) < 50 && !get_nearest_monster({ type: "fieldgen0" }) && distance(character, {x: step.x, y: step.y}) < 250 )
-	  {
-		 let item = locate_item("fieldgen0");
-                 if (item)use(item);
-		fieldgen0_position = { x: character.real_x, y: character.real_y };
-
-	  }
-	
-    if (distance(character, step) < 30 && !monster && member2 && distance(character,member2) < 55 ) {
-        buoc++;
-    }
-
-	if (character.hp < 2000)parent.api_call("disconnect_character", {name: "haiz"});
-
-}
-
-if (buoc == 8)
-{
-	stop_character("Ynhi")	
-	stop_character(Xmagelayer)	
-	buoc = 0
-	framtay = 0
-	smart_move({ map: "winterland", x: 1049, y: -2002 })
-}
-	
-}
-
-
-*/
 
 
 let startTime = null; // Thời gian bắt đầu đếm giờ
@@ -1259,8 +1092,9 @@ if (character.map === "tomb" && buoc >= 1 && buoc <= steps.length) {
 
 if (buoc == 12) // Tăng lên 12 vì đã thêm 1 bước vào mảng
 {
-	stop_character("Ynhi")	
-	stop_character(tomplayer)	
+	stop_character("Ynhi");	
+	stop_character(tomplayer);	
+	stop_character("MuaBan"); 
 	buoc = 0
 	framtay = 0
     waitStartTime = null
@@ -1442,8 +1276,9 @@ const step = steps[index];
 
 if (buoc1 == 8)
 {
-	stop_character("Ynhi")	
-	stop_character(spiderlayer)	
+	stop_character("Ynhi");	
+	stop_character(spiderlayer);	
+	stop_character("MuaBan") ;
 	buoc1 = 0
 	framtay = 0
 	smart_move({ map: "gateway", x: -321, y: -194 })
