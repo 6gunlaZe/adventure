@@ -557,7 +557,7 @@ party = party
 		if (m.name === "6gunlaZe" && get_nearest_monster({ type: crepp }) ) {
 			ratio += 0.3;
 		}
-		if (m.name === "haiz" && !get_nearest_monster({ type: "pppompom" }) ) {
+		if (m.name === "haiz" && character.map != "winter_instance" && !get_nearest_monster({ type: "pppompom" }) ) {
 			ratio += 0.22;
 		}
 		if (m.name === "LyThanhThu"  && get_nearest_monster({ type: crepp }) ) {
@@ -628,7 +628,7 @@ function lowest_health_partymember() {
         if (member.name === "6gunlaZe" && get_nearest_monster({ type: crepp }) ) {
                member.entity.health_ratio += 0.3;
         }
-		if (member.name === "haiz"  && !get_nearest_monster({ type: "pppompom" })  ) {
+		if (member.name === "haiz" && character.map != "winter_instance" && !get_nearest_monster({ type: "pppompom" })  ) {
 			 member.entity.health_ratio += 0.22;
 		}
         if (member.name === "LyThanhThu" && get_nearest_monster({ type: crepp }) ) {
