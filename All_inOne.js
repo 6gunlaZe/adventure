@@ -109,11 +109,14 @@ const locations = {
   { type: "farm", x: 355, y: -893, map: "spookytown" }, 
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
-	
+    targetron: [
+  { type: "farm", x: -490, y: -187, map: "uhills" }, 
+  { type: "safe", x: -309, y: -172, map: "uhills" }
+    ],
 	
 };
 
-const home = 'booboo';
+const home = 'targetron';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
