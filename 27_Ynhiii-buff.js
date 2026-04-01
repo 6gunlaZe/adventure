@@ -2107,7 +2107,7 @@ const equipmentSets = {
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
-        { itemName: "oxhelmet", slot: "helmet", l: "l" },
+       // { itemName: "oxhelmet", slot: "helmet", l: "l" },
 
 
 		
@@ -2211,7 +2211,6 @@ const equipmentSets = {
 
     ],
     Unluck: [
-        //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
