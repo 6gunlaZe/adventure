@@ -2403,216 +2403,186 @@ let checkluckk = 0;
 
 function ChuyendoiITEM() {
 
-	
     const leader = get_player("haiz");
     const damer = getOtherPartyMember();
     const currentTime = performance.now();
     const penalty = ms_penalty_cd();
 
-    const RANGE = 100;
+    if (currentTime - eTime < 120) return;
+
+    const RANGE = 200;
     const RANGE_SQ = RANGE * RANGE;
 
     const cx = character.x;
     const cy = character.y;
 
+    let MageX = false;
     let hasLowHp = false;
     let hasPhysical = false;
     let hasMagical = false;
 
-for (const id in parent.entities) {
-    const e = parent.entities[id];
+    // 👉 cache type
+    let nearTypes = new Set();
 
-    if (!e.visible || e.dead) continue;
-    if (e.type !== "monster") continue;
+    for (const id in parent.entities) {
+        const e = parent.entities[id];
+        if (!e.visible || e.dead || e.type !== "monster") continue;
 
-    const isTargetingMe = (e.target === character.name);
-    const isCoop = e.cooperative;
+        const dx = cx - e.x;
+        const dy = cy - e.y;
+        if (dx*dx + dy*dy > RANGE_SQ) continue;
 
-    if (!isTargetingMe && !isCoop) continue;
+        nearTypes.add(e.mtype); // 👉 lưu type
 
-    const dx = cx - e.x;
-    const dy = cy - e.y;
-    if (dx*dx + dy*dy > RANGE_SQ) continue;
+        const isTargetingMe = (e.target === character.name);
+        const isCoop = e.cooperative;
 
-    // 🔹 Damage type chỉ tính nếu đang đánh mình
-    if (isTargetingMe) {
-        if (e.damage_type === "physical") hasPhysical = true;
-        if (e.damage_type === "magical")  hasMagical = true;
-    }
+        if (!isTargetingMe && !isCoop) continue;
 
-    // 🔹 Low HP logic
-    if (!hasLowHp) {
-        if (isCoop) {
-            if (e.hp < 150000) hasLowHp = true;
-        } else if (isTargetingMe) {
-            let threshold = 9000;
-            if (e.max_hp >= 800000) threshold = 38000;
-            else if (e.max_hp >= 200000) threshold = 25000;
-
-            if (e.hp < threshold) hasLowHp = true;
+        if (isTargetingMe) {
+            if (e.damage_type === "physical") hasPhysical = true;
+            if (e.damage_type === "magical")  hasMagical = true;
+            if (e.mtype === "xmagex") MageX = true;
         }
+
+        if (!hasLowHp) {
+            if (isCoop) {
+                if (e.hp < 150000) hasLowHp = true;
+            } else if (isTargetingMe) {
+                let threshold = 9000;
+                if (e.max_hp >= 800000) threshold = 38000;
+                else if (e.max_hp >= 200000) threshold = 25000;
+
+                if (e.hp < threshold) hasLowHp = true;
+            }
+        }
+
+        if (hasLowHp && hasPhysical && hasMagical) break;
     }
 
-    if (hasLowHp && hasPhysical && hasMagical) break;
-}
+    // 👉 helper check nhanh
+    const has = (type) => nearTypes.has(type);
 
-	
-	
+    // ================= LOGIC =================
 
-	if (currentTime - eTime < 120)return
-
- if (smart.moving && !get_nearest_monster({ type: "bscorpion" })) 
-	{
+    if (smart.moving && !has("bscorpion")) {
         eTime = currentTime;
-        equipSet('nogold');	
-		return
-	}
+        equipSet('nogold');
+        return;
+    }
 
-
-
-	
-	if(get_nearest_monster({ type: "xmagefi" }) && !hasLowHp)
-	{
-        eTime = currentTime; 
-        equipSet('bossburn');	
-		return
-	}
-
-	if( (get_nearest_monster({ type: "xmagen" }) ||  get_nearest_monster({ type: "xmagex" })  ) && !hasLowHp)
-	{
-        eTime = currentTime; 
-        equipSet('bossDOC');	
-		return
-	}
-
-
-
-	if(get_nearest_monster({ type: "fireroamer" }) && !hasLowHp && goldcheck == 0 )
-	{
-        eTime = currentTime; 
-        equipSet('creepburn');	
-		return
-	}
-
-	if(get_nearest_monster({ type: crepp }) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.98)
-	{
-        eTime = currentTime; 
-        equipSet('fram');	
-		return
-	}
-	
-	
-	if((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && !hasLowHp) ||  (character.max_hp < 10000 && character.hp/character.max_hp < 0.75))
-	{
+    if (has("xmagefi") && !hasLowHp) {
         eTime = currentTime;
-        equipSet('fram');	
-		return
-	}
+        equipSet('bossburn');
+        return;
+    }
 
-	
-	if(checkdef == 0 && character.hp/character.max_hp < 0.55)
-	{
-	checkdef = 1
+    if ((has("xmagen") || has("xmagex")) && !hasLowHp) {
         eTime = currentTime;
-		
-        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
-		{
-			equipSet('deffbrun');
-		}
-		else
-		{
-			equipSet('deff');
-		}
-		
-		
-		return
-	}
-	if(checkdef == 1 && character.hp/character.max_hp > 0.78)
-	{
-        eTime = currentTime;
+        equipSet('bossDOC');
+        return;
+    }
 
-        if(get_nearest_monster({ type: "fireroamer" }) && crepp == "fireroamer")
-		{
-        equipSet('nodeffbrun');		
-		}
-		else
-		{
-        equipSet('nodeff');		
-		}
-		
-	checkdef = 0	
-		return
-	}
-
-	if(checkheall == 0 && character.hp/character.max_hp > 0.65 && ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4  )))
-	{
-	checkheall = 1
+    if (has("fireroamer") && !hasLowHp && goldcheck == 0) {
         eTime = currentTime;
-        equipSet('healmax');
-		return
-	}
-	if(checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp/damer.max_hp > 0.7)) )
-	{
+        equipSet('creepburn');
+        return;
+    }
+
+    if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.98) {
         eTime = currentTime;
         equipSet('fram');
-	checkheall = 0	
-		return
-	}
+        return;
+    }
 
+    // ===== phần dưới giữ nguyên logic =====
 
-	if(!hasLowHp && checkluckk > 0 && goldcheck == 0  )
-	{
+    if ((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && !hasLowHp) || 
+        (character.max_hp < 10000 && character.hp/character.max_hp < 0.75)) {
         eTime = currentTime;
-        // game_log("🎯 Unluck"); 	
-        equipSet('Unluck');	
-		checkluckk -= 1
-		return
-	}
+        equipSet('fram');
+        return;
+    }
 
-	
+    if (checkdef == 0 && character.hp/character.max_hp < 0.55) {
+        checkdef = 1;
+        eTime = currentTime;
 
-if ( hasLowHp && character.map != "winter_instance" && character.hp/character.max_hp > 0.45 && checkdef == 0 && character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
-	eTime = currentTime;
-        // game_log("🔄 luck") ;	
-	let slot = locate_item("luckbooster");
-        if (slot == -1)shift(0, 'luckbooster')
-
-	if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2500 )
-	{
-		        equipSet('luck'); 
-	}
-	else
-	{
-		        equipSet('luckfull'); 
-	}
-
-	
-	checkluckk =3
-	return
-}
-
-if (checkluckk <= 0 && checkheall == 0 && checkdef == 0)
-{
-
-
-        if ( hasMagical || character.map == "winter_instance" ) {
-     	eTime = currentTime;
-        equipSet('phep');
+        if (has("fireroamer") && crepp == "fireroamer") {
+            equipSet('deffbrun');
+        } else {
+            equipSet('deff');
         }
-        else if (  (hasPhysical && character.hp/character.max_hp < 0.68)  )
-	    {
-	    eTime = currentTime;
-        equipSet('vatly');
-     	}
+        return;
+    }
 
-	
-}
+    if (checkdef == 1 && character.hp/character.max_hp > 0.78) {
+        eTime = currentTime;
 
+        if (has("fireroamer") && crepp == "fireroamer") {
+            equipSet('nodeffbrun');
+        } else {
+            equipSet('nodeff');
+        }
 
+        checkdef = 0;
+        return;
+    }
+
+    if (checkheall == 0 && character.hp/character.max_hp > 0.65 &&
+        ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4))) {
+
+        checkheall = 1;
+        eTime = currentTime;
+        equipSet('healmax');
+        return;
+    }
+
+    if (checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp/damer.max_hp > 0.7))) {
+        eTime = currentTime;
+        equipSet('fram');
+        checkheall = 0;
+        return;
+    }
+
+    if (!hasLowHp && checkluckk > 0 && goldcheck == 0) {
+        eTime = currentTime;
+        equipSet('Unluck');
+        checkluckk -= 1;
+        return;
+    }
+
+    if (hasLowHp && (character.map != "winter_instance" || MageX) &&
+        character.hp/character.max_hp > 0.45 && checkdef == 0 &&
+        character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
+
+        eTime = currentTime;
+
+        let slot = locate_item("luckbooster");
+        if (slot == -1) shift(0, 'luckbooster');
+
+        if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2500) {
+            equipSet('luck');
+        } else {
+            equipSet('luckfull');
+        }
+
+        checkluckk = 3;
+        return;
+    }
+
+    if (checkluckk <= 0 && checkheall == 0 && checkdef == 0) {
+        eTime = currentTime;
+
+        if (hasMagical || character.map == "winter_instance") {
+            equipSet('phep');
+        } else if (hasPhysical && character.hp/character.max_hp < 0.68) {
+            equipSet('vatly');
+        }
+    }
 }
 
 setInterval(ChuyendoiITEM, 100);
-
 
 
 
