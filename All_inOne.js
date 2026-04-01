@@ -2060,9 +2060,9 @@ let ignore = mpp > 4500 ? 5 :
 if ( !get_nearest_monster({ type: home }) )	ignore = 0 /// chỉ có thể bỏ qua nếu đang đứng trong bãi fram thôi, tránh khi đánh boss v..v.v
 
 
-// Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu)
-let creeps = list.filter(m => m.mtype.includes(home))
-                 .sort((a,b)=> distance(character, a) - distance(character, b));
+
+// Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu) //có thêm tùy chọn nếu bãi  fram > 2 loại quái
+let creeps = list.filter(m => m.mtype.includes(home) || m.mtype.includes("sparkbot")).sort((a,b)=> distance(character, a) - distance(character, b));
 
 
 const hasStrongCreep = creeps.some(c => c.attack > 800);
