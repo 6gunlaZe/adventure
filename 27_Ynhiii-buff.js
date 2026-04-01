@@ -2130,8 +2130,8 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
-      //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+      //  { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
@@ -2218,7 +2218,9 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
-        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+    //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 8 },
@@ -2538,9 +2540,9 @@ function ChuyendoiITEM() {
         return;
     }
 
-    if (checkheall == 0 && character.hp/character.max_hp > 0.65 &&
+    if (checkheall == 0 && character.hp/character.max_hp > 0.65 && 1 > 2 &&
         ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4))) {
-
+    // tạm ngưng logic này
         checkheall = 1;
         eTime = currentTime;
         equipSet('healmax');
