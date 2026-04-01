@@ -2069,14 +2069,16 @@ const hasStrongCreep = creeps.some(c => c.attack > 800);
 // Quái cần quan tâm thật sự:
 //   - Giữ toàn bộ quái không phải creep
 //   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
+
+
 const untargetedMonsters = list
-  .filter(m => !m.mtype.includes(home))
+  .filter(m => !(m.mtype.includes(home) || m.mtype.includes("sparkbot")))
   .concat(
     hasStrongCreep
-      ? creeps                // có creep mạnh → lấy hết
-      : creeps.slice(ignore)  // không có → bỏ qua X con
+      ? creeps // có creep mạnh → lấy hết không bỏ qua con nào
+      : creeps.slice(ignore) // không có quái mạnh → bỏ qua một số X con
   );
-
+	
 
 
 //const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
