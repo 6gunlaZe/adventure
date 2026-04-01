@@ -1021,14 +1021,22 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
                 shouldAbsorb = true;
             }
 
+
             // === Farm mob ưu tiên ===
             if (typeof crepp !== "undefined") {
-                const farmCount = threats.filter(m => m.mtype === crepp).length;
+                const extraMob = "sparkbot"; // mob thêm thủ công
+
+                const farmCount = threats.filter(m =>
+                    m.mtype === crepp ||
+                    m.mtype === extraMob
+                ).length;
+
                 if (farmCount >= 2 && character.hp > 10000) {
                     score += 20;
                     shouldAbsorb = true;
                 }
             }
+
 
             // === Quái sắp chết (cướp kill) ===
             const dyingMobs = threats.filter(e => {
@@ -2452,6 +2460,7 @@ function ChuyendoiITEM() {
                 let threshold = 9000;
                 if (e.max_hp >= 800000) threshold = 38000;
                 else if (e.max_hp >= 200000) threshold = 25000;
+				if (character.map == "uhills") threshold = 11000; // dùng riêng cho quái tagetron
 
                 if (e.hp < threshold) hasLowHp = true;
             }
@@ -2574,7 +2583,7 @@ function ChuyendoiITEM() {
     if (checkluckk <= 0 && checkheall == 0 && checkdef == 0) {
         eTime = currentTime;
 
-        if (hasMagical || character.map == "winter_instance") {
+        if (hasMagical || character.map == "winter_instance" || character.map == "uhills" ) {
             equipSet('phep');
         } else if (hasPhysical && character.hp/character.max_hp < 0.68) {
             equipSet('vatly');
