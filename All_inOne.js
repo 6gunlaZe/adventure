@@ -1772,10 +1772,12 @@ if (
     character.map !== "winter_instance" &&
     (
         (f1 && f1.hp < f1.max_hp * 0.6) ||
-        (tank && tank.hp < tank.max_hp * 0.6) ||
-        (tank && tank.ctype === "priest" && tank.mp < 4000) ||
+        (tank && tank.hp < tank.max_hp * 0.55 && !character.s.warcry ) ||
+        (tank && tank.hp < tank.max_hp * 0.4 ) ||
+        (tank && tank.ctype === "priest" && tank.mp < 3000 ) ||
+        (tank && tank.ctype === "priest" && tank.mp < 4000 && !character.s.warcry ) ||
         (tank && tank.ctype === "priest" && tank.mp < 5500 && character.mp > character.max_mp * 0.8) ||
-        character.hp < 12000
+        character.hp < 10000
     )
 ) {
     handleStomp(Mainhand, stMaps, aoeMaps, tank);
