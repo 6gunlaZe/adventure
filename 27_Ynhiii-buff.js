@@ -1553,7 +1553,8 @@ function getOtherPartyMember() {
 
 
 async function handleZap() {
-    const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","hen","rooster","cutebee"];  // List of mobs to zap chỉ làm những quái levl thấp
+	const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","hen","rooster","cutebee"]
+  .filter(m => m !== "targetron");
     const quaiyeu = ["rooster","cutebee","bigbird", "spider", "scorpion","bscorpion","gscorpion","crabx","mummy","booboo"];  // không quan tâm tới levl
 	const soluongTOIDA = 14; // thường quái mạnh để 8 thôi
     const delay = 200;
