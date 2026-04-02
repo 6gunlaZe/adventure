@@ -2150,9 +2150,10 @@ const equipmentSets = {
     framVIP: [
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+      // { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
       //  { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-		
+       { itemName: "shield", slot: "offhand", level: 8, l: "l" },
+
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
