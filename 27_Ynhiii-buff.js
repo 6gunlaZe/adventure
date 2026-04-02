@@ -2697,7 +2697,7 @@ function elixirUsage() {
         }
 
         // 3️⃣ winter_instance → hotchocolate
-        else if (character.map === "winter_instance") {
+        else if (character.map === "winter_instance" || character.map == "uhills" ) {
             targetElixir = "hotchocolate";
         }
 
