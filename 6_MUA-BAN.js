@@ -262,7 +262,13 @@ var bankItems = {
   cring: [{ bank: "items6", level: -1, quantity: 1 }],
   cearring: [{ bank: "items6", level: -1, quantity: 1 }],
   lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
-  ringsj: [{ bank: "items4", level: -1, quantity: 1 }],
+  ringsj: [
+    { bank: "items4", level: 2, quantity: 1 },
+    { bank: "items4", level: 4, quantity: 1 },
+    { bank: "items4", level: 3, quantity: 1 },
+  ],
+
+	
 };
 
 
@@ -1848,7 +1854,7 @@ var combineWhitelist =
 		orbofdex: 1,
 		orbofint: 1,
 		orba: 2,
-		ringsj: 4,
+		ringsj: 3,
 
 
 		
