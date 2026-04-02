@@ -1085,8 +1085,8 @@ function hutquaibangtay() {
     if (
         checker && leader &&
         character.targets <= 9 &&
-        character.mp > 2000 &&
-        character.hp / character.max_hp > 0.75 &&
+        character.mp > 5000 &&
+        character.hp / character.max_hp > 0.95 &&
         leader.hp > 12700 &&
         leader.mp > 200 &&
         target.level < 4
@@ -1099,12 +1099,32 @@ function hutquaibangtay() {
     if (
         !checker && leader &&
         character.targets <= 3 &&
-        character.hp > 7000
+        character.mp > 5000 &&
+        character.hp / character.max_hp > 0.95 &&
+        leader.hp > 12700 &&
+        leader.mp > 200 &&
+        target.level < 4    
+	) 
+	{
+        change_target(target);
+        if (can_attack(target)) attack(target);
+        return true;
+    }
+
+    if (
+        checker && leader &&
+        character.targets <= 0 &&
+        character.mp / character.max_mp > 0.999 &&
+        character.hp / character.max_hp > 0.999 &&
+        leader.hp > 12700 &&
+        leader.mp > 200 
     ) {
         change_target(target);
         if (can_attack(target)) attack(target);
         return true;
     }
+
+	
 
     return false;
 }
