@@ -2256,7 +2256,8 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
     //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+    //    { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+       { itemName: "shield", slot: "offhand", level: 8, l: "l" },
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -2269,6 +2270,29 @@ const equipmentSets = {
         { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
 		
     ],
+
+    UnluckVIP: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3},	    
+    //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+
+      //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+		
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+		
+    ],
+
+	
 };
 
 
@@ -2603,7 +2627,9 @@ function ChuyendoiITEM() {
 
     if (!hasLowHp && checkluckk > 0 && goldcheck == 0) {
         eTime = currentTime;
-        equipSet('Unluck');
+		   	if (character.map == "uhills") equipSet('UnluckVIP'); 
+            else equipSet('Unluck'); 
+		
         checkluckk -= 1;
         return;
     }
