@@ -2127,12 +2127,11 @@ const equipmentSets = {
 		
     ],
     fram: [
-	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
       //  { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-        //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
+		
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
@@ -2147,6 +2146,29 @@ const equipmentSets = {
         { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
 		
     ],
+
+    framVIP: [
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+      //  { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+		
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3},	
+		
+        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+		
+    ],
+
+	
     bossburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
@@ -2477,7 +2499,7 @@ function ChuyendoiITEM() {
                 if (e.max_hp >= 800000) threshold = 38000;
                 else if (e.max_hp >= 200000) threshold = 25000;
 				if (character.map == "uhills") threshold = 11000; // dùng riêng cho quái tagetron
-				if (character.map == "winter_instance") threshold = 17000; // dùng riêng cho quái xmagex
+				if (character.map == "winter_instance") threshold = 15000; // dùng riêng cho quái xmagex
 
                 if (e.hp < threshold) hasLowHp = true;
             }
@@ -2523,7 +2545,8 @@ function ChuyendoiITEM() {
 
     if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.98) {
         eTime = currentTime;
-        equipSet('fram');
+		   	if (character.map == "uhills") equipSet('framVIP'); 
+            else equipSet('fram'); 
         return;
     }
 
