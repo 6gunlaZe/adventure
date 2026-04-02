@@ -2462,6 +2462,7 @@ function ChuyendoiITEM() {
                 if (e.max_hp >= 800000) threshold = 38000;
                 else if (e.max_hp >= 200000) threshold = 25000;
 				if (character.map == "uhills") threshold = 11000; // dùng riêng cho quái tagetron
+				if (character.map == "winter_instance") threshold = 17000; // dùng riêng cho quái xmagex
 
                 if (e.hp < threshold) hasLowHp = true;
             }
