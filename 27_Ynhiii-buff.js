@@ -2544,7 +2544,7 @@ function ChuyendoiITEM() {
         return;
     }
 
-    if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.98) {
+    if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.97) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('framVIP'); 
             else equipSet('fram'); 
@@ -2627,10 +2627,10 @@ function ChuyendoiITEM() {
         return;
     }
 
-    if (checkluckk <= 0 && checkheall == 0 && checkdef == 0) {
+    if (checkluckk <= 0 && checkheall == 0 && checkdef == 0 && character.map != "uhills" ) {
         eTime = currentTime;
 
-        if (hasMagical || character.map == "winter_instance" || character.map == "uhills" ) {
+		if (hasMagical || character.map == "winter_instance" ) {
             equipSet('phep');
         } else if (hasPhysical && character.hp/character.max_hp < 0.68) {
             equipSet('vatly');
