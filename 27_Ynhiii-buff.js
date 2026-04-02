@@ -2174,6 +2174,21 @@ const equipmentSets = {
 		
     ],
 
+    bossBANG: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "orba", slot: "orb", level: 3, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+		
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
+
+		
+    ],
+	
 	
     creepburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
@@ -2488,6 +2503,12 @@ function ChuyendoiITEM() {
         return;
     }
 
+    if (has("xmagefz") && !hasLowHp) {
+        eTime = currentTime;
+        equipSet('bossBANG');
+        return;
+    }
+	
     if ((has("xmagen") || has("xmagex")) && !hasLowHp) {
         eTime = currentTime;
         equipSet('bossDOC');
