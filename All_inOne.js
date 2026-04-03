@@ -401,20 +401,9 @@ function handleEvents() {
 }
 
 
-	/*
-    if(  parent?.S?.wabbit.live && !character?.s?.easterluck  ) {
-        let wabbit = parent.S.wabbit;
-        if(wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
-            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map }).then(() => {
-                let target_monster = get_nearest_monster({ type : "wabbit" });
-                if (target_monster) {
-                    change_target(target_monster);
-                }
-            });
-        }
-	    return
-    }
-*/
+	
+
+
 
 
 let startPartyCheckAt = Date.now() + 100000; // mốc 100s sau khi chạy
@@ -429,6 +418,24 @@ async function handleHome() {
             });
         }
 	}
+
+
+    if(  parent?.S?.wabbit.live && !character?.s?.easterluck  ) {
+        let wabbit = parent.S.wabbit;
+        if(wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
+            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map }).then(() => {
+                let target_monster = get_nearest_monster({ type : "wabbit" });
+                if (target_monster) {
+                    change_target(target_monster);
+                }
+            });
+        }
+	    return
+    }
+
+
+
+	
 
     if (Date.now() >= startPartyCheckAt) { //để đảm bảo các logic check quái khác lúc đầu hoạt động bình thường
     autoPartyCheck(f1111, f2222, 50000);
