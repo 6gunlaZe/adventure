@@ -217,7 +217,7 @@ if (smart.moving) return;
 
     if (parent?.S?.wabbit?.live && !character?.s?.easterluck ) {
         let wabbit = parent.S.wabbit;
-        if (wabbit && wabbit.live && !smart.moving) {
+        if (wabbit && wabbit.live && !smart.moving && !(character.map == wabbit.map && distance(character, { x: wabbit.x, y: wabbit.y }) < character.range ) ) {
             try {
                 await smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map });
                 let target_monster = get_nearest_monster({ type: "wabbit" });
