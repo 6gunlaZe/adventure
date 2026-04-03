@@ -110,7 +110,7 @@ const locations = {
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
     targetron: [
-  { type: "farm", x: -465, y: -185, map: "uhills" }, 
+  { type: "farm", x: -428, y: -148, map: "uhills" }, 
   { type: "safe", x: -309, y: -172, map: "uhills" }
     ],
 	
