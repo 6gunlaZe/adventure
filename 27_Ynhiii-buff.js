@@ -2299,7 +2299,8 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 7, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
     //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+     //   { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+       { itemName: "shield", slot: "offhand", level: 8, l: "l" },
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -2546,7 +2547,7 @@ function ChuyendoiITEM() {
                 let threshold = 9000;
                 if (e.max_hp >= 800000) threshold = 38000;
                 else if (e.max_hp >= 200000) threshold = 25000;
-				if (character.map == "uhills") threshold = 11000; // dùng riêng cho quái tagetron
+				if (character.map == "uhills") threshold = 9300; // dùng riêng cho quái tagetron
 				if (character.map == "winter_instance") threshold = 15000; // dùng riêng cho quái xmagex
 
                 if (e.hp < threshold) hasLowHp = true;
