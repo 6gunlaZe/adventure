@@ -212,6 +212,8 @@ var bankItems = {
   spikedhelmet: [{ bank: "items1", level: 0, quantity: 1 }],  
   horsecapeg: [{ bank: "items1", level: -1, quantity: 1 }],  
   lmace: [{ bank: "items1", level: -1, quantity: 1 }],  
+  alloyquiver: [{ bank: "items1", level: 5, quantity: 1 }],
+  pinkie: [{ bank: "items1", level: 5, quantity: 1 }],
 
 	
 
