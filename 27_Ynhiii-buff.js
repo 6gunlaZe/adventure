@@ -2492,6 +2492,7 @@ let eTime = 0;
 let checkdef = 0;
 let checkheall = 0;
 let checkluckk = 0;
+const blacklistluck = ["nerfedmummy", "nerfedbat",]; // mảng cần loại
 
 function ChuyendoiITEM() {
 
@@ -2515,10 +2516,11 @@ function ChuyendoiITEM() {
 
     // 👉 cache type
     let nearTypes = new Set();
+	
 
     for (const id in parent.entities) {
         const e = parent.entities[id];
-        if (!e.visible || e.dead || e.type !== "monster") continue;
+        if (!e.visible || e.dead || e.type !== "monster" || blacklistluck.includes(e.mtype) ) continue;
 
         const dx = cx - e.x;
         const dy = cy - e.y;
