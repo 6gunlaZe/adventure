@@ -420,19 +420,27 @@ async function handleHome() {
 	}
 
 
-    if(  parent?.S?.wabbit.live && !character?.s?.easterluck  ) {
+
+
+    if (parent?.S?.wabbit?.live && !character?.s?.easterluck ) {
         let wabbit = parent.S.wabbit;
-        if(wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" }) ) {
-            smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map }).then(() => {
-                let target_monster = get_nearest_monster({ type : "wabbit" });
+        if (wabbit && wabbit.live && !smart.moving && !get_nearest_monster({ type: "wabbit" })   ) {
+            try {
+                await smart_move({ x: wabbit.x, y: wabbit.y, map: wabbit.map });
+                let target_monster = get_nearest_monster({ type: "wabbit" });
                 if (target_monster) {
                     change_target(target_monster);
                 }
-            });
+            } catch (error) {
+                console.log("Không thể di chuyển đến wabbit, sử dụng 'use_town'");
+                await smart_move(destination);
+            }
+            game_log("Đang di chuyển đến wabbit");
         }
-	    return
+        return;
     }
 
+	
 
 
 	
