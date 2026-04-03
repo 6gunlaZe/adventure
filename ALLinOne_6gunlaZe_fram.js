@@ -215,7 +215,7 @@ if (smart.moving) return;
 	    return
     }
 
-    if (parent?.S?.wabbit?.live && !character?.s?.easterluck && 1 == 2 ) {
+    if (parent?.S?.wabbit?.live && !character?.s?.easterluck ) {
         let wabbit = parent.S.wabbit;
         if (wabbit && wabbit.live && !smart.moving) {
             try {
