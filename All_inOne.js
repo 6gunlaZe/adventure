@@ -188,11 +188,11 @@ const curMap = character.map;
 const hasFieldGen = locate_item("fieldgen0") !== -1;
 
 const keyData = [
-    { name: "tomb", count: count_item("tombkey"), action: framTOMBgame, map: "tomb" },
+    { name: "tomb", count: count_item("tombkey1"), action: framTOMBgame, map: "tomb" },
     { name: "spider", count: count_item("spiderkey"), action: spidergame, map: "spider_instance" },
     { 
         name: "frozen", 
-        count: hasFieldGen ? count_item("frozenkey") : 0,  // tạm ngưng xmagex
+        count: hasFieldGen ? count_item("frozenkey1") : 0,  // tạm ngưng xmagex
         action: framXmage, 
         map: "winter_instance" 
     }
@@ -231,7 +231,7 @@ if (currentJob) {
               (h >= 0 && h < 3) || (h >= 6 && h < 9) || (h >= 13 && h < 22)
             ) && character.esize > 3 &&
             (
-                 count_item("tombkey") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey") > 0 &&  locate_item("fieldgen0") !== -1 )
+                 count_item("tombkey1") > 0 || count_item("spiderkey") > 0 || (count_item("frozenkey1") > 0 &&  locate_item("fieldgen0") !== -1 )
             )
         ) {
              framtay = 1;
@@ -3353,7 +3353,7 @@ setInterval(function() {
         return;
     }
 
-    let itemsToExclude = ["fieldgen0","frozenkey","spiderkey","candycanesword","elixirfires","hotchocolate","tombkey","elixirluck","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "jacko","tracker","supermittens","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","tigerstone","rabbitsfoot"];
+    let itemsToExclude = ["fieldgen0","frozenkey","spiderkey","candycanesword","elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome", "jacko","tracker","supermittens","mittens","xgloves","exoarm","hhelmet","fury","wbasher", "basher","bataxe","tigerstone","rabbitsfoot"];
 
     for (let i = 0; i < 42; i++) {
         const item = character.items[i];
