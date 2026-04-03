@@ -2126,7 +2126,7 @@ skill_scare();
 crabxx()	
  franky()	
 icegolem()
-}, 400);
+}, 800);
 ////////////////
 
 
@@ -2280,6 +2280,9 @@ if(parent.S.icegolem)
 
 function franky() {
 if (!parent.S.franky)frankymode = 0;	
+	
+if (parent.S.franky)send_cm(nhanvatphu,"franky"); // gọi nhanh trước khi check
+
 
 if (frankymode == 1 && parent.party_list.includes(nhanvatphu))
 {
