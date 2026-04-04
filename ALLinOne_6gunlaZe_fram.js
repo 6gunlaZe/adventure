@@ -425,7 +425,7 @@ if (leader && homeMob && home != "mummy" ) {
 
 	
 	
-    let stopAttack = (check_quai_A4_stop_attach() == 1 || !leader || (character.map == "winter_instance" && healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
+    let stopAttack = (check_quai_A4_stop_attach() == 1 || ( !leader && homeMob ) || (character.map == "winter_instance" && healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
 	
     try {
 		
