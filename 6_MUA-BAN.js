@@ -214,6 +214,8 @@ var bankItems = {
   lmace: [{ bank: "items1", level: -1, quantity: 1 }],  
   alloyquiver: [{ bank: "items1", level: 5, quantity: 1 }],
   pinkie: [{ bank: "items1", level: 5, quantity: 1 }],
+  ecape: [{ bank: "items1", level: 8, quantity: 1 }],
+  bataxe: [{ bank: "items1", level: 0, quantity: 1 }],
 
 	
 
