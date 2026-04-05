@@ -1717,9 +1717,16 @@ async function handleBossZap() {
 handleBossZap();
 
 
+
+// ===== Thêm đầu file =====
+const danhSachQuaiC = ["sparkbot", "targetron"]; // chỉnh lại theo nhu cầu
+let lastZapC = 0;
+
+
+// ===== ZapCase đã chỉnh =====
 async function ZapCase() {
-    const quaiyeu = ["crabxx","snowman","wabbit"]; /// những quái mà chỉ nhận dame 1
-    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro",]; // Danh sách tự động hút khi đủ có team
+    const quaiyeu = ["crabxx","snowman","wabbit"];
+    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro"];
 
     const delay = 350;
     var haiz = get_player("haiz");
@@ -1728,41 +1735,61 @@ async function ZapCase() {
     try {
         if (!character.rip) {
             
-            // MODULE: Check đủ 3 người (Check haiz và gun trong tầm)
             const isFullTeam = (haiz && gun && distance(character, haiz) < 150 && distance(character, gun) < 250);
 
-            // MODULE: Lọc quái theo ưu tiên
             const entities = Object.values(parent.entities).filter(entity => {
                 if (!entity || entity.type !== "monster" || entity.dead || !entity.visible || !is_in_range(entity, "zapperzap")) return false;
 
-                // 1. Ưu tiên: Zap quái yếu nếu nó đang cắn ai đó (entity.target không null)
+                // 1. Quái yếu đang cắn
                 if (quaiyeu.includes(entity.mtype) && entity.target) return true;
 
-                // 2. Hút quái danh sách A: Chỉ khi ĐỦ 3 người và quái chưa có target
+                // 2. Hút quái A khi đủ team
                 if (isFullTeam && danhSachQuaiA.includes(entity.mtype) && !entity.target) return true;
+
+                // 3. Quái C: MP > 80% + delay 5s
+                if (
+                    danhSachQuaiC.includes(entity.mtype) &&
+                    !entity.target &&
+                    character.mp / character.max_mp > 0.8 &&
+                    Date.now() - lastZapC >= 5000
+                ) return true;
 
                 return false;
             });
 
-           // Sắp xếp ưu tiên con CHƯA có target lên đầu để hút thêm quái mới
-             entities.sort((a, b) => (a.target ? 1 : -1));
+            // ưu tiên quái chưa target
+            entities.sort((a, b) => (a.target ? 1 : -1));
 
-            // Thực hiện Zap (Điều kiện an toàn của bạn)
             if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 ) {
-                if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > 6300 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")) {
+                if (
+                    entities.length > 0 &&
+                    !is_on_cooldown("zapperzap") &&
+                    character.mp > 6300 &&
+                    (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")
+                ) {
                     for (const entity of entities) {
                         if (!is_on_cooldown("zapperzap")) {
                             await use_skill("zapperzap", entity);
-							break; // Dừng vòng for để loop ZapCase check lại danh sách ưu tiên mới
+
+                            // nếu là quái C → set delay 5s
+                            if (danhSachQuaiC.includes(entity.mtype)) {
+                                lastZapC = Date.now();
+                            }
+
+                            break;
                         }
                     }
                 }
             }
         }
     } catch (e) { console.error(e); }
+
     setTimeout(ZapCase, delay);
 }
+
 ZapCase();
+
+
 
 
 
