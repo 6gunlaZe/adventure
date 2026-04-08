@@ -1944,8 +1944,8 @@ var craftList = [
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
     "cshell","shield","gcape","sparkstaff",
     "candy1","candy0","carrot",
-    "dexamulet","fallen","ink","bowofthedead",
-    "pinkie","strring","dexearring",
+    "dexamulet","fallen","ink","bowofthedead"
+    ,"strring","dexearring",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
     "dexbelt","cryptkey","essenceofgreed",
     "sshield","vdagger","vhammer","scythe","bataxe",
