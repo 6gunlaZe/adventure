@@ -775,6 +775,11 @@ equipSet('nogold');
 let goldcheck = 0
 
 
+// reset goldcheck mỗi 5 phút
+setInterval(() => {
+    goldcheck = 0;
+}, 200000);
+
 async function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
