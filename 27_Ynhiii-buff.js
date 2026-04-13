@@ -2056,7 +2056,7 @@ async function equipBatch(data) {
 
         for (let j = 0; j < parent.character.items.length; j++) {
             const item = parent.character.items[j];
-            if (item && item.name === itemName && item.level === level && item.l === l) {
+            if (item && item.name === itemName && item.level === level && (item.l === l || l === undefined) ) {
                 validItems.push({ num: j, slot: slot });
                 break;
             }
