@@ -9,7 +9,7 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = "ghost"
+var crepp = "plantoid"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
@@ -27,18 +27,6 @@ setInterval(() => {
 }, 90000); // mỗi 90 giây
 
 
-// hàm fram lấy lọ thuốc
-setInterval(function () {
-
-	if(crepp != "ghost") return
-	
-    // Lấy quái gần nhất
-    let monster = get_nearest_monster();
-    if (!monster) return;
-
-    heal(get_nearest_monster());
-
-}, 570);
 
 
 	
