@@ -28,8 +28,6 @@ setInterval(() => {
 
 
 // hàm fram lấy lọ thuốc
-let healedMonsters = {};
-
 setInterval(function () {
 
 	if(crepp != "ghost") return
@@ -38,20 +36,9 @@ setInterval(function () {
     let monster = get_nearest_monster();
     if (!monster) return;
 
-    // Nếu đã heal rồi thì bỏ qua
-    if (!healedMonsters[monster.id]) {
-        heal(monster);
-        healedMonsters[monster.id] = true;
-    }
+    heal(get_nearest_monster());
 
-    // Dọn dẹp những quái đã chết hoặc biến mất
-    for (let id in healedMonsters) {
-        if (!parent.entities[id] || parent.entities[id].dead) {
-            delete healedMonsters[id];
-        }
-    }
-
-}, 170);
+}, 570);
 
 
 	
@@ -950,7 +937,7 @@ setInterval(() => {
     if (hutquaibangtay()) return;
     if (tryAttack(currentTarget)) return;
 
-    // buff_khi_ranh();
+     buff_khi_ranh();
 
 }, 200);
 
