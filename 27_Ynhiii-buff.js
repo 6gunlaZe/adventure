@@ -9,7 +9,7 @@ var idmap
 let rateheal
 let delayitem
 let stopgiudo = 0  // 1 = stop
-var crepp = "plantoid"
+var crepp = "ghost"
 let receivedData
 let delayaoe  = Date.now()
 let framfocus = 1  //tập trung quanh 1 nhân vật khi fram
@@ -25,6 +25,33 @@ setInterval(() => {
     parent.socket.emit("send_updates", {});
     game_log("🔁 Force refresh", "#AAAAFF");
 }, 90000); // mỗi 90 giây
+
+
+// hàm fram lấy lọ thuốc
+let healedMonsters = {};
+
+setInterval(function () {
+
+	if(crepp != "ghost") return
+	
+    // Lấy quái gần nhất
+    let monster = get_nearest_monster();
+    if (!monster) return;
+
+    // Nếu đã heal rồi thì bỏ qua
+    if (!healedMonsters[monster.id]) {
+        heal(monster);
+        healedMonsters[monster.id] = true;
+    }
+
+    // Dọn dẹp những quái đã chết hoặc biến mất
+    for (let id in healedMonsters) {
+        if (!parent.entities[id] || parent.entities[id].dead) {
+            delete healedMonsters[id];
+        }
+    }
+
+}, 500);
 
 
 	
