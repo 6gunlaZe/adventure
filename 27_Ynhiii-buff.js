@@ -950,7 +950,7 @@ setInterval(() => {
     if (hutquaibangtay()) return;
     if (tryAttack(currentTarget)) return;
 
-    buff_khi_ranh();
+    // buff_khi_ranh();
 
 }, 200);
 
