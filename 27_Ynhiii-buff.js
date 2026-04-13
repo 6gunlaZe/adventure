@@ -51,7 +51,7 @@ setInterval(function () {
         }
     }
 
-}, 70);
+}, 170);
 
 
 	
