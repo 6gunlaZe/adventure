@@ -1408,6 +1408,15 @@ function tryPartyHeal() {
             return true;
         }
     }
+
+    // MODE 2.6: spam heal khi mana dư mức rat cao
+    if (   (character.max_mp - character.mp) < 600  ) {
+        if (Date.now() > delayParty + 200) {
+            use_skill("partyheal");
+            delayParty = Date.now();
+            return true;
+        }
+    }
 	
 
     // MODE 1: heal thông minh
