@@ -2160,7 +2160,7 @@ const equipmentSets = {
 	   // { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
+       // { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
        // { itemName: "oxhelmet", slot: "helmet", l: "l" },
 
