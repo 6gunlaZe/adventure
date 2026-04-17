@@ -1762,12 +1762,12 @@ async function ZapCase() {
                 // 2. Hút quái A khi đủ team
                 if (isFullTeam && danhSachQuaiA.includes(entity.mtype) && !entity.target) return true;
 
-                // 3. Quái C: MP > 80% + delay 5s
+                // 3. Quái C: MP > 80% + delay 2s
                 if (
                     danhSachQuaiC.includes(entity.mtype) &&
                     !entity.target &&
                     character.mp / character.max_mp > 0.8 &&
-                    Date.now() - lastZapC >= 3000
+                    Date.now() - lastZapC >= 2000
                 ) return true;
 
                 return false;
@@ -1787,7 +1787,7 @@ async function ZapCase() {
                         if (!is_on_cooldown("zapperzap")) {
                             await use_skill("zapperzap", entity);
 
-                            // nếu là quái C → set delay 3s
+                            // nếu là quái C → set delay 2s
                             if (danhSachQuaiC.includes(entity.mtype)) {
                                 lastZapC = Date.now();
                             }
