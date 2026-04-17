@@ -1766,7 +1766,7 @@ async function ZapCase() {
                 if (
                     danhSachQuaiC.includes(entity.mtype) &&
                     !entity.target &&
-                    character.mp / character.max_mp > 0.8 &&
+                    character.mp / character.max_mp > 0.75 &&
                     Date.now() - lastZapC >= 2000
                 ) return true;
 
@@ -1780,7 +1780,7 @@ async function ZapCase() {
                 if (
                     entities.length > 0 &&
                     !is_on_cooldown("zapperzap") &&
-                    character.mp > 6300 &&
+                    character.mp > 6000 &&
                     (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")
                 ) {
                     for (const entity of entities) {
