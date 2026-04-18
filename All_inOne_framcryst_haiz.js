@@ -621,6 +621,11 @@ if (  ( z == 98 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_ki
 let toke2n = key_auto;  // Thay bằng token của bạn
 if (landaucheck == 0)ghichu(character.in, "12 - full",toke2n)
 if (landaucheck == 1)ghichu(character.in, "landau",toke2n)
+
+// Đợi 2 giây 
+setTimeout(() => {
+	use_skill("town");
+}, 2000);
 	
 // Đợi 6 giây 
 setTimeout(() => {
