@@ -933,7 +933,7 @@ const equipmentSets = {
     ],
     shot5: [
         { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-	{ itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+	{ itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
     ],
     stealth: [
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
@@ -948,7 +948,7 @@ const equipmentSets = {
     ],
     dame: [
         { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
-        { itemName: "alloyquiver", slot: "offhand", level: 8, l: "l" },
+        { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
