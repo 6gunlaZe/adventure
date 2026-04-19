@@ -1224,7 +1224,9 @@ function checkbuymp() {
 /////////////////// bom mau
 setInterval(function() {
 
+if (character.c.fishing)return
 
+	
 if (character.hp/character.max_hp< 0.5 && character.mp > 50) {
    use_skill("use_hp");
 	
