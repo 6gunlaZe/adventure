@@ -1309,8 +1309,10 @@ function check_quai_A4_stop_attach() {
     }
 */
 	
-    const ynhi = get_player("Ynhi");
-    const ynhi_far = !ynhi || distance(character, ynhi) > 150;
+const ynhi = get_player("Ynhi");
+const range = ynhi?.range || 180;
+
+const ynhi_far = !ynhi || distance(character, ynhi) > range;
 
     // Rule 1: trong crypt mà xa Ynhi → stop
     if (character.map === "crypt" && ynhi_far) {
