@@ -1308,19 +1308,29 @@ function check_quai_A4_stop_attach() {
         return 0;
     }
 */
-	 if ( character.map == "crypt" && !get_player("Ynhi") ) return 1;
-
 	
-    if (  is_on_cooldown("scare") && character.hp/character.max_hp < 0.7  ) {
+    const ynhi = get_player("Ynhi");
+    const ynhi_far = !ynhi || distance(character, ynhi) > 150;
+
+    // Rule 1: trong crypt mà xa Ynhi → stop
+    if (character.map === "crypt" && ynhi_far) {
         return 1;
-    } else {
-        return 0;
     }
 
+    // Rule 2: máu thấp → stop
+    if (character.hp / character.max_hp < 0.6) {
+        return 1;
+    }
+
+    // Rule 3: scare đang cooldown + xa Ynhi → stop
+    if (is_on_cooldown("scare") && ynhi_far) {
+        return 1;
+    }
+
+    return 0;
 	
 	
 }
-// if (check_viem_xung_quanh() == 1) targetedForMoreThanOneSecond = true;
 
 
 function scare() {
