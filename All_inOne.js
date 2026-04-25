@@ -4104,7 +4104,7 @@ async function checkCrabxx() {
 
 
 setInterval(() => {
-//	checkCrabxx();  // tạm ngưng  
+	checkCrabxx();  // 
 }, 90000); // kiểm tra mỗi 30 giây
 
 
@@ -4143,7 +4143,7 @@ async function checkServersForMonsters(monsters, monsters1, monsters2) {
 if (events || framtay == 1) return;
 
   const BOSS_CONFIG = [
-    { name: "franky", list: monsters, hpMax: 120000000, hpDelta: 4000000, setCantank: true, priority: 3 },
+    { name: "franky", list: monsters, hpMax: 120000000, hpDelta: 1000000, setCantank: true, priority: 3 },
     { name: "icegolem", list: monsters1, hpMax: 14000000, hpDelta: 0, setCantank: false, priority: 2 },
     { name: "dragold", list: monsters2, hpMax: 25700000, hpDelta: 0, setCantank: false, priority: 1 }
   ];
