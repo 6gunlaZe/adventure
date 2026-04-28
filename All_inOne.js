@@ -4104,8 +4104,8 @@ async function checkCrabxx() {
 
 
 setInterval(() => {
-	checkCrabxx();  // 
-}, 90000); // kiểm tra mỗi 30 giây
+ // 	checkCrabxx();  // tạm ngưng
+}, 50000); // kiểm tra mỗi 30 giây
 
 
 
