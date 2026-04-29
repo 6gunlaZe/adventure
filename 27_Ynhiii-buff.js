@@ -2309,7 +2309,7 @@ const equipmentSets = {
     ],
     nogold: [
         { itemName: "mpxgloves", slot: "gloves", level: 4 }, 
-        { itemName: "gcape", slot: "cape", level: 8, l: "l" },  
+        { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
     Unluck: [
