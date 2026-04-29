@@ -1425,14 +1425,14 @@ const equipmentSets = {
     ],
 
     nodeffbrun: [
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },	    
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 
     ],
 	
     nodeff: [
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },	    
       //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
@@ -1453,7 +1453,7 @@ const equipmentSets = {
         { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
 	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
       //  { itemName: "cdragon", slot: "chest", l: "l" },
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
@@ -1465,7 +1465,7 @@ const equipmentSets = {
     ],
 	
     healmax: [
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
 
@@ -1476,7 +1476,7 @@ const equipmentSets = {
 		
     ],
     fram: [
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
       //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
@@ -1497,7 +1497,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -1507,7 +1507,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
@@ -1537,7 +1537,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 7, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
