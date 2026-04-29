@@ -4713,50 +4713,61 @@ function distanceToPoint(x1, y1, x2, y2) {
 //////////////////////////////////
 
 // ===== CONFIG =====
-const KEEP_AMOUNT = 0; // Số lượng món đồ muốn giữ lại trong túi
 const MULE_NAME = "MuaBan";
 
-const ITEM_WHITELIST = [
-    "fieldgen0",
-];
+const ITEM_CONFIG = {
+    fieldgen0: 0,
+    cryptkey: 5,
+};
 
-// ===== SEND FUNCTION =====
+// ===== MAIN =====
 function sendItems(name) {
-    let lootMule = get_player(name);
-    if (!lootMule || distance(character, lootMule) > 250) return;
+    let mule = get_player(name);
+    if (!mule || distance(character, mule) > 250) return;
 
-    // Duyệt qua từng loại item trong danh sách trắng
-    ITEM_WHITELIST.forEach(itemName => {
-        // Lấy tất cả các ô đồ có chứa item này và không bị khóa/seal
-        let itemsOfThisType = character.items
-            .map((item, index) => ({...item, index}))
-            .filter(item => item && item.name === itemName && !item.l && !item.s);
+    let grouped = {};
 
-        // Tính tổng số lượng hiện có
-        let totalCount = itemsOfThisType.reduce((sum, item) => sum + (item.q ?? 1), 0);
+    // ===== SINGLE LOOP (tối ưu CPU) =====
+    for (let i = 0; i < character.items.length; i++) {
+        let item = character.items[i];
+        if (!item || item.l || item.s) continue;
 
-        // Nếu tổng số lượng lớn hơn mức cần giữ lại
-        if (totalCount > KEEP_AMOUNT) {
-            let amountToSend = totalCount - KEEP_AMOUNT;
-            console.log(`Đang gửi ${amountToSend} ${itemName} cho ${name} (Giữ lại ${KEEP_AMOUNT})`);
+        let cfg = ITEM_CONFIG[item.name];
+        if (cfg === undefined) continue;
 
-            // Bắt đầu gửi từ các ô đồ
-            for (let item of itemsOfThisType) {
-                if (amountToSend <= 0) break;
-
-                let qInSlot = item.q ?? 1;
-                let sendQty = Math.min(qInSlot, amountToSend);
-
-                send_item(lootMule, item.index, sendQty);
-                amountToSend -= sendQty;
-            }
+        if (!grouped[item.name]) {
+            grouped[item.name] = {
+                total: 0,
+                slots: []
+            };
         }
-    });
+
+        let qty = item.q ?? 1;
+        grouped[item.name].total += qty;
+        grouped[item.name].slots.push({ index: i, qty });
+    }
+
+    // ===== PROCESS SEND =====
+    for (let itemName in grouped) {
+        let keep = ITEM_CONFIG[itemName];
+        let data = grouped[itemName];
+
+        if (data.total <= keep) continue;
+
+        let toSend = data.total - keep;
+
+        for (let slot of data.slots) {
+            if (toSend <= 0) break;
+
+            let sendQty = Math.min(slot.qty, toSend);
+            send_item(mule, slot.index, sendQty);
+            toSend -= sendQty;
+        }
+    }
 }
 
+// ===== LOOP =====
 setInterval(() => sendItems(MULE_NAME), 10000);
-
-
 
 
 
