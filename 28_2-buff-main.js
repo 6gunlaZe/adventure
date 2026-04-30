@@ -257,7 +257,7 @@ setTimeout(function() {
 
 
 
-changeitem({ slot: "gloves", name : "supermittens", level : 8 });
+changeitem({ slot: "gloves", name : "mpxgloves", level : 4 });
 
 
 
@@ -290,7 +290,7 @@ function shifting() {
 
 async function lootAllChests() {
     if (looting ) return;
-	if ( isEquipping === true || character.slots.gloves?.name != "supermittens" ) return;
+	if ( isEquipping === true || character.slots.gloves?.name != "mpxgloves" ) return;
     looting = true;
 
     try {
@@ -1469,7 +1469,6 @@ const equipmentSets = {
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
 
-     //   { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1481,11 +1480,11 @@ const equipmentSets = {
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "mpxgloves", slot: "gloves", level: 4 },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
-        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1512,7 +1511,6 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
 		
-        { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1530,7 +1528,7 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "mpxgloves", slot: "gloves", level: 4 },
     ],
     Unluck: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
@@ -1541,7 +1539,7 @@ const equipmentSets = {
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8 },
+        { itemName: "mpxgloves", slot: "gloves", level: 4 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
