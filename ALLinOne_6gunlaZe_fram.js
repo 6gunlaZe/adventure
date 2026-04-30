@@ -1710,19 +1710,17 @@ if (targets.length >= 2) {
 // === 5. SOLO FILTER ===
 if (SOLOMODE === 1) {
     const isFullHP = character.hp === character.max_hp;
+    const limit = isFullHP ? 3 : 1;
 
-    if (!isFullHP) {
-        const first = targets[0] ? [targets[0]] : [];
+    const limited = targets.slice(0, limit);
 
-        return {
-            targets: first,
-            inRange: inRange.slice(0, 1),
-            outOfRange: [],
-            characterRange: characterRange.slice(0, 1)
-        };
-    }
-    // full máu → đi tiếp xuống return gốc
-}	
+    return {
+        targets: limited,
+        inRange: limited.filter(m => inRange.includes(m)),
+        outOfRange: limited.filter(m => outOfRange.includes(m)),
+        characterRange: limited.filter(m => characterRange.includes(m))
+    };
+}
 
     return {
         targets: [...inRange, ...outOfRange, ...characterRange],
