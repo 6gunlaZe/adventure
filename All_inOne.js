@@ -4717,7 +4717,7 @@ const MULE_NAME = "MuaBan";
 
 const ITEM_CONFIG = {
     fieldgen0: 0,
-    cryptkey: 5,
+    cryptkey: 50,
 };
 
 // ===== MAIN =====
