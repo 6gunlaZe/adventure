@@ -430,7 +430,7 @@ if (leader && homeMob && home != "mummy" ) {
 
 	
 	
-    let stopAttack = (check_quai_A4_stop_attach() == 1 || ( !leader && homeMob ) || (character.map == "winter_instance" && healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
+    let stopAttack = (check_quai_A4_stop_attach() == 1 || ( !leader && homeMob && SOLOMODE == 0 ) || (character.map == "winter_instance" && healerr && is_disabled(healerr) && xmagefzboss && xmagefzboss.hp < 15000 ) ); // không tấn công khi không có haiz
 	
     try {
 		
@@ -1606,7 +1606,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","iceroamer"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
