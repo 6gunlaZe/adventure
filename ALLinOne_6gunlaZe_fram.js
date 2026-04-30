@@ -113,7 +113,7 @@ const locations = {
   { type: "safe", x: 606, y: 7, map: "winterland" }
     ],
     goo: [
-  { type: "farm", x: -60, y: 751, map: "main" },
+  { type: "farm", x: -19, y: 790, map: "main" },
   { type: "safe", x: 42, y: 807, map: "main" }
     ],
 	
