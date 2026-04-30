@@ -107,14 +107,19 @@ const locations = {
   { type: "farm", x: -400, y: -176, map: "uhills" }, 
   { type: "safe", x: -309, y: -172, map: "uhills" }
     ],
+    iceroamer: [
+  { type: "farm", x: 867, y: -67, map: "winterland" },
+  { type: "safe", x: 606, y: 7, map: "winterland" }
+    ],
 	
 
 };
 
+let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'targetron';
+const home = 'iceroamer';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
@@ -238,7 +243,7 @@ if (smart.moving) return;
 	const tank = get_player("Ynhi");
 
     // Nếu chưa có tank, tank chết, hoặc tank quá xa → rút về điểm an toàn
-    if (!tank || tank.rip || distance(character, tank) > 300) {
+    if ((!tank || tank.rip || distance(character, tank) > 300) && SOLOMODE == 0 ){
         if (!smart.moving) {
             try {
                 await smart_move(safeDestination);
