@@ -1330,7 +1330,7 @@ const ynhi_far = !ynhi || distance(character, ynhi) > range;
     }
 
     // Rule 3: scare đang cooldown + xa Ynhi → stop
-    if (is_on_cooldown("scare") && ynhi_far) {
+    if (is_on_cooldown("scare") && ynhi_far && SOLOMODE == 0 ) {
         return 1;
     }
 
