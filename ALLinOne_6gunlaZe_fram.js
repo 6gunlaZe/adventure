@@ -469,18 +469,18 @@ if (healTargets.length >= 3 && character.mp > mp3 && !is_on_cooldown("3shot")   
 
 	    }else if ((character.hp < 6500 && smart.moving) || character.hp < 4500 ){
               //khi máu yếu và đang di chuyển thông minh không làm gì cả
-	    }else if (monstersInRangeList.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
+	    }else if (monstersInRangeList.length >= 5 && character.mp > mp5 && ((leader && leader.hp > 10000) || SOLOMODE == 1 ) ) {
 		      weaponSet("boom");
               if (codame)  await use_skill("5shot", monstersInRangeList.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > mp5 && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 5 && character.mp > mp5 && ((leader && leader.hp > 10000) || SOLOMODE == 1 ) ) {
                 
 		      weaponSet("shot5");
               if (codame)  await use_skill("5shot", monsterscharacterRange.slice(0, 5));
                 delay = ms_to_next_skill("attack");
 		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > mp3  && leader && leader.hp > 10000) {
+            } else if (monsterscharacterRange.length >= 3 && character.mp > mp3  && ((leader && leader.hp > 10000) || SOLOMODE == 1 ) ) {
 	
 				if (monstersInRangeList.length >= 5)weaponSet("boom");
 					else weaponSet("dead");
