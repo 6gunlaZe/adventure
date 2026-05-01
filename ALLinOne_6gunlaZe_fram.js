@@ -23,7 +23,6 @@ const locations = {
   { type: "safe", x: 6, y: -855, map: "winterland" }
     ],
     cgoo: [{ x: -221, y: -274 }],
-    crab: [{ x: -11840, y: -37 }],
     ent: [{ x: -420, y: -1960 }],
     fireroamer: [
   { type: "farm", x: 114, y: -883, map: "desertland" },
@@ -112,9 +111,9 @@ const locations = {
   { type: "farm", x: 867, y: -67, map: "winterland" },
   { type: "safe", x: 606, y: 7, map: "winterland" }
     ],
-    goo: [
-  { type: "farm", x: -19, y: 790, map: "main" },
-  { type: "safe", x: 42, y: 807, map: "main" }
+    crab: [
+  { type: "farm", x: -1140, y: -57, map: "main" },
+  { type: "safe", x: -1142, y: -60, map: "main" }
     ],
 	
 
@@ -124,7 +123,7 @@ let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'goo';
+const home = 'crab';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
@@ -1611,7 +1610,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","goo"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","crab"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
