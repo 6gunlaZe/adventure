@@ -12,7 +12,7 @@ let datahero
 let keyauto
 let checkback = 0
 let movesuper = 0
-let SieutocRun = 0  // 0 = chạy bình thường, 1 thì tùy chỉnh chỉ đánh Bat và quái a3
+let SieutocRun = 1  // 0 = chạy bình thường, 1 thì tùy chỉnh chỉ đánh Bat và quái a3
 game_log("Game vs 1.1");
 
 smart_move({ map: "cave", x: -194, y: -1281 })
