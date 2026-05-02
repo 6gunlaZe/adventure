@@ -115,7 +115,10 @@ const locations = {
   { type: "farm", x: -1140, y: -57, map: "main" },
   { type: "safe", x: -1142, y: -60, map: "main" }
     ],
-	
+    squig: [
+  { type: "farm", x: -1161, y: 419, map: "main" },
+  { type: "safe", x: -1160, y: 418, map: "main" }
+    ],
 
 };
 
@@ -1610,7 +1613,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","crab"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","squig"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
