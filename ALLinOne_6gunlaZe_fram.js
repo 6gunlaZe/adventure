@@ -107,7 +107,10 @@ const locations = {
   { type: "farm", x: -102, y: 1329, map: "main" },
   { type: "safe", x: -102, y: 1329, map: "main" }
     ],
-
+    snake: [
+  { type: "farm", x: -594, y: -511 , map: "halloween" },
+  { type: "safe", x: -594, y: -511 , map: "halloween" }
+    ],
 	
 };
 
@@ -115,7 +118,7 @@ let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'poisio';
+const home = 'snake';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
@@ -1602,7 +1605,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["poisio","a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad",];
+    const alwaysIncludeMtypes = ["snake","a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","osnake"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
