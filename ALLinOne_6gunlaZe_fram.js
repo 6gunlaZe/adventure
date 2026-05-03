@@ -11,9 +11,6 @@ let crab = 0  ///mode săn crabxx
 let landaucyp = 2; ///mode lần đầu trong crypt
 
 const locations = {
-	armadillo: [{ x: 617, y: 1784 }],
-    bat: [{ x: 1200, y: -782 }],
-    bigbird: [{ x: 1343, y: 248 }],
     bscorpion: [
   { type: "farm", x: -427, y: -1235, map: "desertland" },
   { type: "safe", x: -635, y: -1312, map: "desertland" }
@@ -22,8 +19,6 @@ const locations = {
   { type: "farm", x: -17, y: -1108, map: "winterland" },
   { type: "safe", x: 6, y: -855, map: "winterland" }
     ],
-    cgoo: [{ x: -221, y: -274 }],
-    ent: [{ x: -420, y: -1960 }],
     fireroamer: [
   { type: "farm", x: 114, y: -883, map: "desertland" },
   { type: "safe", x: -30, y: -800, map: "desertland" }
@@ -36,35 +31,22 @@ const locations = {
   { type: "farm", x: -400, y: -1650 , map: "halloween" },
   { type: "safe", x: -284, y: -1528 , map: "halloween" }
     ],
-    gscorpion: [{ x: 390, y: -1422 }],
-    iceroamer: [{ x: 823, y: -45 }],
     mechagnome: [
   { type: "farm", x: 0, y: 0 },
   { type: "safe", x: -152, y: 2 }
     ],
-    mole: [{ x: 4, y: -282 }],  //-282
-    mummy: [{ x: 256, y: -1417 }],
     booboo: [
   { type: "farm", x: 350, y: -675 },
   { type: "safe", x: 158, y: -660 }
     ],
-    oneeye: [{ x: -270, y: 160 }],
-    pinkgoblin: [{ x: 366, y: 377 }],
-    poisio: [{ x: -121, y: 1360 }],
-    prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
-    pppompom: [{ x: 292, y: -189 }],
     plantoid: [
   { type: "farm", x: -686, y: -370, map: "desertland" },
   { type: "safe", x: -600, y: -180, map: "desertland" }
     ],	
-	rat: [{ x: 6, y: 430 }],
-    scorpion: [{ x: -495, y: 685 }],
-    stoneworm: [{ x: 830, y: 7 }],
     spider: [
   { type: "farm", x: 1297, y: -146, map: "main" },
   { type: "safe", x: 1290, y: -80, map: "main" }
     ],
-	squig: [{ x: -1175, y: 422 }],
     wolf: [
   { type: "farm", x: 400, y: -2650, map: "winterland" },
   { type: "safe", x: 400, y: -2450, map: "winterland" }
@@ -73,8 +55,6 @@ const locations = {
   { type: "farm", x: 62, y: -1974, map: "winterland" },
   { type: "safe", x: -2, y: -1799, map: "winterland" }
     ],
-	
-    xscorpion: [{ x: -495, y: 685 }],
     odino: [
   { type: "farm", x: -20, y: 675, map: "mforest" },
   { type: "safe", x: -240, y: 700, map: "mforest" }
@@ -123,14 +103,19 @@ const locations = {
   { type: "farm", x: 1, y: 339, map: "level2s" },
   { type: "safe", x: 1, y: 339, map: "level2s" }
     ],
+    poisio: [
+  { type: "farm", x: 45, y: -1383, map: "main" },
+  { type: "safe", x: 45, y: -1383, map: "main" }
+    ],
 
+	
 };
 
 let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'cgoo';
+const home = 'poisio';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
@@ -1617,7 +1602,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","cgoo"];
+    const alwaysIncludeMtypes = ["a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","poisio"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
