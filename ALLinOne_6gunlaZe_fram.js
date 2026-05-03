@@ -104,8 +104,8 @@ const locations = {
   { type: "safe", x: 1, y: 339, map: "level2s" }
     ],
     poisio: [
-  { type: "farm", x: -45, y: 1383, map: "main" },
-  { type: "safe", x: -45, y: 1383, map: "main" }
+  { type: "farm", x: -102, y: 1329, map: "main" },
+  { type: "safe", x: -102, y: 1329, map: "main" }
     ],
 
 	
