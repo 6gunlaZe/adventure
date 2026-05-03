@@ -120,8 +120,8 @@ const locations = {
   { type: "safe", x: -1160, y: 418, map: "main" }
     ],
     cgoo: [
-  { type: "farm", x: 1, y: 279, map: "level2s" },
-  { type: "safe", x: 1, y: 279, map: "level2s" }
+  { type: "farm", x: 1, y: 339, map: "level2s" },
+  { type: "safe", x: 1, y: 339, map: "level2s" }
     ],
 
 };
