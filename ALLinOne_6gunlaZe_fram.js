@@ -108,8 +108,8 @@ const locations = {
   { type: "safe", x: -102, y: 1329, map: "main" }
     ],
     snake: [
-  { type: "farm", x: -594, y: -511 , map: "halloween" },
-  { type: "safe", x: -594, y: -511 , map: "halloween" }
+  { type: "farm", x: 354, y: -714 , map: "halloween" },
+  { type: "safe", x: 354, y: -714 , map: "halloween" }
     ],
 	
 };
