@@ -1665,8 +1665,20 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
         const dB = Math.hypot(b.x - homeX, b.y - homeY);
         if (dA !== dB) return dA - dB;
 
-        // 5. quái trâu hơn đứng trước khi fram chung,  solo thì ngược lại
-		if (SOLOMODE == 1)return a.hp - b.hp;
+    // 5. quái trâu hơn đứng trước khi fram chung,  solo thì ngược lại
+    if (SOLOMODE == 1) {
+
+    // ưu tiên quái gần character trước
+    const ca = distance(character, a);
+    const cb = distance(character, b);
+
+    if (ca !== cb) return ca - cb;
+
+    // nếu bằng khoảng cách thì mới ưu tiên máu thấp
+    return a.hp - b.hp;
+    }
+
+		
         return b.hp - a.hp;
     });
 
