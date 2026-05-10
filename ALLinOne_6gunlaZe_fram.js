@@ -1660,26 +1660,29 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
         const pB = targetNames.indexOf(b.target);
         if (pA !== pB) return pA - pB;
 
-        // 4. gần home
-        const dA = Math.hypot(a.x - homeX, a.y - homeY);
-        const dB = Math.hypot(b.x - homeX, b.y - homeY);
-        if (dA !== dB) return dA - dB;
+// 4. SOLO MODE
+if (SOLOMODE == 1) {
 
-    // 5. quái trâu hơn đứng trước khi fram chung,  solo thì ngược lại
-    if (SOLOMODE == 1) {
-
-    // ưu tiên quái gần character trước
+    // ưu tiên quái gần character
     const ca = distance(character, a);
     const cb = distance(character, b);
 
     if (ca !== cb) return ca - cb;
 
-    // nếu bằng khoảng cách thì mới ưu tiên máu thấp
+    // gần bằng nhau thì đánh quái ít máu trước
     return a.hp - b.hp;
-    }
+}
+
+// 5. PARTY MODE → gần home
+const dA = Math.hypot(a.x - homeX, a.y - homeY);
+const dB = Math.hypot(b.x - homeX, b.y - homeY);
+
+if (dA !== dB) return dA - dB;
+
+// 6. PARTY MODE → quái trâu trước
+return b.hp - a.hp;
 
 		
-        return b.hp - a.hp;
     });
 
 // === 3. CHÈN QUÁI FINISHER ===
