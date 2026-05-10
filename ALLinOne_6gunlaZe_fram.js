@@ -1715,7 +1715,7 @@ if (targets.length >= 2 && SOLOMODE != 1) {
 // === 5. SOLO FILTER ===
 if (SOLOMODE === 1) {
     const isFullHP = character.hp/character.max_hp > 0.85;
-    const limit = isFullHP ? 5 : 1;
+    const limit = isFullHP ? 3 : 1;
 
     const limited = targets.slice(0, limit);
 
