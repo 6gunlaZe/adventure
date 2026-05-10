@@ -1671,7 +1671,7 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
     });
 
 // === 3. CHÈN QUÁI FINISHER ===
-if (targets.length >= 2) {
+if (targets.length >= 2 && SOLOMODE != 1) {
     const finisherIndex = targets.findIndex(m =>
         m.hp >= 1800 &&
         m.hp <= 7000 &&
