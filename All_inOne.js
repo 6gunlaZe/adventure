@@ -62,7 +62,6 @@ const locations = {
     ],	
     rat: [{ x: 6, y: 430 }],
     scorpion: [{ x: -495, y: 685 }],
-    stoneworm: [{ x: 830, y: 7 }],
     spider: [
   { type: "farm", x: 1290, y: -80, map: "main" },
   { type: "safe", x: 1290, y: -90, map: "main" }
@@ -113,10 +112,14 @@ const locations = {
   { type: "farm", x: -386, y: -147, map: "uhills" }, // x: -386, y: -147   x: -518, y: -270
   { type: "safe", x: -309, y: -172, map: "uhills" }
     ],
+    stoneworm: [
+  { type: "farm", x: 637, y: 127 , map: "spookytown" },
+  { type: "safe", x: 637, y: 127 , map: "spookytown" }
+    ],
 	
 };
 
-const home = 'prat';
+const home = 'stoneworm';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
