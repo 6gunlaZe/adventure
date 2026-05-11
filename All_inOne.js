@@ -113,7 +113,7 @@ const locations = {
   { type: "safe", x: -309, y: -172, map: "uhills" }
     ],
     stoneworm: [
-  { type: "farm", x: 711, y: 118 , map: "spookytown" },
+  { type: "farm", x: 677, y: 132 , map: "spookytown" },
   { type: "safe", x: 637, y: 127 , map: "spookytown" }
     ],
 	
