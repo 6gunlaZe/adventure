@@ -112,7 +112,7 @@ const locations = {
   { type: "safe", x: 354, y: -714 , map: "halloween" }
     ],
     stoneworm: [
-  { type: "farm", x: 769, y: 27 , map: "spookytown" },
+  { type: "farm", x: 908, y: -105 , map: "spookytown" },
   { type: "safe", x: 769, y: 27 , map: "spookytown" }
     ],
 
