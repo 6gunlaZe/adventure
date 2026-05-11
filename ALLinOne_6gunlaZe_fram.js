@@ -1655,14 +1655,14 @@ function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args =
         const bossB = isPriorityMtype(b);
         if (bossA !== bossB) return bossA ? -1 : 1;
 
-// 3. bảo vệ party
+// 3. bảo vệ party, chỉ áp dụng khi không phải trong solo
 const pA = targetNames.indexOf(a.target);
 const pB = targetNames.indexOf(b.target);
 
 const safePA = pA === -1 ? 999 : pA;
 const safePB = pB === -1 ? 999 : pB;
 
-if (safePA !== safePB) return safePA - safePB;
+if (safePA !== safePB && SOLOMODE != 1 ) return safePA - safePB;
 
 // 4. SOLO MODE
 if (SOLOMODE == 1) {
