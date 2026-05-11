@@ -422,7 +422,7 @@ const mapHealBonus =
 
 let X, Y;
 
-if (leader && homeMob && home != "mummy" ) {
+if (leader && homeMob && home != "mummy" && SOLOMODE != 1 ) {
     X = leader.x;
     Y = leader.y;
 } else {
