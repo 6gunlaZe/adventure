@@ -1739,7 +1739,7 @@ function targetLoop() {
 		}
 		
 
-        if (nearest && !is_in_range(nearest)) {
+        if (nearest && !is_in_range(nearest) && nearest.mtype != "stoneworm" ) {
             gobaltaget = nearest;
         }
 
