@@ -1709,7 +1709,7 @@ function targetLoop() {
 
         // 5️⃣ Mob thường
         if (!nearest) {
-            for (const m of ["phoenix111","jr","greenjr","mvampire","snowman","bgoo","rgoo","wabbit"]) {
+            for (const m of ["phoenix111","jr","greenjr","mvampire","snowman","bgoo","rgoo","wabbit","stoneworm"]) {
                 const t = get_nearest_monster({ type: m });
                 if (t) {
                     nearest = t;
