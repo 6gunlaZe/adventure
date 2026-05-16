@@ -2452,9 +2452,9 @@ const equipmentSets = {
     ],
     home: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 11, l: "l" },
 
         { itemName: "strring", slot: "ring1", level: 5, l: "l" },
         { itemName: "strring", slot: "ring2", level: 4, l: "l" },
@@ -2471,7 +2471,7 @@ const equipmentSets = {
         { itemName: "xpants", slot: "pants", level: 8, l: "l" },
 
         { itemName: "strring", slot: "ring1", level: 5, l: "l" },
-        { itemName: "ringsj", slot: "ring2", level: 5, l: "l" },
+        { itemName: "ringsj", slot: "ring2", level: 6, l: "l" },
 		
     ],
     def_physical: [
@@ -2495,9 +2495,9 @@ const equipmentSets = {
     ],
     nodeff: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 11, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
@@ -2542,7 +2542,7 @@ const equipmentSets = {
         { itemName: "orba", slot: "orb", level: 3, l: "l" },
 
         { itemName: "strring", slot: "ring1", level: 5, l: "l" },
-        { itemName: "ringsj", slot: "ring2", level: 5, l: "l" },
+        { itemName: "ringsj", slot: "ring2", level: 6, l: "l" },
 		
     ],
 
