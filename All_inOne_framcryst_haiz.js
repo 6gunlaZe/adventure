@@ -1435,6 +1435,11 @@ function on_party_request(name) {
         if (name == "MuaBan" || name == "nhiY" || name == "Ynhi" || name == "angioseal"  || name == "6gunlaZe"  || name == "haiz1") {
             accept_party_request(name);
         }
+
+    if (name) {
+        accept_party_request(name);
+    }
+	
     }
 
 
