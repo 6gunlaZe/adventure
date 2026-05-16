@@ -2863,6 +2863,10 @@ if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || n
         if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
             accept_party_request(name);
         }	
+
+    if (name) {
+        accept_party_request(name);
+    }
 	
 	
     }
