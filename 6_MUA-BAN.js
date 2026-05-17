@@ -1863,7 +1863,6 @@ var combineWhitelist =
 		orbofdex: 1,
 		orbofint: 1,
 		orba: 2,
-		ringsj: 3,
 
 
 		
