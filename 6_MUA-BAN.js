@@ -27,7 +27,30 @@ var hostname = "haiz"
 
 
 var nhanvatphu = null;   // sẽ tự động cập nhật
+
 const PARTY_EXCLUDE = ["haiz", "Ynhi"];
+
+const ALLOWED_NAMES = [
+    "6gunlaZe",
+    "nhiY",
+    "haiz",
+    "MuaBan",
+    "Ynhi",
+    "LyThanhThu",
+    "haiz1",
+    "kilerr",
+    "kxsights",
+    "angioseal",
+    "tienV",
+    "oppa",
+    "TrieuVan",
+    "KimNhatPhong",
+    "NgoKhong",
+    "IamDrT",
+    "KhuongChieu",
+    "DongNguyet"
+];
+
 function updateNhanVatPhu() {
     if (!parent.party_list || parent.party_list.length === 0) {
         nhanvatphu = null;
@@ -35,8 +58,15 @@ function updateNhanVatPhu() {
     }
 
     for (const name of parent.party_list) {
+
+        // bỏ qua blacklist
         if (PARTY_EXCLUDE.includes(name)) continue;
+
+        // bỏ qua chính mình
         if (name === character.name) continue;
+
+        // chỉ nhận name nằm trong whitelist
+        if (!ALLOWED_NAMES.includes(name)) continue;
 
         nhanvatphu = name;
         return;
@@ -44,6 +74,7 @@ function updateNhanVatPhu() {
 
     nhanvatphu = null;
 }
+
 setInterval(updateNhanVatPhu, 500);
 
 
