@@ -123,7 +123,7 @@ let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'stoneworm';
+const home = 'poisio';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
@@ -1610,7 +1610,7 @@ async function safeawwaitwalkInCircle() {
 
 function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold, args = {}) {
 
-    const alwaysIncludeMtypes = ["stoneworm","a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","osnake"];
+    const alwaysIncludeMtypes = ["poisio","a5","crabx","nerfedmummy","bbpompom","booboo","wabbit","bee","cutebee","crab","grinch","squigtoad","osnake"];
     const topPriorityMtypes = ["a5","crabx"]; //ưu tiên lên trên đầu khi đánh
 	
     // Danh sách quái cần có Ynhi mới dám đánh bbpompom là quái fram yếu nên có trong cả 2 danh sách
