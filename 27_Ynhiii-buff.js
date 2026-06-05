@@ -1611,7 +1611,7 @@ async function handleZap() {
             );
 
             // Step 2: Use zapper skill if conditions are met
-		if (character.targets <= soluongTOIDA && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && gun )
+		if (character.targets <= soluongTOIDA && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && (gun || crepp == "xscorpion" ) )
 		{
             if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > G?.skills?.zapperzap?.mp + 4250 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  ) {
                 for (const entity of entities) {
