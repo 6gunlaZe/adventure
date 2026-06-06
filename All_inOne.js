@@ -122,7 +122,7 @@ const locations = {
 	
 };
 
-const home = 'xscorpion';
+const home = 'odino';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
