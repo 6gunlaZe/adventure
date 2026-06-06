@@ -1110,7 +1110,7 @@ function hutquaibangtay() {
         character.hp / character.max_hp > 0.95 &&
         leader.hp > 12700 &&
         leader.mp > 200 &&
-        target.level < 4    
+        (target.level < 4 || crepp == "odino" )   
 	) 
 	{
         change_target(target);
