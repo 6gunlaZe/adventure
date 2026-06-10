@@ -119,11 +119,11 @@ const locations = {
 	
 };
 
-let SOLOMODE = 1; // BẬT TẮT CHẾ ĐỘ SOLO
+let SOLOMODE = 0; // BẬT TẮT CHẾ ĐỘ SOLO 1 = bật
 
 const f1111 = 'haiz';  ///tank fram check f1 có mới ra chỗ fram 
 
-const home = 'poisio';
+const home = 'odino';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
