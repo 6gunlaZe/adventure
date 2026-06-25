@@ -57,7 +57,7 @@ const locations = {
     ],
     odino: [
   { type: "farm", x: -20, y: 675, map: "mforest" },
-  { type: "safe", x: -240, y: 700, map: "mforest" }
+  { type: "safe", x: -151, y: 717, map: "mforest" }
     ],
     dryad: [
   { type: "farm", x: 270, y: -303, map: "mforest" },
