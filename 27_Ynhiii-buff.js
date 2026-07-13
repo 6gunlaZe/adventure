@@ -1742,7 +1742,7 @@ let lastZapC = 0;
 // ===== ZapCase đã chỉnh =====
 async function ZapCase() {
     const quaiyeu = ["crabxx","snowman","wabbit"];
-    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro","plantoid"];
+    const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro","plantoid","ent"];
 
     const delay = 350;
     var haiz = get_player("haiz");
