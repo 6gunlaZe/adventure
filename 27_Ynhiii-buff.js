@@ -1023,7 +1023,7 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
             let shouldAbsorb = false;
 
             // === Player yếu / quan trọng ===
-            if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu") {
+            if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu" || name === "MuaBan" ) {
                 score += 50;
                 shouldAbsorb = true;
             }
