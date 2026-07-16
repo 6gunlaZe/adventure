@@ -1737,6 +1737,7 @@ handleBossZap();
 // ===== Thêm đầu file =====
 const danhSachQuaiC = ["sparkbot", "targetron"]; // chỉnh lại theo nhu cầu
 let lastZapC = 0;
+let lastEntRequest = 0;
 
 
 // ===== ZapCase đã chỉnh =====
@@ -1779,7 +1780,11 @@ async function ZapCase() {
             entities.sort((a, b) => (a.target ? 1 : -1));
 			
             //logic phụ giửi lệnh dẫn quái ent về đánh
-            if (isFullTeam && character.hp/character.max_hp > 0.75 && entcheck == 0 && character.map == "desertland" && !smart.moving )send_cm("MuaBan","ent");
+            if ( Date.now()-lastEntRequest>180000 && isFullTeam && character.hp/character.max_hp > 0.75 && entcheck == 0 && character.map == "desertland" && !smart.moving )
+			{
+				send_cm("MuaBan","ent");
+                lastEntRequest=Date.now();
+			}
 			//////////////	
 			
             if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 ) {
