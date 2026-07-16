@@ -223,16 +223,8 @@ async function runLure(){
 }
 
 
-function on_cm(name, data) {
-        if ((name === "Ynhi" || name === "haiz") && data === "ent") {
-            runLure();
-        }
-}
-
-
 ///////////////////////////////////////////
 //////////////////////////////////////////
-
 
 
 
