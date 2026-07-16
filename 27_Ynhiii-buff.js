@@ -1780,7 +1780,7 @@ async function ZapCase() {
             entities.sort((a, b) => (a.target ? 1 : -1));
 			
             //logic phụ giửi lệnh dẫn quái ent về đánh
-            if ( Date.now()-lastEntRequest>180000 && isFullTeam && character.hp/character.max_hp > 0.75 && entcheck == 0 && character.map == "desertland" && !smart.moving && crepp == "fireroamer" )
+            if ( Date.now()-lastEntRequest>180000 && isFullTeam && character.hp/character.max_hp > 0.75 && entcheck == 0 && character.map == "desertland" && !smart.moving && crepp == "fireroamer" && character.targets > 6 && !parent.S.franky && !parent.S.crabxx )
 			{
 				send_cm("MuaBan","ent");
                 lastEntRequest=Date.now();
