@@ -700,7 +700,7 @@ function on_cm(name, data) {
             send_cm(hostname, "boss5");
         }
         // --- Logic dẫn quái ent về fram ---
-        if (name === "Ynhi" && data === "ent") {
+        if ((name === "Ynhi" || name === "haiz") && data === "ent") {
             runLure();
         }
 
