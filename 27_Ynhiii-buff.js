@@ -1747,7 +1747,7 @@ async function ZapCase() {
     const delay = 350;
     var haiz = get_player("haiz");
     var gun = getOtherPartyMember();
-
+    let entcheck = 0;
     try {
         if (!character.rip) {
             
@@ -1755,7 +1755,9 @@ async function ZapCase() {
 
             const entities = Object.values(parent.entities).filter(entity => {
                 if (!entity || entity.type !== "monster" || entity.dead || !entity.visible || !is_in_range(entity, "zapperzap")) return false;
-
+				
+                if (entity.mtype == "ent") entcheck = 1;
+					
                 // 1. Quái yếu đang cắn
                 if (quaiyeu.includes(entity.mtype) && entity.target) return true;
 
@@ -1775,7 +1777,11 @@ async function ZapCase() {
 
             // ưu tiên quái chưa target
             entities.sort((a, b) => (a.target ? 1 : -1));
-
+			
+            //logic phụ giửi lệnh dẫn quái ent về đánh
+            if (isFullTeam && character.hp/character.max_hp > 0.75
+			//////////////	
+			
             if (character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 ) {
                 if (
                     entities.length > 0 &&
