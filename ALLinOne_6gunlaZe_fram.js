@@ -1140,7 +1140,7 @@ function getSupershotTarget() {
 	if (!ynhi || distance(character, ynhi) > 150) return null;
 
 	const validNames = ["wolf"];
-	const extraNames = ["bscorpion", "franky"];
+	const extraNames = ["bscorpion1", "franky"];
 
 	let candidates = Object.values(parent.entities).filter(e => {
 		if (e.type !== "monster" || e.dead) return false;
