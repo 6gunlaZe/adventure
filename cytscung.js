@@ -1,1358 +1,2284 @@
-let frankymode = 0
-let lastUpdateTime = performance.now();
-let lastSwapTime = 0;
-const swapCooldown = 500;
-let receivedData
-let evenmuaban
-var idmap
-let cryts = 0  ///mode săn boss ở hầm ngục
-const locations = {
-	armadillo: [{ x: 617, y: 1784 }],
-    bat: [{ x: 1200, y: -782 }],
-    bigbird: [{ x: 1343, y: 248 }],
-    bscorpion: [{ x: -408, y: -1241 }],
-    boar: [{ x: 19, y: -1109 }],
-    cgoo: [{ x: -221, y: -274 }],
-    crab: [{ x: -11840, y: -37 }],
-    ent: [{ x: -420, y: -1960 }],
-    fireroamer: [{ x: 222, y: -827 }],
-    ghost: [{ x: -405, y: -1642 }],
-    gscorpion: [{ x: 390, y: -1422 }],
-    iceroamer: [{ x: 823, y: -45 }],
-    mechagnome: [{ x: 0, y: 0 }],
-    mole: [{ x: 14, y: -1072 }],
-    mummy: [{ x: 256, y: -1417 }],
-    oneeye: [{ x: -270, y: 160 }],
-    pinkgoblin: [{ x: 366, y: 377 }],
-    poisio: [{ x: -121, y: 1360 }],
-    prat: [{ x: -280, y: 552 }], //[{ x: 6, y: 430 }]
-    pppompom: [{ x: 292, y: -189 }],
-    plantoid: [{ x: -780, y: -387 }], // [{ x: -840, y: -340 }]
-    rat: [{ x: 6, y: 430 }],
-    scorpion: [{ x: -495, y: 685 }],
-    stoneworm: [{ x: 830, y: 7 }],
-    spider: [{ x: 1247, y: -91 }],
-    squig: [{ x: -1175, y: 422 }],
-    wolf: [{ x: 433, y: -2745 }],
-    wolfie: [{ x: 113, y: -2014 }],
-    xscorpion: [{ x: -495, y: 685 }]
-};
 
-const home = 'armadillo';
-const mobMap = 'main';
-const destination = {
-    map: mobMap,
-    x: locations[home][0].x,
-    y: locations[home][0].y
-};
-let angle = 0;
-const speed = 3; // normal 2 or .65
-let folowhaizevents = false;
+/// send_mail('Plutus', '10 keys', 'nice', true)
+/// wishlist(23,"fury",2000000000,0,3)
+let urls = [
+    "https://raw.githubusercontent.com/6gunlaZe/adventure/refs/heads/main/6_MUA-BAN.js",
+];
 
+urls.forEach((url) => loadURLs(url, 3)); // Thử tối đa 3 lần
 
+function loadURLs(url, retries = 3) {
+    let attempt = 0;
 
-const boundaryOur = Object.values(G.maps[mobMap].monsters).find(e => e.type === home).boundary;
-const [topLeftX, topLeftY, bottomRightX, bottomRightY] = boundaryOur;
-const centerX = (topLeftX + bottomRightX) / 2;
-const centerY = (topLeftY + bottomRightY) / 2;
+    while (attempt < retries) {
+        try {
+            var ajax = new XMLHttpRequest();
+            ajax.open('GET', url, false); // synchronous
+            ajax.send(null);
 
-let framboss = 0
-let folowhaiz = 0
-let gobaltaget = null;
-
-
-
-
-async function eventer() {
-    const delay = 500;
-    try {
-        if (folowhaizevents) {
-             handlebossPro(evenmuaban)
-	} else if (framboss > 0) {
-
-	} else if (cryts > 0) {
-          cryts()
-        } else if (!get_nearest_monster({ type: home }) || ( character.map == mobMap &&  distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 100 ) ) {
-           handleHome();
-        } else {
-            walkInCircle();
-        }
-    } catch (e) {
-        console.error(e);
-    }
-
-    setTimeout(eventer, delay);
-}
-eventer();
-
-
-
-function handleHome() {
-	var f1 = get_player("haiz"); 
-    if ( f1 && get_nearest_monster({type: "franky"})) {
-	     folowhaizevents = true;
-	    return
-    }
-    if (!smart.moving) {
-        smart_move(destination);
-        game_log(`Moving to ${home}`);
-    }
-}
-
-
-
-
-
-const targetNames = ["Ynhi","haiz", "nhiY"];
-
-// không được để return trong hàm loop
-async function attackLoop() {
-	//if (character.moving)return
-    let delay = null; // Default delay
-    const X = locations[home][0].x; // X coordinate of home location
-    const Y = locations[home][0].y; // Y coordinate of home location
-    const now = performance.now();
-//game_log("m")
-    const rangeThreshold = 50; // phạm vi tấn công boom
-    const leader = get_player("haiz");
-    	
-    try {
-
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
-	    if (tagetskill.length == 1)use_skill("huntersmark", tagetskill);
-	    
-const { targets, inRange: monstersInRangeList , characterRange:  monsterscharacterRange } = getPrioritizedTargets(targetNames, X, Y, rangeThreshold);
-//game_log("monstersInRangeList.length" +monstersInRangeList.length)		
-//game_log("characterRange" +monsterscharacterRange.length)		
-
-            // ưu tiên kill những quái vật đang nhắm vào đồng đội mình hoặc đồng đội mình đang nhắm vào.
-            if (monstersInRangeList.length >= 5 && character.mp > 430 ) {
-                weaponSet("boom");
-                await use_skill("5shot", monstersInRangeList.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 5 && character.mp > 430 ) {
-                weaponSet("dead");
-                await use_skill("5shot", monsterscharacterRange.slice(0, 5));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (monsterscharacterRange.length >= 3 && character.mp > 330 ) {
-                weaponSet("dead");
-                await use_skill("3shot", monsterscharacterRange.slice(0, 3));
-                delay = ms_to_next_skill("attack");
-		    
-            } else if (targets.length > 0 && targets.length < 3 ) {
-                weaponSet("single");
-                await attack(targets[0]);
-                delay = ms_to_next_skill("attack");
-            }else
-	    {
-
-    // Current target and target of leader.
-    var currentTarget = get_targeted_monster();
-    var leaderTarget = get_target_of(leader)
-		    
-    if (leaderTarget && leaderTarget.target ){
-    // Change the target.
-    if (!currentTarget || currentTarget != leaderTarget){ 
-        // Current target is empty or other than the leader's.
-        change_target(leaderTarget);
-        currentTarget = get_targeted_monster();
-    }
-	if( currentTarget && is_in_range(currentTarget))
-	{
-		weaponSet("single");
-                await attack(currentTarget);
-                delay = ms_to_next_skill("attack");
-	}  
-    }
-	    }
-
-	    
-//if (targets.length > 0 || leaderTarget )return không được để return trong hàm loop
-if (targets.length == 0  && !leaderTarget )
-{		
-var targets1 = getBestTargets({ max_range: character.range, type: home, subtype: "frog11", number: 3 }); // Hàm gọi quái vật
-
-let check3shot = 0;
-let check5shot = 0;
-
-// Kiểm tra điều kiện cho "3shot"
-if (targets1.length >= 3 && character.mp > 330 && !is_on_cooldown("3shot")) {
-    check3shot = 1;
-} else {
-    check3shot = 0;
-}
-
-// Kiểm tra điều kiện cho "5shot"
-if (targets1.length >= 5 && character.mp > 430 && !is_on_cooldown("5shot")) {
-    check5shot = 1;
-} else {
-    check5shot = 0;
-}
-
-// Sử dụng kỹ năng "5shot" nếu đủ điều kiện
-if (check5shot === 1) {
-	weaponSet("dead");
-    await use_skill("5shot", targets1);
-	                delay = ms_to_next_skill("attack");
-
-}
-// Sử dụng kỹ năng "3shot" nếu không sử dụng "5shot" 
-else if (check3shot === 1 ) {
-	weaponSet("dead");
-    await use_skill("3shot", targets1);
-	                delay = ms_to_next_skill("attack");
-}
-else if (targets1.length < 3 && targets1.length > 0 )
-{
-	weaponSet("dead");
-                await attack(targets1[0]);
-                delay = ms_to_next_skill("attack");
-}
-
-	    
-}
-	    
-	    
-
-    } catch (e) {
-        //console.error(e);
-    }
-    setTimeout(attackLoop, delay);
-}
-
-attackLoop();
-
-
-
-
-
-
-
-//l: "l"  == L lock
-let isEquipping = false; // Flag kiểm soát trạng thái
-
-async function equipBatch(data) {
-    if (isEquipping) {
-        game_log("equipBatch is already running. Skipping.");
-        return;
-    }
-    isEquipping = true; // Đánh dấu đang chạy
-
-    if (!Array.isArray(data)) {
-        game_log("Can't equipBatch non-array");
-        isEquipping = false;
-        return handleEquipBatchError("Invalid input: not an array");
-    }
-    if (data.length > 15) {
-        game_log("Can't equipBatch more than 15 items");
-        isEquipping = false;
-        return handleEquipBatchError("Too many items");
-    }
-
-    let validItems = [];
-
-    for (let i = 0; i < data.length; i++) {
-        let itemName = data[i].itemName;
-        let slot = data[i].slot;
-        let level = data[i].level;
-        let l = data[i].l;
-
-        if (!itemName) {
-            game_log("Item name not provided. Skipping.");
-            continue;
-        }
-
-        let found = false;
-        if (parent.character.slots[slot]) {
-            let slotItem = parent.character.items[parent.character.slots[slot]];
-            if (slotItem && slotItem.name === itemName && slotItem.level === level && slotItem.l === l) {
-                found = true;
+            if (ajax.status === 200) {
+                var script = ajax.responseText || ajax.response;
+                eval.apply(window, [script]);
+                console.log(`✅ Script loaded successfully from ${url} (attempt ${attempt + 1})`);
+                return true;
+            } else {
+                console.warn(`❌ Attempt ${attempt + 1} failed with status: ${ajax.status}`);
             }
+        } catch (e) {
+            console.warn(`⚠️ Attempt ${attempt + 1} threw an error: ${e}`);
         }
 
-        if (found) {
-            game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
-            continue;
-        }
+        attempt++;
+    }
 
-        for (let j = 0; j < parent.character.items.length; j++) {
-            const item = parent.character.items[j];
-            if (item && item.name === itemName && item.level === level && item.l === l) {
-                validItems.push({ num: j, slot: slot });
-                break;
+    console.error(`🚫 Failed to load script from ${url} after ${retries} attempts. Logging out...`);
+    parent.api_call("disconnect_character", {name: "MuaBan"});
+    return false;
+}
+
+
+///////////////////
+
+const autoSellToMerchItems = [
+    { name: "tombkey", price: 2300000 },
+    { name: "frozenkey", price: 5900000 },
+    { name: "spikedhelmet", price: 14900000 },
+
+];
+
+const validBuyers = ["Plutus", "CrownMerch"]; // <-- Thêm nhiều người mua ở đây
+
+function MerchantSellTo() {
+    for (let i in parent.entities) {
+        const entity = parent.entities[i];
+
+        // Chỉ làm việc với merchant hợp lệ trong danh sách
+        if (entity.ctype === "merchant" && validBuyers.includes(entity.name)) {
+            const otherPlayer = entity;
+
+            let tradeSlots = [];
+            if (otherPlayer.slots) {
+                tradeSlots = Object.keys(otherPlayer.slots).filter(tradeSlot =>
+                    tradeSlot.includes("trade")
+                );
             }
-        }
-    }
 
-    if (validItems.length === 0) {
-        isEquipping = false;
-        return; // Không có vật phẩm hợp lệ
-    }
-
-    try {
-        parent.socket.emit("equip_batch", validItems);
-        await parent.push_deferred("equip_batch");
-    } catch (error) {
-        console.error("Error in equipBatch:", error);
-        handleEquipBatchError("Failed to equip items");
-    }
-
-    isEquipping = false; // Reset flag khi hoàn tất
-}
-
-
-
-
-
-const equipmentSets = {
-
-    dps: [
-        { itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
-        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
-        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
-        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
-    ],
-    luck: [
-        { itemName: "mearring", slot: "earring2", level: 0, l: "u" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" },
-        { itemName: "ringhs", slot: "ring2", level: 0, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l" }
-    ],
-    single: [
-        { itemName: "firebow", slot: "mainhand", level: 9, l: "l" },
-        //{ itemName: "coat", slot: "chest", level: 12, l: "s" }
-    ],
-    dead: [
-        { itemName: "crossbow", slot: "mainhand", level: 8, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
-    ],
-    boom: [
-        { itemName: "pouchbow", slot: "mainhand", level: 9, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
-    ],
-    heal: [
-        { itemName: "cupid", slot: "mainhand", level: 8, l: "l" },
-    ],
-    xp: [
-        { itemName: "talkingskull", slot: "orb", level: 4, l: "l" },
-        //{ itemName: "tshirt3", slot: "chest", level: 7, l: "l" },
-    ],
-    stealth: [
-        { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
-    ],
-    cape: [
-        { itemName: "gcape", slot: "cape", level: 9, l: "l" },
-    ],
-    orb: [
-        { itemName: "orbofdex", slot: "orb", level: 5, l: "l" },
-        //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
-    ],
-    mana: [
-        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
-    ],
-    stat: [
-        { itemName: "coat", slot: "chest", level: 12, l: "s" }
-    ],
-};
-
-
-
-
-
-
-
-function equipSet(setName) {
-    const set = equipmentSets[setName];
-    if (set) {
-        equipBatch(set);
-    } else {
-        console.error(`Set "${setName}" not found.`);
-    }
-}
-
-
-
-//////////////////////////////////////////////////////////////////
-let lastSwitchTime = 0; // Timestamp of the last switch
-const switchCooldown = 750; // Cooldown period in milliseconds (0.75 seconds)
-
-// Function to check if the cooldown period has passed
-function CD() {
-    return performance.now() - lastSwitchTime > switchCooldown;
-}
-
-// Utility function to handle cooldown check and equipment switch
-const weaponSet = (set) => {
-    if (CD()) {
-        equipSet(set);
-        lastSwitchTime = performance.now();
-    }
-};
-
-
-
-
-// Helper function to handle errors
-function handleEquipBatchError(message) {
-    game_log(message);
-    // You may decide to implement a delay or other error handling mechanism here
-    return Promise.reject({ reason: "invalid", message });
-}
-
-
-
-function ms_to_next_skill(skill) {
-    const next_skill = parent.next_skill[skill]
-    if (next_skill == undefined) return 0
-    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) - character.ping;
-    return ms < 0 ? 0 : ms;
-}
-
-
-
-
-
-function get_nearest_monster_v2(args = {}) {
-    let min_d = 999999, target = null;
-    let optimal_hp = args.check_max_hp ? 0 : 999999999; // Set initial optimal HP based on whether we're checking for max or min HP
-
-    for (let id in parent.entities) {
-        let current = parent.entities[id];
-        if (current.type != "monster" || !current.visible || current.dead) continue;
-        if (args.type && current.mtype != args.type) continue;
-        if (args.min_level !== undefined && current.level < args.min_level) continue;
-        if (args.max_level !== undefined && current.level > args.max_level) continue;
-        if (args.target && !args.target.includes(current.target)) continue;
-        if (args.no_target && current.target && current.target != character.name) continue;
-
-        // Status effects (debuffs/buffs) check
-        if (args.statusEffects && !args.statusEffects.every(effect => current.s[effect])) continue;
-
-        // Min/max XP check
-        if (args.min_xp !== undefined && current.xp < args.min_xp) continue;
-        if (args.max_xp !== undefined && current.xp > args.max_xp) continue;
-
-        // Attack power limit
-        if (args.max_att !== undefined && current.attack > args.max_att) continue;
-
-        // Path check
-        if (args.path_check && !can_move_to(current)) continue;
-
-        // Distance calculation
-        let c_dist = args.point_for_distance_check
-            ? Math.hypot(args.point_for_distance_check[0] - current.x, args.point_for_distance_check[1] - current.y)
-            : parent.distance(character, current);
-
-        if (args.max_distance !== undefined && c_dist > args.max_distance) continue;
-
-        // Generalized HP check (min or max)
-        if (args.check_min_hp || args.check_max_hp) {
-            let c_hp = current.hp;
-            if ((args.check_min_hp && c_hp < optimal_hp) || (args.check_max_hp && c_hp > optimal_hp)) {
-                optimal_hp = c_hp;
-                target = current;
-            }
-            continue;
-        }
-
-        // If no specific HP check, choose the closest monster
-        if (c_dist < min_d) {
-            min_d = c_dist;
-            target = current;
-        }
-    }
-    return target;
-}
-
-
-
-
-
-function scare() {
-    const slot = character.items.findIndex(i => i && i.name === "jacko");
-    const orb = character.items.findIndex(i => !i);
-    let mobnum = 0;
-    let targetedForMoreThanOneSecond = false;
-
-    for (id in parent.entities) {
-        var current = parent.entities[id];
-        if (character.hp <5000 && current.target == character.name) {
-            mobnum++;
-            targetedForMoreThanOneSecond = true;
-        }
-    }
-
-    if (mobnum > 0 && targetedForMoreThanOneSecond) {
-        if (!is_on_cooldown("scare")) {
-            setTimeout(() => {
-                if (!is_on_cooldown("scare")) {
-                    equip(slot);
-                    use("scare");
-                    equip(slot);
+            tradeSlots.forEach(tradeSlot => {
+                if (otherPlayer.slots[tradeSlot]) {
+                    autoSellToMerchItems.forEach(item => {
+                        if (
+                            otherPlayer.slots[tradeSlot].name === item.name &&
+                            otherPlayer.slots[tradeSlot].price >= item.price &&
+                            locate_item(item.name) !== -1
+                        ) {
+                            const mySlotNumber = locate_item(item.name);
+                            if (mySlotNumber !== -1) {
+                                trade_sell(otherPlayer, tradeSlot);
+                                log("Sold " + item.name + " to merchant: " + otherPlayer.name);
+                            }
+                        }
+                    });
                 }
-            }, 1000); // 1000 milliseconds = 1 second
+            });
         }
     }
 }
-setInterval(scare, 1500);  // Gọi lại scare() sau mỗi 1.5 giây
+
+const intervalId = setInterval(() => {
+    let canRun = false;
+
+    for (const name of validBuyers) {
+        if (get_player(name)) {
+            canRun = true;
+            break;
+        }
+    }
+
+    if (canRun) {
+        MerchantSellTo();
+    } else {
+        console.log("No valid buyers nearby.");
+    }
+}, 3000);
 
 
 
-function use_hp_or_mp1()
-{
-	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
-	var used=true;
-	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
+//////////////////////
+
+//const item1cap = "orba"
+const item1cap = "orba"
+
+var craftList112 = [item1cap,"carrotsword","pouchbow","basketofeggs"]; // tạm ngưng fireblade firestars pouchbow basketofeggs
+
+setInterval(function()
+			{
+if (character.esize > 6)tryCraft();
 	
-	
-if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
-
-	
-	else used=false;
-	if(used)
-		last_potion=new Date();
-	else
-		return resolving_promise({reason:"full",success:false,used:false});
-}
-
-setInterval(function() {
-use_hp_or_mp1()
-}, 200);
-
-
-
-
-
-
-
-function get_nearest_monster1(args) ///săn boss franky, ice
-{
- let checkkill = 0
-	var heal = get_player("Ynhi"); 
-	var min_d=character.range + 225,target=null;
-  if(!heal) return target;
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-
-	    checkkill = get_nearest_playerV_noMyparty(current)
-	    if (checkkill < 2)continue
+    sellExtraItems([
+        ["bow", 1],
+        ["blade", 1],
+        ["snowball", 1],
+        ["smoke", 1],
+        ["throwingstars", 5],
 
 
 		
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
-}
+    ]);
 
+if (character.esize > 6){
+	
+buyMissingItemsByLevel([
+	["scroll0", 5000, 3000],
+    ["scroll1", 150, 200],
+    ["cscroll0",50, 300],
+    ["cscroll1",50, 300], 
+    ["scroll2",25, 60], 
+   // ["coat", 13, 1, 6],      // chỉ đếm pants +0 → +6
 
+]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-function get_nearest_playerV_noMyparty(currentTarget)
+}	
+	
+    let [scrollSlot, scroll] = find_item(i => i.name === "mpot1");
+	
+if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
 {
-	// Just as an example
-	var min_d=2000,target=0;
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY"   ) continue;
-		if(current.target == currentTarget.id) target +=1;
-	}
-	game_log("so luong nguoi choi kill boss la: " + target)
-	return target;
+    if (!scroll && character.map != "winter_instance") { parent.buy("mpot1",100); }	
 }
-
-
-
-
-async function moveLoop() {
-    let delay = 1000;
-    try {
-
-if (!character.party)send_party_request("haiz");
-
-if(gobaltaget && !is_in_range(gobaltaget) && distance(character, gobaltaget)  < 300 && !smart.moving && gobaltaget.visible && !gobaltaget.dead)
-{
-		move(
-			character.x+(gobaltaget.x-character.x)/2,
-			character.y+(gobaltaget.y-character.y)/2
-			);
-		// Walk half the distance
-}
-else
-{
-	gobaltaget = null;
-}
-
-	    
-if (!folowhaizevents){
-
-
+	let [scrollSlot1, scroll1] = find_item(i => i.name === "hpot1");
+    if (!scroll1 && character.hp/character.max_hp< 0.5 ) { parent.buy("hpot1",1); }	
 	
 	
+}, 500);
 
 
+function sellExtraItems(itemPairs) {
+    for (let p = 0; p < itemPairs.length; p++) {
+        let name = itemPairs[p][0];
+        let keep = itemPairs[p][1];
 
-
-
-	    
-}
-    } catch (e) {
-        console.error(e);
-    }
-    setTimeout(moveLoop, delay);
-}
-
-moveLoop();
-
-
-
-async function walkInCircle() {
-    if (!smart.moving) {
-        const center = locations[home][0];
-        const radius = 45;
-
-        // Calculate time elapsed since the last update
-        const currentTime = performance.now();
-        const deltaTime = currentTime - lastUpdateTime;
-        lastUpdateTime = currentTime;
-
-        // Calculate the new angle based on elapsed time and speed
-        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
-        angle = (angle + deltaAngle) % (2 * Math.PI);
-
-        const offsetX = Math.cos(angle) * radius;
-        const offsetY = Math.sin(angle) * radius;
-        const targetX = center.x + offsetX;
-        const targetY = center.y + offsetY;
-
-        if (!character.moving && lastUpdateTime > 100) {
-            await xmove(targetX, targetY);
-        }
-
-        // drawCirclesAndLines(center, radius);
-    }
-}
-
-
-
-
-function getPrioritizedTargets(targetNames, homeX, homeY, rangeThreshold) {
-    // Step 1: Filter and sort all valid monster targets
-    const targets = Object.values(parent.entities)
-        .filter(monster =>
-            monster.type === "monster" && // Ensure the entity is a monster
-            monster.target &&             // Có một mục tiêu đang bị tấn công
-            targetNames.includes(monster.target) // Mục tiêu của quái vật phải nằm trong danh sách ưu tiên targetNames (các nhân vật của party mình)
-        )
-        .sort((a, b) => {
-            // Step 2: Sort monsters by priority, distance, and HP Quái vật nào gần hơn sẽ được ưu tiên hơn. mục tiêu có lượng HP cao hơn sẽ được ưu tiên hơn
-            const priorityA = targetNames.indexOf(a.target);
-            const priorityB = targetNames.indexOf(b.target);
-
-            if (priorityA !== priorityB) return priorityA - priorityB;
-
-            const distA = Math.hypot(a.x - homeX, a.y - homeY);
-            const distB = Math.hypot(b.x - homeX, b.y - homeY);
-
-            if (distA !== distB) return distA - distB;
-
-            return b.hp - a.hp; // Highest HP last
-        });
-
-    // Step 3: Separate monsters into in-range and out-of-range categories
-    const inRange = [];
-    const outOfRange = [];
-    const characterRange = [];
-    
- for (const monster of targets) {
-    const distance = Math.hypot(monster.x - homeX, monster.y - homeY);
-
-    // Kiểm tra nếu quái vật trong phạm vi rangeThreshold
-    if (distance <= rangeThreshold) { 
-        inRange.push(monster);  // Thêm quái vật vào inRange
-        characterRange.push(monster);  // Thêm quái vật vào characterRange
-    } else if (distance <= character.range) {
-        // Nếu quái vật trong phạm vi của nhân vật nhưng ngoài phạm vi rangeThreshold
-        characterRange.push(monster);  // Thêm quái vật vào characterRange
-    } else {
-        // Nếu quái vật ngoài phạm vi của cả rangeThreshold và character.range
-        outOfRange.push(monster);  // Thêm quái vật vào outOfRange
-    }
-}
-
-
-    // Step 4: Return the combined targets and categorized lists
-    return {
-        targets: [...inRange, ...outOfRange, ...characterRange],  // Combined list with inRange prioritized
-        inRange,
-        outOfRange,
-	characterRange
-    };
-}
-
-
-let delayboss = Date.now()
-function cryts() {
-if (character.map != "cave" && character.map != "crypt" )smart_move({ map: "cave", x: -194, y: -1281 })	
-if (character.map == "cave" && distance(character, {x: -194, y: -1281}) > 30)smart_move({ map: "cave", x: -194, y: -1281 })
-
-    var currentTarget = get_targeted_monster();
-	if(!currentTarget)
-	{
-		var currentTarget1 = get_nearest_monster_solobosskill() 
-		if(currentTarget1) {
-
- if (is_in_range(currentTarget1, "supershot") && character.mp > 500 && currentTarget1.hp >10000  && !is_on_cooldown("supershot") && Date.now() > delayboss + 100000 ) {
-                delayboss = Date.now()
-                use_skill("supershot", currentTarget1);
-                game_log("Supershot!!");
-           }			
-		}
-	}
-
-
-	
-	
-}
-
-
-
-function handlebossPro(eventType) {
-
-if (eventType === undefined || eventType === null) {
-	folowhaizevents = false;
-  return; // Trả về nếu eventType không xác định
-}
-
-// Tiếp tục xử lý nếu eventType có giá trị hợp lệ
-
-if (eventType == "goobrawl" || eventType ==  "crabxx"|| eventType == "franky" )
-{
-    if (parent?.S?.[eventType]) {
-	    
-       if (eventType == "goobrawl"){
-	        if (character.map !== "goobrawl")parent.socket.emit('join', { name: eventType });
-      }
-
-	    
-
-
-let leader = get_player("haiz");
-if (leader && distance(character, leader) < 50) return
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
-
-	
-    // Đảm bảo rằng nhận được thông tin hợp lệ
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
-
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
-        } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-            if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
-                xmove(targetX, targetY);
+        // Tìm tất cả slot item level 0 hoặc không có level
+        let slots = [];
+        for (let i = 0; i < character.items.length; i++) {
+            let it = character.items[i];
+            if (it && it.name === name && (!it.level || it.level === 0)) {
+                slots.push(i);
             }
         }
-    }	    
 
-
-}
-	else 
-    {
-	    folowhaizevents = false;
-    }
-}
-	else{
-
-
-if (parent?.S?.[eventType]?.live) {
-
-
-let leader = get_player("haiz");
-if (leader && distance(character, leader) < 50) return
-    // Nếu nhân vật đang di chuyển, không làm gì thêm
-    if (smart.moving) return;
-
-	
-    // Đảm bảo rằng nhận được thông tin hợp lệ
-    if (receivedData && typeof receivedData === 'object' && receivedData.message === "location") {
-        const targetMap = receivedData.map;  // Lấy tên bản đồ
-        const targetX = receivedData.x;      // Lấy tọa độ X
-        const targetY = receivedData.y;      // Lấy tọa độ Y
-
-        // Kiểm tra nếu nhân vật đang ở đúng bản đồ
-        if (character.map !== targetMap && character.map != "crypt") {
-            // Nếu không ở bản đồ mục tiêu, di chuyển đến bản đồ đó
-            smart_move({
-                map: targetMap,
-                x: targetX,
-                y: targetY
-            });
-        } else {
-            // Nếu đã ở đúng bản đồ, kiểm tra xem đã đến tọa độ mục tiêu chưa
-            if (character.x !== targetX || character.y !== targetY) {
-                // Nếu chưa đến, di chuyển đến tọa độ mới
-                xmove(targetX, targetY);
+        // Nếu số slot > keep → bán phần dư
+        if (slots.length > keep) {
+            for (let s = keep; s < slots.length; s++) {
+                let idx = slots[s];
+                let it = character.items[idx];
+                let qty = it.q || 1;
+                sell(idx, qty);
+                return; // mỗi tick chỉ bán 1 stack
             }
         }
-    }	    
-
-
-}
-	else 
-    {
-	    folowhaizevents = false;
-    }
-
-	
-	}
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-setTimeout(function() {
-    if (get_nearest_monster({type: "phoenix"})  && distance(character, {x: 500, y: 1800}) < 350  && character.map == "main" ) {
- send_cm("MuaBan", "phoenix1");
-    }
-}, 10000);  // 10000 mili giây = 10 giây
-
-
-
-
-setInterval(function() {
-
- if (character.rip) { ///////auto hoi sinh
-    respawn();
-  }
-
-}, 420000);
-
-
-function on_magiport(name){
-    if(name == "nhiY"){
-        accept_magiport(name);
     }
 }
 
 
-/////////////
-function on_cm(name, data) {
-	
+function buyMissingItemsByLevel(itemPairs) {
+    // An toàn 1: inventory gần đầy → không mua
+    if (character.esize < 1) return;
 
-	if(name == "MuaBan")
-	{
-           if(data)
-	   {
-		   evenmuaban = data
-		   folowhaizevents = true;
-	   }
-	}
+    // An toàn 2: không đủ gold → không mua
+    if (character.gold < 1000000) return;
 
-if (name == "haiz") {
-    // Kiểm tra nếu data là "goo" và character.map không phải là "crypt"
-    if (data == "goo" && character.map != "crypt") {
-        enter("crypt", idmap);
-    }
-    else if (data == "crypt") {
-        cryts = 1;
-    }    
-    // Kiểm tra nếu data không phải là "goo" và là một chuỗi (string)
-    else if (data != "goo" && data != "crypt" && typeof data === 'string') {
-        idmap = data;
-    }
-    // Kiểm tra nếu data không phải là "goo" (không cần kiểm tra kiểu dữ liệu ở đây)
-    else if (data != "goo" && data != "crypt") {
-        receivedData = data;
-    }
-}
+    for (let p = 0; p < itemPairs.length; p++) {
+        let name    = itemPairs[p][0];
+        let keep    = itemPairs[p][1];
+        let buyQty  = itemPairs[p][2] || 1;
+        let maxLvl  = itemPairs[p][3]; // có thể undefined
 
-	
-}
+        let count = 0;
 
+        for (let i = 0; i < character.items.length; i++) {
+            let it = character.items[i];
+            if (!it || it.name !== name) continue;
 
+            // Nếu có giới hạn level → chỉ tính level ≤ maxLvl
+            if (maxLvl !== undefined) {
+                let lvl = it.level || 0;
+                if (lvl > maxLvl) continue;
+            }
 
+            count += it.q || 1;
+        }
 
-	
-////////
-
-
-setInterval(function() {
-    let lootMule = get_player("MuaBan");
-
-		 //giui vang when in range
-    var merch = get_player("MuaBan"); // replace this with your merchants name
-    if (merch && distance(character, merch) <= 400) {
-        send_gold(merch,character.gold)
-    }
-	//
-	
-    if (lootMule == null) {
-        //game_log("Nobody to transfer to");
-        loot_transfer = false;
-        return;
-    }
-
-
-    let itemsToExclude = ["hpot0", "mpot0","hpot1", "mpot1", "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1", "luckbooster", "goldbooster", "xpbooster", "pumpkinspice", "xptome","cscroll0", "cscroll1", "scroll0", "scroll1", "tracker","crossbow","jacko", "pouchbow","orbg"];
-	
-	
-    for (let i = 0; i < 42; i++) {
-        const item = character.items[i];
-
-        // Check if the item is not in the exclusion list, and doesn't have locked or sealed properties
-        if (item && !itemsToExclude.includes(item.name) && !item.l && !item.s) {
-            send_item(lootMule.id, i, item.q ?? 1);
+        // Thiếu → mua bù
+        if (count < keep) {
+            buy(name, buyQty);
+            return; // mỗi tick chỉ mua 1 loại
         }
     }
+}
+
+
+
+
+
+////ban cac mon do chi dinh bando
+setInterval(function() {
+	
+// if( character.map == "main" && distance(character, {x: 62, y: 681}) < 450 )auto_craft("basketofeggs"); //auto ép đồ
+	
+if(1>0) for(const slot in character.items)
+	{
+var item = character.items[slot];
+      // Kiểm tra level của item, nếu không có level thì mặc định là 0
+      const level = item?.level ? item.level : 0;		
+if (level >= 1)continue
+		
+if(["gphelmet","bwing","xmace","whiteegg","shoes1111","gloves","vitscroll","gslime","jacko","vitring","intring","intring","dexring","intearring","strearring","stramulet","smoke111","talkingskull","sstinger","elixirstr2","elixirstr1","elixirstr0","elixirdex2","elixirdex1","elixirdex0","elixirint2","elixirint1","elixirint0","elixirvit2","elixirvit1","elixirvit0","pclaw","carrotsword","snowball111","blade1111","svenom","wbasher","danhsachphahuyyyyyyyyyyyyyyyyyyyyyyyyy","rfangs","t2bow","hammer","basher","frankypants","seashell","pumpkinspice","eslippers","ecape11","lantern","pinkie","helmet","shoes",
+            "glolipop","spear","dagger","helmet1","gloves1","coat1","shoes1","vboots","tombkey",
+            "hhelmet","hboots","epyjamas","carrotsword1111","ringsj",
+            "eears","harmor","hgloves","mittens1111","daggerofthedead11111",
+            "staffofthedead","firestaff","swordofthedead","maceofthedead","pmaceofthedead",
+            "pmace","fireblade1111","hpants","rapier","slimestaff","cclaw","pouchbow111","cape","oozingterror","harbringer","gbow","broom","sweaterhs","pants1","mittens","vgloves","fieldgen0","throwingstars","cupid","firecrackers","elixirpnres","wattire","wcap","wbreeches","wgloves","wshoes","tshirt2","tshirt0","tshirt1","tshirt3","t2quiver","horsecapeg","spikedhelmet","lspores","essenceofether","bandages","ectoplasm","bunnyelixir"].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+	}
+
 }, 1000);
 //////
 
 
+//// PHA HỦY ĐỂ CÓ ITEM +13
 
-setInterval(function() {
-	
+function auto_destroy_low_level_items() {
+    for (const slot in character.items) {
+        let item = character.items[slot];
+        if (!item) continue;
 
-		if(character.esize < 7)
-	{
-		send_cm("MuaBan", "full");
-		game_log("lay do !!!!!!");
-	}
+        // Lấy level của item (mặc định = 0 nếu không có)
+        const level = item.level ?? 0;
 
+        // Nếu item có level >= 1 thì bỏ qua
+        if (level >= 1) continue;
 
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
+        // Danh sách item cần phá
+        const destroyList = [
+            "khongphahuynua"
+        ];
 
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluongmp);
-
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						game_log("so luong  la "+soluonghp);
-
-            }				
-			}
-	/////////		
-	
-	if( (soluonghp < 7000 ) )
-	{
-		send_cm("MuaBan", "hp");
-		game_log("re filll !!!!!!");
-	}
-		if( ( soluongmp < 7000) )
-	{
-		send_cm("MuaBan", "mp");
-		game_log("re filll !!!!!!");
-	}
-/////////////		
-
-	
-
-	
-}, 40000); 
-
-
-
-
-////////////////////////////////////////////////////////
-setInterval(function() {
-looting()	
-}, 4000);
-function looting() {
-	    let chests = get_chests();
-    let chestIds = Object.keys(chests);
-    if (chestIds.length > 20) {
-	  shift(0, 'goldbooster');   
-        for (let id of chestIds) {
-            loot(id);   
-	    }
+        // Nếu item nằm trong danh sách thì phá
+        if (destroyList.includes(item.name)) {
+            destroy(slot);
+        }
     }
-    setTimeout(shifting, 550);
-
-}
-function shifting() {
-    shift(0, 'xpbooster');
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-function get_nearest_monster_solobosskill(args) ///mod
-{
-	//args:
-	// max_att - max attack
-	// min_xp - min XP
-	// target: Only return monsters that target this "name" or player object
-	// no_target: Only pick monsters that don't have any target
-	// path_check: Checks if the character can move to the target
-	// type: Type of the monsters, for example "goo", can be referenced from `show_json(G.monsters)` [08/02/17]
-	var min_d=450 ,target=null;
-        var bossarmy=[ "a2" , "a3", "a7", "vbat"]; 
-	if(!args) args={};
-	if(args && args.target && args.target.name) args.target=args.target.name;
-	if(args && args.type=="monster") game_log("get_nearest_monster: you used monster.type, which is always 'monster', use monster.mtype instead");
-	if(args && args.mtype) game_log("get_nearest_monster: you used 'mtype', you should use 'type'");
-
-	for(id in parent.entities)
-	{
-		var current=parent.entities[id];
-		if ( (bossarmy.indexOf(current.mtype) == -1)   ) continue
-		if(current.type!="monster" || !current.visible || current.dead) continue;
-		if(args.type && current.mtype!=args.type) continue;
-		if(args.min_xp && current.xp<args.min_xp) continue;
-		if(args.max_att && current.attack>args.max_att) continue;
-		if(args.target && current.target!=args.target) continue;
-		if(args.no_target && current.target && current.target!=character.name) continue;
-		if(args.NO_target && current.target) continue;
-		if(args.path_check && !can_move_to(current)) continue;
-		var c_dist=parent.distance(character,current);
-		if(c_dist<min_d) min_d=c_dist,target=current; //lua chon quai vat gan nhat
-	}
-	return target;
-}
+// Gọi hàm liên tục mỗi 300ms
+setInterval(auto_destroy_low_level_items, 1000);
 
 
-///////
-function getBestTargets(options = {}) {
-    const entities = []
-	     let number = 0
 
-     var army=[options.subtype, options.type, "aaa", "bbb", "cccc"];  
-  
 
-    for (const id in parent.entities) {
-        const entity = parent.entities[id]
-        if (entity.type !== "monster") continue
-        if (entity.dead || !entity.visible) continue
+// Tự động đổi các món đồ
+setInterval(() => {
+    if (character.q.exchange) return;
+    if (character.esize < 5) return;
 
- if (options.max_range && distance(character, entity) > options.max_range) continue
+    // Danh sách item và số lượng yêu cầu tối thiểu để exchange
+    const itemRequirements = {
+        "gem0": 1,
+        "gem1": 1,
+        "candy0": 1,
+        "candy1": 1,
+        "mistletoe": 1,
+        "xbox": 1,
+        "ornament": 20,
+        "candycane": 1,		
+        "basketofeggs": 1,    
+        "candypop": 10,      
+        "armorbox": 1,
+        "weaponbox": 1,
+        "leather": 40,
+        "goldenegg": 1,
+		"seashell": 20,
+		"brownenvelope": 1,
+		"troll": 1,
 		
-if (options.subtype && options.type && (army.indexOf(entity.mtype) == -1)   ) continue
-if (!options.subtype && options.type &&entity.mtype != options.type   ) continue
+    };
+
+    const itemsToCheck = Object.keys(itemRequirements);
+    let first_index = -1;
+
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
+        if (!item || !itemsToCheck.includes(item.name)) continue;
+
+        const requiredAmount = itemRequirements[item.name] || 1;
+
+        if (item.q >= requiredAmount) {
 			
-
-if (options.maxHP && entity.max_hp > options.maxHP) continue
-if (options.HP && entity.hp > options.HP) continue
-	    if (options.HPmin && entity.hp < options.HPmin) continue
- 		if (options.target && entity.target != options.target) continue
-		if (options.havetarget && !entity.target ) continue
-		if (options.Nohavetarget && entity.target ) continue
-		if (options.fire && entity.s.burned  ) continue
-	        if (options.cus && !entity.s["cursed"]  ) continue
-	    	if (options.NoMark && entity.s.marked ) continue
-		if (options.targetNO && entity.target == options.targetNO) continue     
- 		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
-	//  if(army.indexOf(entity.mtype) == -1) continue
-		///check list khong co se tra ve -1
-      //  !target2.s.marked 
-		
-		
-		if ( options.number &&   (number+1) > options.number ) return entities;
-		/// lon hon so luong thi bo qua
-			number = 1 + number
-        entities.push(entity)
+	// Dùng kỹ năng tăng tốc
+	if (can_use("massexchangepp") && !character.s.massproductionpp)
+		use_skill("massexchangepp");
+	else if (can_use("massexchange") && !character.s.massproduction)
+		use_skill("massexchange");
+			
+            exchange(i);
+            break;
+        } else if (first_index === -1) {
+            first_index = i;
+        } else {
+            swap(first_index, i);
+            break;
+        }
     }
+}, 1000);
 
 
-    // We will return all entities, so that this function can be used with skills that target multiple entities in the future
-    return entities
+
+
+function elixirUsage() {
+    try {
+        let requiredElixir =  "bunnyelixir11"
+        // Use the required elixir if it's not currently equipped
+            let item = locate_item(requiredElixir);
+            if (item>=0) {
+                use(item);
+            }
+ 
+
+    } catch (e) {
+        console.error("Error in elixirUsage function:", e);
+    }
 }
-////////////////////////////////////////////////////
-/////////////////////////////////////////
+
+// Run elixirUsage every 50 seconds
+setInterval(elixirUsage, 10000);
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Extra range to add to a monster's attack range to give more wiggle room
-const rangeBuffer = 125;
-
-// How far away we want to consider monsters
-const calcRadius = 300;
-
-// Types of monsters we want to avoid
-const avoidTypes = ["bossname"];
-
-const avoidPlayers = false; // Set to false to not avoid players at all
-const playerBuffer = 0; // Additional range around players
-const avoidPlayersWhitelist = []; // Players to avoid differently
-const avoidPlayersWhitelistRange = 30; // Set to null to not avoid whitelisted players
-const playerRangeOverride = 3; // Overrides how far to avoid, set to null to use player range
-const playerAvoidIgnoreClasses = ["merchant"]; // Classes we don't want to avoid
-
-// Tracking when we send movements to avoid flooding the socket
-let lastMove;
-
-// Whether we want to draw the various calculations visually
-const drawDebug = false;
 
 
-function avoidance() {
-    if (drawDebug) {
-        clear_drawings();
+
+
+
+
+
+
+
+
+// 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
+var upgradeGroups = {
+	group_basic: [ // đồ phổ thông
+		{ levels: [0,1,2,3,4], scroll: 0, offering: 0 },
+		{ levels: [5,6],     scroll: 1, offering: 0 },
+		{ levels: [7],     scroll: 2, offering: 0 },
+		{ levels: [8],       scroll: 2, offering: 1 }
+	],
+	group_basic00: [ // đồ rác
+		{ levels: [1,2,3,4], scroll: 0, offering: 0 },
+		{ levels: [5,6,7],     scroll: 1, offering: 0 },
+		{ levels: [8],       scroll: 2, offering: 0 }
+	],
+	group_basic01: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6,], scroll: 1, offering: 0 },
+	//	{ levels: [7],     scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 1 }
+	//	{ levels: [9],       scroll: 2, offering: 2 }
+
+	],
+	group_basic02: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6], scroll: 1, offering: 0 },
+		{ levels: [7],     scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 2 }
+	],
+
+	group_basic03: [ // đồ rác
+		{ levels: [0,1,2,3], scroll: 0, offering: 0 },
+		{ levels: [4,5,6,7],     scroll: 1, offering: 0 },
+		{ levels: [8],       scroll: 2, offering: 1 }
+	],	
+	
+	group_basic04: [ // đồ rác
+		{ levels: [0,1,2,3,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],     scroll: 2, offering: 0 },
+		{ levels: [7],       scroll: 2, offering: 1 }
+	],	
+	
+	group_basic05: [ // đồ rác
+		{ levels: [0,1,2,3], scroll: 0, offering: 0 },
+		{ levels: [4,5,6],     scroll: 1, offering: 0 },
+		{ levels: [7,8],       scroll: 2, offering: 1 }
+	],	
+	
+	group_basic06: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6], scroll: 0, offering: 0 },
+	//	{ levels: [7,8],     scroll: 1, offering: 0 },
+	//	{ levels: [9],       scroll: 2, offering: 1 }
+	],
+	
+	group_basic07: [ // đồ rác
+		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [3,4,5,6],     scroll: 1, offering: 0 },
+//		{ levels: [7],       scroll: 1, offering: 1 },
+//		{ levels: [8],       scroll: 2, offering: 1 },
+//		{ levels: [9],       scroll: 2, offering: 2 },
+	],	
+
+	group_basic08: [ // đồ rác
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5],     scroll: 2, offering: 0 },
+		{ levels: [6],     scroll: 2, offering: 1 },
+		{ levels: [7],       scroll: 2, offering: 1 }
+	//	{ levels: [8],       scroll: 2, offering: 2 }
+	],
+	
+	group_weapon: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5],     scroll: 2, offering: 0 },
+		{ levels: [6],       scroll: 2, offering: 1 }
+	],
+
+	group_weapon1: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+		{ levels: [4,5,6],     scroll: 2, offering: 0 },
+	//	{ levels: [7,8],       scroll: 2, offering: 1 }
+	],
+
+	group_weapon2: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //36% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //46% //26%
+	],
+
+	group_weapon3: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 },
+	//	{ levels: [4,], scroll: 2, offering: 0 }, //58
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //43% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //48% //27%
+	],
+
+	group_weapon4: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,], scroll: 1, offering: 0 },
+		{ levels: [2,], scroll: 2, offering: 0 },
+		{ levels: [3,4,], scroll: 2, offering: 1 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //45%
+	//	{ levels: [6,7],       scroll: 2, offering: 2 } // 48% //28%
+	//	{ levels: [8],       scroll: 3, offering: 2 }   //18%
+	],
+	
+	group_weapon5: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 }, 
+		{ levels: [4],  scroll: 2, offering: 1 },  
+		{ levels: [5],  scroll: 2, offering: 1 }, // 66 
+	//	{ levels: [6],  scroll: 2, offering: 1 }, // 28
+	//	{ levels: [7,8],  scroll: 2, offering: 2 },  28 13
+	//	{ levels: [9],  scroll: 3, offering: 2 },  5.4
+
+	],
+	group_rare1: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
+		// { levels: [8], scroll: 2, offering: 1 },
+	],
+	
+	group_rare2: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2,3,4,], scroll: 1, offering: 0 },
+		{ levels: [5,], scroll: 2, offering: 0 },
+		{ levels: [6,], scroll: 2, offering: 1 },
+
+		// { levels: [8], scroll: 2, offering: 1 },
+	],	
+	
+	
+	
+	group_rare: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2], scroll: 2, offering: 0 },
+		{ levels: [3], scroll: 2, offering: 1 },
+	],
+	group_vip: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0], scroll: 2, offering: 0 },
+		{ levels: [1,2,3], scroll: 2, offering: 1 },
+	],
+	group_vip1: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0], scroll: 2, offering: 0 },
+		{ levels: [1,2,3], scroll: 2, offering: 1 },
+	],	
+	group_vip2: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1], scroll: 2, offering: 0 },
+		{ levels: [2,3], scroll: 2, offering: 1 },
+	],	
+	
+	group_Supervip: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2], scroll: 2, offering: 1 },
+	],
+	
+};
+
+// 2️⃣ Gán item vào nhóm
+var upgradeWhitelistVIPP = {
+	group_basic: ["ololipop"],
+	group_basic00: ["cclaw"],
+	group_basic01: ["firebow","fireblade"],	
+	group_basic02: ["gcape","eslippers11","ecape"],	
+	group_basic03: ["mittens111","shield",],	
+	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead","tshirt4"],
+	group_basic05: ["wingedboots","sshield"],	
+	group_basic06: ["pants","coat","blade"],
+	group_basic07: ["pouchbow"],	
+	group_basic08: ["ecape11"],	
+	group_weapon: ["bowofthedead","crossbow","oozingterror11111"],
+	group_weapon1: ["firestars"],
+	group_weapon2: ["spikedhelmet11"],
+	group_weapon3: ["bcape"],
+	group_weapon4: ["alloyquiver111"],
+	group_weapon5: ["bataxe"],
+
+	group_rare1: ["handofmidas","hdagger","xboots","xgloves",],
+	group_rare2: ["sparkstaff",],
+	group_rare: ["xarmor","xpants","t3bow","lmace"],
+	group_vip: ["vattire","vstaff"],
+	group_vip1: ["starkillers1111","vhammer","vdagger","xhelmet"],
+	group_vip2: ["supermittens",],
+	group_Supervip: ["fury",],
+
+	
+
+};
+
+
+
+
+
+/////////
+
+    let fastModeUntil = 0;
+
+
+setInterval(function() {
+	if(parent != null && parent.socket != null &&  character.esize < 22)
+	{
+		
+		if  ( Date.now() > fastModeUntil )	upgradeVIP();
+		compound_itemsVIP()
+	}
+
+}, 1700);
+
+
+function upgradeVIP() {
+	let candidates = [];
+	
+	            if (character.q?.upgrade)return
+	
+
+	for (let i = 0; i < character.items.length; i++) {
+		let c = character.items[i];
+		if (!c) continue;
+		
+			// 🔒 LOẠI ITEM HIẾM (shiny, gleaming, ...)
+	    if (c.p1111) continue;
+
+		// Tìm nhóm phù hợp
+		let group = Object.keys(upgradeWhitelistVIPP).find(groupName =>
+			upgradeWhitelistVIPP[groupName].includes(c.name)
+		);
+		if (!group) continue;
+
+		let rules = upgradeGroups[group];
+		let rule = rules.find(r => r.levels.includes(c.level));
+		if (!rule) continue;
+
+		candidates.push({
+			slot: i,
+			item: c,
+			group,
+			rule
+		});
+	}
+
+	if (candidates.length === 0) return;
+
+	// 🔽 Chọn item có level thấp nhất
+	let target = candidates.reduce((a, b) => (a.item.level < b.item.level ? a : b));
+
+	let rule = target.rule;
+	let scrollname   = ["scroll0", "scroll1", "scroll2"][rule.scroll];
+	let offeringname = ["0_La_Khong_dung", "offeringp", "offering"][rule.offering];
+
+	let [scroll_slot, scroll] = find_item(i => i.name == scrollname);
+	let [offering_slot, offering] = find_item(i => i.name == offeringname) || [null, null];
+
+	if (!scroll) { parent.buy(scrollname); return; }
+	
+//Nếu rule.offering = 0 → bỏ qua luôn bước kiểm tra offering.
+// Nếu rule.offering = 1 hoặc 2 mà không có offering trong túi → dừng không nâng, tránh lỗi.
+	if (rule.offering > 0 && ( !offering_slot || offering_slot < 0 )  ) return;
+
+	// Dùng kỹ năng tăng tốc
+	if (can_use("massproductionpp") && !character.s.massproductionpp)
+		use_skill("massproductionpp");
+	else if (can_use("massproduction") && !character.s.massproduction)
+		use_skill("massproduction");
+
+	parent.socket.emit('upgrade', {
+		item_num: target.slot,
+		scroll_num: scroll_slot,
+		offering_num: offering_slot,
+		clevel: target.item.level
+	});
+
+	game_log(`🔨 Upgrading ${target.item.name}+${target.item.level} [${target.group}] using ${scrollname}${rule.offering>0 ? " + "+offeringname : ""}`);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const compoundGroups = {
+    jewelry: [
+        { levels: [0], scroll: 2, offering: 0 },
+        { levels: [1,2],     scroll: 2, offering: 1 },
+    ],
+    jewelry1: [
+        { levels: [0], scroll: 1, offering: 0 },
+        { levels: [1,],     scroll: 1, offering: 1 },
+    ],
+
+    jewelry2: [
+        { levels: [2], scroll: 1, offering: 1 },
+       // { levels: [1,2],     scroll: 2, offering: 1 },
+    ],	
+    jewelry3: [
+        { levels: [3,4], scroll: 1, offering: 1 },
+       // { levels: [1,2],     scroll: 2, offering: 1 },
+    ],	
+    jewelry4: [
+        { levels: [0], scroll: 2, offering: 1 },
+       // { levels: [1,2],     scroll: 2, offering: 1 },
+    ],
+	
+    accessories: [
+        { levels: [0,1], scroll: 1, offering: 0 },
+    ],
+    accessories1: [
+        { levels: [0,], scroll: 1, offering: 0 },
+        { levels: [1,2], scroll: 1, offering: 1 },
+    ],
+    rac: [
+        { levels: [0,], scroll: 1, offering: 0 },
+        { levels: [1,2], scroll: 1, offering: 0 },
+    ],
+	
+	
+
+};
+
+const compoundWhitelistVIPP = {
+    jewelry: ["lantern"],
+    jewelry1: ["wbookhs"],
+    jewelry2: ["cearring","cring"],
+    jewelry3: ["strbelt","intbelt","dexbelt","ringsj"],
+    jewelry4: ["rabbitsfoot"],
+    accessories: ["spookyamulet"],
+    accessories1: ["orbofstr","orbofdex"],
+    rac: ["orbofvit","orbofint"],
+
+};
+
+
+
+
+
+function compound_itemsVIP() {
+    let candidates = [];
+
+    // 🔍 Quét toàn bộ túi
+    for (let i = 0; i < character.items.length; i++) {
+        let item = character.items[i];
+        if (!item) continue;
+
+        // Tìm nhóm phù hợp
+        let groupName = Object.keys(compoundWhitelistVIPP).find(g =>
+            compoundWhitelistVIPP[g].includes(item.name)
+        );
+        if (!groupName) continue;
+
+        // Lấy rule theo nhóm
+        let rules = compoundGroups[groupName];
+        let rule = rules.find(r => r.levels.includes(item.level));
+        if (!rule) continue;
+
+        // Gom các item cùng tên + cùng cấp
+        let sameItems = character.items
+            .map((it, idx) => ({ it, idx }))
+            .filter(x => x.it && x.it.name === item.name && x.it.level === item.level);
+
+        // Phải đủ >=3 item mới ghép được
+        if (sameItems.length >= 3) {
+            candidates.push({
+                name: item.name,
+                groupName,
+                rule,
+                items: sameItems.slice(0, 3) // Lấy 3 item đầu
+            });
+        }
     }
 
-    // Try to avoid monsters
-    const avoiding = avoidMobs();
+    if (candidates.length === 0) return;
 
-    if (!avoiding) {
-        if ((!lastMove || new Date() - lastMove > 100)  && cryts > 0) {
-		let host = get_player("haiz")
-           if(host)xmove(host.real_x, host.real_y); // Move to current position (no goal used)
-            lastMove = new Date();
+    // 🔽 Ưu tiên ghép item có cấp thấp nhất (tăng đều)
+    let target = candidates.reduce((a, b) =>
+        a.items[0].it.level < b.items[0].it.level ? a : b
+    );
+
+    let { rule } = target;
+    let scrollName   = ["cscroll0", "cscroll1", "cscroll2"][rule.scroll];
+    let offeringName = rule.offering > 0 ? ["offeringp", "offering"][rule.offering - 1] : null;
+
+    let [scrollSlot, scroll] = find_item(i => i.name === scrollName);
+    if (!scroll) { parent.buy(scrollName); return; }
+
+    // 🛑 Nếu rule yêu cầu offering mà không có → dừng an toàn
+    let offeringSlot = null;
+    if (offeringName) {
+        [offeringSlot] = find_item(i => i.name === offeringName) || [null];
+        if (!offeringSlot || offeringSlot < 0   ) return;
+    }
+
+    // 💨 Dùng kỹ năng tăng tốc
+    if (can_use("massproductionpp") && !character.s.massproductionpp)
+        use_skill("massproductionpp");
+    else if (can_use("massproduction") && !character.s.massproduction)
+        use_skill("massproduction");
+
+   // 🎯 Lấy 3 slot cần ghép
+    let slots = target.items.map(x => x.idx);
+    let clevel = target.items[0].it.level;
+
+    // ⚒️ Thực hiện ghép (đúng cấu trúc gốc của game)
+    parent.socket.emit("compound", {
+        items: [slots[0], slots[1], slots[2]],  // 3 slot index
+        scroll_num: scrollSlot,                 // slot chứa scroll
+        offering_num: offeringSlot,             // slot chứa offering (có thể null)
+        clevel: clevel                          // cấp hiện tại của item
+    });
+
+    game_log(`💎 Compounding ${target.name}+${target.items[0].it.level} [${target.groupName}] using ${scrollName}${offeringName ? " + " + offeringName : ""}`);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////
+
+function tryCraft()
+{
+	//Iterate over everything we've configured to auto craft.
+	for(var index in craftList112)
+	{
+		//What's the name of the item we want to craft?
+		var craftName = craftList112[index];
+		
+		//Grab the crafting recipe.
+		var craftDef = parent.G.craft[craftName];
+		
+		var cost = craftDef.cost;
+		
+		//Did we find a recipe?
+		if(craftDef != null)
+		{
+			//Yeah? Do we have enough to pay for the recipe?
+			if(cost < character.gold)
+			{
+				//Variable to track how many items we're missing from the recipe.
+				var missing = 0;
+				
+				//Variable to hold the inventory slots of items that belong to the recipe.
+				var craftSlots = [];
+				
+				//Variable to hold the item names of things we're missing from the recipe.
+				var buyableMissing = [];
+				
+				//Iterate over every item in the recipe to check if we have it.
+				for(var itemIndex in craftDef.items)
+				{
+					//Grab the item from the recipe, it'll say what and how many.
+					var itemDef = craftDef.items[itemIndex];
+					
+					//What is the name of the item in the recipe?
+					var itemName = itemDef[1];
+					
+					//How many of the item do we need.
+					var itemQuantity = itemDef[0];
+					
+					//Grab information on the item we need.
+					var item = parent.G.items[itemName];
+					
+					var level = null;
+					
+					//Is this item upgradeable?
+					if(item.scroll == true)
+					{
+						//As of now we need level 0 items.
+						//May need to change later.
+						level = 0;
+					}
+					
+					//Try to find the index of the item in our inventory
+					var itemSearch = scanInventoryForItemIndex(itemName, level);
+					
+					//Do we have the item needed to craft?
+					if(itemSearch == null)
+					{
+						//Mark that we're missing an item.
+						missing++;
+						
+						//No? Then check to see if we can buy one.
+						var basics = parent.G.npcs["basics"];
+						
+						if(basics.items.includes(itemName))
+						{
+							//Do we have enough to complete the crafting with the cost of the item included?
+							cost += item.g;
+							
+							if(craftDef.cost < character.gold)
+							{
+								//Yeah? Mark it as something to buy.
+								buyableMissing.push(itemName);
+							}
+							else
+							{
+								//Not enough gold to craft, clear the list of things to buy and stop.
+								buyableMissing = [];
+								break;
+							}
+						}
+					}
+					else
+					{
+						//Do we have the amount of the item that is required by the recipe?
+						var invItem = character.items[itemSearch];
+						
+						if(invItem.q >= itemQuantity || itemQuantity == 1)
+						{
+							//Yeah? Then we'll mark it for use.
+							craftSlots.push(itemSearch);
+						}
+						else
+						{
+							missing++;
+						}
+					}
+				}
+				
+				//Are we missing anything?
+				if(missing == 0)
+				{
+					//Craft it!
+					var craftArray = [];
+					
+					for(id in craftSlots)
+					{
+						craftArray.push([id, craftSlots[id]]);
+					}
+					
+					parent.socket.emit("craft", {
+            			items: craftArray
+					});
+					break;
+				}
+				else
+				{
+					//Try to buy whatever we're missing.
+					if(buyableMissing.length == missing)
+					{
+						for(var idBuy in buyableMissing)
+						{
+							//Buy an item we're missing, and break execution so that we can control how fast requests are sent to the server.
+							var buyName = buyableMissing[idBuy];
+							
+							buy(buyName);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+function scanInventoryForItemIndex(name, maxLevel)
+{
+	//Iterate over every slot in our inventory.
+	for(var i = 0; i <= 41; i++)
+	{
+		var curSlot = character.items[i];
+		
+		//Does the item name match?
+		if(curSlot != null && curSlot.name == name)
+		{
+			//Does the level match?
+			if(maxLevel == null || curSlot.level <= maxLevel)
+			{
+				//Return the inventory slot #.
+				return i
+			}
+		}
+	}
+}
+
+
+
+
+function scanItemIndex(name, maxLevel)
+{
+	//Iterate over every slot in our inventory.
+	for(var i = 0; i <= 41; i++)
+	{
+		var curSlot = character.items[i];
+		
+		//Does the item name match?
+		if(curSlot != null && curSlot.name == name)
+		{
+			//Does the level match?
+			if(curSlot.level == maxLevel)
+			{
+				//Return the inventory slot #.
+				return i
+			}
+		}
+	}
+}
+
+
+
+
+
+
+/////////////////////////////////////////////////////////
+
+
+function has_high_level_item(name, min_level=1) {
+    for (let i = 0; i < character.items.length; i++) {
+        const item = character.items[i];
+        if (item && item.name === name) {
+            const level = item.level ? item.level : 0;
+            if (level >= min_level) {
+                return true; // đã có item đạt level yêu cầu
+            }
+        }
+    }
+    return false;
+}
+
+
+
+let destroyIndex = 0; // chỉ số coat sẽ phá (xoay vòng)
+
+function destroy_one_coat_lv0() {
+    // Lấy danh sách slot chứa coat lv0
+    let slots = [];
+    for (const slot in character.items) {
+        let item = character.items[slot];
+        if (item && item.name === "coat" && (item.level ?? 0) === 0) {
+            slots.push(parseInt(slot));
+        }
+    }
+
+    if (slots.length < 3 && character.esize > 4) return; // chỉ phá khi có ít nhất 6 coat lv0
+
+    // Sắp xếp slot tăng dần
+    slots.sort((a, b) => a - b);
+
+    // Nếu destroyIndex vượt quá danh sách, quay lại đầu
+    if (destroyIndex >= slots.length) {
+        destroyIndex = 0;
+    }
+
+    // Lấy slot theo round-robin
+    let slotToDestroy = slots[destroyIndex];
+
+    // Tăng chỉ số cho lần kế tiếp
+    destroyIndex++;
+
+    // Xác minh và phá
+    let item = character.items[slotToDestroy];
+    if (item && item.name === "coat" && (item.level ?? 0) === 0) {
+		  // game_log("🗑️ Xóa coat ở slot " + slotToDestroy);
+        destroy(slotToDestroy);
+    }
+}
+
+
+function auto_buy_coat() {
+    // Nếu đã có coat >= 1 thì ngưng
+	
+    if (is_blacklisted_present()) {
+        // game_log("🚫 Có người cấm trong map, dừng auto!");
+        return;
+    }
+	
+	
+    if (has_high_level_item("coat", 1)) return;
+
+    if (character.gold < 100000000 || character.map == "bank") return;
+
+    // Gọi hàm phá coat lv0 (chỉ phá 1 cái mỗi vòng lặp)
+    destroy_one_coat_lv0();
+
+    // Luôn giữ cho trong túi có 2 coat để ép
+    let coatCount = character.items.filter(i => i && i.name === "coat").length;
+    if (coatCount < 5 && character.esize > 5) {
+        buy("coat");
+    }
+}
+
+
+
+
+function sell_coat_below100() {
+    // Nếu đã có coat >= 1 thì ngưng
+	
+    if (is_blacklisted_present()) {
+        // game_log("🚫 Có người cấm trong map, dừng auto!");
+        return;
+    }
+	
+	
+    if (has_high_level_item("coat", 1)) return;
+
+    if (character.gold > 100000000 || character.map == "bank") return;
+
+    // Gọi hàm phá coat lv0 (chỉ phá 1 cái mỗi vòng lặp)
+    for (const slot in character.items) {
+        let item = character.items[slot];
+        if (!item) continue;
+
+        // Lấy level của item (mặc định = 0 nếu không có)
+        const level = item.level ?? 0;
+
+        // Nếu item có level >= 1 thì bỏ qua
+        if (level >= 1) continue;
+
+        // Danh sách item cần phá
+        const destroyList = [
+           "coat"
+        ];
+
+        // Nếu item nằm trong danh sách thì phá
+        if (destroyList.includes(item.name)) {
+            destroy(slot);
         }
     }
 
 }
-setInterval(avoidance, 50);
 
-function avoidMobs() {
-    let maxWeight = -Infinity;
-    let maxWeightAngle = 0;
 
-    const monstersInRadius = getMonstersInRadius();
-    const avoidRanges = getAnglesToAvoid(monstersInRadius);
-    const inAttackRange = isInAttackRange(monstersInRadius);
+// tạm ngưng mua và phá hủy item
+// Lặp 0.5 giây
+// setInterval(auto_buy_coat, 420);
+// Lặp 0.5 giây
+// setInterval(sell_coat_below100, 12000);
 
-    // If we are in attack range or need to avoid monsters, find the safest direction to move
-    if (inAttackRange || (!can_move_to(character.real_x, character.real_y))) {
-        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 60) {
-            let weight = 0;
 
-            const position = pointOnAngle(character, angle, 75);
 
-            if (can_move_to(position.x, position.y)) {
-                let rangeWeight = 0;
-                let inRange = false;
+const blacklistPlayers = ["6gunlaZe", "Ynhi", "haiz"];
 
-                for (const id in monstersInRadius) {
-                    const entity = monstersInRadius[id];
-                    const monsterRange = getRange(entity);
-                    const distToMonster = distanceToPoint(position.x, position.y, entity.real_x, entity.real_y);
-                    const charDistToMonster = distanceToPoint(character.real_x, character.real_y, entity.real_x, entity.real_y);
+// Hàm kiểm tra xem có người cấm trong map không
+function is_blacklisted_present() {
+    for (let name of blacklistPlayers) {
+        if (get_player(name)) {
+            return true;
+        }
+    }
+    return false;
+}
 
-                    if (charDistToMonster < monsterRange) {
-                        inRange = true;
-                        if (distToMonster > charDistToMonster) {
-                            rangeWeight += distToMonster - charDistToMonster;
-                        }
-                    }
-                }
+//////////////////////////////////////////////
+//////////////////////////////////////////////
 
-                if (inRange) {
-                    weight = rangeWeight;
-                }
 
-                const intersectsRadius = angleIntersectsMonsters(avoidRanges, angle);
-                if (!can_move_to(character.real_x, character.real_y)) {
-                    weight -= distanceToPoint(position.x, position.y, character.real_x, character.real_y) / 10;
-                }
 
-                if (!intersectsRadius) {
-                    if (weight > maxWeight) {
-                        maxWeight = weight;
-                        maxWeightAngle = angle;
-                    }
-                }
+
+let bossTurn = 0; // để xoay lượt
+const PLAYER_RADIUS = 400; // khoảng cách tính số người chơi
+const PLAYER_THRESHOLD = 2; // bao nhiêu người thì gọi đồng đội
+const HP_THRESHOLD = 0.95; // boss còn dưới 95% máu thì gọi đồng đội
+let currentTargetBoss = null; // boss đang được kéo bởi đồng đội
+
+async function checkAndMoveToBoss() {
+    try {
+        if (character.moving) return;
+
+        // Nếu đang xử lý boss, chỉ theo dõi boss đó
+        if (currentTargetBoss) {
+            const alive = !!parent?.S?.[currentTargetBoss.type]?.live;
+            if (alive) {
+                game_log(`⏳ Boss ${currentTargetBoss.name} đang được đồng đội xử lý, chờ boss chết...`);
+                return; // boss vẫn sống, không check boss khác
+            } else {
+                game_log(`✅ Boss ${currentTargetBoss.name} đã bị kill, reset trạng thái.`);
+                currentTargetBoss = null; // boss đã chết, tiếp tục check boss mới
             }
         }
 
-        const movePoint = pointOnAngle(character, maxWeightAngle, 20);
-        if (!lastMove || new Date() - lastMove > 100) {
-            lastMove = new Date();
-            move(movePoint.x, movePoint.y);
+        // Danh sách boss
+        const bosses = [
+            { name: "Mr. Pumpkin", type: "mrpumpkin", pos: { map: "halloween", x: -161, y: 769 }, alive: !!parent?.S?.mrpumpkin?.live },
+            { name: "Mr. Green",   type: "mrgreen",   pos: { map: "spookytown", x: 343, y: 1017 }, alive: !!parent?.S?.mrgreen?.live },
+        ];
+
+        // Xoay lượt kiểm tra
+        const order = [
+            ...bosses.slice(bossTurn % bosses.length),
+            ...bosses.slice(0, bossTurn % bosses.length)
+        ];
+
+        game_log(`🔄 Lượt ${bossTurn + 1}: ưu tiên ${order[0].name}...`);
+        const targetBoss = order.find(b => b.alive);
+
+        if (!targetBoss) {
+            game_log("❌ Không có boss nào hiện tại.");
+            bossTurn++;
+            return;
         }
 
-        if (drawDebug) {
-            draw_line(character.real_x, character.real_y, movePoint.x, movePoint.y, 2, 0xF20D0D);
+        // Di chuyển tới boss
+        game_log(`⚔️ ${targetBoss.name} xuất hiện! Di chuyển tới ngay...`);
+        await smart_move(targetBoss.pos);
+        game_log(`✅ Đã đến vị trí ${targetBoss.name}.`);
+
+        // Tìm boss gần nhất đúng loại
+        const bossEntity = get_nearest_monster({ type: targetBoss.type });
+        if (!bossEntity) {
+            game_log("⚠️ Không thấy boss trong tầm nhìn!");
+            bossTurn++;
+            return;
         }
 
+        // Đếm số người chơi gần nhân vật
+        let playerCount = 0;
+        for (let id in parent.entities) {
+            const current = parent.entities[id];
+            if (!current.player) continue;
+            if (parent.distance(character, current) < PLAYER_RADIUS) playerCount++;
+        }
+
+        game_log(`👥 Số người chơi xung quanh: ${playerCount}`);
+        const bossHpPercent = bossEntity.hp / bossEntity.max_hp;
+
+        // Kiểm tra điều kiện gọi đồng đội
+        if (playerCount >= PLAYER_THRESHOLD && bossHpPercent <= HP_THRESHOLD) {
+            let cmd = targetBoss.type === "mrgreen" ? "bossvip5" :
+                      targetBoss.type === "mrpumpkin" ? "bossvip4" : "error";
+
+            game_log(`🚨 Boss ${targetBoss.name} còn ${Math.floor(bossHpPercent * 100)}% HP, gửi lệnh đồng đội!`);
+            send_cm("haiz", cmd);
+
+            // Lưu boss này vào currentTargetBoss
+            currentTargetBoss = targetBoss;
+
+        } else {
+            game_log(`ℹ️ Boss ${targetBoss.name}: ${Math.floor(bossHpPercent * 100)}% HP, ${playerCount} người quanh.`);
+        }
+
+        bossTurn++;
+    } catch (e) {
+        game_log("❌ Lỗi khi kiểm tra boss: " + e);
+    }
+}
+
+
+
+
+// tạm ngưng do hết even
+// Chạy ngay
+//checkAndMoveToBoss();
+
+// Kiểm tra lại mỗi 30 giây
+//setInterval(checkAndMoveToBoss, 30 * 1000);
+
+
+
+let checkcauca = 0;
+const startTime1c = Date.now();
+const DELAY1c =  3 * 60 * 1000; // 5 phút
+
+async function doFishing() {
+    // Chờ 5 phút đầu tiên
+    if (Date.now() - startTime1c < DELAY1c ) {
+        return;
+    }
+    // 1. Check cooldown skill fishing
+    if (is_on_cooldown("fishing") )
+	{
+		checkcauca = 0;
+		return;
+	}
+	
+	
+
+	
+
+
+    // 3. Move tới vị trí câu cá nếu chưa đứng đúng
+    const target = { map: "main", x: -1366, y: -14 };
+
+    if ( !smart.moving &&
+        (character.map !== target.map ||
+        distance(character, target) > 10)
+    ) {
+        await smart_move(target);
+    }
+	
+    if ( 
+        (character.map == target.map &&
+        distance(character, target) < 10)
+    ) {
+		
+	checkcauca = 1;
+
+    // 2. Kiểm tra vũ khí (rod)
+    const rodName = "rod"; //
+
+    if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
+        const rod = locate_item(rodName);
+        if (rod !== -1) {
+			unequip("offhand");
+            await equip(rod);
+        } else {
+            game_log("Không có cần câu!");
+            return;
+        }
+    }
+	
+	    // 4. Dùng skill fishing
+    if (!character.c.fishing) use_skill("fishing");
+	
+	}
+	else
+	{
+			checkcauca = 0;
+
+	}
+	
+
+
+}
+
+
+
+setInterval(doFishing, 2000);
+
+
+
+
+//////////////// đánh quái yếu + hỗ trợ quái mạnh bằng snowball
+//////////////// SNOWBALL FARM – FINAL CLEAN VERSION ////////////////
+
+setInterval(() => {
+    lootNearby();
+	
+    if (checkcauca == 1) return;
+	
+    weakMonsterSkill({
+        monsterTypes: [
+          "frog","jr","greenjr","grinch",
+        ],
+        strongMonsterTypes: ["fireroamer111"],
+        minSnowballForStrong: 70
+    });
+}, 180);
+
+
+/* ================= GLOBAL STATE ================= */
+
+let snowballQueue = [];
+let lastSnowballTargetTime = 0;
+let equipLockUntil = 0;
+
+const NO_TARGET_TIMEOUT = 800;   // ms
+const EQUIP_LOCK_TIME   = 400;   // ms
+const NEARBY_RANGE      = 600;
+
+
+/* ================= HELPERS ================= */
+
+function isValidMonster(e) {
+    return e && e.type === "monster" && !e.dead && e.hp > 0;
+}
+
+function safeEquip(itemName) {
+    const now = Date.now();
+    if (now < equipLockUntil) return false;
+    if (character.slots.mainhand?.name === itemName) return false;
+
+    const slot = character.items.findIndex(i => i && i.name === itemName);
+    if (slot === -1) return false;
+
+    equip(slot);
+    equipLockUntil = now + EQUIP_LOCK_TIME;
+    return true;
+}
+
+function hasNearbyRelevantMonster(monsterTypes, strongMonsterTypes) {
+    for (let e of Object.values(parent.entities)) {
+        if (!isValidMonster(e)) continue;
+
+        if (
+            monsterTypes.includes(e.mtype) ||
+            strongMonsterTypes.includes(e.mtype)
+        ) {
+            if (distance(character, e) <= NEARBY_RANGE) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+/* ================= CORE LOGIC ================= */
+
+function weakMonsterSkill({
+    monsterTypes,
+    strongMonsterTypes = [],
+    minSnowballForStrong = 50,
+    skill = "snowball",
+    fortName = "froststaff",
+    bowName = "broom",
+    requiredItem = "snowball"
+} = {}) {
+
+    /* ===== COUNT SNOWBALL ===== */
+let snowballCount = 0;
+for (let i of character.items) {
+    if (i && i.name === requiredItem) {
+        snowballCount += i.q || 1;
+    }
+}
+
+if (startLure)return false;	
+	
+	 if (!character.slots.offhand || character.slots.offhand.name !== "wbookhs"){
+        const rod1 = locate_item("wbookhs");
+        if (rod1 !== -1) {
+         equip(rod1);
+        }
+	 }
+	
+/* ===== HẾT SNOWBALL → ĐỔI BROOM NGAY ===== */
+if (snowballCount === 0) {
+    safeEquip(bowName);
+    return false;
+}
+
+
+    /* ===== SELECT TARGET ===== */
+    const target = selectSnowballTarget(
+        monsterTypes,
+        strongMonsterTypes,
+        snowballCount,
+        minSnowballForStrong
+    );
+
+    const now = Date.now();
+
+    /* ===== CÓ TARGET ===== */
+    if (target) {
+        lastSnowballTargetTime = now;
+
+        safeEquip(fortName);
+
+        if (
+            character.slots.mainhand?.name === fortName &&
+            !is_on_cooldown(skill) && character.mp > 100 &&
+            can_use(skill, target)
+        ) {
+            use_skill(skill, target);
+        }
         return true;
+    }
+
+    /* ===== KHÔNG TARGET NHƯNG CÒN QUÁI GẦN ===== */
+    if (hasNearbyRelevantMonster(monsterTypes, strongMonsterTypes)) {
+        return false;
+    }
+
+/* ===== HẾT QUÁI HOẶC HẾT SNOWBALL → ĐỔI BROOM NGAY ===== */
+if (!target || snowballCount === 0) {
+    safeEquip(bowName);
+    return false;
+}
+
+
+	
+	
+}
+
+
+/* ================= TARGET SELECTION ================= */
+
+function selectSnowballTarget(
+    monsterTypes,
+    strongMonsterTypes,
+    snowballCount,
+    minSnowballForStrong
+) {
+    /* ===== FIREROAMER: SPAM ===== */
+	const ATTACK_RANGE = 300;
+
+    for (let e of Object.values(parent.entities)) {
+        if (
+            isValidMonster(e) &&
+            strongMonsterTypes.includes(e.mtype) &&
+            e.target &&
+            parent.party_list?.includes(e.target) &&
+            snowballCount >= minSnowballForStrong
+			&&  distance(character, e) <= ATTACK_RANGE   
+
+        ) {
+            return e;
+        }
+    }
+
+    /* ===== CLEAN QUEUE ===== */
+    snowballQueue = snowballQueue.filter(isValidMonster);
+
+    /* ===== QUÁI YẾU ===== */
+    for (let e of Object.values(parent.entities)) {
+        if (!isValidMonster(e)) continue;
+        if (!monsterTypes.includes(e.mtype)) continue;
+        if (distance(character, e) > ATTACK_RANGE) continue; 
+
+        if (e.hp >= 2000) {
+            return e; // focus
+        }
+
+        if (!snowballQueue.some(q => q.id === e.id)) {
+            snowballQueue.push(e); // rải
+        }
+    }
+
+/* ===== RẢI SNOWBALL CHỈ KHI CÒN SNOWBALL ===== */
+if (snowballQueue.length > 0 && snowballCount > 0) {
+    return snowballQueue.shift();
+}
+
+
+    return null;
+}
+
+
+/* ================= LOOT ================= */
+
+function lootNearby() {
+    if (character.rip) return false;
+
+    if (parent.party_list?.length) {
+        for (let name of parent.party_list) {
+            if (name !== character.name && get_player(name)) {
+                return false;
+            }
+        }
+    }
+
+    const chests = get_chests();
+    for (let id in chests) loot(id);
+    return true;
+}
+
+
+////////////////////////////////////////////////
+
+
+
+
+
+
+//////////////////////vòng lặp xả banh
+
+
+setInterval(() => {
+    // ===== COUNT SNOWBALL =====
+    let snowballCount = 0;
+    for (let i of character.items) {
+        if (i && i.name === "snowball") {
+            snowballCount += i.q || 1;
+        }
+    }
+
+    // ===== CONDITION MOVE =====
+    if (snowballCount > 0 && character.mp > 1000 && !parent?.S?.grinch?.live ) {
+        if (!smart.moving && character.map != "bank" ) {
+			
+					smart_move("jr", () => {
+  smart_move("main");
+    });
+        }
+    }
+}, 450000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////
+// CHECK LUCKY SLOT + AUTO UPGRADE (NON-BLOCKING)
+/////////////////////////////////////////////////////
+
+(async () => {
+
+    /*********************************************************
+     * LISTEN q_data – CHỈ BẮT PERFECT 0000
+     *********************************************************/
+    parent.socket._callbacks.$q_data.length = 1;
+
+    parent.socket.on("q_data", (event) => {
+        const slot = event.num;
+        const nums = event.p?.nums;
+        if (!nums) return;
+      // game_log(`Slot ${slot} nums: ${nums.join(",")}`);  
+		
+        if (
+            nums[0] === 0 &&
+            nums[1] === 0 &&
+            nums[2] === 0 &&
+            nums[3] === 0
+        ) {
+            const time = new Date().toLocaleString();
+            game_log(`PERFECT 0000 | Slot ${slot} | ${time}`);
+            ghichu(
+                "PERFECT 0000 LOG",
+                `Slot ${slot} hit 0000 at ${time}`,
+                ""
+            );
+        }
+    });
+
+    /*********************************************************
+     * TRY SWAP – SLOT BẬN THÌ BỎ QUA (KHÔNG BLOCK)
+     *********************************************************/
+    async function trySwapToSlot(itemSlot, targetSlot) {
+        try {
+            const targetItem = character.items[targetSlot];
+
+            // né scroll đang chiếm slot
+            if (targetItem && targetItem.name === "scroll0") {
+                const empty = character.items.findIndex(it => it === null);
+                if (empty === -1) return false;
+                await swap(targetSlot, empty);
+            }
+
+            await swap(itemSlot, targetSlot);
+            return true;
+
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /*********************************************************
+     * UPGRADE RETRY – KHÔNG TREO, THÊM TIMEOUT
+     *********************************************************/
+    async function upgradeRetry(slot, scroll, timeout = 10000) {
+        const start = Date.now();
+        while (true) {
+            if (Date.now() - start > timeout) {
+                game_log(`Upgrade slot ${slot} TIMEOUT`);
+                return false;
+            }
+
+            if (character.q?.upgrade != null) {
+                await sleep(500);
+                continue;
+            }
+
+            try {
+                await upgrade(slot, scroll);
+                game_log(`Upgrade slot ${slot} SUCCESS`);
+                return true;
+            } catch (e) {
+                await sleep(500);
+            }
+        }
+    }
+
+    /*********************************************************
+     * AUTO UPGRADE LOOP – KHÔNG BAO GIỜ ĐỨNG MÃ
+     *********************************************************/
+    async function autoUpgradeLoop() {
+        for (;;) {
+            if (character.esize <= 3 || character.map !== "main") {
+                await sleep(1000);
+                continue;
+            }
+
+            for (let i = 0; i < 42; i++) {
+
+                if (character.q?.upgrade != null) {
+                    await sleep(500);
+                    continue;
+                }
+
+                // --- đảm bảo helmet ---
+                let helmet = locate_item("helmet");
+                if (helmet === -1) {
+                    await buy("helmet");
+                    helmet = locate_item("helmet");
+                } else {
+                    const h = character.items[helmet];
+                    if (h && h.level === 7) {
+                        await sell(helmet);
+                        await buy("helmet");
+                        helmet = locate_item("helmet");
+                    }
+                }
+
+                // --- swap helmet vào slot i ---
+                if (helmet !== i && helmet !== -1) {
+                    const ok = await trySwapToSlot(helmet, i);
+                    if (!ok) continue;
+                }
+
+                // --- đảm bảo scroll ---
+                let scroll = locate_item("scroll0");
+                if (scroll === -1) {
+                    await buy("scroll0", 1000); // mua ít tránh lag
+                    scroll = locate_item("scroll0");
+                }
+
+                // --- upgrade slot i ---
+                if (helmet !== -1 && scroll !== -1) {
+                    await upgradeRetry(i, scroll);
+                }
+            }
+
+            await sleep(1000); // nghỉ 1s sau 1 vòng upgrade
+        }
+    }
+
+    /*********************************************************
+     * AUTO BUY & SELL HELMET – RIÊNG TASK // chỉ dùng khi muốn tìm lucky slot
+     *********************************************************/
+    async function helmetManager() {
+        for (;;) {
+            try {
+                const helmets = character.items
+                    .map((it, idx) => ({ item: it, slot: idx }))
+                    .filter(it => it.item && it.item.name === "helmet");
+
+                if (helmets.length <= 1) {
+                    await buy("helmet");
+                    game_log(`Đã mua thêm helmet vì chỉ còn ${helmets.length} chiếc`);
+                }
+
+                for (const h of helmets) {
+                    if (h.item.level === 7) {
+                        await sell(h.slot);
+                        game_log(`Đã bán helmet level 7 ở slot ${h.slot}`);
+                    }
+                }
+            } catch (e) {
+                game_log(`Lỗi khi xử lý helmet: ${e}`);
+            }
+
+            await sleep(2000); // nghỉ 2s trước khi check lại
+        }
+    }
+
+	
+
+/*********************************************************
+ * JOB: UPGRADE ITEM A Ở SLOT 31
+ *********************************************************/
+	
+async function smartUpgradeManager() {
+    const TARGET_SLOT = 31;
+    const INTERVAL_NORMAL = 260000;
+    const INTERVAL_FAST = 300;
+	
+	const UPGRADE_CONFIG = [
+    {
+        name: "coatxxx",
+        min_level: 7,
+        max_level: 8, // Chỉ nâng cấp nếu dưới level 9
+        levels: {
+            7: { scroll: "scroll1"},
+            8: { scroll: "scroll1"}
+        }
+    },
+	
+    {
+        name: "pouchbow",
+        min_level: 7,
+        max_level: 7, // Chỉ nâng cấp nếu dưới level 9
+        levels: {
+            7: { scroll: "scroll1", offering: "offeringp"},
+        }
+    },
+		
+    {
+        name: "fireblade",
+        min_level: 7,
+        max_level: 7,
+        levels: {
+            7: { scroll: "scroll2", offering: "offeringp" },
+            // ... thêm các level khác
+        }
+    }
+    ];
+	
+	
+    let lastRun = 0;
+
+    for (;;) {
+        try {
+            if (character.q?.upgrade) {
+                await sleep(500);
+                continue;
+            }
+
+// --- A. TÍNH TOÁN INTERVAL ---
+// Đếm xem có bao nhiêu item trong config đang đợi nâng cấp
+let eligibleCount = 0;
+let targetItemData = null;
+
+for (let i = 0; i < character.items.length; i++) {
+    const it = character.items[i];
+    if (!it) continue;
+
+    const cfg = UPGRADE_CONFIG.find(c =>
+        c.name === it.name &&
+        it.level >= c.min_level &&
+        it.level < (c.max_level + 1)
+    );
+
+    if (cfg) {
+        eligibleCount++;
+        if (!targetItemData)
+            targetItemData = { slot: i, ...cfg, currentLevel: it.level };
+    }
+}
+
+// Nếu >3 item thì bật fast mode 60s
+if (eligibleCount > 3 && Date.now() > fastModeUntil) {
+    fastModeUntil = Date.now() + 60000;
+}
+
+// Nếu đang trong fast mode thì chạy nhanh
+const currentInterval =
+    Date.now() < fastModeUntil ? INTERVAL_FAST : INTERVAL_NORMAL;
+			
+			
+			
+            if (Date.now() - lastRun < currentInterval) {
+                await sleep(500);
+                continue;
+            }
+
+            // --- B. THỰC HIỆN UPGRADE ---
+            if (!targetItemData) {
+                await sleep(1000);
+                continue;
+            }
+
+            // 1. Di chuyển vào slot đích (31)
+            if (targetItemData.slot !== TARGET_SLOT) {
+                if (!await trySwapToSlot(targetItemData.slot, TARGET_SLOT)) {
+                    await sleep(500);
+                    continue;
+                }
+            }
+
+            // 2. Lấy thông tin scroll/offering dựa trên level hiện tại
+            const levelSettings = targetItemData.levels[targetItemData.currentLevel];
+            if (!levelSettings) {
+                game_log(`Chưa cấu hình level ${targetItemData.currentLevel} cho ${targetItemData.name}`);
+                await sleep(1000);
+                continue;
+            }
+
+            const scrollSlot = locate_item(levelSettings.scroll);
+            const offeringSlot = levelSettings.offering ? locate_item(levelSettings.offering) : -1;
+
+            if (scrollSlot === -1) {
+                game_log(`Thiếu ${levelSettings.scroll} để nâng cấp ${targetItemData.name}`);
+                await sleep(5000);
+                continue;
+            }
+
+            // 3. Tiến hành Upgrade
+            game_log(`[UPGRADE] ${targetItemData.name} +${targetItemData.currentLevel} -> +${targetItemData.currentLevel + 1}`);
+            
+	// Dùng kỹ năng tăng tốc
+	if (can_use("massproductionpp") && !character.s.massproductionpp)
+		use_skill("massproductionpp");
+	else if (can_use("massproduction") && !character.s.massproduction)
+		use_skill("massproduction");
+			
+            // Nếu có offering thì dùng, không thì chỉ dùng scroll
+            if (offeringSlot !== -1) {
+                await upgrade(TARGET_SLOT, scrollSlot, offeringSlot);
+            } else {
+                await upgrade(TARGET_SLOT, scrollSlot);
+            }
+
+            lastRun = Date.now();
+
+        } catch (e) {
+            game_log(`Error: ${e}`);
+        }
+        await sleep(500);
+    }
+}
+
+
+///////////////////////////
+//////////////////////////
+
+	
+	
+	
+	
+    // --- chạy song song 2 task ---
+	
+  //  autoUpgradeLoop();
+  //  helmetManager();
+	smartUpgradeManager()
+
+
+})();
+
+/// đã xong nhiệm vụ tìm ra lucky slot
+////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////
+function ghichu(title, mess, key_auto1) {
+  const token = key_auto1;  // Thay bằng token của bạn
+  const repoOwner = '6gunlaZe';  // Tên người sở hữu repo
+  const repoName = 'game';  // Tên repository
+  const issueTitle = title;
+  const newLine = mess;  // Nội dung dòng mới cần thêm vào
+
+  // Tìm kiếm các issue có tiêu đề trùng với title trong repository cụ thể
+  fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(issueTitle)}+repo:${repoOwner}/${repoName}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.items.length === 0) {
+      // Nếu không tìm thấy issue với tiêu đề này, tạo mới issue
+      fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `token ${token}`,
+        },
+        body: JSON.stringify({
+          title: issueTitle,
+          body: newLine,  // Thêm nội dung dòng mới vào body
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Issue mới đã được tạo:', data);
+      })
+      .catch(error => {
+        console.error('Lỗi khi tạo Issue:', error);
+      });
+    } else {
+      // Nếu đã tồn tại issue, thêm dòng mới vào body của issue đầu tiên tìm được
+      const issueNumber = data.items[0].number;  // Lấy số của issue đầu tiên
+      const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
+
+      // Lấy nội dung hiện tại của issue
+      fetch(issueUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      })
+      .then(response => response.json())
+      .then(issueData => {
+        // Kiểm tra nếu issueData.body có giá trị, nếu không thì khởi tạo giá trị mới
+        const updatedBody = (issueData.body || '') + '\n' + newLine; // Thêm dòng mới vào cuối body
+
+        // Cập nhật lại nội dung của issue
+        fetch(issueUrl, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+          },
+          body: JSON.stringify({
+            title: issueData.title, // Giữ nguyên tiêu đề
+            body: updatedBody,  // Cập nhật nội dung của issue
+          }),
+        })
+        .then(response => response.json())
+        .then(updatedData => {
+          console.log('Issue đã được cập nhật:', updatedData);
+        })
+        .catch(error => {
+          console.error('Lỗi khi cập nhật Issue:', error);
+        });
+      })
+      .catch(error => {
+        console.error('Lỗi khi lấy nội dung issue:', error);
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Lỗi khi tìm kiếm issue:', error);
+  });
+}
+
+
+///////////////////////////////
+////////////////////////////// LOG GOLD MỖI LẦN VÀO
+
+function formatGold(gold) {
+    const b = gold / 1_000_000_000;
+    return `${gold} (${b.toFixed(2)} b)`;
+}
+
+function logGold() {
+    
+        const time = new Date().toLocaleString("vi-VN");
+
+        ghichu(
+            "GOLD CHANGE LOG",
+            `→ ${formatGold(character.gold)}  | Time: ${time}`,
+            ""
+        );
+
+   
+}
+
+// logGold()  //tạm ngưng log gold
+
+/////////////////////////
+/////////////////////////
+
+
+
+
+let lastStr = "";
+
+parent.socket.on("q_data", (event) => {
+
+    const nums = event.p?.nums;
+    if (!nums || nums.length !== 4) return;
+
+    const str = nums.slice().reverse().join(""); // đảo ngược
+
+    if (str === lastStr) return;
+
+    lastStr = str;
+
+    game_log(`Slot ${event.num} nums: ${str}`);
+
+});
+
+
+///////////////////////////////////////////////////
+////////////////////////////////////////////////
+
+
+const WAYPOINTS = [
+    { map: "desertland", x: -222,    y: -1898 },
+    { map: "desertland", x: 5,    y: -1883 },
+    { map: "desertland", x: 218,  y: -1745 },
+    { map: "desertland", x: 199,  y: -1125 },
+    { map: "desertland", x: 85,   y: -1035 },
+  //  { map: "desertland", x: -187, y: -620 },
+  //  { map: "desertland", x: -496, y: -620 },
+  //  { map: "desertland", x: -757, y: -302 }
+];
+
+const AIM_POINT = {
+    x: -79,
+    y: -1007
+};
+
+const SCARE_BUFFER = 15;
+let danglure = 0;
+let lureEntId = null;
+let startLure = false;
+//====================================================
+// Đứng ở mép range hướng về AIM_POINT
+//====================================================
+
+async function moveToEdge(ent){
+
+    const dx = AIM_POINT.x - ent.x;
+    const dy = AIM_POINT.y - ent.y;
+
+    const len = Math.hypot(dx,dy);
+    if(!len) return;
+
+    await move(
+        ent.x + dx/len*character.range,
+        ent.y + dy/len*character.range
+    );
+}
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
+
+
+function getLowestLevelEnt() {
+
+    return Object.values(parent.entities)
+        .filter(e =>
+            e?.mtype == "ent" &&
+            !e.rip &&
+            (!e.target || e.target == character.name)
+        )
+        .sort((a, b) =>
+            a.level - b.level ||
+            distance(character, a) - distance(character, b)
+        )[0];
+}
+
+
+
+
+//====================================================
+// Lấy aggro ban đầu
+//====================================================
+
+async function lureEnt(){
+
+    let ent = getLowestLevelEnt();
+	if(!ent){
+        game_log("Không tìm thấy Ent");
+        return false;
+    }
+
+    await moveToEdge(ent);
+
+    while(ent && !ent.rip){
+
+        ent = parent.entities[ent.id];
+        if(!ent) return false;
+
+        if(ent.target == character.name){
+
+            lureEntId = ent.id;
+            game_log("Đã lấy aggro");
+            return true;
+        }
+
+        if(can_attack(ent) && character.hp > 15000 && danglure == 0)
+		{
+            await attack(ent);
+			danglure = 1;
+		}
+        await sleep(250);
     }
 
     return false;
 }
 
-function getRange(entity) {
-    if (entity.type !== "character") {
-        return (parent.G.monsters[entity.mtype]?.range || 100) + rangeBuffer;
-    } else {
-        if (avoidPlayersWhitelist.includes(entity.id) && avoidPlayersWhitelistRange != null) {
-            return avoidPlayersWhitelistRange;
-        } else if (playerRangeOverride != null) {
-            return playerRangeOverride + playerBuffer;
-        } else {
-            return (entity.range || 100) + playerBuffer;
-        }
+//====================================================
+// Loop giữ aggro
+//====================================================
+
+const SAFE_MULTIPLIER = 2.3;
+const PANIC_BUFFER = 20;
+
+setInterval(() => {
+
+    if (!lureEntId) return;
+
+    const ent = parent.entities[lureEntId];
+
+    if (!ent || ent.rip) {
+        lureEntId = null;
+        return;
     }
+
+    const d = distance(character, ent);
+
+    const SAFE = ent.range * SAFE_MULTIPLIER;
+    const PANIC = ent.range + PANIC_BUFFER;
+
+    //========================
+    // PANIC
+    //========================
+    if (d <= PANIC) {
+
+        if (can_use("scare"))
+            use_skill("scare");
+
+        return;
+    }
+
+    //========================
+    // DANGER
+    //========================
+    if (d <= SAFE && d > (PANIC + 40) ) {
+
+        // Chỉ giữ aggro khi scare đã sẵn sàng
+        if (can_use("scare") && can_attack(ent) && character.hp > 5000)
+            attack(ent);
+
+        return;
+    }
+
+    //========================
+    // SAFE
+    //========================
+
+    if (can_attack(ent) && d > SAFE)
+        attack(ent);
+
+}, 50);
+
+//====================================================
+// Đi waypoint
+//====================================================
+
+async function walkRoute(){
+
+    for(let i = 1; i < WAYPOINTS.length; i++){
+
+        const p = WAYPOINTS[i];
+
+        await smart_move({
+            map: p.map,
+            x: p.x,
+            y: p.y
+        });
+
+    }
+
 }
 
-function isInAttackRange(monstersInRadius) {
-    return monstersInRadius.some(monster => {
-        const monsterRange = getRange(monster);
-        const charDistToMonster = distanceToPoint(character.real_x, character.real_y, monster.real_x, monster.real_y);
-        return charDistToMonster < monsterRange;
+///////////////////////////////////////
+async function runLure(){
+
+    try{
+
+		
+		startLure = true;
+
+	 if (!character.slots.mainhand || character.slots.mainhand.name !== "dartgun"){
+        const rod1 = locate_item("dartgun");
+        if (rod1 !== -1) {
+         equip(rod1);
+        }
+	 }	
+		
+        await smart_move(WAYPOINTS[0]);
+
+	
+		
+        const ok = await lureEnt();
+
+        if(!ok){
+            game_log("Không lấy được aggro");
+            return;
+        }
+
+        await walkRoute();
+
+        game_log("Hoàn thành");
+
+    }finally{
+
+        lureEntId = null;
+        startLure = false;
+		danglure = 0;
+	smart_move({ map: "main", x: -200, y: -110 }, () => {
+     open_stand();
     });
-}
-
-function angleIntersectsMonsters(avoidRanges, angle) {
-    return avoidRanges.some(range => isBetween(range[1], range[0], angle));
-}
-
-function getAnglesToAvoid(monstersInRadius) {
-    const avoidRanges = [];
-    for (const id in monstersInRadius) {
-        const monster = monstersInRadius[id];
-        const monsterRange = getRange(monster);
-        const tangents = findTangents({ x: character.real_x, y: character.real_y }, { x: monster.real_x, y: monster.real_y, radius: monsterRange });
-
-        if (!isNaN(tangents[0].x)) {
-            const angle1 = angleToPoint(character, tangents[0].x, tangents[0].y);
-            const angle2 = angleToPoint(character, tangents[1].x, tangents[1].y);
-            avoidRanges.push(angle1 < angle2 ? [angle1, angle2] : [angle2, angle1]);
-
-            if (drawDebug) {
-                draw_line(character.real_x, character.real_y, tangents[0].x, tangents[0].y, 1, 0x17F20D);
-                draw_line(character.real_x, character.real_y, tangents[1].x, tangents[1].y, 1, 0x17F20D);
-            }
-        }
-
-        if (drawDebug) {
-            draw_circle(monster.real_x, monster.real_y, monsterRange, 1, 0x17F20D);
-        }
+		
     }
-    return avoidRanges;
+
 }
 
-function getMonstersInRadius() {
-    return Object.values(parent.entities).filter(entity => {
-        const distanceToEntity = distanceToPoint(entity.real_x, entity.real_y, character.real_x, character.real_y);
-        const range = getRange(entity);
-        return (entity.type === "monster" && avoidTypes.includes(entity.mtype) && distanceToEntity < calcRadius) ||
-            (avoidPlayers && entity.type === "character" && !entity.npc && !playerAvoidIgnoreClasses.includes(entity.ctype) &&
-                (!avoidPlayersWhitelist.includes(entity.id) || avoidPlayersWhitelistRange != null) &&
-                (distanceToEntity < calcRadius || distanceToEntity < range));
-    });
+
+function on_cm(name, data) {
+        if ((name === "Ynhi" || name === "haiz") && data === "ent") {
+            runLure();
+        }
 }
 
-function normalizeAngle(angle) {
-    return Math.atan2(Math.sin(angle), Math.cos(angle));
-}
 
-function isBetween(angle1, angle2, target) {
-    if (angle1 <= angle2) {
-        return angle2 - angle1 <= Math.PI ? angle1 <= target && target <= angle2 : angle2 <= target || target <= angle1;
-    } else {
-        return angle1 - angle2 <= Math.PI ? angle2 <= target && target <= angle1 : angle1 <= target || target <= angle2;
-    }
-}
-
-function findTangents(point, circle) {
-    const dx = circle.x - point.x;
-    const dy = circle.y - point.y;
-    const dd = Math.sqrt(dx * dx + dy * dy);
-    const a = Math.asin(circle.radius / dd);
-    const b = Math.atan2(dy, dx);
-
-    const ta = { x: circle.x + circle.radius * Math.sin(b - a), y: circle.y - circle.radius * Math.cos(b - a) };
-    const tb = { x: circle.x - circle.radius * Math.sin(b + a), y: circle.y + circle.radius * Math.cos(b + a) };
-
-    return [ta, tb];
-}
-
-function offsetToPoint(x, y) {
-    const angle = angleToPoint(x, y) + Math.PI / 2;
-    return angle - characterAngle();
-}
-
-function pointOnAngle(entity, angle, distance) {
-    return { x: entity.real_x + distance * Math.cos(angle), y: entity.real_y + distance * Math.sin(angle) };
-}
-
-function entityAngle(entity) {
-    return (entity.angle * Math.PI) / 180;
-}
-
-function angleToPoint(entity, x, y) {
-    const deltaX = entity.real_x - x;
-    const deltaY = entity.real_y - y;
-    return Math.atan2(deltaY, deltaX) + Math.PI;
-}
-
-function characterAngle() {
-    return (character.angle * Math.PI) / 180;
-}
-
-function distanceToPoint(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-}
+///////////////////////////////////////////
+//////////////////////////////////////////
