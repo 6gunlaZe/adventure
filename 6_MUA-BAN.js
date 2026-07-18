@@ -2490,8 +2490,35 @@ function getLowestLevelEnt() {
         )[0];
 }
 
+////////////////////////////////////////////
+///////////////////////////////////////////
+const MAX_LURE_DISTANCE = 250;
+const RESUME_DISTANCE = 200;
 
+async function waitIfTooFar() {
 
+    if (!lureEntId) return;
+
+    while (true) {
+
+        const ent = parent.entities[lureEntId];
+
+        if (!ent || ent.rip) {
+            lureEntId = null;
+            return;
+        }
+
+        const d = distance(character, ent);
+
+        if (d <= RESUME_DISTANCE)
+            return;
+
+        game_log("Đợi Ent tới...");
+
+        await sleep(100);
+    }
+
+}
 
 //====================================================
 // Lấy aggro ban đầu
@@ -2592,6 +2619,16 @@ setInterval(() => {
 async function walkRoute(){
 
     for(let i = 1; i < WAYPOINTS.length; i++){
+
+        const ent = parent.entities[lureEntId];
+
+        if(ent && !ent.rip){
+
+            const d = distance(character, ent);
+
+            if(d > MAX_LURE_DISTANCE)
+                await waitIfTooFar();
+        }
 
         const p = WAYPOINTS[i];
 
