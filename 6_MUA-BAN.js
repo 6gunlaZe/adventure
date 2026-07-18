@@ -2492,8 +2492,8 @@ function getLowestLevelEnt() {
 
 ////////////////////////////////////////////
 ///////////////////////////////////////////
-const MAX_LURE_DISTANCE = 250;
-const RESUME_DISTANCE = 200;
+const MAX_LURE_DISTANCE = 200;
+const RESUME_DISTANCE = 145;
 
 async function waitIfTooFar() {
 
