@@ -2510,7 +2510,7 @@ async function waitIfTooFar() {
 
         const d = distance(character, ent);
 
-        if (d <= RESUME_DISTANCE)
+        if ((d <= RESUME_DISTANCE) || ((d <= MAX_LURE_DISTANCE) && ent.target) )
             return;
 
         game_log("Đợi Ent tới...");
