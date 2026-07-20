@@ -1307,7 +1307,7 @@ function curseLogic(currentTarget) {
             if (
                 isLowMp &&
                 dist < CURSE_LOW_MP_CAST_RANGE &&
-                tryCurse(m, 2000)
+                tryCurse(m, 3000)
             ) {
                 return true;
             }
