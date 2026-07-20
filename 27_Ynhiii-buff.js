@@ -1672,6 +1672,9 @@ function getOtherPartyMember() {
 }
 
 
+
+const MPdutru = 4500;
+
 async function handleZap() {
 	const zapperMobs = [crepp, "rgoo", "bgoo", "wolfie", "jr", "goldenbat","stompy","hen","rooster","cutebee"]
   .filter(m => m !== "targetron");
@@ -1697,7 +1700,7 @@ async function handleZap() {
             // Step 2: Use zapper skill if conditions are met
 		if (character.targets <= soluongTOIDA && character.hp/character.max_hp > 0.75 && haiz && haiz.hp > 12700 && haiz.mp > 200 && distance(character, haiz) < 120 && (gun || crepp == "xscorpion" ) )
 		{
-            if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > G?.skills?.zapperzap?.mp + 4250 && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  ) {
+            if (entities.length > 0 && !is_on_cooldown("zapperzap") && character.mp > G?.skills?.zapperzap?.mp + MPdutru && (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper" )  ) {
                 for (const entity of entities) {
                     if (!is_on_cooldown("zapperzap")) {
                         await use_skill("zapperzap", entity);  // Zap the entity
@@ -1708,7 +1711,7 @@ async function handleZap() {
             else if (
     entities.length === 0 &&
     !is_on_cooldown("zapperzap") && character.hp/character.max_hp > 0.99 && character.targets == 0 &&
-    character.mp > G?.skills?.zapperzap?.mp + 4250 &&
+    character.mp > G?.skills?.zapperzap?.mp + MPdutru &&
     (character.slots.ring1?.name == "zapper" || character.slots.ring2?.name == "zapper")
 ) {
     // Lọc ra các quái hợp lệ
