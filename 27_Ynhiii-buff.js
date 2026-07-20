@@ -1207,6 +1207,40 @@ function tryAttack(target) {
 
 
 
+
+// ================= Curse Config =================
+
+const HIGH_MP_CURSE_TYPES = new Set([
+    "franky",
+    "icegolem",
+    "crabxx",
+    "bscorpion",
+    "mrgreen",
+    "mrpumpkin",
+    "dragold",
+    "stompy",
+    "skeletor"
+]);
+
+const LOW_MP_CURSE_TYPES = new Set([
+    "ent",
+    "a6",
+]);
+
+const CURSE_LEADER_RADIUS = 15;
+
+const CURSE_HIGH_MP_RADIUS = 40;
+const CURSE_LOW_MP_RADIUS = 40;
+
+const CURSE_HIGH_MP_CAST_RANGE = 40;
+const CURSE_LOW_MP_CAST_RANGE = 40;
+
+const CURSE_BIG_HP = 40000;
+const CURSE_TANK_HP = 30000;
+
+
+// ================= Curse =================
+
 function tryCurse(target, mpReq = 4500) {
     if (
         target &&
@@ -1221,64 +1255,114 @@ function tryCurse(target, mpReq = 4500) {
     return false;
 }
 
+
 function curseLogic(currentTarget) {
-  const leader = get_player("haiz");
-    // === 1. Boss / quái nặng cố định ===
-    const priorityTypes = ["franky", "icegolem", "crabxx", "bscorpion","mrgreen","mrpumpkin","dragold","stompy", "skeletor",];
-    for (let type of priorityTypes) {
-        const t = get_nearest_monster({ type });
-        if (tryCurse(t)) return true;
-    }
 
-// === 2. Quái quanh leader có HP lớn nhất (>40k) ===
-if (leader) {
-    let maxHpTarget = null;
-    let maxHp = 0;
+    const leader = get_player("haiz");
 
-    for (let id in parent.entities) {
-        const m = parent.entities[id];
-        if (!m || m.type !== "monster" || m.dead) continue;
+    if (leader) {
 
-        if (!m.target) continue; // chưa có target ai hết, bở qua
+        let maxHpTarget = null;
+        let maxHp = 0;
+        let maxHpDist = Infinity;
 
-        // quái gần leader
-        if (distance(m, leader) > 15) continue;
+        for (const id in parent.entities) {
 
-        if (m.hp > maxHp) {
-            maxHp = m.hp;
-            maxHpTarget = m;
+            const m = parent.entities[id];
+
+            if (
+                !m ||
+                m.type !== "monster" ||
+                m.dead ||
+                !m.target
+            ) continue;
+
+            const isHighMp = HIGH_MP_CURSE_TYPES.has(m.mtype);
+            const isLowMp  = LOW_MP_CURSE_TYPES.has(m.mtype);
+
+            // Bán kính quanh leader
+            const leaderRadius =
+                (isHighMp || isLowMp)
+                    ? 40
+                    : CURSE_LEADER_RADIUS;
+
+            if (distance(m, leader) > leaderRadius) continue;
+
+            const dist = distance(character, m);
+
+            // ===================================================
+            // Boss / quái đặc biệt (MP > 4500)
+            // ===================================================
+            if (
+                isHighMp &&
+                dist < CURSE_HIGH_MP_CAST_RANGE &&
+                tryCurse(m)
+            ) {
+                return true;
+            }
+
+            // ===================================================
+            // Quái đặc biệt (MP > 2000)
+            // ===================================================
+            if (
+                isLowMp &&
+                dist < CURSE_LOW_MP_CAST_RANGE &&
+                tryCurse(m, 2000)
+            ) {
+                return true;
+            }
+
+            // ===================================================
+            // Quái HP lớn nhất quanh leader
+            // ===================================================
+            if (!isHighMp && !isLowMp && m.hp > maxHp) {
+                maxHp = m.hp;
+                maxHpTarget = m;
+                maxHpDist = dist;
+            }
+        }
+
+        // Curse quái HP lớn nhất
+        if (
+            maxHpTarget &&
+            maxHp > CURSE_BIG_HP &&
+            maxHpDist < 30 &&
+            tryCurse(maxHpTarget)
+        ) {
+            return true;
         }
     }
 
-    if (
-        maxHpTarget &&
-        maxHpTarget.hp > 40000 &&
-        distance(character, maxHpTarget) < 20
-    ) {
-        if (tryCurse(maxHpTarget)) return true;
-    }
-}
-
-
-    // === 3. Quái leader đang tank (ưu tiên cao) ===
+    // ===================================================
+    // Quái leader đang tank
+    // ===================================================
     if (
         currentTarget &&
         currentTarget.target === "haiz" &&
-        currentTarget.hp > 30000
+        currentTarget.hp > CURSE_TANK_HP
     ) {
-        // gần thì curse luôn
-        if (distance(character, currentTarget) < 15) {
-            if (tryCurse(currentTarget)) return true;
+
+        if (
+            distance(character, currentTarget) < 15 &&
+            tryCurse(currentTarget)
+        ) {
+            return true;
         }
 
-        // xa nhưng không phải quái farm
-        if (currentTarget.mtype !== crepp) {
-            if (tryCurse(currentTarget)) return true;
+        if (
+            currentTarget.mtype !== crepp &&
+            tryCurse(currentTarget)
+        ) {
+            return true;
         }
     }
 
     return false;
 }
+
+
+
+
 
 function tryDarkBlessing(target) {
     if (
