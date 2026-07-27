@@ -112,7 +112,7 @@ const locations = {
   { type: "safe", x: 440, y: -999, map: "spookytown" }
     ],
     targetron: [
-  { type: "farm", x: -386, y: -147, map: "uhills" }, // x: -386, y: -147   x: -518, y: -270
+  { type: "farm", x: -512, y: -239, map: "uhills" }, // x: -386, y: -147   x: -518, y: -270    x: -512, y: -239
   { type: "safe", x: -309, y: -172, map: "uhills" }
     ],
     stoneworm: [
