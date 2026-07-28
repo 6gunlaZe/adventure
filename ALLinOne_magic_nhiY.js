@@ -4,6 +4,7 @@
 // Just set attack_mode to true and ENGAGE!
 ///VIPPPPPPPPPPPP
 ////////////////
+const creppfram = 'targetron';
 let delaymageMagiPort = Date.now();
 const TenMinutesInMs = 300 * 60 * 1000
 let started
@@ -1139,6 +1140,7 @@ function ChuyendoiITEM() {
     let needFireDef = false;
     let needNormalDef = false;
     let needLuck = false;
+	let fram = false;
 
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
@@ -1149,6 +1151,11 @@ function ChuyendoiITEM() {
             break;
         }
 
+        // khi fram cùng đồng đội
+        if (e.mtype === creppfram) {
+            fram = true;
+        }
+		
         // Coop gần chết → ưu tiên luck
         if (e.cooperative && e.hp < 350000) {
             needLuck = true;
@@ -1166,8 +1173,11 @@ function ChuyendoiITEM() {
         equipSet('def');
     } else if (needLuck) {
         equipSet('luck');
+    } else if (fram) {
+		unequip("offhand");
+        equipSet('dameAOE');
     } else {
-        equipSet('dame');
+        equipSet('dame'); 
     }
 }
 
@@ -1280,7 +1290,19 @@ const equipmentSets = {
     ],
     dame: [
         { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
+        { itemName: "firestaff", slot: "mainhand", level: 9, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
+        { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
+		
+    ],
+    dameAOE: [
+        { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
+        { itemName: "sparkstaff", slot: "mainhand", level: 8, l: "l" },
         { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
