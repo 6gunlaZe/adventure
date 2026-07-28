@@ -757,7 +757,7 @@ if (!is_on_cooldown("energize")) {
         let mp_cap = rangerObj.max_mp - 800;
         let ranger_need = mp_cap - rangerObj.mp;
 
-        let mage_can_give = character.mp - 400;
+        let mage_can_give = character.mp - 2000;
 
         if (mage_can_give <= 0) break;
 
