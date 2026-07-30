@@ -1296,7 +1296,7 @@ const equipmentSets = {
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },	    
         { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
 		
     ],
@@ -1307,7 +1307,7 @@ const equipmentSets = {
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
-        { itemName: "sweaterhs", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "vattire", slot: "chest", level: 8, l: "l" },	    
         { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
 		
     ],
