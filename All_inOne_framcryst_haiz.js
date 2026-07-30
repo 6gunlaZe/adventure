@@ -428,8 +428,8 @@ const mobsInRangeNobat = mobsInRange.filter(monster =>
 const nguyehiemoutngay = mobsInRange.filter(monster =>
     distance(character, monster) <= 360 &&
     (
-        (monster.mtype === "a1" && monster.level > 2) ||
-        (monster.mtype === "a8" && monster.level > 6) ||
+        (monster.mtype === "a1") ||
+        (monster.mtype === "a8" && monster.level > 7) ||
         (monster.mtype === "a6" && monster.level > 4)
     )
 );
