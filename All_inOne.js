@@ -1910,7 +1910,7 @@ const magicalMobs = mobsInRange.filter(mob => {
 
 
     // ===== Mana hysteresis =====
-    const MANA_IN = 1050;   // MP xuống dưới mức này → vào mana
+    const MANA_IN = 1250;   // MP xuống dưới mức này → vào mana
     const MANA_OUT = 2200;  // MP lên trên mức này → thoát mana
 
     // Kiểm tra hiện tại đang dùng mana set
