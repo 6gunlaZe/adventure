@@ -1003,6 +1003,12 @@ function ChuyendoiITEM() {
     let needLuck = false;
     let needmana = false;
 
+    // ===== Mana hysteresis =====
+    const MANA_IN = 1450;   // MP xuống dưới mức này → vào mana
+    const MANA_OUT = 2000;  // MP lên trên mức này → thoát mana
+
+    // Kiểm tra hiện tại đang dùng mana set
+    const isManaSet = character.slots?.chest?.name === "tshirt9";
 
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
@@ -1022,28 +1028,37 @@ function ChuyendoiITEM() {
         if (e.target === character.name && character.hp < 4500) {
             needNormalDef = true;
         }
-		
-        // khi không chịu sát thương mà mana thấp
-        if (character.hp > 7500 && character.mp < 2000) {
-            needmana = true;
+
+        // Mana thấp
+        if (character.hp > 7500) {
+            if (!isManaSet && character.mp < MANA_IN) {
+                needmana = true;
+            }
+
+            if (isManaSet && character.mp < MANA_OUT) {
+                needmana = true;
+            }
         }
-		
     }
 
     if (needFireDef) {
         equipSet('def_fire');
+
     } else if (needNormalDef) {
         equipSet('def');
+
     } else if (needLuck) {
         equipSet('luck');
+
     } else if (needmana) {
         equipSet('mana');
+
     } else {
         equipSet('dame');
     }
 }
 
-setInterval(ChuyendoiITEM, 700); // chỉ áp cho trang bị
+setInterval(ChuyendoiITEM, 700);
 
 
 
