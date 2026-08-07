@@ -1845,7 +1845,7 @@ setTimeout(function () {
 
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
-
+let lastManaCheck = 0;
 
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
@@ -1908,6 +1908,15 @@ const magicalMobs = mobsInRange.filter(mob => {
         mob.mtype !== "nerfedbat"
     );
 
+
+    // ===== Mana hysteresis =====
+    const MANA_IN = 1050;   // MP xuống dưới mức này → vào mana
+    const MANA_OUT = 2000;  // MP lên trên mức này → thoát mana
+
+    // Kiểm tra hiện tại đang dùng mana set
+    const isManaSet = character.slots?.chest?.name === "tshirt9";
+
+	
     // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
     if (physicalMobs.length >= 1) {
         defSafeSince = null;
@@ -1979,6 +1988,31 @@ const magicalMobs = mobsInRange.filter(mob => {
         return;
     }
 
+
+if (currentTime - lastManaCheck >= 1000) {
+    lastManaCheck = currentTime;
+
+    if (character.slots.helmet?.name === "fury") {
+
+        if (character.hp > 11500) {
+
+            if (
+                (!isManaSet && character.mp < MANA_IN) ||
+                (isManaSet && character.mp < MANA_OUT)
+            ) {
+                eTime = currentTime;
+                equipSet('mana');
+            }
+            else if (isManaSet) {
+                eTime = currentTime;
+                equipSet('nomana');
+            }
+        }
+    }
+}
+
+	
+
     // 👉 Trạng thái đặc biệt → bỏ qua
     if (events && !get_nearest_monster({ type: home })) return;
     if (bossvip > 0 || framtay > 0) return;
@@ -2002,6 +2036,8 @@ const magicalMobs = mobsInRange.filter(mob => {
 
 	
 }
+
+
 
 
 
@@ -2507,6 +2543,14 @@ const equipmentSets = {
         { itemName: "strring", slot: "ring1", level: 5, l: "l" },
         { itemName: "strring", slot: "ring2", level: 4, l: "l" },
 	    
+    ],
+
+
+    nomana: [
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+    ],
+    mana: [
+        { itemName: "tshirt9", slot: "chest", level: 5, l: "l" },
     ],
 
     single_Magic: [
