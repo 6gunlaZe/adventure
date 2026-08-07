@@ -2141,7 +2141,7 @@ const untargetedMonsters = list
 
 
     if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) ) {
-        if (Mainhand !== "bataxe") {
+        if (Mainhand !== "bataxe" &&  !isEquipping ) {
             scytheSet(); // Equip the bataxe
         }
         use_skill("cleave"); // Use the cleave skill
