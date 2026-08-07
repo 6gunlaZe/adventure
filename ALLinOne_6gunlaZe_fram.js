@@ -1024,7 +1024,7 @@ function ChuyendoiITEM() {
         }
 		
         // khi không chịu sát thương mà mana thấp
-        if (character.hp > 7500 && character.mp < 1300) {
+        if (character.hp > 7500 && character.mp < 2000) {
             needmana = true;
         }
 		
