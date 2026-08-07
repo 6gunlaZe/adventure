@@ -955,6 +955,17 @@ const equipmentSets = {
     def_fire: [
       //  { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
+    mana: [
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+        { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 5, l: "l" },	    
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+		
+    ],
     dame: [
         { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
         { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
@@ -990,6 +1001,8 @@ function ChuyendoiITEM() {
     let needFireDef = false;
     let needNormalDef = false;
     let needLuck = false;
+    let needmana = false;
+
 
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
@@ -1009,6 +1022,12 @@ function ChuyendoiITEM() {
         if (e.target === character.name && character.hp < 4500) {
             needNormalDef = true;
         }
+		
+        // khi không chịu sát thương mà mana thấp
+        if (character.hp > 7500 && character.mp < 1300) {
+            needmana = true;
+        }
+		
     }
 
     if (needFireDef) {
@@ -1017,6 +1036,8 @@ function ChuyendoiITEM() {
         equipSet('def');
     } else if (needLuck) {
         equipSet('luck');
+    } else if (needmana) {
+        equipSet('mana');
     } else {
         equipSet('dame');
     }
