@@ -1911,7 +1911,7 @@ const magicalMobs = mobsInRange.filter(mob => {
 
     // ===== Mana hysteresis =====
     const MANA_IN = 1050;   // MP xuống dưới mức này → vào mana
-    const MANA_OUT = 2000;  // MP lên trên mức này → thoát mana
+    const MANA_OUT = 2200;  // MP lên trên mức này → thoát mana
 
     // Kiểm tra hiện tại đang dùng mana set
     const isManaSet = character.slots?.chest?.name === "tshirt9";
@@ -1989,21 +1989,18 @@ const magicalMobs = mobsInRange.filter(mob => {
     }
 
 
-if (currentTime - lastManaCheck >= 1000) {
+if (currentTime - lastManaCheck >= 700) {
     lastManaCheck = currentTime;
 
     if (character.slots.helmet?.name === "fury") {
 
         if (character.hp > 11500) {
 
-            if (
-                (!isManaSet && character.mp < MANA_IN) ||
-                (isManaSet && character.mp < MANA_OUT)
-            ) {
+            if (!isManaSet && character.mp < MANA_IN) {
                 eTime = currentTime;
                 equipSet('mana');
             }
-            else if (isManaSet) {
+            else if (isManaSet && character.mp >= MANA_OUT) {
                 eTime = currentTime;
                 equipSet('nomana');
             }
