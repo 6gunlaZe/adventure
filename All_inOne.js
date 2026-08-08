@@ -2475,8 +2475,10 @@ const equipmentSets = {
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
     ],
     aoe: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
@@ -2497,7 +2499,8 @@ const equipmentSets = {
 		
     ],
     def_magical: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
@@ -2511,7 +2514,8 @@ const equipmentSets = {
 		
     ],
     def_physical: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
@@ -2551,19 +2555,22 @@ const equipmentSets = {
     ],
 
     single_Magic: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
     ],
 
     single_physical: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },
     ],
     def_bang: [
 	    
     ],
     def_fire: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "lantern", slot: "offhand", level: 4, l: "l" },
         { itemName: "vgloves", slot: "gloves", level: 7, l: "l" },
         { itemName: "orba", slot: "orb", level: 3, l: "l" },
@@ -2575,7 +2582,8 @@ const equipmentSets = {
     ],
 	
     def_magic_ORB: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
