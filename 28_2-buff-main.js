@@ -1408,7 +1408,7 @@ const equipmentSets = {
     deff: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
@@ -1421,13 +1421,13 @@ const equipmentSets = {
     deffbrun: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
     ],
 
     nodeffbrun: [
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },	    
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
     ],
 	
@@ -1499,7 +1499,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
     ],
     creepburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
@@ -1509,7 +1509,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "orboffire", slot: "orb", level: 3, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
