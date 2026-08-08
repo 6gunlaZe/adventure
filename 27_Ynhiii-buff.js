@@ -2305,7 +2305,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
         { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
 
@@ -2327,7 +2327,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
 
@@ -2391,7 +2391,7 @@ const equipmentSets = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 
 		
     ],
@@ -2429,7 +2429,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 		
         { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
 
@@ -2451,7 +2451,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 		
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 0, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
 
