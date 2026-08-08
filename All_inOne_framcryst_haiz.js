@@ -2099,7 +2099,9 @@ const equipmentSets = {
 		
     ],
     luck: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },	    
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },	    
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 1, } 
     ],
@@ -2108,8 +2110,10 @@ const equipmentSets = {
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
     
     ],
     aoe: [
@@ -2120,7 +2124,9 @@ const equipmentSets = {
         { itemName: "stealthcape", slot: "cape", level: 0, l: "l" },
     ],
     def1: [
-        { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },	    
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+
+       // { itemName: "fireblade", slot: "mainhand", level: 10, l: "s" },	    
         { itemName: "sshield", slot: "offhand", level: 8, l: "l" },	   
 		
     ],
