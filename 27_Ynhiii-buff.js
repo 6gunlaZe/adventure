@@ -2296,6 +2296,7 @@ const equipmentSets = {
 		
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
         { itemName: "mpxgloves", slot: "gloves", level: 4 },
@@ -2317,6 +2318,7 @@ const equipmentSets = {
 
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
         { itemName: "mpxgloves", slot: "gloves", level: 4 },
@@ -2334,6 +2336,7 @@ const equipmentSets = {
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
@@ -2343,6 +2346,7 @@ const equipmentSets = {
 
     bossDOC: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
@@ -2357,6 +2361,7 @@ const equipmentSets = {
 
     bossBANG: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
@@ -2374,6 +2379,7 @@ const equipmentSets = {
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
 	    //{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
@@ -2404,16 +2410,10 @@ const equipmentSets = {
         { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
-    mana: [
-        { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
-    ],
-    nomana: [
-        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-    ],
-	
     Unluck: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
@@ -2436,6 +2436,7 @@ const equipmentSets = {
     UnluckVIP: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
     //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
@@ -2634,8 +2635,6 @@ let checkdef = 0;
 let checkheall = 0;
 let checkluckk = 0;
 const blacklistluck = ["nerfedmummy", "nerfedbat",]; // mảng cần loại
-let lastManaCheck = 0;
-
 
 function ChuyendoiITEM() {
 
@@ -2702,34 +2701,7 @@ function ChuyendoiITEM() {
     // 👉 helper check nhanh
     const has = (type) => nearTypes.has(type);
 
-
-
-    // ===== Mana hysteresis =====
-    const MANA_IN = 4000;   // MP xuống dưới mức này → vào mana
-    const MANA_OUT = 7000;  // MP lên trên mức này → thoát mana
-
-    // Kiểm tra hiện tại đang dùng mana set
-    const isManaSet = character.slots?.amulet?.name === "mpxamulet";
-
-
-if (currentTime - lastManaCheck >= 1000 && character.slots?.offhand?.name != "mshield" ) {
-    lastManaCheck = currentTime;
-            if (!isManaSet && character.mp < MANA_IN) {
-                eTime = currentTime;
-                equipSet('mana');
-				        return;
-            }
-            else if (isManaSet && character.mp >= MANA_OUT) {
-                eTime = currentTime;
-                equipSet('nomana');
-				        return;
-            }
-}
-
-
     // ================= LOGIC =================
-
-	
 
     if (smart.moving && !has("bscorpion")) {
         eTime = currentTime;
