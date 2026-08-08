@@ -2410,6 +2410,13 @@ const equipmentSets = {
         { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
+    mana: [
+        { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
+    ],
+    nomana: [
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+    ],
+	
     Unluck: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
@@ -2635,6 +2642,8 @@ let checkdef = 0;
 let checkheall = 0;
 let checkluckk = 0;
 const blacklistluck = ["nerfedmummy", "nerfedbat",]; // mảng cần loại
+let lastManaCheck = 0;
+
 
 function ChuyendoiITEM() {
 
@@ -2701,7 +2710,34 @@ function ChuyendoiITEM() {
     // 👉 helper check nhanh
     const has = (type) => nearTypes.has(type);
 
+
+
+    // ===== Mana hysteresis =====
+    const MANA_IN = 4000;   // MP xuống dưới mức này → vào mana
+    const MANA_OUT = 7000;  // MP lên trên mức này → thoát mana
+
+    // Kiểm tra hiện tại đang dùng mana set
+    const isManaSet = character.slots?.amulet?.name === "mpxamulet";
+
+
+if (currentTime - lastManaCheck >= 1000) {
+    lastManaCheck = currentTime;
+            if (!isManaSet && character.mp < MANA_IN) {
+                eTime = currentTime;
+                equipSet('mana');
+				        return;
+            }
+            else if (isManaSet && character.mp >= MANA_OUT) {
+                eTime = currentTime;
+                equipSet('nomana');
+				        return;
+            }
+}
+
+
     // ================= LOGIC =================
+
+	
 
     if (smart.moving && !has("bscorpion")) {
         eTime = currentTime;
