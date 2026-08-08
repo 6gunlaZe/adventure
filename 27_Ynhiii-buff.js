@@ -2195,7 +2195,7 @@ const equipmentSets = {
     deff: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -2209,7 +2209,7 @@ const equipmentSets = {
     deffbrun: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
@@ -2220,7 +2220,7 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },		
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },	    
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
@@ -2233,7 +2233,7 @@ const equipmentSets = {
       //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
 		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-		        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+		        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
@@ -2280,7 +2280,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
        // { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -2341,7 +2341,7 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
     ],
 
     bossDOC: [
@@ -2351,7 +2351,7 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "tigerstone", slot: "orb", level: 3},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
         { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
@@ -2366,7 +2366,7 @@ const equipmentSets = {
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
         { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
@@ -2384,7 +2384,7 @@ const equipmentSets = {
 	    //{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "mpxgloves", slot: "gloves", level: 4 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -2422,7 +2422,7 @@ const equipmentSets = {
     //   { itemName: "shield", slot: "offhand", level: 8, l: "l" },
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
         { itemName: "mpxgloves", slot: "gloves", level: 4 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
@@ -2444,7 +2444,7 @@ const equipmentSets = {
        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 2, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
         { itemName: "mpxgloves", slot: "gloves", level: 4 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
