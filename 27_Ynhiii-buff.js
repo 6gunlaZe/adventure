@@ -1504,13 +1504,13 @@ function tryPartyHeal() {
 	
 
     // MODE 1: heal thông minh
-    if (target.health_ratio >= 0.65) return false;
+    if (target.health_ratio >= 0.6) return false;
 
-    const maxRatio = 0.68;
+    const maxRatio = 0.65;
     const minRatio = 0.33;
 
-    const maxDelay = 360;
-    const minDelay = 70;
+    const maxDelay = 460;
+    const minDelay = 90;
 
     const r = Math.max(minRatio, Math.min(maxRatio, target.health_ratio));
 
