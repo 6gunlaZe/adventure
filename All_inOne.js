@@ -313,7 +313,7 @@ async function checkGameEvents() {
 
     if (pro > 0) {
         prolive = 1;
-	ICEcheckHPMYSv(["icegolem"] , 15000000)  // ĐỂ MÁU LÀ 15M TRÁNH TỰ ĐÁNH 1 MÌNH
+	ICEcheckHPMYSv(["icegolem"] , 15000000)  // ĐỂ MÁU LÀ 15M TRÁNH TỰ ĐÁNH 1 MÌNH, ví dụ khi đang ở sever ngẫu nhiên xuất hiện icegolem, không kịp chuyển qua franky
 
     } else {
         prolive = 0; // khi boss đã chết
