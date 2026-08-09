@@ -621,11 +621,26 @@ const equipmentSets = {
         { itemName: "orboffire", slot: "orb", level: 3, l: "l" },
     ],
     dame: [
+
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+
         { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
-        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+		
+    ],
+    damehuman: [
+        { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
+        { itemName: "mpxgloves", slot: "gloves", level: 4, l: "l" },
+		
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
         { itemName: "pants", slot: "pants", level: 10, l: "l" },
 		
@@ -639,6 +654,10 @@ function ChuyendoiITEM() {
     let needNormalDef = false;
     let needLuck = false;
 
+const target1 = get_entity(character.target);
+const human = !!target1?.humanoid;
+
+	
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
 
@@ -665,6 +684,8 @@ function ChuyendoiITEM() {
       //  equipSet('def');
     } else if (needLuck) {
         equipSet('luck');
+    } else if (human) {
+        equipSet('damehuman');
     } else {
         equipSet('dame');
     }
