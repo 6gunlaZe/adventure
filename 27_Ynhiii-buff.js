@@ -1048,8 +1048,8 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
             // === Quái sắp chết (cướp kill) ===
             const dyingMobs = threats.filter(e => {
                 const hpThreshold =
-                    e.max_hp >= 800000 ? 38000 :
-                    e.max_hp >= 200000 ? 25000 : 9000;
+                    e.max_hp >= 800000 ? 45000 :
+                    e.max_hp >= 200000 ? 29000 : 15000;
                 return e.hp < hpThreshold && e.max_hp > 9000;
             }).length;
 
@@ -2685,11 +2685,11 @@ function ChuyendoiITEM() {
             if (isCoop) {
                 if (e.hp < 150000) hasLowHp = true;
             } else if (isTargetingMe) {
-                let threshold = 9000;
-                if (e.max_hp >= 800000) threshold = 38000;
-                else if (e.max_hp >= 200000) threshold = 25000;
-				if (character.map == "uhills") threshold = 9300; // dùng riêng cho quái tagetron
-				if (character.map == "winter_instance") threshold = 15000; // dùng riêng cho quái xmagex
+                let threshold = 12000;
+                if (e.max_hp >= 800000) threshold = 42000;
+                else if (e.max_hp >= 200000) threshold = 28000;
+				if (character.map == "uhills") threshold = 11000; // dùng riêng cho quái tagetron
+				if (character.map == "winter_instance") threshold = 17000; // dùng riêng cho quái xmagex
 
                 if (e.hp < threshold) hasLowHp = true;
             }
