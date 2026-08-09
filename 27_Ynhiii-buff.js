@@ -1038,7 +1038,7 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
                     m.mtype === extraMob
                 ).length;
 
-                if (farmCount >= 3 && character.hp > 10000) {
+                if (farmCount >= 2 && character.hp > 10000) {
                     score += 20;
                     shouldAbsorb = true;
                 }
