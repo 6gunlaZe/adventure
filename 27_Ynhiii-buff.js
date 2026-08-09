@@ -1241,7 +1241,7 @@ const CURSE_TANK_HP = 30000;
 
 // ================= Curse =================
 
-function tryCurse(target, mpReq = 4500) {
+function tryCurse(target, mpReq = 4200) {
     if (
         target &&
         character.mp > mpReq &&
