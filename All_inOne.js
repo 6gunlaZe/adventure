@@ -3561,7 +3561,7 @@ function autoPartyCheck(f1name, f2name, interval = 60000) {
 
 //////////////
 
-function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
+async function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
     if (parent?.S?.[eventType]) {
               Now_is_gobalevenrun = true
 	    
@@ -3588,7 +3588,17 @@ function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name) {
         }
 	    else
 	{
-	 if (!smart.moving) smart_move({ x, y, map: mapName });
+
+    if (!smart.moving) {
+    try {
+        await smart_move({ x, y, map: mapName });
+    } catch (error) {
+        console.log("Không thể đi tới boss, dùng town.");
+        await use_skill("town");
+        return;
+    }
+    }
+
 	}
 
 
