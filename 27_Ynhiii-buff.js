@@ -1469,14 +1469,14 @@ function tryPartyHeal() {
     if (character.mp <= 750) return false;
 
     // MODE 0: cứu nguy spike damage (double heal)
-    if (target.health_ratio < 0.3) {
+    if (target.health_ratio < 0.33) {
         use_skill("partyheal");
         delayParty = Date.now();
         return true;
     }
 
     // MODE 2: heal phụ khi mana dư
-    if (character.mp > 6000 && target.health_ratio < 0.50) {
+    if (character.mp > 6000 && target.health_ratio < 0.60) {
         if (Date.now() > delayParty + 800) {
             use_skill("partyheal");
             delayParty = Date.now();
@@ -1504,13 +1504,13 @@ function tryPartyHeal() {
 	
 
     // MODE 1: heal thông minh
-    if (target.health_ratio >= 0.6) return false;
+    if (target.health_ratio >= 0.65) return false;
 
-    const maxRatio = 0.65;
+    const maxRatio = 0.68;
     const minRatio = 0.33;
 
-    const maxDelay = 460;
-    const minDelay = 100;
+    const maxDelay = 360;
+    const minDelay = 70;
 
     const r = Math.max(minRatio, Math.min(maxRatio, target.health_ratio));
 
