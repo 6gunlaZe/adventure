@@ -737,57 +737,182 @@ if ( currentTarget && cung1 && (distance(character,cung1) < character.range)) {
 	
 	
 	
-////// buff xạ thủ – có chế độ nguy cấp (multi target)
-
-let rangerList = ["arena","winter_instance"].includes(character.map)
-    ? ["Ynhi", "6gunlaZe", "haiz"]
-    : ["6gunlaZe", "haiz", "Ynhi"];
-
-
-if (!is_on_cooldown("energize")) {
-
-    for (let name of rangerList) {
-
-        let rangerObj = get_player(name);
-        if (!rangerObj) continue;
-
-        if (!is_in_range(rangerObj, "energize")) continue;
-        if (rangerObj.rip) continue;
-
-        let mp_cap = rangerObj.max_mp - 800;
-        let ranger_need = mp_cap - rangerObj.mp;
-
-        let mage_can_give = character.mp - 2000;
-
-        if (mage_can_give <= 0) break;
-
-        let amount = Math.min(ranger_need, mage_can_give);
-
-        if (amount > 0) {
-
-            use_skill("energize", rangerObj.name, amount);
-
-            break; // ⚠️ mỗi tick chỉ buff 1 người
-        }
-    }
-}
-
-
-
-	
-	
-	//////
-	
-	
-	
-
-
-	
 	
 	
 	
 	
 },1000/4); // Loops every 1/4 seconds.
+
+
+
+
+
+
+
+// ==========================================
+// RANGER ENERGIZE LOOP
+// ==========================================
+
+const rangerArena = ["Ynhi", "6gunlaZe", "haiz"];
+const rangerNormal = ["6gunlaZe", "haiz", "Ynhi"];
+
+let energizeLoopRunning = false;
+
+
+// ==========================================
+// START
+// ==========================================
+
+function startEnergizeLoop() {
+
+    if (energizeLoopRunning) return;
+    energizeLoopRunning = true;
+
+    const loop = () => {
+
+        if (!energizeLoopRunning) return;
+
+        try {
+
+            // Energize đang cooldown
+            if (is_on_cooldown("energize")) {
+                setTimeout(loop, 50);
+                return;
+            }
+
+            // Mage giữ lại 2000 MP
+            const mageCanGive = character.mp - 2000;
+
+            if (mageCanGive <= 0) {
+                setTimeout(loop, 50);
+                return;
+            }
+
+
+            // ==========================================
+            // ARENA / WINTER INSTANCE
+            // Giữ nguyên thứ tự ưu tiên
+            // ==========================================
+
+            if (
+                character.map === "arena" ||
+                character.map === "winter_instance"
+            ) {
+
+                for (const name of rangerArena) {
+
+                    const ranger = get_player(name);
+
+                    if (!ranger) continue;
+                    if (ranger.rip) continue;
+                    if (!is_in_range(ranger, "energize")) continue;
+
+                    const need =
+                        ranger.max_mp - 600 - ranger.mp;
+
+                    if (need <= 0) continue;
+
+                    const amount = Math.min(
+                        need,
+                        mageCanGive
+                    );
+
+                    use_skill(
+                        "energize",
+                        ranger.name,
+                        amount
+                    );
+
+                    break;
+                }
+
+            }
+
+            // ==========================================
+            // MAP KHÁC
+            // Ưu tiên người thiếu nhiều MP nhất
+            // HAIZ x2
+            // ==========================================
+
+            else {
+
+                let bestRanger = null;
+                let bestPriority = 0;
+
+                for (const name of rangerNormal) {
+
+                    const ranger = get_player(name);
+
+                    if (!ranger) continue;
+                    if (ranger.rip) continue;
+                    if (!is_in_range(ranger, "energize")) continue;
+
+                    const need =
+                        ranger.max_mp - 600 - ranger.mp;
+
+                    if (need <= 0) continue;
+
+                    // Haiz có độ ưu tiên x2
+                    const priority =
+                        name === "haiz"
+                            ? need * 2
+                            : need;
+
+                    if (priority > bestPriority) {
+                        bestPriority = priority;
+                        bestRanger = ranger;
+                    }
+                }
+
+                // Có người cần buff
+                if (bestRanger) {
+
+                    const need =
+                        bestRanger.max_mp -
+                        600 -
+                        bestRanger.mp;
+
+                    const amount = Math.min(
+                        need,
+                        mageCanGive
+                    );
+
+                    use_skill(
+                        "energize",
+                        bestRanger.name,
+                        amount
+                    );
+                }
+            }
+
+        } catch (e) {
+            console.error("Energize loop error:", e);
+        }
+
+        setTimeout(loop, 100);
+    };
+
+    loop();
+}
+
+
+// ==========================================
+// STOP
+// ==========================================
+
+function stopEnergizeLoop() {
+    energizeLoopRunning = false;
+}
+
+
+// ==========================================
+// START LOOP
+// ==========================================
+
+startEnergizeLoop();
+
+
+
 
 
 
