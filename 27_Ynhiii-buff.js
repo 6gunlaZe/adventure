@@ -890,7 +890,6 @@ setInterval(() => {
             gcdFastTimer = null;
 
             const t = get_targeted_monster();
-            if (!t) return;
 			
              tryPartyHeal();
 			
@@ -901,6 +900,7 @@ setInterval(() => {
             if (tryNearbyHeal()) return;
 			
             if (hutquaibangtay()) return;
+            if (!t) return;
             if (tryAttack(t)) return;
 
 			
