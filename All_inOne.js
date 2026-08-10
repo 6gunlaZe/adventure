@@ -2551,7 +2551,7 @@ const equipmentSets = {
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
     ],
     mana: [
-        { itemName: "tshirt9", slot: "chest", level: 5, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
 
     single_Magic: [
