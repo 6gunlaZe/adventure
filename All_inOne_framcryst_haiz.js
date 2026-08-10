@@ -2145,7 +2145,7 @@ const equipmentSets = {
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
     ],
     mana: [
-        { itemName: "tshirt9", slot: "chest", level: 6, l: "l" }
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" }
     ],
     stat: [
         { itemName: "coat", slot: "chest", level: 13, l: "l" }
