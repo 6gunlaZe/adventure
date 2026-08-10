@@ -1054,7 +1054,9 @@ function ChuyendoiITEM() {
         equipSet('mana');
 
     } else {
-        equipSet('dame');
+       // equipSet('dame');
+        equipSet('mana');
+
     }
 }
 
