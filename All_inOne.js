@@ -2002,7 +2002,7 @@ if (currentTime - lastManaCheck >= 700) {
             }
             else if (isManaSet && character.mp >= MANA_OUT) {
                 eTime = currentTime;
-                equipSet('nomana');
+                //equipSet('nomana');
             }
         }
     }
