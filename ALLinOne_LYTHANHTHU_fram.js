@@ -649,15 +649,30 @@ const equipmentSets = {
 };
 
 
+
+
+
+
+
+const humanoidNames = new Set([
+    "franky",
+    "banditleader",
+    "cultist",
+    "witch",
+    // thêm name quái humanoid vào đây
+]);
+
 function ChuyendoiITEM() {
     let needFireDef = false;
     let needNormalDef = false;
     let needLuck = false;
 
-const target1 = get_entity(character.target);
-const human = !!target1?.humanoid;
+    const target1 = get_entity(character.target);
 
-	
+    const human =
+        !!target1?.humanoid ||
+        humanoidNames.has(target1?.mtype);
+
     for (const e of Object.values(parent.entities)) {
         if (!e.visible || e.dead || distance(character, e) > 400) continue;
 
@@ -679,19 +694,21 @@ const human = !!target1?.humanoid;
     }
 
     if (needFireDef) {
-      //  equipSet('def_fire');
+        // equipSet("def_fire");
     } else if (needNormalDef) {
-      //  equipSet('def');
+        // equipSet("def");
     } else if (needLuck) {
-        equipSet('luck');
+        equipSet("luck");
     } else if (human) {
-        equipSet('damehuman');
+        equipSet("damehuman");
     } else {
-        equipSet('dame');
+        equipSet("dame");
     }
 }
 
-setInterval(ChuyendoiITEM, 700); // chỉ áp cho trang bị
+setInterval(ChuyendoiITEM, 700);
+
+
 
 
 
