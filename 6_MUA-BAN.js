@@ -246,6 +246,9 @@ var bankItems = {
   alloyquiver: [{ bank: "items1", level: -1, quantity: 1 }],
   pinkie: [{ bank: "items1", level: 5, quantity: 1 }],
   ecape: [{ bank: "items1", level: 8, quantity: 1 }],
+  sparkstaff: [{ bank: "items1", level: -1, quantity: 1 }],
+
+	
 	
   bataxe: [
     { bank: "items1", level: 5, quantity: 1 },
@@ -257,11 +260,6 @@ var bankItems = {
   pants: [
     { bank: "items1", level: 9, quantity: 1 },
     { bank: "items1", level: 8, quantity: 1 },
-    { bank: "items1", level: 7, quantity: 1 },
-  ],
-  sparkstaff: [
-    { bank: "items1", level: 5, quantity: 1 },
-    { bank: "items1", level: 6, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
   shield: [
