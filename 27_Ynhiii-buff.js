@@ -2800,16 +2800,16 @@ function ChuyendoiITEM() {
         return;
     }
 
-    if (hasLowHp && (character.map != "winter_instance" || MageX) &&
+    if (hasLowHp && character.ping < 500 && (character.map != "winter_instance" || MageX) &&
         character.hp/character.max_hp > 0.45 && checkdef == 0 &&
-        character.mp > 1500 && character.slots.orb?.name != "rabbitsfoot") {
+        character.mp > 2000 && character.slots.orb?.name != "rabbitsfoot") {
 
         eTime = currentTime;
 
         let slot = locate_item("luckbooster");
         if (slot == -1) shift(0, 'luckbooster');
 
-        if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2500) {
+        if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2800) {
             equipSet('luck');
         } else {
             equipSet('luckfull');
