@@ -285,108 +285,6 @@ function getLowestHpPercentTarget(targets) {
 }
 
 
-/*
-
-const targetNames = ["haiz","6gunlaZe","nhiY","tienV","Ynhi","LyThanhThu1"];
-
-
-async function attackLoop() {
-	//if (character.moving)return
-    let delay = null; // Default delay
-
-    try {
-        let nearest = null;
-
-
-if (
-        character.map == mobMap &&
-        distance(character, { x: locations[home][0].x, y: locations[home][0].y }) < 250
-    ) 
-{	
-        // Find the nearest monster based on the targetNames
-        for (let i = 0; i < targetNames.length; i++) {
-          nearest = get_nearest_monster_v2({
-          target: targetNames[i],
-           max_distance: character.range,
-         check_low_hp: true
-         });
-            if (nearest) break;
-        }
-}
-
-        if (!nearest) {
-            for (let i = 0; i < targetNames.length; i++) {
-                nearest = get_nearest_monster_v2({
-                    target: targetNames[i],
-					statusEffects: ["cursed"],
-                    max_distance: character.range,
-                    check_max_hp: true,  // Checking for monster with max HP
-                });
-                if (nearest) break;
-            }
-        }
-		
-
-	    
-        if (!nearest) {
-            for (let i = 0; i < targetNames.length; i++) {
-                nearest = get_nearest_monster_v2({
-                    target: targetNames[i],
-                    max_distance: character.range,
-                    check_max_hp: true,  // Checking for monster with max HP
-                });
-                if (nearest) break;
-            }
-        }
-
-    if (!nearest) {
-        // Target hiện tại
-        let currentTarget = get_targeted_monster();
-
-        // Tìm target theo thứ tự ưu tiên
-        let priorityTarget = null;
-
-        for (let name of targetNames) {
-            const player = get_player(name);
-            if (!player) continue;
-
-            const t = get_target_of(player);
-            if (t && !t.dead) {
-                priorityTarget = t;
-                break; // dừng ngay khi tìm được target hợp lệ đầu tiên
-            }
-        }
-
-        // Đổi target nếu cần
-        if (priorityTarget) {
-			if (currentTarget !== priorityTarget)change_target(priorityTarget);
-            nearest = priorityTarget;
-        }
-     }
-
-
-
-	if ( nearest && !is_in_range(nearest))
-	{
-          gobaltaget = nearest;
-	}
-	    
-        // If a monster is found and is in range, execute the attack
-        if (nearest && is_in_range(nearest) && !smart.moving) {
-            await attack(nearest); // Initiate attack
-            delay = ms_to_next_skill("attack"); // Calculate delay for the next attack
-        }
-
-	    
-    } catch (e) {
-        //console.error(e);
-    }
-	 setTimeout(attackLoop, delay/2 || 250); // Default delay if undefined
-}
-
-attackLoop();
-
-*/
 
 
 
@@ -498,7 +396,7 @@ function attackLoop() {
 
         const t = combatState.target;
 
-        if (!t || smart.moving || is_disabled(character)) {
+        if (!t || is_disabled(character)) {
             return setTimeout(attackLoop, 40);
         }
 
