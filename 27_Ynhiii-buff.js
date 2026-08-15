@@ -323,64 +323,96 @@ function partyheal_logic() {
 setInterval(partyheal_logic, 600);
 
 
-/*
-let last_cast_time = null;
 
-function resource_logic() {
 
-    let skill = null;
+// ================= POTION =================
 
-    if (character.hp < 2100 && character.mp > 100 && can_use("use_hp")) {
-        skill = "use_hp";
+function use_hp_or_mp1() {
+    try {
+        // HP và MP dùng chung cooldown
+        if (is_on_cooldown("use_hp")) {
+            return false;
+        }
+
+        let skill;
+
+        // HP thấp + MP > 150 → HP
+        if (character.hp < 2100 && character.mp > 150) {
+            skill = "use_hp";
+        }
+
+        // HP chưa thấp + MP < 90% → MP
+        else if (character.mp / character.max_mp < 0.9) {
+            skill = "use_mp";
+        }
+
+        // Các trường hợp còn lại → HP
+        else {
+            skill = "use_hp";
+        }
+
+        use_skill(skill);
+
+        // Giảm cooldown potion theo ping
+        reduce_cooldown("use_hp", character.ping * 0.95);
+
+        return true;
+
+    } catch (e) {
+        return false;
     }
-    else if (character.mp / character.max_mp < 0.9 && can_use("use_mp")) {
-        skill = "use_mp";
-    }
-
-
-    if (!skill) return;
-
-    // CAST
-    use_skill(skill);
-
-    const now = Date.now();
-    const delta = last_cast_time ? now - last_cast_time : 0;
-
-    game_log(
-        `[CAST] ${skill} | Δ=${delta}ms (cd≈2000ms)`,
-        delta < 1800 ? "red" : "green"
-    );
-
-    last_cast_time = now;
 }
 
-setInterval(resource_logic, 100);
 
-*/
+// ================= POTION LOOP =================
 
+function potionLoop() {
+    let delay = 25;
 
+    try {
+        const ms = ms_to_next_skill("use_hp");
 
+        // Potion gần sẵn sàng
+        if (ms < Math.max(10, character.ping / 10)) {
 
-function use_hp_or_mp1()
-{
-	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
-	var used=true;
-	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
-	
+            const used = use_hp_or_mp1();
 
-    if (character.hp < 2100 && character.mp > 100)use_skill("use_hp");
-    else if (character.mp / character.max_mp < 0.9)use_skill("use_mp");
-	else used=false;
-	
-	if(used)
-		last_potion=new Date();
-	else
-		return resolving_promise({reason:"full",success:false,used:false});
+            if (used) {
+                // Vừa dùng → cooldown mới bắt đầu
+                delay = 500;
+            } else {
+                // Chưa dùng được → chống spam
+                delay = 20;
+            }
+
+        } else {
+
+            // Adaptive polling
+            delay = 25;
+
+            if (ms > 25)   delay = 10;
+            if (ms > 50)   delay = 30;
+            if (ms > 100)  delay = 60;
+            if (ms > 200)  delay = 140;
+            if (ms > 300)  delay = 200;
+            if (ms > 500)  delay = 300;
+            if (ms > 800)  delay = 400;
+            if (ms > 1200) delay = 500;
+            if (ms > 1600) delay = 600;
+        }
+
+    } catch (e) {
+        delay = 200;
+    }
+
+    setTimeout(potionLoop, delay);
 }
 
-setInterval(function() {
-use_hp_or_mp1()
-}, 200);
+
+// ================= START =================
+
+potionLoop();
+
 
 
 
