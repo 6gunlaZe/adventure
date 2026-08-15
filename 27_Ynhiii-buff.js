@@ -342,7 +342,7 @@ function use_hp_or_mp1() {
         }
 
         // HP chưa thấp + MP < 90% → MP
-        else if (character.mp / character.max_mp < 0.9) {
+        else if (character.mp / character.max_mp < 0.95) {
             skill = "use_mp";
         }
 
