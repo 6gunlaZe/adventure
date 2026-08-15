@@ -1321,9 +1321,12 @@ function use_hp_or_mp1() {
         } 
         else if (character.mp / character.max_mp < 0.85) {
             skill = "use_mp";
-        } 
-        else {
+         
+        } else if (character.hp / character.max_hp < 0.9) {
             skill = "use_hp";
+        } else {
+            // Đã sửa: Không thỏa điều kiện nào (HP >= 90% và MP >= 95%) -> Bỏ qua không cắn
+            return;
         }
 
         is_using_potion = true;
