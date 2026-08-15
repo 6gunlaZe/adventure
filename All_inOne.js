@@ -2891,7 +2891,7 @@ function use_hp_or_mp1() {
         if (character.mp < 1600 && character.hp > 10500) {
             skill = "use_mp";
         } 
-        else if (character.hp / character.max_mp < 0.8 && character.mp > 150) {
+        else if (character.hp / character.max_hp < 0.8 && character.mp > 150) {
             skill = "use_hp";
         } 
         else if (character.mp / character.max_mp < 0.85) {
