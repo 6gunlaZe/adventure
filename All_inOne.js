@@ -2877,28 +2877,88 @@ setInterval(scare, 1000);
 
 
 
-function use_hp_or_mp1()
-{
-	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
-	var used=true;
-	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
-	
-	
-if (character.mp < 600 && character.hp > 5500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.95) use_skill("use_mp");
 
-	
-	else used=false;
-	if(used)
-		last_potion=new Date();
-	else
-		return resolving_promise({reason:"full",success:false,used:false});
+
+
+let is_using_potion = false;
+
+function use_hp_or_mp1() {
+    if (is_using_potion) return;
+
+    try {
+        let skill;
+
+        if (character.mp < 1600 && character.hp > 10500) {
+            skill = "use_mp";
+        } 
+        else if (character.hp / character.max_mp < 0.8 && character.mp > 150) {
+            skill = "use_hp";
+        } 
+        else if (character.mp / character.max_mp < 0.85) {
+            skill = "use_mp";
+        } 
+        else {
+            skill = "use_hp";
+        }
+
+        is_using_potion = true;
+
+        use_skill(skill)
+            .then(() => {
+                const reduction = character.ping * 0.95;
+                
+                // Đồng bộ giảm Cooldown cho CẢ HAI kỹ năng
+                reduce_cooldown("use_hp", reduction);
+                reduce_cooldown("use_mp", reduction);
+                
+            })
+            .catch(() => {})
+            .finally(() => {
+                is_using_potion = false;
+            });
+
+    } catch (e) {
+        is_using_potion = false;
+    }
 }
 
-setInterval(function() {
-use_hp_or_mp1()
-}, 200);
+function potionLoop() {
+    let delay = 25;
+
+    try {
+        // Kiểm tra cooldown nhỏ nhất giữa HP và MP để đảm bảo tính chuẩn xác
+        const ms_hp = ms_to_next_skill("use_hp");
+        const ms_mp = ms_to_next_skill("use_mp");
+        const ms = Math.min(
+            isNaN(ms_hp) ? 0 : ms_hp, 
+            isNaN(ms_mp) ? 0 : ms_mp
+        );
+
+        if (ms < Math.max(10, character.ping / 10)) {
+            use_hp_or_mp1();
+        }
+
+        if (ms > 1600)      delay = 600;
+        else if (ms > 1200) delay = 500;
+        else if (ms > 800)  delay = 400;
+        else if (ms > 500)  delay = 300;
+        else if (ms > 300)  delay = 200;
+        else if (ms > 200)  delay = 140;
+        else if (ms > 100)  delay = 60;
+        else if (ms > 50)   delay = 30;
+        else if (ms > 25)   delay = 10;
+        else                delay = 25;
+
+    } catch (e) {
+        delay = 200;
+    }
+
+    setTimeout(potionLoop, delay);
+}
+
+potionLoop();
+
+
 
 
 
