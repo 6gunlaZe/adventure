@@ -324,66 +324,71 @@ setInterval(partyheal_logic, 600);
 
 
 
-// ================= POTION =================
+
+
+let is_using_potion = false;
 
 function use_hp_or_mp1() {
+    if (is_using_potion) return;
+
     try {
         let skill;
 
-        // HP thấp + MP > 150 → HP
         if (character.hp < 2100 && character.mp > 150) {
             skill = "use_hp";
-        }
-
-        // HP chưa thấp + MP < 95% → MP
-        else if (character.mp / character.max_mp < 0.95) {
+        } else if (character.mp / character.max_mp < 0.95) {
             skill = "use_mp";
-        }
-
-        // Các trường hợp còn lại → HP
-        else {
+        } else {
             skill = "use_hp";
         }
 
-        // Chỉ giảm cooldown sau khi use_skill() resolve
+        is_using_potion = true;
+
         use_skill(skill)
             .then(() => {
-                reduce_cooldown(
-                    "use_hp",
-                    character.ping * 0.95
-                );
+                const reduction = character.ping * 0.95;
+                
+                // Đồng bộ giảm Cooldown cho CẢ HAI kỹ năng
+                reduce_cooldown("use_hp", reduction);
+                reduce_cooldown("use_mp", reduction);
+                
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+                is_using_potion = false;
+            });
 
-    } catch (e) {}
+    } catch (e) {
+        is_using_potion = false;
+    }
 }
-
-
-// ================= POTION LOOP =================
 
 function potionLoop() {
     let delay = 25;
 
     try {
-        const ms = ms_to_next_skill("use_hp");
+        // Kiểm tra cooldown nhỏ nhất giữa HP và MP để đảm bảo tính chuẩn xác
+        const ms_hp = ms_to_next_skill("use_hp");
+        const ms_mp = ms_to_next_skill("use_mp");
+        const ms = Math.min(
+            isNaN(ms_hp) ? 0 : ms_hp, 
+            isNaN(ms_mp) ? 0 : ms_mp
+        );
 
-        // Potion gần sẵn sàng
         if (ms < Math.max(10, character.ping / 10)) {
             use_hp_or_mp1();
         }
 
-        // Adaptive polling
-        delay = 25;
-
-        if (ms > 25)   delay = 10;
-        if (ms > 50)   delay = 30;
-        if (ms > 100)  delay = 60;
-        if (ms > 200)  delay = 140;
-        if (ms > 300)  delay = 200;
-        if (ms > 500)  delay = 300;
-        if (ms > 800)  delay = 400;
-        if (ms > 1200) delay = 500;
-        if (ms > 1600) delay = 600;
+        if (ms > 1600)      delay = 600;
+        else if (ms > 1200) delay = 500;
+        else if (ms > 800)  delay = 400;
+        else if (ms > 500)  delay = 300;
+        else if (ms > 300)  delay = 200;
+        else if (ms > 200)  delay = 140;
+        else if (ms > 100)  delay = 60;
+        else if (ms > 50)   delay = 30;
+        else if (ms > 25)   delay = 10;
+        else                delay = 25;
 
     } catch (e) {
         delay = 200;
@@ -392,10 +397,11 @@ function potionLoop() {
     setTimeout(potionLoop, delay);
 }
 
-
-// ================= START =================
-
 potionLoop();
+
+
+
+
 
 
 
