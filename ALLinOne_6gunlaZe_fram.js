@@ -1302,31 +1302,6 @@ setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 
 
 
-function use_hp_or_mp1()
-{
-	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
-	var used=true;
-	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
-	
-	
-if (character.mp < 600 && character.hp > 2500 ) use_skill("use_mp");
-  else if (character.hp/character.max_hp< 0.6 && character.mp > 130 ) use_skill("use_hp");
-  else if (character.mp/character.max_mp < 0.75) use_skill("use_mp");
-
-	
-	else used=false;
-	if(used)
-		last_potion=new Date();
-	else
-		return resolving_promise({reason:"full",success:false,used:false});
-}
-
-setInterval(function() {
-use_hp_or_mp1()
-}, 200);
-
-
-
 
 
 
