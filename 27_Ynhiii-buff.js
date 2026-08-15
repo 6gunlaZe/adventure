@@ -1462,7 +1462,6 @@ let delayParty = 0;
 
 function tryPartyHeal() {
 
-    if (is_on_cooldown("partyheal")) return false;
 
     const target = lowest_health_partymember();
     if (!target) return false;
@@ -1476,6 +1475,9 @@ function tryPartyHeal() {
         return true;
     }
 
+    if (is_on_cooldown("partyheal")) return false;
+
+	
     // MODE 2: heal phụ khi mana dư
     if (character.mp > 6000 && target.health_ratio < 0.60) {
         if (Date.now() > delayParty + 400) {
