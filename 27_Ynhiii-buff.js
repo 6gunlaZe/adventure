@@ -324,16 +324,10 @@ setInterval(partyheal_logic, 600);
 
 
 
-
 // ================= POTION =================
 
 function use_hp_or_mp1() {
     try {
-        // HP và MP dùng chung cooldown
-        if (is_on_cooldown("use_hp")) {
-            return false;
-        }
-
         let skill;
 
         // HP thấp + MP > 150 → HP
@@ -341,7 +335,7 @@ function use_hp_or_mp1() {
             skill = "use_hp";
         }
 
-        // HP chưa thấp + MP < 90% → MP
+        // HP chưa thấp + MP < 95% → MP
         else if (character.mp / character.max_mp < 0.95) {
             skill = "use_mp";
         }
@@ -351,16 +345,17 @@ function use_hp_or_mp1() {
             skill = "use_hp";
         }
 
-        use_skill(skill);
+        // Chỉ giảm cooldown sau khi use_skill() resolve
+        use_skill(skill)
+            .then(() => {
+                reduce_cooldown(
+                    "use_hp",
+                    character.ping * 0.95
+                );
+            })
+            .catch(() => {});
 
-        // Giảm cooldown potion theo ping
-        reduce_cooldown("use_hp", character.ping * 0.95);
-
-        return true;
-
-    } catch (e) {
-        return false;
-    }
+    } catch (e) {}
 }
 
 
@@ -374,32 +369,21 @@ function potionLoop() {
 
         // Potion gần sẵn sàng
         if (ms < Math.max(10, character.ping / 10)) {
-
-            const used = use_hp_or_mp1();
-
-            if (used) {
-                // Vừa dùng → cooldown mới bắt đầu
-                delay = 500;
-            } else {
-                // Chưa dùng được → chống spam
-                delay = 20;
-            }
-
-        } else {
-
-            // Adaptive polling
-            delay = 25;
-
-            if (ms > 25)   delay = 10;
-            if (ms > 50)   delay = 30;
-            if (ms > 100)  delay = 60;
-            if (ms > 200)  delay = 140;
-            if (ms > 300)  delay = 200;
-            if (ms > 500)  delay = 300;
-            if (ms > 800)  delay = 400;
-            if (ms > 1200) delay = 500;
-            if (ms > 1600) delay = 600;
+            use_hp_or_mp1();
         }
+
+        // Adaptive polling
+        delay = 25;
+
+        if (ms > 25)   delay = 10;
+        if (ms > 50)   delay = 30;
+        if (ms > 100)  delay = 60;
+        if (ms > 200)  delay = 140;
+        if (ms > 300)  delay = 200;
+        if (ms > 500)  delay = 300;
+        if (ms > 800)  delay = 400;
+        if (ms > 1200) delay = 500;
+        if (ms > 1600) delay = 600;
 
     } catch (e) {
         delay = 200;
@@ -412,8 +396,6 @@ function potionLoop() {
 // ================= START =================
 
 potionLoop();
-
-
 
 
 
