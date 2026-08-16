@@ -780,7 +780,7 @@ setTimeout(function() {
 
 
 
-changeitem({ slot: "gloves", name : "mpxgloves", level : 4 });
+changeitem({ slot: "gloves", name : "mpxgloves", level : 6 });
 
 
 async function lootLoop() {
@@ -2383,7 +2383,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 4 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -2405,7 +2405,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3},	
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 4 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -2470,7 +2470,7 @@ const equipmentSets = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 4 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -2490,7 +2490,7 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "mpxgloves", slot: "gloves", level: 4 }, 
+        { itemName: "mpxgloves", slot: "gloves", level: 6 }, 
         { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
@@ -2507,7 +2507,7 @@ const equipmentSets = {
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-        { itemName: "mpxgloves", slot: "gloves", level: 4 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -2529,7 +2529,7 @@ const equipmentSets = {
 
       //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-        { itemName: "mpxgloves", slot: "gloves", level: 4 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
