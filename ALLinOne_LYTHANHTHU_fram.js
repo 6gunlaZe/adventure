@@ -533,7 +533,7 @@ const equipmentSets = {
     ],
     damehuman: [
         { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
-        { itemName: "mpxgloves", slot: "gloves", level: 4, l: "l" },
+        { itemName: "mpxgloves", slot: "gloves", level: 5, l: "l" },
 		
         { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
 
