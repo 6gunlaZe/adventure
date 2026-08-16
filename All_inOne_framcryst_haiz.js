@@ -543,6 +543,9 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 		else if (MobisA1.length >= 1 && untargetedMobs.length == 0)  //thả diều a1
 		{
 /////////////////
+
+			/*  
+			// tạm ngưng đánh a1 nên tắt code này
                 let target_monster = get_nearest_monster({ type: "a1" });
 
     if (target_monster && distance(character, target_monster) < character.range )
@@ -561,6 +564,7 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
         }
         togglea1 = !togglea1; // đổi trạng thái ở vòng lặp tiếp theo
     }
+	*/
 ///////////////////
 		}
 
