@@ -1448,6 +1448,8 @@ function tryNearbyHeal() {
     return false;
 }
 
+
+/*
 let delayHeal = 0;
 function trySingleHeal() {
 
@@ -1478,6 +1480,62 @@ function trySingleHeal() {
 
     return false;
 }
+
+*/
+
+
+
+
+let delayHeal = 0;
+
+function trySingleHeal() {
+    // Chỉ pre-queue nếu CD còn dưới 150ms
+    if (ms_to_next_skill("heal") > 150) return false;
+
+    let rateheal;
+    if (character.map === "winter_instance") {
+        rateheal = 0.9;
+    } else {
+        rateheal = 1 - (character.heal / character.max_hp);
+        if (rateheal < 0.9) rateheal = 0.9;
+        if (character.targets > 5) rateheal = 0.95;
+    }
+
+    const target = lowest_health_partymember();
+
+    if (
+        target && 
+        target.health_ratio < rateheal && 
+        distance(character, target) <= character.range && 
+        Date.now() > delayHeal
+    ) {
+        // GỬI LỆNH HEAL VÀ HỨNG PROMISE
+        heal(target).then((data) => {
+            // Server xác nhận Heal THÀNH CÔNG
+            // GCD đã kích hoạt chuẩn xác
+        }).catch((err) => {
+            // Server TỪ CHỐI (vd: out of range, hết mana, bị khống chế...)
+            // Reset delay ngay để tick 200ms sau có thể thử lại hoặc làm việc khác!
+            delayHeal = 0;
+            // console.log("Heal thất bại do:", err.reason);
+        });
+
+        // Chống spam trong 100ms chờ Server phản hồi
+        delayHeal = Date.now() + 100;
+
+        // RETURN TRUE: Xác nhận đã BẮT ĐƯỢC TARGET & ĐÃ GỬI LỆNH.
+        // Ngăn không cho các hàm attack bên dưới gửi đè gói tin!
+        return true; 
+    }
+
+    return false;
+}
+
+
+
+
+
+
 
 
 
