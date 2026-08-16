@@ -2,8 +2,8 @@ let lastSwapTime = 0;
 const swapCooldown = 500;
 
 /*************** CONFIG ***************/
-const HOME_SERVER = { region: "US", id: "I" };
-const RUN_SERVER = { region: "ASIA", id: "I" };
+const HOME_SERVER = { region: "ASIA", id: "I" };
+const RUN_SERVER = { region: "US", id: "I" }; 
 
 const SERVER_RULES = [
     { region: "EU",   id: "I",   weight: 3 },
@@ -19,8 +19,8 @@ const SERVER_RULES = [
 
 const SERVER_PARTY_MAP = [
     { region: "EU",   id: "I",   f1: "Ynhi",   f2: "nhiY" },
- //   { region: "US",   id: "I",   f1: "Ynhi",       f2: "nhiY" },
-    { region: "ASIA", id: "I",   f1: "Ynhi", f2: "LyThanhThu" },
+    { region: "US",   id: "I",   f1: "Ynhi",       f2: "LyThanhThu" },
+ //   { region: "ASIA", id: "I",   f1: "Ynhi", f2: "LyThanhThu" },
  //   { region: "US",   id: "II",  f1: "6gunlaZe",   f2: "Ynhi" },
  //   { region: "US",   id: "III", f1: "nhiY",       f2: "LyThanhThu" },
  //   { region: "EU",   id: "II",  f1: "tienV",      f2: "Ynhi" }
@@ -122,7 +122,7 @@ const locations = {
 	
 };
 
-const home = 'targetron';
+const home = 'plantoid';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
