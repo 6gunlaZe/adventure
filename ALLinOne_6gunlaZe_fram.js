@@ -1308,7 +1308,7 @@ setInterval(scare, 1000);  // Gọi lại scare() sau mỗi 1.5 giây
 let is_using_potion = false;
 
 function use_hp_or_mp1() {
-    if (is_using_potion) return;
+    if (is_using_potion || character.c.town ) return;
 
     try {
         let skill;
