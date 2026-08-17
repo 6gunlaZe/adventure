@@ -329,7 +329,7 @@ setInterval(partyheal_logic, 600);
 let is_using_potion = false;
 
 function use_hp_or_mp1() {
-    if (is_using_potion) return;
+    if (is_using_potion || character.c.town ) return;
 
     try {
         let skill;
