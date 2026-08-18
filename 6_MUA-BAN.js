@@ -2571,7 +2571,7 @@ async function lureEnt(){
 //====================================================
 
 const SAFE_MULTIPLIER = 2.3;
-const PANIC_BUFFER = 25;
+const PANIC_BUFFER = 30;
 
 setInterval(() => {
 
