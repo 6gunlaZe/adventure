@@ -2449,11 +2449,10 @@ const WAYPOINTS = [
     { map: "desertland", x: 218,  y: -1745 },
     { map: "desertland", x: 199,  y: -1125 },
     { map: "desertland", x: 85,   y: -1035 }, //// điểm chốt quái lửa
-    { map: "desertland", x: -83, y: -899 },
-    { map: "desertland", x: -142, y: -700 },
-    { map: "desertland", x: -400, y: -642 },
-    { map: "desertland", x: -600, y: -500 },
-    { map: "desertland", x: -757, y: -315 },	
+    { map: "desertland", x: -49, y: -760 },
+    { map: "desertland", x: -207, y: -622 },
+    { map: "desertland", x: -476, y: -615 },
+    { map: "desertland", x: -723, y: -367 },
 ];
 
 const AIM_POINT = {
