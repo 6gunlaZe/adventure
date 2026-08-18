@@ -1552,8 +1552,8 @@ if (callnguoi < 2000 && callnguoi % 20 === 0) {
            // smart_move({ x, y, map: mapName });
         }
 	    
-  if (eventType == "goobrawl" )eventType="bgoo"
-
+  if (eventType != "goobrawl" )
+{
         const monster = get_nearest_monster({ type: eventType });
         if (monster) {
             if (monster.hp > hpThreshold) {
@@ -1568,7 +1568,18 @@ if (callnguoi < 2000 && callnguoi % 20 === 0) {
 	 else
 	{
 	 if (!smart.moving) smart_move({ x, y, map: mapName });
-	}   
+	}
+}
+else
+{
+        if (character.map != mapName) {
+    	 if (!smart.moving) smart_move({ x, y, map: mapName });
+        }
+}
+
+
+
+		
     }
 }
 
