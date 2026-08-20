@@ -1561,7 +1561,7 @@ function tryPartyHeal() {
 	
     // MODE 2: heal phụ khi mana dư
     if (character.mp > 6000 && target.health_ratio < 0.60) {
-        if (Date.now() > delayParty + 400) {
+        if (Date.now() > delayParty + 300) {
             use_skill("partyheal");
             delayParty = Date.now();
             return true;
@@ -1588,9 +1588,9 @@ function tryPartyHeal() {
 	
 
     // MODE 1: heal thông minh
-    if (target.health_ratio >= 0.6) return false;
+    if (target.health_ratio >= 0.65) return false;
 
-    const maxRatio = 0.65;
+    const maxRatio = 0.66;
     const minRatio = 0.33;
 
     const maxDelay = 260;
