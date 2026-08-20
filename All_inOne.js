@@ -278,7 +278,7 @@ async function checkGameEvents() {
 	//    { eventType: 'wabbit', type: 'withJoin' },
         { eventType: 'dragold', type: 'withJoin' },
 		
-        { eventType: 'goobrawl', type: 'specific' },
+     //   { eventType: 'goobrawl', type: 'specific' },
         { eventType: 'crabxx', type: 'pro' },
         { eventType: 'franky', type: 'pro' },
         { eventType: 'icegolem', type: 'pro' },
@@ -393,7 +393,7 @@ function handleEvents() {
         //handleSpecificEvent('snowman', 'winterland', 1190, -900, 50);
 	    if(Now_is_gobalevenrun)return
 		
-        handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
+      //  handleSpecificEventWithJoin('goobrawl', 'goobrawl', 0, 0, 15000);
 	    if(Now_is_gobalevenrun)return
 	   handlebossPro('crabxx', 'main', -976, 1785, 10000, "Ynhi","6gunlaZe")
 	     if(Now_is_gobalevenrun)return
