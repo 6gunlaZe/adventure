@@ -1550,7 +1550,7 @@ function tryPartyHeal() {
     if (character.mp <= 750) return false;
 
     // MODE 0: cứu nguy spike damage (double heal) cứ có mana là spam skill
-    if (target.health_ratio < 0.33) {
+    if (target.health_ratio < 0.36) {
         use_skill("partyheal");
        // delayParty = Date.now();   // chặn delay không cập nhật ở đây
         return true;
