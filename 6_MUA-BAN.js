@@ -1902,7 +1902,7 @@ var combineWhitelist =
 		cring: 2,
 		cearring: 2,
 		//talkingskull: 3,
-		t2intamulet: 2,
+		t2intamulet: 1,
 		t2stramulet: 2,
 		t2dexamulet: 2,
 		orbofstr: 1,
