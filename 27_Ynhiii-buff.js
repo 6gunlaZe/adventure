@@ -909,38 +909,14 @@ setInterval(() => {
     tryDarkBlessing(currentTarget);
     curseLogic(currentTarget);
 
-    // 🚀 GCD sắp mở → canh nhanh
-    if (ms > 0 && ms < 160 && !gcdFastTimer) {
-        gcdFastTimer = setTimeout(() => {
-            gcdFastTimer = null;
 
-			
-             tryPartyHeal();
-			
-            //Heal đơn party trước
-            if (trySingleHeal()) return;
-
-            //Nếu chưa dùng heal cooldown thì mới heal người ngoài
-            if (tryNearbyHeal()) return;
-			
-            if (hutquaibangtay()) return;
-
-            const t = get_targeted_monster();
-            if (!t) return;
-            if (tryAttack(t)) return;
-
-			
-
-        }, ms);
-        return;
-    }
+    tryPartyHeal();
 
     // GCD chưa mở → thôi
-    if (ms > 0) return;
+    if (ms > 100) return;
 
     // ===== GCD ACTION (fallback) =====
 	
-    tryPartyHeal();
 			
             //Heal đơn party trước
     if (trySingleHeal()) return;
@@ -951,9 +927,9 @@ setInterval(() => {
     if (hutquaibangtay()) return;
     if (tryAttack(currentTarget)) return;
 
-     buff_khi_ranh();
+   //  buff_khi_ranh();
 
-}, 200);
+}, 50);
 
 
 
@@ -1105,6 +1081,10 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
 
 
 function hutquaibangtay() {
+
+    if (ms_to_next_skill("heal") > 150) return false;
+
+	
     const leader = get_player("haiz");
     const checker = get_player(nhanvatphu);
     const target = get_nearest_monster1({
@@ -1220,6 +1200,10 @@ function kiteLogic(currentTarget) {
 
 
 function tryAttack(target) {
+
+	    if (ms_to_next_skill("heal") > 150) return false;
+
+	
     if (
         target &&
         can_attack(target) 
@@ -1450,40 +1434,6 @@ function tryNearbyHeal() {
     return false;
 }
 
-
-/*
-let delayHeal = 0;
-function trySingleHeal() {
-
-    if (is_on_cooldown("heal")) return false;
-
-    let rateheal;
-
-    if (character.map === "winter_instance") {
-        rateheal = 0.9;
-    } else {
-        rateheal = 1 - (character.heal / character.max_hp);
-        if (rateheal < 0.9) rateheal = 0.9;
-        if (character.targets > 5) rateheal = 0.95;
-    }
-
-    const target = lowest_health_partymember();
-
-    if (
-        target &&
-        target.health_ratio < rateheal &&
-        distance(character, target) <= character.range &&
-        Date.now() > delayHeal
-    ) {
-        heal(target);
-        delayHeal = Date.now() + 50; // chống spam vòng lặp
-        return true;
-    }
-
-    return false;
-}
-
-*/
 
 
 
