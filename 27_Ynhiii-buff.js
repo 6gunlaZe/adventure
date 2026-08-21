@@ -917,10 +917,8 @@ setInterval(() => {
 
     // ===== GCD ACTION (fallback) =====
 	
-		game_log("1");	
             //Heal đơn party trước
     if (trySingleHeal()) return;
-		game_log("5");	
 
             //Nếu chưa dùng heal cooldown thì mới heal người ngoài
     if (tryNearbyHeal()) return;
@@ -1441,7 +1439,6 @@ function tryNearbyHeal() {
 
 let delayHeal = 0;
 function trySingleHeal() {
-		game_log("2");	
 
     if (is_on_cooldown("heal")) return false;
 
@@ -1456,7 +1453,6 @@ function trySingleHeal() {
     }
 
     const target = lowest_health_partymember();
-		game_log("3");	
 
     if (
         target &&
@@ -1464,12 +1460,10 @@ function trySingleHeal() {
         distance(character, target) <= character.range &&
         Date.now() > delayHeal
     ) {
-				game_log("66666");	
         heal(target);
         delayHeal = Date.now() + 50; // chống spam vòng lặp
         return true;
     }
-		game_log("4");	
 
     return false;
 }
