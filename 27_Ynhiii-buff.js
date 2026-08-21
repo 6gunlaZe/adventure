@@ -1436,51 +1436,34 @@ function tryNearbyHeal() {
 
 
 
-let isHealing = false; // Flag khóa Async chống spam Promise
 
+
+let delayHeal = 0;
 function trySingleHeal() {
-    // 1. Nếu đang chờ Server phản hồi lệnh Heal trước đó -> Chặn lại
-    if (isHealing) return true;
 
-    // 2. Kiếm tra Cooldown skill Heal (Chuẩn Engine)
-    // Nếu Cooldown còn hơn 100ms thì chưa tới lượt Heal
-    if (is_on_cooldown("heal") || ms_to_next_skill("heal") > 100) {
-        return false;
+    if (is_on_cooldown("heal")) return false;
+
+    let rateheal;
+
+    if (character.map === "winter_instance") {
+        rateheal = 0.9;
+    } else {
+        rateheal = 1 - (character.heal / character.max_hp);
+        if (rateheal < 0.9) rateheal = 0.9;
+        if (character.targets > 5) rateheal = 0.95;
     }
 
-    // 3. Tìm đồng đội mất máu nhiều nhất (Bao gồm cả bản thân)
     const target = lowest_health_partymember();
-    if (!target) return false;
 
-    // 4. Tính % máu chuẩn xác
-    const hpRatio = target.hp / target.max_hp;
-    
-    // Ngưỡng Heal: Mất > 15% máu (máu < 85%) hoặc 90% ở map đặc biệt
-    let healThreshold = 0.9;
-    if (character.map === "winter_instance" || character.targets > 5) {
-        healThreshold = 0.95;
-    }
-
-    // 5. Điều kiện thi triển Heal
-    if (hpRatio < healThreshold && distance(character, target) <= character.range) {
-        
-        isHealing = true; // Khóa ngay lập tức
-
-        // Gọi hàm heal gốc của Game
-        heal(target)
-            .then(() => {
-                // Heal thành công
-            })
-            .catch((err) => {
-                // Thất bại (Out of range, hết mana...)
-                // console.log("Heal lỗi:", err);
-            })
-            .finally(() => {
-                // Giải phóng khóa khi Server đã xử lý xong
-                isHealing = false;
-            });
-
-        return true; // BÁO VỀ MAIN LOOP: Đã chiếm lượt Heal, KHÔNG ĐƯỢC ATTACK!
+    if (
+        target &&
+        target.health_ratio < rateheal &&
+        distance(character, target) <= character.range &&
+        Date.now() > delayHeal
+    ) {
+        heal(target);
+        delayHeal = Date.now() + 50; // chống spam vòng lặp
+        return true;
     }
 
     return false;
