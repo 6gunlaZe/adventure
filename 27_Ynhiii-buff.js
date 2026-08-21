@@ -1447,10 +1447,10 @@ function trySingleHeal() {
     if (Date.now() < delayHeal) return false;
 
     // 2. Tính toán Ngưỡng Máu Cần Heal (Target Health Ratio)
-    let threshold = 0.85; // Mặc định: Máu dưới 85% mới Heal
+    let threshold = 0.9; // Mặc định: Máu dưới 85% mới Heal
 
     if (character.map === "winter_instance") {
-        threshold = 0.90;
+        threshold = 0.95;
     } else if (character.targets > 5) {
         threshold = 0.95; // Đang bị quái vây đông -> Heal sớm hơn (95%)
     }
