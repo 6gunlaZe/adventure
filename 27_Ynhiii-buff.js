@@ -1915,6 +1915,51 @@ ZapCase();
 
 
 
+// Variable check delay riêng
+let isZapCLunning = false;
+
+async function ZapQuaiCLoop() {
+    const delay = 10; // 10 ms
+
+    try {
+        if (!character.rip && !isZapCLunning) {
+            isZapCLunning = true;
+
+            // Tìm quái thuộc danhSachQuaiC trong tầm đánh
+            const targetC = Object.values(parent.entities).find(entity => 
+                entity && !entity.target &&
+                entity.type === "monster" &&
+                !entity.dead &&
+                entity.visible &&
+                danhSachQuaiC.includes(entity.mtype) &&
+                is_in_range(entity, "zapperzap")
+            );
+
+            // Kiểm tra điều kiện trang bị, MP và Cooldown trước khi bắn
+            if (
+                targetC &&
+                !is_on_cooldown("zapperzap") &&
+                character.mp > 5500 &&
+                (character.slots.ring1?.name === "zapper" || character.slots.ring2?.name === "zapper")
+            ) {
+                await use_skill("zapperzap", targetC);
+            }
+            
+            isZapCLunning = false;
+        }
+    } catch (e) {
+        console.error("Lỗi ZapQuaiCLoop:", e);
+        isZapCLunning = false;
+    }
+
+    setTimeout(ZapQuaiCLoop, delay);
+}
+
+// Bắt đầu chạy hàm
+ZapQuaiCLoop();  // KS quái khi có người đánh cùng bãi
+
+
+
 
 
 function checkPVPandARENA() {
