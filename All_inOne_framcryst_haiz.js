@@ -438,7 +438,18 @@ const nguyehiemmmm = mobsInRange.filter(monster =>
     (monster.mtype === "a8" && monster.level > 4 && character.hp < 10000)
 );
 
-
+const a3xongfilm = mobsInRange.filter(monster => 
+    (monster.mtype === "a3" && monster.hp < 4)
+);
+	
+if (a3xongfilm.length >= 1 )
+{
+		if (z < 250){
+  z = 250;
+let toke21n122 = key_auto;  // Thay bằng token của bạn
+ghichu(character.in, "xongfilm 19",toke21n122)
+		}
+}	
 	
 if (nguyehiemmmm.length >= 1 )
 {
