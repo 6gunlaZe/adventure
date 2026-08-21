@@ -2188,7 +2188,7 @@ async function handleWarriorSkills(tank,f1) {
 
 
 
-const mobTypes = ["bat11","mummy","booboo"]; //list auto hút quái xung quanh của war ==> Tạm ngưng
+const mobTypes = ["bat11","mummy","booboo","targetron","sparkbot"]; //list auto hút quái xung quanh của war ==> Tạm ngưng
 const mobsInRange = Object.values(parent.entities).filter(e =>
     mobTypes.includes(e.mtype) && e.level < 3 && // canh chỉnh level tùy theo quái mạnh yếu
     e.visible && !e.dead &&
@@ -2210,7 +2210,7 @@ if (
     !smart.moving &&
     !is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&
-    untargetedMobs.length >= 3 &&
+    untargetedMobs.length >= 2 &&
     (   ( tank && tank.name == "Ynhi" && !tank.rip && tank.hp > 12000 && tank.mp > 4000  && distance(character, tank) < 180 )  ||  (tank && f1 && tank.name != "Ynhi")     ) && 
     character.hp > 14000 && character.mp > 800
 ) {
