@@ -913,11 +913,11 @@ setInterval(() => {
     tryPartyHeal();
 
     // GCD chưa mở → thôi
-    // if (ms > 100) return;
+     if (ms > 100) return;
 
     // ===== GCD ACTION (fallback) =====
 	
-		game_log("1");	
+		game_log("11");	
             //Heal đơn party trước
     if (trySingleHeal()) return;
 		game_log("5");	
@@ -1464,6 +1464,7 @@ function trySingleHeal() {
         distance(character, target) <= character.range &&
         Date.now() > delayHeal
     ) {
+				game_log("66666");	
         heal(target);
         delayHeal = Date.now() + 50; // chống spam vòng lặp
         return true;
