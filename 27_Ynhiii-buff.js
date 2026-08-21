@@ -2870,8 +2870,8 @@ function elixirUsage() {
             targetElixir = "elixirpnres";
         }
 
-        // 3️⃣ winter_instance → hotchocolate
-        else if (character.map === "winter_instance" || character.map == "uhills" ) {
+        // 3️⃣ winter_instance → hotchocolate , tạm ngưng áp dụng cho map uhills
+        else if (character.map === "winter_instance" || character.map == "uhills99955555" ) { 
             targetElixir = "hotchocolate";
         }
 
