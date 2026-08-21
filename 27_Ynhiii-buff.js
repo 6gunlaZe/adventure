@@ -910,14 +910,14 @@ setInterval(() => {
     curseLogic(currentTarget);
 
 
-   // tryPartyHeal();
+    if (ms > 100) tryPartyHeal();
 
     // GCD chưa mở → thôi
-     if (ms > 100) return;
+     if (ms > 70) return;
 
     // ===== GCD ACTION (fallback) =====
 	
-		game_log("111");	
+		game_log("1");	
             //Heal đơn party trước
     if (trySingleHeal()) return;
 		game_log("5");	
@@ -1500,7 +1500,7 @@ function tryPartyHeal() {
 	
     // MODE 2: heal phụ khi mana dư
     if (character.mp > 6000 && target.health_ratio < 0.60) {
-        if (Date.now() > delayParty + 300) {
+        if (Date.now() > delayParty + 400) {
             use_skill("partyheal");
             delayParty = Date.now();
             return true;
@@ -1509,7 +1509,7 @@ function tryPartyHeal() {
 
     // MODE 2.5: heal phụ khi mana dư mức cao
     if (   (character.max_mp - character.mp) < 1500  && target.health_ratio < 0.83) {
-        if (Date.now() > delayParty + 200) {
+        if (Date.now() > delayParty + 300) {
             use_skill("partyheal");
             delayParty = Date.now();
             return true;
@@ -1532,7 +1532,7 @@ function tryPartyHeal() {
     const maxRatio = 0.66;
     const minRatio = 0.33;
 
-    const maxDelay = 260;
+    const maxDelay = 360;
     const minDelay = 50;
 
     const r = Math.max(minRatio, Math.min(maxRatio, target.health_ratio));
