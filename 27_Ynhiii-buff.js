@@ -218,7 +218,7 @@ function on_cm(name, data) {
     // 1. Phản hồi kỹ thuật (Heal) cho nhóm
     if (["haiz", "6gunlaZe", "tienV", "LyThanhThu", nhanvatphu].includes(name)) {
         if (data === "bosshelp") {
-            if (!is_on_cooldown("partyheal") && character.mp > 550) use_skill("partyheal");
+            if (!is_on_cooldown("partyheal") && character.mp > 750 && ms_to_next_skill("attack") > 100 ) use_skill("partyheal");
         }
     }
 
@@ -312,16 +312,6 @@ setInterval(() => {
 	
 
 }, 200);
-
-
-function partyheal_logic() {
-    if (!can_use("partyheal")) return;
-    if ((character.max_mp - character.mp) < 300)use_skill("partyheal");
-	
-}
-
-setInterval(partyheal_logic, 600);
-
 
 
 
