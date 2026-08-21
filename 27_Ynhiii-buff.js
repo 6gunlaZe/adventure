@@ -925,7 +925,7 @@ setInterval(() => {
     if (tryNearbyHeal()) return;
 	
     if (hutquaibangtay()) return;
-    if (tryAttack(currentTarget)) return;
+   // if (tryAttack(currentTarget)) return;
 
    //  buff_khi_ranh();
 
@@ -1436,49 +1436,55 @@ function tryNearbyHeal() {
 
 
 
-
-let delayHeal = 0;
+let isHealing = false; // Flag khóa Async chống spam Promise
 
 function trySingleHeal() {
-    // 1. Kiểm tra Cooldown skill Heal (Pre-queue 100ms là đủ an toàn cho Ping thấp)
-    if (ms_to_next_skill("heal") > 100) return false;
-    
-    // Lock tạm thời chống Spam Packet trùng lệnh trong cùng 1-2 frame
-    if (Date.now() < delayHeal) return false;
+    // 1. Nếu đang chờ Server phản hồi lệnh Heal trước đó -> Chặn lại
+    if (isHealing) return true;
 
-    // 2. Tính toán Ngưỡng Máu Cần Heal (Target Health Ratio)
-    let threshold = 0.9; // Mặc định: Máu dưới 85% mới Heal
-
-    if (character.map === "winter_instance") {
-        threshold = 0.95;
-    } else if (character.targets > 5) {
-        threshold = 0.95; // Đang bị quái vây đông -> Heal sớm hơn (95%)
+    // 2. Kiếm tra Cooldown skill Heal (Chuẩn Engine)
+    // Nếu Cooldown còn hơn 100ms thì chưa tới lượt Heal
+    if (is_on_cooldown("heal") || ms_to_next_skill("heal") > 100) {
+        return false;
     }
 
-    // 3. Tìm đồng đội mất máu nhiều nhất
+    // 3. Tìm đồng đội mất máu nhiều nhất (Bao gồm cả bản thân)
     const target = lowest_health_partymember();
+    if (!target) return false;
 
-    // Tính health_ratio chuẩn của Target (Máu hiện tại / Máu tối đa)
-    if (target && (target.hp / target.max_hp) < threshold) {
-        if (distance(character, target) <= character.range) {
-            
-            // Khóa delay ngay lập tức dựa trên Ping thực tế + buffer 50ms
-            const safeLock = Math.max(80, character.ping + 50);
-            delayHeal = Date.now() + safeLock;
+    // 4. Tính % máu chuẩn xác
+    const hpRatio = target.hp / target.max_hp;
+    
+    // Ngưỡng Heal: Mất > 15% máu (máu < 85%) hoặc 90% ở map đặc biệt
+    let healThreshold = 0.9;
+    if (character.map === "winter_instance" || character.targets > 5) {
+        healThreshold = 0.95;
+    }
 
-            // Gửi lệnh Heal
-            heal(target).catch((err) => {
-                // Nếu thất bại do Out of range / Mana, mở khóa sớm hơn 1 chút
-                delayHeal = Date.now() + 30;
+    // 5. Điều kiện thi triển Heal
+    if (hpRatio < healThreshold && distance(character, target) <= character.range) {
+        
+        isHealing = true; // Khóa ngay lập tức
+
+        // Gọi hàm heal gốc của Game
+        heal(target)
+            .then(() => {
+                // Heal thành công
+            })
+            .catch((err) => {
+                // Thất bại (Out of range, hết mana...)
+                // console.log("Heal lỗi:", err);
+            })
+            .finally(() => {
+                // Giải phóng khóa khi Server đã xử lý xong
+                isHealing = false;
             });
 
-            return true; // Xác nhận đã dành lượt (GCD) cho skill Heal
-        }
+        return true; // BÁO VỀ MAIN LOOP: Đã chiếm lượt Heal, KHÔNG ĐƯỢC ATTACK!
     }
 
     return false;
 }
-
 
 
 
