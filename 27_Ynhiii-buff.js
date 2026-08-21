@@ -910,14 +910,14 @@ setInterval(() => {
     curseLogic(currentTarget);
 
 
-    tryPartyHeal();
+   // tryPartyHeal();
 
     // GCD chưa mở → thôi
      if (ms > 100) return;
 
     // ===== GCD ACTION (fallback) =====
 	
-		game_log("11");	
+		game_log("111");	
             //Heal đơn party trước
     if (trySingleHeal()) return;
 		game_log("5");	
