@@ -617,7 +617,7 @@ heal(party[0].entity);
 
 
 function lowest_health_partymember() {
-	if (Date.now() < 300 + delayitem2) return;
+	if (Date.now() < 200 + delayitem2) return;
 	delayitem2 = Date.now();
 
 	let party = [];
