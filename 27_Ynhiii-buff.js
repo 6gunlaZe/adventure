@@ -1267,6 +1267,8 @@ function tryCurse(target, mpReq = 4200) {
 
 function curseLogic(currentTarget) {
 
+   if (is_on_cooldown("curse")) return
+	
     const leader = get_player("haiz");
 
     if (leader) {
