@@ -1437,54 +1437,47 @@ function tryNearbyHeal() {
 
 
 
-
 let delayHeal = 0;
 
 function trySingleHeal() {
-    // Chỉ pre-queue nếu CD còn dưới 150ms
-    if (ms_to_next_skill("heal") > 150) return false;
+    // 1. Kiểm tra Cooldown skill Heal (Pre-queue 100ms là đủ an toàn cho Ping thấp)
+    if (ms_to_next_skill("heal") > 100) return false;
+    
+    // Lock tạm thời chống Spam Packet trùng lệnh trong cùng 1-2 frame
+    if (Date.now() < delayHeal) return false;
 
-    let rateheal;
+    // 2. Tính toán Ngưỡng Máu Cần Heal (Target Health Ratio)
+    let threshold = 0.85; // Mặc định: Máu dưới 85% mới Heal
+
     if (character.map === "winter_instance") {
-        rateheal = 0.9;
-    } else {
-        rateheal = 1 - (character.heal / character.max_hp);
-        if (rateheal < 0.9) rateheal = 0.9;
-        if (character.targets > 5) rateheal = 0.95;
+        threshold = 0.90;
+    } else if (character.targets > 5) {
+        threshold = 0.95; // Đang bị quái vây đông -> Heal sớm hơn (95%)
     }
 
+    // 3. Tìm đồng đội mất máu nhiều nhất
     const target = lowest_health_partymember();
 
-    if (
-        target && 
-        target.health_ratio < rateheal && 
-        distance(character, target) <= character.range && 
-        Date.now() > delayHeal
-    ) {
-        // GỬI LỆNH HEAL VÀ HỨNG PROMISE
-        heal(target).then((data) => {
-            // Server xác nhận Heal THÀNH CÔNG
-            // GCD đã kích hoạt chuẩn xác
-        }).catch((err) => {
-            // Server TỪ CHỐI (vd: out of range, hết mana, bị khống chế...)
-            // Reset delay ngay để tick 200ms sau có thể thử lại hoặc làm việc khác!
-            delayHeal = 0;
-            // console.log("Heal thất bại do:", err.reason);
-        });
+    // Tính health_ratio chuẩn của Target (Máu hiện tại / Máu tối đa)
+    if (target && (target.hp / target.max_hp) < threshold) {
+        if (distance(character, target) <= character.range) {
+            
+            // Khóa delay ngay lập tức dựa trên Ping thực tế + buffer 50ms
+            const safeLock = Math.max(80, character.ping + 50);
+            delayHeal = Date.now() + safeLock;
 
-        // Chống spam trong 100ms chờ Server phản hồi
-        delayHeal = Date.now() + 100;
+            // Gửi lệnh Heal
+            heal(target).catch((err) => {
+                // Nếu thất bại do Out of range / Mana, mở khóa sớm hơn 1 chút
+                delayHeal = Date.now() + 30;
+            });
 
-        // RETURN TRUE: Xác nhận đã BẮT ĐƯỢC TARGET & ĐÃ GỬI LỆNH.
-        // Ngăn không cho các hàm attack bên dưới gửi đè gói tin!
-        return true; 
+            return true; // Xác nhận đã dành lượt (GCD) cho skill Heal
+        }
     }
 
     return false;
 }
-
-
-
 
 
 
