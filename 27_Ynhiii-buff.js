@@ -913,7 +913,7 @@ setInterval(() => {
     tryPartyHeal();
 
     // GCD chưa mở → thôi
-    if (ms > 100) return;
+    // if (ms > 100) return;
 
     // ===== GCD ACTION (fallback) =====
 	
