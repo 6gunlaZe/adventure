@@ -1872,7 +1872,6 @@ let lastManaCheck = 0;
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
     if (currentTime - eTime < 50) return;
-	if (isEquipping) return;
 
 // Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
 const mobsInRange = Object.values(parent.entities).filter(entity =>
