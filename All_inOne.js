@@ -2195,6 +2195,12 @@ const mobsInRange = Object.values(parent.entities).filter(e =>
     distance(character, e) <= G.skills.agitate.range
 );
 
+// Trả về true nếu có ít nhất 1 quái thỏa điều kiện, ngược lại trả về false
+const isWeakMobAttackingYnhi = mobsInRange.some(e => 
+    e.target === "Ynhi" &&  e.hp < 25000 
+);
+
+	
 const untargetedMobs = mobsInRange.filter(e => !e.target);
 
 const ignoreMobs = ["xmagex", "xmagefi", "xmagefz"];
@@ -2207,7 +2213,7 @@ const mobsTargetingTank = Object.values(parent.entities).filter(e =>
 );
 
 if (
-    !smart.moving &&
+    !smart.moving && !isWeakMobAttackingYnhi &&
     !is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&
     untargetedMobs.length >= 1 &&
