@@ -1,7 +1,7 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
 
-game_log("Game vs 1.2");
+game_log("Game vs 1.3");
 
 /*************** CONFIG ***************/
 const HOME_SERVER = { region: "ASIA", id: "I" };
@@ -1867,6 +1867,8 @@ setTimeout(function () {
   equipSet('nodeff');  // lần đầu đăng nhập trở về mặc định
 }, 10000); // 10000ms = 10 giây
 
+
+
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
 let lastManaCheck = 0;
@@ -1874,65 +1876,58 @@ let lastManaCheck = 0;
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
     if (currentTime - eTime < 50) return;
-	if (isEquipping) return;
+    if (isEquipping) return;
 
-// Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
-const mobsInRange = Object.values(parent.entities).filter(entity =>
-    entity.visible &&
-    !entity.dead &&
-    distance(character, entity) <= 100 &&
-    (
-        entity.target === character.name ||
-        entity.cooperative === true
-    )
-);
+    // TỐI ƯU 1: Gom các điều kiện phân loại quái vào 1 lượt duyệt duy nhất
+    let physicalCount = 0;
+    let magicOrbCount = 0;
+    let magicalCount = 0;
+    let fireCount = 0;
+    let hasLowHP_CoopMob = false;
 
-    const FireMobs = mobsInRange.filter(mob =>
-        mob.mtype == "xmagefi"
-    );
-	
-const hasLowHP_CoopMob = mobsInRange.some(mob =>
-    mob.cooperative === true &&
-    mob.hp != null &&
-    mob.hp < 180000
-);
+    const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
 
+    for (const entity of Object.values(parent.entities)) {
+        if (!entity.visible || entity.dead) continue;
 
-const physicalMobs = mobsInRange.filter(mob => {
-    if (mob.mtype === "crabxx" || mob.mtype === "ent" ) return false;
-    if (mob.damage_type !== "physical") return false;
-    if (character.hp < 8000) return mob.attack > 1000;
-    if (character.hp < 15000) return mob.attack > 2000;
-    return mob.attack > 3500;
-});
+        // Tính khoảng cách
+        if (distance(character, entity) <= 100) {
+            const isTarget = entity.target === character.name;
+            const isCoop = entity.cooperative === true;
 
+            // Chỉ xét nếu quái đang đánh mình hoặc là quái coop
+            if (isTarget || isCoop) {
+                // Check Coop Mob HP
+                if (isCoop && entity.hp != null && entity.hp < 180000) {
+                    hasLowHP_CoopMob = true;
+                }
 
-const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+                // Check Fire Mob
+                if (entity.mtype === "xmagefi") fireCount++;
 
-const MobMagicNeedORB = mobsInRange.filter(m =>
-    specialORB.includes(m.mtype)
-);
+                // Check Special ORB
+                if (specialORB.includes(entity.mtype)) magicOrbCount++;
 
-	
-const magicalMobs = mobsInRange.filter(mob => {
-   // if (mob.mtype === "xmagex") return true;
-    if (mob.damage_type !== "magical") return false;
-    if (character.hp < 12000) return mob.attack > 1000;
-    if (character.hp < 15000) return mob.attack > 2000;
-    return mob.attack > 3500;
-});
+                // Check Physical
+                if (entity.mtype !== "crabxx" && entity.mtype !== "ent" && entity.damage_type === "physical") {
+                    if ((character.hp < 8000 && entity.attack > 1000) ||
+                        (character.hp < 15000 && entity.attack > 2000) ||
+                        (entity.attack > 3500)) {
+                        physicalCount++;
+                    }
+                }
 
-
-
-	
-    const lowHpMobs = mobsInRange.filter(mob =>
-        mob.hp < 6000 &&
-        mob.attack > 500 &&
-        mob.target === character.name &&
-        mob.mtype !== "nerfedmummy" &&
-        mob.mtype !== "nerfedbat"
-    );
-
+                // Check Magical
+                if (entity.damage_type === "magical") {
+                    if ((character.hp < 12000 && entity.attack > 1000) ||
+                        (character.hp < 15000 && entity.attack > 2000) ||
+                        (entity.attack > 3500)) {
+                        magicalCount++;
+                    }
+                }
+            }
+        }
+    }
 
     // ===== Mana hysteresis =====
     const MANA_IN = 1250;   // MP xuống dưới mức này → vào mana
@@ -1941,9 +1936,8 @@ const magicalMobs = mobsInRange.filter(mob => {
     // Kiểm tra hiện tại đang dùng mana set
     const isManaSet = character.slots?.chest?.name === "tshirt9";
 
-	
     // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
-    if (physicalMobs.length >= 1) {
+    if (physicalCount >= 1) {
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_physical');
@@ -1951,43 +1945,28 @@ const magicalMobs = mobsInRange.filter(mob => {
         return;
     }
 
-
-
-	if (MobMagicNeedORB.length >= 1) {  
+    if (magicOrbCount >= 1) {  
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magic_ORB');
         checkdef = 2;
         return;
     }
-	else if (magicalMobs.length >= 1) {  
+    else if (magicalCount >= 1) {  
         defSafeSince = null;
         eTime = currentTime;
         equipSet('def_magical');
         checkdef = 2;
         return;
     }
-    else if (FireMobs.length >= 1)
-	{
+    else if (fireCount >= 1) {
         eTime = currentTime;
         equipSet('def_fire');
         return;
-	}
-
-
-	
-    // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
-    if (lowHpMobs.length >= 2 && 1 == 2) {
-        eTime = currentTime;
-        equipSet('lowhp_clear');
-        return;
     }
 
-    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY và không có quái co-op sắp chết
-    if (character.hp > 15000 && !hasLowHP_CoopMob &&
-        physicalMobs.length === 0 &&
-        magicalMobs.length === 0) {
-        
+    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
+    if (character.hp > 15000 && !hasLowHP_CoopMob && physicalCount === 0 && magicalCount === 0) {
         // Ghi thời điểm bắt đầu an toàn
         if (!defSafeSince) defSafeSince = currentTime;
 
@@ -1999,7 +1978,6 @@ const magicalMobs = mobsInRange.filter(mob => {
             equipSet('nodeff');
             return;
         }
-
     } else {
         // Nếu có mob mạnh lại → reset đồng hồ an toàn
         defSafeSince = null;
@@ -2013,27 +1991,22 @@ const magicalMobs = mobsInRange.filter(mob => {
         return;
     }
 
+    if (currentTime - lastManaCheck >= 700) {
+        lastManaCheck = currentTime;
 
-if (currentTime - lastManaCheck >= 700) {
-    lastManaCheck = currentTime;
-
-    if (character.slots.helmet?.name === "fury") {
-
-        if (character.hp > 11500) {
-
-            if (!isManaSet && character.mp < MANA_IN) {
-                eTime = currentTime;
-                equipSet('mana');
-            }
-            else if (isManaSet && character.mp >= MANA_OUT) {
-                eTime = currentTime;
-                //equipSet('nomana');
+        if (character.slots.helmet?.name === "fury") {
+            if (character.hp > 11500) {
+                if (!isManaSet && character.mp < MANA_IN) {
+                    eTime = currentTime;
+                    equipSet('mana');
+                }
+                else if (isManaSet && character.mp >= MANA_OUT) {
+                    eTime = currentTime;
+                    //equipSet('nomana');
+                }
             }
         }
     }
-}
-
-	
 
     // 👉 Trạng thái đặc biệt → bỏ qua
     if (events && !get_nearest_monster({ type: home })) return;
@@ -2044,21 +2017,13 @@ if (currentTime - lastManaCheck >= 700) {
         equipSet('single');
     } else {
         eTime = currentTime;
-		
-		if ( home == 'bscorpion' )
-		{
-		equipSet('single');
-		}
-		else
-		{
-		equipSet('aoe');
-		}
-        
+        if (home == 'bscorpion') {
+            equipSet('single');
+        } else {
+            equipSet('aoe');
+        }
     }
-
-	
 }
-
 
 
 
