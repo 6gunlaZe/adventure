@@ -1818,7 +1818,6 @@ if (
 				
 
                 if (character.ctype === "warrior") {
-                    //console.log("Calling handleCleave");
                     handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
                    
                     handleWarriorSkills(tank,f1);
@@ -2095,100 +2094,127 @@ function autoSwapCandy() {
 }
 
 
-let lastCleaveTime = 0;
-const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
 
-function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
+
+let lastCleaveTime = 0;
+const CLEAVE_THRESHOLD = 500;
+
+// Chuyển Set/Array cố định ra ngoài để tránh khởi tạo lại mỗi 30ms
+const MAPS_TO_INCLUDE = new Set([
+    "chicanthemoday","desertland","goobrawl","main","level2w","cave",
+    "halloween","spookytown","tunnel","winterland","level2n","mforest",
+    "tomb","crypt","cyberland","spider_instance","winter_instance",
+    "winter_cave","level1","uhills"
+]);
+const EXTRA_RANGE_MAPS = new Set(["level2w"]);
+
+async function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-    const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
-	
-// Map cần tăng range check để an toàn
-const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
-// Range cleave theo map
-const cleaveRange = G.skills.cleave.range + 
-    (extraRangeMaps.includes(character.map) ? 40 : 10);
-
-const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
-    type === "monster" &&
-    visible &&
-    !dead &&
-    distance(character, { x, y }) <= cleaveRange
-);
-
-// Biến riêng: true nếu có ít nhất 1 quái trong tầm đánh thường
-const hasNearbyMonster = monstersInRange.some(m => distance(character, m) <= character.range);
-	
-
-// Quái trong range nhưng chưa có target + HP ≥ 10000
-let list = monstersInRange.filter(m => !m.target && m.hp >= 10000);
-
-// Lấy MP của Ynhi (đồng đội / nhân vật phụ)
-let ynhi = get_player("Ynhi");
-	
-// Lấy MP của Ynhi, nhưng chỉ khi HP > 12000, còn lại cho = 0
-let mpp = (ynhi && ynhi.hp > 12000) ? ynhi.mp : 0;
-	
-// Số lượng creep được phép bỏ qua tùy theo MP của Ynhi
-let ignore = mpp > 4500 ? 5 :
-             mpp > 3500 ? 3 :
-             mpp > 2500 ? 1 : 0;
-
-if ( !get_nearest_monster({ type: home }) || character.hp < 8000 )	ignore = 0 /// chỉ có thể bỏ qua nếu đang đứng trong bãi fram thôi, tránh khi đánh boss hoặc khi máu thấp v..v.v
-
-
-
-// Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu) //có thêm tùy chọn nếu bãi  fram > 2 loại quái
-let creeps = list.filter(m => m.mtype.includes(home) || m.mtype.includes("sparkbot")).sort((a,b)=> distance(character, a) - distance(character, b));
-
-
-const hasStrongCreep = creeps.some(c => c.attack > 800);
-// Quái cần quan tâm thật sự:
-//   - Giữ toàn bộ quái không phải creep
-//   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
-
-
-const untargetedMonsters = list
-  .filter(m => !(m.mtype.includes(home) || m.mtype.includes("sparkbot")))
-  .concat(
-    hasStrongCreep
-      ? creeps // có creep mạnh → lấy hết không bỏ qua con nào
-      : creeps.slice(ignore) // không có quái mạnh → bỏ qua một số X con
-  );
-	
-
-
-//const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
-
-
-    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) ) {
-        if (Mainhand !== "bataxe" &&  !isEquipping ) {
-            scytheSet(); // Equip the bataxe
-        }
-        use_skill("cleave"); // Use the cleave skill
-        reduce_cooldown("cleave", character.ping * 0.95);
-        lastCleaveTime = currentTime; // Update the last cleave time
+    // Fast-Fail 1: Kiểm tra các điều kiện cơ bản trước khi tốn CPU tính khoảng cách quái
+    if (
+        smart.moving || 
+        !cc || 
+        !aoe || 
+        !tank || 
+        timeSinceLastCleave < CLEAVE_THRESHOLD || 
+        is_on_cooldown("cleave") || 
+        !MAPS_TO_INCLUDE.has(character.map)
+    ) {
+        // Không đủ điều kiện Cleave -> Chạy Swap vũ khí bình thường
+        await handleWeaponSwap(stMaps, aoeMaps);
+        return;
     }
 
-    // Handle weapon swapping outside of cleave logic to keep it separate
-    handleWeaponSwap(stMaps, aoeMaps);
+    // Tính range Cleave
+    const cleaveRange = G.skills.cleave.range + (EXTRA_RANGE_MAPS.has(character.map) ? 40 : 10);
+    
+    // Tối ưu CPU: Duyệt 1 vòng duy nhất, lưu kèm `dist` để không phải tính lại
+    let monstersInRange = [];
+    let hasNearbyMonster = false;
+
+    for (const id in parent.entities) {
+        const m = parent.entities[id];
+        if (m.type === "monster" && m.visible && !m.dead) {
+            const d = distance(character, m);
+            if (d <= cleaveRange) {
+                monstersInRange.push({ entity: m, dist: d });
+                if (d <= character.range) {
+                    hasNearbyMonster = true;
+                }
+            }
+        }
+    }
+
+    // Fast-Fail 2: Không có quái trong range -> Thoát
+    if (monstersInRange.length === 0) {
+        await handleWeaponSwap(stMaps, aoeMaps);
+        return;
+    }
+
+    // Kiểm tra Attack CD
+    if (ms_to_next_skill("attack") <= 75 && hasNearbyMonster) {
+        await handleWeaponSwap(stMaps, aoeMaps);
+        return;
+    }
+
+    // Logic kiểm tra Aggro / Quái thả
+    let list = monstersInRange.filter(item => !item.entity.target && item.entity.hp >= 10000);
+
+    // Tính số lượng creep bỏ qua dựa trên MP Ynhi
+    let ignore = 0;
+    const ynhi = get_player("Ynhi");
+    const mpp = (ynhi && ynhi.hp > 12000) ? ynhi.mp : 0;
+
+    if (mpp > 4500) ignore = 5;
+    else if (mpp > 3500) ignore = 3;
+    else if (mpp > 2500) ignore = 1;
+
+    // Nếu không có home monster hoặc HP thấp -> Không bỏ qua con nào
+    if (!get_nearest_monster({ type: home }) || character.hp < 8000) {
+        ignore = 0;
+    }
+
+    // Lọc Creep và sắp xếp theo khoảng cách đã tính sẵn
+    let creeps = list
+        .filter(item => item.entity.mtype.includes(home) || item.entity.mtype.includes("sparkbot"))
+        .sort((a, b) => a.dist - b.dist);
+
+    const hasStrongCreep = creeps.some(item => item.entity.attack > 800);
+
+    const untargetedMonsters = list
+        .filter(item => !(item.entity.mtype.includes(home) || item.entity.mtype.includes("sparkbot")))
+        .concat(hasStrongCreep ? creeps : creeps.slice(ignore));
+
+    // Đã đủ điều kiện An Toàn để Cleave!
+    if (untargetedMonsters.length === 0) {
+        // 1. Kiểm tra vũ khí Bataxe
+        if (Mainhand !== "bataxe") {
+            if (!isEquipping) {
+                await scytheSet(); // Đợi đổi vũ khí xong
+            }
+            return; // Thoát để frame 30ms sau nhận Mainhand mới rồi mới Cleave
+        }
+
+        // 2. Thực hiện Cleave khi đã chắc chắn cầm Bataxe
+        try {
+            await use_skill("cleave");
+            lastCleaveTime = currentTime;
+            
+            // Tùy chọn: Sau khi Cleave xong mới Swap về vũ khí chính
+            await handleWeaponSwap(stMaps, aoeMaps);
+        } catch (e) {
+            // Lỗi khi cast skill
+        }
+    } else {
+        // Nếu không an toàn để Cleave -> Duy trì vũ khí thường
+        await handleWeaponSwap(stMaps, aoeMaps);
+    }
 }
 
-function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) {
-    return (
-        !smart.moving // Don't cleave if moving smartly
-        && cc // CC check: Ensure you have CC up
-        && aoe // Mana check: Ensure AOE is available
-        && timeSinceLastCleave >= CLEAVE_THRESHOLD // Prevent cleave spamming
-        && monstersInRange.length > 0 // Ensure there are monsters in range
-        && untargetedMonsters.length === 0 // Only cleave if no untargeted monsters (no aggro)
-        && mapsToInclude.includes(character.map) // Map check (optional, clarify if needed)
-        && tank // Ensure tank (priest) is around
-        && !is_on_cooldown("cleave") // Ensure cleave is not on cooldown
-        && (ms_to_next_skill("attack") > 75  || !hasNearbyMonster )// Ensure attack isn't about to be ready
-    );
-}
+
+
 
 async function handleWarriorSkills(tank,f1) {
 
