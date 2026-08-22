@@ -1,8 +1,6 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
 
-game_log("Game vs 1.1");
-
 /*************** CONFIG ***************/
 const HOME_SERVER = { region: "ASIA", id: "I" };
 const RUN_SERVER = { region: "US", id: "I" }; 
@@ -1838,29 +1836,18 @@ if (
 }
 skillLoop()
 
-
-
 async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
-    if (is_on_cooldown("stomp") || character.mp <= 300) {
-        handleWeaponSwap(stMaps, aoeMaps);
-        return;
-    }
-
-    if (Mainhand !== "basher") {
-        // Lúc này await sẽ ĐỢI tháo offhand + đao Basher xong hoàn toàn
-        await basherSet(); 
-        return; // Thoát ra để vòng lặp 50ms sau nhận Mainhand mới rồi mới Stomp
-    }
-
-    // Khi Mainhand đã là basher -> Đảm bảo Stomp trúng 100%
-    try {
-        await use_skill("stomp");
+    if (!is_on_cooldown("stomp") && character.mp > 300) {
+        if (Mainhand !== "basher" && performance.now() - basher > 5000) {
+            basher = performance.now();
+            basherSet();
+        }
+        use_skill("stomp");
         game_log("Using STOMP", "#B900FF");
-    } catch (e) {}
+    } else {
+        handleWeaponSwap(stMaps, aoeMaps);
+    }
 }
-
-
-
 
 
 setTimeout(function () {
@@ -1874,7 +1861,6 @@ let lastManaCheck = 0;
 function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
     if (currentTime - eTime < 50) return;
-	if (isEquipping) return;
 
 // Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
 const mobsInRange = Object.values(parent.entities).filter(entity =>
@@ -2100,30 +2086,14 @@ function autoSwapCandy() {
 
 let lastCleaveTime = 0;
 const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
-const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
-// Map cần tăng range check để an toàn
-const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
 function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-
-
-
-// Fast-Fail 1: Kiểm tra các điều kiện cơ bản
-    if (
-        smart.moving || 
-        !cc || 
-        !aoe || 
-        !tank || 
-        timeSinceLastCleave < CLEAVE_THRESHOLD || 
-        is_on_cooldown("cleave")
-    ) {
-        handleWeaponSwap(stMaps, aoeMaps, Mainhand);
-        return;
-    }
-
+    const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
 	
+// Map cần tăng range check để an toàn
+const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
 // Range cleave theo map
 const cleaveRange = G.skills.cleave.range + 
@@ -2367,25 +2337,19 @@ for (let id in parent.entities) {
 
 
 
-
-async function scytheSet() {
+function scytheSet() {
     unequip("offhand");
-    return await equipBatch([
-        { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" }
+    equipBatch([
+        { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" },
     ]);
 }
 
-
-
-
-async function basherSet() {
+function basherSet() {
     unequip("offhand");
-    return await equipBatch([
+    equipBatch([
         { itemName: "basher", slot: "mainhand", level: 7 }
     ]);
 }
-
-
 
 //l: "l"  == L lock
 let isEquipping = false; // Flag kiểm soát trạng thái
