@@ -1772,7 +1772,6 @@ attackLoop();
 
 ////////////////////////////////////////////////////////////////
 let scythe = 0;
-let eTime = 0;
 let basher = 0;
 async function skillLoop() {
     let delay = 30;
@@ -1864,71 +1863,61 @@ setTimeout(function () {
   equipSet('nodeff');  // lần đầu đăng nhập trở về mặc định
 }, 10000); // 10000ms = 10 giây
 
+
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
 let lastManaCheck = 0;
+let eTime = 0;
+let currentSet = ""; // Biến chốt chặn: Lưu tên set hiện tại để không bao giờ gửi socket trùng
 
-function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+async function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
-    if (currentTime - eTime < 50) return;
 
-// Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
-const mobsInRange = Object.values(parent.entities).filter(entity =>
-    entity.visible &&
-    !entity.dead &&
-    distance(character, entity) <= 100 &&
-    (
-        entity.target === character.name ||
-        entity.cooperative === true
-    )
-);
+    // 1. Chặn spam: Nếu đang đổi đồ hoặc chưa quá 100ms cooldown -> Thoát ngay
+    if (typeof isEquipping !== "undefined" && isEquipping) return;
+    if (currentTime - eTime < 100) return;
+
+    // Mob xung quanh (bao gồm cả quái cooperative/hợp tác dù không target mình)
+    const mobsInRange = Object.values(parent.entities).filter(entity =>
+        entity.visible &&
+        !entity.dead &&
+        distance(character, entity) <= 100 &&
+        (
+            entity.target === character.name ||
+            entity.cooperative === true
+        )
+    );
 
     const FireMobs = mobsInRange.filter(mob =>
         mob.mtype == "xmagefi"
     );
-	
-const hasLowHP_CoopMob = mobsInRange.some(mob =>
-    mob.cooperative === true &&
-    mob.hp != null &&
-    mob.hp < 180000
-);
-
-
-const physicalMobs = mobsInRange.filter(mob => {
-    if (mob.mtype === "crabxx" || mob.mtype === "ent" ) return false;
-    if (mob.damage_type !== "physical") return false;
-    if (character.hp < 8000) return mob.attack > 1000;
-    if (character.hp < 15000) return mob.attack > 2000;
-    return mob.attack > 3500;
-});
-
-
-const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
-
-const MobMagicNeedORB = mobsInRange.filter(m =>
-    specialORB.includes(m.mtype)
-);
-
-	
-const magicalMobs = mobsInRange.filter(mob => {
-   // if (mob.mtype === "xmagex") return true;
-    if (mob.damage_type !== "magical") return false;
-    if (character.hp < 12000) return mob.attack > 1000;
-    if (character.hp < 15000) return mob.attack > 2000;
-    return mob.attack > 3500;
-});
-
-
-
-	
-    const lowHpMobs = mobsInRange.filter(mob =>
-        mob.hp < 6000 &&
-        mob.attack > 500 &&
-        mob.target === character.name &&
-        mob.mtype !== "nerfedmummy" &&
-        mob.mtype !== "nerfedbat"
+    
+    const hasLowHP_CoopMob = mobsInRange.some(mob =>
+        mob.cooperative === true &&
+        mob.hp != null &&
+        mob.hp < 180000
     );
 
+    const physicalMobs = mobsInRange.filter(mob => {
+        if (mob.mtype === "crabxx" || mob.mtype === "ent") return false;
+        if (mob.damage_type !== "physical") return false;
+        if (character.hp < 8000) return mob.attack > 1000;
+        if (character.hp < 15000) return mob.attack > 2000;
+        return mob.attack > 3500;
+    });
+
+    const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+
+    const MobMagicNeedORB = mobsInRange.filter(m =>
+        specialORB.includes(m.mtype)
+    );
+
+    const magicalMobs = mobsInRange.filter(mob => {
+        if (mob.damage_type !== "magical") return false;
+        if (character.hp < 12000) return mob.attack > 1000;
+        if (character.hp < 15000) return mob.attack > 2000;
+        return mob.attack > 3500;
+    });
 
     // ===== Mana hysteresis =====
     const MANA_IN = 1250;   // MP xuống dưới mức này → vào mana
@@ -1937,122 +1926,131 @@ const magicalMobs = mobsInRange.filter(mob => {
     // Kiểm tra hiện tại đang dùng mana set
     const isManaSet = character.slots?.chest?.name === "tshirt9";
 
-	
-    // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
+    // 👉 ƯU TIÊN 1: Physical Mobs
     if (physicalMobs.length >= 1) {
         defSafeSince = null;
-        eTime = currentTime;
-        equipSet('def_physical');
         checkdef = 2;
+        if (currentSet !== 'def_physical') {
+            eTime = currentTime;
+            currentSet = 'def_physical';
+            await equipSet('def_physical');
+        }
         return;
     }
 
-
-
-	if (MobMagicNeedORB.length >= 1) {  
+    // 👉 ƯU TIÊN 2: Magic Mobs / Fire
+    if (MobMagicNeedORB.length >= 1) {  
         defSafeSince = null;
-        eTime = currentTime;
-        equipSet('def_magic_ORB');
         checkdef = 2;
+        if (currentSet !== 'def_magic_ORB') {
+            eTime = currentTime;
+            currentSet = 'def_magic_ORB';
+            await equipSet('def_magic_ORB');
+        }
         return;
     }
-	else if (magicalMobs.length >= 1) {  
+    else if (magicalMobs.length >= 1) {  
         defSafeSince = null;
-        eTime = currentTime;
-        equipSet('def_magical');
         checkdef = 2;
+        if (currentSet !== 'def_magical') {
+            eTime = currentTime;
+            currentSet = 'def_magical';
+            await equipSet('def_magical');
+        }
         return;
     }
-    else if (FireMobs.length >= 1)
-	{
-        eTime = currentTime;
-        equipSet('def_fire');
-        return;
-	}
-
-
-	
-    // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
-    if (lowHpMobs.length >= 2 && 1 == 2) {
-        eTime = currentTime;
-        equipSet('lowhp_clear');
+    else if (FireMobs.length >= 1) {
+        if (currentSet !== 'def_fire') {
+            eTime = currentTime;
+            currentSet = 'def_fire';
+            await equipSet('def_fire');
+        }
         return;
     }
 
-    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY và không có quái co-op sắp chết
+    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
     if (character.hp > 15000 && !hasLowHP_CoopMob &&
         physicalMobs.length === 0 &&
         magicalMobs.length === 0) {
         
-        // Ghi thời điểm bắt đầu an toàn
         if (!defSafeSince) defSafeSince = currentTime;
 
-        // Đủ thời gian an toàn → gỡ phòng thủ
         if (currentTime - defSafeSince >= 3000 && character.slots.helmet?.name === "xhelmet") {
             checkdef = 0;
             defSafeSince = null;
-            eTime = currentTime;
-            equipSet('nodeff');
+            if (currentSet !== 'nodeff') {
+                eTime = currentTime;
+                currentSet = 'nodeff';
+                await equipSet('nodeff');
+            }
             return;
         }
 
     } else {
-        // Nếu có mob mạnh lại → reset đồng hồ an toàn
         defSafeSince = null;
     }
 
-    // 👉 Chuyển sang deff nếu máu thấp mà chưa bị mob mạnh
+    // 👉 Chuyển sang deff nếu máu thấp
     if (checkdef === 0 && character.hp < 11000) {
-        eTime = currentTime;
         checkdef = 1;
-        equipSet('deff');
+        if (currentSet !== 'deff') {
+            eTime = currentTime;
+            currentSet = 'deff';
+            await equipSet('deff');
+        }
         return;
     }
 
+    // 👉 MANA CHECK
+    if (currentTime - lastManaCheck >= 700) {
+        lastManaCheck = currentTime;
 
-if (currentTime - lastManaCheck >= 700) {
-    lastManaCheck = currentTime;
-
-    if (character.slots.helmet?.name === "fury") {
-
-        if (character.hp > 11500) {
-
-            if (!isManaSet && character.mp < MANA_IN) {
-                eTime = currentTime;
-                equipSet('mana');
-            }
-            else if (isManaSet && character.mp >= MANA_OUT) {
-                eTime = currentTime;
-                //equipSet('nomana');
+        if (character.slots.helmet?.name === "fury") {
+            if (character.hp > 11500) {
+                if (!isManaSet && character.mp < MANA_IN) {
+                    if (currentSet !== 'mana') {
+                        eTime = currentTime;
+                        currentSet = 'mana';
+                        await equipSet('mana');
+                    }
+                    return;
+                }
+                else if (isManaSet && character.mp >= MANA_OUT && 1 > 2) { 
+                    if (currentSet !== 'nomana') {
+                        eTime = currentTime;
+                        currentSet = 'nomana';
+                        await equipSet('nomana');
+                    }
+                    return;
+                }
             }
         }
     }
-}
-
-	
 
     // 👉 Trạng thái đặc biệt → bỏ qua
-    if (events && !get_nearest_monster({ type: home })) return;
-    if (bossvip > 0 || framtay > 0) return;
+    const currentHome = typeof home !== "undefined" ? home : null;
+    if (typeof events !== "undefined" && events && currentHome && !get_nearest_monster({ type: currentHome })) return;
+    if ((typeof bossvip !== "undefined" && bossvip > 0) || (typeof framtay !== "undefined" && framtay > 0)) return;
 
-    if (framboss > 0) {
-        eTime = currentTime;
-        equipSet('single');
+    // 👉 ĐỔI SET TẤN CÔNG (SINGLE / AOE) - ĐÃ BẢO VỆ CHỐNG SPAM 30MS
+    let nextAttackSet = "aoe";
+
+    if (typeof framboss !== "undefined" && framboss > 0) {
+        nextAttackSet = "single";
     } else {
-        eTime = currentTime;
-		
-		if ( home == 'bscorpion' )
-		{
-		equipSet('single');
-		}
-		else
-		{
-		equipSet('aoe');
-		}
-        
+        if (currentHome === 'bscorpion') {
+            nextAttackSet = "single";
+        } else {
+            nextAttackSet = "aoe";
+        }
     }
 
-	
+    // Chỉ thực thi equipSet khi Set mục tiêu khác với Set đang mặc
+    if (currentSet !== nextAttackSet) {
+        eTime = currentTime;
+        currentSet = nextAttackSet;
+        await equipSet(nextAttackSet);
+    }
 }
 
 
