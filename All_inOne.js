@@ -1772,6 +1772,7 @@ attackLoop();
 
 ////////////////////////////////////////////////////////////////
 let scythe = 0;
+let eTime = 0;
 let basher = 0;
 async function skillLoop() {
     let delay = 30;
@@ -1817,6 +1818,7 @@ if (
 				
 
                 if (character.ctype === "warrior") {
+                    //console.log("Calling handleCleave");
                     handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank);
                    
                     handleWarriorSkills(tank,f1);
@@ -1863,61 +1865,71 @@ setTimeout(function () {
   equipSet('nodeff');  // lần đầu đăng nhập trở về mặc định
 }, 10000); // 10000ms = 10 giây
 
-
 let checkdef = 0; // 0 = bình thường, 1 = deff, 2 = def mạnh
 let defSafeSince = null;
 let lastManaCheck = 0;
-let eTime = 0;
-let currentSet = ""; // Biến chốt chặn: Lưu tên set hiện tại để không bao giờ gửi socket trùng
 
-async function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
+function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     const currentTime = performance.now();
+    if (currentTime - eTime < 50) return;
 
-    // 1. Chặn spam: Nếu đang đổi đồ hoặc chưa quá 100ms cooldown -> Thoát ngay
-    if (typeof isEquipping !== "undefined" && isEquipping) return;
-    if (currentTime - eTime < 100) return;
-
-    // Mob xung quanh (bao gồm cả quái cooperative/hợp tác dù không target mình)
-    const mobsInRange = Object.values(parent.entities).filter(entity =>
-        entity.visible &&
-        !entity.dead &&
-        distance(character, entity) <= 100 &&
-        (
-            entity.target === character.name ||
-            entity.cooperative === true
-        )
-    );
+// Mob xung quanh (bao gòm cả quái cooperative/hợptác dù không target mình)
+const mobsInRange = Object.values(parent.entities).filter(entity =>
+    entity.visible &&
+    !entity.dead &&
+    distance(character, entity) <= 100 &&
+    (
+        entity.target === character.name ||
+        entity.cooperative === true
+    )
+);
 
     const FireMobs = mobsInRange.filter(mob =>
         mob.mtype == "xmagefi"
     );
-    
-    const hasLowHP_CoopMob = mobsInRange.some(mob =>
-        mob.cooperative === true &&
-        mob.hp != null &&
-        mob.hp < 180000
+	
+const hasLowHP_CoopMob = mobsInRange.some(mob =>
+    mob.cooperative === true &&
+    mob.hp != null &&
+    mob.hp < 180000
+);
+
+
+const physicalMobs = mobsInRange.filter(mob => {
+    if (mob.mtype === "crabxx" || mob.mtype === "ent" ) return false;
+    if (mob.damage_type !== "physical") return false;
+    if (character.hp < 8000) return mob.attack > 1000;
+    if (character.hp < 15000) return mob.attack > 2000;
+    return mob.attack > 3500;
+});
+
+
+const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+
+const MobMagicNeedORB = mobsInRange.filter(m =>
+    specialORB.includes(m.mtype)
+);
+
+	
+const magicalMobs = mobsInRange.filter(mob => {
+   // if (mob.mtype === "xmagex") return true;
+    if (mob.damage_type !== "magical") return false;
+    if (character.hp < 12000) return mob.attack > 1000;
+    if (character.hp < 15000) return mob.attack > 2000;
+    return mob.attack > 3500;
+});
+
+
+
+	
+    const lowHpMobs = mobsInRange.filter(mob =>
+        mob.hp < 6000 &&
+        mob.attack > 500 &&
+        mob.target === character.name &&
+        mob.mtype !== "nerfedmummy" &&
+        mob.mtype !== "nerfedbat"
     );
 
-    const physicalMobs = mobsInRange.filter(mob => {
-        if (mob.mtype === "crabxx" || mob.mtype === "ent") return false;
-        if (mob.damage_type !== "physical") return false;
-        if (character.hp < 8000) return mob.attack > 1000;
-        if (character.hp < 15000) return mob.attack > 2000;
-        return mob.attack > 3500;
-    });
-
-    const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
-
-    const MobMagicNeedORB = mobsInRange.filter(m =>
-        specialORB.includes(m.mtype)
-    );
-
-    const magicalMobs = mobsInRange.filter(mob => {
-        if (mob.damage_type !== "magical") return false;
-        if (character.hp < 12000) return mob.attack > 1000;
-        if (character.hp < 15000) return mob.attack > 2000;
-        return mob.attack > 3500;
-    });
 
     // ===== Mana hysteresis =====
     const MANA_IN = 1250;   // MP xuống dưới mức này → vào mana
@@ -1926,131 +1938,122 @@ async function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     // Kiểm tra hiện tại đang dùng mana set
     const isManaSet = character.slots?.chest?.name === "tshirt9";
 
-    // 👉 ƯU TIÊN 1: Physical Mobs
+	
+    // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
     if (physicalMobs.length >= 1) {
         defSafeSince = null;
+        eTime = currentTime;
+        equipSet('def_physical');
         checkdef = 2;
-        if (currentSet !== 'def_physical') {
-            eTime = currentTime;
-            currentSet = 'def_physical';
-            await equipSet('def_physical');
-        }
         return;
     }
 
-    // 👉 ƯU TIÊN 2: Magic Mobs / Fire
-    if (MobMagicNeedORB.length >= 1) {  
+
+
+	if (MobMagicNeedORB.length >= 1) {  
         defSafeSince = null;
+        eTime = currentTime;
+        equipSet('def_magic_ORB');
         checkdef = 2;
-        if (currentSet !== 'def_magic_ORB') {
-            eTime = currentTime;
-            currentSet = 'def_magic_ORB';
-            await equipSet('def_magic_ORB');
-        }
         return;
     }
-    else if (magicalMobs.length >= 1) {  
+	else if (magicalMobs.length >= 1) {  
         defSafeSince = null;
+        eTime = currentTime;
+        equipSet('def_magical');
         checkdef = 2;
-        if (currentSet !== 'def_magical') {
-            eTime = currentTime;
-            currentSet = 'def_magical';
-            await equipSet('def_magical');
-        }
         return;
     }
-    else if (FireMobs.length >= 1) {
-        if (currentSet !== 'def_fire') {
-            eTime = currentTime;
-            currentSet = 'def_fire';
-            await equipSet('def_fire');
-        }
+    else if (FireMobs.length >= 1)
+	{
+        eTime = currentTime;
+        equipSet('def_fire');
+        return;
+	}
+
+
+	
+    // 👉 ƯU TIÊN: Clear mob máu thấp  //chưa sử dụng bây giờ
+    if (lowHpMobs.length >= 2 && 1 == 2) {
+        eTime = currentTime;
+        equipSet('lowhp_clear');
         return;
     }
 
-    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY
+    // 👉 GỠ TRANG BỊ PHÒNG THỦ NẾU AN TOÀN LIÊN TỤC > 3 GIÂY và không có quái co-op sắp chết
     if (character.hp > 15000 && !hasLowHP_CoopMob &&
         physicalMobs.length === 0 &&
         magicalMobs.length === 0) {
         
+        // Ghi thời điểm bắt đầu an toàn
         if (!defSafeSince) defSafeSince = currentTime;
 
+        // Đủ thời gian an toàn → gỡ phòng thủ
         if (currentTime - defSafeSince >= 3000 && character.slots.helmet?.name === "xhelmet") {
             checkdef = 0;
             defSafeSince = null;
-            if (currentSet !== 'nodeff') {
-                eTime = currentTime;
-                currentSet = 'nodeff';
-                await equipSet('nodeff');
-            }
+            eTime = currentTime;
+            equipSet('nodeff');
             return;
         }
 
     } else {
+        // Nếu có mob mạnh lại → reset đồng hồ an toàn
         defSafeSince = null;
     }
 
-    // 👉 Chuyển sang deff nếu máu thấp
+    // 👉 Chuyển sang deff nếu máu thấp mà chưa bị mob mạnh
     if (checkdef === 0 && character.hp < 11000) {
+        eTime = currentTime;
         checkdef = 1;
-        if (currentSet !== 'deff') {
-            eTime = currentTime;
-            currentSet = 'deff';
-            await equipSet('deff');
-        }
+        equipSet('deff');
         return;
     }
 
-    // 👉 MANA CHECK
-    if (currentTime - lastManaCheck >= 700) {
-        lastManaCheck = currentTime;
 
-        if (character.slots.helmet?.name === "fury") {
-            if (character.hp > 11500) {
-                if (!isManaSet && character.mp < MANA_IN) {
-                    if (currentSet !== 'mana') {
-                        eTime = currentTime;
-                        currentSet = 'mana';
-                        await equipSet('mana');
-                    }
-                    return;
-                }
-                else if (isManaSet && character.mp >= MANA_OUT && 1 > 2) { 
-                    if (currentSet !== 'nomana') {
-                        eTime = currentTime;
-                        currentSet = 'nomana';
-                        await equipSet('nomana');
-                    }
-                    return;
-                }
+if (currentTime - lastManaCheck >= 700) {
+    lastManaCheck = currentTime;
+
+    if (character.slots.helmet?.name === "fury") {
+
+        if (character.hp > 11500) {
+
+            if (!isManaSet && character.mp < MANA_IN) {
+                eTime = currentTime;
+                equipSet('mana');
+            }
+            else if (isManaSet && character.mp >= MANA_OUT) {
+                eTime = currentTime;
+                //equipSet('nomana');
             }
         }
     }
+}
+
+	
 
     // 👉 Trạng thái đặc biệt → bỏ qua
-    const currentHome = typeof home !== "undefined" ? home : null;
-    if (typeof events !== "undefined" && events && currentHome && !get_nearest_monster({ type: currentHome })) return;
-    if ((typeof bossvip !== "undefined" && bossvip > 0) || (typeof framtay !== "undefined" && framtay > 0)) return;
+    if (events && !get_nearest_monster({ type: home })) return;
+    if (bossvip > 0 || framtay > 0) return;
 
-    // 👉 ĐỔI SET TẤN CÔNG (SINGLE / AOE) - ĐÃ BẢO VỆ CHỐNG SPAM 30MS
-    let nextAttackSet = "aoe";
-
-    if (typeof framboss !== "undefined" && framboss > 0) {
-        nextAttackSet = "single";
-    } else {
-        if (currentHome === 'bscorpion') {
-            nextAttackSet = "single";
-        } else {
-            nextAttackSet = "aoe";
-        }
-    }
-
-    // Chỉ thực thi equipSet khi Set mục tiêu khác với Set đang mặc
-    if (currentSet !== nextAttackSet) {
+    if (framboss > 0) {
         eTime = currentTime;
-        currentSet = nextAttackSet;
-        await equipSet(nextAttackSet);
+        equipSet('single');
+    } else {
+        eTime = currentTime;
+		
+		if ( home == 'bscorpion' )
+		{
+		equipSet('single');
+		}
+		else
+		{
+		equipSet('aoe');
+		}
+        
     }
+
+	
 }
 
 
@@ -2092,124 +2095,100 @@ function autoSwapCandy() {
 }
 
 
-
-
 let lastCleaveTime = 0;
-const CLEAVE_THRESHOLD = 500;
+const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
 
-// Chuyển Set/Array cố định ra ngoài để tránh khởi tạo lại mỗi 30ms
-const MAPS_TO_INCLUDE = new Set([
-    "chicanthemoday","desertland","goobrawl","main","level2w","cave",
-    "halloween","spookytown","tunnel","winterland","level2n","mforest",
-    "tomb","crypt","cyberland","spider_instance","winter_instance",
-    "winter_cave","level1","uhills"
-]);
-const EXTRA_RANGE_MAPS = new Set(["level2w"]);
-
-async function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
+function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
+    const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
+	
+// Map cần tăng range check để an toàn
+const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
-    // Fast-Fail 1: Kiểm tra các điều kiện cơ bản trước khi tốn CPU tính khoảng cách quái
-    if (
-        smart.moving || 
-        !cc || 
-        !aoe || 
-        !tank || 
-        timeSinceLastCleave < CLEAVE_THRESHOLD || 
-        is_on_cooldown("cleave") || 
-        !MAPS_TO_INCLUDE.has(character.map)
-    ) {
-        // Không đủ điều kiện Cleave -> Chạy Swap vũ khí bình thường
-        await handleWeaponSwap(stMaps, aoeMaps);
-        return;
-    }
+// Range cleave theo map
+const cleaveRange = G.skills.cleave.range + 
+    (extraRangeMaps.includes(character.map) ? 40 : 10);
 
-    // Tính range Cleave
-    const cleaveRange = G.skills.cleave.range + (EXTRA_RANGE_MAPS.has(character.map) ? 40 : 10);
-    
-    // Tối ưu CPU: Duyệt 1 vòng duy nhất, lưu kèm `dist` để không phải tính lại
-    let monstersInRange = [];
-    let hasNearbyMonster = false;
+const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
+    type === "monster" &&
+    visible &&
+    !dead &&
+    distance(character, { x, y }) <= cleaveRange
+);
 
-    for (const id in parent.entities) {
-        const m = parent.entities[id];
-        if (m.type === "monster" && m.visible && !m.dead) {
-            const d = distance(character, m);
-            if (d <= cleaveRange) {
-                monstersInRange.push({ entity: m, dist: d });
-                if (d <= character.range) {
-                    hasNearbyMonster = true;
-                }
-            }
+// Biến riêng: true nếu có ít nhất 1 quái trong tầm đánh thường
+const hasNearbyMonster = monstersInRange.some(m => distance(character, m) <= character.range);
+	
+
+// Quái trong range nhưng chưa có target + HP ≥ 10000
+let list = monstersInRange.filter(m => !m.target && m.hp >= 10000);
+
+// Lấy MP của Ynhi (đồng đội / nhân vật phụ)
+let ynhi = get_player("Ynhi");
+	
+// Lấy MP của Ynhi, nhưng chỉ khi HP > 12000, còn lại cho = 0
+let mpp = (ynhi && ynhi.hp > 12000) ? ynhi.mp : 0;
+	
+// Số lượng creep được phép bỏ qua tùy theo MP của Ynhi
+let ignore = mpp > 4500 ? 5 :
+             mpp > 3500 ? 3 :
+             mpp > 2500 ? 1 : 0;
+
+if ( !get_nearest_monster({ type: home }) || character.hp < 8000 )	ignore = 0 /// chỉ có thể bỏ qua nếu đang đứng trong bãi fram thôi, tránh khi đánh boss hoặc khi máu thấp v..v.v
+
+
+
+// Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu) //có thêm tùy chọn nếu bãi  fram > 2 loại quái
+let creeps = list.filter(m => m.mtype.includes(home) || m.mtype.includes("sparkbot")).sort((a,b)=> distance(character, a) - distance(character, b));
+
+
+const hasStrongCreep = creeps.some(c => c.attack > 800);
+// Quái cần quan tâm thật sự:
+//   - Giữ toàn bộ quái không phải creep
+//   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
+
+
+const untargetedMonsters = list
+  .filter(m => !(m.mtype.includes(home) || m.mtype.includes("sparkbot")))
+  .concat(
+    hasStrongCreep
+      ? creeps // có creep mạnh → lấy hết không bỏ qua con nào
+      : creeps.slice(ignore) // không có quái mạnh → bỏ qua một số X con
+  );
+	
+
+
+//const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
+
+
+    if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) ) {
+        if (Mainhand !== "bataxe" &&  !isEquipping ) {
+            scytheSet(); // Equip the bataxe
         }
+        use_skill("cleave"); // Use the cleave skill
+        reduce_cooldown("cleave", character.ping * 0.95);
+        lastCleaveTime = currentTime; // Update the last cleave time
     }
 
-    // Fast-Fail 2: Không có quái trong range -> Thoát
-    if (monstersInRange.length === 0) {
-        await handleWeaponSwap(stMaps, aoeMaps);
-        return;
-    }
-
-    // Kiểm tra Attack CD
-    if (ms_to_next_skill("attack") <= 75 && hasNearbyMonster) {
-        await handleWeaponSwap(stMaps, aoeMaps);
-        return;
-    }
-
-    // Logic kiểm tra Aggro / Quái thả
-    let list = monstersInRange.filter(item => !item.entity.target && item.entity.hp >= 10000);
-
-    // Tính số lượng creep bỏ qua dựa trên MP Ynhi
-    let ignore = 0;
-    const ynhi = get_player("Ynhi");
-    const mpp = (ynhi && ynhi.hp > 12000) ? ynhi.mp : 0;
-
-    if (mpp > 4500) ignore = 5;
-    else if (mpp > 3500) ignore = 3;
-    else if (mpp > 2500) ignore = 1;
-
-    // Nếu không có home monster hoặc HP thấp -> Không bỏ qua con nào
-    if (!get_nearest_monster({ type: home }) || character.hp < 8000) {
-        ignore = 0;
-    }
-
-    // Lọc Creep và sắp xếp theo khoảng cách đã tính sẵn
-    let creeps = list
-        .filter(item => item.entity.mtype.includes(home) || item.entity.mtype.includes("sparkbot"))
-        .sort((a, b) => a.dist - b.dist);
-
-    const hasStrongCreep = creeps.some(item => item.entity.attack > 800);
-
-    const untargetedMonsters = list
-        .filter(item => !(item.entity.mtype.includes(home) || item.entity.mtype.includes("sparkbot")))
-        .concat(hasStrongCreep ? creeps : creeps.slice(ignore));
-
-    // Đã đủ điều kiện An Toàn để Cleave!
-    if (untargetedMonsters.length === 0) {
-        // 1. Kiểm tra vũ khí Bataxe
-        if (Mainhand !== "bataxe") {
-            if (!isEquipping) {
-                await scytheSet(); // Đợi đổi vũ khí xong
-            }
-            return; // Thoát để frame 30ms sau nhận Mainhand mới rồi mới Cleave
-        }
-
-        // 2. Thực hiện Cleave khi đã chắc chắn cầm Bataxe
-        try {
-            await use_skill("cleave");
-            lastCleaveTime = currentTime;
-        } catch (e) {
-            // Lỗi khi cast skill
-        }
-    } else {
-        // Nếu không an toàn để Cleave -> Duy trì vũ khí thường
-        await handleWeaponSwap(stMaps, aoeMaps);
-    }
+    // Handle weapon swapping outside of cleave logic to keep it separate
+    handleWeaponSwap(stMaps, aoeMaps);
 }
 
-
-
+function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) {
+    return (
+        !smart.moving // Don't cleave if moving smartly
+        && cc // CC check: Ensure you have CC up
+        && aoe // Mana check: Ensure AOE is available
+        && timeSinceLastCleave >= CLEAVE_THRESHOLD // Prevent cleave spamming
+        && monstersInRange.length > 0 // Ensure there are monsters in range
+        && untargetedMonsters.length === 0 // Only cleave if no untargeted monsters (no aggro)
+        && mapsToInclude.includes(character.map) // Map check (optional, clarify if needed)
+        && tank // Ensure tank (priest) is around
+        && !is_on_cooldown("cleave") // Ensure cleave is not on cooldown
+        && (ms_to_next_skill("attack") > 75  || !hasNearbyMonster )// Ensure attack isn't about to be ready
+    );
+}
 
 async function handleWarriorSkills(tank,f1) {
 
@@ -2370,8 +2349,6 @@ for (let id in parent.entities) {
 
 
 
-
-// 1. Bộ Bataxe (Cleave)
 async function scytheSet() {
     if (character.slots?.offhand) {
         await unequip("offhand");
@@ -2382,7 +2359,9 @@ async function scytheSet() {
     ]);
 }
 
-// 2. Bộ Basher (Stomp)
+
+
+
 async function basherSet() {
     if (character.slots?.offhand) {
         await unequip("offhand");
@@ -2392,7 +2371,6 @@ async function basherSet() {
         { itemName: "basher", slot: "mainhand", level: 7 }
     ]);
 }
-
 
 
 
@@ -4962,9 +4940,3 @@ function sendItems(name) {
 
 // ===== LOOP =====
 setInterval(() => sendItems(MULE_NAME), 10000);
-
-
-
-
-
-
