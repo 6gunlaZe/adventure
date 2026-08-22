@@ -928,8 +928,8 @@ const NO_ABSORB_MOBS = [
 ];
 
 let lastAbsorbTime = 0;
-const ABSORB_DELAY = 700; // ms
-const ABSORB_DELAY_BOSS = 1200; // ms
+const ABSORB_DELAY = 150; // ms
+const ABSORB_DELAY_BOSS = 1000; // ms
 
 function tryAbsorb() {
     if (!character.party || smart.moving ) return;
@@ -945,7 +945,11 @@ function tryAbsorb() {
 
 
 
-// --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM ---
+if ( (now - lastAbsorbTime) > ABSORB_DELAY_BOSS) {
+	
+// --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM Xmage---
+
+if ( character.map == "winter_instance") {	
 const priority_mobs = ["xmagefz", "xmagefi", "xmagex","xmagen"];
 
 // Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
@@ -953,7 +957,7 @@ const boss_entity = Object.values(parent.entities).find(e =>
     priority_mobs.includes(e.mtype) && !e.dead
 );
 
-if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 8500 && character.mp > 500 && (now - lastAbsorbTime) > ABSORB_DELAY_BOSS ) {
+if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 8500 && character.mp > 500 ) {
     const teammate = get_player(boss_entity.target);
     
     // Nếu đồng đội đang bị Boss đánh và ở trong tầm hỗ trợ (240px)
@@ -965,7 +969,7 @@ if (boss_entity && boss_entity.target && boss_entity.target !== character.name &
 
     }
 }
-
+}
 
 // --- LOGIC KIỂM TRA FRANKY ---
 
@@ -989,7 +993,7 @@ if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && 
 }
 }
 
-
+}
 
 	
     // Nếu không tìm thấy BOSS cần can thiệp, chạy logic party bình thường
