@@ -2098,14 +2098,30 @@ function autoSwapCandy() {
 
 let lastCleaveTime = 0;
 const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
+const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
+// Map cần tăng range check để an toàn
+const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
 function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-    const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
+
+
+
+// Fast-Fail 1: Kiểm tra các điều kiện cơ bản
+    if (
+        smart.moving || 
+        !cc || 
+        !aoe || 
+        !tank || 
+        timeSinceLastCleave < CLEAVE_THRESHOLD || 
+        is_on_cooldown("cleave")
+    ) {
+        handleWeaponSwap(stMaps, aoeMaps, Mainhand);
+        return;
+    }
+
 	
-// Map cần tăng range check để an toàn
-const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 
 // Range cleave theo map
 const cleaveRange = G.skills.cleave.range + 
