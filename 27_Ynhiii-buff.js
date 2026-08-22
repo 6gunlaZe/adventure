@@ -1841,7 +1841,7 @@ async function ZapCase() {
     const quaiyeu = ["crabxx","snowman","wabbit"];
     const danhSachQuaiA = ["gbluepro", "ggreenpro", "gredpro","plantoid","ent"];
 
-    const delay = 350;
+    const delay = 250;
     var haiz = get_player("haiz");
     var gun = getOtherPartyMember();
     let entcheck = 0;
@@ -1861,12 +1861,11 @@ async function ZapCase() {
                 // 2. Hút quái A khi đủ team
                 if (isFullTeam && danhSachQuaiA.includes(entity.mtype) && !entity.target) return true;
 
-                // 3. Quái C: MP > 80% + delay 2s
+                // 3. Quái C: MP > 80%
                 if (
                     danhSachQuaiC.includes(entity.mtype) &&
                     !entity.target &&
-                    character.mp / character.max_mp > 0.7 &&
-                    Date.now() - lastZapC >= 2000
+                    character.mp / character.max_mp > 0.7 
                 ) return true;
 
                 return false;
@@ -1893,12 +1892,6 @@ async function ZapCase() {
                     for (const entity of entities) {
                         if (!is_on_cooldown("zapperzap")) {
                             await use_skill("zapperzap", entity);
-
-                            // nếu là quái C → set delay 2s
-                            if (danhSachQuaiC.includes(entity.mtype)) {
-                                lastZapC = Date.now();
-                            }
-
                             break;
                         }
                     }
@@ -1956,7 +1949,7 @@ async function ZapQuaiCLoop() {
 }
 
 // Bắt đầu chạy hàm
-ZapQuaiCLoop();  // KS quái khi có người đánh cùng bãi
+// ZapQuaiCLoop();  // KS quái khi có người đánh cùng bãi  --- tạm ngưng
 
 
 
