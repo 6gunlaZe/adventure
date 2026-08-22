@@ -1836,18 +1836,29 @@ if (
 }
 skillLoop()
 
+
+
 async function handleStomp(Mainhand, stMaps, aoeMaps, tank) {
-    if (!is_on_cooldown("stomp") && character.mp > 300) {
-        if (Mainhand !== "basher" && performance.now() - basher > 5000) {
-            basher = performance.now();
-            basherSet();
-        }
-        use_skill("stomp");
-        game_log("Using STOMP", "#B900FF");
-    } else {
+    if (is_on_cooldown("stomp") || character.mp <= 300) {
         handleWeaponSwap(stMaps, aoeMaps);
+        return;
     }
+
+    if (Mainhand !== "basher") {
+        // Lúc này await sẽ ĐỢI tháo offhand + đao Basher xong hoàn toàn
+        await basherSet(); 
+        return; // Thoát ra để vòng lặp 50ms sau nhận Mainhand mới rồi mới Stomp
+    }
+
+    // Khi Mainhand đã là basher -> Đảm bảo Stomp trúng 100%
+    try {
+        await use_skill("stomp");
+        game_log("Using STOMP", "#B900FF");
+    } catch (e) {}
 }
+
+
+
 
 
 setTimeout(function () {
@@ -2344,12 +2355,13 @@ function scytheSet() {
     ]);
 }
 
-function basherSet() {
+async function basherSet() {
     unequip("offhand");
-    equipBatch([
+    return await equipBatch([
         { itemName: "basher", slot: "mainhand", level: 7 }
     ]);
 }
+
 
 //l: "l"  == L lock
 let isEquipping = false; // Flag kiểm soát trạng thái
