@@ -2201,9 +2201,6 @@ async function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
         try {
             await use_skill("cleave");
             lastCleaveTime = currentTime;
-            
-            // Tùy chọn: Sau khi Cleave xong mới Swap về vũ khí chính
-            await handleWeaponSwap(stMaps, aoeMaps);
         } catch (e) {
             // Lỗi khi cast skill
         }
