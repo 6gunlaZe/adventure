@@ -2367,10 +2367,7 @@ for (let id in parent.entities) {
 
 
 async function scytheSet() {
-    if (character.slots?.offhand) {
-        await unequip("offhand");
-    }
-
+    unequip("offhand");
     return await equipBatch([
         { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" }
     ]);
@@ -2380,10 +2377,7 @@ async function scytheSet() {
 
 
 async function basherSet() {
-    if (character.slots?.offhand) {
-        await unequip("offhand");
-    }
-
+    unequip("offhand");
     return await equipBatch([
         { itemName: "basher", slot: "mainhand", level: 7 }
     ]);
