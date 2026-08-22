@@ -1,7 +1,7 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
 
-game_log("Game vs 1.1");
+game_log("Game vs 1.2");
 
 /*************** CONFIG ***************/
 const HOME_SERVER = { region: "ASIA", id: "I" };
@@ -2098,6 +2098,9 @@ function autoSwapCandy() {
 }
 
 
+
+
+
 let lastCleaveTime = 0;
 const CLEAVE_THRESHOLD = 500; // Time in milliseconds between cleave uses
 const mapsToInclude = ["chicanthemoday","desertland", "goobrawl", "main", "level2w", "cave", "halloween", "spookytown", "tunnel", "winterland", "level2n","mforest","tomb","crypt","cyberland","spider_instance","winter_instance","winter_cave","level1","uhills"];
@@ -2107,8 +2110,6 @@ const extraRangeMaps = ["level2w"]; //có thể thêm nhiều map
 function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
     const currentTime = performance.now();
     const timeSinceLastCleave = currentTime - lastCleaveTime;
-
-
 
 // Fast-Fail 1: Kiểm tra các điều kiện cơ bản
     if (
@@ -2123,22 +2124,22 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
         return;
     }
 
-	
-
 // Range cleave theo map
 const cleaveRange = G.skills.cleave.range + 
     (extraRangeMaps.includes(character.map) ? 40 : 10);
 
-const monstersInRange = Object.values(parent.entities).filter(({ type, visible, dead, x, y }) =>
-    type === "monster" &&
-    visible &&
-    !dead &&
-    distance(character, { x, y }) <= cleaveRange
-);
-
-// Biến riêng: true nếu có ít nhất 1 quái trong tầm đánh thường
-const hasNearbyMonster = monstersInRange.some(m => distance(character, m) <= character.range);
-	
+// SỬA TỐI THIỂU: Tính khoảng cách 1 lần & gán luôn hasNearbyMonster để tránh lặp dư thừa
+let hasNearbyMonster = false;
+const monstersInRange = Object.values(parent.entities).filter(e => {
+    if (e.type === "monster" && e.visible && !e.dead) {
+        const d = distance(character, e);
+        if (d <= cleaveRange) {
+            if (d <= character.range) hasNearbyMonster = true;
+            return true;
+        }
+    }
+    return false;
+});
 
 // Quái trong range nhưng chưa có target + HP ≥ 10000
 let list = monstersInRange.filter(m => !m.target && m.hp >= 10000);
@@ -2156,17 +2157,13 @@ let ignore = mpp > 4500 ? 5 :
 
 if ( !get_nearest_monster({ type: home }) || character.hp < 8000 )	ignore = 0 /// chỉ có thể bỏ qua nếu đang đứng trong bãi fram thôi, tránh khi đánh boss hoặc khi máu thấp v..v.v
 
-
-
 // Lọc creep và sắp xếp theo khoảng cách (gần nhất đứng đầu) //có thêm tùy chọn nếu bãi  fram > 2 loại quái
 let creeps = list.filter(m => m.mtype.includes(home) || m.mtype.includes("sparkbot")).sort((a,b)=> distance(character, a) - distance(character, b));
-
 
 const hasStrongCreep = creeps.some(c => c.attack > 800);
 // Quái cần quan tâm thật sự:
 //   - Giữ toàn bộ quái không phải creep
 //   - Chỉ giữ creep sau khi đã bỏ qua X con gần nhất
-
 
 const untargetedMonsters = list
   .filter(m => !(m.mtype.includes(home) || m.mtype.includes("sparkbot")))
@@ -2175,11 +2172,6 @@ const untargetedMonsters = list
       ? creeps // có creep mạnh → lấy hết không bỏ qua con nào
       : creeps.slice(ignore) // không có quái mạnh → bỏ qua một số X con
   );
-	
-
-
-//const untargetedMonsters = monstersInRange.filter(({ target, hp }) => !target && hp >= 4000);  // phiên bản cũ
-
 
     if (canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) ) {
         if (Mainhand !== "bataxe" &&  !isEquipping ) {
@@ -2193,6 +2185,10 @@ const untargetedMonsters = list
     // Handle weapon swapping outside of cleave logic to keep it separate
     handleWeaponSwap(stMaps, aoeMaps);
 }
+
+
+
+
 
 function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastCleave, untargetedMonsters, hasNearbyMonster) {
     return (
