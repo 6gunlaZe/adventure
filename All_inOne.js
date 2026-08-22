@@ -2210,7 +2210,7 @@ if (
     !smart.moving &&
     !is_on_cooldown("agitate") &&
     mobsInRange.length >= 3 &&
-    untargetedMobs.length >= 2 &&
+    untargetedMobs.length >= 1 &&
     (   ( tank && tank.name == "Ynhi" && !tank.rip && tank.hp > 12000 && tank.mp > 4000  && distance(character, tank) < 180 )  ||  (tank && f1 && tank.name != "Ynhi")     ) && 
     character.hp > 14000 && character.mp > 800
 ) {
