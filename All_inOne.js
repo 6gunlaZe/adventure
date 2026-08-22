@@ -2374,19 +2374,31 @@ for (let id in parent.entities) {
 
 
 
-function scytheSet() {
-    unequip("offhand");
-    equipBatch([
-        { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" },
+
+
+// 1. Bộ Bataxe (Cleave)
+async function scytheSet() {
+    if (character.slots?.offhand) {
+        await unequip("offhand");
+    }
+
+    return await equipBatch([
+        { itemName: "bataxe", slot: "mainhand", level: 9, l: "l" }
     ]);
 }
 
+// 2. Bộ Basher (Stomp)
 async function basherSet() {
-    unequip("offhand");
+    if (character.slots?.offhand) {
+        await unequip("offhand");
+    }
+
     return await equipBatch([
         { itemName: "basher", slot: "mainhand", level: 7 }
     ]);
 }
+
+
 
 
 //l: "l"  == L lock
