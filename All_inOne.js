@@ -1,6 +1,8 @@
 let lastSwapTime = 0;
 const swapCooldown = 500;
 
+game_log("Game vs 1.1");
+
 /*************** CONFIG ***************/
 const HOME_SERVER = { region: "ASIA", id: "I" };
 const RUN_SERVER = { region: "US", id: "I" }; 
