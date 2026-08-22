@@ -439,7 +439,7 @@ const nguyehiemmmm = mobsInRange.filter(monster =>
 );
 
 const a3xongfilm = mobsInRange.filter(monster => 
-    (monster.mtype === "a3" && monster.hp < 4)
+    (monster.mtype === "a3" && monster.hp < 50000)
 );
 	
 if (a3xongfilm.length >= 1 )
@@ -450,7 +450,7 @@ setTimeout(() => {
   z = 250;
 let toke21n122 = key_auto;  // Thay bằng token của bạn
 ghichu(character.in, "xongfilm 19",toke21n122)
-	}, 3000);
+	}, 10000);
 		}
 }	
 	
