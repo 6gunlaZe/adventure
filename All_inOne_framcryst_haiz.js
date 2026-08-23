@@ -593,6 +593,9 @@ if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, me
 
      if (character.mp > 1300 && !is_on_cooldown("taunt") ) use_skill("taunt", quaivbat0);
     }
+
+  if ( character.mp > 1000 &&  character.hp > 10000  && !is_on_cooldown("agitate") )use_skill("agitate");
+	
 }
 
 
@@ -605,6 +608,7 @@ if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, me
 else if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, member1) <= 300 && distance(character, member2) <= 300)
 {
 	//các mục tránh bỏ chạy khi không cần tiết
+   if ( character.mp > 1000 &&  character.hp > 10000  && !is_on_cooldown("agitate") )use_skill("agitate");
 
     var quaivbat = get_nearest_monster({type: "vbat"});
     if (quaivbat && distance(character, quaivbat) < 160 ) {
