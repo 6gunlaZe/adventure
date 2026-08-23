@@ -582,6 +582,24 @@ else if ((mobsInRange.length == 1 && untargetedMobs.length == 0) || (mobsInRange
 ///////////////////
 		}
 
+
+if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, member1) <= 200 && distance(character, member2) <= 200)
+{
+	//các mục tránh bỏ chạy khi không cần tiết
+
+    var quaivbat0 = get_nearest_monster_solobosskill({type: "vbat", NO_target: true});
+	
+    if (quaivbat0 && distance(character, quaivbat0) < 200 ) {
+
+     if (character.mp > 1300 && !is_on_cooldown("taunt") ) use_skill("taunt", quaivbat0);
+    }
+}
+
+
+
+
+		
+
 		
 	}
 else if (mobsInRangeNobat.length == 0 && member1 && member2 && distance(character, member1) <= 300 && distance(character, member2) <= 300)
@@ -1960,6 +1978,7 @@ for (let id in parent.entities) {
             game_log("Taunting " + current.name, "#FFA600"); // Ghi log thông báo đã taunt quái vật
         }
     }
+	
 }
 
 
