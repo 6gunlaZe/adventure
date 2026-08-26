@@ -1457,6 +1457,8 @@ if (options.min_range && distance(character, entity) < options.min_range) contin
 
 function use_hp_or_mp1()
 {
+    if (character.c.town) return;
+	
 	if(safeties && mssince(last_potion)<min(200,character.ping*3)) return resolving_promise({reason:"safeties",success:false,used:false});
 	var used=true;
 	if(is_on_cooldown("use_hp")) return resolving_promise({success:false,reason:"cooldown"});
