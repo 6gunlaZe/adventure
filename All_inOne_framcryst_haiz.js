@@ -400,15 +400,20 @@ const dacbietmobsInRange = Object.values(parent.entities)
 
 //////////////////Logic new
 var checka5 = getBestTargets({ max_range: character.range, type: "a555555555",  number: 1 });  /// a5 đứng 1 mình rất trâu từ bỏ giết
-const mobTypes = ["a0", "a1" , "a2" , "a3", "a4", "a6" , "a7", "a8", "vbat"];
+
+
+const mobTypes = ["a0", "a1", "a2", "a3", "a4", "a6", "a7", "a8", "vbat"];
 const mobsInRange = Object.values(parent.entities)
     .filter(entity => 
-        mobTypes.includes(entity.mtype) &&          // Kiểm tra nếu loại mob là trong danh sách
-        entity.visible &&                            // Kiểm tra nếu thực thể đang hiển thị
-        !entity.dead &&                              // Kiểm tra nếu thực thể chưa chết
-        distance(character, entity) <= 400          // Nếu không phải vbat, kiểm tra khoảng cách <= 400
+        mobTypes.includes(entity.mtype) && 
+        entity.visible && 
+        !entity.dead && 
+        // Kiểm tra tầm đánh riêng cho a3 khi landaucheck == 1
+        distance(character, entity) <= (entity.mtype === "a3" && landaucheck === 1 ? 200 : 400)
     );
 
+
+	
 const untargetedMobs = mobsInRange.filter(monster => !monster.target);  // Kiểm tra nếu mob chưa có mục tiêu
 const lowhpMob = mobsInRange.filter(monster => monster.hp < 10000); 
 const MobisA2 = mobsInRange.filter(monster => monster.mtype == "a2" || monster.mtype == "a8" || monster.mtype == "a6" ); 
