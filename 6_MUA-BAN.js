@@ -311,7 +311,12 @@ var bankItems = {
   vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
   spores: [{ bank: "items7", level: -1, quantity: 1 }],
   frostcore: [{ bank: "items7", level: -1, quantity: 1 }],
+  stormfeather: [{ bank: "items7", level: -1, quantity: 1 }],
+  voidthread: [{ bank: "items7", level: -1, quantity: 1 }],
 
+
+
+	
 	
   ringsj: [
     { bank: "items4", level: 2, quantity: 1 },
