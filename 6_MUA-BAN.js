@@ -309,6 +309,7 @@ var bankItems = {
   cearring: [{ bank: "items6", level: -1, quantity: 1 }],
   lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
   vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  spores: [{ bank: "items7", level: -1, quantity: 1 }],
 
 	
   ringsj: [
