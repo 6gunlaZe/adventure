@@ -667,10 +667,10 @@ setTimeout(() => {
 	use_skill("town");
 }, 2000);
 	
-// Đợi 6 giây 
+// Đợi 8 giây 
 setTimeout(() => {
 	smart_move({ map: "cave", x: -194, y: -1281 })
-}, 6000);
+}, 8000);
 	
 	return
 }
