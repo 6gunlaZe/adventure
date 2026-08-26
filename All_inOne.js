@@ -2185,7 +2185,7 @@ async function handleWarriorSkills(tank,f1) {
 
 
 
-const mobTypes = ["bat11","mummy","booboo","targetron","sparkbot"]; //list auto hút quái xung quanh của war ==> Tạm ngưng
+const mobTypes = ["bat11","mummy","booboo","targetron","sparkbot","mole"]; //list auto hút quái xung quanh của war ==> Tạm ngưng
 const mobsInRange = Object.values(parent.entities).filter(e =>
     mobTypes.includes(e.mtype) && e.level < 3 && // canh chỉnh level tùy theo quái mạnh yếu
     e.visible && !e.dead &&
@@ -2194,7 +2194,7 @@ const mobsInRange = Object.values(parent.entities).filter(e =>
 
 // Trả về true nếu có ít nhất 1 quái thỏa điều kiện, ngược lại trả về false
 const isWeakMobAttackingYnhi = mobsInRange.some(e => 
-    e.target === "Ynhi" &&  e.hp < 25000 
+    e.target === "Ynhi" &&  e.hp < 25000 && e.max_hp > 30000
 );
 
 	
