@@ -130,7 +130,7 @@ const locations = {
 	
 };
 
-const home = 'mole';
+const home = 'targetron';
 const farmLocation = locations[home].find(p => p.type === "farm");
 const mobMap = farmLocation?.map || "main"; // fallback nếu không có
 
