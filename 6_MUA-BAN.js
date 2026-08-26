@@ -310,6 +310,7 @@ var bankItems = {
   lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
   vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
   spores: [{ bank: "items7", level: -1, quantity: 1 }],
+  frostcore: [{ bank: "items7", level: -1, quantity: 1 }],
 
 	
   ringsj: [
