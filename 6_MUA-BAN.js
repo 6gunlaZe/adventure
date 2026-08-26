@@ -157,7 +157,7 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue  //nếu level trên 1 thì không bán
 		
-if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","hbow","spores", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+if(["pstem","skullamulet","phelmet","smush","stinger","hpamulet", "hpbelt", "mushroomstaff","frogt" ,"sword","hbow", "rattail", "warmscarf", "xmasshoes", "xmaspants", "ornamentstaff","rednose","candycanesword","xmassweater","xmashat","vitring","beewings","crabclaw","santasbelt", "iceskates","wbook0", "swifty", "merry", "hotchocolate","eggnog", "snowflakes","quiver", ].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -1990,7 +1990,7 @@ function compound_items() {
 
 // ====== DANH SÁCH ITEM MUỐN MUA ======
 var craftList = [
-    "smoke","weaponbox","intbelt","strbelt",
+    "smoke","weaponbox","intbelt","strbelt","spores","vitearring","ashleaf","gslime"
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
     "cshell","shield","gcape","sparkstaff",
     "candy1","candy0","carrot",
