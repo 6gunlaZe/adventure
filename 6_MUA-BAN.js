@@ -308,6 +308,9 @@ var bankItems = {
   cring: [{ bank: "items6", level: -1, quantity: 1 }],
   cearring: [{ bank: "items6", level: -1, quantity: 1 }],
   lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
+
+	
   ringsj: [
     { bank: "items4", level: 2, quantity: 1 },
     { bank: "items4", level: 4, quantity: 1 },
