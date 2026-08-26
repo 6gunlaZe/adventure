@@ -1890,7 +1890,7 @@ var combineWhitelist =
 		//dexring: 4,
 		//intring: 4,
 		strring: 3,
-		dexamulet: 4,
+		dexamulet: 2,
 		intamulet: 4,
 		//stramulet: 4,
 		ctristone:3,
