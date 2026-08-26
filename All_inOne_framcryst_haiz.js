@@ -652,7 +652,7 @@ else
  var  targetkill = solobosskill({ max_range: 300}) 
  var  targetNO = solobossNO({ max_range: 330}) 
 if (z > 990)return
-if (  ( z == 98 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kill() >= 14 && targetkill.length == 0) || z > 130 || (checkback + z) > 235 || (SieutocRun == 1 && z == 46 && landaucheck == 1 ) ){
+if (  ( z == 98 && landaucheck == 1 && targetkill.length == 0) || (get_NUMber_kill() >= 14 && targetkill.length == 0) || z > 130 || (checkback + z) > 235 || (SieutocRun == 1 && z == 47 && landaucheck == 1 ) ){
 	stop_character("Ynhi")	
 	stop_character("6gunlaZe")	
 	z = 1000
