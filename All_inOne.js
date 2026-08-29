@@ -1890,6 +1890,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     let magicalCount = 0;
     let fireCount = 0;
     let hasLowHP_CoopMob = false;
+    let Soluongquai = 0;
 
     const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
 
@@ -1897,10 +1898,13 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         if (!entity.visible || entity.dead) continue;
 
         // Tính khoảng cách
-        if (distance(character, entity) <= 100) {
+        if (distance(character, entity) <= 120) {
             const isTarget = entity.target === character.name;
             const isCoop = entity.cooperative === true;
-
+			
+           // đếm số quái thực đánh
+           if (entity.target) Soluongquai++;
+			
             // Chỉ xét nếu quái đang đánh mình hoặc là quái coop
             if (isTarget || isCoop) {
                 // Check Coop Mob HP
@@ -1935,9 +1939,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         }
     }
 
-    // ===== Mana hysteresis =====
-    const MANA_IN = 1250;   // MP xuống dưới mức này → vào mana
-    const MANA_OUT = 2200;  // MP lên trên mức này → thoát mana
+	let targetHighArmor = get_targeted_monster()?.armor > 300;
 
     // Kiểm tra hiện tại đang dùng mana set
     const isManaSet = character.slots?.chest?.name === "tshirt9";
@@ -1981,7 +1983,16 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
             checkdef = 0;
             defSafeSince = null;
             eTime = currentTime;
-            equipSet('nodeff');
+			
+            if (targetHighArmor)
+			{
+				equipSet('nodeffxuyengiap');
+			}
+			else
+			{
+				equipSet('nodeff');
+			}
+			
             return;
         }
     } else {
@@ -2002,13 +2013,14 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
         if (character.slots.helmet?.name === "fury") {
             if (character.hp > 11500) {
-                if (!isManaSet && character.mp < MANA_IN) {
+                if (Soluongquai >= 4) {
                     eTime = currentTime;
                     equipSet('mana');
                 }
-                else if (isManaSet && character.mp >= MANA_OUT) {
+                else  
+				{
                     eTime = currentTime;
-                    //equipSet('nomana');
+                    equipSet('nomana');
                 }
             }
         }
@@ -2554,6 +2566,19 @@ const equipmentSets = {
 		
     ],
     nodeff: [
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 11, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "snring", slot: "amulet", level: 2, l: "l"},
+        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
+        { itemName: "strring", slot: "ring2", level: 4, l: "l" },
+	    
+    ],
+
+    nodeffxuyengiap: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
