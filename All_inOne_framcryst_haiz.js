@@ -450,12 +450,12 @@ const a3xongfilm = mobsInRange.filter(monster =>
 if (a3xongfilm.length >= 1 )
 {
 		if (z < 250){
-// Đợi 3 giây 
+// Đợi 8 giây 
 setTimeout(() => {
   z = 250;
 let toke21n122 = key_auto;  // Thay bằng token của bạn
 ghichu(character.in, "xongfilm 19",toke21n122)
-	}, 10000);
+	}, 8000);
 		}
 }	
 	
