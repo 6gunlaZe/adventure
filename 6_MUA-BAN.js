@@ -313,6 +313,7 @@ var bankItems = {
   frostcore: [{ bank: "items7", level: -1, quantity: 1 }],
   stormfeather: [{ bank: "items7", level: -1, quantity: 1 }],
   voidthread: [{ bank: "items7", level: -1, quantity: 1 }],
+  gslime: [{ bank: "items7", level: -1, quantity: 1 }],
 
 
 
