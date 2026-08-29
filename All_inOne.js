@@ -1896,6 +1896,7 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
     for (const entity of Object.values(parent.entities)) {
         if (!entity.visible || entity.dead) continue;
+		if (entity.type !== "monster") continue
 
         // Tính khoảng cách
         if (distance(character, entity) <= 120) {
