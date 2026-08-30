@@ -506,12 +506,17 @@ const isBscorpion = target?.mtype === "bscorpion";
 
     // 🔄 Khi đã ở đúng vị trí → đặc biệt áp dụng cho soloquai
 if (isBscorpion) {
-    const range = character.range - 20;
 
+const range = character.range - 20;
+const d = distance(character, target);
+
+if (d > range) {
     move(
-        target.x + (character.x - target.x) * range / distance(character, target),
-        target.y + (character.y - target.y) * range / distance(character, target)
+        target.x + (character.x - target.x) * range / d,
+        target.y + (character.y - target.y) * range / d
     );
+}
+	
 }
 	else
 {
