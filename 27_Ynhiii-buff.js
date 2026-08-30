@@ -2570,20 +2570,24 @@ function ms_penalty_cd() {
 const TEMPORAL_RADIUS = 270;   // bán kính tính quái quanh người
 const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
 const TEMPORAL_DELAY = 900;    // delay trước khi cast
+const TEMPORAL_COOLDOWN = 10000; // tối thiểu 10 giây giữa 2 lần cast
 
 // =========================
 // STATE
 // =========================
 let temporalMaxMonsters = 0;
 let lastMap = character.map;
+let lastTemporalTime = 0;
 
 // =========================
 // HELPER: đếm quái quanh người
 // =========================
 function countNearbyMonsters(radius) {
     let count = 0;
+
     for (let id in parent.entities) {
         const e = parent.entities[id];
+
         if (
             e.type === "monster" &&
             distance(character, e) <= radius
@@ -2591,6 +2595,7 @@ function countNearbyMonsters(radius) {
             count++;
         }
     }
+
     return count;
 }
 
@@ -2598,6 +2603,7 @@ function countNearbyMonsters(radius) {
 // MAIN: temporalsurge logic
 // =========================
 function temporalSurgeLogic() {
+
     // cooldown / safety
     if (character.mp < 6000) return;
     if (is_on_cooldown("temporalsurge")) return;
@@ -2611,20 +2617,36 @@ function temporalSurgeLogic() {
 
     if (smart.moving) return;
 
-	
-
     const currentCount = countNearbyMonsters(TEMPORAL_RADIUS);
 
     // cập nhật max
     if (currentCount > temporalMaxMonsters) {
         temporalMaxMonsters = currentCount;
-        return; // vừa cập nhật max thì chưa cần dùng skill
+        return;
     }
 
-    // điều kiện dùng skill
-    if (currentCount < temporalMaxMonsters - (crepp === "bscorpion" ? 0 : TEMPORAL_GAP) && character.mp > 1300) {
-        const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
+    // =========================
+    // Tính theo loại quái
+    // =========================
+    const temporalGap = crepp === "bscorpion" ? 0 : TEMPORAL_GAP;
+    const temporalDelay = crepp === "bscorpion" ? 0 : TEMPORAL_DELAY;
+
+    // =========================
+    // Điều kiện dùng skill
+    // =========================
+    if (
+        currentCount < temporalMaxMonsters - temporalGap &&
+        character.mp > 1300 &&
+        Date.now() - lastTemporalTime >= TEMPORAL_COOLDOWN
+    ) {
+        const orbSlot = character.items.findIndex(
+            i => i && i.name === "orboftemporal"
+        );
+
         if (orbSlot === -1) return;
+
+        // ghi nhận thời điểm lên lịch
+        lastTemporalTime = Date.now();
 
         setTimeout(() => {
             if (is_on_cooldown("temporalsurge")) return;
@@ -2632,15 +2654,15 @@ function temporalSurgeLogic() {
             equip(orbSlot);
             use_skill("temporalsurge");
             equip(orbSlot);
-        }, TEMPORAL_DELAY);
+
+        }, temporalDelay);
     }
 }
 
 // =========================
 // LOOP
 // =========================
-setInterval(temporalSurgeLogic, 1200);
-
+setInterval(temporalSurgeLogic, 200);
 
 
 
