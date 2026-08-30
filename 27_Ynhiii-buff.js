@@ -798,14 +798,13 @@ setInterval(() => {
 async function lootAllChests() {
     let chests = get_chests();
     let chestIds = Object.keys(chests);
-    let scorpionNearby = get_nearest_monster({ type: "bscorpion" });
 
     if (
         (chestIds.length > 10 || character.map == "tomb" || character.map == "winter_instance" || character.map == "spider_instance" ||
-        (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&  
+        (crepp === "bscorpion" && chestIds.length > 0)  || (smart.moving && chestIds.length > 0)  ) &&  
 		chestIds.length > 0  &&
         character.cc < 200 &&
-        isEquipping === false && character.slots.orb?.name != "rabbitsfoot"
+        isEquipping === false && character.slots.earring2?.name != "mearring"
     ) {
         try {
             equipSet("gold");
@@ -2421,6 +2420,17 @@ const equipmentSets = {
       //  { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
+
+
+    Unlucktest: [
+
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+
+    ],
+
+
+	
     Unluck: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
@@ -2820,10 +2830,10 @@ function ChuyendoiITEM() {
 
 
 ///////Logic BỎ trang bị Luck
-    if (has(crepp) && !hasLowHp && checkluckk > 0 && goldcheck == 0 && !Chican1) {
+    if (!hasLowHp && checkluckk > 0 && goldcheck == 0 && !Chican1) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('framVIP'); 
-            else equipSet('Unluck'); 
+            else equipSet('Unlucktest'); 
 		
         checkluckk -= 1;
         return;
