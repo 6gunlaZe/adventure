@@ -2757,6 +2757,7 @@ if (args.check_low_hp) {
 
 
 
+let boquaTEMPORAL = 2; // bỏ qua một số lần để tránh trùng người chơi khác
 
 // =========================
 // CONFIG
@@ -2765,6 +2766,7 @@ const TEMPORAL_RADIUS = 270;   // bán kính tính quái quanh người
 const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
 const TEMPORAL_DELAY = 900;    // delay trước khi cast
 const TEMPORAL_COOLDOWN = 15000; // tối thiểu 10 giây giữa 2 lần cast
+
 
 // =========================
 // STATE
@@ -2838,6 +2840,11 @@ function temporalSurgeLogic() {
         );
 
         if (orbSlot === -1) return;
+
+if (boquaTEMPORAL > 0) {
+    boquaTEMPORAL--;
+    return;
+}
 
         // ghi nhận thời điểm lên lịch
         lastTemporalTime = Date.now();
