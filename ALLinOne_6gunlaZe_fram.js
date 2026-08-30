@@ -790,17 +790,17 @@ function ChuyendoiITEM() {
     let needNormalDef = false;
     let needLuck = false;
     let needmana = false;
+    let Soluongquai = 0;
 
-    // ===== Mana hysteresis =====
-    const MANA_IN = 1450;   // MP xuống dưới mức này → vào mana
-    const MANA_OUT = 2000;  // MP lên trên mức này → thoát mana
-
-    // Kiểm tra hiện tại đang dùng mana set
-    const isManaSet = character.slots?.chest?.name === "tshirt9";
 
     for (const e of Object.values(parent.entities)) {
-        if (!e.visible || e.dead || distance(character, e) > 400) continue;
+        if (!e.visible || e.dead || distance(character, e) > 300) continue;
+		if (e.type !== "monster") continue
 
+
+        if (e.target) Soluongquai++;
+
+		
         // Nguy hiểm cao nhất
         if (e.mtype === "xmagefi") {
             needFireDef = true;
@@ -817,16 +817,12 @@ function ChuyendoiITEM() {
             needNormalDef = true;
         }
 
-        // Mana thấp
-        if (character.hp > 7500) {
-            if (!isManaSet && character.mp < MANA_IN) {
-                needmana = true;
-            }
-
-            if (isManaSet && character.mp < MANA_OUT) {
-                needmana = true;
-            }
+        if (character.hp > 5500 && Soluongquai >= 4) {
+            needmana = true;
         }
+
+		
+
     }
 
     if (needFireDef) {
@@ -842,9 +838,7 @@ function ChuyendoiITEM() {
         equipSet('mana');
 
     } else {
-       // equipSet('dame');
-        equipSet('mana');
-
+        equipSet('dame');
     }
 }
 
