@@ -1218,13 +1218,6 @@ function tryAttack(target) {
 // ================= Curse Config =================
 
 const HIGH_MP_CURSE_TYPES = new Set([
-    "franky",
-    "icegolem",
-    "crabxx",
-    "bscorpion",
-    "mrgreen",
-    "mrpumpkin",
-    "dragold",
     "stompy",
     "skeletor"
 ]);
@@ -1234,13 +1227,23 @@ const LOW_MP_CURSE_TYPES = new Set([
     "a6",
 ]);
 
-const CURSE_LEADER_RADIUS = 15;
+const KhonggioihanQuai = new Set([ //không giới hạn khoảng cách tới leader
+    "franky",
+    "icegolem",
+    "crabxx",
+    "bscorpion",
+    "mrgreen",
+    "mrpumpkin",
+    "dragold",
+]);
 
-const CURSE_HIGH_MP_RADIUS = 40;
-const CURSE_LOW_MP_RADIUS = 40;
 
-const CURSE_HIGH_MP_CAST_RANGE = 40;
-const CURSE_LOW_MP_CAST_RANGE = 40;
+
+const CURSE_LEADER_RADIUS = 18; // khoảng cách mặc định quanh leader cho các quái còn lại không được định nghĩa
+
+//khoảng cách cho phép từ ynhi
+const CURSE_HIGH_MP_CAST_RANGE = 140;
+const CURSE_LOW_MP_CAST_RANGE = 60;
 
 const CURSE_BIG_HP = 40000;
 const CURSE_TANK_HP = 30000;
@@ -1288,14 +1291,16 @@ function curseLogic(currentTarget) {
 
             const isHighMp = HIGH_MP_CURSE_TYPES.has(m.mtype);
             const isLowMp  = LOW_MP_CURSE_TYPES.has(m.mtype);
+            const Khonggioihan  = KhonggioihanQuai.has(m.mtype);
+
 
             // Bán kính quanh leader
             const leaderRadius =
                 (isHighMp || isLowMp)
-                    ? 40
+                    ? 50
                     : CURSE_LEADER_RADIUS;
 
-            if (distance(m, leader) > leaderRadius) continue;
+            if (distance(m, leader) > leaderRadius && !Khonggioihan) continue;
 
             const dist = distance(character, m);
 
