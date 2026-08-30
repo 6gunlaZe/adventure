@@ -1264,6 +1264,7 @@ function temporalSurgeLogic() {
             equip(orbSlot);
             use_skill("temporalsurge");
             equip(orbSlot);
+            game_log("🔁 temporalsurge", "#AAAAFF");
 
         }, temporalDelay);
     }
