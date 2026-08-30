@@ -805,7 +805,7 @@ async function lootAllChests() {
         (crepp === "bscorpion" && chestIds.length > 0 && !scorpionNearby)) &&  
 		chestIds.length > 0  &&
         character.cc < 200 &&
-        isEquipping === false && character.slots.gloves?.name === "mpxgloves"
+        isEquipping === false && character.slots.orb?.name != "rabbitsfoot"
     ) {
         try {
             equipSet("gold");
@@ -2417,8 +2417,8 @@ const equipmentSets = {
         //{ itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
     ],
     nogold: [
-        { itemName: "mpxgloves", slot: "gloves", level: 6 }, 
-        { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
+       // { itemName: "mpxgloves", slot: "gloves", level: 6 }, 
+      //  { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
 
     ],
     Unluck: [
