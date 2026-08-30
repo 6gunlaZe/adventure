@@ -2820,7 +2820,7 @@ function ChuyendoiITEM() {
 
 
 ///////Logic BỎ trang bị Luck
-    if (!hasLowHp && checkluckk > 0 && goldcheck == 0 && !Chican1) {
+    if (has(crepp) && !hasLowHp && checkluckk > 0 && goldcheck == 0 && !Chican1) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('framVIP'); 
             else equipSet('Unluck'); 
