@@ -2567,6 +2567,8 @@ function ms_penalty_cd() {
 
 
 
+
+let boquaTEMPORAL = 3; // bỏ qua một số lần để tránh trùng người chơi khác
 // =========================
 // CONFIG
 // =========================
@@ -2648,6 +2650,11 @@ function temporalSurgeLogic() {
 
         if (orbSlot === -1) return;
 
+if (boquaTEMPORAL > 0) {
+    boquaTEMPORAL--;
+    return;
+}
+		
         // ghi nhận thời điểm lên lịch
         lastTemporalTime = Date.now();
                 send_cm(nhanvatfram, "TemporalTime");
