@@ -542,54 +542,6 @@ if (isBscorpion) {
 
 
 
-async function safeawwait() {
-		    let tank = get_player("Ynhi");
-//if(  parent?.S?.wabbit.live && !character?.s?.easterluck  )return
-if (character.hp < 4000 && !character.rip) parent.api_call("disconnect_character", {name: "haiz"});
-	
-if (!tank || tank.rip || (tank && !tank.rip && distance(character, tank) > 70) ){
-    if (!smart.moving) {
-smart_move(safeDestination);
-    }
-}
-else
-{
-if( character.map != mobMap  || (  character.map == mobMap && !smart.moving  && distance(character, {x: locations[home][0].x, y: locations[home][0].y}) > 70  ))smart_move(destination)	
-
-
-
-    if (!smart.moving) {
-        let center = locations[home][0];
-        const radius = 24;
-
-        // Calculate time elapsed since the last update
-        const currentTime = performance.now();
-        const deltaTime = currentTime - lastUpdateTime;
-        lastUpdateTime = currentTime;
-
-        // Calculate the new angle based on elapsed time and speed
-        const deltaAngle = speed * (deltaTime / 1000); // Convert milliseconds to seconds
-        angle = (angle + deltaAngle) % (2 * Math.PI);
-
-        const offsetX = Math.cos(angle) * radius;
-        const offsetY = Math.sin(angle) * radius;
-        const targetX = center.x + offsetX;
-        const targetY = center.y + offsetY;
-
-        if (!character.moving && lastUpdateTime > 100) {
-            await xmove(targetX, targetY);
-        }
-    }
-
-
-
-	
-}
-	
-}
-
-
-
 /// bộ đếm số 
 let count = 0;
 setInterval(() => {
