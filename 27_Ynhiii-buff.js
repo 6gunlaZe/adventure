@@ -914,7 +914,7 @@ setInterval(() => {
     if (tryNearbyHeal()) return;
 	
     if (hutquaibangtay()) return;
-   // if (tryAttack(currentTarget)) return;
+    if (tryAttack(currentTarget)) return;
 
    //  buff_khi_ranh();
 
@@ -1192,7 +1192,11 @@ function kiteLogic(currentTarget) {
 }
 
 
+const strongMonsters = ["sparkbot", "targetron", "fireroamer"];   // các quái không được đánh tay
+
 function tryAttack(target) {
+	
+        if (strongMonsters.includes(target?.mtype) || target?.attack > 3000 ) return false;
 
 	    if (ms_to_next_skill("heal") > 150) return false;
 
