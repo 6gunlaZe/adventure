@@ -2081,7 +2081,9 @@ function on_magiport(name){
 /////////////
 function on_cm(name, data) {
 	
+ if(data == "TemporalTime")lastTemporalTime = Date.now();
 
+	
 	if(name == "MuaBan")
 	{
            if(data)
