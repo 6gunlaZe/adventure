@@ -2256,7 +2256,7 @@ const equipmentSets = {
 
     deff: [
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "tigerstone", slot: "orb", level: 3},	
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
      //   { itemName: "supermittens", slot: "gloves", level: 8 },
@@ -2359,7 +2359,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "tigerstone", slot: "orb", level: 3},	
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
 		
         { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -2381,7 +2381,7 @@ const equipmentSets = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "tigerstone", slot: "orb", level: 3},	
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
 		
         { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
@@ -2411,7 +2411,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
@@ -2478,7 +2478,7 @@ const equipmentSets = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
 	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	    
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
     //    { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
     //   { itemName: "shield", slot: "offhand", level: 8, l: "l" },
@@ -2500,7 +2500,7 @@ const equipmentSets = {
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "tigerstone", slot: "orb", level: 3},	    
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	    
     //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
      //   { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
