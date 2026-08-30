@@ -215,6 +215,9 @@ function on_magiport(name){
 
 
 function on_cm(name, data) {
+
+ if(data == "TemporalTime")lastTemporalTime = Date.now();
+
     // 1. Phản hồi kỹ thuật (Heal) cho nhóm
     if (["haiz", "6gunlaZe", "tienV", "LyThanhThu", nhanvatphu].includes(name)) {
         if (data === "bosshelp") {
