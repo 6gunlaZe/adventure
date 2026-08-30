@@ -853,7 +853,7 @@ function waitForMidas(timeout = 800) {
 
 let delayBug = Date.now();
 let attack_mode = true;
-
+const bustdamezap = ["bscorpion"];   // các quái cần dồn dame zapper
 let gcdFastTimer = null;
 
 
@@ -898,8 +898,15 @@ setInterval(() => {
     curseLogic(currentTarget);
 
 
-    if (ms > 100) tryPartyHeal();
+    if (ms > 100) 
+	{
+		tryPartyHeal();
 
+        if (currentTarget && !is_on_cooldown("zapperzap") && bustdamezap.includes(currentTarget?.mtype) && character.mp > 6000 && ms > 300){
+			use_skill("zapperzap", currentTarget);  
+		}
+	}
+	
     // GCD chưa mở → thôi
      if (ms > 70) return;
 
@@ -1191,17 +1198,11 @@ function kiteLogic(currentTarget) {
 
 
 const strongMonsters = ["sparkbot", "targetron", "fireroamer"];   // các quái không được đánh tay
-const bustdamezap = ["bscorpion"];   // các quái cần dồn dame zapper
 
 function tryAttack(target) {
 	
         if (strongMonsters.includes(target?.mtype) || target?.attack > 3000 ) return false;
 
-        if (target && !is_on_cooldown("zapperzap") && bustdamezap.includes(target?.mtype) && character.mp > 6000 && ms_to_next_skill("attack") > 100 ){
-			use_skill("zapperzap", target);  
-			return true;
-		}
-	
 	    if (ms_to_next_skill("attack") > 150) return false;
 
 	
