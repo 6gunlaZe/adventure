@@ -2254,53 +2254,65 @@ async function equipBatch(data) {
 
 const equipmentSets = {
 
-    deff: [
+    fram: [
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+      //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+		
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-     //   { itemName: "supermittens", slot: "gloves", level: 8 },
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 
-		
-
-    ],
-	
-    deffbrun: [
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
 
-    nodeffbrun: [
-	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },		
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },	    
-		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
-
-		
-    ],
-	
     nodeff: [
-	//{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },	    
-      //  { itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
-		        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-      //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-		        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-
+		{ itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+		{ itemName: "sbelt", slot: "belt", level: 3, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
     ],
+	
+    deff: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+    ],
+
+
+    creepburn: [
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+
+		
+    ],
+	
     gold: [
         { itemName: "handofmidas", slot: "gloves", level: 8 },  
         { itemName: "horsecapeg", slot: "cape", level: 9, l: "l" },  
@@ -2350,26 +2362,7 @@ const equipmentSets = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
 		
     ],
-    fram: [
-		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-      //  { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-		
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
-        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
-		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
-        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-
-        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
-		
-    ],
 
     framVIP: [
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
@@ -2436,27 +2429,6 @@ const equipmentSets = {
 		
     ],
 	
-	
-    creepburn: [
-        //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-
-        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-	    //{ itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
-        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
-        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
-
-		
-    ],
     vatly: [
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
     ],
@@ -2795,6 +2767,9 @@ function ChuyendoiITEM() {
         return;
     }
 
+
+
+	///////Logic về set fram mặc định khi máu >97%
     if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.97) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('framVIP'); 
@@ -2802,32 +2777,28 @@ function ChuyendoiITEM() {
         return;
     }
 
-    // ===== phần dưới giữ nguyên logic =====
 
-    if ((character.max_hp < 10000 && character.hp/character.max_hp < 0.9 && !hasLowHp) || 
-        (character.max_hp < 10000 && character.hp/character.max_hp < 0.75)) {
-        eTime = currentTime;
-        equipSet('fram');
-        return;
-    }
 
+	///////Logic DEF khi máu <55%
     if (checkdef == 0 && character.hp/character.max_hp < 0.55) {
         checkdef = 1;
         eTime = currentTime;
 
         if (has("fireroamer") && crepp == "fireroamer") {
-            equipSet('deffbrun');
+        equipSet('creepburn');
         } else {
             equipSet('deff');
         }
         return;
     }
+	
 
+	///////Logic nhả DEF > về lại trang bị Trung gian khi máu > 78%
     if (checkdef == 1 && character.hp/character.max_hp > 0.78) {
         eTime = currentTime;
 
         if (has("fireroamer") && crepp == "fireroamer") {
-            equipSet('nodeffbrun');
+        equipSet('creepburn');
         } else {
             equipSet('nodeff');
         }
@@ -2836,22 +2807,8 @@ function ChuyendoiITEM() {
         return;
     }
 
-    if (checkheall == 0 && character.hp/character.max_hp > 0.65 && 1 > 2 &&
-        ((leader && leader.hp < 10000) || (damer && damer.hp/damer.max_hp < 0.4))) {
-    // tạm ngưng logic này
-        checkheall = 1;
-        eTime = currentTime;
-        equipSet('healmax');
-        return;
-    }
 
-    if (checkheall == 1 && ((leader && leader.hp > 14000) && (damer && damer.hp/damer.max_hp > 0.7))) {
-        eTime = currentTime;
-        equipSet('fram');
-        checkheall = 0;
-        return;
-    }
-
+///////Logic BỎ trang bị Luck
     if (!hasLowHp && checkluckk > 0 && goldcheck == 0) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('UnluckVIP'); 
@@ -2861,6 +2818,7 @@ function ChuyendoiITEM() {
         return;
     }
 
+///////Logic Mặc trang bị Luck
     if (hasLowHp && character.ping < 500 && (character.map != "winter_instance" || MageX) &&
         character.hp/character.max_hp > 0.45 && checkdef == 0 &&
         character.mp > 2000 && character.slots.orb?.name != "rabbitsfoot") {
@@ -2880,6 +2838,7 @@ function ChuyendoiITEM() {
         return;
     }
 
+///////Logic Tùy chỉnh offhand theo dạng quái vật
     if (checkluckk <= 0 && checkheall == 0 && checkdef == 0 && character.map != "uhills" ) {
         eTime = currentTime;
 
