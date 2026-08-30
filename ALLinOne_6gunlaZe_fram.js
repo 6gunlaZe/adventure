@@ -1255,7 +1255,9 @@ function temporalSurgeLogic() {
 
         // ghi nhận thời điểm lên lịch
         lastTemporalTime = Date.now();
-
+                send_cm(f1111, "TemporalTime");
+                send_cm("Ynhi", "TemporalTime");
+		
         setTimeout(() => {
             if (is_on_cooldown("temporalsurge")) return;
 
