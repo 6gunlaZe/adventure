@@ -483,10 +483,15 @@ async function handleHome() {
         return;
     }
 
+
+const target = get_targeted_monster();
+const isBscorpion = target?.mtype === "bscorpion";
+	
+
     // 🧭 Nếu chưa đến đúng điểm farm → di chuyển tới
     if (
         character.map !== mobMap ||
-        distance(character, { x: locations[home][0].x, y: locations[home][0].y }) > 50
+        distance(character, { x: locations[home][0].x, y: locations[home][0].y }) > (isBscorpion ? 120 : 50)
     ) {
         try {
             await smart_move(destination);
@@ -500,10 +505,6 @@ async function handleHome() {
 
 
     // 🔄 Khi đã ở đúng vị trí → đặc biệt áp dụng cho soloquai
-
-const target = get_targeted_monster();
-const isBscorpion = target?.mtype === "bscorpion";
-
 if (isBscorpion) {
     const range = character.range - 20;
 
