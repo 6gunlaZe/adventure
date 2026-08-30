@@ -3698,7 +3698,7 @@ async function handlebossPro(eventType, mapName, x, y, hpThreshold,f1name,f2name
 	    else
 	{
 
-    if (!smart.moving) {
+    if (!smart.moving && eventType != "icegolem") {
     try {
         await smart_move({ x, y, map: mapName });
     } catch (error) {
