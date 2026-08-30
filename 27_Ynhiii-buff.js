@@ -2328,6 +2328,7 @@ const equipmentSets = {
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
 
 		
     ],
@@ -2340,7 +2341,7 @@ const equipmentSets = {
         { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
 		
-	   // { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
        // { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
