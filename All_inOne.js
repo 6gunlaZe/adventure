@@ -512,9 +512,9 @@ if (isBscorpion) {
         target.y + (character.y - target.y) * range / distance(character, target)
     );
 }
+	else
+{
 
-
-	
     // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm cho các quái còn lại
         let center = locations[home][0];
 	const radius = 8;  //40
@@ -534,6 +534,7 @@ if (isBscorpion) {
         if (!character.moving && lastUpdateTime > 100) {
             await xmove(targetX, targetY);
         }
+}
     
 }
 
