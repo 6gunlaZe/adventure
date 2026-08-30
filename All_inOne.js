@@ -2764,7 +2764,7 @@ if (args.check_low_hp) {
 const TEMPORAL_RADIUS = 270;   // bán kính tính quái quanh người
 const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
 const TEMPORAL_DELAY = 900;    // delay trước khi cast
-const TEMPORAL_COOLDOWN = 10000; // tối thiểu 10 giây giữa 2 lần cast
+const TEMPORAL_COOLDOWN = 15000; // tối thiểu 10 giây giữa 2 lần cast
 
 // =========================
 // STATE
@@ -2841,6 +2841,9 @@ function temporalSurgeLogic() {
 
         // ghi nhận thời điểm lên lịch
         lastTemporalTime = Date.now();
+                send_cm(f1111, "TemporalTime");
+                send_cm(f2222, "TemporalTime");
+
 
         setTimeout(() => {
             if (is_on_cooldown("temporalsurge")) return;
@@ -3334,6 +3337,9 @@ let framboss1 = 0
 function on_cm(name, data) {
 
  if(name == "Ynhi" && data == "hardreset")parent.api_call("disconnect_character", {name: "haiz"});
+	
+ if(data == "TemporalTime")lastTemporalTime = Date.now();
+
 
 
 ////////////////////
