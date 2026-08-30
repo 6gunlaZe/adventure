@@ -497,7 +497,25 @@ async function handleHome() {
         return;
     }
 
-    // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm
+
+
+    // 🔄 Khi đã ở đúng vị trí → đặc biệt áp dụng cho soloquai
+
+const target = get_targeted_monster();
+const isBscorpion = target?.mtype === "bscorpion";
+
+if (isBscorpion) {
+    const range = character.range - 20;
+
+    move(
+        target.x + (character.x - target.x) * range / distance(character, target),
+        target.y + (character.y - target.y) * range / distance(character, target)
+    );
+}
+
+
+	
+    // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm cho các quái còn lại
         let center = locations[home][0];
 	const radius = 8;  //40
 
