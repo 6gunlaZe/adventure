@@ -2650,6 +2650,8 @@ function temporalSurgeLogic() {
 
         // ghi nhận thời điểm lên lịch
         lastTemporalTime = Date.now();
+                send_cm(nhanvatfram, "TemporalTime");
+                send_cm(nhanvatphu, "TemporalTime");
 
         setTimeout(() => {
             if (is_on_cooldown("temporalsurge")) return;
