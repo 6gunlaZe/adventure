@@ -1279,7 +1279,6 @@ function curseLogic(currentTarget) {
 
         let maxHpTarget = null;
         let maxHp = 0;
-        let maxHpDist = Infinity;
 
         for (const id in parent.entities) {
 
@@ -1335,7 +1334,6 @@ function curseLogic(currentTarget) {
             if (!isHighMp && !isLowMp && m.hp > maxHp) {
                 maxHp = m.hp;
                 maxHpTarget = m;
-                maxHpDist = dist;
             }
         }
 
@@ -1343,7 +1341,6 @@ function curseLogic(currentTarget) {
         if (
             maxHpTarget &&
             maxHp > CURSE_BIG_HP &&
-            maxHpDist < 30 &&
             tryCurse(maxHpTarget)
         ) {
             return true;
