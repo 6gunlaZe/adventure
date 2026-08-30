@@ -799,6 +799,8 @@ function ChuyendoiITEM() {
 
 
         if (e.target) Soluongquai++;
+        if (e.max_hp < 5000) Soluongquai++;
+
 
 		
         // Nguy hiểm cao nhất
