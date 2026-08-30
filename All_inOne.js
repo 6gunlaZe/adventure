@@ -1920,8 +1920,6 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 const targetNow = get_targeted_monster();
 const targetHighArmor = targetNow?.armor > 300;
 	
-    // Kiểm tra hiện tại đang dùng mana set
-    const isManaSet = character.slots?.chest?.name === "tshirt9";
 
     // 👉 ƯU TIÊN: Mob mạnh (reset thời gian an toàn)
     if (physicalCount >= 1) {
