@@ -1199,7 +1199,7 @@ function tryAttack(target) {
 	
         if (strongMonsters.includes(target?.mtype) || target?.attack > 3000 ) return false;
 
-        if (target && !is_on_cooldown("zapperzap") && bustdamezap.includes(target?.mtype) && character.mp > 6000 )  use_skill("zapperzap", target);  
+        if (target && !is_on_cooldown("zapperzap") && bustdamezap.includes(target?.mtype) && character.mp > 6000 && ms_to_next_skill("attack") > 250 )  use_skill("zapperzap", target);  
 	
 	    if (ms_to_next_skill("heal") < 150) return false;
 
