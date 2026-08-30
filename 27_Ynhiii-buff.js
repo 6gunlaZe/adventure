@@ -2567,7 +2567,7 @@ function ms_penalty_cd() {
 // =========================
 // CONFIG
 // =========================
-const TEMPORAL_RADIUS = 320;   // bán kính tính quái quanh người
+const TEMPORAL_RADIUS = 270;   // bán kính tính quái quanh người
 const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
 const TEMPORAL_DELAY = 900;    // delay trước khi cast
 
@@ -2601,7 +2601,6 @@ function temporalSurgeLogic() {
     // cooldown / safety
     if (character.mp < 6000) return;
     if (is_on_cooldown("temporalsurge")) return;
-    if (smart.moving) return;
 
     // reset khi đổi map
     if (character.map !== lastMap) {
@@ -2609,6 +2608,10 @@ function temporalSurgeLogic() {
         lastMap = character.map;
         return;
     }
+
+    if (smart.moving) return;
+
+	
 
     const currentCount = countNearbyMonsters(TEMPORAL_RADIUS);
 
@@ -2619,7 +2622,7 @@ function temporalSurgeLogic() {
     }
 
     // điều kiện dùng skill
-    if (currentCount < temporalMaxMonsters - TEMPORAL_GAP && character.mp > 1300) {
+    if (currentCount < temporalMaxMonsters - (crepp === "bscorpion" ? 0 : TEMPORAL_GAP) && character.mp > 1300) {
         const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
         if (orbSlot === -1) return;
 
