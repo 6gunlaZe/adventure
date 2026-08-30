@@ -2364,29 +2364,6 @@ const equipmentSets = {
     ],
 
 
-    framVIP: [
-		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-      // { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-      //  { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-       { itemName: "shield", slot: "offhand", level: 8, l: "l" },
-
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-
-        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
-		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
-        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
-        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-
-        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
-        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
-		
-    ],
-
-	
     bossburn: [
         //{ itemName: "helmet1", slot: "helmet", level: 9, l: "l" },
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
@@ -2467,27 +2444,50 @@ const equipmentSets = {
 		
     ],
 
-    UnluckVIP: [
+    framVIP: [
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	    
-    //    { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-     //   { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-       { itemName: "shield", slot: "offhand", level: 8, l: "l" },
-
-      //  { itemName: "intbelt", slot: "belt", level: 4, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
         { itemName: "mpxgloves", slot: "gloves", level: 6 },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-		
+
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
+
+
+    fulldame: [
+		{ itemName: "firestaff", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 5, l: "l" },
+
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "orbofint", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mittens", slot: "gloves", level: 10, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+		
+    ],
+
+	
 
 	
 };
@@ -2669,6 +2669,8 @@ let checkdef = 0;
 let checkheall = 0;
 let checkluckk = 0;
 const blacklistluck = ["nerfedmummy", "nerfedbat",]; // mảng cần loại
+const Chican1listSET = ["bscorpion",]; // mảng cần loại
+
 
 function ChuyendoiITEM() {
 
@@ -2689,6 +2691,8 @@ function ChuyendoiITEM() {
     let hasLowHp = false;
     let hasPhysical = false;
     let hasMagical = false;
+    let Chican1 = false;
+
 
     // 👉 cache type
     let nearTypes = new Set();
@@ -2713,6 +2717,7 @@ function ChuyendoiITEM() {
             if (e.damage_type === "physical") hasPhysical = true;
             if (e.damage_type === "magical")  hasMagical = true;
             if (e.mtype === "xmagex") MageX = true;
+			if (Chican1listSET.includes(e.mtype)) Chican1 = true;
         }
 
         if (!hasLowHp) {
@@ -2767,10 +2772,16 @@ function ChuyendoiITEM() {
         return;
     }
 
+    if (has("bscorpion") && !hasLowHp && goldcheck == 0) {
+        eTime = currentTime;
+        equipSet('fulldame');
+        return;
+    }
+	
 
 
 	///////Logic về set fram mặc định khi máu >97%
-    if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.97) {
+    if (has(crepp) && !hasLowHp && goldcheck == 0 && character.hp/character.max_hp > 0.97 && !Chican1) {
         eTime = currentTime;
 		   	if (character.map == "uhills") equipSet('framVIP'); 
             else equipSet('fram'); 
@@ -2780,7 +2791,7 @@ function ChuyendoiITEM() {
 
 
 	///////Logic DEF khi máu <55%
-    if (checkdef == 0 && character.hp/character.max_hp < 0.55) {
+    if (checkdef == 0 && character.hp/character.max_hp < 0.55 && !Chican1) {
         checkdef = 1;
         eTime = currentTime;
 
@@ -2794,7 +2805,7 @@ function ChuyendoiITEM() {
 	
 
 	///////Logic nhả DEF > về lại trang bị Trung gian khi máu > 78%
-    if (checkdef == 1 && character.hp/character.max_hp > 0.78) {
+    if (checkdef == 1 && character.hp/character.max_hp > 0.78 && !Chican1) {
         eTime = currentTime;
 
         if (has("fireroamer") && crepp == "fireroamer") {
@@ -2809,9 +2820,9 @@ function ChuyendoiITEM() {
 
 
 ///////Logic BỎ trang bị Luck
-    if (!hasLowHp && checkluckk > 0 && goldcheck == 0) {
+    if (!hasLowHp && checkluckk > 0 && goldcheck == 0 && !Chican1) {
         eTime = currentTime;
-		   	if (character.map == "uhills") equipSet('UnluckVIP'); 
+		   	if (character.map == "uhills") equipSet('framVIP'); 
             else equipSet('Unluck'); 
 		
         checkluckk -= 1;
@@ -2839,7 +2850,7 @@ function ChuyendoiITEM() {
     }
 
 ///////Logic Tùy chỉnh offhand theo dạng quái vật
-    if (checkluckk <= 0 && checkheall == 0 && checkdef == 0 && character.map != "uhills" ) {
+    if (checkluckk <= 0 && checkheall == 0 && checkdef == 0 && character.map != "uhills" && !Chican1 ) {
         eTime = currentTime;
 
 		if (hasMagical || character.map == "winter_instance" ) {
