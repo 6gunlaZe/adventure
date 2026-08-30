@@ -1201,7 +1201,7 @@ function tryAttack(target) {
 
         if (target && !is_on_cooldown("zapperzap") && bustdamezap.includes(target?.mtype) && character.mp > 6000 && ms_to_next_skill("attack") > 250 )  use_skill("zapperzap", target);  
 	
-	    if (ms_to_next_skill("heal") < 150) return false;
+	    if (ms_to_next_skill("attack") > 150) return false;
 
 	
     if (
