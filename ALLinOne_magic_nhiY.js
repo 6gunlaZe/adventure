@@ -1415,9 +1415,9 @@ const equipmentSets = {
     ],
     dame: [
         { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
-        { itemName: "firestaff", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "harbringer", slot: "mainhand", level: 9, l: "l" },
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
@@ -1428,7 +1428,7 @@ const equipmentSets = {
     dameAOE: [
         { itemName: "orbofint", slot: "orb", level: 3, l: "l" },
         { itemName: "sparkstaff", slot: "mainhand", level: 8, l: "l" },
-        { itemName: "mittens", slot: "gloves", level: 10, l: "l" },
+        { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
 
         { itemName: "wingedboots", slot: "shoes", level: 8, l: "l"  },
