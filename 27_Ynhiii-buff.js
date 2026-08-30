@@ -1140,8 +1140,8 @@ function kiteLogic(currentTarget) {
     if (!leader) return;
 
     const distToLeader = distance(character, leader);
-    const scorpion = get_nearest_monster({ type: "bscorpion" });
-
+    const scorpion = currentTarget?.mtype === "bscorpion" ? currentTarget : null;
+	
     // ===== CASE 1: Có target và đứng gần leader =====
     if (currentTarget && distToLeader < character.range && kitefram === 0) {
 
@@ -1150,12 +1150,12 @@ function kiteLogic(currentTarget) {
                 currentTarget.mtype === "franky" ||
                 currentTarget.mtype === "nerfedmummy"
             ) {
-                kite(leader, 30);
+                kite(leader, 30, scorpion);
             } else {
-                kite(leader, 50);
+                kite(leader, 50, scorpion);
             }
         } else {
-            kite(leader, 40);
+            kite(leader, 40, scorpion);
         }
         return;
     }
@@ -1165,7 +1165,7 @@ function kiteLogic(currentTarget) {
         if (scorpion && crepp === "bscorpion") {
             kite(leader, 120, scorpion);
         } else {
-            kite(leader, 35);
+            kite(leader, 35, scorpion);
         }
         return;
     }
@@ -1179,14 +1179,14 @@ function kiteLogic(currentTarget) {
             if (scorpion && crepp === "bscorpion") {
                 kite(cung, 120, scorpion);
             } else {
-                kite(cung, 35);
+                kite(cung, 35, scorpion);
             }
         }
         return;
     }
 
     // ===== DEFAULT =====
-    kite(leader, 35);
+    kite(leader, 35, scorpion);
 }
 
 
