@@ -478,10 +478,8 @@ function kite(taget, kite_range = 20, quai = null) {
 
 	
 
-    const originalPosition = {
-        x: taget.real_x,
-        y: taget.real_y
-    };
+    const originalPosition = quai ? { x: -410, y: -1252 } : { x: taget.real_x, y: taget.real_y };
+	
 
     for (let i = 0; i < maxAttempts; i++) {
         const radius = kite_range + i * 5;
