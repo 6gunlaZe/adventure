@@ -1979,8 +1979,8 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
         // Ghi thời điểm bắt đầu an toàn
         if (!defSafeSince) defSafeSince = currentTime;
 
-        // Đủ thời gian an toàn → gỡ phòng thủ
-        if (currentTime - defSafeSince >= 3000 && character.slots.helmet?.name === "xhelmet") {
+        // Đủ thời gian an toàn → gỡ phòng thủ / check lại mỗi 40s
+        if ((currentTime - defSafeSince >= 3000 && character.slots.helmet?.name === "xhelmet") || (currentTime - defSafeSince >= 40000) ) {
             checkdef = 0;
             defSafeSince = null;
             eTime = currentTime;
