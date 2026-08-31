@@ -2073,7 +2073,7 @@ function handleCleave(Mainhand, aoe, cc, stMaps, aoeMaps, tank) {
 
 // Fast-Fail 1: Kiểm tra các điều kiện cơ bản
     if (
-        smart.moving || 
+        smart.moving || character.esize < 1 ||
         !cc || 
         !aoe || 
         !tank || 
