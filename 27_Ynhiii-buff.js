@@ -930,147 +930,175 @@ setInterval(() => {
 
 
 
-// ❌ Quái không bao giờ được absorb vào target của nó
-const NO_ABSORB_MOBS = [
-    "pppompom","oneeye","xmagen1111","nerfedmummy","nerfedbat",
-];
+// ❌ Danh sách quái CẤM hút (Warrior sẽ không bao giờ absorb từ mục tiêu đang đánh các quái này)
+const NO_ABSORB_MOBS = ["pppompom", "oneeye", "xmagen1111", "nerfedmummy", "nerfedbat"];
+
+// 🐉 Danh sách Boss nguy hiểm ưu tiên xử lý riêng
+const PRIORITY_BOSSES = ["xmagefz", "xmagefi", "xmagex", "xmagen"];
+
+// 👑 Danh sách người chơi VIP (luôn được ưu tiên cứu khi bị tấn công)
+const VIP_PLAYERS = ["6gunlaZe", "tienV", "LyThanhThu", "MuaBan", "nhiY"];
 
 let lastAbsorbTime = 0;
-const ABSORB_DELAY = 150; // ms
-const ABSORB_DELAY_BOSS = 1000; // ms
+const ABSORB_DELAY = 150;      // Cooldown ngắn giữa các lần kiểm tra (150ms)
+const ABSORB_DELAY_BOSS = 1000; // Cooldown kiểm tra Boss (1000ms)
 
 function tryAbsorb() {
-    if (!character.party || smart.moving ) return;
+    // ==========================================
+    // 1. ĐIỀU KIỆN CHẶN SỚM (Tiết kiệm CPU)
+    // ==========================================
+    // Bỏ qua nếu: Không có party, đang di chuyển bằng smart.move, máu < 8500, hoặc skill Absorb đang CD
+    if (!character.party || smart.moving || character.hp < 8500) return;
     if (is_on_cooldown("absorb")) return;
-    if (character.hp < 8500) return;
 
     const now = Date.now();
     if (now - lastAbsorbTime < ABSORB_DELAY) return;
 
     const party = get_party();
+    if (!party) return;
+
     let bestTarget = null;
     let highestScore = 0;
 
-
-
-if ( (now - lastAbsorbTime) > ABSORB_DELAY_BOSS) {
-	
-// --- LOGIC MẶC ĐỊNH HÚT BOSS NGUY HIỂM Xmage---
-
-if ( character.map == "winter_instance") {	
-const priority_mobs = ["xmagefz", "xmagefi", "xmagex","xmagen"];
-
-// Tìm bất kỳ con Boss nào trong danh sách đang tồn tại
-const boss_entity = Object.values(parent.entities).find(e => 
-    priority_mobs.includes(e.mtype) && !e.dead
-);
-
-if (boss_entity && boss_entity.target && boss_entity.target !== character.name && character.hp > 8500 && character.mp > 500 ) {
-    const teammate = get_player(boss_entity.target);
-    
-    // Nếu đồng đội đang bị Boss đánh và ở trong tầm hỗ trợ (240px)
-    if (teammate && !teammate.rip && distance(character, teammate) <= 240 && teammate.hp / teammate.max_hp < 0.85 ) {
+    // ==========================================
+    // 2. LOGIC XỬ LÝ BOSS NGUY HIỂM (Mỗi 1 giây quét 1 lần)
+    // ==========================================
+    if (now - lastAbsorbTime > ABSORB_DELAY_BOSS) {
         
-        // Mục tiêu lúc này là ĐỒNG ĐỘI để thực hiện Buff/Hỗ trợ
-        bestTarget = boss_entity.target; 
-        highestScore = 9999; // điểm số ưu tiên
+        // --- Trường hợp 1: Map Winter Instance ---
+        if (character.map === "winter_instance") {
+            for (let id in parent.entities) {
+                let e = parent.entities[id];
+                if (!e || e.dead || !PRIORITY_BOSSES.includes(e.mtype)) continue;
 
+                // Nếu Boss đang đánh đồng đội và mình đủ HP/MP
+                if (e.target && e.target !== character.name && character.hp > 8500 && character.mp > 500) {
+                    let teammate = get_player(e.target);
+                    // Đồng đội sống, trong tầm 240px và HP < 85%
+                    if (teammate && !teammate.rip && distance(character, teammate) <= 240 && (teammate.hp / teammate.max_hp) < 0.85) {
+                        bestTarget = e.target;
+                        highestScore = 9999; // Điểm tối cao -> Absorb ngay!
+                        break;
+                    }
+                }
+            }
+        
+        // --- Trường hợp 2: Map Level 2 W (Franky) ---
+        } else if (character.map === "level2w") {
+            for (let id in parent.entities) {
+                let e = parent.entities[id];
+                if (!e || e.dead || e.mtype !== "franky") continue;
+
+                // Nếu Franky đang đánh đồng đội (trừ "haiz" và mình)
+                if (e.target && e.target !== "haiz" && e.target !== character.name) {
+                    let teammateFranky = get_player(e.target);
+                    let frankyInSafeZone = distance(e, { x: 14, y: 30 }) < 70; // Kiểm tra Franky có ở SafeZone không
+
+                    if (teammateFranky && !character.rip && !frankyInSafeZone && character.hp > 12000) {
+                        bestTarget = e.target;
+                        highestScore = 9998;
+                        break;
+                    }
+                }
+            }
+        }
     }
-}
-}
 
-// --- LOGIC KIỂM TRA FRANKY ---
-
-if ( character.map == "level2w") {	
-const franky_entity = Object.values(parent.entities).find(e =>
-    e.mtype === "franky" && !e.dead
-);
-
-if (franky_entity && franky_entity.target && franky_entity.target !== "haiz" && franky_entity.target !== character.name) {
-
-    const teammateFranky = get_player(franky_entity.target);
-
-    const frankyInSafeZone = distance(franky_entity, { x: 14, y: 30 }) < 70;
-
-    // nếu franky đang ở ngoài safe
-    if (teammateFranky && !character.rip && !frankyInSafeZone && character.hp > 12000 ) {
-        bestTarget = franky_entity.target;
-        highestScore = 9998;
-
-    }
-}
-}
-
-}
-
-	
-    // Nếu không tìm thấy BOSS cần can thiệp, chạy logic party bình thường
+    // ==========================================
+    // 3. LOGIC XỬ LÝ PARTY BÌNH THƯỜNG
+    // ==========================================
     if (!bestTarget) {
+        // Tạo danh sách lưu trữ quái đang đe dọa từng đồng đội
+        const partyThreats = {};
         for (let name in party) {
-            if (name === character.name) continue;
+            if (name !== character.name) partyThreats[name] = [];
+        }
 
-            const player = get_player(name);
-            if (!player || player.rip) continue;
-            if (distance(character, player) > 240) continue;
+        // Quét toàn bộ quái trên màn hình ĐÚNG 1 LẦN duy nhất
+        for (let id in parent.entities) {
+            let e = parent.entities[id];
+            
+            // Bỏ qua nếu không phải quái, quái chết, hoặc quái nằm trong danh sách CẤM
+            if (!e || e.dead || e.type !== "monster" || NO_ABSORB_MOBS.includes(e.mtype)) continue;
 
-            const threats = Object.values(parent.entities).filter(e =>
-                e.type === "monster" &&  
-                e.target === name &&
-                !e.dead &&
-                distance(player, e) < 250 && !NO_ABSORB_MOBS.includes(e.mtype)
-            );
+            // Nếu con quái này đang nhắm vào 1 thành viên trong Party
+            if (partyThreats[e.target] !== undefined) {
+                let player = get_player(e.target);
+                // Người chơi còn sống, mình cách người chơi <= 240px, quái cách người chơi < 250px
+                if (player && !player.rip && distance(character, player) <= 240 && distance(player, e) < 250) {
+                    partyThreats[e.target].push(e); // Thêm quái vào danh sách đe dọa của người chơi đó
+                }
+            }
+        }
 
-            if (threats.length === 0) continue;
+        // --- ĐÁNH GIÁ ĐIỂM SỐ ĐỂ CHỌN MỤC TIÊU BẢO VỆ TỐT NHẤT ---
+        for (let name in partyThreats) {
+            let threats = partyThreats[name];
+            if (threats.length === 0) continue; // Đồng đội này không bị quái đánh -> Bỏ qua
 
-            let score = threats.length * 2;
+            let player = get_player(name);
+            if (!player) continue;
+
+            let score = threats.length * 2; // Điểm cơ bản: Cứ mỗi quái đánh cộng 2 điểm
             let shouldAbsorb = false;
 
-            // === Player yếu / quan trọng ===
-            if (player.hp < 7000 || name === "6gunlaZe" || name === "tienV" || name === "LyThanhThu" || name === "MuaBan" || name === "nhiY" ) {
+            // 🔹 BẢO VỆ DỰA TRÊN ĐỒNG ĐỘI YẾU / VIP
+            if (player.hp < 8000 || VIP_PLAYERS.includes(name)) {
                 score += 50;
                 shouldAbsorb = true;
             }
 
-
-            // === Farm mob ưu tiên ===
+            // 🔹 BẢO VỆ DỰA TRÊN LOẠI QUÁI TẤN CÔNG (Khi biến crepp tồn tại)
             if (typeof crepp !== "undefined") {
-                const extraMob = "sparkbot"; // mob thêm thủ công
+                let farmCount = 0;
+                let checkmage = 0;
 
-                const farmCount = threats.filter(m =>
-                    m.mtype === crepp ||
-                    m.mtype === extraMob
-                ).length;
+                for (let m of threats) {
+                    // Đếm số quái thuộc loại quái đang farm hoặc quái đặc biệt (sparkbot, ent)
+                    if (m.mtype === crepp || m.mtype === "sparkbot" || m.mtype === "ent") farmCount++;
+                    
+                    // Đếm số quái gây sát thương Phép (Magic)
+                    if (m.damage_type === "magical") checkmage++;
+                }
 
-                if (farmCount >= 2 && character.hp > 10000) {
+                // 🎯 Trường hợp 1: Người chơi BÌNH THƯỜNG (không phải "haiz")
+                // Điều kiện: Bị từ 2 quái farm/đặc biệt quây trở lên &  HP > 10000
+                if (farmCount >= 2 && character.hp > 10000 && name !== "haiz") {
+                    score += 20;
+                    shouldAbsorb = true;
+                }
+
+                // 🎯 Trường hợp 2: Tối ưu riêng cho "haiz"
+                // Điều kiện: (Bị >= 3 quái Phép đánh HOẶC Máu haiz < 12000) &  HP > 10000
+                if ((checkmage >= 3 || player.hp < 12000) && name === "haiz" && character.hp > 10000) {
                     score += 20;
                     shouldAbsorb = true;
                 }
             }
 
+            // 🔹 BẢO VỆ DỰA TRÊN QUÁI SẮP CHẾT (Cướp kill / share exp / dọn nhanh)
+            let dyingCount = 0;
+            for (let e of threats) {
+                let hpThreshold = e.max_hp >= 800000 ? 45000 : (e.max_hp >= 200000 ? 29000 : 15000);
+                if (e.hp < hpThreshold && e.max_hp > 9000) dyingCount++;
+            }
 
-            // === Quái sắp chết (cướp kill) ===
-            const dyingMobs = threats.filter(e => {
-                const hpThreshold =
-                    e.max_hp >= 800000 ? 45000 :
-                    e.max_hp >= 200000 ? 29000 : 15000;
-                return e.hp < hpThreshold && e.max_hp > 9000;
-            }).length;
-
-            if (dyingMobs > 0) {
+            if (dyingCount > 0) {
                 score += 40;
                 shouldAbsorb = true;
             }
 
-            if (!shouldAbsorb) continue;
-
-            if (score > highestScore) {
+            // 🏆 So sánh chọn mục tiêu có ĐIỂM ƯU TIÊN CAO NHẤT
+            if (shouldAbsorb && score > highestScore) {
                 highestScore = score;
                 bestTarget = name;
             }
         }
     }
 
-    // Thực hiện Absorb
+    // ==========================================
+    // 4. KÍCH HOẠT SKILL ABSORB
+    // ==========================================
     if (bestTarget && character.hp >= 8500) {
         use_skill("absorb", bestTarget);
         lastAbsorbTime = now;
