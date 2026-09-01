@@ -2169,36 +2169,33 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
 
 
 
-
-async function handleWarriorSkills(tank,f1) {
+async function handleWarriorSkills(tank, f1) {
 
     if (!is_on_cooldown("warcry") && !character.s.warcry && character.s.darkblessing) {
         await use_skill("warcry");
     }
 
     // --- KHAI BÁO CÁC MẢNG VÀ DỮ LIỆU CẦN DÙNG ---
-    const mobTypes = ["bat11","mummy","booboo","targetron","sparkbot","mole", ];
-    const ignoreMobs = ["xmagex", "xmagefi", "xmagex"];
-    let monstersAgo = ["gpurplepro","gredpro", "xmagefz","xmagefi","xmagex","ent"];
-	
-    // --- KHAI BÁO MẢNG QUÁI CẦN FREE PULL (Thêm loại quái mới vào đây nếu muốn) ---
+    const mobTypes = ["bat11", "mummy", "booboo", "targetron", "sparkbot", "mole"];
+    const ignoreMobs = ["xmagex", "xmagefi", "xmagefz"]; 
+    let monstersAgo = ["gpurplepro", "gredpro", "xmagefz", "xmagefi", "xmagex", "ent"];
     const pullMobTypes = ["ent", "pppompom"];
-	
+
     const mobsInRange = [];
     const untargetedMobs = [];
     const mobsTargetingTank = [];
     const mobstype = [];
     const dangerousMobsToTaunt = [];
+
     let isWeakMobAttackingYnhi = false;
     let check_porcupine = false;
-	let check_BIGDAME = false;
+    let check_BIGDAME = false;
     let freePullMob = null;
-
 
     // --- GOM TẤT CẢ VÀO 1 VÒNG LẶP DUY NHẤT ĐỂ TỐI ƯU PERFORMANCE ---
     for (let id in parent.entities) {
         let current = parent.entities[id];
-        if (!current || !current.visible || current.dead || current.type !== "monster" ) continue;
+        if (!current || !current.visible || current.dead || current.type !== "monster") continue;
 
         let dist = distance(character, current);
 
@@ -2207,20 +2204,18 @@ async function handleWarriorSkills(tank,f1) {
             check_porcupine = true;
         }
 
-// Trong vòng lặp for (parent.entities) ban đầu, bạn chỉ cần tìm con quái thỏa điều kiện free pull:
-if (pullMobTypes.includes(current.mtype) && !current.target) {
-    if (!freePullMob || distance(character, current) < distance(character, freePullMob)) {
-        freePullMob = current; // Lưu lại con quái gần nhất chưa có target
-    }
-}
-		
+        // Tìm con quái free pull gần nhất chưa có target
+        if (pullMobTypes.includes(current.mtype) && !current.target) {
+            if (!freePullMob || distance(character, current) < distance(character, freePullMob)) {
+                freePullMob = current;
+            }
+        }
 
-		
         // Kiểm tra loại quái có attack lớn
         if (current.target && current.target == character.name && current.attack > 3000 && current.damage_type == "physical" && dist <= 100) {
-	        check_BIGDAME = true;
-            }
-		
+            check_BIGDAME = true;
+        }
+
         // 1. Phân loại cho mobsInRange & untargetedMobs (dùng cho agitate / taunt)
         if (mobTypes.includes(current.mtype) && current.level < 3 && dist <= G.skills.agitate.range) {
             mobsInRange.push(current);
@@ -2258,7 +2253,7 @@ if (pullMobTypes.includes(current.mtype) && !current.target) {
         !is_on_cooldown("agitate") &&
         mobsInRange.length >= 3 &&
         untargetedMobs.length >= 2 &&
-        (   ( tank && tank.name == "Ynhi" && !tank.rip && tank.hp > 12000 && tank.mp > 4000  && distance(character, tank) < 180 )  ||  (tank && f1 && tank.name != "Ynhi")     ) && 
+        ((tank && tank.name == "Ynhi" && !tank.rip && tank.hp > 12000 && tank.mp > 4000 && distance(character, tank) < 180) || (tank && f1 && tank.name != "Ynhi")) &&
         character.hp > 14000 && character.mp > 800
     ) {
         if (!check_porcupine) {
@@ -2267,71 +2262,65 @@ if (pullMobTypes.includes(current.mtype) && !current.target) {
         }
     }
 
-	
-// =========================================================================
-// 2. LOGIC XỬ LÝ TAUNT (Thứ tự ưu tiên từ trên xuống dưới)
-// =========================================================================
+    // =========================================================================
+    // LOGIC XỬ LÝ TAUNT (Thứ tự ưu tiên từ trên xuống dưới)
+    // =========================================================================
 
-// 🛡️ ƯU TIÊN 1: Taunt quái đang đánh Tank (khi Tank yếu HP < 8000)
-if (
-    mobsTargetingTank.length > 0 &&
-    !is_on_cooldown("taunt") &&
-    tank && !tank.rip &&
-    tank.hp < 8000 &&
-    character.hp > 11000
-) {
-    // Tìm con quái có chỉ số attack cao nhất đang đánh Tank
-    const mob = mobsTargetingTank.reduce((best, e) => {
-        if (!best) return e;
-        return (e.attack || 0) > (best.attack || 0) ? e : best;
-    }, null);
+    // 🛡️ ƯU TIÊN 1: Taunt quái đang đánh Tank (khi Tank yếu HP < 8000)
+    if (
+        mobsTargetingTank.length > 0 &&
+        !is_on_cooldown("taunt") &&
+        tank && !tank.rip &&
+        tank.hp < 8000 &&
+        character.hp > 11000
+    ) {
+        const mob = mobsTargetingTank.reduce((best, e) => {
+            if (!best) return e;
+            return (e.attack || 0) > (best.attack || 0) ? e : best;
+        }, null);
 
-    if (is_in_range(mob, "taunt")) {
-        await use_skill("taunt", mob.id);
-        game_log(`🛡 Taunted quái đánh ${tank.name}: ${mob.mtype}`, "#AA00FF");
+        if (is_in_range(mob, "taunt")) {
+            await use_skill("taunt", mob.id);
+            game_log(`🛡 Taunted quái đánh ${tank.name}: ${mob.mtype}`, "#AA00FF");
+        }
     }
-} 
 
-// 🧲 ƯU TIÊN 2: Taunt quái chưa có Target để kéo về (tiết kiệm Mana cho Tank)
-else if (
-    untargetedMobs.length > 0 &&
-    !is_on_cooldown("taunt") &&
-    tank && !tank.rip && tank.hp > 17500 &&
-    ((tank.name == "Ynhi" && tank.mp < 3500) || tank.name != "Ynhi") &&
-    character.hp > 14000
-) {
-    const mob = untargetedMobs[0];
-    if (is_in_range(mob, "taunt")) {
-        await use_skill("taunt", mob.id);
-        game_log(`🧲 Taunted ${mob.mtype}`, "#AA00FF");
+    // 🧲 ƯU TIÊN 2: Taunt quái chưa có Target để kéo về (tiết kiệm Mana cho Tank)
+    else if (
+        untargetedMobs.length > 0 &&
+        !is_on_cooldown("taunt") &&
+        tank && !tank.rip && tank.hp > 17500 &&
+        ((tank.name == "Ynhi" && tank.mp < 3500) || tank.name != "Ynhi") &&
+        character.hp > 14000
+    ) {
+        const mob = untargetedMobs[0];
+        if (is_in_range(mob, "taunt")) {
+            await use_skill("taunt", mob.id);
+            game_log(`🧲 Taunted ${mob.mtype}`, "#AA00FF");
+        }
     }
-}
 
-// 🐷 ƯU TIÊN 3: Chủ động Taunt quái trong danh sách Free Pull (Ent, Pppompom,...)
-else if (
-    freePullMob &&
-    !is_on_cooldown("taunt") && 
-    tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
-    character.hp > 17000 && character.mp > 1000 &&
-    (freePullMob.mtype !== "ent" || !character.target) // Giữ đúng logic: Nếu là "ent" thì bắt buộc !character.target
-) {
-    if (is_in_range(freePullMob, "taunt")) {
-        await use_skill("taunt", freePullMob.id);
-        game_log(`🐷 Taunt ${freePullMob.mtype} (free pull)`, "#FF8800");
+    // 🐷 ƯU TIÊN 3: Chủ động Taunt quái trong danh sách Free Pull (Ent, Pppompom,...)
+    else if (
+        freePullMob &&
+        !is_on_cooldown("taunt") &&
+        tank && !tank.rip && tank.hp > 14500 && tank.mp > 2500 &&
+        character.hp > 17000 && character.mp > 1000 &&
+        (freePullMob.mtype !== "ent" || !character.target)
+    ) {
+        if (is_in_range(freePullMob, "taunt")) {
+            await use_skill("taunt", freePullMob.id);
+            game_log(`🐷 Taunt ${freePullMob.mtype} (free pull)`, "#FF8800");
+        }
     }
-}
-
-
-
-	
 
     // --- LOGIC CHARGE & HARDSHELL ---
-    if (!is_on_cooldown("charge") && is_moving(character) ) {
-        await use_skill("charge"); // Sử dụng kỹ năng "charge"
+    if (!is_on_cooldown("charge") && is_moving(character)) {
+        await use_skill("charge");
     }
 
-    if (!is_on_cooldown("hardshell") && (character.hp < 12000 || check_BIGDAME ) && mobstype.length >= 1) {
-        await use_skill("hardshell"); // Sử dụng kỹ năng "hardshell" để bảo vệ nhân vật
+    if (!is_on_cooldown("hardshell") && (character.hp < 12000 || check_BIGDAME) && mobstype.length >= 1) {
+        await use_skill("hardshell");
     }
 
     // --- TAUNT QUÁI MẠNH CẦN SHARE DAME ---
@@ -2339,14 +2328,10 @@ else if (
         if (is_in_range(current, "taunt") && !is_on_cooldown("taunt")) {
             await use_skill("taunt", current.id);
             game_log("Taunting " + current.name, "#FFA600");
+            break; // 🛠 SỬA: Thêm break để chỉ taunt 1 con duy nhất trong 1 loop
         }
     }
-
 }
-
-
-
-
 
 
 
