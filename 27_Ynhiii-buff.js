@@ -463,6 +463,7 @@ function kite(taget, kite_range = 20, quai = null) {
         "mummy": 50,
         "plantoid": 40,
         "gscorpion": 50,
+        "bscorpion": 100,
         "spider": 10,
         "spiderr": 10,
         "spiderbl": 10,
