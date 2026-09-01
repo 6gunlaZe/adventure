@@ -2326,7 +2326,7 @@ if (current.mtype === "ent" && current.target) {
     }
 // 🌲 ƯU TIÊN 4: Chỉ hút 1 con Ent từ Ynhi NẾU Warrior chưa bị con Ent nào đánh (checkENT === 0)
 else if (
-    checkENT === 0 && 
+    checkENT === 0 && character.hp > 15000 && character.mp > 1000 &&
     hutENT && 
     !is_on_cooldown("taunt") && 
     is_in_range(hutENT, "taunt")
