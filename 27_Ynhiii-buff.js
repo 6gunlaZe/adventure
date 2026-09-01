@@ -1871,7 +1871,7 @@ async function ZapCase() {
             const entities = Object.values(parent.entities).filter(entity => {
                 if (!entity || entity.type !== "monster" || entity.dead || !entity.visible || !is_in_range(entity, "zapperzap")) return false;
 				
-                if (entity.mtype == "ent") entcheck = 1;
+                if (entity.mtype == "ent") entcheck++;
 					
                 // 1. Quái yếu đang cắn
                 if (quaiyeu.includes(entity.mtype) && entity.target) return true;
@@ -1893,7 +1893,7 @@ async function ZapCase() {
             entities.sort((a, b) => (a.target ? 1 : -1));
 			
             //logic phụ giửi lệnh dẫn quái ent về đánh
-            if ( Date.now()-lastEntRequest>150000 && isFullTeam && character.hp/character.max_hp > 0.75 && entcheck == 0 && character.map == "desertland" && !smart.moving && (crepp == "fireroamer" || crepp == "plantoid" ) && character.targets > 6 && !parent.S.franky && !parent.S.crabxx )
+            if ( Date.now()-lastEntRequest>150000 && isFullTeam && character.hp/character.max_hp > 0.75 && entcheck <= 1 && character.map == "desertland" && !smart.moving && (crepp == "fireroamer" || crepp == "plantoid" ) && character.targets > 6 && !parent.S.franky && !parent.S.crabxx )
 			{
 				send_cm("MuaBan","ent");
                 lastEntRequest=Date.now();
