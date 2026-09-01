@@ -2501,8 +2501,26 @@ const equipmentSets = {
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 		
     ],
+    fulldefAmor: [
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
-	
+        { itemName: "spikedhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+        { itemName: "cring", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+		
+    ],
 
 	
 };
@@ -2719,7 +2737,7 @@ let checkdef = 0;
 let checkheall = 0;
 let checkluckk = 0;
 const blacklistluck = ["nerfedmummy", "nerfedbat",]; // mảng cần loại
-const Chican1listSET = ["bscorpion",]; // mảng cần loại
+const Chican1listSET = ["bscorpion","plantoid"]; // mảng cần loại
 
 
 function ChuyendoiITEM() {
@@ -2827,7 +2845,11 @@ function ChuyendoiITEM() {
         equipSet('fulldame');
         return;
     }
-	
+    if (has("plantoid") && !hasLowHp && goldcheck == 0) {
+        eTime = currentTime;
+        equipSet('fulldefAmor');
+        return;
+    }	
 
 
 	///////Logic về set fram mặc định khi máu >97%
