@@ -1870,6 +1870,9 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
     let Soluongquai = 0;
 
     const specialORB = ["xmagex", "xmagen", "xmagefi", "xmagefz"];
+    const deffwithMana = ["ent"];
+    let fram_ent = 0;
+
 
     for (const entity of Object.values(parent.entities)) {
         if (!entity.visible || entity.dead) continue;
@@ -1895,6 +1898,9 @@ function handleWeaponSwap(stMaps, aoeMaps, Mainhand, offhand) {
 
                 // Check Special ORB
                 if (specialORB.includes(entity.mtype)) magicOrbCount++;
+
+                // Check quái ent đang tank
+                if (deffwithMana.includes(entity.mtype)) fram_ent++;				
 
                 // Check Physical
                 if (entity.mtype !== "crabxx" && entity.mtype !== "ent" && entity.damage_type === "physical") {
@@ -1981,7 +1987,12 @@ const targetHighArmor = targetNow?.armor > 300;
     if (checkdef === 0 && character.hp < 11000) {
         eTime = currentTime;
         checkdef = 1;
-        equipSet('deff');
+		if (fram_ent > 0 && )
+		{
+			equipSet('deffwithmana');
+		}
+        else equipSet('deff');
+		
         return;
     }
 
@@ -2578,12 +2589,20 @@ const equipmentSets = {
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
         { itemName: "xpants", slot: "pants", level: 8, l: "l" },
 		
+    ],
+
+    deffwithmana: [
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
 		
     ],
+	
+	
     nodeff: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+     //   { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "pants", slot: "pants", level: 11, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
@@ -2596,7 +2615,7 @@ const equipmentSets = {
     nodeffxuyengiap: [
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+      //  { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "fallen", slot: "pants", level: 4, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
