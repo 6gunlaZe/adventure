@@ -2191,6 +2191,9 @@ async function handleWarriorSkills(tank, f1) {
     let check_porcupine = false;
     let check_BIGDAME = false;
     let freePullMob = null;
+    let checkENT = 0;
+    let hutENT = null;
+
 
     // --- GOM TẤT CẢ VÀO 1 VÒNG LẶP DUY NHẤT ĐỂ TỐI ƯU PERFORMANCE ---
     for (let id in parent.entities) {
@@ -2215,6 +2218,14 @@ async function handleWarriorSkills(tank, f1) {
         if (current.target && current.target == character.name && current.attack > 3000 && current.damage_type == "physical" && dist <= 100) {
             check_BIGDAME = true;
         }
+
+if (current.mtype === "ent" && current.target) {
+    if (current.target === character.name) {
+        checkENT++; // Đếm số Ent đang đánh Warrior
+    } else if (current.target === "Ynhi" && dist <= 200) {
+        hutENT = current; // Lưu con Ent đang đánh Ynhi
+    }
+}
 
         // 1. Phân loại cho mobsInRange & untargetedMobs (dùng cho agitate / taunt)
         if (mobTypes.includes(current.mtype) && current.level < 3 && dist <= G.skills.agitate.range) {
@@ -2313,6 +2324,19 @@ async function handleWarriorSkills(tank, f1) {
             game_log(`🐷 Taunt ${freePullMob.mtype} (free pull)`, "#FF8800");
         }
     }
+// 🌲 ƯU TIÊN 4: Chỉ hút 1 con Ent từ Ynhi NẾU Warrior chưa bị con Ent nào đánh (checkENT === 0)
+else if (
+    checkENT === 0 && 
+    hutENT && 
+    !is_on_cooldown("taunt") && 
+    is_in_range(hutENT, "taunt")
+) {
+    await use_skill("taunt", hutENT.id);
+    game_log(`🌲 Taunt ${hutENT.mtype} (hút bớt từ Ynhi)`, "#FF8800");
+}
+
+
+	
 
     // --- LOGIC CHARGE & HARDSHELL ---
     if (!is_on_cooldown("charge") && is_moving(character)) {
