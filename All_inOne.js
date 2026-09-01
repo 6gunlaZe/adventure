@@ -1987,7 +1987,7 @@ const targetHighArmor = targetNow?.armor > 300;
     if (checkdef === 0 && character.hp < 11000) {
         eTime = currentTime;
         checkdef = 1;
-		if (fram_ent > 0 && )
+		if (fram_ent > 0 )
 		{
 			equipSet('deffwithmana');
 		}
