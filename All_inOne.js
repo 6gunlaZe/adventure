@@ -2343,7 +2343,7 @@ else if (
         await use_skill("charge");
     }
 
-    if (!is_on_cooldown("hardshell") && (character.hp < 12000 || check_BIGDAME) && mobstype.length >= 1) {
+    if (!is_on_cooldown("hardshell") && (character.hp < 16000 || check_BIGDAME) && mobstype.length >= 1) {
         await use_skill("hardshell");
     }
 
