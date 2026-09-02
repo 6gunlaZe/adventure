@@ -2418,7 +2418,7 @@ const equipmentSets = {
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
-        { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 
 		
     ],
@@ -2433,7 +2433,7 @@ const equipmentSets = {
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
-        { itemName: "ringsj", slot: "ring2", level: 6, l: "s"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
 
 		
     ],
