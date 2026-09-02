@@ -171,6 +171,7 @@ var bankItems = {
   // ===== MATERIALS / MISC =====
   tigerhelmet: [{ bank: "items0", level: -1, quantity: 1 }],
   pleather: [{ bank: "items5", level: -1, quantity: 1 }],
+  leather: [{ bank: "items5", level: -1, quantity: 1 }],
   seashell: [{ bank: "items5", level: -1, quantity: 1 }],
   bfur: [{ bank: "items5", level: -1, quantity: 1 }],
   poison: [{ bank: "items5", level: -1, quantity: 1 }],
