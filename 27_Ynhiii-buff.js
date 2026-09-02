@@ -808,7 +808,7 @@ async function lootAllChests() {
         (crepp === "bscorpion" && chestIds.length > 0)  || (smart.moving && chestIds.length > 0)  ) &&  
 		chestIds.length > 0  &&
         character.cc < 200 &&
-        isEquipping === false && character.slots.earring2?.name != "mearring"
+        isEquipping === false && character.slots.earring2?.name != "cloverstud"
     ) {
         try {
             equipSet("gold");
@@ -2355,7 +2355,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
 
@@ -2367,7 +2367,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "mearring", slot: "earring2", level: 0, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
         { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
 		
 	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
