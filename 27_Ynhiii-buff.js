@@ -2375,7 +2375,7 @@ const equipmentSets = {
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
        // { itemName: "mittens", slot: "gloves", level: 5, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
-       // { itemName: "oxhelmet", slot: "helmet", l: "l" },
+        { itemName: "ringofluck", slot: "ring2", level: 0, l: "s"  },
 
 
 		
