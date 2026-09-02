@@ -10,7 +10,7 @@ map_key("A", "toggle_run_code");
 
 map_key("Z", "snippet", "parent.stop_runner();");
 map_key("X", "snippet", 'load_code("bankautoclean")');
-map_key("C", "snippet", 'load_code("6gun dps")');
+map_key("C", "snippet", 'load_code("dps test")');
 map_key("S", "snippet", 'load_code("banktrans")');
 map_key("D", "snippet", 'load_code("seashell-doido")');
 map_key("F", "snippet", 'load_code("autobuyponty")');
