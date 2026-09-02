@@ -1069,8 +1069,8 @@ function tryAbsorb() {
                 }
 
                 // 🎯 Trường hợp 2: Tối ưu riêng cho "haiz"
-                // Điều kiện: (Bị >= 3 quái Phép đánh HOẶC Máu haiz < 12000) &  HP > 10000
-                if ((checkmage >= 3 || player.hp < 13500) && name === "haiz" && character.hp > 10000) {
+                // Điều kiện: (Bị >= 3 quái Phép đánh HOẶC Máu haiz < 14000) &  HP > 10000
+                if ((checkmage >= 3 || player.hp < 14000) && name === "haiz" && character.hp > 10000) {
                     score += 20;
                     shouldAbsorb = true;
                 }
