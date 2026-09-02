@@ -2518,12 +2518,7 @@ game.on('death', function (data) {
 
 const equipmentSets = {
 
-    dps: [
-        //{ itemName: "dexearring", slot: "earring2", level: 5, l: "l" },
-        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
-        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
-        { itemName: "suckerpunch", slot: "ring2", level: 2, l: "u" },
-    ],
+
     luck: [
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
@@ -2621,7 +2616,7 @@ const equipmentSets = {
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
         { itemName: "suckerpunch", slot: "ring1", level: 1, l: "l" },
-        { itemName: "suckerpunch", slot: "ring2", level: 0, l: "l" },
+        { itemName: "suckerpunch", slot: "ring2", level: 1, l: "s" },
 	    
     ],
 
