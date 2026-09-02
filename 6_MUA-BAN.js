@@ -726,8 +726,8 @@ function on_cm(name, data) {
             send_cm(hostname, "boss5");
         }
         // --- Logic dẫn quái ent về fram ---
-        if ((name === "Ynhi" || name === "haiz") && data === "ent") {
-            runLure();
+        if ((name === "Ynhi" || name === "haiz") && data === "ent" && startLure == false ) {
+             runLure();
         }
 
 
@@ -2701,12 +2701,17 @@ async function runLure(){
 
     }finally{
 
-        lureEntId = null;
-        startLure = false;
-		danglure = 0;
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
-     open_stand();
-    });
+    lureEntId = null;
+    danglure = 0;
+
+    smart_move(
+        { map: "main", x: -200, y: -110 },
+        () => {
+            open_stand();
+            startLure = false;
+            game_log("Lure hoàn thành hoàn toàn");
+        }
+    );
 		
     }
 
