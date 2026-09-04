@@ -1899,7 +1899,7 @@ async function ZapCase() {
             const entities = Object.values(parent.entities).filter(entity => {
                 if (!entity || entity.type !== "monster" || entity.dead || !entity.visible || !is_in_range(entity, "zapperzap")) return false;
 				
-                if (entity.mtype == "ent" && entity.hp > 1000000) entcheck++;
+                if (entity.mtype == "ent" && entity.hp > 1200000) entcheck++;
 					
                 // 1. Quái yếu đang cắn
                 if (quaiyeu.includes(entity.mtype) && entity.target) return true;
