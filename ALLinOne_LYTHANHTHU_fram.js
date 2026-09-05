@@ -793,7 +793,7 @@ async function skillLoop() {
         else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
 
         if (
-            quickSkill &&
+            quickSkill && ms_to_next_skill("attack") > 300 &&
             inRange &&
             !is_on_cooldown(quickSkill) &&
             character.mp > 750
