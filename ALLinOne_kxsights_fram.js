@@ -750,8 +750,7 @@ if (args.check_low_hp) {
 
 
 
-const QUICK_DAGGERS = ["daggerofthedead", "vdagger"];
-const QUICK_FISTS   = ["cclaw", "pclaw"];
+
 
 async function skillLoop() {
     try {
@@ -761,45 +760,7 @@ async function skillLoop() {
             distance(character, target) <
             character.range + (character.xrange || 0);
 
-        // 1. Invis
-        if (!is_on_cooldown("invis") && !character.s.invis && inRange && !smart.moving ) {
-            use_skill("invis");
-        }
 
-        // 2. Rspeed party
-        if (!is_on_cooldown("rspeed") && parent.party_list) {
-            for (let id in parent.party_list) {
-                const member = parent.party_list[id];
-                let entity = parent.entities[member];
-                if (member === character.name) entity = character;
-
-                if (
-                    entity &&
-                    character.mp > 500 &&
-                    distance(character, entity) < 300 &&
-                    (!entity.s?.rspeed || entity.s.rspeed.ms < 300000)
-                ) {
-                    use_skill("rspeed", entity);
-                    break;
-                }
-            }
-        }
-
-        // 3. Quick attack
-        let quickSkill = null;
-        const mhName = character.slots.mainhand?.name;
-
-        if (QUICK_DAGGERS.includes(mhName)) quickSkill = "quickstab";
-        else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
-
-        if (
-            quickSkill && ms_to_next_skill("attack") > 300 &&
-            inRange &&
-            !is_on_cooldown(quickSkill) &&
-            character.mp > 750
-        ) {
-            await use_skill(quickSkill, target);
-        }
 
     } catch (e) {
         console.log("skillLoop error:", e);
@@ -808,7 +769,7 @@ async function skillLoop() {
     setTimeout(skillLoop, 100);
 }
 
-skillLoop();
+// skillLoop();
 
 
 
