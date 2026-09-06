@@ -152,7 +152,7 @@ const speed = 3; // normal 2 or .65
 let events = false;
 
 const f1111 = 'Ynhi';  ///tank fram haiz check f1 có mới ra chỗ fram tienV
-const f2222 = '6gunlaZe';   // LyThanhThu  6gunlaZe nhiY
+const f2222 = 'kxsights';   // LyThanhThu  6gunlaZe nhiY kxsights
 
 
 
@@ -562,7 +562,7 @@ setInterval(() => {
 function checkPVPandARENA() {
 
 if (character.map != "arena")return
-const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV","LyThanhThu"];
+const friend = ["MuaBan", "haiz" , "haiz1" , "Ynhi", "nhiY", "6gunlaZe","tienV","LyThanhThu","kxsights"];
 const PVPInRange = Object.values(parent.entities)    //trả về các đối tượng kẻ thù
     .filter(entity => 
 	 entity.player  &&   
@@ -1583,7 +1583,7 @@ else
 
 
 
-const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV","LyThanhThu"];
+const targetNames = ["6gunlaZe", "Ynhi","haiz", "nhiY","tienV","LyThanhThu","kxsights"];
 
 
 function attackLoop() {
@@ -3083,7 +3083,7 @@ potionLoop();
 /////////////////////////////////////////////////////
 
 function on_party_request(name) {
-if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal" || name == "tienV" || name == "LyThanhThu" ) {
+if (name == "MuaBan" || name == "haiz1" || name == "nhiY" || name == "Ynhi" || name == "6gunlaZe"  || name == "angioseal" || name == "tienV" || name == "LyThanhThu" || name == "kxsights") {
             accept_party_request(name);
         }
         if ((name == "haiz" || name == "angioseal") && bosstime == 0 ) {
@@ -3141,6 +3141,8 @@ const characterData = [
     ["tienV", 45],
     ["nhiY", 12],
     ["LyThanhThu", 47],
+    ["kxsights", 55],
+
 ];
 
 const targets = [f1111, f2222];
@@ -3706,14 +3708,14 @@ function autoPartyCheck(f1name, f2name, interval = 60000) {
     if (Date.now() > partychecktime + interval) {
         partychecktime = Date.now();
 
-        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe', 'tienV' , 'LyThanhThu' ];
+        const playerNames = ['haiz1', 'nhiY', 'Ynhi', '6gunlaZe', 'tienV' , 'LyThanhThu', 'kxsights' ];
         const characterData = [
             ["6gunlaZe", 33],
             ["Ynhi", 27],
             ["tienV", 45],
             ["nhiY", 12],
             ["LyThanhThu", 47],
-
+            ["kxsights", 55],
         ];
 
         // Stop các char không phải f1/f2
@@ -4015,7 +4017,7 @@ function get_nearest_playerV_noMyparty(currentTarget)
 	{
 		var current=parent.entities[id];
 		if(!current.player) continue;
-    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV" || current.id == "LyThanhThu"  ) continue;
+    if(current.id == "haiz1" || current.id == "Ynhi" || current.id == "6gunlaZe" || current.id == "haiz" || current.id == "nhiY" || current.id == "tienV" || current.id == "LyThanhThu" || current.id == "kxsights" ) continue;
 		if(current.target == currentTarget.id) target +=1;
 	}
 	//game_log("so luong nguoi choi kill boss la: " + target)
