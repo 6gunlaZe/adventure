@@ -2356,7 +2356,7 @@ const equipmentSets = {
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
         { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
-        { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
 
 		
@@ -2368,7 +2368,7 @@ const equipmentSets = {
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
         { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
-        { itemName: "mearring", slot: "earring1", level: 0, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
 		
 	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
