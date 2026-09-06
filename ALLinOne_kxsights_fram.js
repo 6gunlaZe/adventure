@@ -772,6 +772,10 @@ const AURA_DELAY = 5000;
 let lastAuraCheck = 0;
 let Tankshare = "Ynhi"
 
+// Delay kiểm tra/cast Shield
+const SHIELD_DELAY = 1000;
+
+let lastShieldCheck = 0;
 // ============================================================
 // SKILL LOOP
 // ============================================================
@@ -903,48 +907,50 @@ async function skillLoop() {
         }
 
 
-        // ========================================================
-        // 3. AETHER SHIELD / MSHIELD
-        // ========================================================
+// ========================================================
+// 3. AETHER SHIELD / MSHIELD
+// ========================================================
 
-        if (
-            character.hp >= character.max_hp * 0.3 &&
-            !character.s.aether_shield
-        ) {
-            // HP > 30% -> bật Aether Shield
+if (Date.now() - lastShieldCheck >= SHIELD_DELAY) {
+
+    lastShieldCheck = Date.now();
+
+    if (
+        character.hp >= character.max_hp * 0.3 &&
+        !character.s.aether_shield
+    ) {
+        // HP >= 30% -> bật Aether Shield
+        use_skill("aether_shield");
+
+        game_log("skillLoop aether_shield");
+
+    } else if (
+        character.hp < character.max_hp * 0.3 &&
+        character.mp > 500
+    ) {
+        // HP < 30% + MP > 500 -> bật MShield
+        use_skill("mshield");
+
+        game_log("skillLoop mshield");
+
+    } else {
+
+        // Không còn điều kiện -> tắt khiên đang bật
+
+        if (character.s.aether_shield) {
+
             use_skill("aether_shield");
 
-            game_log("skillLoop aether_shield");
+            game_log("skillLoop off aether_shield");
 
-        } else if (
-            character.hp < character.max_hp * 0.3 &&
-            character.mp > 500
-        ) {
-            // HP < 30% + MP > 500 -> bật MShield
+        } else if (character.s.mshield) {
+
             use_skill("mshield");
 
-            game_log("skillLoop mshield");
-
-        } else {
-
-            // ----------------------------------------------------
-            // Không còn điều kiện -> tắt khiên đang bật
-            // ----------------------------------------------------
-
-            if (character.s.aether_shield) {
-
-                use_skill("aether_shield");
-
-                game_log("skillLoop off aether_shield");
-
-            } else if (character.s.mshield) {
-
-                use_skill("mshield");
-
-                game_log("skillLoop off mshield");
-            }
+            game_log("skillLoop off mshield");
         }
-
+    }
+}
 
         // ========================================================
         // 4. PURIFY
