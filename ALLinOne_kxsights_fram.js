@@ -770,7 +770,7 @@ const DESIRED_AURA = "paladin_aura_zeal";
 const AURA_DELAY = 5000;
 
 let lastAuraCheck = 0;
-
+let Tankshare = "Ynhi"
 
 // ============================================================
 // SKILL LOOP
@@ -806,7 +806,7 @@ async function skillLoop() {
 
             if (
                 entity.type === "character" &&
-                entity.name === "Ynhi"
+                entity.name === Tankshare
             ) {
                 ynhi = entity;
             }
@@ -820,7 +820,7 @@ async function skillLoop() {
                 entity.type === "monster" &&
                 !entity.dead &&
                 entity.visible &&
-                entity.target === "ynhi"
+                entity.target === Tankshare
             ) {
                 ynhi_attackers++;
             }
@@ -890,8 +890,7 @@ async function skillLoop() {
         if (
             ynhi &&
             !ynhi.dead &&
-            (ynhi.hp / ynhi.max_hp) < 0.9 &&
-            ynhi_attackers > 3 &&
+            ynhi_attackers > 5 &&
             !is_on_cooldown("guardians_oath") &&
             distance(character, ynhi) < 200
         ) {
