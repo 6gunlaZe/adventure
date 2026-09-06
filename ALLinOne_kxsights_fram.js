@@ -780,7 +780,72 @@ async function skillLoop() {
 
     try {
 
+        // ========================================================
+        // TARGET HIỆN TẠI
+        // ========================================================
+
         const target = get_targeted_monster();
+
+
+        // ========================================================
+        // QUÉT ENTITY 1 LẦN
+        // ========================================================
+
+        let ynhi = null;
+        let ynhi_attackers = 0;
+        let purifyTarget = null;
+
+        for (let id in parent.entities) {
+
+            const entity = parent.entities[id];
+
+
+            // ----------------------------------------------------
+            // Tìm Ynhi
+            // ----------------------------------------------------
+
+            if (
+                entity.type === "character" &&
+                entity.name === "Ynhi"
+            ) {
+                ynhi = entity;
+            }
+
+
+            // ----------------------------------------------------
+            // Đếm quái đang đánh Ynhi
+            // ----------------------------------------------------
+
+            if (
+                entity.type === "monster" &&
+                !entity.dead &&
+                entity.visible &&
+                entity.target === "ynhi"
+            ) {
+                ynhi_attackers++;
+            }
+
+
+            // ----------------------------------------------------
+            // Tìm target cho Purify
+            // ----------------------------------------------------
+
+            if (
+                !purifyTarget &&
+                entity.type === "monster" &&
+                !entity.dead &&
+                entity.visible &&
+                entity.hp < 2000 &&
+                distance(character, entity) < 300
+            ) {
+                purifyTarget = entity;
+            }
+        }
+
+
+        // ========================================================
+        // TARGET CÓ TRONG TẦM ĐÁNH?
+        // ========================================================
 
         const inRange =
             target &&
@@ -814,45 +879,90 @@ async function skillLoop() {
             !is_on_cooldown("selfheal")
         ) {
             use_skill("selfheal");
-			        game_log("skillLoop selfheal");
-
+            game_log("skillLoop selfheal");
         }
 
 
         // ========================================================
-        // 2. PURIFY
+        // 2. GUARDIAN'S OATH → YNHI
         // ========================================================
 
-        if (!is_on_cooldown("purify")) {
+        if (
+            ynhi &&
+            !ynhi.dead &&
+            (ynhi.hp / ynhi.max_hp) < 0.9 &&
+            ynhi_attackers > 3 &&
+            !is_on_cooldown("guardians_oath") &&
+            distance(character, ynhi) < 200
+        ) {
+            use_skill("guardians_oath", ynhi);
 
-            let purifyTarget = null;
+            game_log(
+                "skillLoop guardians_oath -> Ynhi | attackers:",
+                ynhi_attackers
+            );
+        }
 
-            for (let id in parent.entities) {
 
-                const entity = parent.entities[id];
+        // ========================================================
+        // 3. AETHER SHIELD / MSHIELD
+        // ========================================================
 
-                if (
-                    entity.type === "monster" &&
-                    !entity.dead &&
-                    entity.visible &&
-                    entity.hp < 2000 &&
-                    distance(character, entity) < 300
-                ) {
-                    purifyTarget = entity;
-                    break;
-                }
-            }
+        if (
+            character.hp >= character.max_hp * 0.3 &&
+            !character.s.aether_shield
+        ) {
+            // HP > 30% -> bật Aether Shield
+            use_skill("aether_shield");
 
-            if (purifyTarget) {
-                use_skill("purify", purifyTarget);
-				        game_log("skillLoop purify");
+            game_log("skillLoop aether_shield");
 
+        } else if (
+            character.hp < character.max_hp * 0.3 &&
+            character.mp > 500
+        ) {
+            // HP < 30% + MP > 500 -> bật MShield
+            use_skill("mshield");
+
+            game_log("skillLoop mshield");
+
+        } else {
+
+            // ----------------------------------------------------
+            // Không còn điều kiện -> tắt khiên đang bật
+            // ----------------------------------------------------
+
+            if (character.s.aether_shield) {
+
+                use_skill("aether_shield");
+
+                game_log("skillLoop off aether_shield");
+
+            } else if (character.s.mshield) {
+
+                use_skill("mshield");
+
+                game_log("skillLoop off mshield");
             }
         }
 
 
         // ========================================================
-        // 3. SHIELD SLAM
+        // 4. PURIFY
+        // ========================================================
+
+        if (
+            purifyTarget &&
+            !is_on_cooldown("purify")
+        ) {
+            use_skill("purify", purifyTarget);
+
+            game_log("skillLoop purify");
+        }
+
+
+        // ========================================================
+        // 5. SHIELD SLAM
         // ========================================================
 
         if (
@@ -862,31 +972,36 @@ async function skillLoop() {
             !is_on_cooldown("shield_slam")
         ) {
             use_skill("shield_slam", target);
-			        game_log("skillLoop shield_slam");
 
+            game_log("skillLoop shield_slam");
         }
 
 
         // ========================================================
-        // 4. SMASH
+        // 6. SMASH
         // ========================================================
 
         if (
             inRange &&
-            (character.mp / character.max_mp) > 0.97 &&
+            (character.mp / character.max_mp) > 0.999 &&
             !is_on_cooldown("smash")
         ) {
             use_skill("smash", target);
-			        game_log("skillLoop smash");
 
+            game_log("skillLoop smash");
         }
+
 
     } catch (e) {
 
-      //  game_log("skillLoop error:", e);
+        // game_log("skillLoop error:", e);
 
     }
 
+
+    // ============================================================
+    // LOOP
+    // ============================================================
 
     setTimeout(skillLoop, 100);
 }
@@ -897,8 +1012,6 @@ async function skillLoop() {
 // ============================================================
 
 skillLoop();
-
-
 
 
 function scare() {
