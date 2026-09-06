@@ -772,10 +772,6 @@ const AURA_DELAY = 5000;
 let lastAuraCheck = 0;
 let Tankshare = "Ynhi"
 
-// Delay kiểm tra/cast Shield
-const SHIELD_DELAY = 1000;
-
-let lastShieldCheck = 0;
 // ============================================================
 // SKILL LOOP
 // ============================================================
@@ -911,9 +907,7 @@ async function skillLoop() {
 // 3. AETHER SHIELD / MSHIELD
 // ========================================================
 
-if (Date.now() - lastShieldCheck >= SHIELD_DELAY) {
 
-    lastShieldCheck = Date.now();
 
     if (
         character.hp >= character.max_hp * 0.3
@@ -947,7 +941,7 @@ if (Date.now() - lastShieldCheck >= SHIELD_DELAY) {
             game_log("skillLoop off mshield");
         }
     }
-}
+
 
         // ========================================================
         // 4. PURIFY
