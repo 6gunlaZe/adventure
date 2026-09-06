@@ -751,72 +751,152 @@ if (args.check_low_hp) {
 
 
 
+// ============================================================
+// CONFIG
+// ============================================================
 
-// Khai báo danh sách tên quái vật áp dụng shield_slam
-const TARGET_MONSTERS = ["goo", "bee", "crab","plantoid"];
+// Danh sách quái áp dụng Shield Slam
+const TARGET_MONSTERS = [
+    "goo",
+    "bee",
+    "crab",
+    "plantoid"
+];
 
-// Chọn dạng Aura mong muốn duy trì ("bulwark", "sanctuary", "zeal", "warding")
-const DESIRED_AURA = "paladin_aura_zeal"; 
+// Aura mong muốn duy trì
+const DESIRED_AURA = "paladin_aura_zeal";
+
+// Delay kiểm tra/cast Aura
+const AURA_DELAY = 5000;
+
+let lastAuraCheck = 0;
+
+
+// ============================================================
+// SKILL LOOP
+// ============================================================
 
 async function skillLoop() {
+
     try {
-        const target = get_target();
+
+        const target = get_targeted_monster();
+
         const inRange =
-            target && !target.dead && 
+            target &&
+            !target.dead &&
             distance(character, target) <
             character.range + (character.xrange || 0);
 
-        // 0. PALADIN AURA (Duy trì trạng thái Aura mong muốn)
-        // Kiểm tra nếu chưa bật đúng Aura và skill hết cooldown (500ms)
-        if (!character.s[`paladin_aura_${DESIRED_AURA}`] && !is_on_cooldown("paladin_aura")) {
+
+        // ========================================================
+        // 0. PALADIN AURA
+        // ========================================================
+
+        if (
+            Date.now() - lastAuraCheck >= AURA_DELAY &&
+            !character.s[DESIRED_AURA] &&
+            !is_on_cooldown("paladin_aura")
+        ) {
+            lastAuraCheck = Date.now();
+
             use_skill("paladin_aura");
         }
 
-        // 1. SKILL SELFHEAL
-        if (character.hp < character.max_hp * 0.8 && character.mp > 200 && !is_on_cooldown("selfheal")) {
+
+        // ========================================================
+        // 1. SELFHEAL
+        // ========================================================
+
+        if (
+            character.hp < character.max_hp * 0.8 &&
+            character.mp > 200 &&
+            !is_on_cooldown("selfheal")
+        ) {
             use_skill("selfheal");
+			        game_log("skillLoop selfheal");
+
         }
 
-        // 2. SKILL PURIFY (Quét toàn bộ quái xung quanh)
+
+        // ========================================================
+        // 2. PURIFY
+        // ========================================================
+
         if (!is_on_cooldown("purify")) {
+
             let purifyTarget = null;
-            for (let id in entities) {
-                let entity = entities[id];
+
+            for (let id in parent.entities) {
+
+                const entity = parent.entities[id];
+
                 if (
-                    entity.type === "monster" && 
-                    !entity.dead && 
-                    entity.hp < 2000 && 
+                    entity.type === "monster" &&
+                    !entity.dead &&
+                    entity.visible &&
+                    entity.hp < 2000 &&
                     distance(character, entity) < 300
                 ) {
                     purifyTarget = entity;
                     break;
                 }
             }
+
             if (purifyTarget) {
                 use_skill("purify", purifyTarget);
+				        game_log("skillLoop purify");
+
             }
         }
 
-        // 3. SKILL SHIELD_SLAM
-        if (inRange && TARGET_MONSTERS.includes(target.mtype) && character.mp > 4000 && !is_on_cooldown("shield_slam")) {
+
+        // ========================================================
+        // 3. SHIELD SLAM
+        // ========================================================
+
+        if (
+            inRange &&
+            TARGET_MONSTERS.includes(target.mtype) &&
+            character.mp > 3500 &&
+            !is_on_cooldown("shield_slam")
+        ) {
             use_skill("shield_slam", target);
+			        game_log("skillLoop shield_slam");
+
         }
 
-        // 4. SKILL SMASH
-        if (inRange && (character.mp / character.max_mp) > 0.97 && !is_on_cooldown("smash")) {
+
+        // ========================================================
+        // 4. SMASH
+        // ========================================================
+
+        if (
+            inRange &&
+            (character.mp / character.max_mp) > 0.97 &&
+            !is_on_cooldown("smash")
+        ) {
             use_skill("smash", target);
+			        game_log("skillLoop smash");
+
         }
 
     } catch (e) {
-        console.log("skillLoop error:", e);
+
+      //  game_log("skillLoop error:", e);
+
     }
+
 
     setTimeout(skillLoop, 100);
 }
 
+
+// ============================================================
+// START
+// ============================================================
+
 skillLoop();
-
-
 
 
 
