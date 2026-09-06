@@ -755,7 +755,7 @@ const QUICK_FISTS   = ["cclaw", "pclaw"];
 
 async function skillLoop() {
     try {
-        const target = get_target();
+        const target = get_targeted_monster();
         const inRange =
             target && !target.dead && 
             distance(character, target) <
