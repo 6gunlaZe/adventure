@@ -916,20 +916,17 @@ if (Date.now() - lastShieldCheck >= SHIELD_DELAY) {
     lastShieldCheck = Date.now();
 
     if (
-        character.hp >= character.max_hp * 0.3 &&
-        !character.s.aether_shield
+        character.hp >= character.max_hp * 0.3
     ) {
         // HP >= 30% -> bật Aether Shield
-        use_skill("aether_shield");
-
-        game_log("skillLoop aether_shield");
+        if(!character.s.aether_shield)use_skill("aether_shield");
 
     } else if (
         character.hp < character.max_hp * 0.3 &&
         character.mp > 500
     ) {
         // HP < 30% + MP > 500 -> bật MShield
-        use_skill("mshield");
+        if (!character.s.mshield)use_skill("mshield");
 
         game_log("skillLoop mshield");
 
