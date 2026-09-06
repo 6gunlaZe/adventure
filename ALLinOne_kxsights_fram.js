@@ -752,6 +752,12 @@ if (args.check_low_hp) {
 
 
 
+// Khai báo danh sách tên quái vật áp dụng shield_slam
+const TARGET_MONSTERS = ["goo", "bee", "crab","plantoid"];
+
+// Chọn dạng Aura mong muốn duy trì ("bulwark", "sanctuary", "zeal", "warding")
+const DESIRED_AURA = "paladin_aura_zeal"; 
+
 async function skillLoop() {
     try {
         const target = get_target();
@@ -760,7 +766,46 @@ async function skillLoop() {
             distance(character, target) <
             character.range + (character.xrange || 0);
 
+        // 0. PALADIN AURA (Duy trì trạng thái Aura mong muốn)
+        // Kiểm tra nếu chưa bật đúng Aura và skill hết cooldown (500ms)
+        if (!character.s[`paladin_aura_${DESIRED_AURA}`] && !is_on_cooldown("paladin_aura")) {
+            use_skill("paladin_aura");
+        }
 
+        // 1. SKILL SELFHEAL
+        if (character.hp < character.max_hp * 0.8 && character.mp > 200 && !is_on_cooldown("selfheal")) {
+            use_skill("selfheal");
+        }
+
+        // 2. SKILL PURIFY (Quét toàn bộ quái xung quanh)
+        if (!is_on_cooldown("purify")) {
+            let purifyTarget = null;
+            for (let id in entities) {
+                let entity = entities[id];
+                if (
+                    entity.type === "monster" && 
+                    !entity.dead && 
+                    entity.hp < 2000 && 
+                    distance(character, entity) < 300
+                ) {
+                    purifyTarget = entity;
+                    break;
+                }
+            }
+            if (purifyTarget) {
+                use_skill("purify", purifyTarget);
+            }
+        }
+
+        // 3. SKILL SHIELD_SLAM
+        if (inRange && TARGET_MONSTERS.includes(target.mtype) && character.mp > 4000 && !is_on_cooldown("shield_slam")) {
+            use_skill("shield_slam", target);
+        }
+
+        // 4. SKILL SMASH
+        if (inRange && (character.mp / character.max_mp) > 0.97 && !is_on_cooldown("smash")) {
+            use_skill("smash", target);
+        }
 
     } catch (e) {
         console.log("skillLoop error:", e);
@@ -769,7 +814,7 @@ async function skillLoop() {
     setTimeout(skillLoop, 100);
 }
 
-// skillLoop();
+skillLoop();
 
 
 
