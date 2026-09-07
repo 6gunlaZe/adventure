@@ -956,9 +956,9 @@ async function skillLoop() {
 
         if (
             inRange &&
-            TARGET_MONSTERS.includes(target.mtype) &&
+            TARGET_MONSTERS.includes(target.mtype) && 
             character.mp > 3500 && slot !== -1 &&
-            !is_on_cooldown("shield_slam")
+            !is_on_cooldown("shield_slam") && ms_to_next_skill("attack") > 200
         ) {
 
                     equip(slot);
@@ -976,7 +976,7 @@ async function skillLoop() {
         if (
             inRange &&
             (character.mp / character.max_mp) > 0.999 &&
-            !is_on_cooldown("smash")
+            !is_on_cooldown("smash") && ms_to_next_skill("attack") > 200
         ) {
             use_skill("smash", target);
 
