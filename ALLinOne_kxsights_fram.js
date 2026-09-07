@@ -771,7 +771,7 @@ const AURA_DELAY = 5000;
 
 let lastAuraCheck = 0;
 let Tankshare = "Ynhi"
-
+let shieldname = "shield"
 // ============================================================
 // SKILL LOOP
 // ============================================================
@@ -785,6 +785,7 @@ async function skillLoop() {
         // ========================================================
 
         const target = get_targeted_monster();
+        const slot = character.items.findIndex(i => i && i.name === shieldname);
 
 
         // ========================================================
@@ -964,10 +965,13 @@ async function skillLoop() {
         if (
             inRange &&
             TARGET_MONSTERS.includes(target.mtype) &&
-            character.mp > 3500 &&
+            character.mp > 3500 && slot !== -1 &&
             !is_on_cooldown("shield_slam")
         ) {
-            use_skill("shield_slam", target);
+
+                    equip(slot);
+                    use_skill("shield_slam", target);
+                    equip(slot);
 
             game_log("skillLoop shield_slam");
         }
