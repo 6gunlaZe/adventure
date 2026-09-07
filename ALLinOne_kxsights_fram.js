@@ -520,16 +520,8 @@ const equipmentSets = {
     ],
     dame: [
 
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
-        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l"},
 
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
-
-        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
-		
     ],
     damehuman: [
         { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
@@ -596,9 +588,9 @@ function ChuyendoiITEM() {
     } else if (needNormalDef) {
         // equipSet("def");
     } else if (needLuck) {
-        equipSet("luck");
+        equipSet("dame");
     } else if (human) {
-        equipSet("damehuman");
+        equipSet("dame");
     } else {
         equipSet("dame");
     }
