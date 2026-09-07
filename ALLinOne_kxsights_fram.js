@@ -751,7 +751,7 @@ if (args.check_low_hp) {
 const TARGET_MONSTERS = [
     "goo",
     "bee",
-    "crab",
+    "ent",
     "plantoid"
 ];
 
