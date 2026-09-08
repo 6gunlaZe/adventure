@@ -141,7 +141,7 @@ let timeupdelay
 ///////////////
  //game_log("move bank !!!!!!" +  get_nearest_npc())
  //game_log("move bank !!!!!!" + distance(character, get_nearest_npc1("Santa")))
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
+	smart_move({ map: "main", x: -100, y: 40 }, () => {
      open_stand();
     });
 
@@ -585,7 +585,7 @@ if ( !is_moving(character) && checkloi1 == 1 &&  Date.now() > (checkloi + 20000)
 checkloi1 = 0
 vanchuyen = 0
 vanchuyenHPMP = 0
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main", x: -100, y: 40 }, () => {
      open_stand();
     });
 	
@@ -618,7 +618,7 @@ vanchuyenHPMP = 0
 	if (checktui == 1 && (Date.now() > (delaybank + ten3sec)) && character.map != "winter_instance" )
 	{
        checktui = 0;
-	smart_move({ map: "main", x: -200, y: -110 }, () => {
+	smart_move({ map: "main", x: -100, y: 40 }, () => {
      open_stand();
     });
     }
@@ -823,7 +823,7 @@ if (lootMule11 != null) {
 		  use_skill("mluck", lootMule11);
    use_skill("town")
   //smart_move(find_npc("newupgrade")); 
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		
@@ -838,7 +838,7 @@ if (lootMule21 != null) {
 		  use_skill("mluck", lootMule21);
    use_skill("town")
   //smart_move(find_npc("newupgrade")); 
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		
@@ -853,7 +853,7 @@ if (lootMule31 != null) {
 		  use_skill("mluck", lootMule31);
    use_skill("town")
   //smart_move(find_npc("newupgrade")); 
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		
@@ -867,7 +867,7 @@ if (lootMule41 != null) {
 		  use_skill("mluck", lootMule41);
    use_skill("town")
   //smart_move(find_npc("newupgrade")); 
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main",x: -100, y: 40 }, () => {
   open_stand();
     });
 		
@@ -882,7 +882,7 @@ if (lootMule51 != null) {
 		  use_skill("mluck", lootMule51);
    use_skill("town")
   //smart_move(find_npc("newupgrade")); 
-		smart_move({ map: "main", x: -200, y: -110 }, () => {
+		smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		
@@ -955,7 +955,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
     }
 	}
 	//////
-    if (character.map == "winter_inn" && Date.now() > (misstoe + TenMinutesInMs111) )smart_move({ map: "main", x: -200, y: -110 }, () => {
+    if (character.map == "winter_inn" && Date.now() > (misstoe + TenMinutesInMs111) )smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	
@@ -974,7 +974,7 @@ if(character.esize > 10 && character.stand && (vanchuyenbank >= 1 || timboss1 >=
 		}
     }
 //////////////////////////////////////////////////////////////	
-    if ( distance(character, get_nearest_npc1("Santa")) < 400 &&character.map == "winterland" && Date.now() > (candy + TenMinutesInMs111) )smart_move({ map: "main", x: -200, y: -110 }, () => {
+    if ( distance(character, get_nearest_npc1("Santa")) < 400 &&character.map == "winterland" && Date.now() > (candy + TenMinutesInMs111) )smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	
@@ -1087,7 +1087,7 @@ function taskBoss() {
 
 
         const doNext = () => {
-            smart_move({ map: "main", x: -200, y: -110 }, open_stand);
+            smart_move({ map: "main", x: -100, y: 40 }, open_stand);
         };
 
         if (randomNum === 1) {
@@ -1133,7 +1133,7 @@ function timbosskill()
  	var targetb= get_nearest_monster({type: "jr"});
 	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"boss1") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1146,7 +1146,7 @@ function timbosskill()
  	var targetb= get_nearest_monster({type: "greenjr"});
 	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"boss8") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1159,7 +1159,7 @@ function timbosskill()
  	var targetb= get_nearest_monster({type: "jr"});
 	if(targetb && parent.party_list.includes("haiz") )send_cm(hostname,"boss1") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1172,7 +1172,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss2") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1185,7 +1185,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss3") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1197,7 +1197,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss400") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1209,7 +1209,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss500") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1222,7 +1222,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss600") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 = 0;
     });	
@@ -1234,7 +1234,7 @@ function timbosskill()
 	var  targetsoloboss = soloboss({ max_range: 400, number : 1 }) 
 	if(targetsoloboss.length > 0 && parent.party_list.includes("haiz") )send_cm(hostname,"boss700") 
 			timboss = Date.now()
-				smart_move({ map: "main", x: -200, y: -110 }, () => {
+				smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
 					timboss1 += 1;
     });	
@@ -1323,7 +1323,7 @@ else if (character.mp/character.max_mp < 0.7) {
 setInterval(function() {
     if (!smart.moving && character.esize < 1 && character.map != "winter_instance" ) {
         if(character.map != "main") use_skill("town")
-smart_move({ map: "main", x: -200, y: -110 }, () => {
+smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	}
@@ -2374,7 +2374,7 @@ if( get_nearest_monster({type:'franky'})  &&  !is_moving(character)  )
 		send_cm(nhanvatphu,"franky")
 		send_cm("haiz","franky") 
 		frankymode = 1
-smart_move({ map: "main", x: -200, y: -110 }, () => {
+smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	}
@@ -2382,14 +2382,14 @@ smart_move({ map: "main", x: -200, y: -110 }, () => {
 
 if(character.map == "level2w" && !parent.S.franky  &&  !is_moving(character)  )				   
 		{
-			smart_move({ map: "main", x: -200, y: -110 }, () => {
+			smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		}
 
 if(character.map == "level2w" && character.hp < 2500  &&  !is_moving(character)  )				   
 		{
-			smart_move({ map: "main", x: -200, y: -110 }, () => {
+			smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		}	
@@ -2419,13 +2419,13 @@ if( get_nearest_monster({type:'crabxx'})  &&  !is_moving(character)  )
 	if(bossc.target && get_nearest_playerV() >=3 && parent.party_list.includes("haiz") && parent.party_list.includes(nhanvatphu) && bossc.hp < 888000 ){
 		send_cm("haiz","crabxx") 
 		crabxxmode = 1
-smart_move({ map: "main", x: -200, y: -110 }, () => {
+smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	}
 	else
 	{
-smart_move({ map: "main", x: -200, y: -110 }, () => {
+smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 	}
@@ -2435,7 +2435,7 @@ smart_move({ map: "main", x: -200, y: -110 }, () => {
 
 if( get_nearest_monster({type:'crabx'}) && !get_nearest_monster({type:'crabxx'}) && !parent.S.crabxx &&  !is_moving(character)  )				   
 		{
-			smart_move({ map: "main", x: -200, y: -110 }, () => {
+			smart_move({ map: "main", x: -100, y: 40 }, () => {
   open_stand();
     });
 		}
@@ -2705,7 +2705,7 @@ async function runLure(){
     danglure = 0;
 
     smart_move(
-        { map: "main", x: -200, y: -110 },
+        { map: "main", x: -100, y: 40 },
         () => {
             open_stand();
             startLure = false;
