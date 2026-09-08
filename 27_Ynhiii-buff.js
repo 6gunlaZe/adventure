@@ -1995,7 +1995,7 @@ async function ZapQuaiCLoop() {
 }
 
 // Bắt đầu chạy hàm
-// ZapQuaiCLoop();  // KS quái khi có người đánh cùng bãi  --- tạm ngưng
+ZapQuaiCLoop();  // KS quái khi có người đánh cùng bãi  --- tạm ngưng
 
 
 
