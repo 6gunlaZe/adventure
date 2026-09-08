@@ -2013,7 +2013,7 @@ var craftList = [
     "cshell","shield","gcape","sparkstaff","harbringer",
     "candy1","candy0","carrot",
     "dexamulet","fallen","ink","bowofthedead"
-    ,"strring","dexearring","dexring","intring","intearring",
+    ,"dexearring","intring","intearring",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
     "dexbelt","cryptkey","essenceofgreed",
     "sshield","vdagger","vhammer","scythe","bataxe",
