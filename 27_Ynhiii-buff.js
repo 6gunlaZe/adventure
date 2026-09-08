@@ -3036,8 +3036,7 @@ setInterval(elixirUsage, 2000);
 
 
 // ============================================================
-// 🎉 ANNIVERSARY - AUTO KISS
-// Nhân vật đã được mode di chuyển đưa tới Featured Player
+// 🎉 ANNIVERSARY - AUTO KISS NẾU NÓ Ở GẦN
 // ============================================================
 
 let lastAnniversaryKiss = 0;
