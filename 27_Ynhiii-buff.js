@@ -3035,6 +3035,67 @@ setInterval(elixirUsage, 2000);
 
 
 
+// ============================================================
+// 🎉 ANNIVERSARY - AUTO KISS
+// Nhân vật đã được mode di chuyển đưa tới Featured Player
+// ============================================================
+
+let lastAnniversaryKiss = 0;
+const ANNIVERSARY_KISS_CHECK = 500; // check mỗi 100ms
+
+async function check_anniversary_kiss() {
+
+    const now = Date.now();
+
+    // Chưa tới thời gian check tiếp theo
+    if (now - lastAnniversaryKiss < ANNIVERSARY_KISS_CHECK) return;
+
+    lastAnniversaryKiss = now;
+
+    const round = server.status.anniversary;
+    const ticket = character.s.anniversary_visit;
+
+    // Không có Anniversary / ticket hợp lệ
+    if (
+        character.s.hopsickness ||
+        character.s.realmfatigue ||
+        !round ||
+        !round.active ||
+        !round.live ||
+        round.available === false ||
+        !ticket ||
+        ticket.ms <= 0 ||
+        ticket.round !== round.round ||
+        ticket.realm !== server.region + " " + server.id ||
+        now >= ticket.expires ||
+        now >= round.expires
+    ) {
+        return;
+    }
+
+    // Tìm Featured Player
+    const player = get_player(round.target);
+
+    if (!player) return;
+
+    // Chưa đủ gần
+    if (distance(character, player) > 80) return;
+
+    // Dùng skill
+    await use_skill("ikissyou", player);
+}
+
+
+setInterval(() => {
+    check_anniversary_kiss().catch(show_json);
+}, 500);
+
+
+
+
+
+
+
 
 
 
