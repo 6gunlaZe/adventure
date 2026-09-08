@@ -2178,6 +2178,10 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
 
 
 
+const isTargetron = home === "targetron";
+
+let soluonghutENT    = isTargetron ? 1 : 0;
+let soluonghutENTvip = isTargetron ? 3 : 1;
 
 
 async function handleWarriorSkills(tank, f1) {
@@ -2230,7 +2234,7 @@ async function handleWarriorSkills(tank, f1) {
             check_BIGDAME = true;
         }
 
-if (current.mtype === "ent" && current.target) {
+if ( (current.mtype === "ent" || current.mtype === "targetron" ) && current.target) {
     if (current.target === character.name) {
         checkENT++; // Đếm số Ent đang đánh Warrior
     } else if (current.target === "Ynhi" && dist <= 200) {
@@ -2337,7 +2341,7 @@ if (current.mtype === "ent" && current.target) {
     }
 // 🌲 ƯU TIÊN 4: Chỉ hút tối đa 1 con Ent từ Ynhi NẾU Warrior chưa bị con Ent nào đánh (checkENT === 0) và +1 con nếu đang có HARDSHELL
 else if (
-    (checkENT <= 0 || (checkENT <= 1 && character.s.hardshell ) ) && character.hp > 15000 && character.mp > 1000 &&
+    ( checkENT <= soluonghutENT || (checkENT <= soluonghutENTvip && character.s.hardshell ) ) && character.hp > 15000 && character.mp > 1000 &&
     hutENT && 
     !is_on_cooldown("taunt") && 
     is_in_range(hutENT, "taunt")
