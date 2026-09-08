@@ -2284,8 +2284,8 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
 
 const isTargetron = home === "targetron";
 
-let soluonghutENT    = isTargetron ? 1 : 0;
-let soluonghutENTvip = isTargetron ? 3 : 1;
+let soluonghutENT    = isTargetron ? 2 : 0;
+let soluonghutENTvip = isTargetron ? 4 : 1;
 
 
 async function handleWarriorSkills(tank, f1) {
@@ -2462,7 +2462,7 @@ else if (
         await use_skill("charge");
     }
 
-    if (!is_on_cooldown("hardshell") && (character.hp < 16000 || check_BIGDAME) && mobstype.length >= 1) {
+    if (!is_on_cooldown("hardshell") && (character.hp < 16800 || check_BIGDAME) && mobstype.length >= 1) {
         await use_skill("hardshell");
     }
 
