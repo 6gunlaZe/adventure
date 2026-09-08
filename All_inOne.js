@@ -4,7 +4,7 @@ const swapCooldown = 500;
 game_log("Game vs 1.3");
 
 /*************** CONFIG ***************/
-const HOME_SERVER = { region: "ASIA", id: "I" };
+const HOME_SERVER = { region: "EU", id: "III" };
 const RUN_SERVER = { region: "US", id: "I" }; 
 
 const SERVER_RULES = [
@@ -12,8 +12,11 @@ const SERVER_RULES = [
     { region: "US",   id: "I",   weight: 2 },
     { region: "ASIA", id: "I",   weight: 1 },
     { region: "US",   id: "II",  weight: 2 },
+    { region: "US",   id: "IV",  weight: 2 },
     { region: "US",   id: "III", weight: 2 },
-    { region: "EU",   id: "II",  weight: 3 }
+    { region: "EU",   id: "II",  weight: 3 },
+    { region: "EU",   id: "III",  weight: 3 }
+
 ];
 
 // SERVER → PARTY MAP
