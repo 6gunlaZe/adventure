@@ -208,9 +208,50 @@ setTimeout(eventer, 5000);
    const mode_follow_haiz = false;
  //const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
 
+
+let lastAnniversaryVisit = 0;
+const ANNIVERSARY_VISIT_CHECK = 10000;
+
+
 async function handleHome() {
 if (smart.moving) return;
 
+
+
+
+    // ============================================================
+    // 🎉 ANNIVERSARY FEATURED PLAYER
+    // ============================================================
+    if (
+        !smart.moving &&
+        Date.now() - lastAnniversaryVisit >= ANNIVERSARY_VISIT_CHECK
+    ) {
+        lastAnniversaryVisit = Date.now();
+
+        const round = server.status.anniversary;
+        const ticket = character.s.anniversary_visit;
+
+        if (
+            round &&
+            round.active &&
+            round.live &&
+            round.available !== false &&
+            ticket &&
+            ticket.ms > 0 &&
+            ticket.round === round.round &&
+            ticket.realm === server.region + " " + server.id &&
+            Date.now() < ticket.expires &&
+            Date.now() < round.expires &&
+            !character.s.hopsickness &&
+            !character.s.realmfatigue
+        ) {
+            await visit_featured_player();
+            return;
+        }
+    }
+//////////////////////////////////
+
+	
 
     if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
         if (!smart.moving) {
