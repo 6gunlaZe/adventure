@@ -2338,7 +2338,7 @@ async function handleWarriorSkills(tank, f1) {
             check_BIGDAME = true;
         }
 
-if ( (current.mtype === "ent" || current.mtype === "targetron" ) && current.target) {
+if ( (current.mtype === "ent" || current.mtype === "targetron" ) && current.target && current.hp > 100000) {
     if (current.target === character.name) {
         checkENT++; // Đếm số Ent đang đánh Warrior
     } else if (current.target === "Ynhi" && dist <= 200) {
