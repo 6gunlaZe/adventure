@@ -152,7 +152,7 @@ const speed = 3; // normal 2 or .65
 let events = false;
 
 const f1111 = 'Ynhi';  ///tank fram haiz check f1 có mới ra chỗ fram tienV
-const f2222 = 'kxsights';   // LyThanhThu  6gunlaZe nhiY kxsights
+const f2222 = '6gunlaZe';   // LyThanhThu  6gunlaZe nhiY kxsights
 
 
 
