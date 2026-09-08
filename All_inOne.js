@@ -417,14 +417,115 @@ function handleEvents() {
 
 	
 
+async function visit_featured_player() {
+    var round = server.status.anniversary;
+    var ticket = character.s.anniversary_visit;
 
+    if (
+        character.s.hopsickness ||
+        character.s.realmfatigue ||
+        !round ||
+        !round.active ||
+        !round.live ||
+        !ticket ||
+        ticket.ms <= 0 ||
+        ticket.round !== round.round ||
+        ticket.realm !== server.region + " " + server.id ||
+        Date.now() >= ticket.expires ||
+        Date.now() >= round.expires
+    ) {
+        return game_log("No Anniversary Visit available right now");
+    }
+
+    if (round.available === false) {
+        return game_log(
+            "Waiting for " + round.target + " to return"
+        );
+    }
+
+    await smart_move({
+        map: round.map,
+        x: round.x,
+        y: round.y
+    });
+
+    var current = server.status.anniversary;
+    ticket = character.s.anniversary_visit;
+
+    if (
+        character.s.hopsickness ||
+        character.s.realmfatigue ||
+        !current ||
+        !current.active ||
+        !current.live ||
+        current.available === false ||
+        current.round !== round.round ||
+        current.id !== round.id ||
+        !ticket ||
+        ticket.ms <= 0 ||
+        Date.now() >= ticket.expires ||
+        Date.now() >= current.expires
+    ) {
+        return;
+    }
+
+    var player = get_player(current.target);
+
+    if (!player || distance(character, player) > 80) {
+        return game_log(
+            "The featured player moved. Find them again."
+        );
+    }
+
+    await use_skill("ikissyou", player);
+}
 
 
 let startPartyCheckAt = Date.now() + 100000; // mốc 100s sau khi chạy
 
+let lastAnniversaryVisit = 0;
+const ANNIVERSARY_VISIT_CHECK = 10000;
+
 async function handleHome() {
 
 
+    // ============================================================
+    // 🎉 ANNIVERSARY FEATURED PLAYER
+    // ============================================================
+    if (
+        !smart.moving &&
+        Date.now() - lastAnniversaryVisit >= ANNIVERSARY_VISIT_CHECK
+    ) {
+        lastAnniversaryVisit = Date.now();
+
+        const round = server.status.anniversary;
+        const ticket = character.s.anniversary_visit;
+
+        if (
+            round &&
+            round.active &&
+            round.live &&
+            round.available !== false &&
+            ticket &&
+            ticket.ms > 0 &&
+            ticket.round === round.round &&
+            ticket.realm === server.region + " " + server.id &&
+            Date.now() < ticket.expires &&
+            Date.now() < round.expires &&
+            !character.s.hopsickness &&
+            !character.s.realmfatigue
+        ) {
+            await visit_featured_player();
+            return;
+        }
+    }
+//////////////////////////////////
+
+
+
+
+
+	
     if (parent?.S?.holidayseason && !character?.s?.holidayspirit) {
         if (!smart.moving) {
             smart_move({ to: "town" }, () => {
