@@ -205,6 +205,74 @@ setTimeout(eventer, 5000);
 
 
 
+
+
+async function visit_featured_player() {
+    var round = server.status.anniversary;
+    var ticket = character.s.anniversary_visit;
+
+    if (
+        character.s.hopsickness ||
+        character.s.realmfatigue ||
+        !round ||
+        !round.active ||
+        !round.live ||
+        !ticket ||
+        ticket.ms <= 0 ||
+        ticket.round !== round.round ||
+        ticket.realm !== server.region + " " + server.id ||
+        Date.now() >= ticket.expires ||
+        Date.now() >= round.expires
+    ) {
+        return game_log("No Anniversary Visit available right now");
+    }
+
+    if (round.available === false) {
+        return game_log(
+            "Waiting for " + round.target + " to return"
+        );
+    }
+
+    await smart_move({
+        map: round.map,
+        x: round.x,
+        y: round.y
+    });
+
+    var current = server.status.anniversary;
+    ticket = character.s.anniversary_visit;
+
+    if (
+        character.s.hopsickness ||
+        character.s.realmfatigue ||
+        !current ||
+        !current.active ||
+        !current.live ||
+        current.available === false ||
+        current.round !== round.round ||
+        current.id !== round.id ||
+        !ticket ||
+        ticket.ms <= 0 ||
+        Date.now() >= ticket.expires ||
+        Date.now() >= current.expires
+    ) {
+        return;
+    }
+
+    var player = get_player(current.target);
+
+    if (!player || distance(character, player) > 80) {
+        return game_log(
+            "The featured player moved. Find them again."
+        );
+    }
+
+    await use_skill("ikissyou", player);
+}
+
+
+
+
    const mode_follow_haiz = false;
  //const mode_follow_haiz = true; // nếu muốn quay quanh haiz ✅ Công tắc follow haiz
 
