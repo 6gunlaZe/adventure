@@ -2021,7 +2021,7 @@ var craftList = [
     "powerglove","xarmor","tshirt9","fury",
     "xhelmet","lostearring","ololipop","supermittens",
     "xgloves","starkillers","wbookhs","crossbow",
-    "mcape","gem0","ornament","candycane","mistletoe","snowball"
+    "mcape","gem0","ornament","candycane","mistletoe",
 ];
 
 const craftSet = new Set(craftList);
