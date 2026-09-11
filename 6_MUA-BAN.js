@@ -2019,7 +2019,7 @@ var craftList = [
     "sshield","vdagger","vhammer","scythe","bataxe",
     "rabbitsfoot","bfangamulet","suckerpunch","cdarktristone",
     "powerglove","xarmor","tshirt9","fury",
-    "xhelmet","lostearring","ololipop","supermittens",
+    "xhelmet","ololipop","supermittens",
     "xgloves","starkillers","wbookhs","crossbow",
     "mcape","gem0","ornament","candycane","mistletoe",
 ];
