@@ -314,13 +314,19 @@ var bankItems = {
   strbelt: [{ bank: "items7", level: -1, quantity: 1 }],
   cring: [{ bank: "items6", level: -1, quantity: 1 }],
   cearring: [{ bank: "items6", level: -1, quantity: 1 }],
-  lostearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  embercore: [{ bank: "items7", level: -1, quantity: 1 }],
   vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
   spores: [{ bank: "items7", level: -1, quantity: 1 }],
   frostcore: [{ bank: "items7", level: -1, quantity: 1 }],
   stormfeather: [{ bank: "items7", level: -1, quantity: 1 }],
   voidthread: [{ bank: "items7", level: -1, quantity: 1 }],
   gslime: [{ bank: "items7", level: -1, quantity: 1 }],
+
+  slice_nightberry: [{ bank: "items3", level: -1, quantity: 1 }],
+  slice_blueberry: [{ bank: "items3", level: -1, quantity: 1 }],
+  slice_honey: [{ bank: "items3", level: -1, quantity: 1 }],
+  slice_citrus: [{ bank: "items3", level: -1, quantity: 1 }],
+  slice_strawberry: [{ bank: "items3", level: -1, quantity: 1 }],
 
 
 
@@ -2013,7 +2019,7 @@ var craftList = [
     "cshell","shield","gcape","sparkstaff","harbringer",
     "candy1","candy0","carrot","firecrackers",
     "fallen","ink","bowofthedead"
-    ,"dexearring","intring",
+    ,"dexearring",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
     "dexbelt","cryptkey","essenceofgreed",
     "sshield","vdagger","vhammer","scythe","bataxe",
