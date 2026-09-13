@@ -2017,7 +2017,7 @@ function compound_items() {
 var craftList = [
     "smoke","weaponbox","intbelt","strbelt","vitearring","gslime","voidthread","bwing","essenceofether","ijx","ectoplasm","bcandle","snakefang","embercore",
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
-    "cshell","shield","gcape","sparkstaff","harbringer",
+    "cshell","shield","gcape","sparkstaff","harbringer","stormfeather",
     "candy1","candy0","carrot","firecrackers",
     "fallen","ink","bowofthedead"
     ,"dexearring",
