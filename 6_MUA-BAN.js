@@ -331,6 +331,14 @@ var bankItems = {
 
 
   ink: [{ bank: "items4", level: -1, quantity: 1 }],
+  candleward: [{ bank: "items4", level: -1, quantity: 1 }],
+  paradequiver: [{ bank: "items4", level: -1, quantity: 1 }],
+  homecominghelm: [{ bank: "items4", level: -1, quantity: 1 }],
+  homecomingcoat: [{ bank: "items4", level: -1, quantity: 1 }],
+  homecomingcape: [{ bank: "items4", level: -1, quantity: 1 }],
+  guestbook: [{ bank: "items4", level: -1, quantity: 1 }],
+  reunionbow: [{ bank: "items4", level: -1, quantity: 1 }],
+  keepsakependant: [{ bank: "items4", level: -1, quantity: 1 }],
 
 	
   ringsj: [
