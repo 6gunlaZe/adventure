@@ -2355,7 +2355,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
 
@@ -2367,7 +2367,7 @@ const equipmentSets = {
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
         { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "cloverstud", slot: "earring2", level: 1, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
 		
 	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
