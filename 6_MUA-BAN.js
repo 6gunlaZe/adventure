@@ -2020,7 +2020,7 @@ var craftList = [
     "cshell","shield","gcape","sparkstaff","harbringer","stormfeather",
     "candy1","candy0","carrot","firecrackers",
     "fallen","ink","bowofthedead"
-    ,"dexearring","confetti"
+    ,"dexearring","confetti",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
     "dexbelt","cryptkey","essenceofgreed",
     "sshield","vdagger","vhammer","scythe","bataxe",
