@@ -330,7 +330,8 @@ var bankItems = {
 
 
 
-	
+  ink: [{ bank: "items4", level: -1, quantity: 1 }],
+
 	
   ringsj: [
     { bank: "items4", level: 2, quantity: 1 },
