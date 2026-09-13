@@ -315,7 +315,7 @@ var bankItems = {
   cring: [{ bank: "items6", level: -1, quantity: 1 }],
   cearring: [{ bank: "items6", level: -1, quantity: 1 }],
   embercore: [{ bank: "items7", level: -1, quantity: 1 }],
-  vitearring: [{ bank: "items7", level: -1, quantity: 1 }],
+  vitearring: [{ bank: "items4", level: -1, quantity: 1 }],
   spores: [{ bank: "items7", level: -1, quantity: 1 }],
   frostcore: [{ bank: "items7", level: -1, quantity: 1 }],
   stormfeather: [{ bank: "items7", level: -1, quantity: 1 }],
@@ -2020,7 +2020,7 @@ var craftList = [
     "cshell","shield","gcape","sparkstaff","harbringer","stormfeather",
     "candy1","candy0","carrot","firecrackers",
     "fallen","ink","bowofthedead"
-    ,"dexearring",
+    ,"dexearring","confetti"
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
     "dexbelt","cryptkey","essenceofgreed",
     "sshield","vdagger","vhammer","scythe","bataxe",
