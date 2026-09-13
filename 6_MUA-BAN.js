@@ -326,7 +326,8 @@ var bankItems = {
   slice_blueberry: [{ bank: "items3", level: -1, quantity: 1 }],
   slice_honey: [{ bank: "items3", level: -1, quantity: 1 }],
   slice_citrus: [{ bank: "items3", level: -1, quantity: 1 }],
-  slice_strawberry: [{ bank: "items3", level: -1, quantity: 1 }],
+  scroll3: [{ bank: "items3", level: -1, quantity: 1 }],
+  mysterybox: [{ bank: "items3", level: -1, quantity: 1 }],
 
 
 
