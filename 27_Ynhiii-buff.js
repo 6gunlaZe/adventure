@@ -2490,7 +2490,7 @@ const equipmentSets = {
     framVIP: [
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
@@ -2532,7 +2532,7 @@ const equipmentSets = {
     fulldefAmor: [
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "shield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
         { itemName: "spikedhelmet", slot: "helmet", level: 8, l: "l" },
