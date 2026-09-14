@@ -2027,7 +2027,7 @@ var craftList = [
     "smoke","weaponbox","intbelt","strbelt","vitearring","gslime","voidthread","bwing","essenceofether","ijx","ectoplasm","bcandle","snakefang","embercore",
     "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
     "cshell","gcape","sparkstaff","harbringer","stormfeather","fireblade",
-    "candy1","candy0","carrot","firecrackers",
+    "candy1","candy0","carrot","firecrackers","glolipop",
     "fallen","ink","bowofthedead"
     ,"dexearring","confetti",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
