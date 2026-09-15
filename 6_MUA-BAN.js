@@ -322,6 +322,7 @@ var bankItems = {
   voidthread: [{ bank: "items7", level: -1, quantity: 1 }],
   gslime: [{ bank: "items7", level: -1, quantity: 1 }],
 
+  slice_strawberry: [{ bank: "items3", level: -1, quantity: 1 }],
   slice_nightberry: [{ bank: "items3", level: -1, quantity: 1 }],
   slice_blueberry: [{ bank: "items3", level: -1, quantity: 1 }],
   slice_honey: [{ bank: "items3", level: -1, quantity: 1 }],
