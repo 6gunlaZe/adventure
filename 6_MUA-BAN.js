@@ -264,6 +264,10 @@ var bankItems = {
     { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 7, quantity: 1 },
   ],
+  wingedboots: [
+    { bank: "items1", level: 9, quantity: 1 },
+    { bank: "items1", level: 8, quantity: 1 },
+  ],
   shield: [
     { bank: "items1", level: 8, quantity: 1 },
     { bank: "items1", level: 6, quantity: 1 },
