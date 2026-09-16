@@ -208,7 +208,7 @@ var bankItems = {
   pstem: [{ bank: "items5", level: -1, quantity: 1 }],
   cryptkey: [{ bank: "items5", level: -1, quantity: 1 }],
   eggnog: [{ bank: "items5", level: -1, quantity: 1 }],
-  feather0: [{ bank: "items5", level: -1, quantity: 1 }],
+  feather0aaa: [{ bank: "items5", level: -1, quantity: 1 }],
   tombkey: [{ bank: "items5", level: -1, quantity: 1 }],
   shadowstone: [{ bank: "items5", level: -1, quantity: 1 }],
   frozenkey: [{ bank: "items5", level: -1, quantity: 1 }],
