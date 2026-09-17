@@ -1400,13 +1400,12 @@ async function sologame() {
  let member2 = get_player("Ynhi");
 	
 	
-if(member2 && character.map == "main") ){
+if(member2 && character.map == "main" ){
 	 let dist_to_gate = distance(character, { x: 818, y: 1201 });
 	 if (dist_to_gate < 30) 
 	 {
 	 send_cm("6gunlaZe","dream");
 	 send_cm("ynhi","dream");	
-
 	 }
 }
 
