@@ -2030,7 +2030,7 @@ function compound_items() {
 // ====== DANH SÁCH ITEM MUỐN MUA ======
 var craftList = [
     "smoke","weaponbox","intbelt","strbelt","vitearring","gslime","voidthread","bwing","essenceofether","ijx","ectoplasm","bcandle","snakefang","embercore",
-    "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8",
+    "cscale","x0","x1","x2","x3","x4","x5","x6","x7","x8","slice_nightberry","slice_blueberry","slice_honey","slice_citrus","slice_strawberry",
     "cshell","gcape","harbringer","stormfeather","fireblade",
     "candy1","candy0","carrot","firecrackers","glolipop",
     "fallen","ink","bowofthedead"
