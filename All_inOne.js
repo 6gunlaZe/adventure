@@ -181,6 +181,7 @@ let prolive = 0
 let framhaiz = 0
 let gobaltaget = null;
 let Now_is_gobalevenrun = false
+let solocheck = 0
 
 ///check 1 lần đầu tiên khi mở - sợ bị dissconnet khi đang đánh boss
 	 var kiltargetfk= get_nearest_monster({type: "franky"});
@@ -239,7 +240,8 @@ if (currentJob) {
 	} else if (bossvip > 0) {
             VIPBosses();
 	} else if (framboss > 0) {
-
+	} else if (solocheck > 0) {
+		    sologame();
     } else {
 
           const h = new Date().getHours();
@@ -1391,9 +1393,24 @@ if (buoc1 == 8)
 
 
 
+async function sologame() {
 
 
+ let member1 = get_player("6gunlaZe");
+ let member2 = get_player("Ynhi");
+	
+	
+if(member2 && character.map == "main") ){
+	 let dist_to_gate = distance(character, { x: 818, y: 1201 });
+	 if (dist_to_gate < 30) 
+	 {
+	 send_cm("6gunlaZe","dream");
+	 send_cm("ynhi","dream");	
 
+	 }
+}
+
+}
 
 
 
