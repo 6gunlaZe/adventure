@@ -766,21 +766,100 @@ function count_item(itemName) {
 
 
 var ALTS = [f1111, f2222];
+var last_choice = null;
 
-async function select_and_sync(option_index) {
-    if (!character.cave || !character.cave.choice) return;
-    
-    var choice_id = character.cave.choice.id;
-    var reply_id = character.cave.choice.options[option_index].id;
+async function select_and_sync(choice, selected) {
+    if (!choice || !selected) return;
 
-    // Gửi tin nhắn cho các acc phụ
+    var choice_id = choice.id;
+    var reply_id = selected.id;
+
+    // Gửi lựa chọn cho các acc phụ
     ALTS.forEach(function(alt_name) {
-        send_cm(alt_name, { type: "cave_sync", reply_id: reply_id });
+        send_cm(alt_name, {
+            type: "cave_sync",
+            reply_id: reply_id
+        });
     });
 
-    // Cho nhân vật chính chọn
+    // Nhân vật chính chọn
     return await cave_reply(choice_id, reply_id);
 }
+
+character.on("cave", async function(state) {
+    var choice = state && state.choice;
+    if (!choice || choice.resolved) return;
+    if (choice.id === last_choice) return;
+
+    var options = choice.options || [];
+
+    // Chỉ giữ option không tốn Gold/Amber và không unavailable
+    var validOptions = options.filter(function(o) {
+        return o &&
+            !o.unavailable &&
+            Number(o.cost || 0) === 0 &&
+            Number(o.amber || 0) === 0;
+    });
+
+    if (validOptions.length === 0) return;
+
+    function textOf(o) {
+        return String(o.label || "").toLowerCase();
+    }
+
+    // 1. Attack / Fight / Battle
+    var combatWords = [
+        "attack",
+        "fight",
+        "battle",
+        "combat",
+        "kill",
+        "strike",
+        "defeat",
+        "tấn công",
+        "chiến đấu",
+        "đánh",
+        "giết"
+    ];
+
+    var directCombat = validOptions.find(function(o) {
+        var text = textOf(o);
+
+        return combatWords.some(function(word) {
+            return text.indexOf(word) !== -1;
+        });
+    });
+
+    // 2. Save ... fight
+    var saveFight = validOptions.find(function(o) {
+        var text = textOf(o);
+
+        return text.indexOf("save") !== -1 &&
+            (
+                text.indexOf("fight") !== -1 ||
+                text.indexOf("battle") !== -1 ||
+                text.indexOf("combat") !== -1 ||
+                text.indexOf("chiến đấu") !== -1
+            );
+    });
+
+    // Ưu tiên combat
+    var selected = directCombat || saveFight;
+
+    // 3. Không có combat → chọn option cuối
+    if (!selected) {
+        selected = validOptions[validOptions.length - 1];
+    }
+
+    last_choice = choice.id;
+
+    try {
+        await select_and_sync(choice, selected);
+    } catch (error) {
+        // Bỏ qua lỗi
+    }
+});
+
 
 
 
