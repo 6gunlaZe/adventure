@@ -2731,7 +2731,6 @@ const equipmentSets = {
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
-        { itemName: "pants", slot: "pants", level: 11, l: "l" },
 
         { itemName: "strring", slot: "ring1", level: 5, l: "l" },
         { itemName: "strring", slot: "ring2", level: 4, l: "l" },
@@ -2784,12 +2783,12 @@ const equipmentSets = {
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
      //   { itemName: "coat", slot: "chest", level: 10, l: "l" },
-        { itemName: "pants", slot: "pants", level: 11, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
-        { itemName: "strring", slot: "ring1", level: 5, l: "l" },
-        { itemName: "strring", slot: "ring2", level: 4, l: "l" },
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
+        { itemName: "strring", slot: "ring2", level: 5, l: "l" },
 	    
     ],
 
@@ -2797,11 +2796,11 @@ const equipmentSets = {
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
       //  { itemName: "coat", slot: "chest", level: 10, l: "l" },
-        { itemName: "fallen", slot: "pants", level: 4, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
         { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
-        { itemName: "suckerpunch", slot: "ring1", level: 1, l: "l" },
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
         { itemName: "suckerpunch", slot: "ring2", level: 1, l: "s" },
 	    
     ],
