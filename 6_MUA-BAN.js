@@ -2036,8 +2036,7 @@ var craftList = [
     "fallen","ink","bowofthedead"
     ,"dexearring","confetti",
     "egg0","egg1","egg2","egg3","egg4","egg5","egg6","egg7","egg8",
-    "dexbelt","cryptkey","essenceofgreed",
-    "sshield","vdagger","vhammer","scythe","bataxe",
+    "dexbelt","cryptkey","essenceofgreed","vdagger","vhammer","scythe","bataxe",
     "rabbitsfoot","bfangamulet","suckerpunch","cdarktristone",
     "powerglove","xarmor","tshirt9","fury",
     "xhelmet","ololipop","supermittens",
