@@ -3525,7 +3525,7 @@ stop_character("nhiY")
 /////////////////
 if (name == "MuaBan") {
     if (data === "framtay") framtay = 1;
-
+    if (data === "solocheck") solocheck = 1;
     if (data === "bank") {
         start_character("MuaBan", 10);
         banktime = Date.now();
