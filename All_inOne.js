@@ -763,6 +763,25 @@ function count_item(itemName) {
 
 
 
+var ALTS = [f1111, f2222];
+
+async function select_and_sync(option_index) {
+    if (!character.cave || !character.cave.choice) return;
+    
+    var choice_id = character.cave.choice.id;
+    var reply_id = character.cave.choice.options[option_index].id;
+
+    // Gửi tin nhắn cho các acc phụ
+    ALTS.forEach(function(alt_name) {
+        send_cm(alt_name, { type: "cave_sync", reply_id: reply_id });
+    });
+
+    // Cho nhân vật chính chọn
+    return await cave_reply(choice_id, reply_id);
+}
+
+
+
 
 
 let xmageStop_lastTime = 0;
