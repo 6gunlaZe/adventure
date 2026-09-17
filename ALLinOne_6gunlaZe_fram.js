@@ -1937,6 +1937,33 @@ function Handelbossvip() {
 
 
 
+var MAIN_CHARACTER = "haiz";
+var reply_id = null;
+var last_choice = null;
+
+
+// Xử lý khi gặp sự kiện hang động
+character.on("cave", async function(state) {
+    var choice = state && state.choice;
+    if (!choice || choice.resolved) return;
+    if (choice.id === last_choice) return;
+
+    var offered = choice.options.some(function(o) {
+        return o.id === reply_id && !o.unavailable;
+    });
+
+    if (!reply_id || !offered) return;
+
+    last_choice = choice.id;
+    try {
+        await cave_reply(choice.id, reply_id);
+        reply_id = null; // Reset biến sau khi đã trả lời xong
+    } catch (error) {
+        console.log("Lỗi khi chọn:", error);
+    }
+});
+
+
 
 function Xmage() {
     if (character.map != "winter_instance") return;
@@ -2153,79 +2180,76 @@ function on_magiport(name){
 
 /////////////
 function on_cm(name, data) {
-	
- if(data == "TemporalTime")lastTemporalTime = Date.now();
+    if (data == "TemporalTime") lastTemporalTime = Date.now();
 
-	
-	if(name == "MuaBan")
-	{
-           if(data)
-	   {
-		   evenmuaban = data
-		   folowhaizevents = true;
-	   }
-	}
-
-if (name === "haiz") {
-    // Lệnh chuyển map nếu chưa đúng map
-    const teleportCommands = {
-        goo: "crypt",
-        goo1: "tomb",
-        goo2: "winter_instance",
-        goo3: "spider_instance",
-		
-    };
-
-    // Các lệnh gán biến trạng thái
-    const flagCommands = {
-        crypt: () => { cryts = 1; },
-        tomb: () => { tomb = 1; },
-        spidergame: () => { tomb = 1; },
-        mage: () => { tomb = 1; },
-        landau1: () => { landaucyp = 1; },
-        landau0: () => { landaucyp = 0; },
-        bossvip1: () => { bossvip = 1; },
-        bossvip2: () => { bossvip = 2; },
-        bossvip3: () => { bossvip = 3; },
-        bossvip4: () => { bossvip = 4; },
-        bossvip5: () => { bossvip = 5; },		
-        crabxx: () => { crab = 1; },
-		// cứ thêm lệnh mới -> gán biến là xài đc
-
-
-		
-    };
-
-    // Tổng hợp tất cả key đặc biệt để loại trừ khi gán idmap
-    const knownKeys = [
-        ...Object.keys(teleportCommands),
-        ...Object.keys(flagCommands)
-    ];
-
-    // Ưu tiên xử lý lệnh dịch chuyển
-    if (teleportCommands[data]) {
-        const targetMap = teleportCommands[data];
-        if (character.map !== targetMap) {
-            enter(targetMap, idmap);
+    if (name == "MuaBan") {
+        if (data) {
+            evenmuaban = data;
+            folowhaizevents = true;
         }
     }
-    // Nếu là các lệnh gán trạng thái
-    else if (flagCommands[data]) {
-        flagCommands[data]();
-    }
-    // Nếu là chuỗi hợp lệ và không phải lệnh đặc biệt → coi như idmap
-    else if (typeof data === "string" && !knownKeys.includes(data)) {
-        idmap = data;
-    }
-    // Chỉ lưu vào receivedData nếu data đúng là một object tọa độ
-    else if (typeof data === "object" && data.message === "location") {
-        receivedData = data;
-    }
-}
 
+    // Xử lý các tin nhắn đến từ Nhân vật chính (haiz)
+    if (name === "haiz") {
 
+        // 1. Nếu data là Object (chứa lệnh cave_sync hoặc tọa độ location)
+        if (typeof data === "object" && data !== null) {
+            
+            // Nhận lệnh chọn trong hang động (cave_sync)
+            if (data.type === "cave_sync") {
+                reply_id = data.reply_id;
+                console.log("Đã nhận reply_id từ haiz:", reply_id);
+            } 
+            // Nhận tọa độ vị trí
+            else if (data.message === "location") {
+                receivedData = data;
+            }
+            
+            return; // Xử lý xong object thì dừng, không chạy các lệnh chuỗi bên dưới
+        }
 
-	
+        // 2. Nếu data là Chuỗi (String) -> Xử lý các lệnh teleport / flag / idmap cũ
+        const teleportCommands = {
+            goo: "crypt",
+            goo1: "tomb",
+            goo2: "winter_instance",
+            goo3: "spider_instance",
+        };
+
+        const flagCommands = {
+            crypt: () => { cryts = 1; },
+            tomb: () => { tomb = 1; },
+            spidergame: () => { tomb = 1; },
+            mage: () => { tomb = 1; },
+            dream: () => { tomb = 1; },
+            landau1: () => { landaucyp = 1; },
+            landau0: () => { landaucyp = 0; },
+            bossvip1: () => { bossvip = 1; },
+            bossvip2: () => { bossvip = 2; },
+            bossvip3: () => { bossvip = 3; },
+            bossvip4: () => { bossvip = 4; },
+            bossvip5: () => { bossvip = 5; },		
+            crabxx: () => { crab = 1; },
+        };
+
+        const knownKeys = [
+            ...Object.keys(teleportCommands),
+            ...Object.keys(flagCommands)
+        ];
+
+        if (teleportCommands[data]) {
+            const targetMap = teleportCommands[data];
+            if (character.map !== targetMap) {
+                enter(targetMap, idmap);
+            }
+        }
+        else if (flagCommands[data]) {
+            flagCommands[data]();
+        }
+        else if (typeof data === "string" && !knownKeys.includes(data)) {
+            idmap = data;
+        }
+    }
 }
 
 
