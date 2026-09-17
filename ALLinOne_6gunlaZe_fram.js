@@ -1993,6 +1993,7 @@ function Xmage() {
 		  
 
 function dream_game() {
+if (character.cave) return
 	
 if(character.map == "main" && distance(character, { x: 818, y: 1201 }) < 50 ) {
 	cave_enter();
