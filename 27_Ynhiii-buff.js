@@ -28,7 +28,6 @@ setInterval(() => {
 
 
 
-
 	
 let lastCallTime = 0; // Biến lưu trữ thời gian mốc
 let delayThreshold = 200; // Ngưỡng thời gian 200ms
@@ -250,6 +249,7 @@ function on_cm(name, data) {
         if (data === "goo1" && character.map !== "tomb") enter("tomb", idmap);
         if (data === "goo2" && character.map !== "winter_instance") enter("winter_instance", idmap);
         if (data === "goo3" && character.map !== "spider_instance") enter("spider_instance", idmap);
+        if (data === "dream" && !character.cave) cave_enter();
 
         // Lệnh cập nhật ID Map (nếu data là chuỗi đơn thuần)
         if (typeof data === 'string' && !["goo", "goo1", "goo2", "goo3"].includes(data)) {
