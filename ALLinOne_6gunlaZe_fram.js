@@ -184,7 +184,8 @@ async function eventer() {
 	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
           Xmage()
 		  spider_game()
-		
+		  dream_game()
+
     } else if (priorityEvents.some(e => parent?.S?.[e]?.live)) {
 			     folowhaizevents = true;
     // const activeEvent = priorityEvents.find(e => parent?.S?.[e]?.live);
@@ -1988,6 +1989,16 @@ function Xmage() {
     }
 }
 
+
+		  
+
+function dream_game() {
+	
+if(character.map == "main" && distance(character, { x: 818, y: 1201 }) < 50 ) {
+	cave_enter();
+}
+	
+}
 
 function spider_game() {
 if (character.map != "spider_instance") return
