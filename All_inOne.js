@@ -4431,6 +4431,7 @@ setInterval(() => {
 
 
 setTimeout(() => {
+	return  // tạm ngưng nhảy sever
     // chạy lần đầu sau 3s
     checkServersForMonsters(["franky"], ["icegolem"], ["dragold"]);
 
