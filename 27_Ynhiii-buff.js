@@ -216,17 +216,35 @@ function on_magiport(name){
 
 function on_cm(name, data) {
 
- if(data == "TemporalTime")lastTemporalTime = Date.now();
+    if (data == "TemporalTime") lastTemporalTime = Date.now();
 
     // 1. Phản hồi kỹ thuật (Heal) cho nhóm
     if (["haiz", "6gunlaZe", "tienV", "LyThanhThu", nhanvatphu].includes(name)) {
         if (data === "bosshelp") {
-            if (!is_on_cooldown("partyheal") && character.mp > 750 && ms_to_next_skill("attack") > 100 ) use_skill("partyheal");
+            if (!is_on_cooldown("partyheal") && character.mp > 750 && ms_to_next_skill("attack") > 150) use_skill("partyheal");
         }
     }
 
     // 2. Chỉ nhận lệnh từ Leader "haiz"
     if (name === "haiz") {
+
+        // --- XỬ LÝ DỮ LIỆU DẠNG OBJECT ---
+        if (typeof data === 'object' && data !== null) {
+            
+            // Nhận lệnh chọn trong hang động
+            if (data.type === "cave_sync") {
+                reply_id = data.reply_id;
+                console.log("Đã nhận reply_id từ haiz:", reply_id);
+            } 
+            // CẬP NHẬT TỌA ĐỘ: Chỉ nhận khi đúng là message: "location"
+            else if (data.message === "location") {
+                receivedData = data; 
+            }
+
+            return; // Xử lý xong Object thì dừng, không xuống đoạn kiểm tra Chuỗi bên dưới
+        }
+
+        // --- XỬ LÝ DỮ LIỆU DẠNG CHUỖI (STRING) ---
         // Lệnh vào cổng (Instance)
         if (data === "goo" && character.map !== "crypt") enter("crypt", idmap);
         if (data === "goo1" && character.map !== "tomb") enter("tomb", idmap);
@@ -236,11 +254,6 @@ function on_cm(name, data) {
         // Lệnh cập nhật ID Map (nếu data là chuỗi đơn thuần)
         if (typeof data === 'string' && !["goo", "goo1", "goo2", "goo3"].includes(data)) {
             idmap = data;
-        }
-
-        // CẬP NHẬT TỌA ĐỘ: Chỉ nhận khi đúng là message: "location"
-        if (typeof data === 'object' && data.message === "location") {
-            receivedData = data; 
         }
     }
 }
@@ -2033,7 +2046,31 @@ setInterval(checkPVPandARENA, 1000); // 1000ms = 1 giây
 
 
 
+var MAIN_CHARACTER = "haiz";
+var reply_id = null;
+var last_choice = null;
 
+
+// Xử lý khi gặp sự kiện hang động
+character.on("cave", async function(state) {
+    var choice = state && state.choice;
+    if (!choice || choice.resolved) return;
+    if (choice.id === last_choice) return;
+
+    var offered = choice.options.some(function(o) {
+        return o.id === reply_id && !o.unavailable;
+    });
+
+    if (!reply_id || !offered) return;
+
+    last_choice = choice.id;
+    try {
+        await cave_reply(choice.id, reply_id);
+        reply_id = null; // Reset biến sau khi đã trả lời xong
+    } catch (error) {
+        console.log("Lỗi khi chọn:", error);
+    }
+});
 
 
 
