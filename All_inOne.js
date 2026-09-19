@@ -4,7 +4,7 @@ const swapCooldown = 500;
 game_log("Game vs 1.3");
 
 /*************** CONFIG ***************/
-const HOME_SERVER = { region: "ASIA", id: "II" };
+const HOME_SERVER = { region: "EU", id: "III" };
 const RUN_SERVER = { region: "US", id: "I" }; 
 
 const SERVER_RULES = [
