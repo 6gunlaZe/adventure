@@ -3454,8 +3454,9 @@ function waitForHPAndSwitch() {
 
 // ----------------------------
 // Trường hợp autobuyPonty = 0 → Chế độ reset server / thời gian reset 2h = autorelog > 1 và nếu muốn tăng thì  + 1 mỗi tăng 1 giời reset sever ví dụ > 2 thì reset sau 3g
+	// tạm tắt autorelog
 // ----------------------------
-if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 1) {
+if (autobuyPonty === 0 && character.hp > 10000 && autorelog > 100000000) {
 
     // Không có chest → reset server
     if (chestIds.length === 0) {
