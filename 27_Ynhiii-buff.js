@@ -1276,7 +1276,7 @@ const LOW_MP_CURSE_TYPES = new Set([
     "a6",
 ]);
 
-const KhonggioihanQuai = new Set([ //không giới hạn khoảng cách tới leader
+const KhonggioihanQuai = new Set([ // Không giới hạn khoảng cách tới leader
     "franky",
     "icegolem",
     "crabxx",
@@ -1286,19 +1286,14 @@ const KhonggioihanQuai = new Set([ //không giới hạn khoảng cách tới le
     "dragold",
 ]);
 
-
-
-const CURSE_LEADER_RADIUS = 18; // khoảng cách mặc định quanh leader cho các quái còn lại không được định nghĩa
-
-//khoảng cách cho phép từ ynhi
+const CURSE_LEADER_RADIUS = 18; // Khoảng cách mặc định quanh leader
 const CURSE_HIGH_MP_CAST_RANGE = 140;
 const CURSE_LOW_MP_CAST_RANGE = 60;
 
-const CURSE_BIG_HP = 40000;
-const CURSE_TANK_HP = 30000;
+const CURSE_BIG_HP = 50000;
+const CURSE_TANK_HP = 40000;
 
-
-// ================= Curse =================
+// ================= Curse Helpers =================
 
 function tryCurse(target, mpReq = 4200) {
     if (
@@ -1306,7 +1301,8 @@ function tryCurse(target, mpReq = 4200) {
         character.mp > mpReq &&
         !is_on_cooldown("curse") &&
         !target.s?.cursed &&
-        character.map !== "winter_instance"
+        character.map !== "winter_instance" &&
+        is_in_range(target, "curse")
     ) {
         use_skill("curse", target);
         return true;
@@ -1314,111 +1310,104 @@ function tryCurse(target, mpReq = 4200) {
     return false;
 }
 
-
 function curseLogic(currentTarget) {
+    if (is_on_cooldown("curse") || character.map === "winter_instance") return false;
 
-   if (is_on_cooldown("curse")) return
-	
     const leader = get_player("haiz");
 
     if (leader) {
+        let markTarget = null;      // Cho logic 3.5
+        let maxMarkHp = 0;
 
-        let maxHpTarget = null;
-        let maxHp = 0;
+        let maxHpTarget = null;     // Cho logic 4
+        let maxHp = CURSE_BIG_HP;
 
         for (const id in parent.entities) {
-
             const m = parent.entities[id];
 
             if (
                 !m ||
                 m.type !== "monster" ||
                 m.dead ||
-                !m.target
+                !m.target ||
+                m.s?.cursed // Bỏ qua nếu đã bị cursed
             ) continue;
 
             const isHighMp = HIGH_MP_CURSE_TYPES.has(m.mtype);
             const isLowMp  = LOW_MP_CURSE_TYPES.has(m.mtype);
-            const Khonggioihan  = KhonggioihanQuai.has(m.mtype);
+            const Khonggioihan = KhonggioihanQuai.has(m.mtype);
 
+            // 1. Kiểm tra khoảng cách với Leader
+            const leaderRadius = (isHighMp || isLowMp) ? 50 : CURSE_LEADER_RADIUS;
+            if (!Khonggioihan && distance(m, leader) > leaderRadius) continue;
 
-            // Bán kính quanh leader
-            const leaderRadius =
-                (isHighMp || isLowMp)
-                    ? 50
-                    : CURSE_LEADER_RADIUS;
+            const distToSelf = distance(character, m);
 
-            if (distance(m, leader) > leaderRadius && !Khonggioihan) continue;
-
-            const dist = distance(character, m);
-
-            // ===================================================
-            // Boss / quái đặc biệt (MP > 4500)
-            // ===================================================
-            if (
-                isHighMp &&
-                dist < CURSE_HIGH_MP_CAST_RANGE &&
-                tryCurse(m)
-            ) {
-                return true;
+            // 2. Quái ưu tiên High MP
+            if (isHighMp) {
+                if (distToSelf <= CURSE_HIGH_MP_CAST_RANGE && tryCurse(m, 4200)) {
+                    return true;
+                }
+                continue;
             }
 
-            // ===================================================
-            // Quái đặc biệt (MP > 2000)
-            // ===================================================
-            if (
-                isLowMp &&
-                dist < CURSE_LOW_MP_CAST_RANGE &&
-                tryCurse(m, 3000)
-            ) {
-                return true;
+            // 3. Quái ưu tiên Low MP
+            if (isLowMp) {
+                if (distToSelf <= CURSE_LOW_MP_CAST_RANGE && tryCurse(m, 3000)) {
+                    return true;
+                }
+                continue;
             }
 
-            // ===================================================
-            // Quái HP lớn nhất quanh leader
-            // ===================================================
-            if (!isHighMp && !isLowMp && m.hp > maxHp) {
+            // Chỉ xét quái nằm trong tầm cast Curse cho các bước tiếp theo
+            if (!is_in_range(m, "curse")) continue;
+
+            // 3.5. Ưu tiên quái đang bị Huntersmark (m.s.marked hoặc m.s.huntersmark)
+            if (m.s?.marked || m.s?.huntersmark) {
+                if (m.hp > maxMarkHp) {
+                    maxMarkHp = m.hp;
+                    markTarget = m;
+                }
+                continue; // Nếu đã là quái marked thì không cần lọt xuống bước 4 nữa
+            }
+
+            // 4. Lọc quái thường có HP lớn nhất (> 40,000 HP)
+            if (m.hp > maxHp) {
                 maxHp = m.hp;
                 maxHpTarget = m;
             }
         }
 
-        // Curse quái HP lớn nhất
-        if (
-            maxHpTarget &&
-            maxHp > CURSE_BIG_HP &&
-            tryCurse(maxHpTarget)
-        ) {
+        // Thực thi Logic 3.5: Curse quái bị Mark trước
+        if (markTarget && tryCurse(markTarget, 4200)) {
+            return true;
+        }
+
+        // Thực thi Logic 4: Curse quái HP lớn nhất nếu không có quái bị Mark
+        if (maxHpTarget && tryCurse(maxHpTarget, 4200)) {
             return true;
         }
     }
 
     // ===================================================
-    // Quái leader đang tank
+    // Quái leader đang tank (Fallback)
     // ===================================================
     if (
-        currentTarget &&
+        currentTarget && leader &&
+        !currentTarget.s?.cursed &&
         currentTarget.target === "haiz" &&
-        currentTarget.hp > CURSE_TANK_HP
+        currentTarget.hp > CURSE_TANK_HP && distance(leader, currentTarget) < 45
     ) {
-
-        if (
-            distance(character, currentTarget) < 15 &&
-            tryCurse(currentTarget)
-        ) {
-            return true;
-        }
-
-        if (
-            currentTarget.mtype !== crepp &&
-            tryCurse(currentTarget)
-        ) {
+        if (tryCurse(currentTarget, 4200)) {
             return true;
         }
     }
 
     return false;
 }
+
+
+
 
 
 
