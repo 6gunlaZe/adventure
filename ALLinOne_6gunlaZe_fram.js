@@ -1024,25 +1024,26 @@ function get_nearest_monster_v2(args = {}) {
 }
 
 
-
 // Hàm tìm mục tiêu cho cả 2 skill trong ĐÚNG 1 VÒNG LẶP
 function getSkillTargets() {
 	let supershotTarget = null;
 	let maxSupershotDist = -1;
 
 	let markTarget = null;
-	let maxMarkHp = 100000; // Chỉ tìm quái > 100k HP
+	let maxMarkHp = 70000; // Chỉ tìm quái > HP
+	let markPriority = 0;   // 2: Quái quanh haiz (<=30px), 1: Quái thường
 
 	// Kiểm tra điều kiện chung trước để tránh quét thừa
 	const canSupershot = !smart.moving && !is_on_cooldown("supershot");
 	const canMark = character.map !== "winter_instance" && !is_on_cooldown("huntersmark");
 
-	// Nếu cả 2 skill đều đang hồi chiêu thì không cần quét entities làm gì
+	// Nếu cả 2 skill đều đang hồi chiêu thì không cần quét entities
 	if (!canSupershot && !canMark) {
 		return { supershotTarget: null, markTarget: null };
 	}
 
-	// Tối ưu: Kiểm tra Ynhi 1 lần cho Supershot
+	// Tối ưu: Lấy thông tin player 1 lần duy nhất
+	const haiz = canMark ? get_player("haiz") : null;
 	const ynhi = canSupershot ? get_player("Ynhi") : null;
 	const isYnhiValid = ynhi && distance(character, ynhi) <= 150;
 
@@ -1055,15 +1056,20 @@ function getSkillTargets() {
 
 		if (!e || e.type !== "monster" || e.dead) continue;
 
-		// 1️⃣ LOGIC CHỌN HUNTER'S MARK (Đang target + trong range + HP > 100k + HP lớn nhất)
-		if (canMark && e.target && is_in_range(e) && !e.s?.marked) {
-			if (e.hp > maxMarkHp) {
+		// 1️⃣ LOGIC CHỌN HUNTER'S MARK
+		if (canMark && e.target && is_in_range(e) && !e.s?.marked && e.hp > maxMarkHp) {
+			// Xกำหนด cấp độ ưu tiên: Quanh haiz <= 30px là cấp 2, ngược lại là cấp 1
+			const currentPriority = (haiz && distance(e, haiz) <= 30) ? 2 : 1;
+
+			// Ưu tiên theo cấp độ (quanh haiz trước), nếu cùng cấp độ thì chọn con HP lớn hơn
+			if (currentPriority > markPriority || (currentPriority === markPriority && e.hp > maxMarkHp)) {
+				markPriority = currentPriority;
 				maxMarkHp = e.hp;
 				markTarget = e;
 			}
 		}
 
-		// 2️⃣ LOGIC CHỌN SUPERSHOT (Giữ nguyên logic điều kiện của bạn)
+		// 2️⃣ LOGIC CHỌN SUPERSHOT
 		if (canSupershot && isYnhiValid && is_in_range(e, "supershot")) {
 			const dist = distance(character, e);
 			let isValidSupershot = false;
@@ -1087,6 +1093,7 @@ function getSkillTargets() {
 
 	return { supershotTarget, markTarget };
 }
+
 
 async function skillLoop() {
 	try {
