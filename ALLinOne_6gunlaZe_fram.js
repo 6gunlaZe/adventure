@@ -1030,8 +1030,8 @@ function getSkillTargets() {
 	let maxSupershotDist = -1;
 
 	let markTarget = null;
-	let maxMarkHp = 70000; // Chỉ tìm quái > HP
-	let markPriority = 0;   // 2: Quái quanh haiz (<=30px), 1: Quái thường
+	let maxMarkHp = 70000; // Chỉ tìm quái > HP quy định
+	let markPriority = 0;   // 3: Cursed, 2: Quái quanh haiz (<=30px), 1: Quái thường
 
 	// Kiểm tra điều kiện chung trước để tránh quét thừa
 	const canSupershot = !smart.moving && !is_on_cooldown("supershot");
@@ -1058,10 +1058,15 @@ function getSkillTargets() {
 
 		// 1️⃣ LOGIC CHỌN HUNTER'S MARK
 		if (canMark && e.target && is_in_range(e) && !e.s?.marked && e.hp > maxMarkHp) {
-			// Xกำหนด cấp độ ưu tiên: Quanh haiz <= 30px là cấp 2, ngược lại là cấp 1
-			const currentPriority = (haiz && distance(e, haiz) <= 30) ? 2 : 1;
+			// Xác định cấp độ ưu tiên: Cursed (3) > Quanh haiz <= 30px (2) > Khác (1)
+			let currentPriority = 1;
+			if (e.s?.cursed) {
+				currentPriority = 3;
+			} else if (haiz && distance(e, haiz) <= 30) {
+				currentPriority = 2;
+			}
 
-			// Ưu tiên theo cấp độ (quanh haiz trước), nếu cùng cấp độ thì chọn con HP lớn hơn
+			// So sánh ưu tiên: Cấp ưu tiên cao hơn sẽ chọn, nếu bằng cấp ưu tiên thì chọn con HP cao hơn
 			if (currentPriority > markPriority || (currentPriority === markPriority && e.hp > maxMarkHp)) {
 				markPriority = currentPriority;
 				maxMarkHp = e.hp;
