@@ -1832,9 +1832,9 @@ function targetLoop() {
     try {
         let nearest = null;
 
-        // 1️⃣ Ưu tiên targetNames gần nhà
+        // 1️⃣ Ưu tiên kết thúc quái sắp chết //// tạm bỏ
         if (
-            character.map === mobMap &&
+            character.map === mobMap && 1 > 2 &&
             distance(character, locations[home][0]) < 250
         ) {
     nearest = findByNames({
