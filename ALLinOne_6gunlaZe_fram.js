@@ -1025,84 +1025,95 @@ function get_nearest_monster_v2(args = {}) {
 
 
 
+// Hàm tìm mục tiêu cho cả 2 skill trong ĐÚNG 1 VÒNG LẶP
+function getSkillTargets() {
+	let supershotTarget = null;
+	let maxSupershotDist = -1;
 
-function getSupershotTarget() {
-	if (smart.moving) return null;
+	let markTarget = null;
+	let maxMarkHp = 100000; // Chỉ tìm quái > 100k HP
 
-	const ynhi = get_player("Ynhi");
-	if (!ynhi || distance(character, ynhi) > 150) return null;
+	// Kiểm tra điều kiện chung trước để tránh quét thừa
+	const canSupershot = !smart.moving && !is_on_cooldown("supershot");
+	const canMark = character.map !== "winter_instance" && !is_on_cooldown("huntersmark");
 
-	const validNames = ["wolf"];
-	const extraNames = ["bscorpion1", "franky"];
-
-	let candidates = Object.values(parent.entities).filter(e => {
-		if (e.type !== "monster" || e.dead) return false;
-
-		// 1️⃣ Quái chuẩn
-		if (validNames.includes(e.mtype)) {
-			return e.hp > 10000 &&
-				e.level < 3 &&
-				is_in_range(e, "supershot") &&
-				distance(character, e) <= 450 &&
-				distance(character, e) > (character.range + 20);
-		}
-
-		// 2️⃣ Quái extra theo tên
-		if (extraNames.includes(e.mtype)) {
-			return e.target && is_in_range(e, "supershot");
-		}
-
-		// 3️⃣ Quái đang combat + bị cursed (bất kể mtype) dễ dàng bao trùm tất cả trường hợp
-		if (e.target && e.s && e.s.cursed && e.hp > 15000) {
-			return is_in_range(e, "supershot");
-		}
-
-		return false;
-	});
-
-	if (candidates.length > 0) {
-		candidates.sort((a, b) => distance(character, b) - distance(character, a));
-		return candidates[0];
+	// Nếu cả 2 skill đều đang hồi chiêu thì không cần quét entities làm gì
+	if (!canSupershot && !canMark) {
+		return { supershotTarget: null, markTarget: null };
 	}
 
-	return null;
+	// Tối ưu: Kiểm tra Ynhi 1 lần cho Supershot
+	const ynhi = canSupershot ? get_player("Ynhi") : null;
+	const isYnhiValid = ynhi && distance(character, ynhi) <= 150;
+
+	const maxFarDist = 450;
+	const minFarDist = character.range + 20;
+
+	// 🔄 DUYỆT 1 LẦN DUY NHẤT TOÀN BỘ ENTITIES
+	for (const id in parent.entities) {
+		const e = parent.entities[id];
+
+		if (!e || e.type !== "monster" || e.dead) continue;
+
+		// 1️⃣ LOGIC CHỌN HUNTER'S MARK (Đang target + trong range + HP > 100k + HP lớn nhất)
+		if (canMark && e.target && is_in_range(e) && !e.s?.marked) {
+			if (e.hp > maxMarkHp) {
+				maxMarkHp = e.hp;
+				markTarget = e;
+			}
+		}
+
+		// 2️⃣ LOGIC CHỌN SUPERSHOT (Giữ nguyên logic điều kiện của bạn)
+		if (canSupershot && isYnhiValid && is_in_range(e, "supershot")) {
+			const dist = distance(character, e);
+			let isValidSupershot = false;
+
+			if (e.mtype === "wolf") {
+				if (e.hp > 10000 && e.level < 3 && dist <= maxFarDist && dist > minFarDist) {
+					isValidSupershot = true;
+				}
+			} else if (e.mtype === "bscorpion1" || e.mtype === "franky") {
+				if (e.target) isValidSupershot = true;
+			} else if (e.target && e.s && e.s.cursed && e.hp > 15000) {
+				isValidSupershot = true;
+			}
+
+			if (isValidSupershot && dist > maxSupershotDist) {
+				maxSupershotDist = dist;
+				supershotTarget = e;
+			}
+		}
+	}
+
+	return { supershotTarget, markTarget };
 }
 
-
-
-
-
-
-
-
 async function skillLoop() {
-    try {
-        const target = getSupershotTarget();
+	try {
+		if (character.mp > 550) {
+			// Gom quét 1 lượt tại đây
+			const { supershotTarget, markTarget } = getSkillTargets();
 
+			// Bắn Hunter's Mark nếu tìm thấy
+			if (markTarget) {
+				await use_skill("huntersmark", markTarget);
+				game_log("🎯 Hunter's Mark -> " + markTarget.mtype + " (HP: " + markTarget.hp + ")");
+			}
 
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
-if ( tagetskill.length == 1 && character.map != "winter_instance" && character.mp > 550 )use_skill("huntersmark", tagetskill);
+			// Bắn Supershot nếu tìm thấy
+			if (supershotTarget) {
+				await use_skill("supershot", supershotTarget);
+				game_log("💥 Supershot -> " + supershotTarget.mtype + " (HP: " + supershotTarget.hp + ")");
+			}
+		}
+	} catch (e) {
+		// console.log("Skill loop error:", e);
+	}
 
-
-
-		
-        if (
-            target &&
-            character.mp > 550 &&
-            !is_on_cooldown("supershot")
-        ) {
-            await use_skill("supershot", target);
-            game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
-        }
-    } catch (e) {
-        //console.log("Skill loop error:", e);
-    }
-
-    setTimeout(skillLoop, 1000); // lặp 1s
+	setTimeout(skillLoop, 250); // Chạy mượt mỗi 250ms
 }
 
 skillLoop();
-
 
 
 
