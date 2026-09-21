@@ -1073,36 +1073,50 @@ function getSupershotTarget() {
 
 
 
-
 async function skillLoop() {
     try {
-        const target = getSupershotTarget();
+        // Return sớm nếu không đủ MP dùng kỹ năng tối thiểu (550 MP)
+        if (character.mp <= 550) return;
 
+        const supershotReady = !is_on_cooldown("supershot");
+        const markReady = !is_on_cooldown("huntersmark");
 
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 40000 }) 
-if ( tagetskill.length == 1 && character.map != "winter_instance" && character.mp > 550 )use_skill("huntersmark", tagetskill);
+        // Return sớm nếu CẢ HAI kỹ năng đều đang trong thời gian hồi chiêu
+        if (!supershotReady && !markReady) return;
 
+        // 1. Xử lý Hunter's Mark
+        if (markReady && character.map !== "winter_instance") {
+            const tagetskill = getBestTargets({ 
+                max_range: character.range, 
+                havetarget: 1, 
+                cus: 1, 
+                NoMark: 1, 
+                number: 1, 
+                HPmin: 40000 
+            });
 
+            if (tagetskill.length === 1) {
+                // Thường dùng use_skill("huntersmark", tagetskill[0]) nếu tagetskill là mảng
+                use_skill("huntersmark", tagetskill[0] || tagetskill);
+            }
+        }
 
-		
-        if (
-            target &&
-            character.mp > 550 &&
-            !is_on_cooldown("supershot")
-        ) {
-            await use_skill("supershot", target);
-            game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
+        // 2. Xử lý Supershot
+        if (supershotReady) {
+            const target = getSupershotTarget();
+            if (target) {
+                await use_skill("supershot", target);
+                game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
+            }
         }
     } catch (e) {
-        //console.log("Skill loop error:", e);
+        // console.log("Skill loop error:", e);
+    } finally {
+        setTimeout(skillLoop, 500); 
     }
-
-    setTimeout(skillLoop, 1000); // lặp 1s
 }
 
 skillLoop();
-
-
 
 
 
