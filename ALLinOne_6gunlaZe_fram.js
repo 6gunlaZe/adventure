@@ -1079,7 +1079,7 @@ async function skillLoop() {
         const target = getSupershotTarget();
 
 
-var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
+var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 40000 }) 
 if ( tagetskill.length == 1 && character.map != "winter_instance" && character.mp > 550 )use_skill("huntersmark", tagetskill);
 
 
@@ -2492,7 +2492,7 @@ if (options.HP && entity.hp > options.HP) continue
 		if (options.havetarget && !entity.target ) continue
 		if (options.Nohavetarget && entity.target ) continue
 		if (options.fire && entity.s.burned  ) continue
-	        if (options.cus && !entity.s["cursed"]  ) continue
+        if (options.cus && (!entity.s?.cursed || entity.s.cursed.ms < 4000)) continue;
 	    	if (options.NoMark && entity.s.marked ) continue
 		if (options.targetNO && entity.target == options.targetNO) continue     
  		if (options.target1 && options.target2 && options.target3 && entity.target != options.target1 && entity.target != options.target2 && entity.target != options.target3)  continue
