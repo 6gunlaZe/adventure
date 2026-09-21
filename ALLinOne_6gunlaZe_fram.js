@@ -1247,7 +1247,7 @@ const ynhi_far = !ynhi || distance(character, ynhi) > range;
 // =========================
 const TEMPORAL_RADIUS = 270;   // bán kính tính quái quanh người
 const TEMPORAL_GAP = 5;        // hụt bao nhiêu quái thì dùng skill
-const TEMPORAL_DELAY = 900;    // delay trước khi cast
+const TEMPORAL_DELAY = 200;    // delay trước khi cast
 const TEMPORAL_COOLDOWN = 10000; // tối thiểu 10 giây giữa 2 lần cast
 
 // =========================
