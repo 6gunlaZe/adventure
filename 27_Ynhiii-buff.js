@@ -1290,7 +1290,7 @@ const CURSE_LEADER_RADIUS = 18; // Khoảng cách mặc định quanh leader
 const CURSE_HIGH_MP_CAST_RANGE = 140;
 const CURSE_LOW_MP_CAST_RANGE = 60;
 
-const CURSE_BIG_HP = 50000;
+const CURSE_BIG_HP = 40000;
 const CURSE_TANK_HP = 40000;
 
 // ================= Curse Helpers =================
@@ -1317,7 +1317,7 @@ function curseLogic(currentTarget) {
 
     if (leader) {
         let markTarget = null;      // Cho logic 3.5
-        let maxMarkHp = 0;
+        let maxMarkHp = 250000;
 
         let maxHpTarget = null;     // Cho logic 4
         let maxHp = CURSE_BIG_HP;
