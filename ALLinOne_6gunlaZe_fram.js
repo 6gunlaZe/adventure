@@ -1030,8 +1030,7 @@ function getSkillTargets() {
 	let maxSupershotDist = -1;
 
 	let markTarget = null;
-	let maxMarkHp = 70000; // Chỉ tìm quái > HP quy định
-	let markPriority = 0;   // 3: Cursed, 2: Quái quanh haiz (<=30px), 1: Quái thường
+	let maxMarkHp = 0; // Khởi tạo mốc HP để tìm con có HP cao nhất
 
 	// Kiểm tra điều kiện chung trước để tránh quét thừa
 	const canSupershot = !smart.moving && !is_on_cooldown("supershot");
@@ -1042,8 +1041,7 @@ function getSkillTargets() {
 		return { supershotTarget: null, markTarget: null };
 	}
 
-	// Tối ưu: Lấy thông tin player 1 lần duy nhất
-	const haiz = canMark ? get_player("haiz") : null;
+	// Tối ưu: Lấy thông tin player 1 lần duy nhất nếu cần dùng cho supershot
 	const ynhi = canSupershot ? get_player("Ynhi") : null;
 	const isYnhiValid = ynhi && distance(character, ynhi) <= 150;
 
@@ -1056,19 +1054,17 @@ function getSkillTargets() {
 
 		if (!e || e.type !== "monster" || e.dead) continue;
 
-		// 1️⃣ LOGIC CHỌN HUNTER'S MARK
-		if (canMark && e.target && is_in_range(e) && !e.s?.marked && e.hp > maxMarkHp) {
-			// Xác định cấp độ ưu tiên: Cursed (3) > Quanh haiz <= 30px (2) > Khác (1)
-			let currentPriority = 1;
-			if (e.s?.cursed) {
-				currentPriority = 3;
-			} else if (haiz && distance(e, haiz) <= 30) {
-				currentPriority = 2;
-			}
-
-			// So sánh ưu tiên: Cấp ưu tiên cao hơn sẽ chọn, nếu bằng cấp ưu tiên thì chọn con HP cao hơn
-			if (currentPriority > markPriority || (currentPriority === markPriority && e.hp > maxMarkHp)) {
-				markPriority = currentPriority;
+		// 1️⃣ LOGIC CHỌN HUNTER'S MARK (MỚI)
+		// Điều kiện: Trong tầm skill, chưa dính Mark, có Cursed và Cursed còn trên 4s (4000ms)
+		if (
+			canMark && 
+			is_in_range(e) && 
+			!e.s?.marked && 
+			e.s?.cursed && 
+			e.s.cursed.ms > 4000
+		) {
+			// Chọn quái có HP lớn nhất
+			if (e.hp > maxMarkHp) {
 				maxMarkHp = e.hp;
 				markTarget = e;
 			}
