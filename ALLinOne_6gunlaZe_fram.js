@@ -184,8 +184,7 @@ async function eventer() {
 	} else if (tomb > 0) { //dùng chung cho cả tomb và xmage
           Xmage()
 		  spider_game()
-		  dream_game()
-
+		
     } else if (priorityEvents.some(e => parent?.S?.[e]?.live)) {
 			     folowhaizevents = true;
     // const activeEvent = priorityEvents.find(e => parent?.S?.[e]?.live);
@@ -822,7 +821,7 @@ const equipmentSets = {
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 11, l: "l" },
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
 		
     ],
     dame: [
@@ -833,7 +832,7 @@ const equipmentSets = {
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 11, l: "l" },
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
 		
     ],
     def: [
@@ -1024,104 +1023,85 @@ function get_nearest_monster_v2(args = {}) {
 }
 
 
-// Hàm tìm mục tiêu cho cả 2 skill trong ĐÚNG 1 VÒNG LẶP
-function getSkillTargets() {
-	let supershotTarget = null;
-	let maxSupershotDist = -1;
 
-	let markTarget = null;
-	let maxMarkHp = 0; // Khởi tạo mốc HP để tìm con có HP cao nhất
 
-	// Kiểm tra điều kiện chung trước để tránh quét thừa
-	const canSupershot = !smart.moving && !is_on_cooldown("supershot");
-	const canMark = character.map !== "winter_instance" && !is_on_cooldown("huntersmark");
+function getSupershotTarget() {
+	if (smart.moving) return null;
 
-	// Nếu cả 2 skill đều đang hồi chiêu thì không cần quét entities
-	if (!canSupershot && !canMark) {
-		return { supershotTarget: null, markTarget: null };
-	}
+	const ynhi = get_player("Ynhi");
+	if (!ynhi || distance(character, ynhi) > 150) return null;
 
-	// Tối ưu: Lấy thông tin player 1 lần duy nhất nếu cần dùng cho supershot
-	const ynhi = canSupershot ? get_player("Ynhi") : null;
-	const isYnhiValid = ynhi && distance(character, ynhi) <= 150;
+	const validNames = ["wolf"];
+	const extraNames = ["bscorpion1", "franky"];
 
-	const maxFarDist = 450;
-	const minFarDist = character.range + 20;
+	let candidates = Object.values(parent.entities).filter(e => {
+		if (e.type !== "monster" || e.dead) return false;
 
-	// 🔄 DUYỆT 1 LẦN DUY NHẤT TOÀN BỘ ENTITIES
-	for (const id in parent.entities) {
-		const e = parent.entities[id];
-
-		if (!e || e.type !== "monster" || e.dead) continue;
-
-		// 1️⃣ LOGIC CHỌN HUNTER'S MARK (MỚI)
-		// Điều kiện: Trong tầm skill, chưa dính Mark, có Cursed và Cursed còn trên 4s (4000ms)
-		if (
-			canMark && 
-			is_in_range(e) && 
-			!e.s?.marked && 
-			e.s?.cursed && 
-			e.s.cursed.ms > 4000
-		) {
-			// Chọn quái có HP lớn nhất
-			if (e.hp > maxMarkHp) {
-				maxMarkHp = e.hp;
-				markTarget = e;
-			}
+		// 1️⃣ Quái chuẩn
+		if (validNames.includes(e.mtype)) {
+			return e.hp > 10000 &&
+				e.level < 3 &&
+				is_in_range(e, "supershot") &&
+				distance(character, e) <= 450 &&
+				distance(character, e) > (character.range + 20);
 		}
 
-		// 2️⃣ LOGIC CHỌN SUPERSHOT
-		if (canSupershot && isYnhiValid && is_in_range(e, "supershot")) {
-			const dist = distance(character, e);
-			let isValidSupershot = false;
-
-			if (e.mtype === "wolf") {
-				if (e.hp > 10000 && e.level < 3 && dist <= maxFarDist && dist > minFarDist) {
-					isValidSupershot = true;
-				}
-			} else if (e.mtype === "bscorpion1" || e.mtype === "franky") {
-				if (e.target) isValidSupershot = true;
-			} else if (e.target && e.s && e.s.cursed && e.hp > 15000) {
-				isValidSupershot = true;
-			}
-
-			if (isValidSupershot && dist > maxSupershotDist) {
-				maxSupershotDist = dist;
-				supershotTarget = e;
-			}
+		// 2️⃣ Quái extra theo tên
+		if (extraNames.includes(e.mtype)) {
+			return e.target && is_in_range(e, "supershot");
 		}
+
+		// 3️⃣ Quái đang combat + bị cursed (bất kể mtype) dễ dàng bao trùm tất cả trường hợp
+		if (e.target && e.s && e.s.cursed && e.hp > 15000) {
+			return is_in_range(e, "supershot");
+		}
+
+		return false;
+	});
+
+	if (candidates.length > 0) {
+		candidates.sort((a, b) => distance(character, b) - distance(character, a));
+		return candidates[0];
 	}
 
-	return { supershotTarget, markTarget };
+	return null;
 }
+
+
+
+
+
+
 
 
 async function skillLoop() {
-	try {
-		if (character.mp > 550) {
-			// Gom quét 1 lượt tại đây
-			const { supershotTarget, markTarget } = getSkillTargets();
+    try {
+        const target = getSupershotTarget();
 
-			// Bắn Hunter's Mark nếu tìm thấy
-			if (markTarget) {
-				await use_skill("huntersmark", markTarget);
-				game_log("🎯 Hunter's Mark -> " + markTarget.mtype + " (HP: " + markTarget.hp + ")");
-			}
 
-			// Bắn Supershot nếu tìm thấy
-			if (supershotTarget) {
-				await use_skill("supershot", supershotTarget);
-				game_log("💥 Supershot -> " + supershotTarget.mtype + " (HP: " + supershotTarget.hp + ")");
-			}
-		}
-	} catch (e) {
-		// console.log("Skill loop error:", e);
-	}
+var tagetskill = getBestTargets({ max_range: character.range, havetarget: 1, cus:1 , NoMark: 1 , number : 1 , HPmin: 20000 }) 
+if ( tagetskill.length == 1 && character.map != "winter_instance" && character.mp > 550 )use_skill("huntersmark", tagetskill);
 
-	setTimeout(skillLoop, 250); // Chạy mượt mỗi 250ms
+
+
+		
+        if (
+            target &&
+            character.mp > 550 &&
+            !is_on_cooldown("supershot")
+        ) {
+            await use_skill("supershot", target);
+            game_log("💥 Supershot vào " + target.mtype + " HP: " + target.hp);
+        }
+    } catch (e) {
+        //console.log("Skill loop error:", e);
+    }
+
+    setTimeout(skillLoop, 1000); // lặp 1s
 }
 
 skillLoop();
+
 
 
 
@@ -1783,7 +1763,7 @@ return b.hp - a.hp;
 // === 3. CHÈN QUÁI FINISHER ===
 if (targets.length >= 2 && SOLOMODE != 1) {
     const finisherIndex = targets.findIndex(m =>
-        m.hp >= 2800 &&
+        m.hp >= 1800 &&
         m.hp <= 7000 &&
         !hasStatus(m, args.statusEffects || []) &&
         !isPriorityMtype(m)
@@ -1957,33 +1937,6 @@ function Handelbossvip() {
 
 
 
-var MAIN_CHARACTER = "haiz";
-var reply_id = null;
-var last_choice = null;
-
-
-// Xử lý khi gặp sự kiện hang động
-character.on("cave", async function(state) {
-    var choice = state && state.choice;
-    if (!choice || choice.resolved) return;
-    if (choice.id === last_choice) return;
-
-    var offered = choice.options.some(function(o) {
-        return o.id === reply_id && !o.unavailable;
-    });
-
-    if (!reply_id || !offered) return;
-
-    last_choice = choice.id;
-    try {
-        await cave_reply(choice.id, reply_id);
-        reply_id = null; // Reset biến sau khi đã trả lời xong
-    } catch (error) {
-        console.log("Lỗi khi chọn:", error);
-    }
-});
-
-
 
 function Xmage() {
     if (character.map != "winter_instance") return;
@@ -2008,17 +1961,6 @@ function Xmage() {
     }
 }
 
-
-		  
-
-function dream_game() {
-if (character.cave) return
-	
-if(character.map == "main" && distance(character, { x: 818, y: 1201 }) < 50 ) {
-	cave_enter();
-}
-	
-}
 
 function spider_game() {
 if (character.map != "spider_instance") return
@@ -2211,76 +2153,79 @@ function on_magiport(name){
 
 /////////////
 function on_cm(name, data) {
-    if (data == "TemporalTime") lastTemporalTime = Date.now();
+	
+ if(data == "TemporalTime")lastTemporalTime = Date.now();
 
-    if (name == "MuaBan") {
-        if (data) {
-            evenmuaban = data;
-            folowhaizevents = true;
+	
+	if(name == "MuaBan")
+	{
+           if(data)
+	   {
+		   evenmuaban = data
+		   folowhaizevents = true;
+	   }
+	}
+
+if (name === "haiz") {
+    // Lệnh chuyển map nếu chưa đúng map
+    const teleportCommands = {
+        goo: "crypt",
+        goo1: "tomb",
+        goo2: "winter_instance",
+        goo3: "spider_instance",
+		
+    };
+
+    // Các lệnh gán biến trạng thái
+    const flagCommands = {
+        crypt: () => { cryts = 1; },
+        tomb: () => { tomb = 1; },
+        spidergame: () => { tomb = 1; },
+        mage: () => { tomb = 1; },
+        landau1: () => { landaucyp = 1; },
+        landau0: () => { landaucyp = 0; },
+        bossvip1: () => { bossvip = 1; },
+        bossvip2: () => { bossvip = 2; },
+        bossvip3: () => { bossvip = 3; },
+        bossvip4: () => { bossvip = 4; },
+        bossvip5: () => { bossvip = 5; },		
+        crabxx: () => { crab = 1; },
+		// cứ thêm lệnh mới -> gán biến là xài đc
+
+
+		
+    };
+
+    // Tổng hợp tất cả key đặc biệt để loại trừ khi gán idmap
+    const knownKeys = [
+        ...Object.keys(teleportCommands),
+        ...Object.keys(flagCommands)
+    ];
+
+    // Ưu tiên xử lý lệnh dịch chuyển
+    if (teleportCommands[data]) {
+        const targetMap = teleportCommands[data];
+        if (character.map !== targetMap) {
+            enter(targetMap, idmap);
         }
     }
-
-    // Xử lý các tin nhắn đến từ Nhân vật chính (haiz)
-    if (name === "haiz") {
-
-        // 1. Nếu data là Object (chứa lệnh cave_sync hoặc tọa độ location)
-        if (typeof data === "object" && data !== null) {
-            
-            // Nhận lệnh chọn trong hang động (cave_sync)
-            if (data.type === "cave_sync") {
-                reply_id = data.reply_id;
-                console.log("Đã nhận reply_id từ haiz:", reply_id);
-            } 
-            // Nhận tọa độ vị trí
-            else if (data.message === "location") {
-                receivedData = data;
-            }
-            
-            return; // Xử lý xong object thì dừng, không chạy các lệnh chuỗi bên dưới
-        }
-
-        // 2. Nếu data là Chuỗi (String) -> Xử lý các lệnh teleport / flag / idmap cũ
-        const teleportCommands = {
-            goo: "crypt",
-            goo1: "tomb",
-            goo2: "winter_instance",
-            goo3: "spider_instance",
-        };
-
-        const flagCommands = {
-            crypt: () => { cryts = 1; },
-            tomb: () => { tomb = 1; },
-            spidergame: () => { tomb = 1; },
-            mage: () => { tomb = 1; },
-            dream: () => { tomb = 1; },
-            landau1: () => { landaucyp = 1; },
-            landau0: () => { landaucyp = 0; },
-            bossvip1: () => { bossvip = 1; },
-            bossvip2: () => { bossvip = 2; },
-            bossvip3: () => { bossvip = 3; },
-            bossvip4: () => { bossvip = 4; },
-            bossvip5: () => { bossvip = 5; },		
-            crabxx: () => { crab = 1; },
-        };
-
-        const knownKeys = [
-            ...Object.keys(teleportCommands),
-            ...Object.keys(flagCommands)
-        ];
-
-        if (teleportCommands[data]) {
-            const targetMap = teleportCommands[data];
-            if (character.map !== targetMap) {
-                enter(targetMap, idmap);
-            }
-        }
-        else if (flagCommands[data]) {
-            flagCommands[data]();
-        }
-        else if (typeof data === "string" && !knownKeys.includes(data)) {
-            idmap = data;
-        }
+    // Nếu là các lệnh gán trạng thái
+    else if (flagCommands[data]) {
+        flagCommands[data]();
     }
+    // Nếu là chuỗi hợp lệ và không phải lệnh đặc biệt → coi như idmap
+    else if (typeof data === "string" && !knownKeys.includes(data)) {
+        idmap = data;
+    }
+    // Chỉ lưu vào receivedData nếu data đúng là một object tọa độ
+    else if (typeof data === "object" && data.message === "location") {
+        receivedData = data;
+    }
+}
+
+
+
+	
 }
 
 
@@ -3016,12 +2961,3 @@ async function check_anniversary_kiss() {
 setInterval(() => {
     check_anniversary_kiss().catch(show_json);
 }, 500);
-
-
-
-
-
-
-
-
-
