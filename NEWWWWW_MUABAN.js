@@ -822,34 +822,30 @@ function service_cleanup(req) {
     service_storage(req);
 }
 
+
 async function process_upgrade_and_compound_retrieval() {
-
-
+    // --- 0. HELPER XÁC ĐỊNH TẦNG & DI CHUYỂN ---
     const packFloor = (pack) => {
         const n = +pack.replace("items", "");
         return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
     };
 
-// Hàm di chuyển tầng chuẩn xác và không bị lỗi tọa độ
-const go = async (to) => {
-    if (!to || character.map === to) return;
-    console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
-    
-    try {
-        // smart_move tự động tìm cửa và chuyển map bank/bank_b/bank_u rất chuẩn
-        await smart_move(to);
-    } catch (err) {
-        console.log(`[StoneMer] Không thể di chuyển sang ${to}:`, err);
-    }
-};
+    const go = async (to) => {
+        if (!to || character.map === to) return;
+        console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
+        try {
+            await smart_move(to);
+        } catch (err) {
+            console.log(`[StoneMer] Lỗi di chuyển sang ${to}:`, err);
+        }
+    };
 
-    // Đếm số ô trống túi đồ chuẩn Adventure Land API
     const getFreeSlots = () => character.esize ?? character.items.filter(i => !i).length;
 
     // ----------------------------------------------------
-    // 1. Quét và gom nhóm toàn bộ món đồ hiện đang có trong Bank
+    // 1. Quét toàn bộ đồ hiện có trong Bank
     // ----------------------------------------------------
-    const bank_items_map = {}; // Key: "name_level", Value: [{pack, slot, item}]
+    const bank_items_map = {};
 
     for (const pack in character.bank) {
         if (!pack.startsWith("items")) continue;
@@ -862,45 +858,44 @@ const go = async (to) => {
 
             const level = item.level ?? 0;
             const key = `${item.name}_${level}`;
-
             if (!bank_items_map[key]) bank_items_map[key] = [];
             bank_items_map[key].push({ pack, slot, item });
         }
     }
 
-    const items_to_retrieve = [];
+    // DANH SÁCH CÁC BỘ HÀNH ĐỘNG (ACTION SETS)
+    const action_sets = [];
 
     // ----------------------------------------------------
-    // A. Check Upgrade Whitelist
+    // A. Check Upgrade Whitelist (Tạo các Bộ Upgrade 2 món)
     // ----------------------------------------------------
     for (const groupName in upgradeWhitelistVIPP) {
         const itemsInGroup = upgradeWhitelistVIPP[groupName] || [];
         const groupRules = upgradeGroups[groupName] || [];
         const validLevels = groupRules.flatMap(rule => rule.levels);
-        const validCountByName = {};
 
         for (const key in bank_items_map) {
             const [name, levelStr] = key.split("_");
             const level = parseInt(levelStr, 10);
-            if (!itemsInGroup.includes(name)) continue;
-            if (!validLevels.includes(level)) continue;
-            validCountByName[name] = (validCountByName[name] || 0) + bank_items_map[key].length;
-        }
+            if (!itemsInGroup.includes(name) || !validLevels.includes(level)) continue;
 
-        for (const key in bank_items_map) {
-            const [name, levelStr] = key.split("_");
-            const level = parseInt(levelStr, 10);
-            if (!itemsInGroup.includes(name)) continue;
-            if (!validLevels.includes(level)) continue;
-            if ((validCountByName[name] || 0) < 2) continue;
-
-            console.log(`[StoneMer] [Upgrade] Chọn ${name} +${level} (Group: ${groupName}, hợp lệ: ${validCountByName[name]} cái)`);
-            items_to_retrieve.push(...bank_items_map[key]);
+            const available = bank_items_map[key];
+            if (available.length >= 2) {
+                // Chia thành từng bộ 2 món
+                const pairsCount = Math.floor(available.length / 2);
+                for (let i = 0; i < pairsCount; i++) {
+                    action_sets.push({
+                        type: "Upgrade",
+                        name: `${name} +${level}`,
+                        items: [available[i * 2], available[i * 2 + 1]]
+                    });
+                }
+            }
         }
     }
 
     // ----------------------------------------------------
-    // B. Check Compound Rules
+    // B. Check Compound Rules (Tạo các Bộ Compound 3 món)
     // ----------------------------------------------------
     for (const compound_entry of COMPOUND_RULES) {
         for (const itemName of compound_entry.items) {
@@ -911,10 +906,12 @@ const go = async (to) => {
 
                     if (available.length >= 3) {
                         const setsCount = Math.floor(available.length / 3);
-                        const countToTake = setsCount * 3;
-                        console.log(`[StoneMer] [Compound] Phát hiện ${available.length}x ${itemName} +${validLevel} -> Sẽ rút ${countToTake} cái.`);
-                        for (let i = 0; i < countToTake; i++) {
-                            items_to_retrieve.push(available[i]);
+                        for (let i = 0; i < setsCount; i++) {
+                            action_sets.push({
+                                type: "Compound",
+                                name: `${itemName} +${validLevel}`,
+                                items: [available[i * 3], available[i * 3 + 1], available[i * 3 + 2]]
+                            });
                         }
                     }
                 }
@@ -923,7 +920,7 @@ const go = async (to) => {
     }
 
     // ----------------------------------------------------
-    // C. Check Crafting List
+    // C. Check Crafting List (Tạo Bộ Crafting)
     // ----------------------------------------------------
     const craftList112 = craftList;
 
@@ -943,7 +940,6 @@ const go = async (to) => {
             const itemGData = parent.G.items[itemName];
             const isEquipment = itemGData.upgrade || itemGData.compound;
 
-            // 1. Đếm số lượng hiện có trong Túi đồ
             let inBagCount = 0;
             character.items.forEach(i => {
                 if (i && i.name === itemName) {
@@ -957,7 +953,6 @@ const go = async (to) => {
 
             if (inBagCount >= quantity) continue;
 
-            // 2. Tìm tiếp trong Bank
             let inBankCount = 0;
             const tempBankSlots = [];
             const isBlacklisted = typeof blackListCraftFromBank !== "undefined" && blackListCraftFromBank.includes(itemName);
@@ -973,11 +968,8 @@ const go = async (to) => {
                     tempBankSlots.push(bankEntry);
                     if (inBankCount >= neededFromBank) break;
                 }
-            } else {
-                console.log(`[StoneMer] [Crafting] ${itemName} nằm trong Blacklist -> Không rút từ Bank.`);
             }
 
-            // 3. Thiếu cả ở Bag + Bank
             if (inBagCount + inBankCount < quantity) {
                 const stillNeeded = quantity - (inBagCount + inBankCount);
                 if (reqLevel === 0 && parent.G.npcs.basics?.items?.includes(itemName)) {
@@ -993,65 +985,69 @@ const go = async (to) => {
 
         if (canCraft && character.gold >= totalCost) {
             if (bankItemsForThisRecipe.length > 0) {
-                console.log(`[StoneMer] [Crafting] Khóa mục tiêu chế: ${craftName}. Cần rút ${bankItemsForThisRecipe.length} ô từ Bank.`);
-                items_to_retrieve.push(...bankItemsForThisRecipe);
-            } else {
-                console.log(`[StoneMer] [Crafting] ${craftName} đã có đủ nguyên liệu trong túi hoặc chỉ cần mua thêm đồ level 0.`);
+                action_sets.push({
+                    type: "Crafting",
+                    name: craftName,
+                    items: bankItemsForThisRecipe
+                });
             }
-            break;
+            break; // Chỉ lấy công thức hợp lệ đầu tiên
         }
     }
 
     // ----------------------------------------------------
-    // D. TIẾN HÀNH RÚT ĐỒ TỐI ƯU (GOM NHÓM THEO TẦNG)
+    // D. RÚT ĐỒ THEO BỘ (KIỂM TRA DỰ PHÒNG SỨC CHỨA)
     // ----------------------------------------------------
-    // Lọc loại bỏ các ô trùng trong Bank
-    const uniqueTargets = items_to_retrieve.filter((item, index, self) =>
-        index === self.findIndex((t) => t.pack === item.pack && t.slot === item.slot)
-    );
-
-    if (!uniqueTargets.length) {
-        console.log("[StoneMer] Không có món đồ nào cần rút.");
+    if (!action_sets.length) {
+        console.log("[StoneMer] Không có bộ đồ nào đủ điều kiện để rút.");
         return;
     }
 
-    console.log(`[StoneMer] Tổng số ô độc bản chuẩn bị rút: ${uniqueTargets.length}`);
+    console.log(`[StoneMer] Phát hiện ${action_sets.length} bộ hành động cần rút.`);
 
-    // GOM NHÓM DANH SÁCH RÚT THEO TẦNG (Chỉ di chuyển tầng 1 lần)
-    const targetsByFloor = {};
-    for (const target of uniqueTargets) {
-        const floor = packFloor(target.pack);
-        if (!targetsByFloor[floor]) targetsByFloor[floor] = [];
-        targetsByFloor[floor].push(target);
-    }
+    for (const set of action_sets) {
+        // Loại bỏ trùng lặp vị trí ô trong bộ này
+        const uniqueItemsInSet = set.items.filter((item, index, self) =>
+            index === self.findIndex((t) => t.pack === item.pack && t.slot === item.slot)
+        );
 
-    // Duyệt từng tầng -> Di chuyển 1 LẦN -> Rút hết đồ ở tầng đó
-    for (const floor in targetsByFloor) {
-        const floorItems = targetsByFloor[floor];
+        const freeSlots = getFreeSlots();
+        const neededSlots = uniqueItemsInSet.length;
 
-        // Di chuyển sang tầng
-        await go(floor);
+        // BỎ QUA nếu rút bộ này xong làm túi đồ còn ít hơn 2 ô trống dự phòng
+        if (freeSlots - neededSlots < 2) {
+            console.log(`[StoneMer] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống (cần giữ 2 ô dự phòng).`);
+            continue; 
+        }
 
-        for (const target of floorItems) {
-            const freeSlots = getFreeSlots();
-            if (freeSlots <= 5) {
-                console.log(`[StoneMer] Dừng rút đồ! Hành trang chỉ còn ${freeSlots} ô trống dự phòng.`);
-                return;
-            }
+        console.log(`[StoneMer] 📦 Bắt đầu rút TRỌN BỘ [${set.type}: ${set.name}] (${neededSlots} ô)...`);
 
-            try {
-                await bank_retrieve(target.pack, target.slot);
-                console.log(`[StoneMer] Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
-                await new Promise(resolve => setTimeout(resolve, 250));
-            } catch (err) {
-                console.log(`[StoneMer] Lỗi khi rút ${target.item.name} từ ${target.pack}[${target.slot}]:`, err);
+        // Gom nhóm đồ trong bộ theo tầng để di chuyển tối ưu
+        const setByFloor = {};
+        for (const target of uniqueItemsInSet) {
+            const floor = packFloor(target.pack);
+            if (!setByFloor[floor]) setByFloor[floor] = [];
+            setByFloor[floor].push(target);
+        }
+
+        // Rút hết các món của bộ này
+        for (const floor in setByFloor) {
+            await go(floor);
+
+            for (const target of setByFloor[floor]) {
+                try {
+                    await bank_retrieve(target.pack, target.slot);
+                    console.log(`[StoneMer]  └─ Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
+                    await new Promise(resolve => setTimeout(resolve, 250));
+                } catch (err) {
+                    console.log(`[StoneMer] Lỗi khi rút ${target.item.name}:`, err);
+                }
             }
         }
     }
 
-    console.log("[StoneMer] Hoàn thành tiến trình rút đồ!");
+    console.log("[StoneMer] Hoàn thành rút đồ theo bộ!");
 }
-
 
 
 
