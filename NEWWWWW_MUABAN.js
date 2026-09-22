@@ -823,32 +823,25 @@ function service_cleanup(req) {
 }
 
 async function process_upgrade_and_compound_retrieval() {
-    // --- 0. HELPER XÁC ĐỊNH TẦNG VÀ TỌA ĐỘ DI CHUYỂN ---
-    const FLOOR_ENTRY = {
-        bank: { bank_b: [1, -436], bank_u: [1, -436] },
-        bank_b: { bank: [-264, -412], bank_u: [-104, -171] },
-        bank_u: { bank: [0, -41], bank_b: [0, -41] },
-    };
+
 
     const packFloor = (pack) => {
         const n = +pack.replace("items", "");
         return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
     };
 
-    // Hàm di chuyển tầng chuẩn xác
-    const go = async (to) => {
-        if (!to || character.map === to) return;
-        console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
-        
-        // Tọa độ cửa xuất phát từ TẦNG HIỆN TẠI (character.map) đến TẦNG ĐÍCH (to)
-        const coords = FLOOR_ENTRY[character.map]?.[to];
-        if (coords) {
-            const [x, y] = coords;
-            await smart_move({ map: to, x, y });
-        } else {
-            await smart_move(to);
-        }
-    };
+// Hàm di chuyển tầng chuẩn xác và không bị lỗi tọa độ
+const go = async (to) => {
+    if (!to || character.map === to) return;
+    console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
+    
+    try {
+        // smart_move tự động tìm cửa và chuyển map bank/bank_b/bank_u rất chuẩn
+        await smart_move(to);
+    } catch (err) {
+        console.log(`[StoneMer] Không thể di chuyển sang ${to}:`, err);
+    }
+};
 
     // Đếm số ô trống túi đồ chuẩn Adventure Land API
     const getFreeSlots = () => character.esize ?? character.items.filter(i => !i).length;
