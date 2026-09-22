@@ -7,7 +7,7 @@ const TRASH_ITEMS = ["slimestaff","hpamulet","hpbelt","stinger","beewings","helm
 					 "dstones","frogt","seashell","oozingterror","basher","spear","dagger","pmace","hammer","rapier","sword","cclaw"];
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud",];
+const craftList = ["computer", "cloverstud","moonshardearring",];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = {
