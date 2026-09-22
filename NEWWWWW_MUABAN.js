@@ -822,7 +822,6 @@ function service_cleanup(req) {
     service_storage(req);
 }
 
-
 async function process_upgrade_and_compound_retrieval() {
     // --- 0. HELPER XÁC ĐỊNH TẦNG & DI CHUYỂN ---
     const packFloor = (pack) => {
@@ -845,7 +844,7 @@ async function process_upgrade_and_compound_retrieval() {
     // ----------------------------------------------------
     // 1. Quét toàn bộ đồ hiện có trong Bank
     // ----------------------------------------------------
-    const bank_items_map = {};
+    const bank_items_map = {}; // Key: "name_level" -> [{pack, slot, item}]
 
     for (const pack in character.bank) {
         if (!pack.startsWith("items")) continue;
@@ -863,11 +862,12 @@ async function process_upgrade_and_compound_retrieval() {
         }
     }
 
-    // DANH SÁCH CÁC BỘ HÀNH ĐỘNG (ACTION SETS)
     const action_sets = [];
+    // Set đánh dấu các ô trang bị độc bản đã bị đặt chỗ
+    const reservedUniqueSlots = new Set();
 
     // ----------------------------------------------------
-    // A. Check Upgrade Whitelist (Tạo các Bộ Upgrade 2 món)
+    // A. Check Upgrade Whitelist (Mỗi bộ 2 món)
     // ----------------------------------------------------
     for (const groupName in upgradeWhitelistVIPP) {
         const itemsInGroup = upgradeWhitelistVIPP[groupName] || [];
@@ -879,15 +879,16 @@ async function process_upgrade_and_compound_retrieval() {
             const level = parseInt(levelStr, 10);
             if (!itemsInGroup.includes(name) || !validLevels.includes(level)) continue;
 
-            const available = bank_items_map[key];
+            const available = bank_items_map[key].filter(e => !reservedUniqueSlots.has(`${e.pack}:${e.slot}`));
             if (available.length >= 2) {
-                // Chia thành từng bộ 2 món
                 const pairsCount = Math.floor(available.length / 2);
                 for (let i = 0; i < pairsCount; i++) {
+                    const pair = [available[i * 2], available[i * 2 + 1]];
+                    pair.forEach(e => reservedUniqueSlots.add(`${e.pack}:${e.slot}`));
                     action_sets.push({
                         type: "Upgrade",
                         name: `${name} +${level}`,
-                        items: [available[i * 2], available[i * 2 + 1]]
+                        items: pair
                     });
                 }
             }
@@ -895,22 +896,24 @@ async function process_upgrade_and_compound_retrieval() {
     }
 
     // ----------------------------------------------------
-    // B. Check Compound Rules (Tạo các Bộ Compound 3 món)
+    // B. Check Compound Rules (Mỗi bộ 3 món)
     // ----------------------------------------------------
     for (const compound_entry of COMPOUND_RULES) {
         for (const itemName of compound_entry.items) {
             for (const rule of compound_entry.rules) {
                 for (const validLevel of rule.levels) {
                     const key = `${itemName}_${validLevel}`;
-                    const available = bank_items_map[key] || [];
+                    const available = (bank_items_map[key] || []).filter(e => !reservedUniqueSlots.has(`${e.pack}:${e.slot}`));
 
                     if (available.length >= 3) {
                         const setsCount = Math.floor(available.length / 3);
                         for (let i = 0; i < setsCount; i++) {
+                            const trio = [available[i * 3], available[i * 3 + 1], available[i * 3 + 2]];
+                            trio.forEach(e => reservedUniqueSlots.add(`${e.pack}:${e.slot}`));
                             action_sets.push({
                                 type: "Compound",
                                 name: `${itemName} +${validLevel}`,
-                                items: [available[i * 3], available[i * 3 + 1], available[i * 3 + 2]]
+                                items: trio
                             });
                         }
                     }
@@ -920,8 +923,26 @@ async function process_upgrade_and_compound_retrieval() {
     }
 
     // ----------------------------------------------------
-    // C. Check Crafting List (Tạo Bộ Crafting)
+    // C. Check Crafting List (VỚI VIRTUAL STACK POOL CỘNG DỒN)
     // ----------------------------------------------------
+    // 1. Tạo Pool ảo quản lý số lượng cho đồ Stackable
+    const virtualStackPool = {};
+    for (const key in bank_items_map) {
+        const [name] = key.split("_");
+        const itemGData = parent.G.items[name];
+        if (itemGData && !itemGData.upgrade && !itemGData.compound) {
+            if (!virtualStackPool[name]) virtualStackPool[name] = [];
+            bank_items_map[key].forEach(entry => {
+                virtualStackPool[name].push({
+                    pack: entry.pack,
+                    slot: entry.slot,
+                    qRemaining: entry.item.q || 1,
+                    entry: entry
+                });
+            });
+        }
+    }
+
     const craftList112 = craftList;
 
     for (const craftName of craftList112) {
@@ -930,6 +951,7 @@ async function process_upgrade_and_compound_retrieval() {
 
         let totalCost = craftDef.cost || 0;
         let canCraft = true;
+        let extraSlotsForNPC = 0;
         const bankItemsForThisRecipe = [];
 
         for (const itemDef of craftDef.items) {
@@ -940,6 +962,7 @@ async function process_upgrade_and_compound_retrieval() {
             const itemGData = parent.G.items[itemName];
             const isEquipment = itemGData.upgrade || itemGData.compound;
 
+            // Đếm số lượng có sẵn trong Túi đồ (bag)
             let inBagCount = 0;
             character.items.forEach(i => {
                 if (i && i.name === itemName) {
@@ -953,27 +976,49 @@ async function process_upgrade_and_compound_retrieval() {
 
             if (inBagCount >= quantity) continue;
 
+            // Tìm tiếp trong Bank
             let inBankCount = 0;
             const tempBankSlots = [];
             const isBlacklisted = typeof blackListCraftFromBank !== "undefined" && blackListCraftFromBank.includes(itemName);
 
             if (!isBlacklisted) {
-                const neededFromBank = quantity - inBagCount;
-                const key = `${itemName}_${reqLevel}`;
-                const bankAvailable = bank_items_map[key] || [];
+                let neededFromBank = quantity - inBagCount;
 
-                for (const bankEntry of bankAvailable) {
-                    const itemQ = bankEntry.item.q || 1;
-                    inBankCount += itemQ;
-                    tempBankSlots.push(bankEntry);
-                    if (inBankCount >= neededFromBank) break;
+                if (isEquipment) {
+                    // Trang bị: Lấy ô độc bản chưa bị đặt chỗ
+                    const key = `${itemName}_${reqLevel}`;
+                    const available = (bank_items_map[key] || []).filter(e => !reservedUniqueSlots.has(`${e.pack}:${e.slot}`));
+                    for (const entry of available) {
+                        inBankCount += 1;
+                        tempBankSlots.push(entry);
+                        if (inBankCount >= neededFromBank) break;
+                    }
+                } else {
+                    // Nguyên liệu cộng dồn: Lấy trừ dần từ Virtual Pool
+                    const pool = virtualStackPool[itemName] || [];
+                    for (const stock of pool) {
+                        if (neededFromBank <= 0) break;
+                        if (stock.qRemaining <= 0) continue;
+
+                        const takeQ = Math.min(stock.qRemaining, neededFromBank);
+                        stock.qRemaining -= takeQ; // Trừ số lượng ảo trong pool
+                        neededFromBank -= takeQ;
+                        inBankCount += takeQ;
+
+                        if (!tempBankSlots.some(b => b.pack === stock.entry.pack && b.slot === stock.entry.slot)) {
+                            tempBankSlots.push(stock.entry);
+                        }
+                    }
                 }
             }
 
-            if (inBagCount + inBankCount < quantity) {
-                const stillNeeded = quantity - (inBagCount + inBankCount);
+            // Thiếu cả Bag + Bank -> Mua từ NPC
+            const totalAvailable = inBagCount + inBankCount;
+            if (totalAvailable < quantity) {
+                const stillNeeded = quantity - totalAvailable;
                 if (reqLevel === 0 && parent.G.npcs.basics?.items?.includes(itemName)) {
                     totalCost += (itemGData.g * stillNeeded);
+                    extraSlotsForNPC += isEquipment ? stillNeeded : 1;
                 } else {
                     canCraft = false;
                     break;
@@ -984,19 +1029,27 @@ async function process_upgrade_and_compound_retrieval() {
         }
 
         if (canCraft && character.gold >= totalCost) {
-            if (bankItemsForThisRecipe.length > 0) {
+            if (bankItemsForThisRecipe.length > 0 || extraSlotsForNPC > 0) {
+                // Đánh dấu giữ chỗ các trang bị độc bản
+                bankItemsForThisRecipe.forEach(b => {
+                    const itemGData = parent.G.items[b.item.name];
+                    if (itemGData && (itemGData.upgrade || itemGData.compound)) {
+                        reservedUniqueSlots.add(`${b.pack}:${b.slot}`);
+                    }
+                });
+
                 action_sets.push({
                     type: "Crafting",
                     name: craftName,
-                    items: bankItemsForThisRecipe
+                    items: bankItemsForThisRecipe,
+                    extraSlotsNeeded: extraSlotsForNPC
                 });
             }
-            break; // Chỉ lấy công thức hợp lệ đầu tiên
         }
     }
 
     // ----------------------------------------------------
-    // D. RÚT ĐỒ THEO BỘ (KIỂM TRA DỰ PHÒNG SỨC CHỨA)
+    // D. RÚT ĐỒ THEO BỘ VÀ KIỂM TRA SỨC CHỨA
     // ----------------------------------------------------
     if (!action_sets.length) {
         console.log("[StoneMer] Không có bộ đồ nào đủ điều kiện để rút.");
@@ -1006,23 +1059,22 @@ async function process_upgrade_and_compound_retrieval() {
     console.log(`[StoneMer] Phát hiện ${action_sets.length} bộ hành động cần rút.`);
 
     for (const set of action_sets) {
-        // Loại bỏ trùng lặp vị trí ô trong bộ này
+        // Loại bỏ trùng ô
         const uniqueItemsInSet = set.items.filter((item, index, self) =>
             index === self.findIndex((t) => t.pack === item.pack && t.slot === item.slot)
         );
 
         const freeSlots = getFreeSlots();
-        const neededSlots = uniqueItemsInSet.length;
+        const neededSlots = uniqueItemsInSet.length + (set.extraSlotsNeeded || 0);
 
-        // BỎ QUA nếu rút bộ này xong làm túi đồ còn ít hơn 4 ô trống dự phòng
-        if (freeSlots - neededSlots < 4) {
-            console.log(`[StoneMer] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống (cần giữ 2 ô dự phòng).`);
-            continue; 
+        // Bỏ qua nếu rút xong bị lấn vào 2 ô dự phòng
+        if (freeSlots - neededSlots < 2) {
+            console.log(`[StoneMer] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống.`);
+            continue;
         }
 
-        console.log(`[StoneMer] 📦 Bắt đầu rút TRỌN BỘ [${set.type}: ${set.name}] (${neededSlots} ô)...`);
+        console.log(`[StoneMer] 📦 Bắt đầu rút TRỌN BỘ [${set.type}: ${set.name}] (${uniqueItemsInSet.length} ô bank)...`);
 
-        // Gom nhóm đồ trong bộ theo tầng để di chuyển tối ưu
         const setByFloor = {};
         for (const target of uniqueItemsInSet) {
             const floor = packFloor(target.pack);
@@ -1030,7 +1082,7 @@ async function process_upgrade_and_compound_retrieval() {
             setByFloor[floor].push(target);
         }
 
-        // Rút hết các món của bộ này
+        // Di chuyển và rút đồ
         for (const floor in setByFloor) {
             await go(floor);
 
@@ -1048,7 +1100,6 @@ async function process_upgrade_and_compound_retrieval() {
 
     console.log("[StoneMer] Hoàn thành rút đồ theo bộ!");
 }
-
 
 
 // Flag tránh chạy chồng chéo lệnh craft
