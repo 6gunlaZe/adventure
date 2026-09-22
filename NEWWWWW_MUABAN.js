@@ -1014,8 +1014,8 @@ async function process_upgrade_and_compound_retrieval() {
         const freeSlots = getFreeSlots();
         const neededSlots = uniqueItemsInSet.length;
 
-        // BỎ QUA nếu rút bộ này xong làm túi đồ còn ít hơn 2 ô trống dự phòng
-        if (freeSlots - neededSlots < 2) {
+        // BỎ QUA nếu rút bộ này xong làm túi đồ còn ít hơn 4 ô trống dự phòng
+        if (freeSlots - neededSlots < 4) {
             console.log(`[StoneMer] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống (cần giữ 2 ô dự phòng).`);
             continue; 
         }
