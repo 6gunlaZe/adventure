@@ -823,7 +823,39 @@ function service_cleanup(req) {
 }
 
 async function process_upgrade_and_compound_retrieval() {
+    // --- 0. HELPER XÁC ĐỊNH TẦNG VÀ TỌA ĐỘ DI CHUYỂN ---
+    const FLOOR_ENTRY = {
+        bank: { bank_b: [1, -436], bank_u: [1, -436] },
+        bank_b: { bank: [-264, -412], bank_u: [-104, -171] },
+        bank_u: { bank: [0, -41], bank_b: [0, -41] },
+    };
+
+    const packFloor = (pack) => {
+        const n = +pack.replace("items", "");
+        return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
+    };
+
+    // Hàm di chuyển tầng chuẩn xác
+    const go = async (to) => {
+        if (!to || character.map === to) return;
+        console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
+        
+        // Tọa độ cửa xuất phát từ TẦNG HIỆN TẠI (character.map) đến TẦNG ĐÍCH (to)
+        const coords = FLOOR_ENTRY[character.map]?.[to];
+        if (coords) {
+            const [x, y] = coords;
+            await smart_move({ map: to, x, y });
+        } else {
+            await smart_move(to);
+        }
+    };
+
+    // Đếm số ô trống túi đồ chuẩn Adventure Land API
+    const getFreeSlots = () => character.esize ?? character.items.filter(i => !i).length;
+
+    // ----------------------------------------------------
     // 1. Quét và gom nhóm toàn bộ món đồ hiện đang có trong Bank
+    // ----------------------------------------------------
     const bank_items_map = {}; // Key: "name_level", Value: [{pack, slot, item}]
 
     for (const pack in character.bank) {
@@ -897,8 +929,8 @@ async function process_upgrade_and_compound_retrieval() {
         }
     }
 
-// ----------------------------------------------------
-    // C. Check Crafting List (CÓ BLACKLIST KHÔNG RÚT TỪ BANK)
+    // ----------------------------------------------------
+    // C. Check Crafting List
     // ----------------------------------------------------
     const craftList112 = craftList;
 
@@ -930,13 +962,12 @@ async function process_upgrade_and_compound_retrieval() {
                 }
             });
 
-            if (inBagCount >= quantity) continue; // Đã đủ trong túi
+            if (inBagCount >= quantity) continue;
 
-            // 2. Tìm tiếp trong Bank (BỎ QUA NẾU NẰM TRONG BLACKLIST)
+            // 2. Tìm tiếp trong Bank
             let inBankCount = 0;
             const tempBankSlots = [];
-
-            const isBlacklisted = blackListCraftFromBank.includes(itemName);
+            const isBlacklisted = typeof blackListCraftFromBank !== "undefined" && blackListCraftFromBank.includes(itemName);
 
             if (!isBlacklisted) {
                 const neededFromBank = quantity - inBagCount;
@@ -953,13 +984,13 @@ async function process_upgrade_and_compound_retrieval() {
                 console.log(`[StoneMer] [Crafting] ${itemName} nằm trong Blacklist -> Không rút từ Bank.`);
             }
 
-            // 3. Thiếu cả ở Bag + Bank -> Kiểm tra NPC Basics
+            // 3. Thiếu cả ở Bag + Bank
             if (inBagCount + inBankCount < quantity) {
                 const stillNeeded = quantity - (inBagCount + inBankCount);
                 if (reqLevel === 0 && parent.G.npcs.basics?.items?.includes(itemName)) {
                     totalCost += (itemGData.g * stillNeeded);
                 } else {
-                    canCraft = false; // Thiếu nguyên liệu không thể mua (hoặc do dính blacklist không rút được) -> Bỏ qua món này
+                    canCraft = false;
                     break;
                 }
             }
@@ -967,7 +998,6 @@ async function process_upgrade_and_compound_retrieval() {
             bankItemsForThisRecipe.push(...tempBankSlots);
         }
 
-        // Nếu đủ điều kiện (tiền + nguyên liệu) -> Khóa món này và BREAK!
         if (canCraft && character.gold >= totalCost) {
             if (bankItemsForThisRecipe.length > 0) {
                 console.log(`[StoneMer] [Crafting] Khóa mục tiêu chế: ${craftName}. Cần rút ${bankItemsForThisRecipe.length} ô từ Bank.`);
@@ -980,31 +1010,53 @@ async function process_upgrade_and_compound_retrieval() {
     }
 
     // ----------------------------------------------------
-    // D. Tiến hành rút đồ (Sử dụng ngưỡng ước tính động)
+    // D. TIẾN HÀNH RÚT ĐỒ TỐI ƯU (GOM NHÓM THEO TẦNG)
     // ----------------------------------------------------
     // Lọc loại bỏ các ô trùng trong Bank
     const uniqueTargets = items_to_retrieve.filter((item, index, self) =>
         index === self.findIndex((t) => t.pack === item.pack && t.slot === item.slot)
     );
 
+    if (!uniqueTargets.length) {
+        console.log("[StoneMer] Không có món đồ nào cần rút.");
+        return;
+    }
+
     console.log(`[StoneMer] Tổng số ô độc bản chuẩn bị rút: ${uniqueTargets.length}`);
 
+    // GOM NHÓM DANH SÁCH RÚT THEO TẦNG (Chỉ di chuyển tầng 1 lần)
+    const targetsByFloor = {};
     for (const target of uniqueTargets) {
-        // Ước tính động: Túi đồ phải còn ít nhất 2 ô trống dự phòng (1 cho NPC buy + 1 cho output auto_craft)
-        const freeSlots = get_free_inventory_slots();
-        if (freeSlots <= 5) {
-            console.log(`[StoneMer] Dừng rút đồ! Hành trang chỉ còn ${freeSlots} ô trống (cần giữ tối thiểu 2 ô trống an toàn).`);
-            break;
-        }
+        const floor = packFloor(target.pack);
+        if (!targetsByFloor[floor]) targetsByFloor[floor] = [];
+        targetsByFloor[floor].push(target);
+    }
 
-        try {
-            await bank_retrieve(target.pack, target.slot);
-            console.log(`[StoneMer] Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
-            await new Promise(resolve => setTimeout(resolve, 250));
-        } catch (err) {
-            console.log(`[StoneMer] Lỗi khi rút ${target.item.name}:`, err);
+    // Duyệt từng tầng -> Di chuyển 1 LẦN -> Rút hết đồ ở tầng đó
+    for (const floor in targetsByFloor) {
+        const floorItems = targetsByFloor[floor];
+
+        // Di chuyển sang tầng
+        await go(floor);
+
+        for (const target of floorItems) {
+            const freeSlots = getFreeSlots();
+            if (freeSlots <= 5) {
+                console.log(`[StoneMer] Dừng rút đồ! Hành trang chỉ còn ${freeSlots} ô trống dự phòng.`);
+                return;
+            }
+
+            try {
+                await bank_retrieve(target.pack, target.slot);
+                console.log(`[StoneMer] Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
+                await new Promise(resolve => setTimeout(resolve, 250));
+            } catch (err) {
+                console.log(`[StoneMer] Lỗi khi rút ${target.item.name} từ ${target.pack}[${target.slot}]:`, err);
+            }
         }
     }
+
+    console.log("[StoneMer] Hoàn thành tiến trình rút đồ!");
 }
 
 
