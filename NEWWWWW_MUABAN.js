@@ -1,6 +1,6 @@
 
-const MERCHANT = "StoneMer";
-const LEADER = "Stonehunter";
+const MERCHANT = "MuaBan";
+const LEADER = "haiz";
 
 // Danh sách item rác sẽ tự động bán
 const TRASH_ITEMS = ["slimestaff","hpamulet","hpbelt","stinger","beewings","helmet","shoes","crabclaw","reefglass","mushroomstaff","ringsj","stramulet","whiteegg","vitscroll","smush",
