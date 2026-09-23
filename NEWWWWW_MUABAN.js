@@ -1,4 +1,7 @@
 
+/// wishlist(23,"fury",2000000000,0,3)
+// send_mail('CrownMerch', '1000 mint', 'nice', true)
+
 const MERCHANT = "MuaBan";
 const LEADER = "haiz";
 
@@ -34,7 +37,29 @@ const IMPORTANT_ITEMS = [
         "tracker", "computer", "supercomputer"
     ];
 
+const autoSellToMerchItems = [
+    { name: "tombkey", price: 2300000 },
+    { name: "platinumingot", price: 799000000 },
+    { name: "vhammer", price: 199900000 },
+    { name: "alloyquiver", price: 990000 },
+	
+];
 
+const autoBuyFromMerchItems = [
+    { name: "offeringp", price: 3600000 },
+    { name: "monstertoken", price: 500005 },
+	
+    { name: "slice_nightberry", price: 320000 },
+    { name: "slice_blueberry", price: 320000 },
+    { name: "slice_honey", price: 1120000 },
+    { name: "slice_citrus", price: 320000 },
+    { name: "slice_strawberry", price: 320000 },
+	
+    { name: "ololipop", price: 1120000 },
+
+
+
+];
 // ============================================================
 // CONFIG
 // ============================================================
@@ -2098,6 +2123,102 @@ game.on("item_sent", function(event) {
 
 
 
+
+
+
+function MerchantTrade() {
+
+    for (let i in parent.entities) {
+
+        const entity = parent.entities[i];
+
+        // Chỉ xét merchant
+        if (entity.ctype !== "merchant") continue;
+        if (!entity.slots) continue;
+
+        const otherPlayer = entity;
+
+        const tradeSlots = Object.keys(otherPlayer.slots).filter(
+            tradeSlot => tradeSlot.includes("trade")
+        );
+
+        for (const tradeSlot of tradeSlots) {
+
+            const slot = otherPlayer.slots[tradeSlot];
+
+            if (!slot) continue;
+
+
+            // =====================================
+            // MERCHANT ĐANG MUA -> MÌNH BÁN
+            // =====================================
+
+            if (slot.b === true) {
+
+                for (const item of autoSellToMerchItems) {
+
+                    if (
+                        slot.name === item.name &&
+                        slot.price >= item.price &&
+                        locate_item(item.name) !== -1
+                    ) {
+
+                        trade_sell(otherPlayer, tradeSlot);
+
+                        log(
+                            "SELL -> " +
+                            item.name +
+                            " to " +
+                            otherPlayer.name +
+                            " for " +
+                            slot.price
+                        );
+
+                        break;
+                    }
+                }
+
+            }
+
+
+            // =====================================
+            // MERCHANT ĐANG BÁN -> MÌNH MUA
+            // =====================================
+
+            else {
+
+                for (const item of autoBuyFromMerchItems) {
+
+                    // Luôn giữ lại ít nhất 10,000 gold
+                    if (
+                        slot.name === item.name &&
+                        slot.price <= item.price &&
+                        character.gold - slot.price >= 1100000000
+                    ) {
+
+                        trade_buy(otherPlayer, tradeSlot);
+
+                        log(
+                            "BUY <- " +
+                            item.name +
+                            " from " +
+                            otherPlayer.name +
+                            " for " +
+                            slot.price
+                        );
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+const intervalId = setInterval(() => {
+    MerchantTrade();
+}, 3000);
 
 
 
