@@ -2005,3 +2005,19 @@ function give_item(target, itemName, amount = 1) {
 
     return totalSent; // Trả về số lượng thực tế đã gửi
 }
+
+
+
+function scare() {
+    if (character.hp / character.max_hp < 0.3 && !is_on_cooldown("scare")) {
+        const slot = character.items.findIndex(i => i?.name === "jacko");
+        if (slot < 0) return;
+
+        equip(slot);
+        use("scare");
+        equip(slot);
+    }
+}
+setInterval(scare, 1000);
+
+
