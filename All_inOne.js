@@ -2419,7 +2419,7 @@ async function handleWarriorSkills(tank, f1) {
 if ( (current.mtype === "ent" || current.mtype === "targetron" ) && current.target && current.hp > 100000) {
     if (current.target === character.name) {
         checkENT++; // Đếm số Ent đang đánh Warrior
-    } else if (current.target === "Ynhi" && dist <= 200) {
+    } else if (current.target === "Ynhi" && dist <= 20) {
         hutENT = current; // Lưu con Ent đang đánh Ynhi
     }
 }
