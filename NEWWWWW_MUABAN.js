@@ -1991,7 +1991,7 @@ setInterval(() => {
 
 
     // ============================================================
-    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (10 PHÚT)
+    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (5 PHÚT)
     // ============================================================
 let lastIdleTime = Date.now();
 let storagePending = false;
@@ -2020,7 +2020,7 @@ setInterval(() => {
     }
 
     const inventoryFull = is_inventory_full() || character.esize < 3;
-    const idleStorage = now - lastIdleTime >= 10 * 60 * 1000;
+    const idleStorage = now - lastIdleTime >= 5 * 60 * 1000;
 
     // Chưa đủ điều kiện STORAGE
     if (!inventoryFull && !idleStorage) {
