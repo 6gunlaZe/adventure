@@ -2168,3 +2168,45 @@ function characterAngle() {
 function distanceToPoint(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 }
+
+
+
+// ============================================================
+// MERCHANT REQUEST COOLDOWN & REQUEST POTIONS
+// ============================================================
+const lastSent = { hp: 0, mp: 0, full: 0 };
+const COOLDOWN_MS = 60000;
+
+setInterval(() => {
+    if (character.rip) return;
+
+    const { esize, map, x, y, items, s } = character;
+    const now = Date.now();
+    let hp = 0, mp = 0;
+
+    const sendRequest = (command) => {
+        if (now - lastSent[command] < COOLDOWN_MS) return;
+
+        send_cm(MERCHANT, { command: command, name: character.name, map: map, x: x, y: y });
+        lastSent[command] = now;
+        console.log(`[Client] Requested '${command}' from ${MERCHANT}`);
+    };
+
+    if (esize < 8 || s?.mluck?.f !== MERCHANT) sendRequest("full");
+
+    for (const item of items) {
+        if (!item) continue;
+        if (item.name === "hpot1") hp += item.q ?? 1;
+        else if (item.name === "mpot1") mp += item.q ?? 1;
+    }
+
+    if (hp < 1000) sendRequest("hp");
+    if (mp < 6000) sendRequest("mp");
+}, 10000);
+
+
+
+
+
+
+
