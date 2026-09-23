@@ -20,7 +20,7 @@ const TRASH_ITEMS = [
 ];
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband"];
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candy0: 1, candy1: 1, candycane: 1, candypop: 10, 
@@ -304,7 +304,7 @@ var upgradeGroups = {
 	
 };
 
-// 2️⃣ Gán item vào nhóm
+// 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
 	group_basic: ["ololipop","glolipop"],
 	group_basic00: ["cclaw111"],
@@ -337,13 +337,17 @@ var upgradeWhitelistVIPP = {
 
 };
 
-const COMPOUND_RULES = [ 
-    { items: ["dexamulet","stramulet11","intamulet",], rules: [{ levels: [0, 1], scroll: null, offering: null }, { levels: [2,3], scroll: "cscroll1", offering: null },  ] },
-    { items: ["dexring","intring"], rules: [{ levels: [0, 1], scroll: null, offering: null }, { levels: [2], scroll: "cscroll1", offering: null },  ] },
-    { items: ["dexearring","strbelt","intbelt"], rules: [{ levels: [0,1], scroll: null, offering: null }, { levels: [2], scroll: "cscroll1", offering: null },  ] },
-    { items: ["dexbelt"], rules: [{ levels: [0,1], scroll: null, offering: null },  ] },
-    { items: ["wbook0"], rules: [{ levels: [0, 1, 2, 3], scroll: null, offering: null },  ] },
-    { items: ["vitearring"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: null }] }
+const COMPOUND_RULES = [  
+    { items: ["dexamulet","stramulet","intamulet",], rules: [{ levels: [0,], scroll: null, offering: null }, { levels: [1,2], scroll: "cscroll1", offering: null }, { levels: [3], scroll: "cscroll1", offering: "offeringp" },  ] },
+    { items: ["vitearring","dexring","intring","strring","intearring","dexbelt"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: null }, ] },
+    { items: ["emberseal","glacierseal","venomband"], rules: [{ levels: [0,], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: null },  ] },
+    { items: ["cring","cearring"], rules: [{ levels: [0], scroll: "cscroll1", offering: null },  { levels: [1], scroll: "cscroll1", offering: null }, { levels: [2], scroll: "cscroll1", offering: "offeringp" },  ] },
+    { items: ["dexearring","strbelt","intbelt","strearring"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1,2], scroll: "cscroll1", offering: null }, { levels: [3], scroll: "cscroll1", offering: "offeringp" },  ] },
+    { items: ["wbook0"], rules: [{ levels: [0, 1, 2, 3], scroll: "cscroll1", offering: null },  ] },
+    { items: ["cloverstud","moonshardearring","windbelt"], rules: [{ levels: [0], scroll: null, offering: null },  ] },
+    { items: ["spookyamulet","ftrinket"], rules: [{ levels: [0, 1, 2,], scroll: "cscroll1", offering: null },  ] },
+    { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null },  ] },
+
 ];
 
 
