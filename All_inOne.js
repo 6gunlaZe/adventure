@@ -3304,7 +3304,7 @@ setInterval(function() {
 if (bankk == 1 && Date.now() > banktime + Ten7MinutesInMs)
 {
 	bankk = 0
-    start_character("MuaBan", 6);	
+    start_character("MuaBan", 5);	
 }	
 //////////////////////////	Cho 10p danh boss
 if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
@@ -3319,7 +3319,7 @@ if (bosstime == 1 && Date.now() > (timekillboss + TenMinutesInMs) )
   {
 	  trieuhoi = 1
 if(!parent.party_list.includes("6gunlaZe") && framjR == 0 && f2222 == "6gunlaZe" ) start_character("6gunlaZe", 33);
-if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 5);
 	  
 const characterData = [
     ["Ynhi", 27],
@@ -3397,7 +3397,7 @@ if ( region == HOME_SERVER.region && serverIden == HOME_SERVER.id )
 
 // if(bosstime == 0 && parent.party_list.includes("nhiY")  && !smart.moving )stop_character("nhiY")
 	
-if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 6);
+if(!parent.party_list.includes("MuaBan")) start_character("MuaBan", 5);
 	
 /////////////////	 ///tạm ngưng check cái này vì đã gọi check mỗi sự kiện khác nhau
 /*	
@@ -3545,7 +3545,7 @@ setInterval(function() {
     if (character.esize < 17) {
 	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
     if (!MuaBan) {
-      start_character("MuaBan", 6);
+      start_character("MuaBan", 5);
 		game_log("trieu hoi MuaBan!!");
 	}
 	}
@@ -3555,7 +3555,7 @@ setInterval(function() {
     if (character.esize > 25) {
        	const MuaBan = (parent.party_list ?? []).some(c => c === 'MuaBan');	
     if (MuaBan) {
-	start_character("MuaBan", 6);	
+	start_character("MuaBan", 5);	
 		game_log(" MuaBan da xong nhiem vu!!");
 	}
 	}
@@ -3605,7 +3605,7 @@ if (name == "MuaBan") {
     if (data === "framtay") framtay = 1;
     if (data === "solocheck") solocheck = 1;
     if (data === "bank") {
-        start_character("MuaBan", 10);
+        start_character("MuaBan", 5);
         banktime = Date.now();
         bankk = 1;
     }
