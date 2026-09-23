@@ -16,7 +16,7 @@ let SieutocRun = 1  // 0 = chạy bình thường, 1 thì tùy chỉnh chỉ đ�
 game_log("Game vs 1.1");
 
 smart_move({ map: "cave", x: -194, y: -1281 })
-start_character("MuaBan", 6);	
+start_character("MuaBan", 5);	
 
 
 /// bộ đếm số 
