@@ -913,24 +913,9 @@ function is_duplicate_request(req) {
 }
 
 
-
-
 function sell_trash_items() {
-    // Nếu đứng tại HOME mà muốn bán đồ cho NPC, cần đảm bảo có NPC bán hàng gần đó 
-    // hoặc Merchant đã mở Stand (mở bảng bán hàng)
     const home = CONFIG.HOME_LOCATION;
-
-if (
-    character.map !== home.map ||
-    Math.hypot(character.x - home.x, character.y - home.y) >= 300
-) {
-    return;
-}
-
-
-	
     let soldCount = 0;
-
     for (let i = 0; i < character.items.length; i++) {
         const item = character.items[i];
         if (!item) continue;
@@ -942,13 +927,10 @@ if (
             soldCount++;
         }
     }
-
     if (soldCount > 0) {
         console.log(`[StoneMer] Cleaned up ${soldCount} trash items at HOME.`);
     }
 }
-
-
 
 function is_inventory_full(threshold = 0) {
     const freeSlots = character.items.filter(item => item === null).length;
