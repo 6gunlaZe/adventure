@@ -2021,3 +2021,37 @@ function scare() {
 setInterval(scare, 1000);
 
 
+
+
+
+function lootNearby() {
+    if (character.rip) return false;
+    if (parent.party_list?.length) {
+        for (let name of parent.party_list) {
+            if (name !== character.name && get_player(name)) {
+                return false;
+            }
+        }
+    }
+
+    const chests = get_chests();
+    for (let id in chests) loot(id);
+    return true;
+}
+function loopLoot() {
+    lootNearby();
+    setTimeout(loopLoot, 2500); // Hẹn giờ 250ms chạy lại
+}
+loopLoot();
+
+
+
+
+
+
+
+
+
+
+
+
