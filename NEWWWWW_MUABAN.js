@@ -881,23 +881,12 @@ if (
 
 
 
-
-/**
- * Kiểm tra xem túi đồ có sắp đầy hay chưa
- * @param {number} threshold - Số ô trống tối thiểu còn lại. Mặc định là 0 (đầy 100%)
- * @returns {boolean}
- */
 function is_inventory_full(threshold = 0) {
     const freeSlots = character.items.filter(item => item === null).length;
     return freeSlots <= threshold;
 }
 
-/**
- * Kiểm tra xem một item trong túi có nên cất vào Bank hay không
- * @param {object} item - Object item lấy từ character.items[i]
- * @param {object} [kept_counts={}] - Object dùng để đếm/theo dõi số lượng item đã giữ lại (ví dụ: { hpot1: 1, mpot1: 1 })
- * @returns {boolean} - Returns true nếu món đồ NÊN cất vào Bank, false nếu GIỮ LẠI trong túi
- */
+
 function should_store_item(item, kept_counts = {}) {
     // 1. Nếu ô trống hoặc item không hợp lệ -> Không làm gì
     if (!item) return false;
@@ -921,9 +910,12 @@ function should_store_item(item, kept_counts = {}) {
 
     // 5. TRASH_ITEMS -> Không cất vào Bank
     if (TRASH_ITEMS.includes(item.name)) {
-        return false;
+        const itemLevel = item.level || 0;
+        if (itemLevel > 0) {
+            return true; // Level từ 1 trở lên -> Cất vào Bank
+        }
+        return false; // Level 0 -> Giữ lại túi
     }
-
 	
     return true;
 }
