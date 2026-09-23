@@ -1646,56 +1646,6 @@ setInterval(function() {
 
 
 
-setInterval(function() {
-	
-if (character.map == "crypt") return
-	
-		if(character.esize < 7 || !character.s.mluck || character.s.mluck.f !== "MuaBan")
-	{
-		send_cm("MuaBan", "full");
-		game_log("lay do !!!!!!");
-	}
-
-
-	let soluonghp = 0
-	let soluongmp = 0
-   /////////
-	        for (let i = 0; i < character.isize; i++) {
-            const item = character.items[i]
-            if (!item) continue // No item in this slot
-
-            if (item.name == "mpot1" ) {
-                // This is an item we want to use!
-                    soluongmp += item.q//tim ra vi tri mon do
-						// game_log("so luong  la "+soluongmp);
-
-            }
-            if (item.name == "hpot1" ) {
-                // This is an item we want to use!
-                    soluonghp += item.q//tim ra vi tri mon do
-						// game_log("so luong  la "+soluonghp);
-
-            }				
-			}
-	/////////		
-	
-	if( (soluonghp < 7000 ) )
-	{
-		send_cm("MuaBan", "hp");
-		game_log("re filll !!!!!!");
-	}
-		if( ( soluongmp < 7000) )
-	{
-		send_cm("MuaBan", "mp");
-		game_log("re filll !!!!!!");
-	}
-/////////////		
-
-	
-
-	
-}, 20000); 
-
 
 
 
@@ -2179,6 +2129,7 @@ const COOLDOWN_MS = 60000;
 
 setInterval(() => {
     if (character.rip) return;
+    const MERCHANT = "MuaBan";
 
     const { esize, map, x, y, items, s } = character;
     const now = Date.now();
