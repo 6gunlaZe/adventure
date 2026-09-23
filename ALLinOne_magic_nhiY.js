@@ -1520,6 +1520,7 @@ const COOLDOWN_MS = 60000;
 
 setInterval(() => {
     if (character.rip) return;
+    const MERCHANT = "MuaBan";
 
     const { esize, map, x, y, items, s } = character;
     const now = Date.now();
