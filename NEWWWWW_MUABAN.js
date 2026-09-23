@@ -113,15 +113,15 @@ const SERVICES = {
     hp: { priority: 10, target: "player", timeout: 150000, handler: service_hp },
     mp: { priority: 70, target: "player", timeout: 150000, handler: service_mp },
     full: { priority: 60, target: "player", timeout: 150000, handler: service_full },
-    buy: { priority: 70, target: "shop", timeout: 15000, handler: service_buy },
-    sell: { priority: 70, target: "shop", timeout: 15000, handler: service_sell },
-    retrieve: { priority: 50, target: "storage", timeout: 15000, handler: service_retrieve },
-    storage: { priority: 100, target: "storage", timeout: 150000, handler: service_storage },
+    buy: { priority: 70, target: "shop", timeout: 55000, handler: service_buy },
+    sell: { priority: 70, target: "shop", timeout: 55000, handler: service_sell },
+    retrieve: { priority: 50, target: "storage", timeout: 55000, handler: service_retrieve },
+    storage: { priority: 100, target: "storage", timeout: 250000, handler: service_storage },
     cleanup: { priority: 30, target: "storage", timeout: 15000, handler: service_cleanup },
-    upgrade: { priority: 20, target: "upgrade", timeout: 30000, handler: service_upgrade },
-    compound: { priority: 20, target: "upgrade", timeout: 30000, handler: service_compound },
-    craft: { priority: 20, target: "upgrade", timeout: 30000, handler: service_craft },
-    gem: { priority: 10, target: "gem", timeout: 15000, handler: service_gem }
+    upgrade: { priority: 20, target: "upgrade", timeout: 60000, handler: service_upgrade },
+    compound: { priority: 20, target: "upgrade", timeout: 60000, handler: service_compound },
+    craft: { priority: 20, target: "upgrade", timeout: 60000, handler: service_craft },
+    gem: { priority: 10, target: "gem", timeout: 65000, handler: service_gem }
 };
 
 // ============================================================
