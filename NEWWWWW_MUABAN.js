@@ -2530,8 +2530,8 @@ setInterval(sendNtfyStatus, 30 * 60 * 1000);
 // ============================================================
 // Biến lưu thời điểm gửi lệnh câu cá gần nhất
 let lastFishingCheck = 0; 
-// Cấu hình thời gian chờ nghỉ thêm giữa các lần đi câu: 5 phút (300 giây)
-const FISHING_EXTRA_DELAY = 300 * 1000; 
+// Cấu hình thời gian chờ nghỉ thêm giữa các lần đi câu: 
+const FISHING_EXTRA_DELAY = 600 * 1000; 
 
 setInterval(() => {
     // 1. Nếu Merchant đang bận hoặc hàng chờ đang có việc -> Bỏ qua
@@ -2540,11 +2540,11 @@ setInterval(() => {
     // 2. Kiểm tra skill fishing có đang cooldown không
     if (is_on_cooldown("fishing")) return;
 
-    // 3. Kiểm tra đã đủ 5 phút từ lần đi câu gần nhất chưa
+    // 3. Kiểm tra đã đủ 10 phút từ lần đi câu gần nhất chưa
     const now = Date.now();
     if (now - lastFishingCheck < FISHING_EXTRA_DELAY) return;
 
-    console.log("[StoneMer] AUTO: Đã đủ 5 phút nghỉ & Skill sẵn sàng → Đẩy job FISHING");
+    console.log("[StoneMer] AUTO: Đã đủ 10 phút nghỉ & Skill sẵn sàng → Đẩy job FISHING");
 
     lastFishingCheck = now;
 
