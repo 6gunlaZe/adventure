@@ -11,7 +11,7 @@ const TRASH_ITEMS = [
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead11111", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
   "firestaff", "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
-  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111",
+  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
   "smoke111", "smush", "snowball111", "snowflakes", "sparkstaff", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
