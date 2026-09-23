@@ -1,6 +1,7 @@
 
 /// send_mail('Plutus', '10 keys', 'nice', true)
 /// wishlist(23,"fury",2000000000,0,3)
+// send_mail('CrownMerch', '1000 mint', 'nice', true)
 let urls = [
     "https://raw.githubusercontent.com/6gunlaZe/adventure/refs/heads/main/6_MUA-BAN.js",
 ];
@@ -41,65 +42,123 @@ function loadURLs(url, retries = 3) {
 
 const autoSellToMerchItems = [
     { name: "tombkey", price: 2300000 },
-    { name: "frozenkey", price: 5900000 },
-    { name: "spikedhelmet", price: 14900000 },
+    { name: "platinumingot", price: 799000000 },
+    { name: "vhammer", price: 199900000 },
+    { name: "alloyquiver", price: 990000 },
+	
+];
+
+const autoBuyFromMerchItems = [
+    { name: "offeringp", price: 3600000 },
+    { name: "monstertoken", price: 500005 },
+	
+    { name: "slice_nightberry", price: 320000 },
+    { name: "slice_blueberry", price: 320000 },
+    { name: "slice_honey", price: 1120000 },
+    { name: "slice_citrus", price: 320000 },
+    { name: "slice_strawberry", price: 320000 },
+	
+    { name: "ololipop", price: 1120000 },
+
+
 
 ];
 
-const validBuyers = ["Plutus", "CrownMerch"]; // <-- Thêm nhiều người mua ở đây
 
-function MerchantSellTo() {
+function MerchantTrade() {
+
     for (let i in parent.entities) {
+
         const entity = parent.entities[i];
 
-        // Chỉ làm việc với merchant hợp lệ trong danh sách
-        if (entity.ctype === "merchant" && validBuyers.includes(entity.name)) {
-            const otherPlayer = entity;
+        // Chỉ xét merchant
+        if (entity.ctype !== "merchant") continue;
+        if (!entity.slots) continue;
 
-            let tradeSlots = [];
-            if (otherPlayer.slots) {
-                tradeSlots = Object.keys(otherPlayer.slots).filter(tradeSlot =>
-                    tradeSlot.includes("trade")
-                );
+        const otherPlayer = entity;
+
+        const tradeSlots = Object.keys(otherPlayer.slots).filter(
+            tradeSlot => tradeSlot.includes("trade")
+        );
+
+        for (const tradeSlot of tradeSlots) {
+
+            const slot = otherPlayer.slots[tradeSlot];
+
+            if (!slot) continue;
+
+
+            // =====================================
+            // MERCHANT ĐANG MUA -> MÌNH BÁN
+            // =====================================
+
+            if (slot.b === true) {
+
+                for (const item of autoSellToMerchItems) {
+
+                    if (
+                        slot.name === item.name &&
+                        slot.price >= item.price &&
+                        locate_item(item.name) !== -1
+                    ) {
+
+                        trade_sell(otherPlayer, tradeSlot);
+
+                        log(
+                            "SELL -> " +
+                            item.name +
+                            " to " +
+                            otherPlayer.name +
+                            " for " +
+                            slot.price
+                        );
+
+                        break;
+                    }
+                }
+
             }
 
-            tradeSlots.forEach(tradeSlot => {
-                if (otherPlayer.slots[tradeSlot]) {
-                    autoSellToMerchItems.forEach(item => {
-                        if (
-                            otherPlayer.slots[tradeSlot].name === item.name &&
-                            otherPlayer.slots[tradeSlot].price >= item.price &&
-                            locate_item(item.name) !== -1
-                        ) {
-                            const mySlotNumber = locate_item(item.name);
-                            if (mySlotNumber !== -1) {
-                                trade_sell(otherPlayer, tradeSlot);
-                                log("Sold " + item.name + " to merchant: " + otherPlayer.name);
-                            }
-                        }
-                    });
+
+            // =====================================
+            // MERCHANT ĐANG BÁN -> MÌNH MUA
+            // =====================================
+
+            else {
+
+                for (const item of autoBuyFromMerchItems) {
+
+                    // Luôn giữ lại ít nhất 10,000 gold
+                    if (
+                        slot.name === item.name &&
+                        slot.price <= item.price &&
+                        character.gold - slot.price >= 1100000000
+                    ) {
+
+                        trade_buy(otherPlayer, tradeSlot);
+
+                        log(
+                            "BUY <- " +
+                            item.name +
+                            " from " +
+                            otherPlayer.name +
+                            " for " +
+                            slot.price
+                        );
+
+                        break;
+                    }
                 }
-            });
+            }
         }
     }
 }
 
+
 const intervalId = setInterval(() => {
-    let canRun = false;
-
-    for (const name of validBuyers) {
-        if (get_player(name)) {
-            canRun = true;
-            break;
-        }
-    }
-
-    if (canRun) {
-        MerchantSellTo();
-    } else {
-        console.log("No valid buyers nearby.");
-    }
+    MerchantTrade();
 }, 3000);
+
 
 
 
@@ -108,33 +167,44 @@ const intervalId = setInterval(() => {
 //const item1cap = "orba"
 const item1cap = "orba"
 
-var craftList112 = [item1cap,"carrotsword"];
+var craftList112 = [item1cap,"carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","cloverstud",]; // tạm ngưng fireblade firestars pouchbow basketofeggs
 
 setInterval(function()
 			{
-if (character.esize > 10)tryCraft();
+if (character.esize > 6)tryCraft();
 	
     sellExtraItems([
         ["bow", 1],
+        ["blade", 1],
         ["snowball", 1],
+        ["smoke", 1],
+        ["shoes", 1],
+        ["throwingstars", 5],
+
 
 		
     ]);
+
+if (character.esize > 6){
 	
-buyMissingItemsAllLevel([
-    ["coat",   3, 1],
-    ["scroll0", 5, 2000],
-    ["scroll1", 5, 2000],
-    ["cscroll0",5, 300],
-    ["cscroll1",5, 300],
+buyMissingItemsByLevel([
+	["scroll0", 5000, 3000],
+    ["scroll1", 150, 200],
+    ["cscroll0",50, 300],
+    ["cscroll1",50, 300], 
+    ["scroll2",25, 60], 
+  //  ["helmet", 13, 1, 6],      // chỉ đếm pants +0 → +6
+
 ]);
 
-	
-	
+}	
 	
     let [scrollSlot, scroll] = find_item(i => i.name === "mpot1");
-    if (!scroll) { parent.buy("mpot1",100); }	
-
+	
+if (character.map == "main" && distance(character, { x: 0, y: 0 }) < 400)
+{
+    if (!scroll && character.map != "winter_instance") { parent.buy("mpot1",100); }	
+}
 	let [scrollSlot1, scroll1] = find_item(i => i.name === "hpot1");
     if (!scroll1 && character.hp/character.max_hp< 0.5 ) { parent.buy("hpot1",1); }	
 	
@@ -170,31 +240,38 @@ function sellExtraItems(itemPairs) {
 }
 
 
-function buyMissingItemsAllLevel(itemPairs) {
+function buyMissingItemsByLevel(itemPairs) {
     // An toàn 1: inventory gần đầy → không mua
-    if (character.esize < 5) return;
+    if (character.esize < 1) return;
 
     // An toàn 2: không đủ gold → không mua
     if (character.gold < 1000000) return;
 
     for (let p = 0; p < itemPairs.length; p++) {
-        let name = itemPairs[p][0];
-        let keep = itemPairs[p][1];
-        let buyQty = itemPairs[p][2] || 1; // mặc định = 1 nếu không khai
+        let name    = itemPairs[p][0];
+        let keep    = itemPairs[p][1];
+        let buyQty  = itemPairs[p][2] || 1;
+        let maxLvl  = itemPairs[p][3]; // có thể undefined
 
-        // Đếm tất cả item cùng tên (mọi level)
         let count = 0;
+
         for (let i = 0; i < character.items.length; i++) {
             let it = character.items[i];
-            if (it && it.name === name) {
-                count += it.q || 1;
+            if (!it || it.name !== name) continue;
+
+            // Nếu có giới hạn level → chỉ tính level ≤ maxLvl
+            if (maxLvl !== undefined) {
+                let lvl = it.level || 0;
+                if (lvl > maxLvl) continue;
             }
+
+            count += it.q || 1;
         }
 
-        // Thiếu → mua bù theo số lượng chỉ định
+        // Thiếu → mua bù
         if (count < keep) {
             buy(name, buyQty);
-            return; // mỗi tick chỉ mua 1 loại để tránh lag
+            return; // mỗi tick chỉ mua 1 loại
         }
     }
 }
@@ -215,13 +292,12 @@ var item = character.items[slot];
       const level = item?.level ? item.level : 0;		
 if (level >= 1)continue
 		
-if(["gphelmet","bwing","xmace","whiteegg","shoes1111","gloves","eslippers","vitscroll","gslime","jacko","vitring","intring","fieldgen0","intring","dexring","intearring","strearring","stramulet","strbelt","smoke","talkingskull","sstinger","elixirstr2","elixirstr1","elixirstr0","elixirdex2","elixirdex1","elixirdex0","elixirint2","elixirint1","elixirint0","elixirvit2","elixirvit1","elixirvit0","ringsj","pclaw","carrotsword","snowball111","blade1111","mshield","svenom","wbasher","danhsachphahuyyyyyyyyyyyyyyyyyyyyyyyyy","rfangs","t2bow","hammer","basher","frankypants",
-            "glolipop","spear","dagger","helmet1","gloves1","coat1","shoes1",
-            "sshield","hhelmet","hboots","epyjamas","ecape","carrotsword1111",
-            "eears","harmor","hgloves","mittens1111","daggerofthedead",
+if(["gphelmet","xmace","whiteegg","shoes","gloves","vitscroll","jacko","vitring","strearring","stramulet","smoke111","talkingskull","sstinger","elixirstr2","elixirstr1","elixirstr0","elixirdex2","elixirdex1","elixirdex0","elixirint2","elixirint1","elixirint0","elixirvit2","elixirvit1","elixirvit0","pclaw","carrotsword","snowball111","blade1111","svenom","wbasher","danhsachphahuyyyyyyyyyyyyyyyyyyyyyyyyy","rfangs","t2bow","hammer","basher","frankypants","seashell","pumpkinspice","eslippers","ecape11","lantern","pinkie","reefglass","partyhat","poker","cake","alloyquiver","sparkstaff","pants","helmet","coat","sshield","cave_reedscythe","lostearring"
+          ,"spear","dagger","helmet1","gloves1","coat1","shoes1","vboots","tombkey",
+            "hhelmet","hboots","epyjamas","carrotsword1111","ringsj",
+            "eears","harmor","hgloves","mittens1111","daggerofthedead11111",
             "staffofthedead","firestaff","swordofthedead","maceofthedead","pmaceofthedead",
-            "pmace","fireblade","hpants","rapier","slimestaff","cclaw","pouchbow",
-            "wattire","cape","oozingterror","harbringer","gbow","broom","sweaterhs","pants1","mittens",].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
+            "pmace","fireblade1111","hpants","rapier","slimestaff","cclaw","pouchbow111","cape","oozingterror","gbow","broom","sweaterhs","pants1","mittens","vgloves","fieldgen0","throwingstars","cupid","firecrackers","elixirpnres","wattire","wcap","wbreeches","wgloves","wshoes","tshirt2","tshirt0","tshirt1","tshirt3","t2quiver","horsecapeg","spikedhelmet","lspores","bandages","bunnyelixir"].includes(character.items?.[slot]?.name)) sell(slot, character.items?.[slot]?.q ? character.items?.[slot]?.q : 1)	
 	}
 
 }, 1000);
@@ -262,7 +338,7 @@ setInterval(auto_destroy_low_level_items, 1000);
 // Tự động đổi các món đồ
 setInterval(() => {
     if (character.q.exchange) return;
-    if (character.esize < 8) return;
+    if (character.esize < 5) return;
 
     // Danh sách item và số lượng yêu cầu tối thiểu để exchange
     const itemRequirements = {
@@ -272,15 +348,22 @@ setInterval(() => {
         "candy1": 1,
         "mistletoe": 1,
         "xbox": 1,
-        "ornament11111": 20,
+        "ornament": 20,
         "candycane": 1,		
         "basketofeggs": 1,    
-        "candypop": 1,      
+        "candypop": 10,      
         "armorbox": 1,
         "weaponbox": 1,
         "leather": 40,
         "goldenegg": 1,
 		"seashell": 20,
+		"brownenvelope": 1,
+		"anniversarygift": 1,
+		"lostearring": 1,
+		"gift0": 1,
+		"troll": 1,
+
+
 		
     };
 
@@ -294,6 +377,13 @@ setInterval(() => {
         const requiredAmount = itemRequirements[item.name] || 1;
 
         if (item.q >= requiredAmount) {
+			
+	// Dùng kỹ năng tăng tốc
+	if (can_use("massexchangepp") && !character.s.massproductionpp)
+		use_skill("massexchangepp");
+	else if (can_use("massexchange") && !character.s.massproduction)
+		use_skill("massexchange");
+			
             exchange(i);
             break;
         } else if (first_index === -1) {
@@ -310,7 +400,7 @@ setInterval(() => {
 
 function elixirUsage() {
     try {
-        let requiredElixir =  "bunnyelixir"
+        let requiredElixir =  "bunnyelixir11"
         // Use the required elixir if it's not currently equipped
             let item = locate_item(requiredElixir);
             if (item>=0) {
@@ -340,9 +430,10 @@ setInterval(elixirUsage, 10000);
 // 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
 var upgradeGroups = {
 	group_basic: [ // đồ phổ thông
-		{ levels: [0,1,2,3,4], scroll: 0, offering: 0 },
-		{ levels: [5,6],     scroll: 1, offering: 0 },
-		{ levels: [7],     scroll: 2, offering: 0 },
+		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [3,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],     scroll: 1, offering: 1 },
+		{ levels: [7],     scroll: 1, offering: 1 },
 		{ levels: [8],       scroll: 2, offering: 1 }
 	],
 	group_basic00: [ // đồ rác
@@ -351,20 +442,25 @@ var upgradeGroups = {
 		{ levels: [8],       scroll: 2, offering: 0 }
 	],
 	group_basic01: [ // đồ rác
-		{ levels: [0,1,2,3,4,5,6], scroll: 1, offering: 0 },
-		{ levels: [7],     scroll: 2, offering: 1 },
+		{ levels: [0,1,2,3,4,5,6,], scroll: 1, offering: 0 },
+	//	{ levels: [7],     scroll: 2, offering: 1 },
 	//	{ levels: [8],       scroll: 2, offering: 1 }
+	//	{ levels: [9],       scroll: 2, offering: 2 }
+
 	],
 	group_basic02: [ // đồ rác
 		{ levels: [0,1,2,3,4,5,6], scroll: 1, offering: 0 },
-		{ levels: [7,8],     scroll: 2, offering: 1 },
-	//	{ levels: [8],       scroll: 2, offering: 0 }
+		{ levels: [7],     scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 2 }
 	],
 
 	group_basic03: [ // đồ rác
-		{ levels: [0,1,2,3], scroll: 0, offering: 0 },
-		{ levels: [4,5,6,7],     scroll: 1, offering: 0 },
-		{ levels: [8],       scroll: 2, offering: 1 }
+		{ levels: [0,], scroll: 0, offering: 0 },
+		{ levels: [1,2,3],     scroll: 1, offering: 0 },
+		{ levels: [4,5],       scroll: 2, offering: 1 },
+	//	{ levels: [6,7],       scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 2 },
+
 	],	
 	
 	group_basic04: [ // đồ rác
@@ -374,9 +470,9 @@ var upgradeGroups = {
 	],	
 	
 	group_basic05: [ // đồ rác
-		{ levels: [0,1,2,3], scroll: 0, offering: 0 },
-		{ levels: [4,5,6],     scroll: 1, offering: 0 },
-		{ levels: [7,8],       scroll: 2, offering: 1 }
+		{ levels: [0,1,], scroll: 0, offering: 0 },
+		{ levels: [2,3,4,5],     scroll: 1, offering: 0 },
+		{ levels: [6,7,],       scroll: 2, offering: 1 }
 	],	
 	
 	group_basic06: [ // đồ rác
@@ -385,24 +481,78 @@ var upgradeGroups = {
 	//	{ levels: [9],       scroll: 2, offering: 1 }
 	],
 	
+	group_basic07: [ // đồ rác
+		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [3,4,5,6],     scroll: 1, offering: 0 },
+//		{ levels: [7],       scroll: 1, offering: 1 },
+//		{ levels: [8],       scroll: 2, offering: 1 },
+//		{ levels: [9],       scroll: 2, offering: 2 },
+	],	
+
+	group_basic08: [ // đồ rác
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5],     scroll: 2, offering: 0 },
+		{ levels: [6],     scroll: 2, offering: 1 },
+		{ levels: [7],       scroll: 2, offering: 1 }
+	//	{ levels: [8],       scroll: 2, offering: 2 }
+	],
+	
 	group_weapon: [ // vũ khí & trang bị tấn công
 		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
 		{ levels: [5],     scroll: 2, offering: 0 },
 		{ levels: [6],       scroll: 2, offering: 1 }
 	],
 
+	group_weapon1: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+		{ levels: [4,5,6],     scroll: 2, offering: 0 },
+	//	{ levels: [7,8],       scroll: 2, offering: 1 }
+	],
+
+	group_weapon2: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //36% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //46% //26%
+	],
+
+	group_weapon3: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 },
+	//	{ levels: [4,], scroll: 2, offering: 0 }, //58
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //43% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //48% //27%
+	],
+
+	group_weapon4: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,], scroll: 1, offering: 0 },
+		{ levels: [2,], scroll: 2, offering: 0 },
+		{ levels: [3,4,], scroll: 2, offering: 1 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //45%
+	//	{ levels: [6,7],       scroll: 2, offering: 2 } // 48% //28%
+	//	{ levels: [8],       scroll: 3, offering: 2 }   //18%
+	],
 	
+	group_weapon5: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 }, 
+		{ levels: [4],  scroll: 2, offering: 1 },  
+		{ levels: [5],  scroll: 2, offering: 1 }, // 66 
+	//	{ levels: [6],  scroll: 2, offering: 1 }, // 28
+	//	{ levels: [7,8],  scroll: 2, offering: 2 },  28 13
+	//	{ levels: [9],  scroll: 3, offering: 2 },  5.4
+
+	],
 	group_rare1: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
 		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
 		// { levels: [8], scroll: 2, offering: 1 },
 	],
 	
 	group_rare2: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
-		{ levels: [0,1,2,3,4,], scroll: 1, offering: 0 },
-		{ levels: [5,], scroll: 2, offering: 0 },
-		{ levels: [6,], scroll: 2, offering: 1 },
-
-		// { levels: [8], scroll: 2, offering: 1 },
+		{ levels: [0,1,2,], scroll: 1, offering: 0 },
+		{ levels: [3,4,], scroll: 2, offering: 1 },
+		// { levels: [5,], scroll: 2, offering: 1 },
+		// { levels: [6,7,], scroll: 2, offering: 2 },
+		// { levels: [8], scroll: 3, offering: 2 },
 	],	
 	
 	
@@ -413,12 +563,28 @@ var upgradeGroups = {
 	],
 	group_vip: [ // đồ quý, phụ kiện hiếm
 		{ levels: [0], scroll: 2, offering: 0 },
-		{ levels: [1,2], scroll: 2, offering: 1 },
+		{ levels: [1,2,3], scroll: 2, offering: 1 },
 	],
 	group_vip1: [ // đồ quý, phụ kiện hiếm
 		{ levels: [0], scroll: 2, offering: 0 },
 		{ levels: [1,2,3], scroll: 2, offering: 1 },
 	],	
+	group_vip2: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1], scroll: 2, offering: 0 },
+		{ levels: [2,3], scroll: 2, offering: 1 },
+	],	
+	group_vip3: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5,6], scroll: 2, offering: 0 },
+		{ levels: [7], scroll: 2, offering: 1 },
+
+	],	
+	group_vip4: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+		{ levels: [4,], scroll: 2, offering: 0 },
+		{ levels: [5,6], scroll: 2, offering: 1 },
+
+	],
 	
 	
 	group_Supervip: [ // đồ quý, phụ kiện hiếm
@@ -429,21 +595,32 @@ var upgradeGroups = {
 
 // 2️⃣ Gán item vào nhóm
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop"],
+	group_basic: ["ololipop","glolipop"],
 	group_basic00: ["cclaw"],
-	group_basic01: ["firebow"],	
-	group_basic02: ["gcape","pants11a"],	
+	group_basic01: ["firebow","fireblade"],	
+	group_basic02: ["gcape","eslippers11","ecape"],	
 	group_basic03: ["mittens111","shield",],	
-	group_basic04: ["angelwings","tshirt2","tshirt0","tshirt1","froststaff","mcape"],	
+	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead","tshirt4"],
 	group_basic05: ["wingedboots"],	
-	group_basic06: ["pants","coat"],	
+	group_basic06: ["pants","coat1111","blade11","helmet1111"],
+	group_basic07: ["pouchbow"],	
+	group_basic08: ["ecape11","woodensword"],	
 	group_weapon: ["bowofthedead","crossbow","oozingterror11111"],
-	group_rare1: ["handofmidas","hdagger","xboots","xgloves","vboots","vgloves"],
-	group_rare2: ["sparkstaff",],
-	group_rare: ["xarmor","xpants","t3bow"],
-	group_vip: ["vhammer","vattire","vstaff","vdagger","xhelmet"],
-	group_vip1: ["starkillers","supermittens"],
-	group_Supervip: ["fury"],
+	group_weapon1: ["firestars"],
+	group_weapon2: ["spikedhelmet11"],
+	group_weapon3: ["bcape"],
+	group_weapon4: ["alloyquiver111"],
+	group_weapon5: ["bataxe"],
+
+	group_rare1: ["handofmidas","hdagger","xboots","xgloves",],
+	group_rare2: ["sparkstaff11",],
+	group_rare: ["xarmor","t3bow","lmace"],
+	group_vip: ["vattire","vstaff"],
+	group_vip1: ["starkillers1111","vhammer111","vdagger","xhelmet"],
+	group_vip2: ["supermittens",],
+	group_vip3: ["harbringer","homecominghelm","homecomingcoat","homecomingcape",],
+	group_vip4: ["candleward",],
+	group_Supervip: ["fury",],
 
 	
 
@@ -455,10 +632,14 @@ var upgradeWhitelistVIPP = {
 
 /////////
 
+    let fastModeUntil = 0;
+
+
 setInterval(function() {
 	if(parent != null && parent.socket != null &&  character.esize < 22)
 	{
-		upgradeVIP();
+		
+		if  ( Date.now() > fastModeUntil )	upgradeVIP();
 		compound_itemsVIP()
 	}
 
@@ -476,7 +657,7 @@ function upgradeVIP() {
 		if (!c) continue;
 		
 			// 🔒 LOẠI ITEM HIẾM (shiny, gleaming, ...)
-	    if (c.p) continue;
+	    if (c.p1111) continue;
 
 		// Tìm nhóm phù hợp
 		let group = Object.keys(upgradeWhitelistVIPP).find(groupName =>
@@ -559,17 +740,47 @@ const compoundGroups = {
         { levels: [2], scroll: 1, offering: 1 },
        // { levels: [1,2],     scroll: 2, offering: 1 },
     ],	
+    jewelry3: [
+        { levels: [3,4], scroll: 1, offering: 1 },
+       // { levels: [1,2],     scroll: 2, offering: 1 },
+    ],	
+    jewelry4: [
+        { levels: [0], scroll: 2, offering: 1 },
+       // { levels: [1,2],     scroll: 2, offering: 1 },
+    ],
 	
     accessories: [
-        { levels: [0,1,2], scroll: 1, offering: 0 },
-        { levels: [3,4,5], scroll: 1, offering: 1 },
-        { levels: [6,7,8,9], scroll: 2, offering: 2 }
+        { levels: [0,1], scroll: 1, offering: 0 },
     ],
+    accessories2: [
+        { levels: [0], scroll: 1, offering: 0 },
+        { levels: [1], scroll: 2, offering: 0 },
+        { levels: [2], scroll: 2, offering: 1 },
+
+
+    ],
+	
     accessories1: [
         { levels: [0,], scroll: 1, offering: 0 },
         { levels: [1,2], scroll: 1, offering: 1 },
-        { levels: [6,7,8,9], scroll: 2, offering: 2 }
     ],
+    rac: [
+        { levels: [0,], scroll: 1, offering: 0 },
+        { levels: [1,2], scroll: 1, offering: 0 },
+    ],
+    rac1: [
+        { levels: [0,], scroll: 0, offering: 0 },
+        { levels: [1], scroll: 1, offering: 0 },
+    ],
+    rac2: [
+        { levels: [0,1,2,], scroll: 0, offering: 0 },
+        { levels: [3], scroll: 1, offering: 0 },
+    ],
+    rac3: [
+        { levels: [0,], scroll: 0, offering: 0 },
+        { levels: [1,2], scroll: 1, offering: 0 },
+
+    ],	
 
 };
 
@@ -577,9 +788,17 @@ const compoundWhitelistVIPP = {
     jewelry: ["lantern"],
     jewelry1: ["wbookhs"],
     jewelry2: ["cearring","cring"],
+    jewelry3: ["strbelt","intbelt","dexbelt","ringsj"],
+    jewelry4: ["rabbitsfoot"],
     accessories: ["spookyamulet"],
     accessories1: ["orbofstr","orbofdex"],
-	
+    accessories2: ["mbelt"],
+    rac: ["orbofvit","orbofint","stramulet"],
+    rac1: ["vitearring"],
+    rac2: ["dexring"],
+    rac3: ["ftrinket"],
+
+
 };
 
 
@@ -1122,263 +1341,6 @@ async function checkAndMoveToBoss() {
 
 
 
-//////////////// đánh quái yếu + hỗ trợ quái mạnh bằng snowball
-//////////////// SNOWBALL FARM – FINAL CLEAN VERSION ////////////////
-
-setInterval(() => {
-    lootNearby();
-    weakMonsterSkill({
-        monsterTypes: [
-          "frog","jr","greenjr",
-        ],
-        strongMonsterTypes: ["fireroamer111"],
-        minSnowballForStrong: 70
-    });
-}, 180);
-
-
-/* ================= GLOBAL STATE ================= */
-
-let snowballQueue = [];
-let lastSnowballTargetTime = 0;
-let equipLockUntil = 0;
-
-const NO_TARGET_TIMEOUT = 800;   // ms
-const EQUIP_LOCK_TIME   = 400;   // ms
-const NEARBY_RANGE      = 600;
-
-
-/* ================= HELPERS ================= */
-
-function isValidMonster(e) {
-    return e && e.type === "monster" && !e.dead && e.hp > 0;
-}
-
-function safeEquip(itemName) {
-    const now = Date.now();
-    if (now < equipLockUntil) return false;
-    if (character.slots.mainhand?.name === itemName) return false;
-
-    const slot = character.items.findIndex(i => i && i.name === itemName);
-    if (slot === -1) return false;
-
-    equip(slot);
-    equipLockUntil = now + EQUIP_LOCK_TIME;
-    return true;
-}
-
-function hasNearbyRelevantMonster(monsterTypes, strongMonsterTypes) {
-    for (let e of Object.values(parent.entities)) {
-        if (!isValidMonster(e)) continue;
-
-        if (
-            monsterTypes.includes(e.mtype) ||
-            strongMonsterTypes.includes(e.mtype)
-        ) {
-            if (distance(character, e) <= NEARBY_RANGE) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-
-/* ================= CORE LOGIC ================= */
-
-function weakMonsterSkill({
-    monsterTypes,
-    strongMonsterTypes = [],
-    minSnowballForStrong = 50,
-    skill = "snowball",
-    fortName = "froststaff",
-    bowName = "broom",
-    requiredItem = "snowball"
-} = {}) {
-
-    /* ===== COUNT SNOWBALL ===== */
-let snowballCount = 0;
-for (let i of character.items) {
-    if (i && i.name === requiredItem) {
-        snowballCount += i.q || 1;
-    }
-}
-
-/* ===== HẾT SNOWBALL → ĐỔI BROOM NGAY ===== */
-if (snowballCount === 0) {
-    safeEquip(bowName);
-    return false;
-}
-
-
-    /* ===== SELECT TARGET ===== */
-    const target = selectSnowballTarget(
-        monsterTypes,
-        strongMonsterTypes,
-        snowballCount,
-        minSnowballForStrong
-    );
-
-    const now = Date.now();
-
-    /* ===== CÓ TARGET ===== */
-    if (target) {
-        lastSnowballTargetTime = now;
-
-        safeEquip(fortName);
-
-        if (
-            character.slots.mainhand?.name === fortName &&
-            !is_on_cooldown(skill) && character.mp > 100 &&
-            can_use(skill, target)
-        ) {
-            use_skill(skill, target);
-        }
-        return true;
-    }
-
-    /* ===== KHÔNG TARGET NHƯNG CÒN QUÁI GẦN ===== */
-    if (hasNearbyRelevantMonster(monsterTypes, strongMonsterTypes)) {
-        return false;
-    }
-
-/* ===== HẾT QUÁI HOẶC HẾT SNOWBALL → ĐỔI BROOM NGAY ===== */
-if (!target || snowballCount === 0) {
-    safeEquip(bowName);
-    return false;
-}
-
-
-	
-	
-}
-
-
-/* ================= TARGET SELECTION ================= */
-
-function selectSnowballTarget(
-    monsterTypes,
-    strongMonsterTypes,
-    snowballCount,
-    minSnowballForStrong
-) {
-    /* ===== FIREROAMER: SPAM ===== */
-	const ATTACK_RANGE = 300;
-
-    for (let e of Object.values(parent.entities)) {
-        if (
-            isValidMonster(e) &&
-            strongMonsterTypes.includes(e.mtype) &&
-            e.target &&
-            parent.party_list?.includes(e.target) &&
-            snowballCount >= minSnowballForStrong
-			&&  distance(character, e) <= ATTACK_RANGE   
-
-        ) {
-            return e;
-        }
-    }
-
-    /* ===== CLEAN QUEUE ===== */
-    snowballQueue = snowballQueue.filter(isValidMonster);
-
-    /* ===== QUÁI YẾU ===== */
-    for (let e of Object.values(parent.entities)) {
-        if (!isValidMonster(e)) continue;
-        if (!monsterTypes.includes(e.mtype)) continue;
-        if (distance(character, e) > ATTACK_RANGE) continue; 
-
-        if (e.hp >= 2000) {
-            return e; // focus
-        }
-
-        if (!snowballQueue.some(q => q.id === e.id)) {
-            snowballQueue.push(e); // rải
-        }
-    }
-
-/* ===== RẢI SNOWBALL CHỈ KHI CÒN SNOWBALL ===== */
-if (snowballQueue.length > 0 && snowballCount > 0) {
-    return snowballQueue.shift();
-}
-
-
-    return null;
-}
-
-
-/* ================= LOOT ================= */
-
-function lootNearby() {
-    if (character.rip) return false;
-
-    if (parent.party_list?.length) {
-        for (let name of parent.party_list) {
-            if (name !== character.name && get_player(name)) {
-                return false;
-            }
-        }
-    }
-
-    const chests = get_chests();
-    for (let id in chests) loot(id);
-    return true;
-}
-
-
-////////////////////////////////////////////////
-
-
-
-
-
-
-//////////////////////vòng lặp xả banh
-
-
-setInterval(() => {
-    // ===== COUNT SNOWBALL =====
-    let snowballCount = 0;
-    for (let i of character.items) {
-        if (i && i.name === "snowball") {
-            snowballCount += i.q || 1;
-        }
-    }
-
-    // ===== CONDITION MOVE =====
-    if (snowballCount > 20 && character.mp > 1000 && !parent?.S?.grinch?.live ) {
-        if (!smart.moving && character.map != "bank" ) {
-			
-					smart_move("frog", () => {
-  open_stand();
-    });
-        }
-    }
-}, 150000);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1419,7 +1381,7 @@ setInterval(() => {
             ghichu(
                 "PERFECT 0000 LOG",
                 `Slot ${slot} hit 0000 at ${time}`,
-                ""
+                "dsfsdfsdfsdfsd"
             );
         }
     });
@@ -1527,7 +1489,7 @@ setInterval(() => {
     }
 
     /*********************************************************
-     * AUTO BUY & SELL HELMET – RIÊNG TASK
+     * AUTO BUY & SELL HELMET – RIÊNG TASK // chỉ dùng khi muốn tìm lucky slot
      *********************************************************/
     async function helmetManager() {
         for (;;) {
@@ -1560,88 +1522,144 @@ setInterval(() => {
 /*********************************************************
  * JOB: UPGRADE ITEM A Ở SLOT 31
  *********************************************************/
-async function upgradeItemAAtSlot31() {
+	
+async function smartUpgradeManager() {
     const TARGET_SLOT = 31;
-    const ITEM_A = "coat";
-    const ITEM_B_LIST = ["scroll1", "offeringp"];
+    const INTERVAL_NORMAL = 260000;
+    const INTERVAL_FAST = 300;
 	
-const INTERVAL = 160000;  /// thời gian chờ mỗi lần nâng cấp
-let lastRun = 0;
+	const UPGRADE_CONFIG = [
+    {
+        name: "coatxxx",
+        min_level: 7,
+        max_level: 8, // Chỉ nâng cấp nếu dưới level 9
+        levels: {
+            7: { scroll: "scroll1"},
+            8: { scroll: "scroll1"}
+        }
+    },
+	
+    {
+        name: "pouchbow",
+        min_level: 7,
+        max_level: 7, // Chỉ nâng cấp nếu dưới level 9
+        levels: {
+            7: { scroll: "scroll1", offering: "offeringp"},
+        }
+    },
+		
+    {
+        name: "fireblade111",
+        min_level: 7,
+        max_level: 7,
+        levels: {
+            7: { scroll: "scroll2", offering: "offeringp" },
+            // ... thêm các level khác
+        }
+    }
+    ];
+	
+	
+    let lastRun = 0;
 
-	
     for (;;) {
         try {
-			
-			
-if (Date.now() - lastRun < INTERVAL) {
-    await sleep(500);
-    continue;
+            if (character.q?.upgrade) {
+                await sleep(500);
+                continue;
+            }
+
+// --- A. TÍNH TOÁN INTERVAL ---
+// Đếm xem có bao nhiêu item trong config đang đợi nâng cấp
+let eligibleCount = 0;
+let targetItemData = null;
+
+for (let i = 0; i < character.items.length; i++) {
+    const it = character.items[i];
+    if (!it) continue;
+
+    const cfg = UPGRADE_CONFIG.find(c =>
+        c.name === it.name &&
+        it.level >= c.min_level &&
+        it.level < (c.max_level + 1)
+    );
+
+    if (cfg) {
+        eligibleCount++;
+        if (!targetItemData)
+            targetItemData = { slot: i, ...cfg, currentLevel: it.level };
+    }
 }
 
+// Nếu >3 item thì bật fast mode 60s
+if (eligibleCount > 3 && Date.now() > fastModeUntil) {
+    fastModeUntil = Date.now() + 60000;
+}
+
+// Nếu đang trong fast mode thì chạy nhanh
+const currentInterval =
+    Date.now() < fastModeUntil ? INTERVAL_FAST : INTERVAL_NORMAL;
 			
 			
-            if (character.q?.upgrade) {
-                await sleep(300);
+			
+            if (Date.now() - lastRun < currentInterval) {
+                await sleep(500);
                 continue;
             }
 
-            // 1. Tìm ITEM A level >= 7
-            let itemASlot = -1;
-            for (let i = 0; i < character.items.length; i++) {
-                const it = character.items[i];
-                if (it && it.name === ITEM_A && it.level >= 7 && it.level < 9) {
-                    itemASlot = i;
-                    break;
-                }
-            }
-
-            if (itemASlot === -1) {
-                await sleep(600);
+            // --- B. THỰC HIỆN UPGRADE ---
+            if (!targetItemData) {
+                await sleep(1000);
                 continue;
             }
 
-            // 2. Đưa ITEM A về slot 31
-            if (itemASlot !== TARGET_SLOT) {
-                if (!await trySwapToSlot(itemASlot, TARGET_SLOT)) {
-                    await sleep(300);
+            // 1. Di chuyển vào slot đích (31)
+            if (targetItemData.slot !== TARGET_SLOT) {
+                if (!await trySwapToSlot(targetItemData.slot, TARGET_SLOT)) {
+                    await sleep(500);
                     continue;
                 }
             }
 
-            // Verify duy nhất
-            const it = character.items[TARGET_SLOT];
-            if (!it || it.name !== ITEM_A || it.level < 7) {
-                await sleep(400);
+            // 2. Lấy thông tin scroll/offering dựa trên level hiện tại
+            const levelSettings = targetItemData.levels[targetItemData.currentLevel];
+            if (!levelSettings) {
+                game_log(`Chưa cấu hình level ${targetItemData.currentLevel} cho ${targetItemData.name}`);
+                await sleep(1000);
                 continue;
             }
 
-            // 3. Check đủ ITEM B (FAIL FAST)
-            const itemBSlots = {};
-            for (const name of ITEM_B_LIST) {
-                const slot = locate_item(name);
-                if (slot === -1) {
-                    await sleep(600);
-                    continue;
-                }
-                itemBSlots[name] = slot;
+            const scrollSlot = locate_item(levelSettings.scroll);
+            const offeringSlot = levelSettings.offering ? locate_item(levelSettings.offering) : -1;
+
+            if (scrollSlot === -1) {
+                game_log(`Thiếu ${levelSettings.scroll} để nâng cấp ${targetItemData.name}`);
+                await sleep(5000);
+                continue;
             }
 
-            game_log(
-                `[UPGRADE] ${ITEM_A} +${it.level} @ slot ${TARGET_SLOT}`
-            );
+            // 3. Tiến hành Upgrade
+            game_log(`[UPGRADE] ${targetItemData.name} +${targetItemData.currentLevel} -> +${targetItemData.currentLevel + 1}`);
+            
+	// Dùng kỹ năng tăng tốc
+	if (can_use("massproductionpp") && !character.s.massproductionpp)
+		use_skill("massproductionpp");
+	else if (can_use("massproduction") && !character.s.massproduction)
+		use_skill("massproduction");
 			
-            // 4. Upgrade
-            await upgradeRetry(TARGET_SLOT, itemBSlots["scroll1"]);
-			
-lastRun = Date.now();
+            // Nếu có offering thì dùng, không thì chỉ dùng scroll
+            if (offeringSlot !== -1) {
+                await upgrade(TARGET_SLOT, scrollSlot, offeringSlot);
+            } else {
+                await upgrade(TARGET_SLOT, scrollSlot);
+            }
 
-			
+            lastRun = Date.now();
 
         } catch (e) {
-            game_log(`Upgrade slot 31 error: ${e}`);
+            game_log(`Error: ${e}`);
         }
-
-        await sleep(400);
+        await sleep(500);
     }
 }
 
@@ -1657,7 +1675,7 @@ lastRun = Date.now();
 	
   //  autoUpgradeLoop();
   //  helmetManager();
-	upgradeItemAAtSlot31()
+	smartUpgradeManager()
 
 
 })();
@@ -1772,13 +1790,13 @@ function logGold() {
         ghichu(
             "GOLD CHANGE LOG",
             `→ ${formatGold(character.gold)}  | Time: ${time}`,
-            ""
+            "èwerwerwerwerwer"
         );
 
    
 }
 
-logGold()
+// logGold()  //tạm ngưng log gold
 
 /////////////////////////
 /////////////////////////
@@ -1786,19 +1804,55 @@ logGold()
 
 
 
+let lastStr = "";
+
+parent.socket.on("q_data", (event) => {
+
+    const nums = event.p?.nums;
+    if (!nums || nums.length !== 4) return;
+
+    const str = nums.slice().reverse().join(""); // đảo ngược
+
+    if (str === lastStr) return;
+
+    lastStr = str;
+
+    game_log(`Slot ${event.num} nums: ${str}`);
+
+});
 
 
+///////////////////////////////////////////////////
+////////////////////////////////////////////////
 
+const NTFY_TOPIC = "adventure_vip111118899";
 
+function sendNtfyStatus() {
+    const hp = Math.round(character.hp / character.max_hp * 100);
+    const mp = Math.round(character.mp / character.max_mp * 100);
 
+    const message =
+`
+Gold: ${character.gold.toLocaleString()}
+Túi trống: ${character.esize}
+Ping: ${character.ping}ms`;
 
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+        method: "POST",
+        headers: {
+            "Title": character.name,
+            "Priority": "default"
+        },
+        body: message
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    })
+    .catch(e => game_log("NTFY ERROR: " + e));
+}
 
+// Gửi ngay khi bot chạy
+sendNtfyStatus();
 
-
-
-
-
-
-
-
-
+// Sau đó gửi mỗi 5 phút
+setInterval(sendNtfyStatus, 30 * 60 * 1000);
