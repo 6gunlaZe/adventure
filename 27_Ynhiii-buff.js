@@ -3090,7 +3090,7 @@ setInterval(() => {
         console.log(`[Client] Requested '${command}' from ${MERCHANT}`);
     };
 
-    if (esize < 8 || s?.mluck?.f !== MERCHANT) sendRequest("full");
+    if (esize < 6 || s?.mluck?.f !== MERCHANT) sendRequest("full");
 
     for (const item of items) {
         if (!item) continue;
