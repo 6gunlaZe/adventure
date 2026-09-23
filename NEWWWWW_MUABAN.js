@@ -102,6 +102,7 @@ const LOCATIONS = {
     shop: { map: "main", x: 0, y: 0 },
     storage: { map: "bank", x: 0, y: -150 },
     upgrade: { map: "main", x: 0, y: 0 },
+    fishing: { map: "main", x: -1366, y: -14 },
     gem: { map: "main", x: 0, y: 0 }
 };
 
@@ -119,6 +120,7 @@ const SERVICES = {
     storage: { priority: 100, target: "storage", timeout: 250000, handler: service_storage },
     cleanup: { priority: 30, target: "storage", timeout: 15000, handler: service_cleanup },
     upgrade: { priority: 20, target: "upgrade", timeout: 60000, handler: service_upgrade },
+    fishing: { priority: 20, target: "fishing", timeout: 300000, handler: service_fishing },
     compound: { priority: 20, target: "upgrade", timeout: 60000, handler: service_compound },
     craft: { priority: 20, target: "upgrade", timeout: 60000, handler: service_craft },
     gem: { priority: 10, target: "gem", timeout: 65000, handler: service_gem }
@@ -756,6 +758,69 @@ function service_compound(req) { go_to_service(req, () => setTimeout(finish_and_
 function service_craft(req) { go_to_service(req, () => setTimeout(finish_and_return, CONFIG.SERVICE_DELAY)); }
 function service_gem(req) { go_to_service(req, () => setTimeout(finish_and_return, CONFIG.SERVICE_DELAY)); }
 
+
+function service_fishing(req) {
+    const FISHING_POS = { map: "main", x: -1366, y: -14 };
+    const MAX_FISHING_TIME = 5 * 60 * 1000; // Tối đa 5 phút
+    const startTime = Date.now();
+
+    // 1. Kiểm tra nhanh cooldown skill trước khi di chuyển
+    if (is_on_cooldown("fishing")) {
+        console.log("[StoneMer] Skill fishing đang cooldown, bỏ qua dịch vụ.");
+        finish_and_return();
+        return;
+    }
+
+    // 2. Tận dụng go_to_service để di chuyển tới vị trí câu cá
+    // Mẹo: Gán đè vị trí yêu cầu thành vị trí câu cá
+    req.map = FISHING_POS.map;
+    req.x = FISHING_POS.x;
+    req.y = FISHING_POS.y;
+
+    go_to_service(req, () => {
+        // Vòng lặp thực hiện câu cá
+        const fishingInterval = setInterval(async () => {
+            const elapsedTime = Date.now() - startTime;
+
+            // ĐIỀU KIỆN KẾT THÚC:
+            // 1. Đã quá 5 phút
+            // 2. Hoặc skill đang cooldown (nghĩa là vừa mới tung cần câu xong)
+            if (elapsedTime >= MAX_FISHING_TIME || is_on_cooldown("fishing")) {
+                clearInterval(fishingInterval);
+                console.log("[StoneMer] Hoàn thành câu cá (hoặc skill đang cooldown/hết giờ).");
+                
+                // Trả lại vũ khí chính nếu cần (tuỳ chọn)
+                setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
+                return;
+            }
+
+            // --- THỰC HIỆN CÂU CÁ ---
+            // Kiểm tra xem đã trang bị Cần câu (rod) chưa
+            const rodName = "rod";
+            if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
+                const rodSlot = locate_item(rodName);
+                if (rodSlot !== -1) {
+                    if (character.slots.offhand) unequip("offhand");
+                    await equip(rodSlot);
+                } else {
+                    console.log("[StoneMer] Không tìm thấy cần câu trong túi!");
+                    clearInterval(fishingInterval);
+                    finish_and_return();
+                    return;
+                }
+            }
+
+            // Tung cần câu nếu không trong trạng thái đang casting
+            if (!character.c?.fishing && !is_on_cooldown("fishing")) {
+                use_skill("fishing").catch(e => console.log("[StoneMer] Lỗi use_skill fishing:", e));
+            }
+        }, 1000); // Quét mỗi 1 giây
+    });
+}
+
+
+
+
 // ============================================================
 // ITEM FUNCTIONS
 // ============================================================
@@ -962,7 +1027,7 @@ function start_idle_upgrade_loop() {
     stop_idle_upgrade_loop();
     idleUpgradeTimer = setInterval(() => {
         // Chặn nâng cấp nếu đang di chuyển hoặc đang bận làm nhiệm vụ
-        if (smart.moving || busy || queue1.length > 0 || character.esize < 1 || character.gold < 4500000 ) return;
+        if ( character.map == "bank" || character.esize < 1 || character.gold < 4500000 ) return;
         compound_itemsVIP();
         upgradeVIP_Idle();
     }, 1700);
@@ -2472,4 +2537,44 @@ sendNtfyStatus();
 
 // Sau đó gửi mỗi 5 phút
 setInterval(sendNtfyStatus, 30 * 60 * 1000);
+
+
+// ============================================================
+// VÒNG LẶP ĐỘC LẬP: TỰ ĐỘNG CÂU CÁ (MỖI 5 PHÚT / LẦN)
+// ============================================================
+// Biến lưu thời điểm gửi lệnh câu cá gần nhất
+let lastFishingCheck = 0; 
+// Cấu hình thời gian chờ nghỉ thêm giữa các lần đi câu: 5 phút (300 giây)
+const FISHING_EXTRA_DELAY = 300 * 1000; 
+
+setInterval(() => {
+    // 1. Nếu Merchant đang bận hoặc hàng chờ đang có việc -> Bỏ qua
+    if (busy || queue1.length > 0) return;
+
+    // 2. Kiểm tra skill fishing có đang cooldown không
+    if (is_on_cooldown("fishing")) return;
+
+    // 3. Kiểm tra đã đủ 5 phút từ lần đi câu gần nhất chưa
+    const now = Date.now();
+    if (now - lastFishingCheck < FISHING_EXTRA_DELAY) return;
+
+    console.log("[StoneMer] AUTO: Đã đủ 5 phút nghỉ & Skill sẵn sàng → Đẩy job FISHING");
+
+    lastFishingCheck = now;
+
+    queue1.push({
+        id: "auto_fishing_" + now,
+        sender: character.name,
+        command: "fishing",
+        priority: 10, // Độ ưu tiên thấp
+        createdAt: now
+    });
+
+    process_queue();
+
+}, 5000); // Quét nhẹ 5s/lần
+
+
+
+
 
