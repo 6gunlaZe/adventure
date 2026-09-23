@@ -185,6 +185,76 @@ const PONTY_EXCLUDE_ITEMS = [
 
 function on_cm(sender, data) {
     if (character.name !== MERCHANT) return;
+    if (!data) return;
+
+    const name = sender; // Chuẩn hóa name từ sender
+
+    // =========================================================================
+    // 1. XỬ LÝ DỮ LIỆU DẠNG CHUỖI (String - Forwarding & Dẫn quái ENT)
+    // =========================================================================
+    if (typeof data === "string") {
+        
+        // --- Logic Forwarding: Chuyển tiếp lệnh từ Haiz cho các thành viên trong party_list ---
+        if (name === "haiz" ) {
+            if (parent.party_list && parent.party_list.length > 0) {
+                for (let member of parent.party_list) {
+                    // Lọc bỏ Merchant, Haiz và Ynhi
+                    if (member !== character.name && member !== "haiz" && member !== "Ynhi") {
+                        send_cm(member, data);
+                    }
+                }
+            }
+        }
+
+        // --- Logic dẫn quái ent về farm --- nên cho vào  HÀNG CHỜ QUEUE
+      //  if ((name === "Ynhi" || name === "haiz") && data === "ent" && (character.map === "main" || !startLure)) {
+      //      runLure();
+     //   }
+
+        return; 
+    }
+
+    // =========================================================================
+    // 2. XỬ LÝ DỮ LIỆU DẠNG ĐỐI TƯỢNG (Kích hoạt chiến thuật / Instance Key)
+    // =========================================================================
+    if (typeof data === "object" && data !== null) {
+        if (data.command) {
+            game_log("Lệnh nhận được: " + data.command);
+        }
+
+        // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
+        if (name === "haiz" && data.command === "assist_xmage") {
+            const targetPos = { map: "winterland", x: 1049, y: -2002 };
+            const isGoingToCorrectPlace = typeof smart !== "undefined" && 
+                                          smart && 
+                                          smart.moving && 
+                                          smart.map === targetPos.map && 
+                                          smart.x === targetPos.x && 
+                                          smart.y === targetPos.y;
+
+            const dungeon_key = data.instance_key;
+
+            if (dungeon_key && character.map !== "winter_instance" && (!isGoingToCorrectPlace || !smart.moving)) {
+                game_log("Nhận mã hầm ngục từ Haiz: " + dungeon_key);
+                
+                // Di chuyển đến cửa hầm ngục
+                smart_move(targetPos, () => {
+                    if (distance(character, targetPos) < 50) {
+                        game_log("Đang vào đúng hầm ngục của Haiz...");
+                        enter("winter_instance", dungeon_key); 
+                    } else {
+                        game_log("Không đúng vị trí cửa hầm ngục!");
+                    }
+                });
+            }
+
+            return; // Kết thúc xử lý lệnh assist_xmage trực tiếp
+        }
+    }
+
+    // =========================================================================
+    // 3. XỬ LÝ ĐƯA VÀO HÀNG CHỜ QUEUE (Các dịch vụ Merchant thông thường)
+    // =========================================================================
     if (!data?.command) return;
 
     const config = SERVICES[data.command];
