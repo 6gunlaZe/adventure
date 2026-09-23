@@ -23,9 +23,8 @@ const TRASH_ITEMS = [
 const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband"];
 
 //Danh sách đổi quà tự động
-const EXCHANGE = {
-    gem0: 1, weaponbox: 1,
-};
+const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candy0: 1, candy1: 1, candycane: 1, candypop: 10, 
+				  gem0: 1, gem1: 1, gift0: 1, goldenegg: 1, leather: 40, lostearring: 1, mistletoe: 1, ornament: 20, seashell: 20, troll: 1, weaponbox: 1, xbox: 1 };
 
 // Danh sách các item KHÔNG ĐƯỢC RÚT TỪ BANK để chế (chỉ dùng nếu có sẵn trong túi)
  const blackListCraftFromBank = ["essenceoffire", "smoke", "mbones"];
@@ -139,57 +138,202 @@ let serviceTimer = null;
 // AUTO UPGRADE RULES & WHITELIST  
 // ============================================================
 
-const upgradeGroups = {
-	group_basic: [
-		{ levels: [0,1,2,3,4], scroll: 0, offering: 0 },
-		{ levels: [5,6],       scroll: 1, offering: 0 },
-		{ levels: [7],         scroll: 2, offering: 0 },
-		{ levels: [8],         scroll: 2, offering: 0 }
-	],
-
-	group_basic1: [
-		{ levels: [0,1,2,3,4,5,6], scroll: 0, offering: 0 },
-		{ levels: [7], scroll: 1, offering: 0 },
-		{ levels: [8], scroll: 2, offering: 0 },
-
-	],
-
-	group_basic2: [
-		{ levels: [0,1,2,3,4], scroll: 0, offering: 0 },
-		//{ levels: [5,6],       scroll: 1, offering: 0 },
-		//{ levels: [7],         scroll: 2, offering: 0 },
-		//{ levels: [8],         scroll: 2, offering: 1 }
-	],
-	group_basic4: [
-		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
-		{ levels: [5,6],       scroll: 2, offering: 0 },
-		{ levels: [7],         scroll: 2, offering: 0 },
-		//{ levels: [8],         scroll: 2, offering: 1 }
-	],
-	group_basic5: [
+// 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
+var upgradeGroups = {
+	group_basic: [ // đồ phổ thông
 		{ levels: [0,1,2], scroll: 0, offering: 0 },
-		{ levels: [3,4,5,6],       scroll: 1, offering: 0 },
-		{ levels: [7],         scroll: 2, offering: 0 },
-		//{ levels: [8],         scroll: 2, offering: 1 }
+		{ levels: [3,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],     scroll: 1, offering: 1 },
+		{ levels: [7],     scroll: 1, offering: 1 },
+		{ levels: [8],       scroll: 2, offering: 1 }
 	],
-	group_basic6: [
-		{ levels: [0,1,2,3,4,5,6,7], scroll: 2, offering: 0 },
+	group_basic00: [ // đồ rác
+		{ levels: [1,2,3,4], scroll: 0, offering: 0 },
+		{ levels: [5,6,7],     scroll: 1, offering: 0 },
+		{ levels: [8],       scroll: 2, offering: 0 }
 	],
-	group_basic3: [
-		{ levels: [0,1,2,3,4,5,6], scroll: 1, offering: 0 },
-		{ levels: [7],         scroll: 2, offering: 0 },
+	group_basic01: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6,], scroll: 1, offering: 0 },
+	//	{ levels: [7],     scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 1 }
+	//	{ levels: [9],       scroll: 2, offering: 2 }
 
-	]
+	],
+	group_basic02: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6], scroll: 1, offering: 0 },
+		{ levels: [7],     scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 2 }
+	],
+
+	group_basic03: [ // đồ rác
+		{ levels: [0,], scroll: 0, offering: 0 },
+		{ levels: [1,2,3],     scroll: 1, offering: 0 },
+		{ levels: [4,5],       scroll: 2, offering: 1 },
+	//	{ levels: [6,7],       scroll: 2, offering: 1 },
+	//	{ levels: [8],       scroll: 2, offering: 2 },
+
+	],	
+	
+	group_basic04: [ // đồ rác
+		{ levels: [0,1,2,3,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],     scroll: 2, offering: 0 },
+		{ levels: [7],       scroll: 2, offering: 1 }
+	],	
+	
+	group_basic05: [ // đồ rác
+		{ levels: [0,1,], scroll: 0, offering: 0 },
+		{ levels: [2,3,4,5],     scroll: 1, offering: 0 },
+		{ levels: [6,7,],       scroll: 2, offering: 1 }
+	],	
+	
+	group_basic06: [ // đồ rác
+		{ levels: [0,1,2,3,4,5,6], scroll: 0, offering: 0 },
+	//	{ levels: [7,8],     scroll: 1, offering: 0 },
+	//	{ levels: [9],       scroll: 2, offering: 1 }
+	],
+	
+	group_basic07: [ // đồ rác
+		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [3,4,5,6],     scroll: 1, offering: 0 },
+//		{ levels: [7],       scroll: 1, offering: 1 },
+//		{ levels: [8],       scroll: 2, offering: 1 },
+//		{ levels: [9],       scroll: 2, offering: 2 },
+	],	
+
+	group_basic08: [ // đồ rác
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5],     scroll: 2, offering: 0 },
+		{ levels: [6],     scroll: 2, offering: 1 },
+		{ levels: [7],       scroll: 2, offering: 1 }
+	//	{ levels: [8],       scroll: 2, offering: 2 }
+	],
+	
+	group_weapon: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5],     scroll: 2, offering: 0 },
+		{ levels: [6],       scroll: 2, offering: 1 }
+	],
+
+	group_weapon1: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+		{ levels: [4,5,6],     scroll: 2, offering: 0 },
+	//	{ levels: [7,8],       scroll: 2, offering: 1 }
+	],
+
+	group_weapon2: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //36% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //46% //26%
+	],
+
+	group_weapon3: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 },
+	//	{ levels: [4,], scroll: 2, offering: 0 }, //58
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //43% 
+	//	{ levels: [6,7],       scroll: 2, offering: 2 }  //48% //27%
+	],
+
+	group_weapon4: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,], scroll: 1, offering: 0 },
+		{ levels: [2,], scroll: 2, offering: 0 },
+		{ levels: [3,4,], scroll: 2, offering: 1 },
+	//	{ levels: [5,],     scroll: 2, offering: 1 },  //45%
+	//	{ levels: [6,7],       scroll: 2, offering: 2 } // 48% //28%
+	//	{ levels: [8],       scroll: 3, offering: 2 }   //18%
+	],
+	
+	group_weapon5: [ // vũ khí & trang bị tấn công
+		{ levels: [0,1,2,], scroll: 1, offering: 0 },
+		{ levels: [3,], scroll: 1, offering: 1 }, 
+		{ levels: [4],  scroll: 2, offering: 1 },  
+		{ levels: [5],  scroll: 2, offering: 1 }, // 66 
+	//	{ levels: [6],  scroll: 2, offering: 1 }, // 28
+	//	{ levels: [7,8],  scroll: 2, offering: 2 },  28 13
+	//	{ levels: [9],  scroll: 3, offering: 2 },  5.4
+
+	],
+	group_rare1: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2,3,4], scroll: 2, offering: 0 },
+		// { levels: [8], scroll: 2, offering: 1 },
+	],
+	
+	group_rare2: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2,], scroll: 1, offering: 0 },
+		{ levels: [3,4,], scroll: 2, offering: 1 },
+		// { levels: [5,], scroll: 2, offering: 1 },
+		// { levels: [6,7,], scroll: 2, offering: 2 },
+		// { levels: [8], scroll: 3, offering: 2 },
+	],	
+	
+	
+	
+	group_rare: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
+		{ levels: [0,1,2], scroll: 2, offering: 0 },
+		{ levels: [3], scroll: 2, offering: 1 },
+	],
+	group_vip: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0], scroll: 2, offering: 0 },
+		{ levels: [1,2,3], scroll: 2, offering: 1 },
+	],
+	group_vip1: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0], scroll: 2, offering: 0 },
+		{ levels: [1,2,3], scroll: 2, offering: 1 },
+	],	
+	group_vip2: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1], scroll: 2, offering: 0 },
+		{ levels: [2,3], scroll: 2, offering: 1 },
+	],	
+	group_vip3: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+		{ levels: [5,6], scroll: 2, offering: 0 },
+		{ levels: [7], scroll: 2, offering: 1 },
+
+	],	
+	group_vip4: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+		{ levels: [4,], scroll: 2, offering: 0 },
+		{ levels: [5,6], scroll: 2, offering: 1 },
+
+	],
+	
+	
+	group_Supervip: [ // đồ quý, phụ kiện hiếm
+		{ levels: [0,1,2], scroll: 2, offering: 1 },
+	],
+	
 };
 
-const upgradeWhitelistVIPP = {
-	group_basic: ["throwingstars"],
-	group_basic1: ["wcap","wattire","wbreeches","wgloves","wshoes"],
-	group_basic2: ["cclaw233242"],
-	group_basic3: ["t2bow","firebow","firestaff"],
-	group_basic4: ["bowofthedead","crossbow","alloyquiver","harbringer"],
-	group_basic5: ["quiver","shield","mittens"],
-	group_basic6: ["t3bow"],
+// 2️⃣ Gán item vào nhóm
+var upgradeWhitelistVIPP = {
+	group_basic: ["ololipop","glolipop"],
+	group_basic00: ["cclaw111"],
+	group_basic01: ["firebow","fireblade"],	
+	group_basic02: ["gcape","eslippers11","ecape"],	
+	group_basic03: ["mittens111","shield",],	
+	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead","tshirt4"],
+	group_basic05: ["wingedboots"],	
+	group_basic06: ["pants1111","coat1111","blade11","helmet1111"],
+	group_basic07: ["pouchbow"],	
+	group_basic08: ["ecape11","woodensword"],	
+	group_weapon: ["bowofthedead","crossbow","oozingterror11111"],
+	group_weapon1: ["firestars"],
+	group_weapon2: ["spikedhelmet11"],
+	group_weapon3: ["bcape"],
+	group_weapon4: ["alloyquiver111"],
+	group_weapon5: ["bataxe"],
+
+	group_rare1: ["handofmidas","hdagger","xboots","xgloves",],
+	group_rare2: ["sparkstaff1111",],
+	group_rare: ["xarmor","t3bow","lmace"],
+	group_vip: ["vattire","vstaff"],
+	group_vip1: ["starkillers1111","vhammer111","vdagger","xhelmet"],
+	group_vip2: ["supermittens",],
+	group_vip3: ["harbringer","homecominghelm","homecomingcoat","homecomingcape",],
+	group_vip4: ["candleward",],
+	group_Supervip: ["fury",],
+
+	
 
 };
 
@@ -2282,4 +2426,53 @@ function buyMissingItemsByLevel(itemPairs) {
     }
 }
 
+// LOG NÂNG CẤP
+let lastStr = "";
+parent.socket.on("q_data", (event) => {
+
+    const nums = event.p?.nums;
+    if (!nums || nums.length !== 4) return;
+
+    const str = nums.slice().reverse().join(""); // đảo ngược
+
+    if (str === lastStr) return;
+
+    lastStr = str;
+
+    game_log(`Slot ${event.num} nums: ${str}`);
+
+});
+
+
+const NTFY_TOPIC = "adventure_vip111118899";
+
+function sendNtfyStatus() {
+    const hp = Math.round(character.hp / character.max_hp * 100);
+    const mp = Math.round(character.mp / character.max_mp * 100);
+
+    const message =
+`
+Gold: ${character.gold.toLocaleString()}
+Túi trống: ${character.esize}
+Ping: ${character.ping}ms`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+        method: "POST",
+        headers: {
+            "Title": character.name,
+            "Priority": "default"
+        },
+        body: message
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    })
+    .catch(e => game_log("NTFY ERROR: " + e));
+}
+
+// Gửi ngay khi bot chạy
+sendNtfyStatus();
+
+// Sau đó gửi mỗi 5 phút
+setInterval(sendNtfyStatus, 30 * 60 * 1000);
 
