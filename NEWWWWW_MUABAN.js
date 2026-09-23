@@ -20,7 +20,7 @@ const TRASH_ITEMS = [
 ];
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring",];
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = {
@@ -37,6 +37,7 @@ const IMPORTANT_ITEMS = [
         "tracker", "computer", "supercomputer"
     ];
 
+//TỰ ĐỘNG SOI HÀNG TRÊN THỊ TRƯỜNG
 const autoSellToMerchItems = [
     { name: "tombkey", price: 2300000 },
     { name: "platinumingot", price: 799000000 },
@@ -44,7 +45,6 @@ const autoSellToMerchItems = [
     { name: "alloyquiver", price: 990000 },
 	
 ];
-
 const autoBuyFromMerchItems = [
     { name: "offeringp", price: 3600000 },
     { name: "monstertoken", price: 500005 },
@@ -56,10 +56,27 @@ const autoBuyFromMerchItems = [
     { name: "slice_strawberry", price: 320000 },
 	
     { name: "ololipop", price: 1120000 },
-
-
-
 ];
+
+
+// TỰ ĐỘNG BÁN NẾU SỐ LƯỢNG TRONG TÚI VƯỢT QUÁ => TRÁNH LAG
+const ITEMS_TO_SELL = [
+    ["bow", 1], 
+    ["blade", 1], 
+    ["snowball", 1],
+    ["smoke", 1], 
+    ["shoes", 1], 
+    ["throwingstars", 5]
+];
+// TỰ ĐỘNG MUA KHI BỊ DƯỚI SỐ LƯỢNG
+const ITEMS_TO_BUY = [
+    ["scroll0", 5000, 3000],
+    ["scroll1", 150, 200],
+    ["cscroll0", 50, 300],
+    ["cscroll1", 50, 300],
+    ["scroll2", 25, 60]
+];
+
 // ============================================================
 // CONFIG
 // ============================================================
@@ -2222,5 +2239,47 @@ const intervalId = setInterval(() => {
 
 
 
+
+setInterval(() => {
+    sellExtraItems(ITEMS_TO_SELL);
+
+    if (character.esize > 6) {
+        buyMissingItemsByLevel(ITEMS_TO_BUY);
+    }
+}, 5000);
+
+function sellExtraItems(itemPairs) {
+    for (const [name, keep] of itemPairs) {
+        // Lấy danh sách các index slot thỏa mãn điều kiện (level 0 hoặc không có level)
+        const slots = character.items
+            .map((it, idx) => (it && it.name === name && (!it.level || it.level === 0)) ? idx : -1)
+            .filter(idx => idx !== -1);
+
+        // Bán phần dư từ vị trí `keep` trở đi
+        if (slots.length > keep) {
+            const idx = slots[keep];
+            sell(idx, character.items[idx].q || 1);
+            return; // Mỗi tick chỉ bán 1 slot
+        }
+    }
+}
+
+function buyMissingItemsByLevel(itemPairs) {
+    if (character.esize < 1 || character.gold < 1000000) return;
+
+    for (const [name, keep, buyQty = 1, maxLvl] of itemPairs) {
+        // Đếm tổng số lượng item thỏa mãn điều kiện level
+        const count = character.items.reduce((total, it) => {
+            if (!it || it.name !== name) return total;
+            if (maxLvl !== undefined && (it.level || 0) > maxLvl) return total;
+            return total + (it.q || 1);
+        }, 0);
+
+        if (count < keep) {
+            buy(name, buyQty);
+            return; // Mỗi tick chỉ mua 1 loại
+        }
+    }
+}
 
 
