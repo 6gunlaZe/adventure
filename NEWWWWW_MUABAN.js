@@ -89,8 +89,8 @@ const CONFIG = {
 
     HOME_LOCATION: {
         map: "main",
-        x: -100,
-        y: -40
+        x: -48,
+        y: -55
     }
 };
 
