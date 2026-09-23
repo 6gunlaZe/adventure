@@ -1009,6 +1009,7 @@ setInterval(() => character.rip && respawn(), 50000);
 function use_hp_or_mp1() {
 	if (safeties && mssince(last_potion) < min(200, character.ping * 3)) return resolving_promise({ reason: "safeties", success: false, used: false });
 	if (is_on_cooldown("use_hp")) return resolving_promise({ success: false, reason: "cooldown" });
+	if (character.c?.fishing && character.mp > 200) return;
 	var skill = null;
 	if (character.mp / character.max_mp < 0.2) skill = "use_mp";
 	else if (character.hp / character.max_hp < 0.6) skill = "use_hp";
