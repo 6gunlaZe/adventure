@@ -2046,7 +2046,55 @@ loopLoot();
 
 
 
+/////////////////////////ĐỔI ĐỒ TỰ ĐỘNG
 
+// Need Strawberry, Honey & Blueberry Slices. Send me 1 nearby (≤400), I send 1 Mint Slice back. send_item("MuaBan",character.items.findIndex(i=>i&&i.name==="slice_honey"),1);
+var TRADE = {
+  //  slice_nightberry: "slice_mint",
+    slice_blueberry: "slice_mint",
+    slice_honey: "slice_mint",
+   // slice_citrus: "slice_mint",
+    slice_strawberry: "slice_mint",
+
+};
+
+game.on("item_sent", function(event) {
+    if (event.receiver !== character.name) return;
+
+    var received = event.item.name;
+    var quantity = event.item.q;
+    var sender = event.sender;
+
+    var replyItem = TRADE[received];
+
+    // Không nằm trong danh sách trade → bỏ qua
+    if (!replyItem) return;
+
+    // Tối đa mỗi giao dịch 100
+    var sendQuantity = Math.min(quantity, 100);
+
+    var slot = locate_item(replyItem);
+
+    // Không đủ item để trả → hoàn lại toàn bộ item vừa nhận
+    if (slot < 0 || character.items[slot].q < sendQuantity) {
+
+        var receivedSlot = locate_item(received);
+
+        if (receivedSlot >= 0) {
+            send_item(sender, receivedSlot, quantity);
+        }
+
+        pm(
+            sender,
+            `Sorry, I don't have enough ${replyItem} to trade back. I returned your ${quantity}x ${received}.`
+        );
+
+        return;
+    }
+
+    // Đủ hàng → gửi lại
+    send_item(sender, slot, sendQuantity);
+});
 
 
 
