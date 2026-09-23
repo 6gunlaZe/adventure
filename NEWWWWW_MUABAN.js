@@ -1989,6 +1989,10 @@ setInterval(() => {
 
 
 
+
+    // ============================================================
+    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (10 PHÚT)
+    // ============================================================
 let lastIdleTime = Date.now();
 let storagePending = false;
 let storagePendingTime = 0;
