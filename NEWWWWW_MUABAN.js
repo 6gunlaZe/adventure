@@ -31,7 +31,7 @@ const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelo
 
 //  Luôn giữ lại các vật phẩm quan trọng trên túi đồ
 const IMPORTANT_ITEMS = [
-        "scroll0", "scroll1", "scroll2","stand0","stand1",
+        "scroll0", "scroll1", "scroll2","stand0","stand1","rod",
         "cscroll0", "cscroll1", "cscroll2", "offeringp",
         "tracker", "computer", "supercomputer"
     ];
