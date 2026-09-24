@@ -869,6 +869,7 @@ function give_potion(target, potion) {
 
     const targetName = target.id;
     let need = 8000; // Số lượng potion tối đa muốn chuyển
+	if (potion == "hpot1")need = 3000;
 
     // 2. Duyệt qua túi đồ của Merchant để gửi item
     for (let i = 0; i < character.items.length && need > 0; i++) {
