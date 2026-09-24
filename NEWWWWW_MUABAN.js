@@ -632,6 +632,7 @@ function return_home(on_complete) {
     if (character.map === home.map && 
         Math.abs(character.x - home.x) < 15 && 
         Math.abs(character.y - home.y) < 15) 
+	{
         sell_trash_items();
         if (on_complete) on_complete();
         return;
