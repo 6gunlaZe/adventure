@@ -456,12 +456,12 @@ function on_cm(sender, data) {
     const config = SERVICES[data.command];
 
     if (!config) {
-        console.log("[StoneMer] Unknown command:", data.command);
+        console.log("[MuaBan] Unknown command:", data.command);
         return;
     }
 
     if (config.target === "player" && !data.name) {
-        console.log("[StoneMer] Missing player name:", data.command);
+        console.log("[MuaBan] Missing player name:", data.command);
         return;
     }
 
@@ -480,19 +480,19 @@ function on_cm(sender, data) {
     };
 
     if (queue1.length >= CONFIG.MAX_QUEUE) {
-        console.log("[StoneMer] Queue full:", data.command, data.name);
+        console.log("[MuaBan] Queue full:", data.command, data.name);
         return;
     }
 
     if (is_duplicate_request(request)) {
-        console.log("[StoneMer] DUPLICATE:", request.command, request.name);
+        console.log("[MuaBan] DUPLICATE:", request.command, request.name);
         return;
     }
 
     queue1.push(request);
     sort_queue();
 
-    console.log("[StoneMer] QUEUE:", request.command, request.name, "priority:", request.priority);
+    console.log("[MuaBan] QUEUE:", request.command, request.name, "priority:", request.priority);
 
     process_queue();
 }
@@ -518,7 +518,7 @@ function process_queue() {
     service = currentService; // Giữ lại nếu các hàm khác (như execute_service) vẫn dùng biến toàn cục 'service'
     busy = true;
 
-    console.log("[StoneMer] START:", currentService.command, currentService.name, "priority:", currentService.priority);
+    console.log("[MuaBan] START:", currentService.command, currentService.name, "priority:", currentService.priority);
 
     const config = SERVICES[currentService.command];
 
@@ -526,9 +526,9 @@ function process_queue() {
     serviceTimer = setTimeout(() => {
         // 2. Kiểm tra an toàn trước khi truy cập thuộc tính
         if (currentService) {
-            console.log("[StoneMer] TIMEOUT:", currentService.command, currentService.name);
+            console.log("[MuaBan] TIMEOUT:", currentService.command, currentService.name);
         } else {
-            console.log("[StoneMer] TIMEOUT: Unknown service");
+            console.log("[MuaBan] TIMEOUT: Unknown service");
         }
         abort_service("Timeout executed");
     }, config?.timeout ?? CONFIG.DEFAULT_TIMEOUT);
@@ -545,7 +545,7 @@ function execute_service() {
     const config = SERVICES[service.command];
 
     if (!config?.handler) {
-        console.log("[StoneMer] Handler missing:", service.command);
+        console.log("[MuaBan] Handler missing:", service.command);
         abort_service("Missing handler");
         return;
     }
@@ -553,7 +553,7 @@ function execute_service() {
     try {
         config.handler(service);
     } catch (e) {
-        console.log("[StoneMer] ERROR:", service.command, e);
+        console.log("[MuaBan] ERROR:", service.command, e);
         abort_service("Exception in handler");
     }
 }
@@ -582,7 +582,7 @@ function go_to_service(req, callback) {
     const destination = get_service_destination(req);
 
     if (!destination) {
-        console.log("[StoneMer] Invalid destination:", req.command);
+        console.log("[MuaBan] Invalid destination:", req.command);
         abort_service("Invalid destination");
         return;
     }
@@ -597,7 +597,7 @@ function go_to_service(req, callback) {
     const moveTimeout = setTimeout(() => {
         if (!completed) {
             completed = true;
-            console.log("[StoneMer] smart_move stuck -> Aborting");
+            console.log("[MuaBan] smart_move stuck -> Aborting");
             stop();
             abort_service("Smart move timeout");
         }
@@ -646,13 +646,13 @@ function return_home(on_complete) {
         return;
     }
 
-    console.log(`[StoneMer] Moving to HOME: ${home.map} (${home.x}, ${home.y})`);
+    console.log(`[MuaBan] Moving to HOME: ${home.map} (${home.x}, ${home.y})`);
 
     // Dừng ép đồ khi di chuyển
     stop_idle_upgrade_loop();
 
     smart_move(home, () => {
-        console.log("[StoneMer] Returned to HOME successfully.");
+        console.log("[MuaBan] Returned to HOME successfully.");
         
         sell_trash_items();
         open_stand();
@@ -665,16 +665,16 @@ function finish_and_return() {
     clearTimeout(serviceTimer);
     serviceTimer = null;
 
-    console.log("[StoneMer] Service finished, returning to HOME...");
+    console.log("[MuaBan] Service finished, returning to HOME...");
 
     return_home(() => {
-        console.log("[StoneMer] Reached HOME. Waiting 10s before releasing service...");
+        console.log("[MuaBan] Reached HOME. Waiting 10s before releasing service...");
 
         setTimeout(() => {
             service = null;
             busy = false;
 
-            console.log("[StoneMer] Service released after 10s.");
+            console.log("[MuaBan] Service released after 10s.");
             process_queue();
         }, 10000);
     });
@@ -684,16 +684,16 @@ function abort_service(reason) {
     clearTimeout(serviceTimer);
     serviceTimer = null;
 
-    console.log(`[StoneMer] Aborting service (${reason}). Returning to HOME...`);
+    console.log(`[MuaBan] Aborting service (${reason}). Returning to HOME...`);
 
     return_home(() => {
-        console.log("[StoneMer] Reached HOME. Waiting 10s before releasing service...");
+        console.log("[MuaBan] Reached HOME. Waiting 10s before releasing service...");
 
         setTimeout(() => {
             service = null;
             busy = false;
 
-            console.log("[StoneMer] Service released after 10s.");
+            console.log("[MuaBan] Service released after 10s.");
             process_queue();
         }, 10000);
     });
@@ -766,7 +766,7 @@ function service_fishing(req) {
 
     // 1. Kiểm tra nhanh cooldown skill trước khi di chuyển
     if (is_on_cooldown("fishing")) {
-        console.log("[StoneMer] Skill fishing đang cooldown, bỏ qua dịch vụ.");
+        console.log("[MuaBan] Skill fishing đang cooldown, bỏ qua dịch vụ.");
         finish_and_return();
         return;
     }
@@ -787,7 +787,7 @@ function service_fishing(req) {
             // 2. Hoặc skill đang cooldown (nghĩa là vừa mới tung cần câu xong)
             if (elapsedTime >= MAX_FISHING_TIME || is_on_cooldown("fishing")) {
                 clearInterval(fishingInterval);
-                console.log("[StoneMer] Hoàn thành câu cá (hoặc skill đang cooldown/hết giờ).");
+                console.log("[MuaBan] Hoàn thành câu cá (hoặc skill đang cooldown/hết giờ).");
                 
                 // Trả lại vũ khí chính nếu cần (tuỳ chọn)
                 setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
@@ -803,7 +803,7 @@ function service_fishing(req) {
                     if (character.slots.offhand) unequip("offhand");
                     await equip(rodSlot);
                 } else {
-                    console.log("[StoneMer] Không tìm thấy cần câu trong túi!");
+                    console.log("[MuaBan] Không tìm thấy cần câu trong túi!");
                     clearInterval(fishingInterval);
                     finish_and_return();
                     return;
@@ -812,7 +812,7 @@ function service_fishing(req) {
 
             // Tung cần câu nếu không trong trạng thái đang casting
             if (!character.c?.fishing && !is_on_cooldown("fishing")) {
-                use_skill("fishing").catch(e => console.log("[StoneMer] Lỗi use_skill fishing:", e));
+                use_skill("fishing").catch(e => console.log("[MuaBan] Lỗi use_skill fishing:", e));
             }
         }, 1000); // Quét mỗi 1 giây
     });
@@ -842,14 +842,14 @@ function apply_mluck(target) {
 
     if (needs_mluck && !is_on_cooldown("mluck")) {
         use_skill("mluck", target);
-        console.log(`[StoneMer] 🍀 MLuck applied to ${target.name}`);
+        console.log(`[MuaBan] 🍀 MLuck applied to ${target.name}`);
     }
 }
 
 function give_potion(target, potion) {
     // 1. Kiểm tra target có tồn tại và đứng gần không (get_player trả về null nếu quá xa)
     if (!target) {
-        console.log("[StoneMer] Target not found or too far away.");
+        console.log("[MuaBan] Target not found or too far away.");
         return;
     }
 
@@ -869,7 +869,7 @@ function give_potion(target, potion) {
 
         // Gọi hàm send_item chuẩn API Adventure Land: send_item(target_name, slot_index, quantity)
         send_item(targetName, i, amountToSend);
-        console.log(`[StoneMer] Sent ${amountToSend}x ${potion} to ${targetName}`);
+        console.log(`[MuaBan] Sent ${amountToSend}x ${potion} to ${targetName}`);
 
         need -= amountToSend;
     }
@@ -891,7 +891,7 @@ function ensure_potions_at_home(potion_name, amount_needed = 4000) {
     if (merchant_has < amount_needed) {
         let to_buy = amount_needed - merchant_has;
 			buy(potion_name, to_buy);
-            console.log(`[StoneMer] 🛒 Bought ${to_buy}x ${potion_name} at HOME`);
+            console.log(`[MuaBan] 🛒 Bought ${to_buy}x ${potion_name} at HOME`);
     }
 }
 
@@ -923,12 +923,12 @@ function sell_trash_items() {
         // Kiểm tra vật phẩm thuộc danh sách rác và không bị khóa (locked)
         if (TRASH_ITEMS.includes(item.name) && !item.l && !item.s && (item.level ?? 0) <= 0) {
             sell(i, item.q ?? 1);
-            console.log(`[StoneMer] Sold trash item at HOME: ${item.name}`);
+            console.log(`[MuaBan] Sold trash item at HOME: ${item.name}`);
             soldCount++;
         }
     }
     if (soldCount > 0) {
-        console.log(`[StoneMer] Cleaned up ${soldCount} trash items at HOME.`);
+        console.log(`[MuaBan] Cleaned up ${soldCount} trash items at HOME.`);
     }
 }
 
@@ -973,7 +973,7 @@ function should_store_item(item, kept_counts = {}) {
 
 
 // ============================================================
-// STONEMER IDLE UPGRADE INTEGRATION
+// MuaBan IDLE UPGRADE INTEGRATION
 // ============================================================
 
 let idleUpgradeTimer = null;
@@ -1085,13 +1085,13 @@ function get_free_inventory_slots() {
 function service_storage(req) {
     go_to_service(req, async () => {
         if (character.map !== "bank") {
-            console.log("[StoneMer] Chưa ở trong Bank, aborting...");
+            console.log("[MuaBan] Chưa ở trong Bank, aborting...");
             finish_and_return();
             return;
         }
 
         console.log("==================================================");
-        console.log("[StoneMer] BẮT ĐẦU BƯỚC 1: CẤT ĐỒ KHÔNG CẦN THIẾT VÀO KHO");
+        console.log("[MuaBan] BẮT ĐẦU BƯỚC 1: CẤT ĐỒ KHÔNG CẦN THIẾT VÀO KHO");
         console.log("==================================================");
 
         const kept_counts = {};
@@ -1103,12 +1103,12 @@ function service_storage(req) {
             if (should_store_item(item, kept_counts)) {
                 try {
                     await bank_store(i);
-                    console.log(`[StoneMer] Đã cất ${item.name} từ ô ${i} vào Bank.`);
+                    console.log(`[MuaBan] Đã cất ${item.name} từ ô ${i} vào Bank.`);
                     await new Promise(resolve => setTimeout(resolve, 200));
                 } catch (err) {
-                    console.log(`[StoneMer] Lỗi cất item ô ${i}:`, err);
+                    console.log(`[MuaBan] Lỗi cất item ô ${i}:`, err);
                     if (err?.reason === "bank_full") {
-                        console.log("[StoneMer] Bank đã đầy!");
+                        console.log("[MuaBan] Bank đã đầy!");
                         break;
                     }
                 }
@@ -1121,12 +1121,12 @@ function service_storage(req) {
         }
 
         console.log("==================================================");
-        console.log("[StoneMer] BẮT ĐẦU BƯỚC 2: CHECK VÀ RÚT ĐỒ NÂNG CẤP / GHÉP");
+        console.log("[MuaBan] BẮT ĐẦU BƯỚC 2: CHECK VÀ RÚT ĐỒ NÂNG CẤP / GHÉP");
         console.log("==================================================");
 
         await process_upgrade_and_compound_retrieval();
 
-        console.log("[StoneMer] Hoàn thành quy trình kho! Chuẩn bị về HOME.");
+        console.log("[MuaBan] Hoàn thành quy trình kho! Chuẩn bị về HOME.");
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
 }
@@ -1150,11 +1150,11 @@ async function process_upgrade_and_compound_retrieval() {
 
     const go = async (to) => {
         if (!to || character.map === to) return;
-        console.log(`[StoneMer] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
+        console.log(`[MuaBan] [TRAVEL] Di chuyển tầng: ${character.map} -> ${to}`);
         try {
             await smart_move(to);
         } catch (err) {
-            console.log(`[StoneMer] Lỗi di chuyển sang ${to}:`, err);
+            console.log(`[MuaBan] Lỗi di chuyển sang ${to}:`, err);
         }
     };
 
@@ -1411,11 +1411,11 @@ async function process_upgrade_and_compound_retrieval() {
     // D. RÚT ĐỒ THEO BỘ (KIỂM TRA DỰ PHÒNG SỨC CHỨA)
     // ----------------------------------------------------
     if (!action_sets.length) {
-        console.log("[StoneMer] Không có bộ đồ nào đủ điều kiện để rút.");
+        console.log("[MuaBan] Không có bộ đồ nào đủ điều kiện để rút.");
         return;
     }
 
-    console.log(`[StoneMer] Phát hiện ${action_sets.length} bộ hành động cần rút.`);
+    console.log(`[MuaBan] Phát hiện ${action_sets.length} bộ hành động cần rút.`);
 
     for (const set of action_sets) {
         const uniqueItemsInSet = set.items.filter((item, index, self) =>
@@ -1426,11 +1426,11 @@ async function process_upgrade_and_compound_retrieval() {
         const neededSlots = uniqueItemsInSet.length;
 
         if (freeSlots - neededSlots < 4) {
-            console.log(`[StoneMer] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống (cần giữ 4 ô dự phòng).`);
+            console.log(`[MuaBan] ⚠️ Bỏ qua bộ [${set.type}: ${set.name}]! Cần ${neededSlots} ô nhưng túi chỉ còn ${freeSlots} ô trống (cần giữ 4 ô dự phòng).`);
             continue; 
         }
 
-        console.log(`[StoneMer] 📦 Bắt đầu rút TRỌN BỘ [${set.type}: ${set.name}] (${neededSlots} ô)...`);
+        console.log(`[MuaBan] 📦 Bắt đầu rút TRỌN BỘ [${set.type}: ${set.name}] (${neededSlots} ô)...`);
 
         const setByFloor = {};
         for (const target of uniqueItemsInSet) {
@@ -1445,16 +1445,16 @@ async function process_upgrade_and_compound_retrieval() {
             for (const target of setByFloor[floor]) {
                 try {
                     await bank_retrieve(target.pack, target.slot);
-                    console.log(`[StoneMer]  └─ Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
+                    console.log(`[MuaBan]  └─ Đã rút: ${target.item.name} (+${target.item.level ?? 0}) từ ${target.pack}[${target.slot}]`);
                     await new Promise(resolve => setTimeout(resolve, 250));
                 } catch (err) {
-                    console.log(`[StoneMer] Lỗi khi rút ${target.item.name}:`, err);
+                    console.log(`[MuaBan] Lỗi khi rút ${target.item.name}:`, err);
                 }
             }
         }
     }
 
-    console.log("[StoneMer] Hoàn thành rút đồ theo bộ!");
+    console.log("[MuaBan] Hoàn thành rút đồ theo bộ!");
 }
 
 
@@ -1555,7 +1555,7 @@ function compound_itemsVIP() {
 
 	// Không nâng cấp nếu character đang trong thời gian chờ compound của game
 	if (character.q?.compound) {
-		console.log("[StoneMer IDLE] ⏳ Đang cooldown compound");
+		console.log("[MuaBan IDLE] ⏳ Đang cooldown compound");
 		return false;
 	}
 
@@ -1603,7 +1603,7 @@ function compound_itemsVIP() {
 		if (matchingSlots.length >= 3) {
 
 			console.log(
-				`[StoneMer IDLE] 🔎 Compound candidate:` +
+				`[MuaBan IDLE] 🔎 Compound candidate:` +
 				` ${item.name}+${item.level}` +
 				` | slots=${matchingSlots.join(",")}` +
 				` | count=${matchingSlots.length}`
@@ -1633,7 +1633,7 @@ function compound_itemsVIP() {
 	} = bestCandidate;
 
 	console.log(
-		`[StoneMer IDLE] 🎯 Compound target:` +
+		`[MuaBan IDLE] 🎯 Compound target:` +
 		` ${name}+${level}` +
 		` | slots=${slots.join(",")}` +
 		` | scrollRule=${rule.scroll ?? "default"}` +
@@ -1652,7 +1652,7 @@ function compound_itemsVIP() {
 		: -1;
 
 	console.log(
-		`[StoneMer IDLE] 📦 Compound material:` +
+		`[MuaBan IDLE] 📦 Compound material:` +
 		` scroll=${scrollName}` +
 		` slot=${scrollSlot}`
 	);
@@ -1660,14 +1660,14 @@ function compound_itemsVIP() {
 	if (scrollSlot === -1) {
 
 		console.log(
-			`[StoneMer IDLE] 🛒 Thiếu ${scrollName} -> BUY`
+			`[MuaBan IDLE] 🛒 Thiếu ${scrollName} -> BUY`
 		);
 
 		if (parent.buy) {
 			parent.buy(scrollName);
 		} else {
 			console.log(
-				"[StoneMer IDLE] ❌ parent.buy không tồn tại"
+				"[MuaBan IDLE] ❌ parent.buy không tồn tại"
 			);
 		}
 
@@ -1688,7 +1688,7 @@ function compound_itemsVIP() {
 			: -1;
 
 		console.log(
-			`[StoneMer IDLE] 📦 Offering:` +
+			`[MuaBan IDLE] 📦 Offering:` +
 			` ${rule.offering}` +
 			` slot=${offeringSlot}`
 		);
@@ -1697,7 +1697,7 @@ function compound_itemsVIP() {
 		if (offeringSlot === -1) {
 
 			console.log(
-				`[StoneMer IDLE] ❌ Thiếu offering ${rule.offering} -> bỏ qua compound`
+				`[MuaBan IDLE] ❌ Thiếu offering ${rule.offering} -> bỏ qua compound`
 			);
 
 			return true;
@@ -1710,7 +1710,7 @@ function compound_itemsVIP() {
 		!character.s.massproductionpp
 	) {
 		console.log(
-			"[StoneMer IDLE] ⚡ Dùng massproductionpp"
+			"[MuaBan IDLE] ⚡ Dùng massproductionpp"
 		);
 
 		use_skill("massproductionpp");
@@ -1720,7 +1720,7 @@ function compound_itemsVIP() {
 		!character.s.massproduction
 	) {
 		console.log(
-			"[StoneMer IDLE] ⚡ Dùng massproduction"
+			"[MuaBan IDLE] ⚡ Dùng massproduction"
 		);
 
 		use_skill("massproduction");
@@ -1730,7 +1730,7 @@ function compound_itemsVIP() {
 	if (parent.socket) {
 
 		console.log(
-			`[StoneMer IDLE] 🚀 SEND compound:` +
+			`[MuaBan IDLE] 🚀 SEND compound:` +
 			` items=[${slots.join(",")}]` +
 			` scroll=${scrollSlot}` +
 			` offering=${offeringSlot > -1 ? offeringSlot : null}` +
@@ -1760,7 +1760,7 @@ function compound_itemsVIP() {
 	} else {
 
 		console.log(
-			"[StoneMer IDLE] ❌ parent.socket không tồn tại"
+			"[MuaBan IDLE] ❌ parent.socket không tồn tại"
 		);
 	}
 
@@ -1776,7 +1776,7 @@ function upgradeVIP_Idle() {
 
 	// Không nâng cấp nếu character đang trong thời gian chờ upgrade của game
 	if (character.q?.upgrade) {
-		console.log("[StoneMer IDLE] ⏳ Đang cooldown upgrade");
+		console.log("[MuaBan IDLE] ⏳ Đang cooldown upgrade");
 		return;
 	}
 
@@ -1827,7 +1827,7 @@ for (let i = 0; i < character.items.length; i++) {
 	if (candidates.length === 0) return;
 
 	console.log(
-		`[StoneMer IDLE] 🔎 Tìm thấy ${candidates.length} item upgrade:`,
+		`[MuaBan IDLE] 🔎 Tìm thấy ${candidates.length} item upgrade:`,
 		candidates.map(c =>
 			`${c.item.name}+${c.item.level ?? 0}[slot ${c.slot}]`
 		).join(", ")
@@ -1848,7 +1848,7 @@ for (let i = 0; i < character.items.length; i++) {
 		["No_use", "offeringp", "offering"][rule.offering];
 
 	console.log(
-		`[StoneMer IDLE] 🎯 Target: ${target.item.name}+${target.item.level ?? 0}` +
+		`[MuaBan IDLE] 🎯 Target: ${target.item.name}+${target.item.level ?? 0}` +
 		` | slot=${target.slot}` +
 		` | scroll=${scrollname}` +
 		` | offering=${rule.offering > 0 ? offeringname : "none"}`
@@ -1867,7 +1867,7 @@ for (let i = 0; i < character.items.length; i++) {
 	let offering_slot = offering_info ? offering_info[0] : -1;
 
 	console.log(
-		`[StoneMer IDLE] 📦 Check material:` +
+		`[MuaBan IDLE] 📦 Check material:` +
 		` scrollSlot=${scroll_slot}` +
 		` offeringSlot=${offering_slot}`
 	);
@@ -1875,14 +1875,14 @@ for (let i = 0; i < character.items.length; i++) {
 	// Nếu thiếu scroll -> Mua scroll từ NPC
 	if (scroll_slot === -1) {
 		console.log(
-			`[StoneMer IDLE] 🛒 Thiếu ${scrollname} -> BUY`
+			`[MuaBan IDLE] 🛒 Thiếu ${scrollname} -> BUY`
 		);
 
 		if (parent.buy) {
 			parent.buy(scrollname);
 		} else {
 			console.log(
-				"[StoneMer IDLE] ❌ parent.buy không tồn tại"
+				"[MuaBan IDLE] ❌ parent.buy không tồn tại"
 			);
 		}
 
@@ -1892,7 +1892,7 @@ for (let i = 0; i < character.items.length; i++) {
 	// Nếu rule yêu cầu offering nhưng không có trong túi -> Bỏ qua
 	if (rule.offering > 0 && offering_slot === -1) {
 		console.log(
-			`[StoneMer IDLE] ❌ Thiếu offering ${offeringname} -> bỏ qua upgrade`
+			`[MuaBan IDLE] ❌ Thiếu offering ${offeringname} -> bỏ qua upgrade`
 		);
 		return;
 	}
@@ -1903,7 +1903,7 @@ for (let i = 0; i < character.items.length; i++) {
 		!character.s.massproductionpp
 	) {
 		console.log(
-			"[StoneMer IDLE] ⚡ Dùng massproductionpp"
+			"[MuaBan IDLE] ⚡ Dùng massproductionpp"
 		);
 
 		use_skill("massproductionpp");
@@ -1913,7 +1913,7 @@ for (let i = 0; i < character.items.length; i++) {
 		!character.s.massproduction
 	) {
 		console.log(
-			"[StoneMer IDLE] ⚡ Dùng massproduction"
+			"[MuaBan IDLE] ⚡ Dùng massproduction"
 		);
 
 		use_skill("massproduction");
@@ -1923,7 +1923,7 @@ for (let i = 0; i < character.items.length; i++) {
 	if (parent.socket) {
 
 		console.log(
-			`[StoneMer IDLE] 🚀 SEND upgrade:` +
+			`[MuaBan IDLE] 🚀 SEND upgrade:` +
 			` item=${target.slot}` +
 			` scroll=${scroll_slot}` +
 			` offering=${offering_slot > -1 ? offering_slot : null}` +
@@ -1940,14 +1940,14 @@ for (let i = 0; i < character.items.length; i++) {
 		});
 
 		console.log(
-			`[StoneMer IDLE] 🔨 Upgrading ${target.item.name}+${target.item.level ?? 0}` +
+			`[MuaBan IDLE] 🔨 Upgrading ${target.item.name}+${target.item.level ?? 0}` +
 			` [${target.group}] using ${scrollname}` +
 			`${rule.offering > 0 ? " + " + offeringname : ""}`
 		);
 
 	} else {
 		console.log(
-			"[StoneMer IDLE] ❌ parent.socket không tồn tại"
+			"[MuaBan IDLE] ❌ parent.socket không tồn tại"
 		);
 	}
 }
@@ -1981,7 +1981,7 @@ setInterval(() => {
 
     // Đảm bảo idle loop đang chạy
     if (!idleUpgradeTimer) {
-        console.log("[StoneMer] 🏠 HOME detected -> START idle upgrade");
+        console.log("[MuaBan] 🏠 HOME detected -> START idle upgrade");
         start_idle_upgrade_loop();
     }
 
@@ -2033,7 +2033,7 @@ setInterval(() => {
     if (!storagePending) {
         storagePending = true;
         storagePendingTime = now;
-        console.log("[StoneMer] AUTO: Đủ điều kiện STORAGE → chờ 30s");
+        console.log("[MuaBan] AUTO: Đủ điều kiện STORAGE → chờ 30s");
         return;
     }
 
@@ -2044,11 +2044,11 @@ setInterval(() => {
     if (!is_inventory_full() && character.esize >= 3 && !idleStorage) {
         storagePending = false;
         storagePendingTime = 0;
-        console.log("[StoneMer] AUTO: Túi đã được xử lý → hủy STORAGE");
+        console.log("[MuaBan] AUTO: Túi đã được xử lý → hủy STORAGE");
         return;
     }
 
-    console.log("[StoneMer] AUTO: Sau 30s vẫn đủ điều kiện → STORAGE");
+    console.log("[MuaBan] AUTO: Sau 30s vẫn đủ điều kiện → STORAGE");
 
     queue1.unshift({
         id: "auto_storage_" + now,
@@ -2544,7 +2544,7 @@ setInterval(() => {
     const now = Date.now();
     if (now - lastFishingCheck < FISHING_EXTRA_DELAY) return;
 
-    console.log("[StoneMer] AUTO: Đã đủ 10 phút nghỉ & Skill sẵn sàng → Đẩy job FISHING");
+    console.log("[MuaBan] AUTO: Đã đủ 10 phút nghỉ & Skill sẵn sàng → Đẩy job FISHING");
 
     lastFishingCheck = now;
 
