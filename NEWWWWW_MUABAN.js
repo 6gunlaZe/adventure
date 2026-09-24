@@ -764,6 +764,10 @@ function service_fishing(req) {
     const MAX_FISHING_TIME = 5 * 60 * 1000; // Tối đa 5 phút
     const startTime = Date.now();
 
+    // Khai báo tên các trang bị chính
+    const MAIN_WEAPON = "broom";
+    const OFF_WEAPON = "wbookhs";
+
     // 1. Kiểm tra nhanh cooldown skill trước khi di chuyển
     if (is_on_cooldown("fishing")) {
         console.log("[MuaBan] Skill fishing đang cooldown, bỏ qua dịch vụ.");
@@ -772,35 +776,48 @@ function service_fishing(req) {
     }
 
     // 2. Tận dụng go_to_service để di chuyển tới vị trí câu cá
-    // Mẹo: Gán đè vị trí yêu cầu thành vị trí câu cá
     req.map = FISHING_POS.map;
     req.x = FISHING_POS.x;
     req.y = FISHING_POS.y;
 
     go_to_service(req, () => {
-        // Vòng lặp thực hiện câu cá
         const fishingInterval = setInterval(async () => {
             const elapsedTime = Date.now() - startTime;
 
-            // ĐIỀU KIỆN KẾT THÚC:
-            // 1. Đã quá 5 phút
-            // 2. Hoặc skill đang cooldown (nghĩa là vừa mới tung cần câu xong)
+            // ĐIỀU KIỆN KẾT THÚC: Quá 5 phút hoặc Skill đã đi vào Cooldown
             if (elapsedTime >= MAX_FISHING_TIME || is_on_cooldown("fishing")) {
                 clearInterval(fishingInterval);
                 console.log("[MuaBan] Hoàn thành câu cá (hoặc skill đang cooldown/hết giờ).");
                 
-                // Trả lại vũ khí chính nếu cần (tuỳ chọn)
-                setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
+                // Trả lại vũ khí chính & phụ trước khi kết thúc
+                setTimeout(async () => {
+                    try {
+                        // Đeo lại vũ khí chính (broom) nếu chưa đeo
+                        if (!character.slots.mainhand || character.slots.mainhand.name !== MAIN_WEAPON) {
+                            const mainSlot = locate_item(MAIN_WEAPON);
+                            if (mainSlot !== -1) await equip(mainSlot);
+                        }
+
+                        // Đeo lại vũ khí phụ (wbookhs) nếu chưa đeo
+                        if (!character.slots.offhand || character.slots.offhand.name !== OFF_WEAPON) {
+                            const offSlot = locate_item(OFF_WEAPON);
+                            if (offSlot !== -1) await equip(offSlot);
+                        }
+                    } catch (err) {
+                        console.log("[MuaBan] Lỗi khi trang bị lại vũ khí:", err);
+                    } finally {
+                        finish_and_return();
+                    }
+                }, CONFIG.SERVICE_DELAY);
                 return;
             }
 
             // --- THỰC HIỆN CÂU CÁ ---
-            // Kiểm tra xem đã trang bị Cần câu (rod) chưa
             const rodName = "rod";
             if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
                 const rodSlot = locate_item(rodName);
                 if (rodSlot !== -1) {
-                    if (character.slots.offhand) unequip("offhand");
+                    if (character.slots.offhand) await unequip("offhand");
                     await equip(rodSlot);
                 } else {
                     console.log("[MuaBan] Không tìm thấy cần câu trong túi!");
@@ -814,12 +831,9 @@ function service_fishing(req) {
             if (!character.c?.fishing && !is_on_cooldown("fishing")) {
                 use_skill("fishing").catch(e => console.log("[MuaBan] Lỗi use_skill fishing:", e));
             }
-        }, 1000); // Quét mỗi 1 giây
+        }, 1000);
     });
 }
-
-
-
 
 // ============================================================
 // ITEM FUNCTIONS
