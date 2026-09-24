@@ -628,15 +628,11 @@ function get_service_target() {
 function return_home(on_complete) {
     const home = CONFIG.HOME_LOCATION;
 
-    // 1. Nếu đã ở HOME -> Xử lý công việc tại HOME
+    // 1. Nếu đã ở HOME -> Xử lý công việc tại HOME, không smartmove về nữa
     if (character.map === home.map && 
         Math.abs(character.x - home.x) < 15 && 
-        Math.abs(character.y - home.y) < 15) {
-        
+        Math.abs(character.y - home.y) < 15) 
         sell_trash_items();
-        ensure_potions_at_home("hpot1", 9900);
-        ensure_potions_at_home("mpot1", 9900);
-
         if (on_complete) on_complete();
         return;
     }
@@ -655,6 +651,8 @@ function return_home(on_complete) {
         console.log("[MuaBan] Returned to HOME successfully.");
         
         sell_trash_items();
+        ensure_potions_at_home("hpot1", 9900);
+        ensure_potions_at_home("mpot1", 9900);
         open_stand();
 		
         if (on_complete) on_complete();
