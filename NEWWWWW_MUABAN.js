@@ -1562,7 +1562,7 @@ let isCraftingBusy = false;
 
 // 2. Chạy hàm kiểm tra chế đồ định kỳ (mỗi 2 giây check 1 lần)
 setInterval(async () => {
-    if (isCraftingBusy || character.rip) return;
+    if (isCraftingBusy || character.rip || character.esize < 5 ) return;
 
     isCraftingBusy = true;
     try {
