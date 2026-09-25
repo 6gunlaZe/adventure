@@ -296,9 +296,13 @@ var upgradeGroups = {
 		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
 		{ levels: [4,], scroll: 2, offering: 0 },
 		{ levels: [5,6], scroll: 2, offering: 1 },
-
 	],
-	
+group_vip5: [ 
+	{ levels: [0,1,2], scroll: 1, offering: 0 },
+	{ levels: [3,4,5], scroll: 2, offering: 0 },
+	{ levels: [6],     scroll: 2, offering: 1 },
+	//{ levels: [7],     scroll: 2, offering: 2 }
+],
 	
 	group_Supervip: [ // đồ quý, phụ kiện hiếm
 		{ levels: [0,1,2], scroll: 2, offering: 1 },
@@ -333,6 +337,7 @@ var upgradeWhitelistVIPP = {
 	group_vip2: ["supermittens",],
 	group_vip3: ["harbringer","homecominghelm","homecomingcoat","homecomingcape",],
 	group_vip4: ["candleward",],
+	group_vip5: ["reunionbow",],
 	group_Supervip: ["fury",],
 
 	
