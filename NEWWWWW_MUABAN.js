@@ -716,7 +716,7 @@ function abort_service(reason) {
 function service_full(req) {
     go_to_service(req, () => {
         const target = get_service_target();
-        if (target) apply_mluck(target);
+        mluck_party();
         if (target && target.name == "autocheck" )give_item(target.name, "confetti", 9999);
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
@@ -734,7 +734,7 @@ function service_hp(req) {
         const target = get_service_target();
         if (target) {
             give_potion(target, "hpot1");
-            apply_mluck(target); // Buff MLuck tiện thể
+            mluck_party();
         }
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
@@ -750,7 +750,7 @@ function service_mp(req) {
         const target = get_service_target();
         if (target) {
             give_potion(target, "mpot1");
-            apply_mluck(target); // Buff MLuck tiện thể
+            mluck_party();
         }
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
@@ -849,26 +849,33 @@ function service_fishing(req) {
 // ITEM FUNCTIONS
 // ============================================================
 
-// Hàm thực hiện Buff MLuck dựa theo logic kiểm tra chuẩn
-function apply_mluck(target) {
-    if (!target) return;
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    // Kiểm tra khoảng cách sử dụng skill mluck
-    if (!is_in_range(target, "mluck")) return;
+async function mluck_party() {
+    if (!character.party) return;
 
-    // Logic kiểm tra xem target có cần MLuck không (lấy từ code mẫu của bạn)
-    const needs_mluck = target.ctype !== "merchant" && (
-        !target.s ||
-        !target.s.mluck ||
-        (target.s.mluck.f !== character.name && !target.s.mluck.strong) ||
-        (target.s.mluck.f === character.name && target.s.mluck.ms < 2000000)
-    );
+    for (const name in parent.party) {
+        const target = get_player(name);
 
-    if (needs_mluck && !is_on_cooldown("mluck")) {
-        use_skill("mluck", target);
-        console.log(`[MuaBan] 🍀 MLuck applied to ${target.name}`);
+        // Bỏ qua nếu không có mặt, là Merchant, đã chết, hoặc ngoài tầm
+        if (!target || target.ctype === "merchant" || target.rip || !is_in_range(target, "mluck")) continue;
+
+        const mluck = target.s?.mluck;
+        const needs = !mluck || 
+                      (!mluck.strong && mluck.f !== character.name) || 
+                      (mluck.f === character.name && mluck.ms < 2000000);
+
+        if (needs && character.mp >= 10) {
+            use_skill("mluck", target);
+            console.log(`[MuaBan] 🍀 MLuck -> ${target.name}`);
+            
+            // Nghỉ 110ms (chờ CD 0.1s + bù ping) rồi buff tiếp người sau
+            await sleep(110); 
+        }
     }
 }
+
+
 
 function give_potion(target, potion) {
     // 1. Kiểm tra target có tồn tại và đứng gần không (get_player trả về null nếu quá xa)
