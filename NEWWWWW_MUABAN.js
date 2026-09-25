@@ -1095,17 +1095,72 @@ function get_free_inventory_slots() {
 // ============================================================
 // QUY TRÌNH CHÍNH (FULL AUTO STORAGE & UPGRADE/COMPOUND RETRIEVE)
 // ============================================================
-
-function service_storage(req) {
+async function service_storage(req) {
     go_to_service(req, async () => {
-        if (character.map !== "bank") {
-            console.log("[MuaBan] Chưa ở trong Bank, aborting...");
-            finish_and_return();
-            return;
+        const BANK_MAPS = ["bank", "bank_b", "bank_u"];
+
+        // --- Helper xác định tầng dựa vào tên Pack ---
+        const packFloor = (pack) => {
+            const n = +pack.replace("items", "");
+            return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
+        };
+
+        // --- Helper di chuyển tầng an toàn ---
+        const goBankFloor = async (to) => {
+            if (!to || character.map === to) return;
+            console.log(`[MuaBan] [TRAVEL] Chuyển tầng kho: ${character.map} -> ${to}`);
+            try {
+                await smart_move(to);
+            } catch (err) {
+                console.log(`[MuaBan] Lỗi di chuyển sang tầng ${to}:`, err);
+            }
+        };
+
+        // --- Helper tìm vị trí cất đồ tối ưu trên toàn bộ 3 tầng kho ---
+        const findFreeBankSlot = (item) => {
+            const isStackable = !item.upgrade && !item.compound && (parent.G.items[item.name]?.s);
+            const maxStack = parent.G.items[item.name]?.s || 9999;
+
+            // 1. Ưu tiên tìm ô đã có sẵn món này để cộng dồn (Stack)
+            if (isStackable) {
+                for (const pack in character.bank) {
+                    if (!pack.startsWith("items")) continue;
+                    const packItems = character.bank[pack];
+                    if (!Array.isArray(packItems)) continue;
+
+                    for (let s = 0; s < packItems.length; s++) {
+                        const bItem = packItems[s];
+                        if (bItem && bItem.name === item.name && (bItem.q || 1) < maxStack) {
+                            return { pack, slot: s };
+                        }
+                    }
+                }
+            }
+
+            // 2. Tìm ô trống hoàn toàn
+            for (const pack in character.bank) {
+                if (!pack.startsWith("items")) continue;
+                const packItems = character.bank[pack];
+                if (!Array.isArray(packItems)) continue;
+
+                for (let s = 0; s < packItems.length; s++) {
+                    if (!packItems[s]) {
+                        return { pack, slot: s };
+                    }
+                }
+            }
+
+            return null; // Cả 3 tầng Bank đã đầy hoàn toàn
+        };
+
+        // Kiểm tra xem bot có đang ở khu vực Bank không
+        if (!BANK_MAPS.includes(character.map)) {
+            console.log("[MuaBan] Chưa ở trong khu vực Bank, đang di chuyển vào...");
+            await goBankFloor("bank");
         }
 
         console.log("==================================================");
-        console.log("[MuaBan] BẮT ĐẦU BƯỚC 1: CẤT ĐỒ KHÔNG CẦN THIẾT VÀO KHO");
+        console.log("[MuaBan] BẮT ĐẦU BƯỚC 1: CẤT ĐỒ KHÔNG CẦN THIẾT VÀO KHO (3 TẦNG)");
         console.log("==================================================");
 
         const kept_counts = {};
@@ -1113,25 +1168,46 @@ function service_storage(req) {
             const item = character.items[i];
             if (!item) continue;
 
-            // should_store_item đã định nghĩa ở bài trước (kiểm tra CONFIG.KEEP_ITEMS)
             if (should_store_item(item, kept_counts)) {
+                // Tìm ô cất đồ trên toàn hệ thống kho
+                const target = findFreeBankSlot(item);
+
+                if (!target) {
+                    console.log("[MuaBan] ⚠️ TOÀN BỘ BANK (CẢ 3 TẦNG) ĐÃ ĐẦY HOÀN TOÀN!");
+                    break; // Dừng cất đồ vì không còn ô trống ở bất kỳ tầng nào
+                }
+
+                const targetFloor = packFloor(target.pack);
+
                 try {
-                    await bank_store(i);
-                    console.log(`[MuaBan] Đã cất ${item.name} từ ô ${i} vào Bank.`);
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                } catch (err) {
-                    console.log(`[MuaBan] Lỗi cất item ô ${i}:`, err);
-                    if (err?.reason === "bank_full") {
-                        console.log("[MuaBan] Bank đã đầy!");
-                        break;
+                    // Tự động di chuyển sang tầng chứa ô trống đó trước khi cất
+                    await goBankFloor(targetFloor);
+
+                    // Cất chính xác vào Pack và Slot đã tìm
+                    await bank_store(i, target.pack, target.slot);
+                    console.log(`[MuaBan] Đã cất ${item.name} từ túi ô ${i} vào ${target.pack}[${target.slot}] (${targetFloor})`);
+
+                    // Cập nhật dữ liệu ảo tạm thời cho character.bank để vòng lặp sau tính toán chính xác
+                    if (!character.bank[target.pack]) character.bank[target.pack] = [];
+                    if (!character.bank[target.pack][target.slot]) {
+                        character.bank[target.pack][target.slot] = { ...item };
+                    } else if (item.q) {
+                        character.bank[target.pack][target.slot].q = (character.bank[target.pack][target.slot].q || 1) + item.q;
                     }
+
+                    await new Promise(resolve => setTimeout(resolve, 250));
+                } catch (err) {
+                    console.log(`[MuaBan] Lỗi cất item ô ${i} vào ${target.pack}[${target.slot}]:`, err);
                 }
             }
         }
 
         // Tự gửi Vàng thừa nếu có quá 10b
         if (character.gold > 10000000000) {
-            try { await bank_deposit(character.gold - 10000000000); } catch (e) {}
+            try { 
+                await goBankFloor("bank"); // Gửi tiền ở tầng chính
+                await bank_deposit(character.gold - 10000000000); 
+            } catch (e) {}
         }
 
         console.log("==================================================");
