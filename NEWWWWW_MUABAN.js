@@ -360,7 +360,7 @@ const PONTY_EXTRA_ITEMS = [
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "glolipop", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mcape", "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
   "snakefang", "smoke", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
-  "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet"
+  "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil"
 ];
 
 // Giới hạn từng item mua của ponty
