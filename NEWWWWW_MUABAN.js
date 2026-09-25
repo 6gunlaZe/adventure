@@ -323,7 +323,7 @@ var upgradeWhitelistVIPP = {
 	group_basic03: ["mittens111","shield",],	
 	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead","tshirt4"],
 	group_basic05: ["wingedboots"],	
-	group_basic06: ["pants1111","coat1111","blade11","helmet1111"],
+	group_basic06: ["pants","coat1111","blade11","helmet1111"],
 	group_basic07: ["pouchbow"],	
 	group_basic08: ["ecape11","woodensword"],	
 	group_weapon: ["bowofthedead","crossbow","oozingterror11111"],
