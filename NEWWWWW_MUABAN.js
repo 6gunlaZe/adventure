@@ -354,7 +354,7 @@ const COMPOUND_RULES = [
     { items: ["cloverstud","moonshardearring","windbelt"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: "offeringp" }, ] },
     { items: ["spookyamulet","ftrinket"], rules: [{ levels: [0, 1, 2,], scroll: "cscroll1", offering: null },  ] },
     { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null },  ] },
-    { items: ["keepsakependant"], rules: [{ levels: [0,1], scroll: "cscroll1", offering: null },  ] },
+    { items: ["keepsakependant","guestbook",], rules: [{ levels: [0,1], scroll: "cscroll1", offering: null },  ] },
 
 ];
 
