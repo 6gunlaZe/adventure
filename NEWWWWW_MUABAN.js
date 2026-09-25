@@ -2549,7 +2549,7 @@ const FISHING_EXTRA_DELAY = 600 * 1000;
 
 setInterval(() => {
     // 1. Nếu Merchant đang bận hoặc hàng chờ đang có việc -> Bỏ qua
-    if (busy || queue1.length > 0) return;
+    if (busy || queue1.length > 0 || character.esize < 15 ) return;
 
     // 2. Kiểm tra skill fishing có đang cooldown không
     if (is_on_cooldown("fishing")) return;
