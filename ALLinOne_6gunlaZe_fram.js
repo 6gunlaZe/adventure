@@ -821,7 +821,7 @@ const equipmentSets = {
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 11, l: "l" },
 		
     ],
     dame: [
@@ -832,7 +832,7 @@ const equipmentSets = {
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "pants", slot: "pants", level: 11, l: "l" },
 		
     ],
     def: [
