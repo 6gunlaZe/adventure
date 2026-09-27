@@ -2678,36 +2678,32 @@ setInterval(() => {
 
 
 
-// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (HOÀN CHỈNH, AN TOÀN, TỰ VỀ NHÀ) ---
+// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (ĐÃ TỐI ƯU & AN TOÀN) ---
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
-	// 1. Ghi nhớ vị trí hiện tại của nhân vật trước khi đi lấy đồ
+	// 1. Ghi nhớ vị trí hiện tại trước khi đi lấy đồ
 	const startMap = character.map;
 	const startX = character.x;
 	const startY = character.y;
 
 	try {
-		// 2. Kiểm tra và mở ngân hàng (Tự động di chuyển đến bank nếu chưa mở)
+		// 2. Di chuyển đến ngân hàng và chờ dữ liệu bank load xong
 		if (!character.bank) {
 			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
 			await smart_move("bank");
 			
-			// Chờ và ép mở ngân hàng cho đến khi dữ liệu bank sẵn sàng
+			// Chờ đến khi server tải xong dữ liệu bank (tối đa 15 giây)
 			let attempts = 0;
-			while (!character.bank && attempts < 15) {
-				if (typeof open_bank === "function") {
-					open_bank();
-				}
+			while (!character.bank && attempts < 30) {
 				await sleep(500);
 				attempts++;
 			}
 
 			if (!character.bank) {
-				log("[ERROR] Không thể mở ngân hàng sau khi đến nơi!", "#ff4d4d");
+				log("[ERROR] Không thể tải dữ liệu ngân hàng!", "#ff4d4d");
 				return false;
 			}
 		}
 
-		// Xác định tầng ngân hàng dựa theo tên pack
 		const packFloor = pack => {
 			const n = +pack.replace("items", "");
 			return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
@@ -2720,7 +2716,6 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		let retrievedCount = 0;
 		let curFloor = character.map;
 
-		// Hàm di chuyển giữa các tầng trong ngân hàng
 		const go = async to => {
 			if (!to || curFloor === to) return;
 			log(`[TRAVEL] Di chuyển trong bank: ${curFloor} -> ${to}`);
@@ -2731,7 +2726,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 			}
 		};
 
-		// 3. Duyệt qua tất cả các pack trong ngân hàng để tìm đồ
+		// 3. Duyệt tìm đồ trong ngân hàng
 		for (const pack of allPacks) {
 			if (retrievedCount >= targetQuantity) break;
 
@@ -2742,40 +2737,37 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 				const item = itemsInPack[i];
 				if (!item) continue;
 
-				// Kiểm tra khớp tên và cấp độ (nếu có yêu cầu)
 				const matchesName = item.name === itemName;
 				const matchesLevel = targetLevel === null || item.level === targetLevel;
 
 				if (matchesName && matchesLevel) {
 					const needed = targetQuantity - retrievedCount;
-					const itemQty = item.q || 1; // Số lượng hiện tại trong ô bank
+					const itemQty = item.q || 1;
 
 					if (!character.esize) {
 						log("[WARN] Túi đồ đã đầy, dừng việc lấy đồ.", "#ff9900");
 						return false;
 					}
 
-					// Di chuyển đến đúng tầng chứa pack đó
+					// Di chuyển đến tầng chứa pack
 					const floor = packFloor(pack);
 					await go(floor);
 
-					// Tìm một ô trống trong túi để rút nguyên cục ra
 					const emptySlot = character.items.findIndex(slot => !slot);
 					if (emptySlot === -1) {
 						log("[WARN] Không tìm thấy ô trống trong túi đồ!", "#ff9900");
 						return false;
 					}
 
-					// Bước A: Rút nguyên cục từ bank vào ô trống
+					// Rút đồ ra túi
 					await bank_retrieve(pack, i, emptySlot);
 					await sleep(300);
 
 					const currentItem = character.items[emptySlot];
 					const currentQty = currentItem?.q || 1;
 
-					// Bước B: Nếu số lượng trong cục đó nhiều hơn số cần lấy -> Tiến hành tách (split)
+					// Xử lý tách stack nếu số lượng lấy ít hơn tổng trong ô bank
 					if (currentQty > needed) {
-						// Chụp lại danh sách các slot đang chứa item này TRƯỚC KHI split
 						const slotsBefore = new Set();
 						character.items.forEach((slotItem, idx) => {
 							if (slotItem && slotItem.name === itemName && (!item.p || slotItem.p === item.p)) {
@@ -2783,11 +2775,9 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 							}
 						});
 
-						// Thực hiện lệnh tách đồ
 						await split(emptySlot, needed);
 						await sleep(300);
 
-						// Quét lại túi SAU KHI split để tìm ra slot mới xuất hiện (đó chính là phần dư)
 						let slotToReturn = -1;
 						character.items.forEach((slotItem, idx) => {
 							if (slotItem && slotItem.name === itemName && !slotsBefore.has(idx)) {
@@ -2795,7 +2785,6 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 							}
 						});
 
-						// Fallback phòng hờ: Nếu không tìm thấy slot mới, lấy slot khác emptySlot chứa item này
 						if (slotToReturn === -1) {
 							character.items.forEach((slotItem, idx) => {
 								if (slotItem && slotItem.name === itemName && idx !== emptySlot) {
@@ -2804,17 +2793,14 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 							});
 						}
 
-						// Bước C: Cất phần dư ngược lại đúng vị trí cũ trong ngân hàng
 						if (slotToReturn !== -1) {
 							await bank_store(slotToReturn, pack, i);
 							await sleep(300);
 						}
 
-						log(`[SUCCESS] Đã lấy chính xác ${needed} ${itemName}, phần dư đã được cất lại bank.`, "#00ff66");
+						log(`[SUCCESS] Đã lấy chính xác ${needed} ${itemName}, phần dư đã cất lại bank.`, "#00ff66");
 						retrievedCount += needed;
-					} 
-					// Trường hợp số lượng ít hơn hoặc bằng yêu cầu thì lấy luôn cả ô
-					else {
+					} else {
 						log(`[SUCCESS] Đã lấy toàn bộ ${currentQty} ${itemName} từ pack ${pack}`, "#00ff66");
 						retrievedCount += currentQty;
 					}
@@ -2825,23 +2811,20 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		}
 
 		if (retrievedCount < targetQuantity) {
-			log(`[WARN] Chỉ tìm thấy và lấy được ${retrievedCount}/${targetQuantity} món ${itemName} trong ngân hàng.`, "#ff4d4d");
+			log(`[WARN] Chỉ tìm thấy và lấy được ${retrievedCount}/${targetQuantity} món ${itemName}.`, "#ff4d4d");
 			return false;
 		}
 
 		return true;
 	} catch (err) {
-		console.error(err); // In chi tiết lỗi gốc ra console F12 nếu có sự cố
+		console.error(err);
 		log(`[ERROR] Lỗi khi lấy đồ: ${err.message || err}`, "#ff4d4d");
 		return false;
 	} finally {
-		// 4. LUÔN LUÔN tự động bay về lại vị trí ban đầu (bất kể thành công hay thất bại)
+		// 4. Luôn tự động bay về lại vị trí ban đầu (bãi câu cá) sau khi hoàn tất
 		log(`[TRAVEL] Quay trở về vị trí ban đầu: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})`, "#2ef288");
 		await smart_move({ map: startMap, x: startX, y: startY });
 	}
 }
-
-
-
 
 
