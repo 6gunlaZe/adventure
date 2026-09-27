@@ -792,8 +792,8 @@ setInterval(() => {
         else if (item.name === "mpot1") mp += item.q ?? 1;
     }
 
-    if (hp < 1000) sendRequest("hp");
-    if (mp < 1000) sendRequest("mp");
+    if (hp < 3000) sendRequest("hp");
+    if (mp < 6000) sendRequest("mp");
 }, 10000);
 
 // ============================================================
