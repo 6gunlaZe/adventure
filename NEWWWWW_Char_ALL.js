@@ -523,7 +523,6 @@ function useAttack() {
     }
     
     // BÙ PING CHO ĐÁNH THƯỜNG
-    const pingComp = Math.max(10, character.ping / 10);
     
     if (
         currentTarget &&
