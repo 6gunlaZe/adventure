@@ -24,7 +24,7 @@ const CHAR_CONFIG = {
     "MuaBan":   { monster: "crab", slot: 2 }
 };
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "bat"; // => Phần còn lại là của LEADER Stonehunter 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "bat"; // => Phần còn lại là của LEADER haiz 
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
@@ -366,7 +366,7 @@ function tryPartyHeal() {
 
 const NO_ABSORB = new Set(["pppompom", "oneeye", "nerfedmummy", "nerfedbat"]);
 const PRIORITY_BOSSES = new Set(["xmagefz", "xmagefi", "xmagex", "xmagen", "franky"]);
-const VIP_PLAYERS = new Set(["Stonehunter", "SleepStoenx", "KiroDagger", "StoneMer","StoneVex"]);
+const VIP_PLAYERS = new Set(["6gunlaZe", "nhiY", "LyThanhThu", "MuaBan","tienV"]);
 
 let lastAbsorbTime = 0;
 
