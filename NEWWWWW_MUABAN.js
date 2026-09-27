@@ -11,7 +11,7 @@ const TRASH_ITEMS = [
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead11111", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
   "firestaff", "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
-  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","alloyquiver",
+  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
   "smoke111", "smush", "snowball111", "snowflakes", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
@@ -27,7 +27,7 @@ const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelo
 				  gem0: 1, gem1: 1, gift0: 1, goldenegg: 1, leather: 40, lostearring: 1, mistletoe: 1, ornament: 20, seashell: 20, troll: 1, weaponbox: 1, xbox: 1 };
 
 // Danh sách các item KHÔNG ĐƯỢC RÚT TỪ BANK để chế (chỉ dùng nếu có sẵn trong túi)
- const blackListCraftFromBank = ["essenceoffire", "smoke", "mbones"];
+ const blackListCraftFromBank = ["essenceoffire", "smoke", "mbones","spidersilk"];
 
 //  Luôn giữ lại các vật phẩm quan trọng trên túi đồ
 const IMPORTANT_ITEMS = [
@@ -330,7 +330,7 @@ var upgradeWhitelistVIPP = {
 	group_weapon1: ["firestars"],
 	group_weapon2: ["spikedhelmet11"],
 	group_weapon3: ["bcape"],
-	group_weapon4: ["alloyquiver111"],
+	group_weapon4: ["alloyquiver"],
 	group_weapon5: ["bataxe"],
 
 	group_rare1: ["handofmidas","hdagger","xboots","xgloves",],
