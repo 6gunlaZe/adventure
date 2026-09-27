@@ -491,13 +491,22 @@ function useAttack() {
 // ============================================================
 // SCAN LOOP & COMBAT LOOP
 // ============================================================
-function lootAllChests() {
-    let chests = get_chests();
+function autoLootAndBooster() {
+    const chests = Object.keys(parent.chests || {});
 
-    for (let id in chests) {
-        loot(id);
+    // 1. Quá nhiều rương -> Gold & Loot rồi thoát luôn
+    if (chests.length >= 20 || smart.moving) {
+        shift(0, 'goldbooster');
+        return chests.forEach(loot);
     }
+
+    // 2. Check quái & Đổi Booster bằng Ternary Operator (1 dòng)
+    monsters.some(m => m.entity.mtype === FARM_MONSTER)
+        ? setTimeout(() => shift(0, 'xpbooster'), 550)
+        : shift(0, 'luckbooster');
 }
+
+setInterval(autoLootAndBooster, 1000);
 
 setInterval(function() {
     scanAll();
@@ -506,9 +515,7 @@ setInterval(function() {
     tryTemporalSurge();
 }, 100);
 
-setInterval(function() {
-    lootAllChests();
-}, 1000);
+
 
 // ============================================================
 // FARM MOVEMENT LOOP
