@@ -584,7 +584,7 @@ const KANE_ORIGIN = { x: -1011, y: 1681, map: "main", width: 20, height: 20 };
 
 setInterval(() => {
 
-    if (FARM_MONSTER != crab && character.name != "LyThanhThu" ) return
+    if (FARM_MONSTER != "crab" && character.name != "LyThanhThu" ) return
     
     // 0. Nếu đã xác định Kane mất tích/đổi map -> Bỏ qua toàn bộ logic dụ Kane
     if (kaneNotFoundOrGobi) {
