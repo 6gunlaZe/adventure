@@ -329,13 +329,12 @@ function energizeParty() {
 }
 
 
-let delayHeal = 0;
-
 function trySingleHeal() {
-    // 1. Điều kiện dừng sớm
-    if (is_on_cooldown("heal") || Date.now() < delayHeal) return false;
+    // 1. Kiểm tra Cooldown & Bù Ping sớm nhất có thể để tiết kiệm CPU
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("heal") > pingComp) return false;
 
-    // 2. Tính tỉ lệ hồi máu (rateheal)
+    // 2. Tính tỉ lệ hồi máu động (rateheal)
     let rateheal = 0.9;
     if (character.map !== "winter_instance") {
         const dynamicRate = 1 - (character.heal / character.max_hp);
@@ -343,26 +342,35 @@ function trySingleHeal() {
         if (character.targets > 5) rateheal = 0.95;
     }
 
-    // 3. Lọc danh sách thành viên Party trong tầm heal và cần heal
-    const healableMembers = partyEntities
-        .map(p => p.entity)
-        .filter(member => 
-            !member.dead &&
-            distance(character, member) <= character.range &&
-            (member.hp / member.max_hp) < rateheal
-        );
+    // 3. Tìm thành viên party cần heal có % HP thấp nhất trong tầm đánh
+    let lowestMember = null;
+    let lowestHpPercent = rateheal; // Chỉ xét những ai máu dưới mức rateheal
 
-    if (healableMembers.length === 0) return false;
+    for (const p of partyEntities) {
+        const member = p.entity;
+        if (!member || member.dead) continue;
+        
+        // Kiểm tra tầm đánh (range)
+        if (distance(character, member) > character.range) continue;
 
-    // 4. Ưu tiên thành viên thấp máu nhất (% HP nhỏ nhất)
-    healableMembers.sort((a, b) => (a.hp / a.max_hp) - (b.hp / b.max_hp));
+        const hpPercent = member.hp / member.max_hp;
+        if (hpPercent < lowestHpPercent) {
+            lowestHpPercent = hpPercent;
+            lowestMember = member;
+        }
+    }
 
-    // 5. Thực hiện Heal
-    const target = healableMembers[0];
-    heal(target);
-    delayHeal = Date.now() + 50;
+    // Nếu không có ai cần heal thì dừng lại
+    if (!lowestMember) return false;
 
-    return true; // Trả về true để báo hiệu đã thực thi heal
+    // 4. Thực hiện Heal và Ép xung Cooldown ngay lập tức
+    heal(lowestMember).then(function() {
+        reduce_cooldown("heal", character.ping * 0.95);
+    }).catch(function(e) {
+        // Bắt lỗi im lặng nếu mục tiêu biến mất hoặc chết giữa chừng
+    });
+
+    return true; // Báo hiệu đã thực thi heal thành công
 }
 
 let delayParty = 0;
