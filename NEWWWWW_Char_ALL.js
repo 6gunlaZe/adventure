@@ -801,19 +801,32 @@ setInterval(() => {
 // ============================================================
 setInterval(() => {
     const m = merchant;
+
     if (!m) {
         loot_transfer = false;
+        game_log("[TRANSFER] ❌ Không tìm thấy merchant");
         return;
     }
 
-    if (distance(character, m) <= MERCHANT_DISTANCE) {
-        if (character.gold) send_gold(m, character.gold);
+    const dist = distance(character, m);
+    game_log(`[TRANSFER] Merchant=${m.name} ID=${m.id} Dist=${Math.round(dist)}`);
 
-        for (let i = 0; i < 42; i++) {
-            const item = character.items[i];
-            if (item && !EXCLUDE.has(item.name) && !item.l && !item.s) {
-                send_item(m.id, i, item.q ?? 1);
-            }
+    if (dist > MERCHANT_DISTANCE) {
+        game_log("[TRANSFER] ❌ Merchant quá xa");
+        return;
+    }
+
+    if (character.gold) {
+        game_log(`[TRANSFER] 💰 Gửi gold: ${character.gold}`);
+        send_gold(m, character.gold);
+    }
+
+    for (let i = 0; i < 42; i++) {
+        const item = character.items[i];
+
+        if (item && !EXCLUDE.has(item.name) && !item.l && !item.s) {
+            game_log(`[TRANSFER] 📦 Gửi ${item.name} x${item.q ?? 1} slot=${i} → ${m.id}`);
+            send_item(m.id, i, item.q ?? 1);
         }
     }
 }, 2000);
