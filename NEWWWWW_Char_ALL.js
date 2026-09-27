@@ -67,6 +67,8 @@ function scanAll() {
             }
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
+                game_log(`[SCAN] ✅ SET MERCHANT: ${merchant.name} / ${merchant.id}`);
+
             }
         }
     }
