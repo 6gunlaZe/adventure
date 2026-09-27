@@ -822,20 +822,28 @@ function service_fishing(req) {
                 return;
             }
 
-            // --- THỰC HIỆN CÂU CÁ ---
-            const rodName = "rod";
-            if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
-                const rodSlot = locate_item(rodName);
-                if (rodSlot !== -1) {
-                    if (character.slots.offhand) await unequip("offhand");
-                    await equip(rodSlot);
-                } else {
-                    console.log("[MuaBan] Không tìm thấy cần câu trong túi!");
-                    clearInterval(fishingInterval);
-                    finish_and_return();
-                    return;
-                }
-            }
+// --- THỰC HIỆN CÂU CÁ ---
+const rodName = "rod";
+if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
+    let rodSlot = locate_item(rodName);
+    
+    // Thêm đoạn kiểm tra và gọi hàm lấy từ ngân hàng
+    if (rodSlot === -1) {
+        console.log("[MuaBan] Không thấy cần câu trong túi, đang đi lấy từ ngân hàng...");
+        await retrieveFromBank(rodName, 1);
+        rodSlot = locate_item(rodName); // Cập nhật lại slot sau khi lấy xong
+    }
+
+    if (rodSlot !== -1) {
+        if (character.slots.offhand) await unequip("offhand");
+        await equip(rodSlot);
+    } else {
+        console.log("[MuaBan] Không tìm thấy cần câu cả trong túi lẫn ngân hàng!");
+        clearInterval(fishingInterval);
+        finish_and_return();
+        return;
+    }
+}
 
             // Tung cần câu nếu không trong trạng thái đang casting
             if (!character.c?.fishing && !is_on_cooldown("fishing")) {
@@ -2670,5 +2678,101 @@ setInterval(() => {
 
 
 
+// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG VÀ TỰ ĐỘNG VỀ LẠI VỊ TRÍ BAN ĐẦU ---
+async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
+	// Ghi nhớ vị trí hiện tại của nhân vật trước khi đi lấy đồ
+	const startMap = character.map;
+	const startX = character.x;
+	const startY = character.y;
 
+	try {
+		// Kiểm tra xem nhân vật đã ở trong ngân hàng chưa
+		if (!character.bank) {
+			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
+			await smart_move("bank");
+			await sleep(1000); // Đợi load dữ liệu bank
+			if (!character.bank) {
+				log("[ERROR] Không thể mở ngân hàng!", "#ff4d4d");
+				return false;
+			}
+		}
+
+		const packFloor = pack => {
+			const n = +pack.replace("items", "");
+			return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
+		};
+
+		const allPacks = Object.keys(character.bank)
+			.filter(k => k !== "gold" && bank_packs[k])
+			.sort((a, b) => +a.replace("items", "") - +b.replace("items", ""));
+
+		let retrievedCount = 0;
+		let curFloor = character.map;
+
+		const go = async to => {
+			if (!to || curFloor === to) return;
+			log(`[TRAVEL] Di chuyển: ${curFloor} -> ${to}`);
+			const [x, y] = FLOOR_ENTRY[to]?.[curFloor] ?? [];
+			if (x != null && y != null) {
+				await smart_move({ map: to, x, y });
+				curFloor = to;
+			}
+		};
+
+		// Duyệt qua tất cả các pack trong ngân hàng để tìm đồ
+		for (const pack of allPacks) {
+			if (retrievedCount >= targetQuantity) break;
+
+			const itemsInPack = character.bank[pack];
+			for (let i = 0; i < itemsInPack.length; i++) {
+				if (retrievedCount >= targetQuantity) break;
+				
+				const item = itemsInPack[i];
+				if (!item) continue;
+
+				// Kiểm tra khớp tên và cấp độ (nếu có yêu cầu)
+				const matchesName = item.name === itemName;
+				const matchesLevel = targetLevel === null || item.level === targetLevel;
+
+				if (matchesName && matchesLevel) {
+					if (!character.esize) {
+						log("[WARN] Túi đồ đã đầy, dừng việc lấy đồ.", "#ff9900");
+						return false;
+					}
+
+					// Di chuyển đến đúng tầng chứa pack đó
+					const floor = packFloor(pack);
+					await go(floor);
+
+					// Tìm ô trống trong túi đồ nhân vật
+					const emptySlot = character.items.findIndex(slot => !slot);
+					if (emptySlot === -1) {
+						log("[WARN] Không tìm thấy ô trống trong túi đồ!", "#ff9900");
+						return false;
+					}
+
+					// Thực hiện lệnh rút đồ
+					await bank_retrieve(pack, i, emptySlot);
+					log(`[SUCCESS] Đã lấy ${item.name} (Lv.${item.level || 0}) từ pack ${pack}, slot ${i}`, "#00ff66");
+					retrievedCount++;
+					await sleep(250);
+				}
+			}
+		}
+
+		if (retrievedCount < targetQuantity) {
+			log(`[WARN] Chỉ tìm thấy và lấy được ${retrievedCount}/${targetQuantity} món ${itemName} trong ngân hàng.`, "#ff9900");
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		log(`[ERROR] Lỗi khi lấy đồ: ${err.message || err}`, "#ff4d4d");
+		return false;
+	} finally {
+		// Dù lấy thành công hay gặp lỗi túi đầy, code trong khối này luôn chạy để đưa nhân vật về chỗ cũ
+		log(`[TRAVEL] Quay trở về vị trí ban đầu: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})`, "#2ef288");
+		await smart_move({ map: startMap, x: startX, y: startY });
+	}
+}
 
