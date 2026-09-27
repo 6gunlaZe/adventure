@@ -1046,8 +1046,8 @@ function on_cm(name, data) {
 // 1. CẤU HÌNH BỘ TRANG BỊ THEO TÊN NHÂN VẬT (character.name)
 // =============================================================================
 const EQUIPMENT_SETS = {
-    // ---- Cấu hình đồ cho Ranger (Ví dụ: f1111) ----
-    6gunlaZe: {
+    // ---- Cấu hình đồ cho Ranger
+    "6gunlaZe": {
         dame: [
             { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
@@ -1100,7 +1100,7 @@ const EQUIPMENT_SETS = {
 // =============================================================================
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
-    6gunlaZe: function() {
+    "6gunlaZe": function() {
         let needNormalDef = false;
         let needLuck = false;
         let monsterDensity = 0;
