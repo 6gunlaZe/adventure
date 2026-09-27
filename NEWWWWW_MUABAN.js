@@ -2678,14 +2678,12 @@ setInterval(() => {
 
 
 
-// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (CÓ CHẾ ĐỘ TỰ ĐỘNG THỬ LẠI KHI BỊ NGẮT) ---
+// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (PHIÊN BẢN AN TOÀN TUYỆT ĐỐI) ---
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
-	// 1. Ghi nhớ vị trí hiện tại trước khi đi lấy đồ
 	const startMap = character.map;
 	const startX = character.x;
 	const startY = character.y;
 
-	// Hàm hỗ trợ smart_move an toàn (tự động retry nếu bị interrupted)
 	async function safeMove(destination) {
 		let attempts = 0;
 		while (attempts < 5) {
@@ -2713,8 +2711,8 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 	}
 
 	try {
-		// 2. Di chuyển đến ngân hàng an toàn
-		if (!character.bank && !smart.moving) {
+		// 1. Di chuyển đến ngân hàng an toàn
+		if (!character.bank && !smart.moving ) {
 			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
 			const moved = await safeMove("bank");
 			if (!moved) {
@@ -2722,7 +2720,6 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 				return false;
 			}
 			
-			// Chờ đến khi server tải xong dữ liệu bank
 			let attempts = 0;
 			while (!character.bank && attempts < 30) {
 				await sleep(500);
@@ -2735,13 +2732,18 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 			}
 		}
 
+		// Khai báo an toàn phòng hờ thiếu biến toàn cục của game
+		const packsData = (typeof bank_packs !== 'undefined') ? bank_packs : {};
+		const floorEntryMap = (typeof FLOOR_ENTRY !== 'undefined') ? FLOOR_ENTRY : {};
+		const bankObj = character.bank || {};
+
 		const packFloor = pack => {
 			const n = +pack.replace("items", "");
 			return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
 		};
 
-		const allPacks = Object.keys(character.bank)
-			.filter(k => k !== "gold" && bank_packs[k])
+		const allPacks = Object.keys(bankObj)
+			.filter(k => k !== "gold" && packsData[k])
 			.sort((a, b) => +a.replace("items", "") - +b.replace("items", ""));
 
 		let retrievedCount = 0;
@@ -2750,18 +2752,20 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		const go = async to => {
 			if (!to || curFloor === to) return;
 			log(`[TRAVEL] Di chuyển trong bank: ${curFloor} -> ${to}`);
-			const [x, y] = FLOOR_ENTRY[to]?.[curFloor] ?? [];
+			const [x, y] = floorEntryMap[to]?.[curFloor] ?? [];
 			if (x != null && y != null) {
 				await safeMove({ map: to, x, y });
 				curFloor = to;
 			}
 		};
 
-		// 3. Duyệt tìm đồ trong ngân hàng
+		// 2. Duyệt tìm đồ trong ngân hàng
 		for (const pack of allPacks) {
 			if (retrievedCount >= targetQuantity) break;
 
-			const itemsInPack = character.bank[pack];
+			const itemsInPack = bankObj[pack];
+			if (!Array.isArray(itemsInPack)) continue;
+
 			for (let i = 0; i < itemsInPack.length; i++) {
 				if (retrievedCount >= targetQuantity) break;
 				
@@ -2773,14 +2777,12 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 				if (matchesName && matchesLevel) {
 					const needed = targetQuantity - retrievedCount;
-					const itemQty = item.q || 1;
 
 					if (!character.esize) {
 						log("[WARN] Túi đồ đã đầy, dừng việc lấy đồ.", "#ff9900");
 						return false;
 					}
 
-					// Di chuyển đến tầng chứa pack
 					const floor = packFloor(pack);
 					await go(floor);
 
@@ -2790,14 +2792,12 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 						return false;
 					}
 
-					// Rút đồ ra túi
 					await bank_retrieve(pack, i, emptySlot);
 					await sleep(300);
 
 					const currentItem = character.items[emptySlot];
 					const currentQty = currentItem?.q || 1;
 
-					// Xử lý tách stack nếu số lượng lấy ít hơn tổng trong ô bank
 					if (currentQty > needed) {
 						const slotsBefore = new Set();
 						character.items.forEach((slotItem, idx) => {
@@ -2852,10 +2852,8 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		log(`[ERROR] Lỗi khi lấy đồ: ${err.message || err}`, "#ff4d4d");
 		return false;
 	} finally {
-		// 4. Luôn tự động bay về lại vị trí ban đầu an toàn
+		// 3. Luôn tự động bay về lại vị trí ban đầu an toàn
 		log(`[TRAVEL] Quay trở về vị trí ban đầu: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})`, "#2ef288");
 		await safeMove({ map: startMap, x: startX, y: startY });
 	}
 }
-
-
