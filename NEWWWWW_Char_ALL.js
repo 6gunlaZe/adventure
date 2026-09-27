@@ -938,9 +938,14 @@ function tryTemporalSurge() {
 
         temporalState.lastTime = Date.now();
         
-        // Gửi tín hiệu thông báo cho party (Đã sửa lỗi f1111 thiếu ngoặc kép)
-        send_cm("f1111", "TemporalTime");
-        send_cm("Ynhi", "TemporalTime");
+        // Gửi tín hiệu thông báo cho tất cả đồng đội trong Party
+        if (character.party) {
+            for (const name in parent.party) {
+                if (name !== character.name) {
+                    send_cm(name, "TemporalTime");
+                }
+            }
+        }
         
         setTimeout(() => {
             if (is_on_cooldown("temporalsurge")) return;
