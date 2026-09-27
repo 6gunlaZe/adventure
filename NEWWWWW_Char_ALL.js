@@ -213,12 +213,14 @@ async function use_multi_shot() {
         if (targets.length >= 4 && can5Shot) {
             skill = "5shot";
         } else if (!can3Shot) {
-            useAttack();
-            return false; // Chỉ có 2-3 mục tiêu nhưng 3shot lại đang hồi chiêu
+            return false; // Chỉ có 2-3 mục tiêu và 3shot lại đang hồi chiêu
         }
 
-        if (character.mp < G.skills[skill].mp + 150) return false;
-
+        if (character.mp < G.skills[skill].mp + 300) //chỉ đủ mana để đánh thường
+        {
+            useAttack();
+            return false;
+        }
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
         await use_skill(skill, targets);
         reduce_cooldown(skill, character.ping * 0.95);
