@@ -2714,7 +2714,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 	try {
 		// 2. Di chuyển đến ngân hàng an toàn
-		if (!character.bank) {
+		if (!character.bank && !smart.moving) {
 			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
 			const moved = await safeMove("bank");
 			if (!moved) {
