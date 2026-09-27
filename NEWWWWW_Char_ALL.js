@@ -500,8 +500,6 @@ function useAttack() {
         return;
     }
     
-    if (attackBusy) return;
-    
     // BÙ PING CHO ĐÁNH THƯỜNG
     const pingComp = Math.max(10, character.ping / 10);
     
