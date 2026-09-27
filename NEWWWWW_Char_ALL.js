@@ -503,6 +503,7 @@ setInterval(function() {
     scanAll();
     currentTarget = selectTarget();
     use_hp_or_mp1();
+    tryTemporalSurge();
 }, 100);
 
 setInterval(function() {
@@ -885,6 +886,75 @@ setInterval(scare, 1000);
 
 
 
+// =========================
+// CONFIG & STATE: Temporal Surge
+// =========================
+const TEMPORAL_CONFIG = {
+    radius: 270,    // Bán kính quét quái
+    gap: 5,         // Hụt bao nhiêu con thì kích hoạt
+    delay: 200,     // Delay trước khi cast
+    cooldown: 10000 // Tối thiểu 10s giữa 2 lần
+};
+
+let temporalState = {
+    maxMonsters: 0,
+    lastMap: character.map,
+    lastTime: 0
+};
+
+// =========================
+// LOGIC
+// =========================
+function tryTemporalSurge() {
+    if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving) return;
+
+    // Reset khi đổi map
+    if (character.map !== temporalState.lastMap) {
+        temporalState.maxMonsters = 0;
+        temporalState.lastMap = character.map;
+        return;
+    }
+
+    // Tận dụng luôn mảng monsters đã có sẵn từ scanAll() để đếm, cực kỳ nhẹ
+    const currentCount = monsters.filter(m => distance(character, m.entity) <= TEMPORAL_CONFIG.radius).length;
+
+    // Cập nhật mốc quái đông nhất
+    if (currentCount > temporalState.maxMonsters) {
+        temporalState.maxMonsters = currentCount;
+        return;
+    }
+
+    const gap = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.gap;
+    const delay = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.delay;
+
+    // Điều kiện xả skill khi số lượng quái sụt giảm mạnh
+    if (
+        currentCount < temporalState.maxMonsters - gap &&
+        character.mp >= 1300 &&
+        Date.now() - temporalState.lastTime >= TEMPORAL_CONFIG.cooldown
+    ) {
+        const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
+        if (orbSlot === -1) return;
+
+        temporalState.lastTime = Date.now();
+        
+        // Gửi tín hiệu thông báo cho party (Đã sửa lỗi f1111 thiếu ngoặc kép)
+        send_cm("f1111", "TemporalTime");
+        send_cm("Ynhi", "TemporalTime");
+        
+        setTimeout(() => {
+            if (is_on_cooldown("temporalsurge")) return;
+
+            equip(orbSlot);
+            use_skill("temporalsurge");
+            game_log("🔁 temporalsurge", "#AAAAFF");
+        }, delay);
+    }
+}
+
+
+
+
 // ============================================================
 // TELEGRAM BOT ALIVE
 // ============================================================
@@ -942,3 +1012,20 @@ setInterval(() => {
     if (character.name !== LEADER) return;
     telegramAlive();
 }, 300000);
+
+
+function on_cm(name, data) {
+    // Trường hợp data là chuỗi đơn giản
+    if (typeof data === "string" && data === "TemporalTime") {
+        temporalState.lastTime = Date.now();
+        game_log(`📩 Đồng bộ Temporal từ ${name}`);
+    }
+    
+    // Trường hợp data là object (nếu sau này bạn mở rộng gửi thêm thông tin)
+    if (typeof data === "object" && data?.message === "TemporalTime") {
+        temporalState.lastTime = Date.now();
+    }
+}
+
+
+
