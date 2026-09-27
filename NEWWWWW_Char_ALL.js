@@ -242,7 +242,9 @@ async function use_multi_shot() {
 
 async function use_fan_of_knives() {
     // 1. Kiểm tra tài nguyên và trạng thái sớm
-    if (attackBusy || character.hp / character.max_hp < 0.3 || character.mp < G.skills["fanofknives"].mp + 130) {
+    if (attackBusy || character.hp / character.max_hp < 0.3 )return false;
+    if (character.mp < G.skills["fanofknives"].mp + 330) {
+        useAttack();
         return false;
     }
     
@@ -255,6 +257,7 @@ async function use_fan_of_knives() {
 
     // 3. Kiểm tra an toàn (Quái cấp cao cắn)
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) {
+        useAttack();
         return false;
     }
 
@@ -266,8 +269,10 @@ async function use_fan_of_knives() {
             .filter(e => e.level <= 1 && is_in_range(e, "fanofknives"));
 
         // TỐI ƯU CPU: Nếu không đủ 3 con thì nghỉ luôn, KHÔNG cần chạy hàm Sort nặng nề
-        if (validMonsters.length < 3) return false;
-
+        if (validMonsters.length < 3){
+        useAttack();
+            return false;
+        }
         // 5. Sắp xếp theo thứ tự ưu tiên (Leader 50px -> Debuff -> Aggro Party -> Max HP)
         const sortedMonsters = sortMonstersByPriority(validMonsters);
 
