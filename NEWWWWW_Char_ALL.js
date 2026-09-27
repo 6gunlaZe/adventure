@@ -847,29 +847,30 @@ function use_hp_or_mp1() {
 
 
 
-
-
 async function skillLoop() {
-    let delay = 40; // Delay mặc định cho phản xạ skill (nhanh hơn đánh thường)
+    let delay = 40; // Độ trễ chuẩn để quét liên tục mà không lag game
 
     try {
-        // Chỉ tung skill khi nhân vật có thể hành động (không chết, không bị choáng)
+        // Chỉ chạy logic nếu nhân vật không bị khống chế/chết
         if (!is_disabled(character)) {
             
             switch (character.ctype) {
                 case "rogue":
-                    useRspeed(); // Khuyên: Cập nhật hàm này để dùng reduce_cooldown
+                    useRspeed(); 
+                    
+                    // Fan of Knives chung CD với Attack. 
+                    // Nếu cast thành công -> Trả về vòng lặp mới (10ms) và chặn luôn useAttack() ở dưới.
                     if (await use_fan_of_knives()) {
-                        delay = 10; // Nếu tung skill thành công, lặp lại ngay lập tức
-                        break;
+                        return setTimeout(skillLoop, 10); 
                     }
                     break;
 
                 case "ranger":
-                    trySuperShot(); // Khuyên: Cập nhật hàm này để dùng reduce_cooldown
+                    trySuperShot(); 
+                    
+                    // Multi-shot (3shot/5shot) chung CD với Attack.
                     if (await use_multi_shot()) {
-                        delay = 10;
-                        break;
+                        return setTimeout(skillLoop, 10);
                     }
                     break;
 
@@ -880,30 +881,39 @@ async function skillLoop() {
                 case "priest":
                     tryPartyHeal();
                     tryAbsorb();
+                    
+                    // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
                     if (trySingleHeal()) {
-                        delay = 10;
-                        break;
+                        return setTimeout(skillLoop, 10);
                     }
                     break;
                     
                 case "warrior":
+                    // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
+                    break;
+                    
                 case "merchant":
+                    // Luck buff, v.v.
                     break;
             }
-            
-            useAttack(); 
+
+            // ==========================================
+            // Nếu code lọt được xuống tận đây (không bị các lệnh 'return' ở trên cản lại),
+            // có nghĩa là nhân vật CHƯA tung skill nào chiếm dụng GCD (Global Cooldown).
+            // Lúc này mới được phép đánh thường!
+            // ==========================================
+            useAttack();
         }
     } catch (e) {
         console.error("Lỗi trong skillLoop:", e);
     }
 
-    // Đệ quy vòng lặp an toàn
+    // Đệ quy dự phòng để duy trì vòng lặp (cho các trường hợp không đánh, chỉ chạy hoặc chờ CD)
     setTimeout(skillLoop, delay);
 }
 
-// Khởi chạy vòng lặp lần đầu
+// Gọi hàm lần đầu tiên để kích hoạt vòng lặp
 skillLoop();
-
 
 
 
