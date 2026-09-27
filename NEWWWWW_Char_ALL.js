@@ -177,8 +177,10 @@ const REVERSE_3SHOT_MONSTERS = ["crab"];
 
 async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.5) return false;
-    if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) return false;
-
+    if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
+        useAttack();
+        return false;
+    }
     // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
     const pingComp = Math.max(10, character.ping / 10);
     const can3Shot = ms_to_next_skill("3shot") <= pingComp;
@@ -206,8 +208,10 @@ async function use_multi_shot() {
 
         // 3. Chọn mục tiêu & Thi triển skill
         const targets = valid.slice(0, 5);
-        if (targets.length < 2) return false;
-
+        if (targets.length < 2) {
+        useAttack();
+            return false;
+        }
         // Ưu tiên 5shot nếu đủ mục tiêu và chiêu đã sẵn sàng
         let skill = "3shot";
         if (targets.length >= 4 && can5Shot) {
@@ -218,6 +222,7 @@ async function use_multi_shot() {
 
         if (character.mp < G.skills[skill].mp + 300) //chỉ đủ mana để đánh thường
         {
+            useAttack();
             return false;
         }
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
@@ -915,9 +920,6 @@ async function skillLoop() {
                     break;
                     
             }
-            
-            // Nếu các điều kiện skill ở trên không thỏa mãn
-            useAttack();
 
         }
     } catch (e) {
