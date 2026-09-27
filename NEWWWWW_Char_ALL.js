@@ -959,7 +959,7 @@ const ELIXIR_BY_MONSTER = {
 
 function elixirUsage() {
     try {
-        const targetElixir = ELIXIR_BY_MONSTER[FARM_MONSTER] || "elixirluck";
+        const targetElixir = ELIXIR_BY_MONSTER[FARM_MONSTER] || "pumpkinspice";
         const currentElixir = character.slots.elixir?.name;
 
         if (currentElixir !== targetElixir) {
