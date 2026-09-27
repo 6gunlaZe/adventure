@@ -493,6 +493,12 @@ async function trySuperShot() {
 
 
 function useAttack() {
+
+
+    // CHỐT CHẶN COOLDOWN: Nếu chưa tới lượt đánh thì thoát luôn, không spam
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) return;
+    
     let targeted = get_targeted_monster();
     
     // CƠ CHẾ AN TOÀN: Xóa mục tiêu hiện tại nếu nó đã chết hoặc không còn tồn tại
