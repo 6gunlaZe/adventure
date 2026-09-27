@@ -2676,184 +2676,106 @@ setInterval(() => {
 
 }, 5000); // Quét nhẹ 5s/lần
 
+const FLOOR_ENTRY = {
+    bank: { bank_b: [1, -436], bank_u: [1, -436] },
+    bank_b: { bank: [-264, -412], bank_u: [-104, -171] },
+    bank_u: { bank: [0, -41], bank_b: [0, -41] },
+};
 
 
-// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (PHIÊN BẢN AN TOÀN TUYỆT ĐỐI) ---
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
-	const startMap = character.map;
-	const startX = character.x;
-	const startY = character.y;
-
-	async function safeMove(destination) {
-		let attempts = 0;
-		while (attempts < 5) {
-			try {
-				const res = await smart_move(destination);
-				if (res && res.failed) {
-					if (res.reason === "interrupted") {
-						attempts++;
-						await sleep(500);
-						continue;
-					}
-					return false;
-				}
-				return true;
-			} catch (err) {
-				if (err && err.reason === "interrupted") {
-					attempts++;
-					await sleep(500);
-					continue;
-				}
-				return false;
-			}
+	// Kiểm tra nếu chưa ở ngân hàng thì tự động di chuyển đến đó
+	if (!character.bank) {
+		log("[TRAVEL] Chưa ở trong ngân hàng, đang tự động di chuyển đến bank...", "#2ef288");
+		await smart_move("bank");
+		
+		// Đợi đến khi dữ liệu ngân hàng được tải xong
+		let waitTime = 0;
+		while (!character.bank && waitTime < 10000) {
+			await sleep(200);
+			waitTime += 200;
 		}
-		return false;
-	}
-
-	try {
-		// 1. Di chuyển đến ngân hàng an toàn
-		if (!character.bank && !smart.moving ) {
-			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
-			const moved = await safeMove("bank");
-			if (!moved) {
-				log("[ERROR] Không thể di chuyển đến ngân hàng do bị gián đoạn!", "#ff4d4d");
-				return false;
-			}
-			
-			let attempts = 0;
-			while (!character.bank && attempts < 30) {
-				await sleep(500);
-				attempts++;
-			}
-
-			if (!character.bank) {
-				log("[ERROR] Không thể tải dữ liệu ngân hàng!", "#ff4d4d");
-				return false;
-			}
-		}
-
-		// Khai báo an toàn phòng hờ thiếu biến toàn cục của game
-		const packsData = (typeof bank_packs !== 'undefined') ? bank_packs : {};
-		const floorEntryMap = (typeof FLOOR_ENTRY !== 'undefined') ? FLOOR_ENTRY : {};
-		const bankObj = character.bank || {};
-
-		const packFloor = pack => {
-			const n = +pack.replace("items", "");
-			return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
-		};
-
-		const allPacks = Object.keys(bankObj)
-			.filter(k => k !== "gold" && packsData[k])
-			.sort((a, b) => +a.replace("items", "") - +b.replace("items", ""));
-
-		let retrievedCount = 0;
-		let curFloor = character.map;
-
-		const go = async to => {
-			if (!to || curFloor === to) return;
-			log(`[TRAVEL] Di chuyển trong bank: ${curFloor} -> ${to}`);
-			const [x, y] = floorEntryMap[to]?.[curFloor] ?? [];
-			if (x != null && y != null) {
-				await safeMove({ map: to, x, y });
-				curFloor = to;
-			}
-		};
-
-		// 2. Duyệt tìm đồ trong ngân hàng
-		for (const pack of allPacks) {
-			if (retrievedCount >= targetQuantity) break;
-
-			const itemsInPack = bankObj[pack];
-			if (!Array.isArray(itemsInPack)) continue;
-
-			for (let i = 0; i < itemsInPack.length; i++) {
-				if (retrievedCount >= targetQuantity) break;
-				
-				const item = itemsInPack[i];
-				if (!item) continue;
-
-				const matchesName = item.name === itemName;
-				const matchesLevel = targetLevel === null || item.level === targetLevel;
-
-				if (matchesName && matchesLevel) {
-					const needed = targetQuantity - retrievedCount;
-
-					if (!character.esize) {
-						log("[WARN] Túi đồ đã đầy, dừng việc lấy đồ.", "#ff9900");
-						return false;
-					}
-
-					const floor = packFloor(pack);
-					await go(floor);
-
-					const emptySlot = character.items.findIndex(slot => !slot);
-					if (emptySlot === -1) {
-						log("[WARN] Không tìm thấy ô trống trong túi đồ!", "#ff9900");
-						return false;
-					}
-
-					await bank_retrieve(pack, i, emptySlot);
-					await sleep(300);
-
-					const currentItem = character.items[emptySlot];
-					const currentQty = currentItem?.q || 1;
-
-					if (currentQty > needed) {
-						const slotsBefore = new Set();
-						character.items.forEach((slotItem, idx) => {
-							if (slotItem && slotItem.name === itemName && (!item.p || slotItem.p === item.p)) {
-								slotsBefore.add(idx);
-							}
-						});
-
-						await split(emptySlot, needed);
-						await sleep(300);
-
-						let slotToReturn = -1;
-						character.items.forEach((slotItem, idx) => {
-							if (slotItem && slotItem.name === itemName && !slotsBefore.has(idx)) {
-								slotToReturn = idx;
-							}
-						});
-
-						if (slotToReturn === -1) {
-							character.items.forEach((slotItem, idx) => {
-								if (slotItem && slotItem.name === itemName && idx !== emptySlot) {
-									slotToReturn = idx;
-								}
-							});
-						}
-
-						if (slotToReturn !== -1) {
-							await bank_store(slotToReturn, pack, i);
-							await sleep(300);
-						}
-
-						log(`[SUCCESS] Đã lấy chính xác ${needed} ${itemName}, phần dư đã cất lại bank.`, "#00ff66");
-						retrievedCount += needed;
-					} else {
-						log(`[SUCCESS] Đã lấy toàn bộ ${currentQty} ${itemName} từ pack ${pack}`, "#00ff66");
-						retrievedCount += currentQty;
-					}
-					
-					await sleep(250);
-				}
-			}
-		}
-
-		if (retrievedCount < targetQuantity) {
-			log(`[WARN] Chỉ tìm thấy và lấy được ${retrievedCount}/${targetQuantity} món ${itemName}.`, "#ff4d4d");
+		
+		if (!character.bank) {
+			log("[ERROR] Không thể di chuyển vào ngân hàng hoặc tải dữ liệu thất bại!", "#ff4d4d");
 			return false;
 		}
+	}
 
-		return true;
-	} catch (err) {
-		console.error(err);
-		log(`[ERROR] Lỗi khi lấy đồ: ${err.message || err}`, "#ff4d4d");
+	// Lấy tất cả các pack hiện có trong ngân hàng
+	const allPacks = Object.keys(character.bank)
+		.filter(k => k !== "gold" && bank_packs[k])
+		.sort((a, b) => +a.replace("items", "") - +b.replace("items", ""));
+
+	if (allPacks.length === 0) {
+		log("[ERROR] Ngân hàng trống hoặc không đọc được dữ liệu pack!", "#ff4d4d");
 		return false;
-	} finally {
-		// 3. Luôn tự động bay về lại vị trí ban đầu an toàn
-		log(`[TRAVEL] Quay trở về vị trí ban đầu: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})`, "#2ef288");
-		await safeMove({ map: startMap, x: startX, y: startY });
+	}
+
+	// Xác định tầng của pack
+	const packFloor = pack => {
+		const n = +pack.replace("items", "");
+		return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
+	};
+
+	let curFloor = character.map;
+	const go = async to => {
+		if (!to || curFloor === to) return;
+		log(`[TRAVEL] Di chuyển tìm đồ: ${curFloor} -> ${to}`);
+		const [x, y] = FLOOR_ENTRY[to]?.[curFloor] ?? [];
+		if (x != null && y != null) {
+			await smart_move({ map: to, x, y });
+			curFloor = to;
+		}
+	};
+
+	let collected = 0;
+	log(`[START] Bắt đầu tìm kiếm "${itemName}" (SL cần: ${targetQuantity}${targetLevel !== null ? `, Cấp: ${targetLevel}` : ''})...`, "#2ef288");
+
+	for (const pack of allPacks) {
+		if (collected >= targetQuantity) break;
+
+		for (let i = 0; i < 42; i++) {
+			if (collected >= targetQuantity) break;
+
+			const item = character.bank[pack][i];
+			if (!item) continue;
+			
+			// Kiểm tra khớp tên và cấp độ
+			if (item.name !== itemName) continue;
+			if (targetLevel !== null && item.level !== targetLevel) continue;
+
+			// Kiểm tra túi đồ
+			if (!character.esize || character.esize <= 0) {
+				log("[WARN] Túi đồ đã đầy, dừng quá trình lấy đồ.", "#ff9900");
+				break;
+			}
+
+			// Di chuyển đến đúng tầng chứa pack
+			await go(packFloor(pack));
+
+			// Tìm ô trống trong túi
+			const invSlot = character.items.findIndex(slotItem => !slotItem);
+			if (invSlot === -1) break;
+
+			// Rút đồ
+			await bank_retrieve(pack, i, invSlot);
+
+			const qty = item.q ?? 1;
+			collected += qty;
+
+			log(`[RETRIEVE] Đã lấy ${item.name} (SL: ${qty}) từ ${pack} [slot ${i}] vào túi [slot ${invSlot}]`, "#00d2ff");
+			await sleep(50);
+		}
+	}
+
+	if (collected > 0) {
+		log(`[SUCCESS] Đã lấy thành công tổng cộng ${collected}/${targetQuantity} món "${itemName}".`, "#00ff66");
+		return true;
+	} else {
+		log(`[NOT FOUND] Không tìm thấy "${itemName}"${targetLevel !== null ? ` cấp ${targetLevel}` : ''} trong ngân hàng.`, "#ff4d4d");
+		return false;
 	}
 }
+
+
