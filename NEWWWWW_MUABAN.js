@@ -2678,20 +2678,51 @@ setInterval(() => {
 
 
 
-// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (ĐÃ TỐI ƯU & AN TOÀN) ---
+// --- HÀM LẤY ĐỒ TỪ NGÂN HÀNG (CÓ CHẾ ĐỘ TỰ ĐỘNG THỬ LẠI KHI BỊ NGẮT) ---
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
 	// 1. Ghi nhớ vị trí hiện tại trước khi đi lấy đồ
 	const startMap = character.map;
 	const startX = character.x;
 	const startY = character.y;
 
+	// Hàm hỗ trợ smart_move an toàn (tự động retry nếu bị interrupted)
+	async function safeMove(destination) {
+		let attempts = 0;
+		while (attempts < 5) {
+			try {
+				const res = await smart_move(destination);
+				if (res && res.failed) {
+					if (res.reason === "interrupted") {
+						attempts++;
+						await sleep(500);
+						continue;
+					}
+					return false;
+				}
+				return true;
+			} catch (err) {
+				if (err && err.reason === "interrupted") {
+					attempts++;
+					await sleep(500);
+					continue;
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+
 	try {
-		// 2. Di chuyển đến ngân hàng và chờ dữ liệu bank load xong
+		// 2. Di chuyển đến ngân hàng an toàn
 		if (!character.bank) {
 			log("[INFO] Đang di chuyển đến ngân hàng...", "#2ef288");
-			await smart_move("bank");
+			const moved = await safeMove("bank");
+			if (!moved) {
+				log("[ERROR] Không thể di chuyển đến ngân hàng do bị gián đoạn!", "#ff4d4d");
+				return false;
+			}
 			
-			// Chờ đến khi server tải xong dữ liệu bank (tối đa 15 giây)
+			// Chờ đến khi server tải xong dữ liệu bank
 			let attempts = 0;
 			while (!character.bank && attempts < 30) {
 				await sleep(500);
@@ -2721,7 +2752,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 			log(`[TRAVEL] Di chuyển trong bank: ${curFloor} -> ${to}`);
 			const [x, y] = FLOOR_ENTRY[to]?.[curFloor] ?? [];
 			if (x != null && y != null) {
-				await smart_move({ map: to, x, y });
+				await safeMove({ map: to, x, y });
 				curFloor = to;
 			}
 		};
@@ -2821,9 +2852,9 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		log(`[ERROR] Lỗi khi lấy đồ: ${err.message || err}`, "#ff4d4d");
 		return false;
 	} finally {
-		// 4. Luôn tự động bay về lại vị trí ban đầu (bãi câu cá) sau khi hoàn tất
+		// 4. Luôn tự động bay về lại vị trí ban đầu an toàn
 		log(`[TRAVEL] Quay trở về vị trí ban đầu: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})`, "#2ef288");
-		await smart_move({ map: startMap, x: startX, y: startY });
+		await safeMove({ map: startMap, x: startX, y: startY });
 	}
 }
 
