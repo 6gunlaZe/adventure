@@ -769,7 +769,7 @@ function service_craft(req) { go_to_service(req, () => setTimeout(finish_and_ret
 function service_gem(req) { go_to_service(req, () => setTimeout(finish_and_return, CONFIG.SERVICE_DELAY)); }
 
 
-function service_fishing(req) {
+async function service_fishing(req) {
     const FISHING_POS = { map: "main", x: -1366, y: -14 };
     const MAX_FISHING_TIME = 5 * 60 * 1000; // Tối đa 5 phút
     const startTime = Date.now();
@@ -777,6 +777,7 @@ function service_fishing(req) {
     // Khai báo tên các trang bị chính
     const MAIN_WEAPON = "broom";
     const OFF_WEAPON = "wbookhs";
+    const rodName = "rod";
 
     // 1. Kiểm tra nhanh cooldown skill trước khi di chuyển
     if (is_on_cooldown("fishing")) {
@@ -785,71 +786,68 @@ function service_fishing(req) {
         return;
     }
 
-    // 2. Tận dụng go_to_service để di chuyển tới vị trí câu cá
+    // 2. Di chuyển tới vị trí câu cá
     req.map = FISHING_POS.map;
     req.x = FISHING_POS.x;
     req.y = FISHING_POS.y;
 
-    go_to_service(req, () => {
-        const fishingInterval = setInterval(async () => {
-            const elapsedTime = Date.now() - startTime;
-
-            // ĐIỀU KIỆN KẾT THÚC: Quá 5 phút hoặc Skill đã đi vào Cooldown
-            if (elapsedTime >= MAX_FISHING_TIME || is_on_cooldown("fishing")) {
-                clearInterval(fishingInterval);
-                console.log("[MuaBan] Hoàn thành câu cá (hoặc skill đang cooldown/hết giờ).");
+    go_to_service(req, async () => {
+        try {
+            // Dùng vòng lặp while tuần tự thay vì setInterval để tránh xung đột
+            while (Date.now() - startTime < MAX_FISHING_TIME) {
                 
-                // Trả lại vũ khí chính & phụ trước khi kết thúc
-                setTimeout(async () => {
-                    try {
-                        // Đeo lại vũ khí chính (broom) nếu chưa đeo
-                        if (!character.slots.mainhand || character.slots.mainhand.name !== MAIN_WEAPON) {
-                            const mainSlot = locate_item(MAIN_WEAPON);
-                            if (mainSlot !== -1) await equip(mainSlot);
-                        }
-
-                        // Đeo lại vũ khí phụ (wbookhs) nếu chưa đeo
-                        if (!character.slots.offhand || character.slots.offhand.name !== OFF_WEAPON) {
-                            const offSlot = locate_item(OFF_WEAPON);
-                            if (offSlot !== -1) await equip(offSlot);
-                        }
-                    } catch (err) {
-                        console.log("[MuaBan] Lỗi khi trang bị lại vũ khí:", err);
-                    } finally {
-                        finish_and_return();
+                // --- KIỂM TRA VÀ ĐEO CẦN CÂU ---
+                if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
+                    let rodSlot = locate_item(rodName);
+                    
+                    if (rodSlot === -1) {
+                        console.log("[MuaBan] Không thấy cần câu trong túi, đang đi lấy từ ngân hàng...");
+                        await retrieveFromBank("spidersilk", 1); // Chờ lấy xong hẳn mới chạy tiếp
+                        rodSlot = locate_item(rodName); 
                     }
-                }, CONFIG.SERVICE_DELAY);
-                return;
+
+                    if (rodSlot !== -1) {
+                        if (character.slots.offhand) await unequip("offhand");
+                        await equip(rodSlot);
+                        await sleep(500); // Đợi game đồng bộ trang bị
+                    } else {
+                        console.log("[MuaBan] Không tìm thấy cần câu cả trong túi lẫn ngân hàng!");
+                        break; // Thoát vòng lặp để đi về
+                    }
+                }
+
+                // --- TUNG CẦN CÂU ---
+                if (!character.c?.fishing && !is_on_cooldown("fishing")) {
+                    use_skill("fishing").catch(e => console.log("[MuaBan] Lỗi use_skill fishing:", e));
+                }
+
+                // Nghỉ 1 giây trước khi kiểm tra nhịp câu tiếp theo
+                await sleep(1000);
             }
 
-// --- THỰC HIỆN CÂU CÁ ---
-const rodName = "rod";
-if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
-    let rodSlot = locate_item(rodName);
-    
-    // Thêm đoạn kiểm tra và gọi hàm lấy từ ngân hàng
-    if (rodSlot === -1) {
-        console.log("[MuaBan] Không thấy cần câu trong túi, đang đi lấy từ ngân hàng...");
-        await retrieveFromBank("spidersilk", 1);
-        rodSlot = locate_item(rodName); // Cập nhật lại slot sau khi lấy xong
-    }
+        } catch (err) {
+            console.log("[MuaBan] Lỗi trong tiến trình câu cá:", err);
+        } finally {
+            // --- KẾT THÚC: TRẢ LẠI VŨ KHÍ BAN ĐẦU ---
+            console.log("[MuaBan] Đã hết thời gian 5 phút câu cá, đang thu dọn trang bị...");
+            await sleep(CONFIG.SERVICE_DELAY || 1000);
+            
+            try {
+                if (!character.slots.mainhand || character.slots.mainhand.name !== MAIN_WEAPON) {
+                    const mainSlot = locate_item(MAIN_WEAPON);
+                    if (mainSlot !== -1) await equip(mainSlot);
+                }
 
-    if (rodSlot !== -1) {
-        if (character.slots.offhand) await unequip("offhand");
-        await equip(rodSlot);
-    } else {
-        console.log("[MuaBan] Không tìm thấy cần câu cả trong túi lẫn ngân hàng!");
-        clearInterval(fishingInterval);
-        finish_and_return();
-        return;
-    }
-}
-
-            // Tung cần câu nếu không trong trạng thái đang casting
-            if (!character.c?.fishing && !is_on_cooldown("fishing")) {
-                use_skill("fishing").catch(e => console.log("[MuaBan] Lỗi use_skill fishing:", e));
+                if (!character.slots.offhand || character.slots.offhand.name !== OFF_WEAPON) {
+                    const offSlot = locate_item(OFF_WEAPON);
+                    if (offSlot !== -1) await equip(offSlot);
+                }
+            } catch (err) {
+                console.log("[MuaBan] Lỗi khi trang bị lại vũ khí:", err);
+            } finally {
+                finish_and_return();
             }
-        }, 1000);
+        }
     });
 }
 
