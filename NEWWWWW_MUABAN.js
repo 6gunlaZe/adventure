@@ -771,7 +771,7 @@ function service_gem(req) { go_to_service(req, () => setTimeout(finish_and_retur
 
 async function service_fishing(req) {
     const FISHING_POS = { map: "main", x: -1366, y: -14 };
-    const MAX_FISHING_TIME = 5 * 60 * 1000; // Tối đa 5 phút
+    const MAX_FISHING_TIME = 5 * 60 * 1000; // Tối đa 5 phút (phòng hờ kẹt mạng)
     const startTime = Date.now();
 
     // Khai báo tên các trang bị chính
@@ -793,7 +793,8 @@ async function service_fishing(req) {
 
     go_to_service(req, async () => {
         try {
-            // Dùng vòng lặp while tuần tự thay vì setInterval để tránh xung đột
+
+            // Dùng vòng lặp while tuần tự
             while (Date.now() - startTime < MAX_FISHING_TIME) {
                 
                 // --- KIỂM TRA VÀ ĐEO CẦN CÂU ---
@@ -802,7 +803,7 @@ async function service_fishing(req) {
                     
                     if (rodSlot === -1) {
                         console.log("[MuaBan] Không thấy cần câu trong túi, đang đi lấy từ ngân hàng...");
-                        await retrieveFromBank("spidersilk", 1); // Chờ lấy xong hẳn mới chạy tiếp
+                        await retrieveFromBank("spidersilk", 1); 
                         rodSlot = locate_item(rodName); 
                     }
 
@@ -821,7 +822,13 @@ async function service_fishing(req) {
                     use_skill("fishing").catch(e => console.log("[MuaBan] Lỗi use_skill fishing:", e));
                 }
 
-                // Nghỉ 1 giây trước khi kiểm tra nhịp câu tiếp theo
+                // --- KIỂM TRA NẾU ĐÃ CÂU XONG VÀ SKILL VÀO COOLDOWN THÌ THOÁT ---
+                if (!character.c?.fishing && is_on_cooldown("fishing")) {
+                    console.log("[MuaBan] Đã nhận được đồ và skill vào cooldown, tiến hành về thôi!");
+                    break; // Thoát vòng lặp ngay lập tức để chuyển sang khối finally thu dọn
+                }
+
+                // Nghỉ 1 giây trước khi kiểm tra nhịp tiếp theo
                 await sleep(1000);
             }
 
@@ -829,7 +836,7 @@ async function service_fishing(req) {
             console.log("[MuaBan] Lỗi trong tiến trình câu cá:", err);
         } finally {
             // --- KẾT THÚC: TRẢ LẠI VŨ KHÍ BAN ĐẦU ---
-            console.log("[MuaBan] Đã hết thời gian 5 phút câu cá, đang thu dọn trang bị...");
+            console.log("[MuaBan] Đang thu dọn trang bị...");
             await sleep(CONFIG.SERVICE_DELAY || 1000);
             
             try {
