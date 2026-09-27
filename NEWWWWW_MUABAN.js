@@ -2683,26 +2683,35 @@ const FLOOR_ENTRY = {
 };
 
 
+let isBankBusy = false; // Biến khóa toàn cục chống chạy chồng lặp
+
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
-	// 1. Lưu lại vị trí ban đầu trước khi làm gì hết
+	// Kiểm tra nếu tiến trình đang chạy thì từ chối chạy đè
+	if (isBankBusy) {
+		log("[WARN] Tiến trình lấy đồ đang chạy, vui lòng đợi hoàn tất!", "#ff9900");
+		return false;
+	}
+	isBankBusy = true; // Khóa lại
+
 	const startMap = character.map;
 	const startX = character.x;
 	const startY = character.y;
 
 	try {
-		// Kiểm tra nếu chưa ở ngân hàng thì tự động di chuyển đến đó
+		// 1. Kiểm tra và vào ngân hàng nếu chưa ở đó
 		if (!character.bank) {
-			log("[TRAVEL] Chưa ở trong ngân hàng, đang tự động di chuyển đến bank...", "#2ef288");
+			log("[TRAVEL] Chưa ở trong ngân hàng, đang di chuyển đến bank...", "#2ef288");
 			if (!smart.moving) await smart_move("bank");
 			
 			let waitTime = 0;
-			while (!character.bank && waitTime < 10000) {
+			while (!character.bank && waitTime < 100000) {
 				await sleep(200);
 				waitTime += 200;
 			}
 			
 			if (!character.bank) {
-				log("[ERROR] Không thể di chuyển vào ngân hàng hoặc tải dữ liệu thất bại!", "#ff4d4d");
+				log("[ERROR] Không thể di chuyển vào ngân hàng!", "#ff4d4d");
+				isBankBusy = false;
 				return false;
 			}
 		}
@@ -2713,6 +2722,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 		if (allPacks.length === 0) {
 			log("[ERROR] Ngân hàng trống hoặc không đọc được dữ liệu pack!", "#ff4d4d");
+			isBankBusy = false;
 			return false;
 		}
 
@@ -2721,29 +2731,32 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 			return n <= 7 ? "bank" : n <= 23 ? "bank_b" : "bank_u";
 		};
 
-		let curFloor = character.map;
-		const go = async to => {
-			if (!to || curFloor === to) return;
-			log(`[TRAVEL] Di chuyển tìm đồ: ${curFloor} -> ${to}`);
-			const [x, y] = FLOOR_ENTRY[to]?.[curFloor] ?? [];
-			if (x != null && y != null) {
-				await smart_move({ map: to, x, y });
-				curFloor = to;
-			}
-		};
-
 		let collected = 0;
+		const processedSlots = new Set(); // Ghi nhớ các slot đã xử lý để không bao giờ lặp lại
 		log(`[START] Bắt đầu tìm kiếm "${itemName}" (Cần lấy: ${targetQuantity}${targetLevel !== null ? `, Cấp: ${targetLevel}` : ''})...`, "#2ef288");
 
 		for (const pack of allPacks) {
 			if (collected >= targetQuantity) break;
 
+			const targetFloor = packFloor(pack);
+			if (character.map !== targetFloor) {
+				await smart_move({ map: targetFloor });
+				let waitMap = 0;
+				while (character.map !== targetFloor && waitMap < 8000) {
+					await sleep(200);
+					waitMap += 200;
+				}
+				await sleep(200);
+			}
+
 			for (let i = 0; i < 42; i++) {
 				if (collected >= targetQuantity) break;
 
+				const slotKey = `${pack}_${i}`;
+				if (processedSlots.has(slotKey)) continue; // Bỏ qua tuyệt đối các slot đã làm
+
 				const item = character.bank[pack][i];
 				if (!item) continue;
-				
 				if (item.name !== itemName) continue;
 				if (targetLevel !== null && item.level !== targetLevel) continue;
 
@@ -2752,56 +2765,55 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 					break;
 				}
 
-				await go(packFloor(pack));
+				// Đánh dấu ngay lập tức slot này đã xử lý
+				processedSlots.add(slotKey);
 
 				const invSlot = character.items.findIndex(slotItem => !slotItem);
-				if (invSlot === -1) break;
+				if (invSlot === -1) {
+					log("[WARN] Túi đồ đã đầy!", "#ff9900");
+					break;
+				}
 
 				// Rút nguyên stack từ bank về túi
 				await bank_retrieve(pack, i, invSlot);
-				await sleep(100); // Đợi server nhận lệnh lấy đồ
+				await sleep(1300);
 
-				const stackQty = item.q ?? 1;
+                 const stackQty = item.q ?? 1;
 				const needed = targetQuantity - collected;
 
 				if (stackQty > needed && item.q) {
-					// Tiến hành chia stack
-					split(invSlot, needed);
+					const remainder = stackQty - needed;
 
-					// CHỜ SERVER TÁCH XONG: Lặp kiểm tra đến khi ô chứa phần thừa xuất hiện trong túi
-					let spareSlot = -1;
-					const remainingQty = stackQty - needed;
-					let waitSplit = 0;
-					while (waitSplit < 2000) {
-						await sleep(100);
-						waitSplit += 100;
-						spareSlot = character.items.findIndex((slotItem, idx) => idx !== invSlot && slotItem?.name === itemName && slotItem?.q === remainingQty);
-						if (spareSlot !== -1) break;
-					}
+					// Tách stack ra
+					split(invSlot, remainder);
+					await sleep(2400);
+
+					// Cứ thấy ô nào khớp tên và đúng số lượng dư là múc cất đi
+					const spareSlot = character.items.findIndex(slotItem => slotItem?.name === itemName && slotItem?.q === remainder);
 
 					if (spareSlot !== -1) {
-						await go(packFloor(pack));
 						await bank_store(spareSlot, pack, i);
-						await sleep(150); // Đợi server nhận lệnh cất lại phần thừa
+						await sleep(2400);
+						log(`[RETRIEVE] Đã lấy chính xác ${needed} cái "${itemName}" (từ stack ${stackQty}), phần thừa (${remainder}) đã cất lại bank.`, "#00d2ff");
 					} else {
-						log("[WARN] Quá thời gian chờ tách stack, vui lòng kiểm tra lại túi đồ.", "#ff9900");
+						log("[WARN] Không tìm thấy ô chứa phần thừa để cất lại bank.", "#ff9900");
 					}
 
 					collected += needed;
-					log(`[RETRIEVE] Đã lấy chính xác ${needed} cái "${itemName}" (từ stack ${stackQty}), phần thừa đã cất lại bank.`, "#00d2ff");
 				} else {
 					collected += stackQty;
 					log(`[RETRIEVE] Đã lấy ${item.name} (SL: ${stackQty}) từ ${pack} [slot ${i}]`, "#00d2ff");
 				}
 
-				await sleep(100);
+				await sleep(200);
 			}
 		}
 
 		// 2. Quay trở lại vị trí ban đầu trước khi kết thúc
-		log(`[TRAVEL] Đang quay trở lại vị trí cũ: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})...`, "#2ef288");
+		log(`[TRAVEL] Đang quay lại vị trí cũ: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})...`, "#2ef288");
 		await smart_move({ map: startMap, x: startX, y: startY });
 
+		isBankBusy = false; // Mở khóa khi hoàn tất thành công
 		if (collected > 0) {
 			log(`[SUCCESS] Hoàn tất! Đã lấy tổng cộng ${collected}/${targetQuantity} món "${itemName}".`, "#00ff66");
 			return true;
@@ -2812,6 +2824,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 	} catch (err) {
 		log(`[ERROR] Lỗi trong quá trình lấy đồ: ${err.message || err}`, "#ff4d4d");
+		isBankBusy = false; // Mở khóa nếu xảy ra lỗi
 		try {
 			await smart_move({ map: startMap, x: startX, y: startY });
 		} catch (e) {}
