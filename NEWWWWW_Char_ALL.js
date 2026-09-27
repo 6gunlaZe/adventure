@@ -1034,3 +1034,192 @@ function on_cm(name, data) {
 
 
 
+
+// =============================================================================
+// 1. CẤU HÌNH BỘ TRANG BỊ THEO TÊN NHÂN VẬT (character.name)
+// =============================================================================
+const EQUIPMENT_SETS = {
+    // ---- Cấu hình đồ cho Ranger (Ví dụ: f1111) ----
+    f1111: {
+        dame: [
+            { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" }
+        ],
+        mana: [
+            { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+            { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" }
+        ],
+        luck: [
+            { itemName: "wshoes", slot: "shoes", level: 8, l: "l" },
+            { itemName: "wcap", slot: "helmet", level: 9, l: "l" },
+            { itemName: "wgloves", slot: "gloves", level: 8, l: "l" },
+            { itemName: "wattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "wbreeches", slot: "pants", level: 8, l: "l" },
+            { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
+        ],
+        def: [],
+        def_fire: []
+    },
+
+    // ---- Cấu hình đồ cho Priest (Ví dụ: Ynhi) ----
+    Ynhi: {
+        dame: [
+            { itemName: "orbofint", slot: "orb", level: 4, l: "l" },
+            { itemName: "lmace", slot: "mainhand", level: 8, l: "l" }
+        ],
+        heal: [
+            { itemName: "cupid", slot: "mainhand", level: 9, l: "l" } // Ví dụ đổi vũ khí bơm máu
+        ],
+        luck: [
+            { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
+        ],
+        def: [],
+        def_fire: []
+    }
+};
+
+// =============================================================================
+// 2. LOGIC ĐIỀU KIỆN CHUYỂN SET CHO TỪNG NHÂN VẬT
+// =============================================================================
+const GEAR_LOGIC = {
+    // ---- Logic của Ranger (f1111) ----
+    f1111: function() {
+        let needNormalDef = false;
+        let needLuck = false;
+        let monsterDensity = 0;
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (distance(character, e) > 300) continue;
+
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+            if (e.target || e.max_hp < 5000) monsterDensity++;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck) return "luck";
+        if (character.hp > 5500 && monsterDensity >= 4) return "mana";
+        
+        return "dame"; // Trạng thái mặc định
+    },
+
+    // ---- Logic của Priest (Ynhi) ----
+    Ynhi: function() {
+        // Có đồng đội nào xung quanh dưới 50% HP không?
+        const someoneDying = partyEntities.some(p => 
+            !p.entity.dead && (p.entity.hp / p.entity.max_hp) < 0.5 && p.distance <= character.range
+        );
+        if (someoneDying) return "heal"; // Đổi sang đồ buff
+
+        // Có đang bị quái đánh không?
+        const underAttack = monsters.some(m => m.entity.target === character.name);
+        if (underAttack) return "def";
+
+        return "dame"; // Trạng thái mặc định
+    }
+};
+
+// =============================================================================
+// 3. CORE SWAP ENGINE (Gửi Socket Batch & Quản lý State)
+// =============================================================================
+let isEquipping = false;
+let currentSet = ""; // Lưu cờ Set hiện tại để chặn spam lệnh
+
+async function equipSet(setName) {
+    // 1. Check an toàn cơ bản
+    if (isEquipping || currentSet === setName) return;
+
+    // 2. Lấy cấu hình đồ theo Tên Nhân Vật
+    const charSets = EQUIPMENT_SETS[character.name];
+    if (!charSets) return; // Không có dữ liệu thì bỏ qua
+
+    const setItems = charSets[setName];
+    if (!setItems || setItems.length === 0) {
+        currentSet = setName; // Đánh dấu để tránh check lại
+        return;
+    }
+
+    isEquipping = true;
+    const validItems = [];
+
+    // 3. Tìm các trang bị CHƯA được mặc
+    for (const item of setItems) {
+        const equipped = character.slots[item.slot];
+        if (equipped && equipped.name === item.itemName && equipped.level === item.level && equipped.l === item.l) {
+            continue;
+        }
+
+        const invIndex = character.items.findIndex(i => 
+            i && i.name === item.itemName && i.level === item.level && i.l === item.l
+        );
+
+        if (invIndex !== -1) {
+            validItems.push({ num: invIndex, slot: item.slot });
+        }
+    }
+
+    // 4. Gửi batch lên server
+    if (validItems.length > 0) {
+        try {
+            parent.socket.emit("equip_batch", validItems);
+            await parent.push_deferred("equip_batch");
+            currentSet = setName;
+            game_log(`⚙ [${character.name}] Switched to [${setName.toUpperCase()}]`, "#4BFF4B");
+        } catch (e) {
+            console.error("equipBatch Error:", e);
+        }
+    } else {
+        currentSet = setName; // Đã mặc đúng đồ
+    }
+
+    isEquipping = false;
+}
+
+// =============================================================================
+// 4. HÀM ĐIỀU PHỐI (VÒNG LẶP)
+// =============================================================================
+function autoSwapEquipment() {
+    if (smart.moving || isEquipping) return;
+
+    // Truy xuất hàm logic theo tên nhân vật đang chạy script
+    const getTargetSet = GEAR_LOGIC[character.name];
+    
+    // Bỏ qua nếu nick này chưa cài đặt logic
+    if (!getTargetSet) return; 
+
+    // Thực thi hàm logic để lấy kết quả Set cần mặc
+    const targetSet = getTargetSet();
+    
+    // Gọi lệnh mặc đồ
+    equipSet(targetSet);
+}
+
+// Chạy kiểm tra mỗi 300ms (hoàn toàn không giật lag)
+setInterval(autoSwapEquipment, 300);
+
+
+
+
+
+
+
+
+
+
+
+
+
