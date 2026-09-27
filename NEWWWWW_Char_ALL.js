@@ -213,6 +213,7 @@ async function use_multi_shot() {
         if (targets.length >= 4 && can5Shot) {
             skill = "5shot";
         } else if (!can3Shot) {
+            useAttack();
             return false; // Chỉ có 2-3 mục tiêu nhưng 3shot lại đang hồi chiêu
         }
 
@@ -902,7 +903,7 @@ async function skillLoop() {
             // có nghĩa là nhân vật CHƯA tung skill nào chiếm dụng GCD (Global Cooldown).
             // Lúc này mới được phép đánh thường!
             // ==========================================
-            useAttack();
+            //useAttack();
         }
     } catch (e) {
         console.error("Lỗi trong skillLoop:", e);
