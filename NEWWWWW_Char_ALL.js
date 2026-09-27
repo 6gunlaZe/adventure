@@ -218,7 +218,6 @@ async function use_multi_shot() {
 
         if (character.mp < G.skills[skill].mp + 300) //chỉ đủ mana để đánh thường
         {
-            useAttack();
             return false;
         }
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
@@ -237,28 +236,45 @@ async function use_multi_shot() {
 
 
 async function use_fan_of_knives() {
+    // 1. Kiểm tra tài nguyên và trạng thái sớm
     if (attackBusy || character.hp / character.max_hp < 0.3 || character.mp < G.skills["fanofknives"].mp + 130) {
         return false;
     }
+    
+    // 2. KIỂM TRA COOLDOWN & BÙ PING (Cực kỳ tiết kiệm CPU)
+    // Vì skill này chung mâm với đánh thường, ta check thời gian chờ của "attack" 
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) {
+        return false; 
+    }
+
+    // 3. Kiểm tra an toàn (Quái cấp cao cắn)
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) {
         return false;
     }
+
     attackBusy = true;
     try {
-        // Lọc quái hợp lệ
+        // 4. Lọc quái hợp lệ
         const validMonsters = monsters
             .map(m => m.entity)
             .filter(e => e.level <= 1 && is_in_range(e, "fanofknives"));
 
-        // Sắp xếp theo thứ tự ưu tiên (Leader 50px -> Debuff -> Aggro Party -> Max HP)
+        // TỐI ƯU CPU: Nếu không đủ 3 con thì nghỉ luôn, KHÔNG cần chạy hàm Sort nặng nề
+        if (validMonsters.length < 3) return false;
+
+        // 5. Sắp xếp theo thứ tự ưu tiên (Leader 50px -> Debuff -> Aggro Party -> Max HP)
         const sortedMonsters = sortMonstersByPriority(validMonsters);
 
         // Lấy 5 quái tốt nhất
         const targets = sortedMonsters.slice(0, 5);
 
-        if (targets.length < 3) return false;
-
+        // 6. Tung chiêu và Ép xung Cooldown
         await use_skill("fanofknives", targets);
+        
+        // Bù Ping ngay lập tức cho thanh Cooldown đánh thường
+        reduce_cooldown("attack", character.ping * 0.95);
+        
         return true;
 
     } catch (e) {
@@ -893,17 +909,11 @@ async function skillLoop() {
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
                     
-                case "merchant":
-                    // Luck buff, v.v.
-                    break;
             }
+            
+            // Nếu các điều kiện skill ở trên không thỏa mãn
+            useAttack();
 
-            // ==========================================
-            // Nếu code lọt được xuống tận đây (không bị các lệnh 'return' ở trên cản lại),
-            // có nghĩa là nhân vật CHƯA tung skill nào chiếm dụng GCD (Global Cooldown).
-            // Lúc này mới được phép đánh thường!
-            // ==========================================
-            //useAttack();
         }
     } catch (e) {
         console.error("Lỗi trong skillLoop:", e);
