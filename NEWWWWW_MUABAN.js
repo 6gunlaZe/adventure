@@ -20,7 +20,7 @@ const TRASH_ITEMS = [
 ];
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart"];
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candy0: 1, candy1: 1, candycane: 1, candypop: 10, 
@@ -830,7 +830,7 @@ if (!character.slots.mainhand || character.slots.mainhand.name !== rodName) {
     // Thêm đoạn kiểm tra và gọi hàm lấy từ ngân hàng
     if (rodSlot === -1) {
         console.log("[MuaBan] Không thấy cần câu trong túi, đang đi lấy từ ngân hàng...");
-        await retrieveFromBank(rodName, 1);
+        await retrieveFromBank("spidersilk", 1);
         rodSlot = locate_item(rodName); // Cập nhật lại slot sau khi lấy xong
     }
 
