@@ -2691,9 +2691,9 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 	try {
 		// Kiểm tra nếu chưa ở ngân hàng thì tự động di chuyển đến đó
-		if (!character.bank && !character.moving) {
+		if (!character.bank) {
 			log("[TRAVEL] Chưa ở trong ngân hàng, đang tự động di chuyển đến bank...", "#2ef288");
-			await smart_move("bank");
+			if (!smart.moving) await smart_move("bank");
 			
 			let waitTime = 0;
 			while (!character.bank && waitTime < 10000) {
