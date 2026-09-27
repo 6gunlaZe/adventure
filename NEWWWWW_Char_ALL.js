@@ -182,10 +182,10 @@ async function use_multi_shot() {
     attackBusy = true;
 
     try {
-        // 1. Kiểm tra an toàn: Máu mình < 70% hoặc HolyStone gần đó < 50%
-        const holyStone = partyEntities.find(p => p.entity.name === "HolyStone" && !p.entity.dead)?.entity;
+        // 1. Kiểm tra an toàn: Máu mình < 70% hoặc Ynhi gần đó < 50%
+        const Ynhi = partyEntities.find(p => p.entity.name === "Ynhi" && !p.entity.dead)?.entity;
         const allowUntargeted = (character.hp / character.max_hp) >= 0.7 && 
-                               (!holyStone || (holyStone.hp / holyStone.max_hp) >= 0.5);
+                               (!Ynhi || (Ynhi.hp / Ynhi.max_hp) >= 0.5);
 
         // 2. Lọc & Sắp xếp danh sách quái
         let valid = monsters
