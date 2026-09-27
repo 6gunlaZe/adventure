@@ -179,13 +179,21 @@ async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.5) return false;
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) return false;
 
+    // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
+    const pingComp = Math.max(10, character.ping / 10);
+    const can3Shot = ms_to_next_skill("3shot") <= pingComp;
+    const can5Shot = ms_to_next_skill("5shot") <= pingComp;
+    
+    // Nếu cả 2 chiêu đều đang cooldown -> Nghỉ luôn, khỏi tính toán
+    if (!can3Shot && !can5Shot) return false;
+
     attackBusy = true;
 
     try {
-        // 1. Kiểm tra an toàn: Máu mình < 70% hoặc Ynhi gần đó < 50%
+        // 1. Kiểm tra an toàn: Máu mình >= 70% hoặc Ynhi gần đó >= 50%
         const Ynhi = partyEntities.find(p => p.entity.name === "Ynhi" && !p.entity.dead)?.entity;
         const allowUntargeted = (character.hp / character.max_hp) >= 0.7 && 
-                               (!Ynhi || (Ynhi.hp / Ynhi.max_hp) >= 0.5);
+                                (!Ynhi || (Ynhi.hp / Ynhi.max_hp) >= 0.5);
 
         // 2. Lọc & Sắp xếp danh sách quái
         let valid = monsters
@@ -200,10 +208,20 @@ async function use_multi_shot() {
         const targets = valid.slice(0, 5);
         if (targets.length < 2) return false;
 
-        const skill = targets.length >= 4 ? "5shot" : "3shot";
+        // Ưu tiên 5shot nếu đủ mục tiêu và chiêu đã sẵn sàng
+        let skill = "3shot";
+        if (targets.length >= 4 && can5Shot) {
+            skill = "5shot";
+        } else if (!can3Shot) {
+            return false; // Chỉ có 2-3 mục tiêu nhưng 3shot lại đang hồi chiêu
+        }
+
         if (character.mp < G.skills[skill].mp + 150) return false;
 
+        // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
         await use_skill(skill, targets);
+        reduce_cooldown(skill, character.ping * 0.95);
+        
         return true;
 
     } catch (e) {
@@ -456,22 +474,33 @@ async function trySuperShot() {
 
 
 function useAttack() {
-
     let targeted = get_targeted_monster();
+    
+    // CƠ CHẾ AN TOÀN: Xóa mục tiêu hiện tại nếu nó đã chết hoặc không còn tồn tại
+    if (currentTarget && (currentTarget.dead || !parent.entities[currentTarget.id])) {
+        currentTarget = null;
+    }
+
     if (targeted) currentTarget = targeted;
     
     if (!currentTarget || smart.moving) return;
 
     // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
-    if ( FARM_MONSTER != "crab" && !is_in_range(currentTarget) ) {
-        move(
-            character.x + (currentTarget.x - character.x) / 2,
-            character.y + (currentTarget.y - character.y) / 2
-        );
+    if (FARM_MONSTER != "crab" && !is_in_range(currentTarget)) {
+        // Tránh tình trạng spam lệnh move liên tục gây khựng nhân vật
+        if (!character.moving) {
+            move(
+                character.x + (currentTarget.x - character.x) / 2,
+                character.y + (currentTarget.y - character.y) / 2
+            );
+        }
         return;
     }
     
     if (attackBusy) return;
+    
+    // BÙ PING CHO ĐÁNH THƯỜNG
+    const pingComp = Math.max(10, character.ping / 10);
     
     if (
         currentTarget &&
@@ -479,9 +508,16 @@ function useAttack() {
         currentTarget.type === "monster" &&
         TARGET_MONSTERS.includes(currentTarget.mtype) &&
         is_in_range(currentTarget) &&
-        can_attack(currentTarget)
+        ms_to_next_skill("attack") <= pingComp // Thay can_attack bằng điều kiện bù ping
     ) {
-        attack(currentTarget);
+        // TẤN CÔNG VÀ ÉP XUNG COOLDOWN
+        attack(currentTarget)
+            .then(function() {
+                reduce_cooldown("attack", character.ping * 0.95);
+            })
+            .catch(function(e) {
+                // Lỗi mục tiêu chết nhanh hơn đạn bay, bắt lỗi im lặng
+            });
     }
 }
 
@@ -809,39 +845,65 @@ function use_hp_or_mp1() {
     return use_skill(skill);
 }
 
-setInterval(function() { skillLoop(); }, 100);
+
 
 
 
 async function skillLoop() {
-    switch (character.ctype) {
-        case "rogue":
-            useRspeed();
-            if (await use_fan_of_knives()) return;
-            break;
+    let delay = 40; // Delay mặc định cho phản xạ skill (nhanh hơn đánh thường)
 
-        case "ranger":
-            trySuperShot();
-            if (await use_multi_shot()) return;
-            break;
+    try {
+        // Chỉ tung skill khi nhân vật có thể hành động (không chết, không bị choáng)
+        if (!is_disabled(character)) {
+            
+            switch (character.ctype) {
+                case "rogue":
+                    useRspeed(); // Khuyên: Cập nhật hàm này để dùng reduce_cooldown
+                    if (await use_fan_of_knives()) {
+                        delay = 10; // Nếu tung skill thành công, lặp lại ngay lập tức
+                        break;
+                    }
+                    break;
 
-        case "mage":
-            energizeParty();
-            break;
+                case "ranger":
+                    trySuperShot(); // Khuyên: Cập nhật hàm này để dùng reduce_cooldown
+                    if (await use_multi_shot()) {
+                        delay = 10;
+                        break;
+                    }
+                    break;
+
+                case "mage":
+                    energizeParty();
+                    break;
+                    
+                case "priest":
+                    tryPartyHeal();
+                    tryAbsorb();
+                    if (trySingleHeal()) {
+                        delay = 10;
+                        break;
+                    }
+                    break;
+                    
+                case "warrior":
+                case "merchant":
+                    break;
+            }
             
-        case "priest":
-            tryPartyHeal();
-            tryAbsorb();
-            if (trySingleHeal()) return;
-            break;
-            
-        case "warrior":
-        case "merchant":
-            break;
+            useAttack(); 
+        }
+    } catch (e) {
+        console.error("Lỗi trong skillLoop:", e);
     }
 
-    useAttack();
+    // Đệ quy vòng lặp an toàn
+    setTimeout(skillLoop, delay);
 }
+
+// Khởi chạy vòng lặp lần đầu
+skillLoop();
+
 
 
 
