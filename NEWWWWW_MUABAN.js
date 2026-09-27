@@ -426,7 +426,7 @@ function on_cm(sender, data) {
     // =========================================================================
     if (typeof data === "object" && data !== null) {
         if (data.command) {
-            game_log("Người gửi: " + data.sender + " | Lệnh: " + data.command);
+        game_log("Người gửi: " + sender + " | Lệnh: " + data.command);
         }
 
         // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
