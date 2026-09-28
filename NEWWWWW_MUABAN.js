@@ -19,6 +19,15 @@ const TRASH_ITEMS = [
   "vitscroll", "wbasher", "wcap", "wbreeches", "wgloves", "whiteegg", "wshoes","wattire", "warmscarf", "xmace", "xmashat", "xmaspants", "xmasshoes", "xmassweater"
 ];
 
+
+// ==========================================
+// CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
+// ==========================================
+const ITEM_TO_RETRIEVE = "smoke"; // Thay tên đồ B vào đây
+const RETRIEVE_QTY = 100;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
+const IDLE_TIME_LIMIT = 60000;        // 60s không hoạt động nâng cấp gì cả sẽ rút
+
+
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
 const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod"];
 
@@ -1841,6 +1850,8 @@ function compound_itemsVIP() {
 		use_skill("massproduction");
 	}
 
+    lastActivityTime = Date.now();
+	
 	// Thực hiện ghép packet
 	if (parent.socket) {
 
@@ -2047,6 +2058,8 @@ function upgradeVIP_Idle() {
 		return; 
 	}
 
+	lastActivityTime = Date.now();
+	
 	// 8. Gửi packet nâng cấp tới Server
 	if (parent.socket) {
 
@@ -2806,3 +2819,35 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		return false;
 	}
 }
+
+
+
+// Biến lưu thời gian hoạt động cuối cùng
+let lastActivityTime = Date.now();
+
+setInterval(async () => {
+    // Nếu túi đồ KHÔNG đủ 17 ô trống -> Reset lại thời gian
+    if (character.esize < 17) {
+        lastActivityTime = Date.now();
+        return;
+    }
+	
+    // Nếu thời gian rảnh đã vượt mức cấu hình 
+    if (Date.now() - lastActivityTime >= IDLE_TIME_LIMIT) {
+        
+        // Reset ngay lập tức để tránh hàm gọi đúp
+        lastActivityTime = Date.now(); 
+        
+        // Gọi hàm với các biến đã cấu hình ở trên
+        await retrieveFromBank(ITEM_TO_RETRIEVE, RETRIEVE_QTY);
+        
+        // Reset lần nữa sau khi xong việc
+        lastActivityTime = Date.now(); 
+    }
+}, 1000); 
+
+// (Nhớ thêm lastActivityTime = Date.now(); vào các hàm nâng cấp của bạn)
+
+
+
+
