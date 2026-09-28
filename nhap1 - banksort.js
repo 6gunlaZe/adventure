@@ -109,19 +109,28 @@ async function runBatchFast(tasks, maxCC = 160) {
 			}
 		};
 
-		
+	
 		
 		
 		
 		
 // =====================================================================
-		// --- PHASE 0: GỘP STACK TẬP TRUNG VỀ 1 PACK/TẦNG DUY NHẤT ---
+		// --- PHASE 0: GỘP STACK CHUẨN XÁC 100% (CHỐNG LAG & CHỐNG LỖI BOUND/SHINY) ---
 		// =====================================================================
-		log("[PHASE 0] Đang quét và gom các ô dở dang về cùng 1 vị trí...");
+		log("[PHASE 0] Đang kiểm tra và lập kế hoạch gom stack an toàn...");
 
-		// 1. Quét kho: CHỈ LẤY CÁC Ô CHƯA FULL STACK (it.q < maxStack)
+		// Hàm hỗ trợ chờ Server phản hồi (Chống lag/ping cao)
+		async function waitUntil(conditionFn, timeout = 1500) {
+			const start = Date.now();
+			while (Date.now() - start < timeout) {
+				if (conditionFn()) return true;
+				await sleep(50);
+			}
+			return false;
+		}
+
+		// 1. Quét toàn bộ kho tìm ô dở dang (q < maxStack)
 		const partialGroups = new Map();
-
 		for (const pack of allPacks) {
 			const items = character.bank[pack];
 			if (!items) continue;
@@ -133,79 +142,131 @@ async function runBatchFast(tasks, maxCC = 160) {
 				const currentQty = it.q || 1;
 
 				if (maxStack > 1 && currentQty < maxStack) {
-					const key = `${it.name}_${it.level || 0}`;
+					// 📌 VÁ LỖI TOÀN DIỆN: Phân biệt cả Name, Level, Shiny (p), Bound (b) và Variant (v)
+					const key = `${it.name}_${it.level || 0}_${it.p || ""}_${it.b || ""}_${it.v || ""}`;
 					if (!partialGroups.has(key)) partialGroups.set(key, []);
 					partialGroups.get(key).push({ pack, slot: i, qty: currentQty, maxStack });
 				}
 			}
 		}
 
-		// 2. Gom nhóm thông minh
-		for (const [key, slots] of partialGroups) {
-			if (slots.length < 2) continue; // Dưới 2 ô dở dang thì không cần gộp
+		// 2. Lập danh sách gom hàng loạt
+		const pendingRetrieves = []; 
 
+		for (const [key, slots] of partialGroups) {
+			if (slots.length < 2) continue;
 			const maxStack = slots[0].maxStack;
 			slots.sort((a, b) => a.qty - b.qty);
 
 			while (slots.length >= 2) {
 				const batchToMerge = [];
 				let currentSum = 0;
-
 				for (let i = 0; i < slots.length; i++) {
 					if (currentSum + slots[i].qty <= maxStack) {
 						currentSum += slots[i].qty;
 						batchToMerge.push(slots[i]);
 					}
 				}
-
 				if (batchToMerge.length < 2) break;
 
-				// 📌 ĐIỂM CHỦ CHỐT: CHỌN 1 PACK VÀ 1 TẦNG LÀM ĐIỂM HẸN TẬP TRUNG!
 				const mainTargetPack = batchToMerge[0].pack;
-				const mainTargetFloor = packFloor(mainTargetPack);
 
-				log(`[PHASE 0] Gom ${batchToMerge.length} ô dở dang của [${key}] tập trung về ${mainTargetPack} (${mainTargetFloor})...`, "#ffaa00");
-
-				// A. RÚT TẤT CẢ RA TÚI
-				const retrievedInvSlots = [];
 				for (const item of batchToMerge) {
-					// Xóa khỏi danh sách chờ
 					const idx = slots.findIndex(s => s.pack === item.pack && s.slot === item.slot);
 					if (idx !== -1) slots.splice(idx, 1);
 
-					const freeInvSlot = character.items.findIndex(x => !x);
-					if (freeInvSlot === -1) {
-						log("[WARNING] Túi đồ đầy, tạm dừng gộp!", "#ffcc00");
-						break;
-					}
-
-					if (!character.bank[item.pack]?.[item.slot]) continue;
-
-					await go(packFloor(item.pack));
-					await bank_retrieve(item.pack, item.slot, freeInvSlot);
-					await sleep(150);
-
-					retrievedInvSlots.push(freeInvSlot);
-				}
-
-				// B. DI CHUYỂN TỚI TẦNG MỤC TIÊU 1 LẦN VÀ CẤT TẤT CẢ VÀO CÙNG 1 PACK
-				if (retrievedInvSlots.length > 0) {
-					await go(mainTargetFloor);
-
-					for (const invSlot of retrievedInvSlots) {
-						if (!character.items[invSlot]) continue;
-
-						// Cất tất cả vào ĐÚNG mainTargetPack để game tự gom đè thành 1 ô
-						await bank_store(invSlot, mainTargetPack);
-						await sleep(150);
-					}
+					pendingRetrieves.push({
+						pack: item.pack,
+						slot: item.slot,
+						mainTargetPack: mainTargetPack
+					});
 				}
 			}
 		}
 
-		log("[PHASE 0] Hoàn tất gộp stack tập trung chuẩn xác!", "#00ff66");
+		if (pendingRetrieves.length === 0) {
+			log("[PHASE 0] Kho đồ đã hoàn tất tối ưu, không có ô dở dang nào cần gom.");
+		} else {
+			log(`[PHASE 0] Lập kế hoạch gom ${pendingRetrieves.length} ô dở dang. Bắt đầu...`, "#ffaa00");
+
+			// 3. Thực thi gom hàng loạt
+			while (pendingRetrieves.length > 0) {
+				const freeInvSlots = [];
+				for (let i = 0; i < character.items.length; i++) {
+					if (!character.items[i]) freeInvSlots.push(i);
+				}
+
+				if (freeInvSlots.length === 0) {
+					log("[WARNING] Túi đồ không còn ô trống! Dừng gom.", "#ffcc00");
+					break;
+				}
+
+				const currentBatch = pendingRetrieves.splice(0, freeInvSlots.length);
+
+				// --- BƯỚC A: RÚT THEO TẦNG ---
+				const retrievesByFloor = new Map();
+				for (let i = 0; i < currentBatch.length; i++) {
+					const item = currentBatch[i];
+					const invSlot = freeInvSlots[i];
+					const floor = packFloor(item.pack);
+
+					if (!retrievesByFloor.has(floor)) retrievesByFloor.set(floor, []);
+					retrievesByFloor.get(floor).push({
+						pack: item.pack,
+						slot: item.slot,
+						invSlot: invSlot,
+						mainTargetPack: item.mainTargetPack
+					});
+				}
+
+				const itemsInHand = []; 
+				for (const [floor, itemsToGet] of retrievesByFloor) {
+					await go(floor); 
+					for (const target of itemsToGet) {
+						if (!character.bank[target.pack]?.[target.slot]) continue;
+						
+						await bank_retrieve(target.pack, target.slot, target.invSlot);
+						
+						// Chờ Server xác nhận item đã về túi đồ (Tối đa 1.5s, chống lag)
+						const success = await waitUntil(() => character.items[target.invSlot] !== null);
+						if (success) {
+							itemsInHand.push({ invSlot: target.invSlot, mainTargetPack: target.mainTargetPack });
+						}
+					}
+				}
+
+				// --- BƯỚC B: CẤT THEO TẦNG MỤC TIÊU ---
+				const storesByFloor = new Map();
+				for (const item of itemsInHand) {
+					const targetFloor = packFloor(item.mainTargetPack);
+					if (!storesByFloor.has(targetFloor)) storesByFloor.set(targetFloor, []);
+					storesByFloor.get(targetFloor).push(item);
+				}
+
+				for (const [floor, itemsToStore] of storesByFloor) {
+					await go(floor); 
+					for (const item of itemsToStore) {
+						if (!character.items[item.invSlot]) continue;
+						
+						await bank_store(item.invSlot, item.mainTargetPack);
+						
+						// Chờ Server xác nhận item đã rời khỏi túi đồ (Tối đa 1.5s, chống lag)
+						await waitUntil(() => character.items[item.invSlot] === null);
+					}
+				}
+			}
+
+			log("[PHASE 0] Hoàn tất gom stack 100% an toàn và chính xác!", "#00ff66");
+		}
 		// =====================================================================
 		
+		
+		
+		
+		
+		
+
+		// =====================================================================
 		
 		// --- PHASE 1: SẮP XẾP VỊ TRÍ TOÀN CỤC BẰNG BATCH (CẢ TÚI CÙNG LÚC) ---
 		log("[PHASE 1] Lên bản đồ vị trí & gom/chuyển đồ siêu tốc...");
