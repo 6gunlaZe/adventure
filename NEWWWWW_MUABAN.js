@@ -2684,7 +2684,8 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 	const startMap = character.map;
 	const startX = character.x;
 	const startY = character.y;
-
+    const wasStanding = character.stand;
+	
 	try {
 		// 1. Kiểm tra và vào ngân hàng nếu chưa ở đó
 		if (!character.bank) {
@@ -2800,7 +2801,8 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		// 2. Quay trở lại vị trí ban đầu trước khi kết thúc
 		log(`[TRAVEL] Đang quay lại vị trí cũ: ${startMap} (${Math.round(startX)}, ${Math.round(startY)})...`, "#2ef288");
 		await smart_move({ map: startMap, x: startX, y: startY });
-
+        if (wasStanding)open_stand(); 
+		
 		isBankBusy = false; // Mở khóa khi hoàn tất thành công
 		if (collected > 0) {
 			log(`[SUCCESS] Hoàn tất! Đã lấy tổng cộng ${collected}/${targetQuantity} món "${itemName}".`, "#00ff66");
@@ -2815,6 +2817,7 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 		isBankBusy = false; // Mở khóa nếu xảy ra lỗi
 		try {
 			await smart_move({ map: startMap, x: startX, y: startY });
+            if (wasStanding)open_stand(); 
 		} catch (e) {}
 		return false;
 	}
