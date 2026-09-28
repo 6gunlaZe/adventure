@@ -1147,42 +1147,56 @@ async function service_storage(req) {
             }
         };
 
-        // --- Helper tìm vị trí cất đồ tối ưu trên toàn bộ 3 tầng kho ---
-        const findFreeBankSlot = (item) => {
-            const isStackable = !item.upgrade && !item.compound && (parent.G.items[item.name]?.s);
-            const maxStack = parent.G.items[item.name]?.s || 9999;
+// --- Helper tìm Pack kho thông minh (chỉ dựa vào .s của game) ---
+const findBankPack = (item) => {
+    const itemInfo = parent.G.items[item.name];
+    const maxStack = itemInfo?.s; // Lấy hạn mức stack từ dữ liệu game
+    const itemQty = item.q || 1;  // Số lượng món đồ chuẩn bị cất
 
-            // 1. Ưu tiên tìm ô đã có sẵn món này để cộng dồn (Stack)
-            if (isStackable) {
-                for (const pack in character.bank) {
-                    if (!pack.startsWith("items")) continue;
-                    const packItems = character.bank[pack];
-                    if (!Array.isArray(packItems)) continue;
+    // 1. Ưu tiên tìm túi có thể gộp stack hoàn toàn HOẶC có ô trống dự phòng trong chính túi đó
+    if (maxStack) {
+        for (const pack in character.bank) {
+            if (!pack.startsWith("items")) continue;
+            const packItems = character.bank[pack];
+            if (!Array.isArray(packItems)) continue;
 
-                    for (let s = 0; s < packItems.length; s++) {
-                        const bItem = packItems[s];
-                        if (bItem && bItem.name === item.name && (bItem.q || 1) < maxStack) {
-                            return { pack, slot: s };
-                        }
+            let hasEmptySlot = false;
+            let canStackFully = false;
+
+            for (let i = 0; i < packItems.length; i++) {
+                const bItem = packItems[i];
+                if (!bItem) {
+                    hasEmptySlot = true;
+                } else if (bItem.name === item.name) {
+                    const currentQty = bItem.q || 1;
+                    // Kiểm tra xem stack hiện tại có đủ chỗ chứa toàn bộ item đem cất không
+                    if (currentQty + itemQty <= maxStack) {
+                        canStackFully = true;
                     }
                 }
             }
 
-            // 2. Tìm ô trống hoàn toàn
-            for (const pack in character.bank) {
-                if (!pack.startsWith("items")) continue;
-                const packItems = character.bank[pack];
-                if (!Array.isArray(packItems)) continue;
-
-                for (let s = 0; s < packItems.length; s++) {
-                    if (!packItems[s]) {
-                        return { pack, slot: s };
-                    }
-                }
+            // Nếu túi này vừa có thể gộp hết, HOẶC có chỗ trống để tạo stack mới trong túi đó
+            if (canStackFully || hasEmptySlot) {
+                return pack;
             }
+        }
+    }
 
-            return null; // Cả 3 tầng Bank đã đầy hoàn toàn
-        };
+    // 2. Nếu không tìm được túi tối ưu để gộp (hoặc là item không stack được), tìm túi bất kỳ còn ô trống
+    for (const pack in character.bank) {
+        if (!pack.startsWith("items")) continue;
+        const packItems = character.bank[pack];
+        if (!Array.isArray(packItems)) continue;
+
+        const hasEmptySlot = packItems.some(bItem => !bItem);
+        if (hasEmptySlot) {
+            return pack;
+        }
+    }
+
+    return null; // Toàn bộ 3 tầng kho đã đầy hoàn toàn
+};
 
         // Kiểm tra xem bot có đang ở khu vực Bank không
         if (!BANK_MAPS.includes(character.map)) {
@@ -1200,35 +1214,27 @@ async function service_storage(req) {
             if (!item) continue;
 
             if (should_store_item(item, kept_counts)) {
-                // Tìm ô cất đồ trên toàn hệ thống kho
-                const target = findFreeBankSlot(item);
+                // 1. Chỉ tìm tên Pack kho tối ưu
+                const targetPack = findBankPack(item);
 
-                if (!target) {
+                if (!targetPack) {
                     console.log("[MuaBan] ⚠️ TOÀN BỘ BANK (CẢ 3 TẦNG) ĐÃ ĐẦY HOÀN TOÀN!");
-                    break; // Dừng cất đồ vì không còn ô trống ở bất kỳ tầng nào
+                    break; // Dừng cất đồ vì không còn chỗ trống ở bất kỳ tầng nào
                 }
 
-                const targetFloor = packFloor(target.pack);
+                const targetFloor = packFloor(targetPack);
 
                 try {
-                    // Tự động di chuyển sang tầng chứa ô trống đó trước khi cất
+                    // 2. Di chuyển sang tầng chứa pack đó trước khi cất
                     await goBankFloor(targetFloor);
 
-                    // Cất chính xác vào Pack và Slot đã tìm
-                    await bank_store(i, target.pack, target.slot);
-                    console.log(`[MuaBan] Đã cất ${item.name} từ túi ô ${i} vào ${target.pack}[${target.slot}] (${targetFloor})`);
-
-                    // Cập nhật dữ liệu ảo tạm thời cho character.bank để vòng lặp sau tính toán chính xác
-                    if (!character.bank[target.pack]) character.bank[target.pack] = [];
-                    if (!character.bank[target.pack][target.slot]) {
-                        character.bank[target.pack][target.slot] = { ...item };
-                    } else if (item.q) {
-                        character.bank[target.pack][target.slot].q = (character.bank[target.pack][target.slot].q || 1) + item.q;
-                    }
+                    // 3. Gọi bank_store với pack_num = -1 để server tự gom stack / chọn slot trống trong pack
+                    await bank_store(i, targetPack, -1);
+                    console.log(`[MuaBan] Đã cất ${item.name} từ túi ô ${i} vào ${targetPack} (${targetFloor})`);
 
                     await new Promise(resolve => setTimeout(resolve, 250));
                 } catch (err) {
-                    console.log(`[MuaBan] Lỗi cất item ô ${i} vào ${target.pack}[${target.slot}]:`, err);
+                    console.log(`[MuaBan] Lỗi cất item ô ${i} vào ${targetPack}:`, err);
                 }
             }
         }
