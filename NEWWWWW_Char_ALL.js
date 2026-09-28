@@ -19,12 +19,13 @@ const FARM_LOCATIONS = {
 };
 
 const CHAR_CONFIG = {
-    "haiz":   { monster: "bat", slot: 1 },
-    "6gunlaZe": { monster: "targetron", slot: 1 },
-    "MuaBan":   { monster: "crab", slot: 2 }
+    "haiz":     { monster: "bat", slot: 1, solo: false },   // Đi solo -> không cần SAFE
+    "6gunlaZe": { monster: "targetron", slot: 1, solo: false }, // Đi party -> cần SAFE
+    "MuaBan":   { monster: "crab", slot: 2, solo: true }
 };
 
 const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "bat"; // => Phần còn lại là của LEADER haiz 
+const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
@@ -39,7 +40,7 @@ let partyEntities = [];
 let merchant = null;
 let currentTarget = null;
 let farmingMoving = false;
-
+let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -47,6 +48,12 @@ function scanAll() {
     monsters = [];
     partyEntities = [];
     merchant = null;
+    SAFE = false; // Reset lại mỗi lần quét
+
+    // Nếu cấu hình là Solo HOẶC bản thân là Priest còn sống -> Mặc định SAFE
+    if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
+        SAFE = true;
+    }
 
     for (const id in parent.entities) {
         const entity = parent.entities[id];
@@ -55,7 +62,7 @@ function scanAll() {
         const dist = distance(character, entity);
 
         // MONSTER
-        if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype) ) {
+        if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
             monsters.push({ entity: entity, distance: dist });
             continue;
         }
@@ -68,10 +75,15 @@ function scanAll() {
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
             }
+
+            // Kiểm tra có Priest (hồi máu) trong party ở gần <= 200 và còn sống không
+            if (entity.ctype === "priest" && !entity.dead && dist <= 200) {
+                SAFE = true;
+            }
         }
     }
 
-    monsters.sort((a, b) => a.distance - b.distance); // sắp xếp quái gần lên trước
+    monsters.sort((a, b) => a.distance - b.distance); // Sắp xếp quái gần lên trước
 
     if (PARTY.includes(character.name)) {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
@@ -898,14 +910,15 @@ async function skillLoop() {
                 case "rogue":
                     useRspeed(); 
                     
-                    // Fan of Knives chung CD với Attack. 
-                    // Nếu cast thành công -> Trả về vòng lặp mới (10ms) và chặn luôn useAttack() ở dưới.
+                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
+
                     if (await use_fan_of_knives()) {
                         return setTimeout(skillLoop, 10); 
                     }
                     break;
 
                 case "ranger":
+                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
                     trySuperShot(); 
                     
                     // Multi-shot (3shot/5shot) chung CD với Attack.
