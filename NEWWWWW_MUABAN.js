@@ -198,7 +198,7 @@ var upgradeGroups = {
 		{ levels: [0,1,2], scroll: 0, offering: 0 },
 		{ levels: [3,4,5,6],     scroll: 1, offering: 0 },
 		{ levels: [7],       scroll: 1, offering: 0 },
-//		{ levels: [8],       scroll: 2, offering: 1 },
+		{ levels: [8],       scroll: 2, offering: 1 },
 //		{ levels: [9],       scroll: 2, offering: 2 },
 	],	
 
@@ -1883,8 +1883,6 @@ function compound_itemsVIP() {
 }
 
 
-
-
 function upgradeVIP_Idle() {
 	// Kiểm tra nếu Merchant đang bận làm service khác hoặc hàng chờ không trống
 	// if (busy || queue1.length > 0) return;
@@ -1895,25 +1893,24 @@ function upgradeVIP_Idle() {
 		return;
 	}
 
-// Đếm số lượng từng loại item trong túi
-let itemCounts = {};
+	// Đếm số lượng từng loại item trong túi
+	let itemCounts = {};
 
-for (let i = 0; i < character.items.length; i++) {
-	let c = character.items[i];
-	if (!c) continue;
+	for (let i = 0; i < character.items.length; i++) {
+		let c = character.items[i];
+		if (!c) continue;
 
-	itemCounts[c.name] = (itemCounts[c.name] || 0) + 1;
-}
+		itemCounts[c.name] = (itemCounts[c.name] || 0) + 1;
+	}
 
-	
 	let candidates = [];
 
 	for (let i = 0; i < character.items.length; i++) {
 		let c = character.items[i];
 		if (!c) continue;
 
-         // Chỉ upgrade nếu trong túi có ít nhất 2 món cùng tên
-        if ((itemCounts[c.name] || 0) < 2) continue;
+		// Chỉ upgrade nếu trong túi có ít nhất 2 món cùng tên
+		if ((itemCounts[c.name] || 0) < 2) continue;
 		
 		// Bỏ qua item bị khóa hoặc item đặc biệt
 		if (c.p1111 || c.l || c.s) continue;
@@ -2034,7 +2031,23 @@ for (let i = 0; i < character.items.length; i++) {
 		use_skill("massproduction");
 	}
 
-	// Gửi packet nâng cấp tới Server
+	// =========================================================
+	// 🍀 BƯỚC 7.5: Chuyển đồ quý (lv >= 8) vào Lucky Slot (ô 31)
+	// =========================================================
+	const LUCKY_SLOT = 31;
+	let currentLevel = target.item.level ?? 0;
+
+	if (currentLevel >= 8 && target.slot !== LUCKY_SLOT) {
+		console.log(
+			`[MuaBan IDLE] 🍀 Đồ quý (lv +${currentLevel}), chuyển từ slot ${target.slot} sang Lucky Slot (${LUCKY_SLOT})`
+		);
+
+		// Thực hiện swap bất đồng bộ và return để chờ server xử lý di chuyển đồ
+		swap(target.slot, LUCKY_SLOT);
+		return; 
+	}
+
+	// 8. Gửi packet nâng cấp tới Server
 	if (parent.socket) {
 
 		console.log(
@@ -2068,10 +2081,8 @@ for (let i = 0; i < character.items.length; i++) {
 }
 
 
-
-
     // ============================================================
-    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (7 PHÚT)
+    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (5 PHÚT)
     // ============================================================
 let lastIdleTime = Date.now();
 let storagePending = false;
@@ -2100,7 +2111,7 @@ setInterval(() => {
     }
 
     const inventoryFull = is_inventory_full() || character.esize < 3;
-    const idleStorage = now - lastIdleTime >= 7 * 60 * 1000;
+    const idleStorage = now - lastIdleTime >= 5 * 60 * 1000;
 
     // Chưa đủ điều kiện STORAGE
     if (!inventoryFull && !idleStorage) {
