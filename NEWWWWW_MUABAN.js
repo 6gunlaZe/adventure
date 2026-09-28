@@ -304,7 +304,8 @@ group_vip5: [
 	//{ levels: [7],     scroll: 2, offering: 2 }
 ],
 group_vip6: [ 
-		{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+	{ levels: [0,1,2,3], scroll: 1, offering: 0 },
+	{ levels: [4,5], scroll: 2, offering: 0 },
 ],
 
 	
@@ -320,7 +321,7 @@ var upgradeWhitelistVIPP = {
 	group_basic00: ["cclaw111"],
 	group_basic01: ["firebow","fireblade"],	
 	group_basic02: ["gcape","eslippers11","ecape"],	
-	group_basic03: ["mittens111","shield",],	
+	group_basic03: ["mittens111","shield111",],	
 	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead","tshirt4"],
 	group_basic05: ["wingedboots"],	
 	group_basic06: ["pants","coat1111","blade11","helmet1111"],
