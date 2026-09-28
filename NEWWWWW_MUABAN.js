@@ -1021,25 +1021,6 @@ function should_store_item(item, kept_counts = {}) {
 // MuaBan IDLE UPGRADE INTEGRATION
 // ============================================================
 
-let idleUpgradeTimer = null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Hàm trợ giúp tìm item trong túi đồ
- */
 function find_item(filter) {
 	for (let i = 0; i < character.items.length; i++) {
 		if (filter(character.items[i])) return [i, character.items[i]];
@@ -1047,28 +1028,38 @@ function find_item(filter) {
 	return null;
 }
 
-/**
- * Khởi động / Dừng vòng lặp Upgrade khi rảnh
- */
-function start_idle_upgrade_loop() {
-    stop_idle_upgrade_loop();
-    idleUpgradeTimer = setInterval(() => {
-        // Chặn nâng cấp nếu đang di chuyển hoặc đang bận làm nhiệm vụ
-        if ( character.map == "bank" || character.esize < 1 || character.gold < 4500000 ) return;
+
+let upgradeTimer = null;
+
+function start_upgrade_loop() {
+    stop_upgrade_loop(); // Đảm bảo dọn dẹp vòng lặp cũ trước khi tạo mới
+    
+    upgradeTimer = setInterval(() => {
+        // 1. Quản lý trạng thái nhân vật
+        if (character.stand && (character.moving || smart.moving)) {
+            close_stand();
+        }
+
+        // 2. Các điều kiện chặn (Guard clauses) - Ngừng thực thi lệnh bên dưới nếu thỏa mãn
+        if (character.map === "bank") return;
+        if (character.esize < 1) return;
+        if (character.gold < 4500000) return; // Chọn 1 mốc vàng chuẩn nhất để sử dụng
+
+        // 3. Thực thi hành động
         compound_itemsVIP();
         upgradeVIP_Idle();
     }, 1700);
 }
 
-function stop_idle_upgrade_loop() {
-	if (idleUpgradeTimer) {
-		clearInterval(idleUpgradeTimer);
-		idleUpgradeTimer = null;
-	}
+function stop_upgrade_loop() {
+    if (upgradeTimer) {
+        clearInterval(upgradeTimer);
+        upgradeTimer = null;
+    }
 }
 
-
-
+// Bắt đầu chạy vòng lặp
+start_upgrade_loop();
 
 
 
@@ -1678,7 +1669,7 @@ async function tryCraftOptimized() {
 
 function compound_itemsVIP() {
 	// Kiểm tra nếu Merchant đang bận làm service khác hoặc hàng chờ không trống
-	if (busy || queue1.length > 0) return false;
+	// if (busy || queue1.length > 0) return false;
 
 	// Không nâng cấp nếu character đang trong thời gian chờ compound của game
 	if (character.q?.compound) {
@@ -1899,7 +1890,7 @@ function compound_itemsVIP() {
 
 function upgradeVIP_Idle() {
 	// Kiểm tra nếu Merchant đang bận làm service khác hoặc hàng chờ không trống
-	if (busy || queue1.length > 0) return;
+	// if (busy || queue1.length > 0) return;
 
 	// Không nâng cấp nếu character đang trong thời gian chờ upgrade của game
 	if (character.q?.upgrade) {
@@ -2078,41 +2069,6 @@ for (let i = 0; i < character.items.length; i++) {
 		);
 	}
 }
-
-
-setInterval(() => {
-
-    if (character.stand && (character.moving || smart.moving)) close_stand();
-	
-    // Không ở HOME
-    if (
-        character.map !== CONFIG.HOME_LOCATION.map ||
-        Math.abs(character.x - CONFIG.HOME_LOCATION.x) >= 15 ||
-        Math.abs(character.y - CONFIG.HOME_LOCATION.y) >= 15
-    ) {
-        stop_idle_upgrade_loop();
-        return;
-    }
-
-    // Đang bận xử lý service
-    if (busy) return;
-
-    // Còn queue chờ xử lý
-    if (queue1.length > 0) return;
-
-    // Không có slot
-    if (character.esize < 1) return;
-
-    // Không đủ gold
-    if (character.gold < 1500000) return;
-
-    // Đảm bảo idle loop đang chạy
-    if (!idleUpgradeTimer) {
-        console.log("[MuaBan] 🏠 HOME detected -> START idle upgrade");
-        start_idle_upgrade_loop();
-    }
-
-}, 1700);
 
 
 
