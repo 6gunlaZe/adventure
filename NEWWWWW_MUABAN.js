@@ -1147,43 +1147,41 @@ async function service_storage(req) {
             }
         };
 
-// --- Helper tìm Pack kho thông minh (chỉ dựa vào .s của game) ---
+// --- Helper tìm Pack kho thông minh (ĐÃ VÁ LỖI ƯU TIÊN STACK TRƯỚC) ---
 const findBankPack = (item) => {
     const itemInfo = parent.G.items[item.name];
-    const maxStack = itemInfo?.s; // Lấy hạn mức stack từ dữ liệu game
-    const itemQty = item.q || 1;  // Số lượng món đồ chuẩn bị cất
+    const maxStack = itemInfo?.s; 
+    const itemQty = item.q || 1;  
 
-    // 1. Ưu tiên tìm túi có thể gộp stack hoàn toàn HOẶC có ô trống dự phòng trong chính túi đó
+    console.log(`\n[FindPack] ----------------------------------------`);
+    console.log(`[FindPack] Đang xử lý item: "${item.name}" (SL: ${itemQty}, MaxStack: ${maxStack || "Không stack"})`);
+
+    // ==========================================
+    // ƯU TIÊN 1: QUÉT TÌM CHỖ GỘP STACK TRƯỚC
+    // ==========================================
     if (maxStack) {
         for (const pack in character.bank) {
             if (!pack.startsWith("items")) continue;
             const packItems = character.bank[pack];
             if (!Array.isArray(packItems)) continue;
 
-            let hasEmptySlot = false;
-            let canStackFully = false;
-
             for (let i = 0; i < packItems.length; i++) {
                 const bItem = packItems[i];
-                if (!bItem) {
-                    hasEmptySlot = true;
-                } else if (bItem.name === item.name) {
+                if (bItem && bItem.name === item.name) {
                     const currentQty = bItem.q || 1;
-                    // Kiểm tra xem stack hiện tại có đủ chỗ chứa toàn bộ item đem cất không
                     if (currentQty + itemQty <= maxStack) {
-                        canStackFully = true;
+                        console.log(`[FindPack]   -> [GỘP ĐƯỢC] Tìm thấy ${item.name} tại ${pack}[${i}] (Có: ${currentQty} + Cất: ${itemQty} <= Max: ${maxStack})`);
+                        console.log(`[FindPack] ✅ QUYẾT ĐỊNH CHỌN: ${pack} (Lý do: Gộp được stack)`);
+                        return pack; // Tìm thấy chỗ gộp là CHỐT luôn!
                     }
                 }
-            }
-
-            // Nếu túi này vừa có thể gộp hết, HOẶC có chỗ trống để tạo stack mới trong túi đó
-            if (canStackFully || hasEmptySlot) {
-                return pack;
             }
         }
     }
 
-    // 2. Nếu không tìm được túi tối ưu để gộp (hoặc là item không stack được), tìm túi bất kỳ còn ô trống
+    // ==========================================
+    // ƯU TIÊN 2: KHÔNG GỘP ĐƯỢC THÌ TÌM Ô TRỐNG
+    // ==========================================
     for (const pack in character.bank) {
         if (!pack.startsWith("items")) continue;
         const packItems = character.bank[pack];
@@ -1191,11 +1189,13 @@ const findBankPack = (item) => {
 
         const hasEmptySlot = packItems.some(bItem => !bItem);
         if (hasEmptySlot) {
-            return pack;
+            console.log(`[FindPack] ✅ QUYẾT ĐỊNH CHỌN: ${pack} (Lý do: Không có chỗ gộp, ném vào ô trống dự phòng)`);
+            return pack; // Chốt túi có ô trống đầu tiên tìm thấy
         }
     }
 
-    return null; // Toàn bộ 3 tầng kho đã đầy hoàn toàn
+    console.log(`[FindPack] ❌ TOÀN BỘ KHO ĐÃ ĐẦY HOÀN TOÀN!`);
+    return null; 
 };
 
         // Kiểm tra xem bot có đang ở khu vực Bank không
