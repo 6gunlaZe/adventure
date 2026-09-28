@@ -523,7 +523,6 @@ function sort_queue() {
 function process_queue() {
     if (busy || queue1.length === 0) return;
   
-    stop_idle_upgrade_loop();
   
     // 1. Khai báo biến cục bộ rõ ràng
     const currentService = queue1.shift();
@@ -656,9 +655,6 @@ function return_home(on_complete) {
     }
 
     console.log(`[MuaBan] Moving to HOME: ${home.map} (${home.x}, ${home.y})`);
-
-    // Dừng ép đồ khi di chuyển
-    stop_idle_upgrade_loop();
 
     smart_move(home, () => {
         console.log("[MuaBan] Returned to HOME successfully.");
