@@ -2830,7 +2830,7 @@ let lastActivityTime = Date.now();
 
 setInterval(async () => {
     // Nếu túi đồ KHÔNG đủ 17 ô trống -> Reset lại thời gian
-    if (character.esize < 17) {
+    if (character.esize < 17 || !character.stand ) {
         lastActivityTime = Date.now();
         return;
     }
