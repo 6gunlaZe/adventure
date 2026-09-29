@@ -1403,18 +1403,50 @@ const GEAR_LOGIC = {
 
     // ---- Logic của Priest (Ynhi) ----
     Ynhi: function() {
-        // Có đồng đội nào xung quanh dưới 50% HP không?
-        const someoneDying = partyEntities.some(p => 
-            !p.entity.dead && (p.entity.hp / p.entity.max_hp) < 0.5 && p.distance <= character.range
-        );
-        if (someoneDying) return "heal"; // Đổi sang đồ buff
+        // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
+        if (character.s?.burned) return "def_fire";
 
-        // Có đang bị quái đánh không?
-        const underAttack = monsters.some(m => m.entity.target === character.name);
-        if (underAttack) return "def";
+        let hasPhysical = false;
+        let hasMagical = false;
+        let needLuck = false;
 
-        return "dame"; // Trạng thái mặc định
+        // 2. Duyệt quái xung quanh (tận dụng mảng monsters từ scanAll)
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+
+            const isTargetingMe = e.target === character.name;
+            const isCoop = e.cooperative;
+
+            if (isTargetingMe && e.attack > 200) {
+                if (e.damage_type === "physical") hasPhysical = true;
+                if (e.damage_type === "magical") hasMagical = true;
+            }
+
+            if ((isTargetingMe && e.hp < 15000) || (isCoop && e.hp < 150000)) {
+                needLuck = true;
+            }
+        }
+
+        // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
+        if (needLuck && character.hp > 6000) {
+            return character.hp > 8000 ? "luck_full" : "luck_def";
+        }
+
+        // Đồ Gold khi có từ 2 rương trở lên
+        const chestCount = Object.keys(parent.chests || {}).length;
+        if (chestCount >= 2) return "gold";
+        
+        // Đồ phòng thủ khi bị quái mạnh đánh
+        if (hasPhysical && hasMagical) return "def_mixed";
+        if (hasPhysical) return "def_phys";
+        if (hasMagical) return "def_mag";
+
+        // 6. Mặc định sang đồ Dame
+        return "dame";
     }
+
+    
 };
 
 // =============================================================================
