@@ -40,6 +40,7 @@ let partyEntities = [];
 let merchant = null;
 let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
+let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -48,7 +49,8 @@ function scanAll() {
     partyEntities = [];
     merchant = null;
     SAFE = false; // Reset lại mỗi lần quét
-
+    hasLowHpAggroMonster = false; // Reset cờ trước mỗi lượt scan
+    
     // Nếu cấu hình là Solo HOẶC bản thân là Priest còn sống -> Mặc định SAFE
     if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
         SAFE = true;
@@ -63,6 +65,11 @@ function scanAll() {
         // MONSTER
         if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
             monsters.push({ entity: entity, distance: dist });
+            
+        if (entity.target === character.name && entity.hp < 20000) {
+            hasLowHpAggroMonster = true;
+        }
+            
             continue;
         }
 
@@ -387,39 +394,56 @@ function trySingleHeal() {
 let delayParty = 0;
 
 function tryPartyHeal() {
-    if (character.mp <= 750 || ms_to_next_skill("attack") < 200 ) return false;
+    // 1. Check MP và cooldown skill
+    if (character.mp <= 750 || is_on_cooldown("partyheal")) return false;
 
-    const aliveMembers = partyEntities.map(p => p.entity).filter(m => !m.dead);
-    if (!aliveMembers.length) return false;
+    // 2. Tìm % HP thấp nhất trong Party
+    let lowestHpRatio = 1.0;
+    let hasAliveMember = false;
 
-    aliveMembers.sort((a, b) => (a.hp / a.max_hp) - (b.hp / b.max_hp));
-    const target = aliveMembers[0];
-    const ratio = target.hp / target.max_hp;
+    for (const p of partyEntities) {
+        const member = p.entity;
+        if (!member || member.dead) continue;
+        hasAliveMember = true;
+        
+        const ratio = member.hp / member.max_hp;
+        if (ratio < lowestHpRatio) lowestHpRatio = ratio;
+    }
 
-    // MODE 0: Cứu nguy khẩn cấp - Bỏ qua cooldown
-    if (ratio < 0.36) {
+    if (!hasAliveMember) return false;
+
+    // 3. MODE 0: Cứu nguy khẩn cấp cực độ (< 36% HP) -> Bơm ngay lập tức
+    if (lowestHpRatio < 0.36) {
         use_skill("partyheal");
+        delayParty = Date.now();
         return true;
     }
 
-    if (is_on_cooldown("partyheal")) return false;
+    // 4. Nhường nhịp cho attack nếu đang an toàn
+    if (ms_to_next_skill("attack") < 200) return false;
 
-    const now = Date.now();
+    // 5. TÍNH TOÁN ĐIỀU KIỆN CẦN BƠM MÁU
     const missingMp = character.max_mp - character.mp;
-
-    // Xác định delay tối thiểu cho từng trường hợp
     let requiredDelay = Infinity;
 
-    if (character.mp > 6000 && ratio < 0.60) requiredDelay = 400;
-    else if (missingMp < 1500 && ratio < 0.83) requiredDelay = 300;
+    if (character.mp > 6000 && lowestHpRatio < 0.67 && lowestHpRatio > 0.5) requiredDelay = 400;
+    else if (missingMp < 1500 && lowestHpRatio < 0.83) requiredDelay = 300;
     else if (missingMp < 600) requiredDelay = 200;
-    else if (ratio < 0.65) {
-        // MODE 1: Dynamic delay
-        const clamped = Math.max(0.33, Math.min(0.66, ratio));
+    else if (lowestHpRatio < 0.65) {
+        const clamped = Math.max(0.33, Math.min(0.66, lowestHpRatio));
         requiredDelay = 50 + (360 - 50) * ((clamped - 0.33) / (0.66 - 0.33));
     }
 
-    // Thực thi nếu thỏa mãn thời gian delay
+    // Nếu KHÔNG thỏa mãn bất kỳ điều kiện bơm máu nào -> requiredDelay vẫn là Infinity -> Bỏ qua
+    if (requiredDelay === Infinity) return false;
+
+    // 🎯 SỬA CHỖ NÀY: Nếu có điều kiện bơm máu VÀ có quái < 20k HP aggro -> ÉP DELAY VỀ 50
+    if (hasLowHpAggroMonster) {
+        requiredDelay = 50;
+    }
+
+    // 6. Thực thi bơm máu
+    const now = Date.now();
     if (now > delayParty + requiredDelay) {
         use_skill("partyheal");
         delayParty = now;
