@@ -1454,6 +1454,7 @@ const GEAR_LOGIC = {
 // =============================================================================
 let isEquipping = false;
 let currentSet = ""; // Lưu cờ Set hiện tại để chặn spam lệnh
+let INTENDED_SET = "";
 
 async function equipSet(setName) {
     // 1. Check an toàn cơ bản
@@ -1508,21 +1509,20 @@ async function equipSet(setName) {
 // =============================================================================
 // 4. HÀM ĐIỀU PHỐI (VÒNG LẶP)
 // =============================================================================
+
+
 function autoSwapEquipment() {
     if (smart.moving || isEquipping) return;
 
-    // Truy xuất hàm logic theo tên nhân vật đang chạy script
     const getTargetSet = GEAR_LOGIC[character.name];
-    
-    // Bỏ qua nếu nick này chưa cài đặt logic
     if (!getTargetSet) return; 
 
-    // Thực thi hàm logic để lấy kết quả Set cần mặc
-    const targetSet = getTargetSet();
+    // Lưu lại ý định thay đồ vào biến toàn cục
+    INTENDED_SET = getTargetSet();
     
-    // Gọi lệnh mặc đồ
-    equipSet(targetSet);
+    equipSet(INTENDED_SET);
 }
+
 
 setInterval(autoSwapEquipment, 100);
 
