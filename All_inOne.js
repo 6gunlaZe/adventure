@@ -593,7 +593,7 @@ if (d > range) {
 
     // 🔄 Khi đã ở đúng vị trí → quay vòng quanh trung tâm cho các quái còn lại
         let center = locations[home][0];
-	const radius = 8;  //40
+	const radius = 30;  //8 40
 
         const currentTime = performance.now();
         const deltaTime = currentTime - lastUpdateTime;
