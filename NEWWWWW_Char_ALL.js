@@ -745,7 +745,7 @@ let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
 let farmAngle = 0;
-const ANGLE_STEP = Math.PI / 6; 
+const ANGLE_STEP = Math.PI / 4; 
 // ----------------------------------
 
 setInterval(function() {
