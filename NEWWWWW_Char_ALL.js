@@ -496,8 +496,16 @@ function tryAbsorb() {
         // Đếm riêng số lượng quái đánh phép (damage_type === "magical")
         const magicCount = attackers.filter(m => m.entity.damage_type === "magical").length;
 
+        // Kiểm tra quái sắp chết dựa theo max_hp của từng con
+        const hasDyingMonster = attackers.some(m => {
+            const e = m.entity;
+            const hpThreshold = e.max_hp >= 800000 ? 65000 : (e.max_hp >= 200000 ? 29000 : 15000);
+            return e.hp < hpThreshold;
+        });
+        
         // TÍNH ĐIỂM NGUY HIỂM:
         let dangerScore = attackers.length * 10;
+        if (hasDyingMonster) dangerScore += 500;
         
         const hpRatio = mate.hp / mate.max_hp;
         if (VIP_PLAYERS.has(mate.name)) dangerScore += 70;
