@@ -454,6 +454,74 @@ function tryPartyHeal() {
 }
 
 
+const EXTRA_CURSE_TARGETS = new Set(["franky", "icegolem", "crabxx", "bscorpion", "mrgreen", "mrpumpkin", "dragold"]);
+
+function tryCurse() {
+    // 1. Kiểm tra Priest, Cooldown & MP tối thiểu
+    if (character.ctype !== "priest" || is_on_cooldown("curse") || character.mp < 2200) return false;
+
+    //Nhường nhịp cho attack
+    if (ms_to_next_skill("attack") < 200) return false;
+    
+    const curseRange = G.skills.curse.range || 200;
+
+    // Lấy entity của LEADER trực tiếp từ mảng partyEntities đã có sẵn
+    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
+    const leaderEntity = leaderObj ? leaderObj.entity : null;
+
+    let bestTarget = null;
+    let maxHp = -1;
+    let maxPriority = -1;
+
+    // 2. Duyệt trực tiếp mảng monsters từ scanAll()
+    for (const m of monsters) {
+        const mob = m.entity;
+
+        // Bỏ qua nếu vượt tầm Curse hoặc quái đã bị dính Cursed
+        if (m.distance > curseRange || mob.s?.cursed) continue;
+
+        const isExtraTarget = EXTRA_CURSE_TARGETS.has(mob.mtype);
+        // Kiểm tra xem quái có đang target bất kỳ ai trong partyEntities không
+        const isAttackingParty = partyEntities.some(p => p.entity.name === mob.target);
+
+        let priority = 0;
+
+        // --- KIỂM TRA ĐIỀU KIỆN ---
+        if (isExtraTarget && character.mp >= 2200) {
+            // Quái danh sách chọn thêm: MP >= 2200, Bỏ qua khoảng cách Leader
+            priority = 2;
+        } else if (isAttackingParty && character.mp >= 4200) {
+            // Quái thường đang đánh Party: MP >= 4200
+            const distToLeader = leaderEntity ? distance(leaderEntity, mob) : Infinity;
+
+            if (distToLeader <= 50) {
+                priority = 2; // Sát Leader (<= 50px)
+            } else {
+                priority = 1; // Đánh Party ở xa Leader (> 50px)
+            }
+        }
+
+        if (priority === 0) continue;
+
+        // --- LỰA CHỌN: UU TIÊN TẦNG CAO HƠN -> MÁU NHIỀU NHẤT ---
+        if (priority > maxPriority || (priority === maxPriority && mob.hp > maxHp)) {
+            maxPriority = priority;
+            maxHp = mob.hp;
+            bestTarget = mob;
+        }
+    }
+
+    // 3. Thi triển Curse
+    if (bestTarget) {
+        use_skill("curse", bestTarget);
+        return true;
+    }
+
+    return false;
+}
+
+
+
 const NO_ABSORB = new Set(["pppompom", "oneeye", "nerfedmummy", "nerfedbat"]);
 const PRIORITY_BOSSES = new Set(["xmagefz", "xmagefi", "xmagex", "xmagen", "franky"]);
 const VIP_PLAYERS = new Set(["6gunlaZe", "nhiY", "LyThanhThu", "MuaBan","tienV"]);
@@ -991,6 +1059,7 @@ async function skillLoop() {
                     
                 case "priest":
                     tryPartyHeal();
+                    tryCurse();
                     tryAbsorb();
                     
                     // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
