@@ -1492,8 +1492,7 @@ function autoSwapEquipment() {
     equipSet(targetSet);
 }
 
-// Chạy kiểm tra mỗi 300ms (hoàn toàn không giật lag)
-setInterval(autoSwapEquipment, 300);
+setInterval(autoSwapEquipment, 100);
 
 
 
