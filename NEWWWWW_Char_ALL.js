@@ -1169,7 +1169,7 @@ function tryTemporalSurge() {
     }
 
     // Tận dụng luôn mảng monsters đã có sẵn từ scanAll() để đếm, cực kỳ nhẹ
-    const currentCount = monsters.filter(m => distance(character, m.entity) <= TEMPORAL_CONFIG.radius).length;
+    const currentCount = monsters.filter(m => m.distance <= TEMPORAL_CONFIG.radius).length;
 
     // Cập nhật mốc quái đông nhất
     if (currentCount > temporalState.maxMonsters) {
@@ -1353,7 +1353,7 @@ const GEAR_LOGIC = {
 
         for (const m of monsters) {
             const e = m.entity;
-            if (distance(character, e) > 300) continue;
+            if (m.distance > 300) continue;
 
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
