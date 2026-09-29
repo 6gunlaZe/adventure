@@ -41,6 +41,8 @@ let merchant = null;
 let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
+let lastFarmMonsterSeen = Date.now();
+let hasFarmMonster = false; // Khai báo biến toàn cục để các hàm khác dùng chung
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -48,10 +50,10 @@ function scanAll() {
     monsters = [];
     partyEntities = [];
     merchant = null;
-    SAFE = false; // Reset lại mỗi lần quét
-    hasLowHpAggroMonster = false; // Reset cờ trước mỗi lượt scan
+    SAFE = false; 
+    hasLowHpAggroMonster = false; 
+    hasFarmMonster = false; // Reset cờ mỗi lần scan
     
-    // Nếu cấu hình là Solo HOẶC bản thân là Priest còn sống -> Mặc định SAFE
     if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
         SAFE = true;
     }
@@ -66,9 +68,17 @@ function scanAll() {
         if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
             monsters.push({ entity: entity, distance: dist });
             
-        if (character.ctype == "priest" && entity.target === character.name && entity.hp < 30000) {
-            hasLowHpAggroMonster = true;
-        }
+            // ==========================================
+            // TÍCH HỢP CHECK FARM_MONSTER & ĐẾM GIỜ TẠI ĐÂY
+            // ==========================================
+            if (entity.mtype === FARM_MONSTER) {
+                hasFarmMonster = true;
+                lastFarmMonsterSeen = Date.now();
+            }
+            
+            if (character.ctype == "priest" && entity.target === character.name && entity.hp < 15000) {
+                hasLowHpAggroMonster = true;
+            }
             
             continue;
         }
@@ -82,20 +92,20 @@ function scanAll() {
                 merchant = entity;
             }
 
-            // Kiểm tra có Priest (hồi máu) trong party ở gần <= 200 và còn sống không
             if (entity.ctype === "priest" && !entity.dead && dist <= 200) {
                 SAFE = true;
             }
         }
     }
 
-    monsters.sort((a, b) => a.distance - b.distance); // Sắp xếp quái gần lên trước
+    monsters.sort((a, b) => a.distance - b.distance); 
 
     if (PARTY.includes(character.name)) {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
     if (character.name === MERCHANT) merchant = character;
 }
+
 
 // ============================================================
 // SELECT TARGET
@@ -708,22 +718,7 @@ function useAttack() {
 // ============================================================
 // SCAN LOOP & COMBAT LOOP
 // ============================================================
-function autoLootAndBooster() {
-    const chests = Object.keys(parent.chests || {});
 
-    // 1. Quá nhiều rương -> Gold & Loot rồi thoát luôn
-    if (chests.length >= 20 || smart.moving) {
-        shift(0, 'goldbooster');
-        return chests.forEach(loot);
-    }
-
-    // 2. Check quái & Đổi Booster bằng Ternary Operator (1 dòng)
-    monsters.some(m => m.entity.mtype === FARM_MONSTER)
-        ? setTimeout(() => shift(0, 'xpbooster'), 550)
-        : shift(0, 'luckbooster');
-}
-
-setInterval(autoLootAndBooster, 1000);
 
 setInterval(function() {
     scanAll();
@@ -1528,8 +1523,60 @@ setInterval(autoSwapEquipment, 100);
 
 
 
+let isLootingBatch = false;
 
+function autoLootAndBooster() {
+    if (isLootingBatch) return;
 
+    const chestIds = Object.keys(parent.chests || {});
+
+    // TRƯỜNG HỢP 1: KHÔNG CÓ RƯƠNG -> Cập nhật Booster theo biến từ scanAll
+    if (chestIds.length === 0) {
+            if (hasFarmMonster) {
+                shift(0, 'xpbooster');
+            } else {
+                shift(0, 'luckbooster');
+            }
+        return;
+    }
+
+    // TRƯỜNG HỢP 2: DÀNH RIÊNG CHO YNHI
+    if (character.name === "Ynhi" && INTENDED_SET === "gold") {
+        shift(0, 'goldbooster');
+        if (character.slots.gloves?.name !== "handofmidas") return;
+
+        isLootingBatch = true;
+        setTimeout(() => {
+            chestIds.forEach(id => loot(id));
+            isLootingBatch = false;
+        }, 100);
+        return;
+    }
+
+    // TRƯỜNG HỢP 3: LOGIC NHẶT CHUNG
+    const isMoving = smart.moving;
+    const tooManyChests = chestIds.length > 20;
+
+    if (tooManyChests || isMoving) {
+        isLootingBatch = true;
+        
+        shift(0, 'goldbooster');
+        setTimeout(() => {
+            chestIds.forEach(id => loot(id));
+        }, 100);
+
+        setTimeout(() => {
+            if (hasFarmMonster) {
+                shift(0, 'xpbooster');
+            } else {
+                shift(0, 'luckbooster');
+            }
+            isLootingBatch = false; 
+        }, 400);
+    }
+}
+
+setInterval(autoLootAndBooster, 100);
 
 
 
