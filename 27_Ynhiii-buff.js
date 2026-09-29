@@ -2916,7 +2916,7 @@ function ChuyendoiITEM() {
         let slot = locate_item("luckbooster");
         if (slot == -1) shift(0, 'luckbooster');
 
-        if (character.hp/character.max_hp < 0.52 || penalty > 1000 || character.mp < 2800) {
+        if (character.hp/character.max_hp < 0.4 || penalty > 1000 || character.mp < 2800) {
             equipSet('luck');
         } else {
             equipSet('luckfull');
