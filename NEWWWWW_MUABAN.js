@@ -23,8 +23,8 @@ const TRASH_ITEMS = [
 // ==========================================
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
-const ITEM_TO_RETRIEVE = "smoke"; // Thay tên đồ B vào đây
-const RETRIEVE_QTY = 100;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
+const ITEM_TO_RETRIEVE = "candy1"; // Thay tên đồ B vào đây
+const RETRIEVE_QTY = 200;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
 const IDLE_TIME_LIMIT = 60000;        // 60s không hoạt động nâng cấp gì cả sẽ rút
 
 
@@ -367,7 +367,7 @@ const COMPOUND_RULES = [
     { items: ["dexearring","strbelt","intbelt","strearring"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1,2], scroll: "cscroll1", offering: null }, { levels: [3], scroll: "cscroll1", offering: "offeringp" },  ] },
     { items: ["wbook0"], rules: [{ levels: [0, 1, 2, 3], scroll: "cscroll1", offering: null },  ] },
     { items: ["cloverstud","moonshardearring","windbelt"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: "offeringp" }, ] },
-    { items: ["spookyamulet","ftrinket"], rules: [{ levels: [0, 1, 2,], scroll: "cscroll1", offering: null },  ] },
+    { items: ["spookyamulet","ftrinket"], rules: [{ levels: [0, 1, 2,], scroll: "cscroll1", offering: null }, { levels: [3], scroll: "cscroll2", offering: "offeringp" },  ] },
     { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null },  ] },
     { items: ["keepsakependant","guestbook",], rules: [{ levels: [0,1], scroll: "cscroll1", offering: null },  ] },
 
