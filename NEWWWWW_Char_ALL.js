@@ -66,7 +66,7 @@ function scanAll() {
         if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
             monsters.push({ entity: entity, distance: dist });
             
-        if (entity.target === character.name && entity.hp < 30000) {
+        if (character.ctype == "priest" && entity.target === character.name && entity.hp < 30000) {
             hasLowHpAggroMonster = true;
         }
             
