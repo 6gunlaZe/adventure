@@ -2362,8 +2362,8 @@ function canCleave(aoe, cc, mapsToInclude, monstersInRange, tank, timeSinceLastC
 
 const isTargetron = home === "targetron";
 
-let soluonghutENT    = isTargetron ? 2 : 0;
-let soluonghutENTvip = isTargetron ? 4 : 1;
+let soluonghutENT    = isTargetron ? 4 : 0;
+let soluonghutENTvip = isTargetron ? 7 : 1;
 
 
 async function handleWarriorSkills(tank, f1) {
