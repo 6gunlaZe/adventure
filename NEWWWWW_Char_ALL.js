@@ -597,6 +597,36 @@ function tryAbsorb() {
 }
 
 
+function tryDarkBlessing() {
+    // 1. BẮT BỘC phải đang có target đánh thì mới xét tiếp (Tránh lãng phí MP khi đi ngang qua quái)
+    if (!currentTarget) return false;
+
+    // 2. Kiểm tra Priest, MP, Cooldown & Status buff
+    if (
+        character.ctype !== "priest" ||
+        character.mp <= 5200 ||
+        is_on_cooldown("darkblessing") ||
+        character.s?.darkblessing
+    ) return false;
+
+    // 3. Nếu target là bscorpion thì chỉ dùng khi nó > 200k HP
+    if (currentTarget.mtype === "bscorpion" && currentTarget.hp <= 200000) return false;
+
+    // 4. Đếm số quái trong bán kính 250px (dùng m.distance từ scanAll)
+    const nearbyMobsCount = monsters.filter(m => m.distance <= 250).length;
+
+    // 5. Gom từ 3 quái trở lên -> Bật Aura
+    if (nearbyMobsCount > 2) {
+        use_skill("darkblessing");
+        return true;
+    }
+
+    return false;
+}
+
+
+
+
 async function trySuperShot() {
     let targeted = get_targeted_monster();
     if (targeted) currentTarget = targeted;
@@ -1061,6 +1091,7 @@ async function skillLoop() {
                     tryPartyHeal();
                     tryCurse();
                     tryAbsorb();
+                    tryDarkBlessing();
                     
                     // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
                     if (trySingleHeal()) {
