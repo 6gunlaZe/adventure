@@ -1024,7 +1024,7 @@ setInterval(() => {
 
 
 function scare() {
-    if (character.hp / character.max_hp < 0.25 && !is_on_cooldown("scare")) {
+    if (character.hp < 4500 && !is_on_cooldown("scare")) {
         const slot = character.items.findIndex(i => i?.name === "jacko");
         if (slot < 0) return;
 
@@ -1034,7 +1034,7 @@ function scare() {
     }
 }
 
-setInterval(scare, 1000);
+setInterval(scare, 400);
 
 
 
