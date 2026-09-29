@@ -14,14 +14,14 @@ const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stonewo
 const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
     bat: { x: -194, y: -461, map: "cave" },
-    targetron: { x: -435, y: -200, map: "uhills" },
+    targetron: { x: -512, y: -239, map: "uhills" },
 
 };
 
 const CHAR_CONFIG = {
-    "haiz":     { monster: "bat", slot: 1, solo: false },   // Đi solo -> không cần SAFE
-    "6gunlaZe": { monster: "targetron", slot: 1, solo: false }, // Đi party -> cần SAFE
-    "MuaBan":   { monster: "crab", slot: 2, solo: true }
+    "Ynhi":     { monster: "targetron", slot: 1, solo: false, circle: true, radius: 40 },  // Đi vòng tròn, bán kính 100
+    "6gunlaZe": { monster: "targetron", slot: 1, solo: false, circle: false, radius: 80 },        // Tắt đi vòng nên không cần điền radius
+    "MuaBan":   { monster: "crab", slot: 2,}   
 };
 
 const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "bat"; // => Phần còn lại là của LEADER haiz 
@@ -39,7 +39,6 @@ let monsters = [];
 let partyEntities = [];
 let merchant = null;
 let currentTarget = null;
-let farmingMoving = false;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 // ============================================================
 // SCAN ALL
@@ -606,20 +605,25 @@ setInterval(function() {
 
 
 // ============================================================
-// FARM MOVEMENT LOOP
+// FARM MOVEMENT LOOP moveloop
 // ============================================================
 
-let checkcrabxx = 0;
 
+let checkcrabxx = 0;
 let noTargetTimer = null;
+let farmingMoving = false;
+
+// --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
+let farmAngle = 0;
+const ANGLE_STEP = Math.PI / 6; 
+// ----------------------------------
 
 setInterval(function() {
 
-    // NẾU ĐANG TRONG QUÁ TRÌNH DỤ KANE -> BỎ QUA FARM LOOP ĐỂ TRÁNH XUNG ĐỘT
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
     
     // EVENT HANDLING
-    if (parent?.S?.goobrawl) {
+    if (parent?.S?.goobrawl && checkcrabxx === 1) {
         if (character.map !== "goobrawl" && !smart.moving) parent.socket.emit("join", { name: "goobrawl" });
         if (character.map === "goobrawl") stop("smart");
         return;
@@ -635,9 +639,29 @@ setInterval(function() {
     // FARM CHECK & DELAY SMART MOVE
     if (smart.moving || mode !== MODE.FARM || farmingMoving) return;
 
+    // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
+    const myConfig = CHAR_CONFIG[character.name] || {};
+    const isCircleEnabled = myConfig.circle === true;
+    const myRadius = myConfig.radius || 30; // Nếu không cài radius trong config, mặc định là 30
+
+    // --- LOGIC ĐI VÒNG TRÒN ---
+    if (isCircleEnabled && character.map === FARM_MAP.map && distance(character, FARM_MAP) < 300) {
+        farmAngle += ANGLE_STEP; 
+        if (farmAngle >= Math.PI * 2) farmAngle = 0; 
+
+        // Sử dụng myRadius thay vì FARM_RADIUS cố định
+        let nextX = FARM_MAP.x + myRadius * Math.cos(farmAngle);
+        let nextY = FARM_MAP.y + myRadius * Math.sin(farmAngle);
+
+        if (can_move_to(nextX, nextY)) {
+            move(nextX, nextY); 
+        }
+    }
+    // --------------------------
+
     if (currentTarget) {
         noTargetTimer = null;
-        return;
+        return; 
     }
 
     if (!noTargetTimer) noTargetTimer = Date.now();
@@ -650,6 +674,8 @@ setInterval(function() {
             noTargetTimer = null; 
         });
 }, 1000);
+
+
 
 // START FARM INITIAL
 smart_move(FARM_MAP)
