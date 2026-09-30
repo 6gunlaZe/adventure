@@ -1649,7 +1649,7 @@ const GEAR_LOGIC = {
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
         if (now - lastDefCheck < 5000) {
-            return currentSet || "dame"; // Chưa đủ 5s -> giữ nguyên set hiện tại
+            return currentSet || "def_mixed"; // Chưa đủ 5s -> giữ nguyên set hiện tại
         }
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
         // -------------------------
