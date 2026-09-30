@@ -1353,17 +1353,125 @@ const EQUIPMENT_SETS = {
     // ---- Cấu hình đồ cho Priest (Ví dụ: Ynhi) ----
     Ynhi: {
         dame: [
-            { itemName: "orbofint", slot: "orb", level: 4, l: "l" },
-            { itemName: "lmace", slot: "mainhand", level: 8, l: "l" }
+
+		{ itemName: "firestaff", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 5, l: "l" },
+
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "orbofint", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mittens", slot: "gloves", level: 10, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+
         ],
-        heal: [
+        def_phys: [
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "spikedhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "bcape", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+        def_mag: [
             { itemName: "cupid", slot: "mainhand", level: 9, l: "l" } // Ví dụ đổi vũ khí bơm máu
         ],
-        luck: [
-            { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
+        def_mixed: [
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
         ],
-        def: [],
-        def_fire: []
+        gold: [
+
+        { itemName: "handofmidas", slot: "gloves", level: 8 },  
+        { itemName: "horsecapeg", slot: "cape", level: 9, l: "l" },  
+            
+        ],
+        luck_full: [
+
+	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 3, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 3, l: "l"  },
+		
+	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
+        { itemName: "ringofluck", slot: "ring2", level: 0, l: "s"  },
+            
+        ],
+        luck_def: [
+
+	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
+        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", level: 3, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 3, l: "l"  },
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+            
+        ],
+        def_fire: [
+
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+        
     }
 };
 
