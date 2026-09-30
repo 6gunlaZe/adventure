@@ -1758,6 +1758,22 @@ setInterval(autoSwapEquipment, 100);
 
 
 
+const BOOSTER_TYPES = ["xpbooster", "luckbooster", "goldbooster"];
+
+function setBooster(targetName) {
+    const item0 = character.items[0];
+
+    // 1. Nếu ô 0 trống, hoặc vật phẩm ở ô 0 KHÔNG phải booster -> Bỏ qua luôn
+    if (!item0 || !BOOSTER_TYPES.includes(item0.name)) return;
+
+    // 2. Nếu ô 0 ĐÃ LÀ đúng loại booster cần tìm -> Dừng, không gửi lệnh (0 Penalty)
+    if (item0.name === targetName) return;
+
+    // 3. Đang là booster loại khác -> Gọi shift để biến đổi nó
+    shift(0, targetName);
+}
+
+
 let isLootingBatch = false;
 
 function autoLootAndBooster() {
@@ -1768,16 +1784,16 @@ function autoLootAndBooster() {
     // TRƯỜNG HỢP 1: KHÔNG CÓ RƯƠNG -> Cập nhật Booster theo biến từ scanAll
     if (chestIds.length === 0) {
             if (hasFarmMonster) {
-                shift(0, 'xpbooster');
+				setBooster('xpbooster');
             } else {
-                shift(0, 'luckbooster');
+               setBooster('luckbooster');
             }
         return;
     }
 
     // TRƯỜNG HỢP 2: DÀNH RIÊNG CHO YNHI
     if (character.name === "Ynhi" && INTENDED_SET === "gold") {
-        shift(0, 'goldbooster');
+        setBooster('goldbooster');
         if (character.slots.gloves?.name !== "handofmidas") return;
 
         isLootingBatch = true;
@@ -1795,16 +1811,16 @@ function autoLootAndBooster() {
     if (tooManyChests || isMoving) {
         isLootingBatch = true;
         
-        shift(0, 'goldbooster');
+        setBooster('goldbooster');
         setTimeout(() => {
             chestIds.forEach(id => loot(id));
         }, 100);
 
         setTimeout(() => {
             if (hasFarmMonster) {
-                shift(0, 'xpbooster');
+                setBooster('xpbooster');
             } else {
-                shift(0, 'luckbooster');
+               setBooster('luckbooster');
             }
             isLootingBatch = false; 
         }, 400);
