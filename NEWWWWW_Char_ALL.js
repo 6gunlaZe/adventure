@@ -1564,6 +1564,7 @@ const EQUIPMENT_SETS = {
 // 2. LOGIC ĐIỀU KIỆN CHUYỂN SET CHO TỪNG NHÂN VẬT
 // =============================================================================
 let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
+let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
@@ -1625,12 +1626,15 @@ const GEAR_LOGIC = {
         }
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
-        if (needLuck && character.hp > 6000) {
+        if (needLuck && character.hp > 6000 && luckcheck < 1) {
+			luckcheck = 6
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
             return character.hp > 8000 ? "luck_full" : "luck_def";
         }
 
+        luckcheck--;
+        if (luckcheck > 0) return
         // Đồ Gold:
         // - Có > 10 rương
         // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
@@ -1644,7 +1648,7 @@ const GEAR_LOGIC = {
 
 		setBooster('xpbooster');
         if (hasPhysical && hasMagical) return "def_mixed";
-
+        if ( character.map == "uhills" ) return "def_mixed";
 		
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
