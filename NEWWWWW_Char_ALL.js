@@ -1619,7 +1619,7 @@ const GEAR_LOGIC = {
                 if (e.damage_type === "magical") hasMagical = true;
             }
 
-            if ((isTargetingMe && e.hp < 15000) || (isCoop && e.hp < 150000)) {
+            if ((isTargetingMe && e.hp < 11000) || (isCoop && e.hp < 150000)) {
                 needLuck = true;
             }
         }
@@ -1655,33 +1655,44 @@ const GEAR_LOGIC = {
 // 3. CORE SWAP ENGINE (Gửi Socket Batch & Quản lý State)
 // =============================================================================
 let isEquipping = false;
-let currentSet = ""; // Lưu cờ Set hiện tại để chặn spam lệnh
+let currentSet = ""; // Lưu cờ Set hiện tại
 let INTENDED_SET = "";
 
 async function equipSet(setName) {
-    // 1. Check an toàn cơ bản
-    if (isEquipping || currentSet === setName) return;
+    // 1. Kiểm tra an toàn cơ bản
+    if (isEquipping) return;
 
     // 2. Lấy cấu hình đồ theo Tên Nhân Vật
     const charSets = EQUIPMENT_SETS[character.name];
-    if (!charSets) return; // Không có dữ liệu thì bỏ qua
+    if (!charSets) return;
 
     const setItems = charSets[setName];
     if (!setItems || setItems.length === 0) {
-        currentSet = setName; // Đánh dấu để tránh check lại
+        currentSet = setName;
         return;
     }
 
-    isEquipping = true;
+    // 3. Phân loại: Món nào ĐÃ MẶC và Món nào CẦN MẶC
     const validItems = [];
+    let isFullyEquipped = true;
 
-    // 3. Tìm các trang bị CHƯA được mặc
     for (const item of setItems) {
         const equipped = character.slots[item.slot];
-        if (equipped && equipped.name === item.itemName && equipped.level === item.level && equipped.l === item.l) {
-            continue;
+        
+        // Kiểm tra xem trang bị trên người có khớp với yêu cầu không
+        const isMatch = equipped && 
+                        equipped.name === item.itemName && 
+                        equipped.level === item.level && 
+                        equipped.l === item.l;
+
+        if (isMatch) {
+            continue; // Đã mặc đúng món này, chuyển sang món tiếp theo
         }
 
+        // Nếu chưa mặc đúng, đánh dấu là Set chưa hoàn chỉnh
+        isFullyEquipped = false;
+
+        // Tìm món đồ trong túi đồ (inventory)
         const invIndex = character.items.findIndex(i => 
             i && i.name === item.itemName && i.level === item.level && i.l === item.l
         );
@@ -1691,21 +1702,34 @@ async function equipSet(setName) {
         }
     }
 
-    // 4. Gửi batch lên server
+    // 4. Nếu ĐÃ MẶC ĐỦ TẤT CẢ -> Cập nhật currentSet và kết thúc
+    if (isFullyEquipped) {
+        if (currentSet !== setName) {
+            currentSet = setName;
+            game_log(`⚙ [${character.name}] Switched to [${setName.toUpperCase()}]`, "#4BFF4B");
+        }
+        return;
+    }
+
+    // Nếu currentSet đã vô tình bằng setName nhưng đồ thực tế chưa mặc đủ -> Reset lại cờ
+    if (currentSet === setName) {
+        currentSet = "";
+    }
+
+    // 5. Gửi batch đổi đồ nếu tìm thấy món trong túi
     if (validItems.length > 0) {
+        isEquipping = true;
         try {
             parent.socket.emit("equip_batch", validItems);
             await parent.push_deferred("equip_batch");
-            currentSet = setName;
-            game_log(`⚙ [${character.name}] Switched to [${setName.toUpperCase()}]`, "#4BFF4B");
+            // Không gán currentSet ở đây nữa! 
+            // Để lượt chạy (loop) sau tự kiểm tra lại slots xem server đã xử lý thành công chưa.
         } catch (e) {
             console.error("equipBatch Error:", e);
+        } finally {
+            isEquipping = false;
         }
-    } else {
-        currentSet = setName; // Đã mặc đúng đồ
     }
-
-    isEquipping = false;
 }
 
 // =============================================================================
