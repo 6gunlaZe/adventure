@@ -1209,7 +1209,7 @@ function tryTemporalSurge() {
     // Điều kiện xả skill khi số lượng quái sụt giảm mạnh
     if (
         currentCount < temporalState.maxMonsters - gap &&
-        character.mp >= 1300 &&
+        character.mp / character.max_mp >= 0.8 &&
         Date.now() - temporalState.lastTime >= TEMPORAL_CONFIG.cooldown
     ) {
         const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
@@ -1232,6 +1232,8 @@ function tryTemporalSurge() {
             equip(orbSlot);
             use_skill("temporalsurge");
             game_log("🔁 temporalsurge", "#AAAAFF");
+            equip(orbSlot);
+
         }, delay);
     }
 }
