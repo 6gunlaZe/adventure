@@ -682,10 +682,12 @@ async function tryzapper() {
     if (character.rip || smart.moving || character.map === "spider_instance") return;
     if (is_on_cooldown("zapperzap")) return;
 
+    if (character.mp < 5000 || character.hp < 15000 ) return;
+
+	
     const hasZapper = character.slots.ring1?.name === "zapper" || character.slots.ring2?.name === "zapper";
     if (!hasZapper) return;
 
-    if (character.mp < 4000) return;
 
     // 🛑 Đếm chính xác số quái thực tế đang target vào nhân vật từ mảng `monsters`
     const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
