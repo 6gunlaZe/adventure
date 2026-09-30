@@ -363,11 +363,11 @@ function trySingleHeal() {
     if (ms_to_next_skill("heal") > pingComp) return false;
 
     // 2. Tính tỉ lệ hồi máu động (rateheal)
-    let rateheal = 0.9;
+    let rateheal = 0.95;
     if (character.map !== "winter_instance") {
         const dynamicRate = 1 - (character.heal / character.max_hp);
         rateheal = Math.max(0.9, dynamicRate);
-        if (character.targets > 5) rateheal = 0.95;
+        if (character.targets > 5 || character.map == "uhills" ) rateheal = 0.97;
     }
 
     // 3. Tìm thành viên party cần heal có % HP thấp nhất trong tầm đánh
