@@ -1512,11 +1512,17 @@ const GEAR_LOGIC = {
         let hasPhysical = false;
         let hasMagical = false;
         let needLuck = false;
+        let hasSpawnMonsterNearby = false; // Cờ kiểm tra có quái có "spawns" ở gần hay không
 
         // 2. Duyệt quái xung quanh (tận dụng mảng monsters từ scanAll)
         for (const m of monsters) {
             const e = m.entity;
             if (m.distance > 300) continue;
+
+            // Kiểm tra nếu quái có thuộc tính spawns (và mảng spawns có phần tử)
+            if (e.spawns && Array.isArray(e.spawns) && e.spawns.length > 0) {
+                hasSpawnMonsterNearby = true;
+            }
 
             const isTargetingMe = e.target === character.name;
             const isCoop = e.cooperative;
@@ -1536,9 +1542,15 @@ const GEAR_LOGIC = {
             return character.hp > 8000 ? "luck_full" : "luck_def";
         }
 
-        // Đồ Gold khi có từ 2 rương trở lên
+        // Đồ Gold:
+        // - Có > 10 rương
+        // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
         const chestCount = Object.keys(parent.chests || {}).length;
-        if (chestCount >= 2) return "gold";
+        const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
+
+        if (chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) {
+            return "gold";
+        }
         
         // Đồ phòng thủ khi bị quái mạnh đánh
         if (hasPhysical && hasMagical) return "def_mixed";
