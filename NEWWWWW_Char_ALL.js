@@ -1625,6 +1625,7 @@ const GEAR_LOGIC = {
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
         if (needLuck && character.hp > 6000) {
+            setBooster('luckbooster');
             return character.hp > 8000 ? "luck_full" : "luck_def";
         }
 
