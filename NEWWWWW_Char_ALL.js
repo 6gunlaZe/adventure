@@ -661,6 +661,67 @@ async function trySuperShot() {
 }
 
 
+const quaiA_Yeu = [
+    "rooster", "cutebee", "bigbird", "spider", "scorpion", "bscorpion", "gscorpion", "crabx", "mummy", "booboo", "rgoo", "bgoo", "wolfie", "jr", "goldenbat", "crabxx", "snowman", "wabbit",
+];
+
+const quaiB_Boss = [
+    "stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin", "plantoid", "ent", "sparkbot", FARM_MONSTER,
+];
+
+let lastEntRequest = 0;
+let leaderLastPos = { x: 0, y: 0, time: Date.now() };
+const MAX_ZAP_TARGETS = 14; // Ngưỡng quái tối đa đang cắn mình
+let lastZapTime = 0;
+let KSplayer = 0;
+
+async function tryzapper() {
+
+    if ( (Date.now() - lastZapTime) < 350 && KSplayer == 0 ) return;
+    if (character.rip || smart.moving || character.map === "spider_instance") return;
+    if (is_on_cooldown("zapperzap")) return;
+
+    const hasZapper = character.slots.ring1?.name === "zapper" || character.slots.ring2?.name === "zapper";
+    if (!hasZapper) return;
+
+    if (character.mp < 4000) return;
+
+    // 🛑 Đếm chính xác số quái thực tế đang target vào nhân vật từ mảng `monsters`
+    const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
+    if (currentTargetsCount >= MAX_ZAP_TARGETS) return; // Đang tank quá ngưỡng -> Dừng Zap ngay
+
+    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
+    const isLeaderNear = leaderObj && leaderObj.distance < 250;
+
+    // 🎯 ƯU TIÊN 1: Quái B (Boss) -> Cần Leader ở gần + Chưa có target
+    if (isLeaderNear) {
+        const targetBoss = monsters.find(m => 
+            quaiB_Boss.includes(m.entity.mtype) && 
+            !m.entity.target && 
+            is_in_range(m.entity, "zapperzap")
+        );
+        if (targetBoss) {
+            lastZapTime = Date.now(); // Cập nhật mốc thời gian ngay trước/khi Zap
+            await use_skill("zapperzap", targetBoss.entity);
+            return;
+        }
+    }
+
+    // 🎯 ƯU TIÊN 2: Quái A (Yếu) -> Cứ đủ MP trong tầm là Zap
+    const targetWeak = monsters.find(m => 
+        quaiA_Yeu.includes(m.entity.mtype) && 
+        is_in_range(m.entity, "zapperzap")
+    );
+    if (targetWeak) {
+        lastZapTime = Date.now(); 
+        await use_skill("zapperzap", targetWeak.entity);
+        return;
+    }
+}
+
+
+
+
 function useAttack() {
 
 
@@ -1087,6 +1148,7 @@ async function skillLoop() {
                     tryCurse();
                     tryAbsorb();
                     tryDarkBlessing();
+					tryzapper();
                     
                     // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
                     if (trySingleHeal()) {
