@@ -1642,7 +1642,10 @@ const GEAR_LOGIC = {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
-        
+
+        if (hasPhysical && hasMagical) return "def_mixed";
+
+		
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
         if (now - lastDefCheck < 5000) {
@@ -1651,13 +1654,11 @@ const GEAR_LOGIC = {
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
         // -------------------------
 
-        // Đồ phòng thủ khi bị quái mạnh đánh
-        if (hasPhysical && hasMagical) return "def_mixed";
         if (hasPhysical) return "def_phys";
         if (hasMagical) return "def_mag";
 
-        // 6. Mặc định sang đồ Dame
-        return "dame";
+        // 6. Mặc định sang đồ Dame -> mix
+        return "def_mixed";
     }
 
     
