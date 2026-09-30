@@ -1756,6 +1756,8 @@ async function equipSet(setName) {
 
 function autoSwapEquipment() {
     if (smart.moving || isEquipping) return;
+    const penaltycheck = ms_penalty_cd();
+    if (penaltycheck > 2000) return;
 
     const getTargetSet = GEAR_LOGIC[character.name];
     if (!getTargetSet) return; 
