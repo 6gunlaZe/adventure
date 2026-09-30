@@ -45,7 +45,6 @@ let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 let lastFarmMonsterSeen = Date.now();
-let hasFarmMonster = false; // Khai báo biến toàn cục để các hàm khác dùng chung
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -55,7 +54,6 @@ function scanAll() {
     merchant = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
-    hasFarmMonster = false; // Reset cờ mỗi lần scan
     
     if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
         SAFE = true;
@@ -75,7 +73,6 @@ function scanAll() {
             // TÍCH HỢP CHECK FARM_MONSTER & ĐẾM GIỜ TẠI ĐÂY
             // ==========================================
             if (entity.mtype === FARM_MONSTER) {
-                hasFarmMonster = true;
                 lastFarmMonsterSeen = Date.now();
             }
             
@@ -1645,6 +1642,7 @@ const GEAR_LOGIC = {
             return "gold";
         }
 
+		setBooster('xpbooster');
         if (hasPhysical && hasMagical) return "def_mixed";
 
 		
@@ -1789,20 +1787,10 @@ let isLootingBatch = false;
 
 function autoLootAndBooster() {
     if (isLootingBatch) return;
-
+    if (character.name != "Ynhi") return
     const chestIds = Object.keys(parent.chests || {});
 
-    // TRƯỜNG HỢP 1: KHÔNG CÓ RƯƠNG -> Cập nhật Booster theo biến từ scanAll
-    if (chestIds.length === 0) {
-            if (hasFarmMonster) {
-				setBooster('xpbooster');
-            } else {
-               setBooster('luckbooster');
-            }
-        return;
-    }
-
-    // TRƯỜNG HỢP 2: DÀNH RIÊNG CHO YNHI
+    // DÀNH RIÊNG CHO YNHI
     if (character.name === "Ynhi" && INTENDED_SET === "gold") {
         setBooster('goldbooster');
         if (character.slots.gloves?.name !== "handofmidas") return;
@@ -1815,27 +1803,6 @@ function autoLootAndBooster() {
         return;
     }
 
-    // TRƯỜNG HỢP 3: LOGIC NHẶT CHUNG
-    const isMoving = smart.moving;
-    const tooManyChests = chestIds.length > 20;
-
-    if (tooManyChests || isMoving) {
-        isLootingBatch = true;
-        
-        setBooster('goldbooster');
-        setTimeout(() => {
-            chestIds.forEach(id => loot(id));
-        }, 100);
-
-        setTimeout(() => {
-            if (hasFarmMonster) {
-                setBooster('xpbooster');
-            } else {
-               setBooster('luckbooster');
-            }
-            isLootingBatch = false; 
-        }, 400);
-    }
 }
 
 setInterval(autoLootAndBooster, 100);
