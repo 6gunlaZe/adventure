@@ -6,7 +6,7 @@ const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBa
 const MERCHANT = "MuaBan";
 const EXCLUDE = new Set([
     "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti",
-    "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2",
+    "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2","handofmidas",
     "fieldgen0","frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","cscroll0","cscroll1","scroll0","scroll1","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot"];
@@ -1386,7 +1386,7 @@ const EQUIPMENT_SETS = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1411,7 +1411,7 @@ const EQUIPMENT_SETS = {
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
@@ -1463,7 +1463,7 @@ const EQUIPMENT_SETS = {
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 		
-        { itemName: "mpxgloves", slot: "gloves", level: 6 },
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
