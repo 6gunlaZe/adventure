@@ -437,8 +437,8 @@ function tryPartyHeal() {
         return true;
     }
 
-    // 4. Nhường nhịp cho attack nếu đang an toàn
-    if (ms_to_next_skill("attack") < 200) return false;
+    // Nhường nhịp cho attack nếu đang an toàn
+    if (ms_to_next_skill("attack") < 100) return false;
 
     // 5. TÍNH TOÁN ĐIỀU KIỆN CẦN BƠM MÁU
     const missingMp = character.max_mp - character.mp;
