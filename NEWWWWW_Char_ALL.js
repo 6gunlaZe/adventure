@@ -669,8 +669,6 @@ const quaiB_Boss = [
     "stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin", "plantoid", "ent", "sparkbot", FARM_MONSTER,
 ];
 
-let lastEntRequest = 0;
-let leaderLastPos = { x: 0, y: 0, time: Date.now() };
 const MAX_ZAP_TARGETS = 14; // Ngưỡng quái tối đa đang cắn mình
 let lastZapTime = 0;
 let KSplayer = 0;
@@ -720,6 +718,31 @@ async function tryzapper() {
 }
 
 
+// 📩  HÀM XIN ENT DESERTLAND (Đếm Ent từ `monsters`)
+function checkAndRequestEnt() {
+
+    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
+    const isLeaderNear = leaderObj && leaderObj.distance < 250;
+
+    // Lọc đếm Ent từ mảng monsters đã scan
+    const entCount = monsters.filter(m => m.entity.mtype === "ent" && m.entity.hp > 1200000).length;
+
+    if (
+        isLeaderNear &&
+        character.hp / character.max_hp > 0.75 &&
+        entCount <= 1 &&
+        character.map === "desertland" &&
+        !smart.moving &&
+        (FARM_MONSTER === "fireroamer" || FARM_MONSTER === "plantoid") &&
+        character.targets > 6 &&
+        !parent.S?.franky &&
+        !parent.S?.crabxx
+    ) {
+        send_cm("MuaBan", "ent");
+    }
+}
+
+setInterval(checkAndRequestEnt, 30000);    // Check xin Ent mỗi 30s
 
 
 function useAttack() {
@@ -1763,9 +1786,41 @@ function autoLootAndBooster() {
 setInterval(autoLootAndBooster, 100);
 
 
+let leaderLastPos = { x: 0, y: 0, time: Date.now() };
+
+function monitorAndResetLeader() {
+
+    if (character.name !== LEADER) return;
+
+    if (character.rip) return;
+
+    const now = Date.now();
+    const moveDist = distance(character, leaderLastPos);
+
+    // Đếm quái xung quanh bản thân (character) từ mảng monsters đã scan
+    const monstersAroundLeader = monsters.filter(m => 
+        distance(character, m.entity) <= (character.range || 100)
+    ).length;
+
+    const isLeaderLonely = (monstersAroundLeader === 0);
+
+    // Nếu có di chuyển hoặc xung quanh có quái -> Cập nhật lại vị trí & mốc thời gian
+    if (moveDist > 10 || !isLeaderLonely) {
+        leaderLastPos = { x: character.x, y: character.y, time: now };
+    }
+
+    const isLeaderStandingStill = (now - leaderLastPos.time) >= 30000;
+    const hardreset = (now - leaderLastPos.time) >= 90000;
 
 
+    // 🛑 Đủ điều kiện đứng yên 90s + trống quái -> Tự ngắt kết nối để reload
+    if (isLeaderStandingStill && isLeaderLonely && hardreset) {
+        parent.api_call("disconnect_character", { name: character.name });
+        leaderLastPos.time = now; // Reset mốc tránh gọi API dồn dập
+    }
+}
 
+setInterval(monitorAndResetLeader, 5000); // Check reset Leader
 
 
 
