@@ -1564,6 +1564,8 @@ const EQUIPMENT_SETS = {
 // =============================================================================
 // 2. LOGIC ĐIỀU KIỆN CHUYỂN SET CHO TỪNG NHÂN VẬT
 // =============================================================================
+let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
+
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
@@ -1625,6 +1627,7 @@ const GEAR_LOGIC = {
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
         if (needLuck && character.hp > 6000) {
+            lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
             return character.hp > 8000 ? "luck_full" : "luck_def";
         }
@@ -1636,9 +1639,18 @@ const GEAR_LOGIC = {
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
 
         if (chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) {
+            lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
         
+        // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
+        const now = Date.now();
+        if (now - lastDefCheck < 5000) {
+            return currentSet || "dame"; // Chưa đủ 5s -> giữ nguyên set hiện tại
+        }
+        lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
+        // -------------------------
+
         // Đồ phòng thủ khi bị quái mạnh đánh
         if (hasPhysical && hasMagical) return "def_mixed";
         if (hasPhysical) return "def_phys";
