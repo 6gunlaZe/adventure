@@ -1823,4 +1823,16 @@ function monitorAndResetLeader() {
 setInterval(monitorAndResetLeader, 5000); // Check reset Leader
 
 
+let game_start_time = Date.now();
+function ms_penalty_cd() {
+    const ms = character?.s?.penalty_cd?.ms ?? 0;
+    return ms < 0 ? 0 : ms;
+}
+
+setInterval(() => {
+    const penalty = ms_penalty_cd();
+    const elapsed_minutes = ((Date.now() - game_start_time) / 60000).toFixed(1);
+
+    game_log(`penalty: ${penalty} | đã chạy: ${elapsed_minutes} phút`);
+}, 5000);
 
