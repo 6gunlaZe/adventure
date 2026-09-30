@@ -18,11 +18,6 @@ const FARM_LOCATIONS = {
 
 };
 
-const CHAR_CONFIG = {
-    "Ynhi":     { monster: "targetron", slot: 1, solo: false, circle: true, radius: 40 },  // Đi vòng tròn, bán kính 100
-    "6gunlaZe": { monster: "targetron", slot: 1, solo: false, circle: true, radius: 80 },        // Tắt đi vòng nên không cần điền radius
-    "MuaBan":   { monster: "crab", slot: 2,}   
-};
 
 const CHAR_CONFIG = {
     "Ynhi":     { monster: "targetron", slot: 1, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
