@@ -1728,11 +1728,6 @@ async function equipSet(setName) {
         return;
     }
 
-    // Nếu currentSet đã vô tình bằng setName nhưng đồ thực tế chưa mặc đủ -> Reset lại cờ
-    if (currentSet === setName) {
-        currentSet = "";
-    }
-
     // 5. Gửi batch đổi đồ nếu tìm thấy món trong túi
     if (validItems.length > 0) {
         isEquipping = true;
