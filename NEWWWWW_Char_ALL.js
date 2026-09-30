@@ -24,6 +24,14 @@ const CHAR_CONFIG = {
     "MuaBan":   { monster: "crab", slot: 2,}   
 };
 
+const CHAR_CONFIG = {
+    "Ynhi":     { monster: "targetron", slot: 1, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "6gunlaZe": { monster: "targetron", slot: 1, solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "MuaBan":   { monster: "crab",      slot: 2, elixir: "elixirluck" }
+};
+
+
+
 const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "bat"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
@@ -1199,18 +1207,14 @@ skillLoop();
 
 
 
-setInterval(() => {
-    game_log(`CHECK Ping: ${character.ping}`);
-}, 5000);
-
-
-const ELIXIR_BY_MONSTER = {
-    crab: "elixirluck",
-};
-
 function elixirUsage() {
     try {
-        const targetElixir = ELIXIR_BY_MONSTER[FARM_MONSTER] || "pumpkinspice";
+        // Lấy config của nhân vật hiện tại
+        const config = CHAR_CONFIG[character.name];
+        if (!config) return;
+
+        // Ưu tiên lấy elixir từ config nhân vật, nếu không có sẽ mặc định là "pumpkinspice"
+        const targetElixir = config.elixir || "pumpkinspice";
         const currentElixir = character.slots.elixir?.name;
 
         if (currentElixir !== targetElixir) {
@@ -1225,8 +1229,8 @@ function elixirUsage() {
     }
 }
 
-
 setInterval(elixirUsage, 20000);
+
 
 setInterval(() => {
  if (character.name !== LEADER) return;
@@ -1857,6 +1861,6 @@ setInterval(() => {
     const penalty = ms_penalty_cd();
     const elapsed_minutes = ((Date.now() - game_start_time) / 60000).toFixed(1);
 
-    game_log(`penalty: ${penalty} | đã chạy: ${elapsed_minutes} phút`);
+    game_log(`penalty: ${penalty} | run: ${elapsed_minutes} min | Ping: ${character.ping}`);
 }, 5000);
 
