@@ -1581,6 +1581,7 @@ const EQUIPMENT_SETS = {
 // =============================================================================
 let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
 let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
+let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
 const LuotBoQua = 8;
 let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
 
@@ -1645,6 +1646,7 @@ const GEAR_LOGIC = {
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
         if (needLuck && character.hp > 6000 && luckcheck < 1) {
+			glod_delay = 25;
 			luckcheck = LuotBoQua;
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
@@ -1653,7 +1655,8 @@ const GEAR_LOGIC = {
         }
 
         luckcheck--;
-		
+        glod_delay--;
+
         if (luckcheck > -1) return activeLuckSet
 		
         // Đồ Gold:
@@ -1663,7 +1666,7 @@ const GEAR_LOGIC = {
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
 
 		
-        if ((chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby))  ) {
+        if ((chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) && glod_delay < 0 ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
