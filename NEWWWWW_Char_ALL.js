@@ -602,7 +602,7 @@ function tryAbsorb() {
         let dangerScore = attackers.length * 10;
         if (hasDyingMonster) dangerScore += 500;
         
-        const hpRatio = mate.hp / mate.max_hp;
+        let hpRatio = mate.hp / mate.max_hp;
 		if (mate.name == "haiz") hpRatio += 0.2;
 		
         if (VIP_PLAYERS.has(mate.name)) dangerScore += 7000;
