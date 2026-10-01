@@ -2674,6 +2674,13 @@ const FLOOR_ENTRY = {
 let isBankBusy = false; // Biến khóa toàn cục chống chạy chồng lặp
 
 async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null) {
+
+    // Kiểm tra nếu itemName rỗng, null, hoặc mảng rỗng
+	if (!itemName || (Array.isArray(itemName) && itemName.length === 0)) {
+		log("[WARN] Tên mục không hợp lệ hoặc danh sách rỗng!", "#ff9900");
+		return false;
+	}
+	
 	// Kiểm tra nếu tiến trình đang chạy thì từ chối chạy đè
 	if (isBankBusy) {
 		log("[WARN] Tiến trình lấy đồ đang chạy, vui lòng đợi hoàn tất!", "#ff9900");
