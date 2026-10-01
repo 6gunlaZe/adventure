@@ -370,9 +370,15 @@ function trySingleHeal() {
         if (character.targets > 5 || character.map == "uhills" ) rateheal = 0.97;
     }
 
+    // Ví dụ: 0.3 nghĩa là hệ thống sẽ tự coi người này MẤT THÊM 30% máu khi đem ra so sánh
+    const PRIORITY_BONUS = {
+        "Ynhi": 0.25, // Ưu tiên số 1 (Đánh lừa giảm 30% máu)
+        "6gunlaZe": 0.15     // Ưu tiên số 2 (Đánh lừa giảm 15% máu)
+    };
+
     // 3. Tìm thành viên party cần heal có % HP thấp nhất trong tầm đánh
     let lowestMember = null;
-    let lowestHpPercent = rateheal; // Chỉ xét những ai máu dưới mức rateheal
+    let lowestEffectiveHp = 999; // Dùng số lớn hẳn để tìm Min, không phụ thuộc vào rateheal nữa
 
     for (const p of partyEntities) {
         const member = p.entity;
@@ -381,9 +387,19 @@ function trySingleHeal() {
         // Kiểm tra tầm đánh (range)
         if (distance(character, member) > character.range) continue;
 
-        const hpPercent = member.hp / member.max_hp;
-        if (hpPercent < lowestHpPercent) {
-            lowestHpPercent = hpPercent;
+        // Tính máu THẬT
+        const actualHpPercent = member.hp / member.max_hp;
+        
+        // ĐIỀU KIỆN GỐC: Vẫn phải đảm bảo máu THẬT dưới mức rateheal thì mới thèm xét bơm
+        if (actualHpPercent > rateheal) continue;
+
+        // TÍNH MÁU ẢO ĐỂ SO SÁNH CẠNH TRANH
+        const bonus = PRIORITY_BONUS[member.name] || 0; // Nếu không có tên trong danh sách thì bonus = 0
+        const effectiveHpPercent = actualHpPercent - bonus;
+
+        // Tìm người có máu ảo thấp nhất
+        if (effectiveHpPercent < lowestEffectiveHp) {
+            lowestEffectiveHp = effectiveHpPercent;
             lowestMember = member;
         }
     }
