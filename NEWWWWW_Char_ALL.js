@@ -1634,7 +1634,7 @@ const GEAR_LOGIC = {
         }
 
         luckcheck--;
-        if (luckcheck > 0) return
+        if (luckcheck > 0) return currentSet
         // Đồ Gold:
         // - Có > 10 rương
         // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
