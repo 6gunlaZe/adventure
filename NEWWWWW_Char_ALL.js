@@ -540,6 +540,7 @@ function tryCurse() {
     // 3. Thi triển Curse
     if (bestTarget) {
         use_skill("curse", bestTarget);
+		game_log("curse");
         return true;
     }
 
