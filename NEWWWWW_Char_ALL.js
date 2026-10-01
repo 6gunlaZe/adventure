@@ -1645,10 +1645,9 @@ const GEAR_LOGIC = {
         // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
         const chestCount = Object.keys(parent.chests || {}).length;
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
-        const penalty_gold = ms_penalty_cd();
 
 		
-        if ((chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) && penalty_gold < 30 ) {
+        if ((chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby))  ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
