@@ -1565,6 +1565,7 @@ const EQUIPMENT_SETS = {
 // =============================================================================
 let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
 let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
+const LuotBoQua = 8;
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
@@ -1627,7 +1628,7 @@ const GEAR_LOGIC = {
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
         if (needLuck && character.hp > 6000 && luckcheck < 1) {
-			luckcheck = 6
+			luckcheck = LuotBoQua;
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
             return character.hp > 8000 ? "luck_full" : "luck_def";
