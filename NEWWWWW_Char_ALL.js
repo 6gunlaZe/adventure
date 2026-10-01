@@ -1566,6 +1566,7 @@ const EQUIPMENT_SETS = {
 let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
 let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
 const LuotBoQua = 8;
+let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
@@ -1631,12 +1632,13 @@ const GEAR_LOGIC = {
 			luckcheck = LuotBoQua;
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
-            return character.hp > 8000 ? "luck_full" : "luck_def";
+			activeLuckSet = character.hp > 8000 ? "luck_full" : "luck_def";
+            return activeLuckSet
         }
 
         luckcheck--;
 		
-        if (luckcheck > -1) return currentSet
+        if (luckcheck > -1) return activeLuckSet
 		
         // Đồ Gold:
         // - Có > 10 rương
