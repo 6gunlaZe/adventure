@@ -284,6 +284,9 @@ setInterval(() => {
 
 
 async function checkGameEvents() {
+
+    return  /// tạm ngưng tất cả even, chỉ có fram thôi
+	
     let checkeven = 0;
     let pro = 0;
     const events1 = [
