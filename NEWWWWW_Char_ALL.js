@@ -653,7 +653,50 @@ function tryDarkBlessing() {
 }
 
 
+async function tryHuntersMark() {
+    // 1. Chặn điều kiện cơ bản, map cấm và CD/MP
+    if (smart.moving) return false;
+    if (character.map === "winter_instance") return false;
+    if (is_on_cooldown("huntersmark") || character.mp < 540) return false;
 
+    // 2. Lọc mục tiêu từ mảng monsters (scanAll)
+    const validTargets = monsters.filter(m => {
+        const e = m.entity;
+        return (
+            m.distance <= character.range && // Trong tầm đánh
+            e.hp >= 40000 &&                 // HP tối thiểu 40.000
+            !e.s?.marked &&                  // 🟢 ĐÃ SỬA: Check !e.s?.marked (chưa bị dính Mark)
+            e.target                         // Quái đã có target
+        );
+    });
+
+    if (validTargets.length === 0) return false;
+
+    // 3. SẮP XẾP ƯU TIÊN: Quái dính Curse xếp đầu -> Nếu cùng trạng thái thì lấy HP cao hơn
+    validTargets.sort((a, b) => {
+        const aCursed = !!a.entity.s?.cursed;
+        const bCursed = !!b.entity.s?.cursed;
+
+        // Ưu tiên con bị Cursed lên trước
+        if (aCursed !== bCursed) {
+            return bCursed - aCursed; 
+        }
+
+        // Cùng Cursed (hoặc cùng chưa Cursed) -> Ưu tiên con trâu HP hơn
+        return b.entity.hp - a.entity.hp;
+    });
+
+    const target = validTargets[0].entity;
+
+    // 4. Thực thi skill
+    try {
+        await use_skill("huntersmark", target);
+        game_log(`🎯 Mark -> ${target.mtype} ${target.s?.cursed ? "☠️(Cursed)" : ""} (HP: ${Math.floor(target.hp)})`, "#00FFFF");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 async function trySuperShot() {
     let targeted = get_targeted_monster();
@@ -671,6 +714,7 @@ async function trySuperShot() {
     
         try {
             await use_skill("supershot", currentTarget);
+        game_log(`=>supershot>----=>`, "#00FFFF");
             return true;
         } catch (e) {
             return false;
@@ -1238,6 +1282,7 @@ async function skillLoop() {
                 case "ranger":
                     if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
                     trySuperShot(); 
+					tryHuntersMark();
                     
                     // Multi-shot (3shot/5shot) chung CD với Attack.
                     if (await use_multi_shot()) {
