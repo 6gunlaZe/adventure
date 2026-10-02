@@ -1495,7 +1495,7 @@ const EQUIPMENT_SETS = {
             { itemName: "coat", slot: "chest", level: 10, l: "l" },
             { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
-        { itemName: "cave_loaded_die", slot: "orb", level: 0, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
 
         ],
         mana: [
@@ -1507,7 +1507,7 @@ const EQUIPMENT_SETS = {
             { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
             { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
-        { itemName: "cave_loaded_die", slot: "orb", level: 0, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "suckerpunch", slot: "earring2", level: 2, l: "u"  },
         { itemName: "suckerpunch", slot: "earring2", level: 2, l: "l"  },
 
@@ -1788,6 +1788,24 @@ async function equipSet(setName) {
         return;
     }
 
+    // Hàm helper giúp check xem 1 item trong game có khớp với cấu hình không
+    const isItemMatch = (gameItem, configItem) => {
+        if (!gameItem) return false;
+        if (gameItem.name !== configItem.itemName) return false;
+        
+        // Nếu config có set level (khác undefined và khác 'x') thì mới đem ra so sánh
+        if (configItem.level !== undefined && configItem.level !== 'x' && gameItem.level !== configItem.level) {
+            return false;
+        }
+        
+        // Tương tự với thuộc tính 'l' (lock, letter, etc.)
+        if (configItem.l !== undefined && configItem.l !== 'x' && gameItem.l !== configItem.l) {
+            return false;
+        }
+
+        return true;
+    };
+
     // 3. Phân loại: Món nào ĐÃ MẶC và Món nào CẦN MẶC
     const validItems = [];
     let isFullyEquipped = true;
@@ -1796,12 +1814,7 @@ async function equipSet(setName) {
         const equipped = character.slots[item.slot];
         
         // Kiểm tra xem trang bị trên người có khớp với yêu cầu không
-        const isMatch = equipped && 
-                        equipped.name === item.itemName && 
-                        equipped.level === item.level && 
-                        equipped.l === item.l;
-
-        if (isMatch) {
+        if (isItemMatch(equipped, item)) {
             continue; // Đã mặc đúng món này, chuyển sang món tiếp theo
         }
 
@@ -1809,9 +1822,7 @@ async function equipSet(setName) {
         isFullyEquipped = false;
 
         // Tìm món đồ trong túi đồ (inventory)
-        const invIndex = character.items.findIndex(i => 
-            i && i.name === item.itemName && i.level === item.level && i.l === item.l
-        );
+        const invIndex = character.items.findIndex(i => isItemMatch(i, item));
 
         if (invIndex !== -1) {
             validItems.push({ num: invIndex, slot: item.slot });
@@ -1833,8 +1844,6 @@ async function equipSet(setName) {
         try {
             parent.socket.emit("equip_batch", validItems);
             await parent.push_deferred("equip_batch");
-            // Không gán currentSet ở đây nữa! 
-            // Để lượt chạy (loop) sau tự kiểm tra lại slots xem server đã xử lý thành công chưa.
         } catch (e) {
             console.error("equipBatch Error:", e);
         } finally {
