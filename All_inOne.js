@@ -2613,25 +2613,38 @@ async function equipBatch(data) {
         }
 
         let found = false;
-        if (parent.character.slots[slot]) {
-            let slotItem = parent.character.items[parent.character.slots[slot]];
-            if (slotItem && slotItem.name === itemName && slotItem.level === level && (l === undefined || slotItem.l === l) ) {
-                found = true;
-            }
+		
+if (parent.character.slots[slot]) {
+        let slotItem = parent.character.items[parent.character.slots[slot]];
+        if (
+            slotItem &&
+            slotItem.name === itemName &&
+            (level === undefined || slotItem.level === level) &&
+            (l === undefined || slotItem.l === l)
+        ) {
+            found = true;
         }
+    }
 
         if (found) {
             game_log(`Item ${itemName} is already equipped in ${slot} slot. Skipping.`);
             continue;
         }
 
-        for (let j = 0; j < parent.character.items.length; j++) {
-            const item = parent.character.items[j];
-            if (item && item.name === itemName && item.level === level && item.l === l) {
-                validItems.push({ num: j, slot: slot });
-                break;
-            }
-        }
+for (let j = 0; j < parent.character.items.length; j++) {
+    const item = parent.character.items[j];
+    if (
+        item &&
+        item.name === itemName &&
+        (level === undefined || item.level === level) &&
+        (l === undefined || item.l === l)
+    ) {
+        validItems.push({ num: j, slot: slot });
+        break;
+    }
+}
+
+		
     }
 
     if (validItems.length === 0) {
@@ -2710,7 +2723,7 @@ const equipmentSets = {
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
     ],
     UNluck: [
-        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         //{ itemName: "tshirt88", slot: "chest", level: 0, l: "l" } 
     ],
     single: [
@@ -2786,7 +2799,7 @@ const equipmentSets = {
         { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
-        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
         { itemName: "suckerpunch", slot: "ring2", level: 2, l: "s" },
 	    
@@ -2799,7 +2812,7 @@ const equipmentSets = {
         { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "snring", slot: "amulet", level: 2, l: "l"},
-        { itemName: "orbofstr", slot: "orb", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l" },
         { itemName: "suckerpunch", slot: "ring2", level: 2, l: "s" },
 	    
