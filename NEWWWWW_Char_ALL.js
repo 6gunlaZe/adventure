@@ -1487,13 +1487,16 @@ const EQUIPMENT_SETS = {
     // ---- Cấu hình đồ cho Ranger
     "6gunlaZe": {
         dame: [
-            { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+           // { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 8, l: "l" },
             { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
             { itemName: "coat", slot: "chest", level: 10, l: "l" },
-            { itemName: "pants", slot: "pants", level: 11, l: "l" }
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", level: 0, l: "l" },
+
         ],
         mana: [
            // { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
@@ -1502,9 +1505,9 @@ const EQUIPMENT_SETS = {
             { itemName: "fury", slot: "helmet", level: 8, l: "l" },
             { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
             { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
-            { itemName: "pants", slot: "pants", level: 11, l: "l" }
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
-            { itemName: "cave_loaded_die", slot: "orb", level: 0, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", level: 0, l: "l" },
         { itemName: "suckerpunch", slot: "earring2", level: 2, l: "u"  },
         { itemName: "suckerpunch", slot: "earring2", level: 2, l: "l"  },
 
