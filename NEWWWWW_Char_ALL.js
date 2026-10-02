@@ -504,7 +504,7 @@ function tryCurse() {
         const mob = m.entity;
 
         // Bỏ qua nếu vượt tầm Curse hoặc quái đã bị dính Cursed
-        if (m.distance > curseRange || mob.s?.cursed) continue;
+        if (m.distance > curseRange || mob.s?.cursed || mob.type == "character" ) continue;
 
         const isExtraTarget = EXTRA_CURSE_TARGETS.has(mob.mtype);
         // Kiểm tra xem quái có đang target bất kỳ ai trong partyEntities không
