@@ -1099,16 +1099,13 @@ async function tryAgitate() {
     if (isWeakMobAttackingYnhi) return false;
 
     // =========================================================================
-    // 3 & 4. ĐIỀU KIỆN CHẤP NHẬN: LỌC QUÁI SẼ BỊ HÚT
+    // 3 & 4. ĐIỀU KIỆN CHẤP NHẬN: LỌC QUÁI SẼ BỊ HÚT: từ 2 con + trong danh sách + chưa nhắm vào ai
     // =========================================================================
-    // Chỉ quan tâm những con CHƯA NHẮM VÀO MÌNH (vì nhắm rồi thì hút làm gì nữa)
-    const mobsToPull = mobsInRange.filter(m => m.entity.target !== character.name);
-
-    // Bắt buộc: TẤT CẢ các quái sắp bị hút đều phải nằm trong danh sách an toàn
+    const mobsToPull = mobsInRange.filter(m => !m.entity.target);
+	
     const allInTargetList = mobsToPull.every(m => TARGET_MONSTERS.includes(m.entity.mtype));
     if (!allInTargetList) return false;
 
-    // Cuối cùng: Phải hút được từ 2 con trở lên mới bõ công tốn 420 MP
     if (mobsToPull.length < 2) return false;
 
     // =========================================================================
