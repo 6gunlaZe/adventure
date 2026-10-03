@@ -741,7 +741,9 @@ async function tryCharge() {
 
 
 async function tryHardshell() {
-    if (is_on_cooldown("hardshell")) return false;
+    if (is_on_cooldown("hardshell") || character.mp < 640) return false;
+    if (smart.moving) return false;
+
 
     // 1. Lọc các quái VẬT LÝ đang NHẮM VÀO MÌNH và ở GẦN (<= 50px)
     const physicalThreats = monsters.filter(m => {
@@ -853,8 +855,8 @@ async function tryStomp() {
 
 async function tryTaunt() {
     // 1. Chặn CD và MP (Taunt tốn 40 MP, tầm đánh mặc định 200px)
-    if (is_on_cooldown("taunt") || character.mp < 40) return false;
-    if (smart.moving || attackBusy) return false;
+    if (is_on_cooldown("taunt") || character.mp < 140) return false;
+    if (smart.moving) return false;
 
     let targetToTaunt = null;
 
@@ -921,7 +923,28 @@ async function tryTaunt() {
 
 
 
+async function tryWarcry() {
+    // 1. Kiểm tra Cooldown, MP (Warcry tốn 320 MP) và trạng thái bận
+    if (is_on_cooldown("warcry") || character.mp < 520) return false;
+    if (smart.moving) return false;
 
+    // 2. Kiểm tra điều kiện Buff:
+    // - CHƯA CÓ Warcry (!character.s?.warcry)
+    // - ĐÃ CÓ Dark Blessing từ Priest (character.s?.darkblessing)
+    const hasWarcry = !!character.s?.warcry;
+    const hasDarkBlessing = !!character.s?.darkblessing;
+
+    if (hasWarcry || !hasDarkBlessing) return false;
+
+    // 3. Thực thi Kỹ năng
+    try {
+        await use_skill("warcry");
+        game_log("📢 Warcry + Dark Blessing Combo!", "#FFD700");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 
 
@@ -1525,6 +1548,7 @@ async function skillLoop() {
                     tryHardshell();
                     tryStomp();
                     tryTaunt();
+					tryWarcry();
 
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
