@@ -45,6 +45,9 @@ let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 let lastFarmMonsterSeen = Date.now();
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -779,7 +782,70 @@ async function tryHardshell() {
 
 
 
+async function tryStomp() {
+    if (is_on_cooldown("stomp")) return false;
 
+    // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
+    const mobsNearby50 = monsters.filter(m => m.distance <= 50);
+    if (mobsNearby50.length === 0) return false;
+
+    const myHpPercent = character.hp / character.max_hp;
+    const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
+    const ynhi = ynhiMember?.entity;
+
+    const hasLowHpMember = partyEntities.some(p => {
+        const e = p.entity;
+        return e && !e.dead && (e.hp / e.max_hp < 0.6);
+    });
+
+    const cond1 = myHpPercent < 0.6 || hasLowHpMember;
+    const cond2 = ynhi && !ynhi.dead && ynhi.mp < 2000;
+    const cond3 = mobsNearby50.length > 10 && ynhi && !ynhi.dead && (
+        (ynhi.hp / ynhi.max_hp < 0.8) || (ynhi.mp / ynhi.max_mp < 0.8)
+    );
+
+    if (!cond1 && !cond2 && !cond3) return false;
+
+    // --- 2. XỬ LÝ SWAP VŨ KHÍ & DÙNG SKILL ---
+    // Nếu đang cầm basher sẵn rồi thì bổ luôn
+    if (character.slots.mainhand?.name === "basher") {
+        try {
+            await use_skill("stomp");
+            game_log(`💫 Stomp Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
+            return true;
+        } catch (e) { return false; }
+    }
+
+    // Nếu chưa cầm, tìm basher trong túi
+    const basherSlot = character.items.findIndex(i => i?.name === "basher");
+    if (basherSlot < 0) return false; // Không mang basher thì chịu
+
+// Bắt đầu chuỗi Swap nhanh
+    isEquipping = true; // Bật cờ chặn hàm equipSet() của bạn lại
+    try {
+        // 1. Tháo offhand trước (nếu đang cầm đồ ở tay phụ)
+        if (character.slots.offhand) {
+            unequip("offhand");
+            await sleep(50); // chờ 1 vài tick ở đây nếu thấy game hay bị miss lệnh do gửi quá nhanh
+        }
+
+        // 2. Lôi basher lên tay (vũ khí chính sẽ rơi vào basherSlot)
+        equip(basherSlot);         
+        
+        // 3. Bổ Stomp
+        await use_skill("stomp");  
+        game_log(`💫 Stomp (Quick-Swap) Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
+        
+        // 4. Trả lại vũ khí chính lên tay (Basher chui lại vào basherSlot)
+        equip(basherSlot);         
+
+        return true;
+    } catch (e) {
+        return false;
+    } finally {
+        isEquipping = false; // Nhả cờ ra -> equipSet() sẽ lập tức tự động mặc lại cái offhand vừa bị tháo ở trên!
+    }
+}
 
 
 
@@ -1383,7 +1449,7 @@ async function skillLoop() {
                 case "warrior":
                     tryCharge();
                     tryHardshell();
-                    tryCharge();
+                    tryStomp();
                     tryCharge();
 
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
