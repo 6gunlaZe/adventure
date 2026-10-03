@@ -846,8 +846,7 @@ async function tryStomp() {
     const basherSlot = character.items.findIndex(i => i?.name === "basher");
     if (basherSlot < 0) return false; // Không mang basher thì chịu
 
-// Bắt đầu chuỗi Swap nhanh
-    isEquipping = true; // Bật cờ chặn hàm equipSet() của bạn lại
+
     try {
         // 1. Tháo offhand trước (nếu đang cầm đồ ở tay phụ)
         if (character.slots.offhand) {
@@ -855,9 +854,8 @@ async function tryStomp() {
             await sleep(50); // chờ 1 vài tick ở đây nếu thấy game hay bị miss lệnh do gửi quá nhanh
         }
 
-        // 2. Lôi basher lên tay (vũ khí chính sẽ rơi vào basherSlot)
-        equip(basherSlot);         
-        
+        await equipSet("stomp");        
+		
         // 3. Bổ Stomp
         await use_skill("stomp");  
         game_log(`💫 Stomp (Quick-Swap) Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
@@ -869,7 +867,7 @@ async function tryStomp() {
     } catch (e) {
         return false;
     } finally {
-        isEquipping = false; // Nhả cờ ra -> equipSet() sẽ lập tức tự động mặc lại cái offhand vừa bị tháo ở trên!
+		
     }
 }
 
@@ -1050,8 +1048,6 @@ async function tryCleave() {
     const bataxeSlot = character.items.findIndex(i => i?.name === "bataxe");
     if (bataxeSlot < 0) return false; // Không mang Bataxe trong túi
 
-    // Khóa cờ đổi đồ để bảo vệ trạng thái Swap
-    isEquipping = true;
     try {
         // 1. Tháo offhand (khiên/vũ khí phụ) vì Bataxe là đồ 2 tay
         if (character.slots.offhand) {
@@ -1059,7 +1055,7 @@ async function tryCleave() {
         }
 
         // 2. Móc Bataxe ra quạt Cleave
-        equip(bataxeSlot);
+        await equipSet("cleave");
         await use_skill("cleave");
         game_log(`🪓 Cleave (Quick-Swap) hit ${cleaveMobs.length} quái!`, "#FF5555");
 
@@ -1069,8 +1065,7 @@ async function tryCleave() {
     } catch (e) {
         return false;
     } finally {
-        // Nhả cờ -> equipSet() ở main loop sẽ tự động mặc lại offhand vừa tháo
-        isEquipping = false; 
+
     }
 }
 
@@ -1992,6 +1987,20 @@ const EQUIPMENT_SETS = {
         ],
 
         single: [],
+		
+        cleave: [
+
+        { itemName: "bataxe", slot: "mainhand", },
+
+			
+        ],
+        stomp: [
+
+        { itemName: "basher", slot: "mainhand", },
+
+			
+        ],
+		
         def: [
 			
         { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
