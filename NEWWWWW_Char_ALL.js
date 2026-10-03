@@ -28,6 +28,7 @@ const FARM_LOCATIONS = {
 const CHAR_CONFIG = {
     "Ynhi":     { monster: "targetron", slot: 27, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
     "6gunlaZe": { monster: "targetron", slot: 33, solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "haiz":     { monster: "targetron", slot: 0, solo: false, circle: true, radius: 30, elixir: "pumpkinspice" },
     "MuaBan":   { monster: "crab",      slot: 5, elixir: "elixirluck" }
 };
 
@@ -1564,6 +1565,7 @@ function startChars() {
 
     // Duyệt qua từng nhân vật trong cấu hình để kiểm tra và khởi chạy
     for (const [charName, config] of Object.entries(CHAR_CONFIG)) {
+		if (charName === LEADER) continue;
         if (!parent.party_list.includes(charName)) {
             start_character(charName, config.slot);
         }
