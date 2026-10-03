@@ -737,7 +737,45 @@ async function tryCharge() {
 }
 
 
+async function tryHardshell() {
+    if (is_on_cooldown("hardshell")) return false;
 
+    // 1. Lọc các quái VẬT LÝ đang NHẮM VÀO MÌNH và ở GẦN (<= 50px)
+    const physicalThreats = monsters.filter(m => {
+        const e = m.entity;
+
+        // Điều kiện 1: Phải ở trong bán kính 50 và đang nhắm vào MÌNH (character.name)
+        if (m.distance > 50 || e.target !== character.name) return false;
+
+        // Điều kiện 2: Phải là quái tấn công vật lý (physical)
+        const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
+        return dmgType === "physical";
+    });
+
+    // Nếu không có con quái vật lý nào đang áp sát đập mình -> Bỏ qua
+    if (physicalThreats.length === 0) return false;
+
+    // 2. Kiểm tra điều kiện kích hoạt: Máu < 70% HOẶC có quái Dame to
+    const isHpLow = (character.hp / character.max_hp) < 0.7; // Máu dưới 70%
+    
+    const hasBigDame = physicalThreats.some(m => {
+        const e = m.entity;
+        const attackVal = e.attack || G.monsters[e.mtype]?.attack || 0;
+        return attackVal >= 1000; // Sát thương >= 1000
+    });
+
+    // Chỉ dùng khi Máu < 70% HOẶC có quái dame > 1000 đang đập
+    if (!isHpLow && !hasBigDame) return false;
+
+    // 3. Thực thi skill
+    try {
+        await use_skill("hardshell");
+        game_log("🛡️ Bật Hardshell (Áp sát + Dame to/Máu thấp)!", "#FFA500");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 
 
@@ -1344,7 +1382,7 @@ async function skillLoop() {
                     
                 case "warrior":
                     tryCharge();
-                    tryCharge();
+                    tryHardshell();
                     tryCharge();
                     tryCharge();
 
