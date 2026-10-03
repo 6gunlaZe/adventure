@@ -878,25 +878,23 @@ async function tryTaunt() {
     if (smart.moving) return false;
 
     let targetToTaunt = null;
+    const tauntRange = 190; // Lấy chuẩn range từ data game (thường là 200)
 
     // =========================================================================
     // ƯU TIÊN 1: CỨU ĐỒNG ĐỘI HẤP HỐI (HP < 6000)
     // =========================================================================
-    // Lấy danh sách tên các đồng đội đang bị tụt HP < 6000 (không tính bản thân)
     const endangeredNames = partyEntities.filter(p => {
         const e = p.entity;
         return e && !e.dead && e.name !== character.name && e.hp < 6000;
     }).map(p => p.entity.name);
 
     if (endangeredNames.length > 0) {
-        // Lọc quái trong tầm Taunt đang nhắm đánh đồng đội hấp hối
         const threatsToParty = monsters.filter(m => {
             const e = m.entity;
-            return is_in_range(e, "taunt") && endangeredNames.includes(e.target);
+            return m.distance <= tauntRange && endangeredNames.includes(e.target);
         });
 
         if (threatsToParty.length > 0) {
-            // Sắp xếp lấy con quái có DAME TO NHẤT
             threatsToParty.sort((a, b) => {
                 const atkA = a.entity.attack || G.monsters[a.entity.mtype]?.attack || 0;
                 const atkB = b.entity.attack || G.monsters[b.entity.mtype]?.attack || 0;
@@ -908,29 +906,52 @@ async function tryTaunt() {
     }
 
     // =========================================================================
-    // ƯU TIÊN 2: HÚT QUÁI FARM VẬT LÝ VỀ VỊ TRÍ (Khi party an toàn)
+    // ƯU TIÊN 2: HÚT QUÁI FARM ĐANG ĐÁNH PARTY (Giới hạn tối đa 6 con đang tank)
     // =========================================================================
     if (!targetToTaunt) {
-        const farmMobs = monsters.filter(m => {
-            const e = m.entity;
+        const monstersTargetingMe = monsters.filter(m => m.entity.target === character.name).length;
 
-            // Phải trong tầm Taunt và Chưa nhắm vào Warrior
-            if (!is_in_range(e, "taunt") || e.target === character.name) return false;
+        if (monstersTargetingMe < 6) {
+            const farmMobs = monsters.filter(m => {
+                const e = m.entity;
 
-            // Kiểm tra
-            if (!TARGET_MONSTERS.includes(e.mtype)) return false;
-            const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
-            return dmgType === "physical";
-        });
+                // 1. Dùng m.distance thay cho is_in_range để tối ưu hiệu năng
+                if (m.distance > tauntRange) return false;
 
-        if (farmMobs.length > 0) {
-            targetToTaunt = farmMobs[0].entity;
+                // 2. Chưa nhắm vào Warrior
+                if (e.target === character.name) return false;
+
+                // 3. Phải đang nhắm vào thành viên trong Party của mình
+                if (!PARTY.includes(e.target)) return false;
+
+                // 4. Phải thuộc danh sách TARGET_MONSTERS
+                if (!TARGET_MONSTERS.includes(e.mtype)) return false;
+
+                // 5. Máu (HP) phải trên 40.000
+                if (e.hp <= 40000) return false;
+
+                // 6. Chỉ chọn quái gây sát thương vật lý
+                const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
+                return dmgType === "physical";
+            });
+
+            if (farmMobs.length > 0) {
+                // Sắp xếp quái theo lượng HP hiện tại (từ cao xuống thấp)
+                farmMobs.sort((a, b) => b.entity.hp - a.entity.hp);
+                
+                // Chọn con máu TRÂU NHẤT để hút
+                targetToTaunt = farmMobs[0].entity;
+            }
         }
     }
+
+    // =========================================================================
+    // THỰC THI SKILL
+    // =========================================================================
     if (targetToTaunt) {
         try {
             await use_skill("taunt", targetToTaunt);
-            game_log(`🧲 Taunted ${targetToTaunt.mtype} (Target: ${targetToTaunt.target || "None"})`, "#AA00FF");
+            game_log(`🧲 Taunted ${targetToTaunt.mtype} (Target: ${targetToTaunt.target || "None"}, HP: ${targetToTaunt.hp})`, "#AA00FF");
             return true;
         } catch (e) {
             return false;
