@@ -2280,7 +2280,7 @@ const GEAR_LOGIC = {
 
         // 6. Mặc định sang đồ Dame -> mix
         return "def_mixed";
-    }
+    },
     // ---- Logic của haiz ----
 "haiz": function() {
     let needNormalDef = false;
