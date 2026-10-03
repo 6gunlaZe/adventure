@@ -227,7 +227,7 @@ const REVERSE_3SHOT_MONSTERS = ["crab"];
 async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.5) return false;
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
-        useAttack();
+        await useAttack();
         return false;
     }
     // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
@@ -258,7 +258,7 @@ async function use_multi_shot() {
         // 3. Chọn mục tiêu & Thi triển skill
         const targets = valid.slice(0, 5);
         if (targets.length < 2) {
-        useAttack();
+        await useAttack();
             return false;
         }
         // Ưu tiên 5shot nếu đủ mục tiêu và chiêu đã sẵn sàng
@@ -271,7 +271,7 @@ async function use_multi_shot() {
 
         if (character.mp < G.skills[skill].mp + 300) //chỉ đủ mana để đánh thường
         {
-            useAttack();
+            await useAttack();
             return false;
         }
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
@@ -293,7 +293,7 @@ async function use_fan_of_knives() {
     // 1. Kiểm tra tài nguyên và trạng thái sớm
     if (attackBusy || character.hp / character.max_hp < 0.3 )return false;
     if (character.mp < G.skills["fanofknives"].mp + 330) {
-        useAttack();
+        await useAttack();
         return false;
     }
     
@@ -306,7 +306,7 @@ async function use_fan_of_knives() {
 
     // 3. Kiểm tra an toàn (Quái cấp cao cắn)
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) {
-        useAttack();
+        await useAttack();
         return false;
     }
 
@@ -319,7 +319,7 @@ async function use_fan_of_knives() {
 
         // TỐI ƯU CPU: Nếu không đủ 3 con thì nghỉ luôn, KHÔNG cần chạy hàm Sort nặng nề
         if (validMonsters.length < 3){
-        useAttack();
+        await useAttack();
             return false;
         }
         // 5. Sắp xếp theo thứ tự ưu tiên (Leader 50px -> Debuff -> Aggro Party -> Max HP)
@@ -1219,23 +1219,24 @@ function checkAndRequestEnt() {
 setInterval(checkAndRequestEnt, 30000);    // Check xin Ent mỗi 30s
 
 
-function useAttack() {
-
-
+async function useAttack() {
     // CHỐT CHẶN COOLDOWN: Nếu chưa tới lượt đánh thì thoát luôn, không spam
     const pingComp = Math.max(10, character.ping / 10);
-    if (ms_to_next_skill("attack") > pingComp) return;
-    
-    let targeted = get_targeted_monster();
+    if (ms_to_next_skill("attack") > pingComp) return false;
     
     // CƠ CHẾ AN TOÀN: Xóa mục tiêu hiện tại nếu nó đã chết hoặc không còn tồn tại
     if (currentTarget && (currentTarget.dead || !parent.entities[currentTarget.id])) {
         currentTarget = null;
     }
 
-    if (targeted) currentTarget = targeted;
+    // ƯU TIÊN 1: Dùng currentTarget đang có sẵn
+    // ƯU TIÊN 2: Nếu không có thì mới lấy theo get_targeted_monster() của game
+    if (!currentTarget) {
+        let targeted = get_targeted_monster();
+        if (targeted) currentTarget = targeted;
+    }
     
-    if (!currentTarget || smart.moving) return;
+    if (!currentTarget || smart.moving) return false;
 
     // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
     if (FARM_MONSTER != "crab" && !is_in_range(currentTarget)) {
@@ -1246,28 +1247,29 @@ function useAttack() {
                 character.y + (currentTarget.y - character.y) / 2
             );
         }
-        return;
+        return false; // Đang bận chạy lại gần, chưa chém được nên trả về false
     }
     
     // BÙ PING CHO ĐÁNH THƯỜNG
-    
     if (
         currentTarget &&
         !smart.moving &&
         currentTarget.type === "monster" &&
-        TARGET_MONSTERS.includes(currentTarget.mtype) &&
+        (TARGET_MONSTERS.includes(currentTarget.mtype) || TARGET_BOSSES.includes(currentTarget.mtype)) &&
         is_in_range(currentTarget) &&
-        ms_to_next_skill("attack") <= pingComp // Thay can_attack bằng điều kiện bù ping
+        ms_to_next_skill("attack") <= pingComp
     ) {
         // TẤN CÔNG VÀ ÉP XUNG COOLDOWN
-        attack(currentTarget)
-            .then(function() {
-                reduce_cooldown("attack", character.ping * 0.95);
-            })
-            .catch(function(e) {
-                // Lỗi mục tiêu chết nhanh hơn đạn bay, bắt lỗi im lặng
-            });
+        try {
+            await attack(currentTarget);
+            reduce_cooldown("attack", character.ping * 0.95);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
+
+    return false;
 }
 
 
@@ -1726,6 +1728,9 @@ async function skillLoop() {
                     tryTaunt();
 					tryWarcry();
 					tryAgitate();
+                    if (await useAttack()) {
+                        return setTimeout(skillLoop, 10);
+                    }
 
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
