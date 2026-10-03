@@ -723,6 +723,41 @@ async function trySuperShot() {
 }
 
 
+
+async function tryCharge() {
+    if (is_on_cooldown("charge")) return false;
+    if (!is_moving(character)) return false;
+
+    try {
+        await use_skill("charge");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const quaiA_Yeu = [
     "rooster", "cutebee", "bigbird", "spider", "scorpion", "bscorpion", "gscorpion", "crabx", "mummy", "booboo", "rgoo", "bgoo", "wolfie", "jr", "goldenbat", "crabxx", "snowman", "wabbit",
 ];
@@ -1308,6 +1343,11 @@ async function skillLoop() {
                     break;
                     
                 case "warrior":
+                    tryCharge();
+                    tryCharge();
+                    tryCharge();
+                    tryCharge();
+
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
                     
