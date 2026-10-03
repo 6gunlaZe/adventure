@@ -2228,8 +2228,11 @@ const GEAR_LOGIC = {
 
         if (needNormalDef) return "def";
         if (needLuck) return "luck";
-        if (character.hp > 5500 && monsterDensity >= 4) return "mana";
-        
+
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+        if (monsterDensity >= 4) lastDefCheck = Date.now();
+        if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+		
         return "dame"; // Trạng thái mặc định
     },
 
@@ -2339,8 +2342,11 @@ const GEAR_LOGIC = {
     if (needNormalDef) return "def";
     if (needLuck) return "luck";
     if (targetNow && SINGLE_MONSTERS.has(targetNow.mtype)) return "single";
-    if (character.hp > 8500 && monsterDensity >= 4) return "mana";
 
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+        if (monsterDensity >= 4) lastDefCheck = Date.now();
+        if (character.hp > 8500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+	
     return "dame";
 },
 
