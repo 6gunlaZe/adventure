@@ -785,6 +785,7 @@ async function tryHardshell() {
 
 
 async function tryStomp() {
+
     if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 ) return false;
 
     // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
@@ -948,7 +949,11 @@ async function tryWarcry() {
 
 
 async function tryCleave() {
-    // 1. Kiểm tra Cooldown, MP (Cleave tốn 320 MP) và trạng thái bận
+
+    // Nhường nhịp cho attack
+    if (ms_to_next_skill("attack") < 100) return false;
+	
+    // 1. Kiểm tra Cooldown, MP (Cleave tốn 720 MP) và trạng thái bận
     if (is_on_cooldown("cleave") || character.mp < 1020) return false;
     if (smart.moving) return false;
 
@@ -1050,7 +1055,58 @@ async function tryCleave() {
 }
 
 
+async function tryAgitate() {
+    // Kiểm tra Cooldown, MP (Agitate tốn 420 MP) và trạng thái
+    if (is_on_cooldown("agitate") || character.mp < 1420) return false;
+    if (smart.moving ) return false;
 
+    // Lấy tầm hoạt động của Agitate (mặc định 320px)
+    const AGITATE_RANGE = G.skills.agitate.range || 320 + 10;
+
+    // Lấy tất cả quái trong tầm hút
+    const mobsInRange = monsters.filter(m => m.distance <= AGITATE_RANGE);
+    if (mobsInRange.length === 0) return false;
+
+    // =========================================================================
+    // 1. ĐIỀU KIỆN TỪ CHỐI: CÓ PORCUPINE 
+    // (Bọn này phản sát thương, kéo 1 bầy về Cleave/Stomp là tự sát)
+    // =========================================================================
+    const hasPorcupine = mobsInRange.some(m => m.entity.mtype === "porcupine");
+    if (hasPorcupine) return false;
+
+    // =========================================================================
+    // 2. ĐIỀU KIỆN TỪ CHỐI: YNHI ĐANG XỬ LÝ QUÁI YẾU MÁU
+    // =========================================================================
+    const isWeakMobAttackingYnhi = mobsInRange.some(m => {
+        const e = m.entity;
+        return e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000;
+    });
+    if (isWeakMobAttackingYnhi) return false;
+
+    // =========================================================================
+    // 3 & 4. ĐIỀU KIỆN CHẤP NHẬN: LỌC QUÁI SẼ BỊ HÚT
+    // =========================================================================
+    // Chỉ quan tâm những con CHƯA NHẮM VÀO MÌNH (vì nhắm rồi thì hút làm gì nữa)
+    const mobsToPull = mobsInRange.filter(m => m.entity.target !== character.name);
+
+    // Bắt buộc: TẤT CẢ các quái sắp bị hút đều phải nằm trong danh sách an toàn
+    const allInTargetList = mobsToPull.every(m => TARGET_MONSTERS.includes(m.entity.mtype));
+    if (!allInTargetList) return false;
+
+    // Cuối cùng: Phải hút được từ 2 con trở lên mới bõ công tốn 420 MP
+    if (mobsToPull.length < 2) return false;
+
+    // =========================================================================
+    // THỰC THI SKILL
+    // =========================================================================
+    try {
+        await use_skill("agitate");
+        game_log(`🌪️ Agitate hút ${mobsToPull.length} quái diện rộng!`, "#FF4500");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 
 
@@ -1644,11 +1700,14 @@ async function skillLoop() {
                     break;
                     
                 case "warrior":
-                    tryCharge();
-                    tryHardshell();
                     tryStomp();
+                    tryHardshell();
+                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
+					tryCleave();
+                    tryCharge();
                     tryTaunt();
 					tryWarcry();
+					tryAgitate();
 
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
