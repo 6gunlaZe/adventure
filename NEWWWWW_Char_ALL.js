@@ -947,7 +947,107 @@ async function tryWarcry() {
 }
 
 
+async function tryCleave() {
+    // 1. Kiểm tra Cooldown, MP (Cleave tốn 320 MP) và trạng thái bận
+    if (is_on_cooldown("cleave") || character.mp < 1020) return false;
+    if (smart.moving) return false;
 
+    // 2. Lọc quái trong tầm thi triển Cleave (Range gốc 160 + 20px bù ping/hitbox)
+    const CLEAVE_RANGE_SAFE = (G.skills.cleave.range || 160) + 20; 
+    
+    // Tận dụng trực tiếp m.distance đã tính sẵn từ scanAll
+    const cleaveMobs = monsters.filter(m => m.distance <= CLEAVE_RANGE_SAFE);
+    if (cleaveMobs.length === 0) return false;
+
+    // Tách quái chưa có target (quái mới/chưa bị thu hút)
+    const untargetedMobs = cleaveMobs.filter(m => !m.entity.target);
+
+    // =========================================================================
+    // ĐIỀU KIỆN AN TOÀN ĐỂ XẢ CLEAVE
+    // =========================================================================
+    let canCleave = false;
+
+    // TH 1: Tối ưu nhất - Tất cả quái trong tầm ĐÃ CÓ TARGET (không sợ kéo nhầm quái lạ)
+    if (untargetedMobs.length === 0) {
+        canCleave = true;
+    } else {
+        // TH 2: Có quái chưa có Target -> Xét các trường hợp ngoại lệ:
+
+        // Ngoại lệ A: Tất cả quái chưa Target đều QUÁ YẾU (HP Max < 10.000) -> Xả thoải mái
+        const allUntargetedAreWeak = untargetedMobs.every(m => (m.entity.max_hp || 0) < 10000);
+
+        if (allUntargetedAreWeak) {
+            canCleave = true;
+        } 
+        // Ngoại lệ B: Máu Warrior đủ trâu (> 10.000 HP) -> Cho phép hút quái trong TARGET_MONSTERS
+        else if (character.hp > 10000) {
+
+            // Lấy MP hiện tại của Priest (Ynhi)
+            const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
+            const ynhiMp = ynhiMember?.entity?.mp || 0;
+
+            // Lượng quái trâu chưa target cho phép kéo thêm dựa vào MP của Ynhi
+            const ignoreLimit = ynhiMp > 4500 ? 5 :
+                                ynhiMp > 3500 ? 3 :
+                                ynhiMp > 2500 ? 1 : 0;
+
+            // Lọc ra danh sách quái trâu (HP Max >= 10.000) chưa có Target
+            const strongUntargeted = untargetedMobs.filter(m => (m.entity.max_hp || 0) >= 10000);
+
+            // Tất cả quái trâu chưa target phải thuộc danh sách TARGET_MONSTERS
+            const allInTargetList = strongUntargeted.every(m => TARGET_MONSTERS.includes(m.entity.mtype));
+
+            // Chỉ Cleave nếu quái hợp lệ và số lượng không vượt quá sức gánh Mana của Ynhi
+            if (allInTargetList && strongUntargeted.length <= ignoreLimit && ignoreLimit > 0) {
+                canCleave = true;
+            }
+        }
+    }
+
+    if (!canCleave) return false;
+
+    // =========================================================================
+    // XỬ LÝ QUICK-SWAP BATAXE & THỰC THI SKILL
+    // =========================================================================
+    
+    // Nếu đang cầm sẵn Bataxe rồi thì quạt luôn
+    if (character.slots.mainhand?.name === "bataxe") {
+        try {
+            await use_skill("cleave");
+            game_log(`🪓 Cleave hit ${cleaveMobs.length} quái!`, "#FF5555");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Tìm bataxe trong túi đồ
+    const bataxeSlot = character.items.findIndex(i => i?.name === "bataxe");
+    if (bataxeSlot < 0) return false; // Không mang Bataxe trong túi
+
+    // Khóa cờ đổi đồ để bảo vệ trạng thái Swap
+    isEquipping = true;
+    try {
+        // 1. Tháo offhand (khiên/vũ khí phụ) vì Bataxe là đồ 2 tay
+        if (character.slots.offhand) {
+            unequip("offhand");
+        }
+
+        // 2. Móc Bataxe ra quạt Cleave
+        equip(bataxeSlot);
+        await use_skill("cleave");
+        game_log(`🪓 Cleave (Quick-Swap) hit ${cleaveMobs.length} quái!`, "#FF5555");
+
+        // 3. Đổi lại vũ khí chính cũ
+        equip(bataxeSlot);
+        return true;
+    } catch (e) {
+        return false;
+    } finally {
+        // Nhả cờ -> equipSet() ở main loop sẽ tự động mặc lại offhand vừa tháo
+        isEquipping = false; 
+    }
+}
 
 
 
