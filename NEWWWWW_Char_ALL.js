@@ -10,10 +10,12 @@ const EXCLUDE = new Set([
     "fieldgen0","frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","cscroll0","cscroll1","scroll0","scroll1","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
 
-// Danh sách các Boss hoặc Quái hiếm cần ưu tiên dồn sát thương tuyệt đối, lưu ý các boss cần thêm vào TARGET_MONSTERS mới có hiệu lực
+// Các quái đều phải thêm vào TARGET_MONSTERS mới có hiệu lực
 const TARGET_BOSSES = ["grinch"]; 
+const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "jr", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu
 
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch"];
+
 
 const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
@@ -1953,6 +1955,53 @@ function on_cm(name, data) {
 // 1. CẤU HÌNH BỘ TRANG BỊ THEO TÊN NHÂN VẬT (character.name)
 // =============================================================================
 const EQUIPMENT_SETS = {
+
+    // ---- Cấu hình đồ cho Warrior
+    "haiz": {
+        dame: [
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 5, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+
+        ],
+        mana: [
+			
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 5, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+			
+        ],
+        luck: [
+
+        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
+			
+        ],
+
+        single: [],
+        def: [
+			
+        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
+        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
+        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+			
+		],
+        def_fire: []
+    },
+	
     // ---- Cấu hình đồ cho Ranger
     "6gunlaZe": {
         dame: [
@@ -2232,7 +2281,41 @@ const GEAR_LOGIC = {
         // 6. Mặc định sang đồ Dame -> mix
         return "def_mixed";
     }
+    // ---- Logic của haiz ----
+"haiz": function() {
+    let needNormalDef = false;
+    let needLuck = false;
+    let monsterDensity = 0;
 
+    const targetNow = get_targeted_monster();
+
+    for (const m of monsters) {
+        const e = m.entity;
+        if (m.distance > 300) continue;
+
+        // Ưu tiên số 1
+        if (e.mtype === "xmagefi") return "def_fire";
+
+        if (e.target === character.name && character.hp < 8500)
+            needNormalDef = true;
+
+        if (e.cooperative && e.hp < 350000)
+            needLuck = true;
+
+        if (e.target || e.max_hp < 5000)
+            monsterDensity++;
+    }
+
+    if (needNormalDef) return "def";
+    if (needLuck) return "luck";
+    if (targetNow && SINGLE_MONSTERS.has(targetNow.mtype)) return "single";
+    if (character.hp > 8500 && monsterDensity >= 4) return "mana";
+
+    return "dame";
+},
+
+
+	
     
 };
 
