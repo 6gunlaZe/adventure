@@ -9,7 +9,11 @@ const EXCLUDE = new Set([
     "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2","handofmidas","basher",
     "fieldgen0","frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","cscroll0","cscroll1","scroll0","scroll1","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
-const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot"];
+
+// Danh sách các Boss hoặc Quái hiếm cần ưu tiên dồn sát thương tuyệt đối, lưu ý các boss cần thêm vào TARGET_MONSTERS mới có hiệu lực
+const TARGET_BOSSES = ["grinch"]; 
+
+const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch"];
 
 const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
@@ -124,32 +128,46 @@ function selectTarget() {
     return sortMonstersByPriority(validMonsters)[0];
 }
 
+
+
 // Hàm sắp xếp quái theo đúng tiêu chí ưu tiên của bạn
 function sortMonstersByPriority(monsterList) {
-    const leaderEntity = partyEntities.find(p => p.entity.name === LEADER)?.entity;
+    const leaderEntity = (character.name === LEADER) 
+        ? character 
+        : partyEntities.find(p => p.entity.name === LEADER)?.entity;
 
     return [...monsterList].sort((a, b) => {
-        // 1. Quái nằm trong bán kính 50px quanh Leader
+        // 1. Ưu tiên TUYỆT ĐỐI: Boss hoặc Quái hiếm
+        const aIsBoss = TARGET_BOSSES.includes(a.mtype);
+        const bIsBoss = TARGET_BOSSES.includes(b.mtype);
+        if (aIsBoss !== bIsBoss) return aIsBoss ? -1 : 1;
+
+        // 2. Quái nằm trong bán kính 50px quanh Leader
         if (leaderEntity) {
             const aNearLeader = distance(a, leaderEntity) <= 50;
             const bNearLeader = distance(b, leaderEntity) <= 50;
             if (aNearLeader !== bNearLeader) return aNearLeader ? -1 : 1;
         }
 
-        // 2. Quái có debuff (weakened / curse)
-        const aWeakened = !!(a.s?.marked || a.s?.cursed );
-        const bWeakened = !!(b.s?.marked || b.s?.cursed );
-        if (aWeakened !== bWeakened) return aWeakened ? -1 : 1;
+        // 3. Ưu tiên Debuff: Quái bị "cursed" (Nguyền rủa)
+        const aCursed = !!a.s?.cursed;
+        const bCursed = !!b.s?.cursed;
+        if (aCursed !== bCursed) return aCursed ? -1 : 1;
 
-        // 3. Quái đang đánh Party
+        // 4. Ưu tiên Debuff: Quái bị "marked" (Hunter's Mark)
+        const aMarked = !!a.s?.marked;
+        const bMarked = !!b.s?.marked;
+        if (aMarked !== bMarked) return aMarked ? -1 : 1;
+
+        // 5. Quái đang đánh Party
         const aAttackingParty = PARTY.includes(a.target);
         const bAttackingParty = PARTY.includes(b.target);
         if (aAttackingParty !== bAttackingParty) return aAttackingParty ? -1 : 1;
 
-        // 4. Máu lớn nhất (HP cao hơn xếp trước)
+        // 6. Máu lớn nhất (HP cao hơn xếp trước)
         if (a.hp !== b.hp) return b.hp - a.hp;
 
-        // 5. Gần bản thân hơn
+        // 7. Gần bản thân hơn
         return distance(character, a) - distance(character, b);
     });
 }
