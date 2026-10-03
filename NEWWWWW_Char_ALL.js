@@ -848,6 +848,77 @@ async function tryStomp() {
 }
 
 
+async function tryTaunt() {
+    // 1. Chặn CD và MP (Taunt tốn 40 MP, tầm đánh mặc định 200px)
+    if (is_on_cooldown("taunt") || character.mp < 40) return false;
+    if (smart.moving || attackBusy) return false;
+
+    let targetToTaunt = null;
+
+    // =========================================================================
+    // ƯU TIÊN 1: CỨU ĐỒNG ĐỘI HẤP HỐI (HP < 6000)
+    // =========================================================================
+    // Lấy danh sách tên các đồng đội đang bị tụt HP < 6000 (không tính bản thân)
+    const endangeredNames = partyEntities.filter(p => {
+        const e = p.entity;
+        return e && !e.dead && e.name !== character.name && e.hp < 6000;
+    }).map(p => p.entity.name);
+
+    if (endangeredNames.length > 0) {
+        // Lọc quái trong tầm Taunt đang nhắm đánh đồng đội hấp hối
+        const threatsToParty = monsters.filter(m => {
+            const e = m.entity;
+            return is_in_range(e, "taunt") && endangeredNames.includes(e.target);
+        });
+
+        if (threatsToParty.length > 0) {
+            // Sắp xếp lấy con quái có DAME TO NHẤT
+            threatsToParty.sort((a, b) => {
+                const atkA = a.entity.attack || G.monsters[a.entity.mtype]?.attack || 0;
+                const atkB = b.entity.attack || G.monsters[b.entity.mtype]?.attack || 0;
+                return atkB - atkA;
+            });
+
+            targetToTaunt = threatsToParty[0].entity;
+        }
+    }
+
+    // =========================================================================
+    // ƯU TIÊN 2: HÚT QUÁI FARM VẬT LÝ VỀ VỊ TRÍ (Khi party an toàn)
+    // =========================================================================
+    if (!targetToTaunt) {
+        const farmMobs = monsters.filter(m => {
+            const e = m.entity;
+
+            // Phải trong tầm Taunt và Chưa nhắm vào Warrior
+            if (!is_in_range(e, "taunt") || e.target === character.name) return false;
+
+            // Kiểm tra
+            if (!TARGET_MONSTERS.includes(e.mtype)) return false;
+            const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
+            return dmgType === "physical";
+        });
+
+        if (farmMobs.length > 0) {
+            targetToTaunt = farmMobs[0].entity;
+        }
+    }
+    if (targetToTaunt) {
+        try {
+            await use_skill("taunt", targetToTaunt);
+            game_log(`🧲 Taunted ${targetToTaunt.mtype} (Target: ${targetToTaunt.target || "None"})`, "#AA00FF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+
 
 
 
@@ -1450,7 +1521,7 @@ async function skillLoop() {
                     tryCharge();
                     tryHardshell();
                     tryStomp();
-                    tryCharge();
+                    tryTaunt();
 
                     // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
