@@ -783,7 +783,7 @@ async function tryHardshell() {
 
 
 async function tryStomp() {
-    if (is_on_cooldown("stomp")) return false;
+    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 ) return false;
 
     // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
     const mobsNearby50 = monsters.filter(m => m.distance <= 50);
@@ -793,12 +793,15 @@ async function tryStomp() {
     const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
     const ynhi = ynhiMember?.entity;
 
+    // Nếu có buff Warcry (character.s?.warcry) -> hạ ngưỡng máu xuống 40% (0.4), ngược lại giữ 60% (0.6)
+    const hpThreshold = character.s?.warcry ? 0.4 : 0.6;
+
     const hasLowHpMember = partyEntities.some(p => {
         const e = p.entity;
-        return e && !e.dead && (e.hp / e.max_hp < 0.6);
+        return e && !e.dead && (e.hp / e.max_hp < hpThreshold);
     });
 
-    const cond1 = myHpPercent < 0.6 || hasLowHpMember;
+    const cond1 = myHpPercent < hpThreshold || hasLowHpMember;
     const cond2 = ynhi && !ynhi.dead && ynhi.mp < 2000;
     const cond3 = mobsNearby50.length > 10 && ynhi && !ynhi.dead && (
         (ynhi.hp / ynhi.max_hp < 0.8) || (ynhi.mp / ynhi.max_mp < 0.8)
