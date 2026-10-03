@@ -806,7 +806,7 @@ async function tryHardshell() {
 
 async function tryStomp() {
 
-    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 ) return false;
+    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 || isEquipping ) return false;
 
     // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
     const mobsNearby50 = monsters.filter(m => m.distance <= 50);
@@ -974,7 +974,7 @@ async function tryCleave() {
     if (ms_to_next_skill("attack") < 100) return false;
 	
     // 1. Kiểm tra Cooldown, MP (Cleave tốn 720 MP) và trạng thái bận
-    if (is_on_cooldown("cleave") || character.mp < 1020) return false;
+    if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping ) return false;
     if (smart.moving) return false;
 
     // 2. Lọc quái trong tầm thi triển Cleave (Range gốc 160 + 20px bù ping/hitbox)
@@ -1722,19 +1722,20 @@ async function skillLoop() {
                     break;
                     
                 case "warrior":
-                    tryStomp();
-                    tryHardshell();
+					if (await tryStomp()) return setTimeout(skillLoop, 10);
+					if (await tryHardshell()) return setTimeout(skillLoop, 10);
                     if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
-					tryCleave();
-                    tryCharge();
-                    tryTaunt();
-					tryWarcry();
-					tryAgitate();
+
+					if (await tryCleave()) return setTimeout(skillLoop, 10);
+					if (await tryCharge()) return setTimeout(skillLoop, 10);
+					if (await tryTaunt()) return setTimeout(skillLoop, 10);
+					if (await tryWarcry()) return setTimeout(skillLoop, 10);
+					if (await tryAgitate()) return setTimeout(skillLoop, 10);
+					
                     if (await useAttack()) {
                         return setTimeout(skillLoop, 10);
                     }
 
-                    // Bạn có thể thêm Cleave, Taunt, Charge vào đây sau
                     break;
                     
             }
