@@ -24,9 +24,9 @@ const FARM_LOCATIONS = {
 
 
 const CHAR_CONFIG = {
-    "Ynhi":     { monster: "targetron", slot: 1, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
-    "6gunlaZe": { monster: "targetron", slot: 1, solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
-    "MuaBan":   { monster: "crab",      slot: 2, elixir: "elixirluck" }
+    "Ynhi":     { monster: "targetron", slot: 27, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "6gunlaZe": { monster: "targetron", slot: 33, solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "MuaBan":   { monster: "crab",      slot: 5, elixir: "elixirluck" }
 };
 
 
