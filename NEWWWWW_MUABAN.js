@@ -2964,27 +2964,34 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 let lastActivityTime = Date.now();
 
 setInterval(async () => {
-    // Nếu túi đồ KHÔNG đủ 17 ô trống -> Reset lại thời gian
-    if (character.esize < 17 || !character.stand ) {
+    // 1. Chưa cấu hình món đồ cần rút -> Bỏ qua ngay
+    if (!ITEM_TO_RETRIEVE) return;
+
+    // 2. Trong túi ĐÃ CÓ sẵn món đồ này rồi -> Reset thời gian rảnh và không rút thêm
+    const alreadyHasItem = character.items.some(i => i && i.name === ITEM_TO_RETRIEVE);
+    if (alreadyHasItem) {
         lastActivityTime = Date.now();
         return;
     }
-	
-    // Nếu thời gian rảnh đã vượt mức cấu hình 
+
+    // 3. Nếu túi đồ KHÔNG đủ 17 ô trống hoặc không ở trạng thái mở sạp (!character.stand) -> Reset lại thời gian
+    if (character.esize < 17 || !character.stand) {
+        lastActivityTime = Date.now();
+        return;
+    }
+
+    // 4. Nếu thời gian rảnh đã vượt mức cấu hình 
     if (Date.now() - lastActivityTime >= IDLE_TIME_LIMIT) {
-        
-        // Reset ngay lập tức để tránh hàm gọi đúp
+        // Reset ngay lập tức để tránh gọi đúp
         lastActivityTime = Date.now(); 
-        
-        // Gọi hàm với các biến đã cấu hình ở trên
+
+        // Gọi hàm rút đồ từ Bank
         await retrieveFromBank(ITEM_TO_RETRIEVE, RETRIEVE_QTY);
-        
+
         // Reset lần nữa sau khi xong việc
         lastActivityTime = Date.now(); 
     }
-}, 1000); 
-
-// (Nhớ thêm lastActivityTime = Date.now(); vào các hàm nâng cấp của bạn)
+}, 1000);
 
 
 
