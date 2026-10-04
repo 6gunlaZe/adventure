@@ -152,7 +152,7 @@ let serviceTimer = null;
 // 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
 var upgradeGroups = {
 	group_basic: [ // đồ phổ thông
-		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [1,2], scroll: 0, offering: 0 },
 		{ levels: [3,4,5], scroll: 1, offering: 0 },
 		{ levels: [6],     scroll: 1, offering: 1 },
 		{ levels: [7],     scroll: 1, offering: 1 },
