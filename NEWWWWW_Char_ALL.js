@@ -2035,7 +2035,8 @@ const EQUIPMENT_SETS = {
     // ---- Cấu hình đồ cho Ranger
     "6gunlaZe": {
         dame: [
-           // { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+			
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 8, l: "l" },
@@ -2047,7 +2048,7 @@ const EQUIPMENT_SETS = {
 
         ],
         mana: [
-           // { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+        { itemName: "pouchbow", slot: "mainhand", level: 11, l: "l" },
             { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 8, l: "l" },
