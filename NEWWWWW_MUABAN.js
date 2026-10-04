@@ -255,9 +255,9 @@ var upgradeGroups = {
 	group_weapon4: [ // vũ khí & trang bị tấn công
 		{ levels: [0,1,], scroll: 1, offering: 0 },
 		{ levels: [2,], scroll: 2, offering: 0 },
-		{ levels: [3,4,], scroll: 2, offering: 1 },
-	//	{ levels: [5,],     scroll: 2, offering: 1 },  //45%
-	//	{ levels: [6,7],       scroll: 2, offering: 2 } // 48% //28%
+		{ levels: [3,4,5], scroll: 2, offering: 0 },
+		{ levels: [6,],     scroll: 2, offering: 1 },  
+	//	{ levels: [7],       scroll: 2, offering: 2 }, 
 	//	{ levels: [8],       scroll: 3, offering: 2 }   //18%
 	],
 	
