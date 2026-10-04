@@ -12,7 +12,7 @@ const EXCLUDE = new Set([
 
 // Các quái đều phải thêm vào TARGET_MONSTERS mới có hiệu lực
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"]; 
-const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "jr", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu
+const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen"];
 
@@ -2071,7 +2071,18 @@ const EQUIPMENT_SETS = {
 			
         ],
 
-        single: [],
+        single: [
+
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 5, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+			
+		],
 		
         cleave: [
 
