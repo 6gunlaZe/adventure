@@ -1890,67 +1890,6 @@ function tryTemporalSurge() {
 }
 
 
-
-
-// ============================================================
-// TELEGRAM BOT ALIVE
-// ============================================================
-
-const TELEGRAM_TOKEN = "7823637456:AAHGyKokFrUdLM-kaBhP6M_wg90fKOWwqY4";
-const TELEGRAM_CHAT_ID = "6708647498";
-
-let lastTelegramAlive = 0;
-const TELEGRAM_ALIVE_INTERVAL = 30 * 60 * 1000; // 30 phút
-
-async function telegramSend(message) {
-    try {
-        const response = await fetch(
-            `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (!data.ok) {
-            console.log("[Telegram] Error:", data.description);
-        }
-    } catch (e) {
-        console.log("[Telegram] Error:", e);
-    }
-}
-
-function telegramAlive() {
-    const now = Date.now();
-
-    if (now - lastTelegramAlive < TELEGRAM_ALIVE_INTERVAL) return;
-
-    lastTelegramAlive = now;
-
-telegramSend(
-    `🟢 ${character.name} đang hoạt động\n` +
-    `Ping: ${character.ping}\n` +
-    `HP: ${Math.round(character.hp / character.max_hp * 100)}%\n` +
-    (character.esize === 0
-        ? `LỖI GAME - TÚI FULL`
-        : `Túi trống: ${character.esize} slot`)
-);
-}
-
-setInterval(() => {
-    if (character.name !== LEADER) return;
-    telegramAlive();
-}, 300000);
-
-
 function on_cm(name, data) {
     // Trường hợp data là chuỗi đơn giản
     if (typeof data === "string" && data === "TemporalTime") {
@@ -1963,8 +1902,6 @@ function on_cm(name, data) {
         temporalState.lastTime = Date.now();
     }
 }
-
-
 
 
 // =============================================================================
