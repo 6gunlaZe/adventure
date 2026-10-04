@@ -2070,6 +2070,9 @@ const EQUIPMENT_SETS = {
             { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
         ],
         def: [],
+        heall: [
+        { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
+		],
         def_fire: []
     },
 
