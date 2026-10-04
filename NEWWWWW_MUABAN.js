@@ -2267,11 +2267,11 @@ setInterval(() => {
         return;
     }
 
-    // Chưa đủ 30s
-    if (now - storagePendingTime < 30 * 1000) return;
+    // Chưa đủ 20s
+    if (now - storagePendingTime < 20 * 1000) return;
 
-    // Sau 30s kiểm tra lại
-    if (!is_inventory_full() && character.esize >= 3 && !idleStorage) {
+    // Sau 20s kiểm tra lại
+    if (!is_inventory_full() && character.esize >= 5 && !idleStorage) {
         storagePending = false;
         storagePendingTime = 0;
         console.log("[MuaBan] AUTO: Túi đã được xử lý → hủy STORAGE");
