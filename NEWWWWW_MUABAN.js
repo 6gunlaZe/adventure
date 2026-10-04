@@ -881,7 +881,7 @@ async function service_fishing(req) {
 // ITEM FUNCTIONS
 // ============================================================
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function mluck_party() {
     if (!character.party) return;
@@ -1061,7 +1061,7 @@ function start_upgrade_loop() {
 
         // 2. Các điều kiện chặn (Guard clauses) - Ngừng thực thi lệnh bên dưới nếu thỏa mãn
         if (character.map === "bank") return;
-        if (character.esize < 1) return;
+        // if (character.esize < 1) return;
         if (character.gold < 4500000) return; // Chọn 1 mốc vàng chuẩn nhất để sử dụng
 
         // 3. Thực thi hành động
