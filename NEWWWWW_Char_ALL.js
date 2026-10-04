@@ -2310,6 +2310,8 @@ const GEAR_LOGIC = {
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
 
+        const dameMonsters = ["mrpumpkin", "mrgreen",]; 
+        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
         let hasPhysical = false;
         let hasMagical = false;
         let needLuck = false;
@@ -2319,6 +2321,10 @@ const GEAR_LOGIC = {
         for (const m of monsters) {
             const e = m.entity;
             if (m.distance > 300) continue;
+
+           if (dameMonsters.includes(e.mtype)) {
+               hasTargetForDame = true;
+           }
 
             // Kiểm tra nếu quái có thuộc tính spawns (và mảng spawns có phần tử)
             if (e.spawns && Array.isArray(e.spawns) && e.spawns.length > 0) {
@@ -2366,6 +2372,8 @@ const GEAR_LOGIC = {
         }
 
 		setBooster('xpbooster');
+
+        if (hasTargetForDame) return "dame";
         if (hasPhysical && hasMagical) return "def_mixed";
         if ( character.map == "uhills" ) return "def_mixed";
 		
