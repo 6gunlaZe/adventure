@@ -14,7 +14,7 @@ const EXCLUDE = new Set([
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"]; 
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 
-const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen"];
+const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen","phoenix"];
 
 
 const FARM_LOCATIONS = {
