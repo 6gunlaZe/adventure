@@ -1310,32 +1310,46 @@ async function process_upgrade_and_compound_retrieval() {
     const reservedUniqueSlots = new Set();
 
     // ----------------------------------------------------
-    // A. Check Upgrade Whitelist (Tạo các Bộ Upgrade 2 món)
+    // A. Check Upgrade Whitelist (Gom chung các món cùng TÊN và CÓ LEVEL HỢP LỆ, >= 2 món)
     // ----------------------------------------------------
+    const MAX_UPGRADE_BATCH = 6; // Gom tối đa 6 món 1 lần rút để không đầy túi
+
     for (const groupName in upgradeWhitelistVIPP) {
         const itemsInGroup = upgradeWhitelistVIPP[groupName] || [];
         const groupRules = upgradeGroups[groupName] || [];
         const validLevels = groupRules.flatMap(rule => rule.levels);
 
-        for (const key in bank_items_map) {
-            const [name, levelStr] = key.split("_");
-            const level = parseInt(levelStr, 10);
-            if (!itemsInGroup.includes(name) || !validLevels.includes(level)) continue;
+        // Duyệt qua từng tên item trong nhóm
+        for (const itemName of itemsInGroup) {
+            const availableForUpgrade = [];
 
-            const available = (bank_items_map[key] || []).filter(e => !reservedUniqueSlots.has(`${e.pack}:${e.slot}`));
-            if (available.length >= 2) {
-                const pairsCount = Math.floor(available.length / 2);
-                for (let i = 0; i < pairsCount; i++) {
-                    const item1 = available[i * 2];
-                    const item2 = available[i * 2 + 1];
-                    reservedUniqueSlots.add(`${item1.pack}:${item1.slot}`);
-                    reservedUniqueSlots.add(`${item2.pack}:${item2.slot}`);
+            // Tìm trong kho TẤT CẢ các item có TÊN này và LEVEL nằm trong khung cho phép
+            for (const level of validLevels) {
+                const key = `${itemName}_${level}`;
+                if (bank_items_map[key]) {
+                    // Lọc ra các item chưa bị "đặt gạch" (reserved)
+                    const itemsAtThisLevel = bank_items_map[key].filter(e => !reservedUniqueSlots.has(`${e.pack}:${e.slot}`));
+                    availableForUpgrade.push(...itemsAtThisLevel);
+                }
+            }
 
-                    action_sets.push({
-                        type: "Upgrade",
-                        name: `${name} +${level}`,
-                        items: [item1, item2]
-                    });
+            // Nếu tổng số lượng (bất kể level nào miễn là hợp lệ) >= 2 món thì bắt đầu chia bộ
+            if (availableForUpgrade.length >= 2) {
+                for (let i = 0; i < availableForUpgrade.length; i += MAX_UPGRADE_BATCH) {
+                    const chunk = availableForUpgrade.slice(i, i + MAX_UPGRADE_BATCH);
+
+                    // Chỉ lấy các nhóm có ít nhất 2 món (lẻ 1 món ở cuối thì bỏ qua, để lại Bank)
+                    if (chunk.length >= 2) {
+                        chunk.forEach(item => {
+                            reservedUniqueSlots.add(`${item.pack}:${item.slot}`);
+                        });
+
+                        action_sets.push({
+                            type: "Upgrade",
+                            name: `${itemName} (Mix Levels, ${chunk.length} món)`,
+                            items: chunk
+                        });
+                    }
                 }
             }
         }
