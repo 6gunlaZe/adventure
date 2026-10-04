@@ -45,6 +45,13 @@ const IMPORTANT_ITEMS = [
         "tracker", "computer", "supercomputer","smoke","bronzeingot",
     ];
 
+//TỰ ĐỘNG  MAKE SHINY
+const shinyList = {
+    "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+    "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+};
+
+
 //TỰ ĐỘNG SOI HÀNG TRÊN THỊ TRƯỜNG
 const autoSellToMerchItems = [
     { name: "tombkey", price: 2300000 },
@@ -394,6 +401,12 @@ const PONTY_EXCLUDE_ITEMS = [
     "wcap","wbreeches","wgloves","wshoes",
 
 ];
+
+const metalsByGrade = {
+    0: ["bronzeingot", "goldnugget"],
+    1: ["goldingot"],
+    2: ["platinumingot"]
+};
 
 
 // ============================================================
@@ -2071,29 +2084,6 @@ function upgradeVIP_Idle() {
 }
 
 
-
-
-
-const shinyList = {
-    "ololipop": {
-        maxLevel: 1,
-        rules: {
-            0: { scroll: "scroll0", offering: null }
-        }
-    },
-    "glolipop": {
-        maxLevel: 1,
-        rules: {
-            0: { scroll: "scroll0", offering: null }
-        }
-    }
-};
-
-const metalsByGrade = {
-    0: ["bronzeingot", "goldnugget"],
-    1: ["goldingot"],
-    2: ["platinumingot"]
-};
 
 function makeShiny() {
     // 1. Kiểm tra guard clause: Thoát sớm nếu shinyList không xác định hoặc rỗng
