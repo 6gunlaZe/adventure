@@ -389,7 +389,7 @@ function energizeParty() {
 }
 
 
-function trySingleHeal() {
+async function trySingleHeal() {
     // 1. Kiểm tra Cooldown & Bù Ping sớm nhất có thể để tiết kiệm CPU
     const pingComp = Math.max(10, character.ping / 10);
     if (ms_to_next_skill("heal") > pingComp) return false;
@@ -1859,7 +1859,7 @@ async function skillLoop() {
 					tryzapper();
                     
                     // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
-                    if (trySingleHeal()) {
+                    if (await trySingleHeal()) {
                         return setTimeout(skillLoop, 10);
                     }
                     break;
