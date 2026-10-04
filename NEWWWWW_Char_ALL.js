@@ -53,7 +53,7 @@ let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 let lastFarmMonsterSeen = Date.now();
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // ============================================================
 // SCAN ALL
