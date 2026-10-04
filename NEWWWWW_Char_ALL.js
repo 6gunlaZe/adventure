@@ -11,10 +11,10 @@ const EXCLUDE = new Set([
 ]);
 
 // Các quái đều phải thêm vào TARGET_MONSTERS mới có hiệu lực
-const TARGET_BOSSES = ["grinch"]; 
+const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"]; 
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "jr", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu
 
-const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch"];
+const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen"];
 
 
 const FARM_LOCATIONS = {
@@ -1365,6 +1365,21 @@ setInterval(function() {
 
 
 
+// ==========================================
+// HÀM HỖ TRỢ: LẤY BOSS DANG LIVE ƯU TIÊN
+// ==========================================
+function getActiveWorldBoss() {
+    const status = server.status || parent?.S;
+    if (!status) return null;
+
+    // Danh sách ưu tiên săn (Pumpkin -> Green -> Slenderman -> Frankie, v.v.)
+    if (status.mrpumpkin?.live) return { ...status.mrpumpkin, id: "mrpumpkin" };
+    if (status.mrgreen?.live) return { ...status.mrgreen, id: "mrgreen" };
+    //if (status.slenderman?.live) return { ...status.slenderman, id: "slenderman" };
+    
+    return null;
+}
+
 // ============================================================
 // FARM MOVEMENT LOOP moveloop
 // ============================================================
@@ -1382,7 +1397,58 @@ const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) /
 setInterval(function() {
 
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
-    
+
+
+// =========================================================
+// 1. WORLD BOSS HANDLING (BÁM SÁT & DUY TRÌ TẦM ĐÁNH)
+// =========================================================
+const activeBoss = getActiveWorldBoss();
+
+if (activeBoss) {
+    // Tìm entity Boss thực tế đang xuất hiện quanh nhân vật
+    const bossEntity = get_nearest_monster({ type: activeBoss.id });
+
+    if (bossEntity && !bossEntity.dead) {
+        const dist = distance(character, bossEntity);
+        // Trừ hao 20 unit để đứng lọt vào trong tầm đánh, tránh đứng sát mép bị hụt skill
+        const safeAttackRange = Math.max(20, character.range - 20);
+
+        if (dist > safeAttackRange) {
+            // Boss di chuyển ra xa -> Bám đuổi
+            if (can_move_to(bossEntity.x, bossEntity.y)) {
+                // Nếu đường đi thẳng không vướng vật cản -> Dừng smart_move và move trực tiếp cho mượt
+                if (smart.moving) stop("smart");
+                
+                // Di chuyển nhích dần về phía Boss
+                move(
+                    character.x + (bossEntity.x - character.x) * 0.4,
+                    character.y + (bossEntity.y - character.y) * 0.4
+                );
+            } else if (!smart.moving) {
+                // Nếu vướng địa hình -> Dùng smart_move để vòng qua vật cản
+                smart_move(bossEntity);
+            }
+        } else {
+            // Đã nằm gọn trong tầm đánh -> Hủy di chuyển để tập trung xả Skill
+            if (smart.moving) stop("smart");
+        }
+    } else {
+        // Boss chưa vào tầm mắt (hoặc đã chạy sang khu vực khác) -> Dùng server.status tìm đường tới
+        if (!smart.moving || smart.map !== activeBoss.map) {
+            farmingMoving = false;
+            noTargetTimer = null;
+            smart_move({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
+        }
+    }
+
+    return; // Ngắt hàm, không chạy logic Farm bên dưới
+}
+
+
+
+
+
+	
     // EVENT HANDLING
     if (parent?.S?.goobrawl && checkcrabxx === 1) {
         if (character.map !== "goobrawl" && !smart.moving) parent.socket.emit("join", { name: "goobrawl" });
