@@ -23,8 +23,8 @@ const TRASH_ITEMS = [
 // ==========================================
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
-const ITEM_TO_RETRIEVE = ""; // ví dụ candy1 Thay tên đồ B vào đây, hiện tại tạm chưa có mục tiêu 
-const RETRIEVE_QTY = 200;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
+const ITEM_TO_RETRIEVE = "bronzeingot"; // ví dụ candy1 Thay tên đồ B vào đây, hiện tại tạm chưa có mục tiêu 
+const RETRIEVE_QTY = 50;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
 const IDLE_TIME_LIMIT = 60000;        // 60s không hoạt động nâng cấp gì cả sẽ rút
 
 
