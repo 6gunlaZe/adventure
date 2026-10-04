@@ -42,6 +42,23 @@ const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 const MODE = { FARM: "farm", OTHER: "other" };
 let mode = MODE.FARM;
 
+
+// Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUA BAN
+const TRASH_ITEMS = [
+  "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
+  "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead11111", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
+  "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
+  "firestaff", "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
+  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff",
+  "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
+  "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
+  "smoke111", "smush", "snowball111", "snowflakes", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
+  "swifty", "sword", "swordofthedead", "t2bow", "t2quiver", "talkingskull", "throwingstars","tombkey", "tshirt0", "tshirt1", "tshirt2", "tshirt3", "vboots", "vgloves", "vitring",
+  "vitscroll", "wbasher", "wcap", "wbreeches", "wgloves", "whiteegg", "wshoes","wattire", "warmscarf", "xmace", "xmashat", "xmaspants", "xmasshoes", "xmassweater"
+];
+
+
+
 const MAX_SCAN_DISTANCE = 300;
 const MERCHANT_DISTANCE = 400;
 
@@ -2666,4 +2683,22 @@ setInterval(() => {
 
     game_log(`penalty: ${penalty} | run: ${elapsed_minutes} min | Ping: ${character.ping}`);
 }, 5000);
+
+
+function sell_trash_items() {
+    for (let i = 0; i < character.items.length; i++) {
+        const item = character.items[i];
+        if (!item) continue;
+
+        // Kiểm tra vật phẩm thuộc danh sách rác và không bị khóa (locked)
+        if (TRASH_ITEMS.includes(item.name) && !item.l && !item.s && (item.level ?? 0) <= 0) {
+            sell(i, item.q ?? 1);
+            soldCount++;
+        }
+    }
+}
+// Tự động gọi hàm sell_trash_items mỗi 4000ms (4 giây)
+setInterval(sell_trash_items, 4000);
+
+
 
