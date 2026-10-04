@@ -862,7 +862,7 @@ async function tryStomp() {
         game_log(`💫 Stomp (Quick-Swap) Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
         
         // 4. Trả lại vũ khí chính lên tay (Basher chui lại vào basherSlot)
-        equip(basherSlot);         
+        // equip(basherSlot);         
 
         return true;
     } catch (e) {
@@ -1082,7 +1082,7 @@ async function tryCleave() {
         game_log(`🪓 Cleave (Quick-Swap) hit ${cleaveMobs.length} quái!`, "#FF5555");
 
         // 3. Đổi lại vũ khí chính cũ
-        equip(bataxeSlot);
+        // equip(bataxeSlot);
         return true;
     } catch (e) {
         return false;
