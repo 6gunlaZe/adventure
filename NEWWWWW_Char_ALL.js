@@ -2275,18 +2275,25 @@ let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
 let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
 const LuotBoQua = 8;
 let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
+const dameMonsters = ["mrpumpkin", "mrgreen",]; 
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
         let needNormalDef = false;
         let needLuck = false;
+        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
+
         let monsterDensity = 0;
 
         for (const m of monsters) {
             const e = m.entity;
             if (m.distance > 300) continue;
-
+			
+           if (dameMonsters.includes(e.mtype)) {
+               hasTargetForDame = true;
+           }
+			
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
@@ -2297,6 +2304,7 @@ const GEAR_LOGIC = {
 
         if (needNormalDef) return "def";
         if (needLuck) return "luck";
+        if (hasTargetForDame) return "dame";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
         if (monsterDensity >= 4) lastDefCheck = Date.now();
@@ -2310,7 +2318,6 @@ const GEAR_LOGIC = {
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
 
-        const dameMonsters = ["mrpumpkin", "mrgreen",]; 
         let hasTargetForDame = false; // Cờ bật khi phát hiện quái
         let hasPhysical = false;
         let hasMagical = false;
