@@ -1843,26 +1843,7 @@ function compound_itemsVIP() {
 	}
 
 	// Buff Mass Production
-	if (
-		can_use("massproductionpp") && character.level >= 60 &&
-		!character.s.massproductionpp
-	) {
-		console.log(
-			"[MuaBan IDLE] ⚡ Dùng massproductionpp"
-		);
-
-		use_skill("massproductionpp");
-
-	} else if (
-		can_use("massproduction") &&
-		!character.s.massproduction
-	) {
-		console.log(
-			"[MuaBan IDLE] ⚡ Dùng massproduction"
-		);
-
-		use_skill("massproduction");
-	}
+       applyMerchantBuff();
 
     lastActivityTime = Date.now();
 	
@@ -2034,27 +2015,9 @@ function upgradeVIP_Idle() {
 		return;
 	}
 
-	// Dùng kỹ năng tăng tỷ lệ thành công của Merchant
-	if (
-		can_use("massproductionpp") && character.level >= 60 &&
-		!character.s.massproductionpp
-	) {
-		console.log(
-			"[MuaBan IDLE] ⚡ Dùng massproductionpp"
-		);
+	// Dùng kỹ năng tăng tốc của Merchant
+       applyMerchantBuff();
 
-		use_skill("massproductionpp");
-
-	} else if (
-		can_use("massproduction") &&
-		!character.s.massproduction
-	) {
-		console.log(
-			"[MuaBan IDLE] ⚡ Dùng massproduction"
-		);
-
-		use_skill("massproduction");
-	}
 
 	// =========================================================
 	// 🍀 BƯỚC 7.5: Chuyển đồ quý (lv >= 8) vào Lucky Slot (ô 31)
@@ -2106,6 +2069,166 @@ function upgradeVIP_Idle() {
 		);
 	}
 }
+
+
+
+
+
+const shinyList = {
+    "ololipop": {
+        maxLevel: 1,
+        rules: {
+            0: { scroll: "scroll0", offering: null }
+        }
+    },
+    "glolipop": {
+        maxLevel: 1,
+        rules: {
+            0: { scroll: "scroll0", offering: null }
+        }
+    }
+};
+
+const metalsByGrade = {
+    0: ["bronzeingot", "goldnugget"],
+    1: ["goldingot"],
+    2: ["platinumingot"]
+};
+
+function makeShiny() {
+    // 1. Kiểm tra guard clause: Thoát sớm nếu shinyList không xác định hoặc rỗng
+    if (!shinyList || typeof shinyList !== 'object' || Object.keys(shinyList).length === 0) return;
+
+    // 2. Kiểm tra nếu nhân vật đang bận upgrade, bận di chuyển, hoặc đã chết
+    if (character.q?.upgrade || character.rip) return;
+
+    const items = character.items;
+
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (!item) continue;
+
+        // Kiểm tra xem item có trong danh sách cấu hình không
+        const config = shinyList[item.name];
+        if (!config) continue;
+
+        const currentLevel = item.level ?? 0;
+
+        // -------------------------------------------------------------
+        // TRƯỜNG HỢP A: Đồ CHƯA có Shiny (chưa có thuộc tính item.p)
+        // -------------------------------------------------------------
+        if (!item.p) {
+            if (currentLevel > 0) continue;
+
+            const grade = item_grade(item);
+            if (grade < 0) continue;
+
+            const metals = metalsByGrade[grade];
+            if (!metals) continue;
+
+            let metalSlot = -1;
+            for (const metalName of metals) {
+                metalSlot = locate_item(metalName);
+                if (metalSlot !== -1) break;
+            }
+
+            // Thiếu nguyên liệu -> Tự mua bronzeingot nếu Grade 0
+            if (metalSlot === -1) {
+                if (grade === 0 && parent.buy) {
+                    console.log("[Shiny] 🛒 Thiếu nguyên liệu -> Mua bronzeingot");
+                    parent.buy("bronzeingot");
+                }
+                continue;
+            }
+
+            // Buff skill Merchant trước khi ép
+            applyMerchantBuff();
+
+            console.log(`[Shiny] ✨ Chế Shiny cho ${item.name} [slot ${i}]`);
+            upgrade(i, null, metalSlot);
+            return;
+        }
+
+        // -------------------------------------------------------------
+        // TRƯỜNG HỢP B: Đồ ĐÃ LÀ SHINY (đã có item.p) -> Upgrade lên maxLevel
+        // -------------------------------------------------------------
+        if (item.p && currentLevel < config.maxLevel) {
+            const rule = config.rules?.[currentLevel];
+            if (!rule) {
+                console.log(`[Shiny] ⚠️ Không tìm thấy rule upgrade cho ${item.name} ở level +${currentLevel}`);
+                continue;
+            }
+
+            const scrollName = rule.scroll;
+            const offeringName = rule.offering;
+
+            // 1. Tìm Scroll bằng hàm locate_item() chuẩn của game
+            const scrollSlot = locate_item(scrollName);
+
+            if (scrollSlot === -1) {
+                console.log(`[Shiny] 🛒 Thiếu ${scrollName} -> Mua từ NPC`);
+                if (parent.buy) {
+                    parent.buy(scrollName);
+                } else {
+                    console.log("[Shiny] ❌ parent.buy không tồn tại");
+                }
+                return;
+            }
+
+            // 2. Tìm Offering (nếu rule có yêu cầu)
+            let offeringSlot = -1;
+            if (offeringName) {
+                offeringSlot = locate_item(offeringName);
+
+                if (offeringSlot === -1) {
+                    console.log(`[Shiny] ❌ Thiếu offering ${offeringName} -> Bỏ qua ${item.name}`);
+                    continue;
+                }
+            }
+
+            // Buff skill Merchant trước khi đập
+            applyMerchantBuff();
+
+            console.log(
+                `[Shiny] 🔨 Upgrade Shiny ${item.name}+${currentLevel} -> +${currentLevel + 1}` +
+                ` | Scroll: ${scrollName} (slot ${scrollSlot})` +
+                ` | Offering: ${offeringName ?? "none"} (slot ${offeringSlot > -1 ? offeringSlot : "none"})`
+            );
+
+            // Gửi gói tin nâng cấp lên server
+            if (parent.socket) {
+                parent.socket.emit('upgrade', {
+                    item_num: i,
+                    scroll_num: scrollSlot,
+                    offering_num: offeringSlot > -1 ? offeringSlot : null,
+                    clevel: currentLevel
+                });
+            } else {
+                upgrade(i, scrollSlot, offeringSlot > -1 ? offeringSlot : null);
+            }
+
+            return; // Dừng vòng lặp chờ server phản hồi
+        }
+    }
+}
+
+// Hàm hỗ trợ tự động dùng Buff Merchant
+function applyMerchantBuff() {
+    if (can_use("massproductionpp") && character.level >= 60 && !character.s?.massproductionpp) {
+        use_skill("massproductionpp");
+    } else if (can_use("massproduction") && !character.s?.massproduction) {
+        use_skill("massproduction");
+    }
+}
+
+setInterval(makeShiny, 500);
+
+
+
+
+
+
+
 
 
     // ============================================================
@@ -2299,9 +2422,10 @@ setInterval(() => {
         if (!item || EXCHANGE[item.name] == null) continue;
 
         if (item.q >= EXCHANGE[item.name]) {
-            if (can_use("massexchangepp") && !character.s.massproductionpp && character.level >= 70 )
+			
+            if (can_use("massexchangepp") && !character.s.massexchangepp && character.level >= 70 )
                 use_skill("massexchangepp");
-            else if (can_use("massexchange") && !character.s.massproduction)
+            else if (can_use("massexchange") && !character.s.massexchange)
                 use_skill("massexchange");
 
             exchange(i);
