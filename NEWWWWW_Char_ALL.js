@@ -1681,14 +1681,14 @@ setInterval(() => {
 // ============================================================
 // TRANSFER GOLD + ITEMS TO MERCHANT
 // ============================================================
+
+
 setInterval(() => {
     const m = merchant;
-    if (!m) {
-        loot_transfer = false;
-        return;
-    }
+    let transferred = false;
 
-    if (distance(character, m) <= MERCHANT_DISTANCE) {
+    // 1. Ưu tiên 1: Gửi cho Merchant chính (khi ở gần)
+    if (m && distance(character, m) <= MERCHANT_DISTANCE) {
         if (character.gold) send_gold(m, character.gold);
 
         for (let i = 0; i < 42; i++) {
@@ -1697,8 +1697,34 @@ setInterval(() => {
                 send_item(m.id, i, item.q ?? 1);
             }
         }
+        transferred = true;
     }
+
+    // 2. DỰ PHÒNG: Nếu túi đồ gần đầy (esize < 2), gửi cho 6gunlaZe
+    if (character.esize < 2 && character.name != "6gunlaZe") {
+        const backup = get_player("6gunlaZe"); // Tìm nhân vật 6gunlaZe xung quanh
+        
+        // Kiểm tra 6gunlaZe có ở gần (trong tầm MERCHANT_DISTANCE) và còn sống không
+        if (backup && !backup.dead && distance(character, backup) <= MERCHANT_DISTANCE) {
+            if (character.gold) send_gold(backup, character.gold);
+
+            for (let i = 0; i < 42; i++) {
+                const item = character.items[i];
+                if (item && !EXCLUDE.has(item.name) && !item.l && !item.s) {
+                    send_item(backup.id, i, item.q ?? 1);
+                }
+            }
+            transferred = true;
+        }
+    }
+
+    // Cập nhật trạng thái loot_transfer
+    loot_transfer = transferred;
 }, 2000);
+
+
+
+
 
 // ============================================================
 // PARTY & START CHARACTERS
