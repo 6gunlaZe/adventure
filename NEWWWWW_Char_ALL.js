@@ -1382,18 +1382,59 @@ setInterval(function() {
 
 
 
-// ==========================================
-// HÀM HỖ TRỢ: LẤY BOSS DANG LIVE ƯU TIÊN
-// ==========================================
+
+function hasEngagedBoss(entity) {
+    if (!entity || entity.dead) return false;
+
+    // 1. Kiểm tra trực tiếp target của nhân vật
+    if (character.target === entity.id) return true;
+
+    // 2. Kiểm tra thuộc tính cooperative
+    if (entity.cooperative) {
+        // Trường hợp 1: cooperative là Mảng (Array)
+        if (Array.isArray(entity.cooperative)) {
+            return entity.cooperative.includes(character.name) || entity.cooperative.includes(character.id);
+        }
+        // Trường hợp 2: cooperative là Object ({ "playerName": true })
+        if (typeof entity.cooperative === "object") {
+            return Boolean(entity.cooperative[character.name] || entity.cooperative[character.id]);
+        }
+    }
+
+    return false;
+}
+
+let currentBossTarget = null;
+
 function getActiveWorldBoss() {
     const status = server.status || parent?.S;
-    if (!status) return null;
+    if (!status) {
+        currentBossTarget = null;
+        return null;
+    }
 
-    // Danh sách ưu tiên săn (Pumpkin -> Green -> Slenderman -> Frankie, v.v.)
-    if (status.mrpumpkin?.live) return { ...status.mrpumpkin, id: "mrpumpkin" };
-    if (status.mrgreen?.live) return { ...status.mrgreen, id: "mrgreen" };
-    //if (status.slenderman?.live) return { ...status.slenderman, id: "slenderman" };
-    
+    // Lấy entity của Boss hiện tại gần nhân vật
+    const currentEntity = currentBossTarget ? get_nearest_monster({ type: currentBossTarget }) : null;
+
+    // Kiểm tra xem đã thực sự chạm/đánh Boss này chưa
+    const isEngaged = hasEngagedBoss(currentEntity);
+
+    // Nếu ĐÃ ĐÁNH và Boss đó vẫn còn LIVE trên server -> Tiếp tục đánh cho xong
+    if (isEngaged && status[currentBossTarget]?.live) {
+        return { ...status[currentBossTarget], id: currentBossTarget };
+    }
+
+    // Nếu CHƯA ĐÁNH hit nào (hoặc Boss cũ đã chết) -> Tìm Boss theo thứ tự ưu tiên
+    if (status.mrpumpkin?.live) {
+        currentBossTarget = "mrpumpkin";
+        return { ...status.mrpumpkin, id: "mrpumpkin" };
+    }
+    if (status.mrgreen?.live) {
+        currentBossTarget = "mrgreen";
+        return { ...status.mrgreen, id: "mrgreen" };
+    }
+
+    currentBossTarget = null;
     return null;
 }
 
