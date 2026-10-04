@@ -2048,7 +2048,8 @@ const EQUIPMENT_SETS = {
         { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
         ],
         mana: [
@@ -2061,11 +2062,13 @@ const EQUIPMENT_SETS = {
         { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 			
         ],
         luck: [
-
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
 			
@@ -2081,6 +2084,8 @@ const EQUIPMENT_SETS = {
         { itemName: "fallen", slot: "pants", level: 5, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 			
 		],
 		
@@ -2103,6 +2108,8 @@ const EQUIPMENT_SETS = {
         { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
         { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
         { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 			
 		],
         def_fire: []
@@ -2122,6 +2129,10 @@ const EQUIPMENT_SETS = {
 			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
 
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+			
         ],
         mana: [
         { itemName: "pouchbow", slot: "mainhand", level: 11, l: "l" },
@@ -2133,12 +2144,18 @@ const EQUIPMENT_SETS = {
             { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-        { itemName: "suckerpunch", slot: "earring2", level: 2, l: "u"  },
-        { itemName: "suckerpunch", slot: "earring2", level: 2, l: "l"  },
+			
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
 
 			
         ],
         luck: [
+			
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
             { itemName: "wshoes", slot: "shoes", level: 8, l: "l" },
             { itemName: "wcap", slot: "helmet", level: 9, l: "l" },
             { itemName: "wgloves", slot: "gloves", level: 8, l: "l" },
