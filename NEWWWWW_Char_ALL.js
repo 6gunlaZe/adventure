@@ -2719,7 +2719,6 @@ function sell_trash_items() {
         // Kiểm tra vật phẩm thuộc danh sách rác và không bị khóa (locked)
         if (TRASH_ITEMS.includes(item.name) && !item.l && !item.s && (item.level ?? 0) <= 0) {
             sell(i, item.q ?? 1);
-            soldCount++;
         }
     }
 }
