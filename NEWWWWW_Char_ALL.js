@@ -58,7 +58,7 @@ const TRASH_ITEMS = [
 ];
 
 
-
+var loot_transfer = false;
 const MAX_SCAN_DISTANCE = 300;
 const MERCHANT_DISTANCE = 400;
 
