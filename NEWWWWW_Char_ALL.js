@@ -47,6 +47,7 @@ const MERCHANT_DISTANCE = 400;
 
 let monsters = [];
 let partyEntities = [];
+let fieldgens = []; 
 let merchant = null;
 let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
@@ -61,6 +62,7 @@ let lastFarmMonsterSeen = Date.now();
 function scanAll() {
     monsters = [];
     partyEntities = [];
+    fieldgens = [];
     merchant = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
@@ -77,6 +79,12 @@ function scanAll() {
 
         // MONSTER
         if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
+
+            if (entity.mtype === "fieldgen0") {
+                fieldgens.push({ entity: entity, distance: dist });
+                continue;
+            }
+			
             monsters.push({ entity: entity, distance: dist });
             
             // ==========================================
@@ -1143,6 +1151,59 @@ async function tryAgitate() {
 }
 
 
+async function try_ATTACK_buff_Heal() {
+    // 1. Chặn Cooldown đánh thường và MP tối thiểu
+    if (is_on_cooldown("attack") || character.mp < 300) return false;
+
+    const range = G.skills["3shot"]?.range || character.range;
+    const candidates = [];
+
+    for (const p of partyEntities) {
+        if (p.entity.name !== character.name && !p.entity.dead && p.distance <= range) {
+            candidates.push({ entity: p.entity, hpRatio: p.entity.hp / p.entity.max_hp });
+        }
+    }
+
+    for (const f of fieldgens) {
+        if (!f.entity.dead && f.distance <= range) {
+            candidates.push({ entity: f.entity, hpRatio: f.entity.hp / f.entity.max_hp });
+        }
+    }
+
+    const criticalTargets = candidates.filter(c => c.hpRatio < 0.3);
+
+    if (criticalTargets.length === 0) return false;
+
+    criticalTargets.sort((a, b) => a.hpRatio - b.hpRatio);
+
+    // TRƯỜNG HỢP 1: Từ 2 người trở lên < 30% HP -> Dùng 3shot
+    if (criticalTargets.length >= 2 && !is_on_cooldown("3shot") && character.mp >= 400) {
+        await equipSet("heall");
+        const targets = criticalTargets.slice(0, 3).map(c => c.entity);
+
+        try {
+            await use_skill("3shot", targets);
+			reduce_cooldown("attack", character.ping * 0.95);
+            game_log(`💚 3Shot Heal applied on ${targets.length} targets (<30% HP)`, "#00FF00");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // TRƯỜNG HỢP 2: Có 1 người < 30% HP (hoặc 3shot đang CD) -> Attack đơn cấp cứu
+    const singleTarget = criticalTargets[0].entity;
+    await equipSet("heall");
+
+    try {
+        await attack(singleTarget);
+		reduce_cooldown("attack", character.ping * 0.95);
+        game_log(`💚 Single Heal target: ${singleTarget.name || singleTarget.mtype}`, "#00FF00");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 
 
@@ -1709,6 +1770,7 @@ async function skillLoop() {
                     break;
 
                 case "ranger":
+					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
                     trySuperShot(); 
 					tryHuntersMark();
