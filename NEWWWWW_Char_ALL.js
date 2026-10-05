@@ -2027,14 +2027,12 @@ setInterval(() => {
 }, 100000); 
 
 
-function scare() {
+async function scare() {
     if (character.hp < 4500 && !is_on_cooldown("scare")) {
         const slot = character.items.findIndex(i => i?.name === "jacko");
         if (slot < 0) return;
-
-        equip(slot);
-        use("scare");
-        equip(slot);
+        await equip(slot);
+        await use("scare");
     }
 }
 
