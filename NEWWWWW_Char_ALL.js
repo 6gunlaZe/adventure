@@ -1462,7 +1462,6 @@ function getActiveWorldBoss() {
 
 
 let checkcrabxx = 0;
-let noTargetTimer = null;
 let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
@@ -1510,7 +1509,6 @@ setInterval(function() {
         else if (!bossEntity) {
             if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
                 farmingMoving = false;
-                noTargetTimer = null;
                 smart_move({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
             }
         }
@@ -1557,19 +1555,16 @@ setInterval(function() {
     }
     // --------------------------
 
-    if (currentTarget) {
-        noTargetTimer = null;
-        return; 
-    }
+// Kiểm tra lạc chỗ => quay về fram
 
-    if (!noTargetTimer) noTargetTimer = Date.now();
-    if (Date.now() - noTargetTimer < 5000) return;
+   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
+   if (timeSinceLastMonster < 10000) return
+
 
     farmingMoving = true;
     smart_move(FARM_MAP)
         .finally(() => { 
             farmingMoving = false; 
-            noTargetTimer = null; 
         });
 }, 1000);
 
