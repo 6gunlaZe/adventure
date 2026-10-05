@@ -2045,6 +2045,12 @@ async function skillLoop() {
 
                 case "mage":
                     energizeParty();
+
+
+                    if (await useAttack()) {
+                        return setTimeout(skillLoop, 10);
+                    }
+					
                     break;
                     
                 case "priest":
