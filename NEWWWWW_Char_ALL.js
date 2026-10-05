@@ -10,11 +10,12 @@ const EXCLUDE = new Set([
     "fieldgen0","frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","cscroll0","cscroll1","scroll0","scroll1","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
 
-// Các quái đều phải thêm vào TARGET_MONSTERS mới có hiệu lực
-const TARGET_BOSSES = ["greenjr","jr","grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
+// Các quái được phép tấn công gồm các phân loại sau
+const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
+const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
-
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen","phoenix"];
+
 
 //HOẠT ĐỘNG SĂN CÁC BOSS SAU
 const WORLD_BOSSES = ["mrpumpkin", "mrgreen",];
@@ -81,6 +82,16 @@ let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
 // ============================================================
 // SCAN ALL
 // ============================================================
+// Gộp TẤT CẢ 4 danh sách vào 1 Set duy nhất
+const ALL_TARGET_MONSTERS = new Set([
+    ...SUPER_BOSSES,
+    ...TARGET_BOSSES,
+    ...SINGLE_MONSTERS, // Thêm cả SINGLE_MONSTERS vào đây
+    ...TARGET_MONSTERS
+]);
+
+
+
 function scanAll() {
     monsters = [];
     partyEntities = [];
@@ -101,8 +112,8 @@ function scanAll() {
         const dist = distance(character, entity);
 
         // MONSTER
-        if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
-
+        if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && ALL_TARGET_MONSTERS.has(entity.mtype)) {
+	
             if (WORLD_BOSSES.includes(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
             }
@@ -175,6 +186,12 @@ function sortMonstersByPriority(monsterList) {
         : partyEntities.find(p => p.entity.name === LEADER)?.entity;
 
     return [...monsterList].sort((a, b) => {
+
+        // 0. Ưu tiên TUYỆT ĐỐI NHẤT: Quái siêu cấp
+        const aIsSuper = SUPER_BOSSES.includes(a.mtype);
+        const bIsSuper = SUPER_BOSSES.includes(b.mtype);
+        if (aIsSuper !== bIsSuper) return aIsSuper ? -1 : 1;
+		
         // 1. Ưu tiên TUYỆT ĐỐI: Boss hoặc Quái hiếm
         const aIsBoss = TARGET_BOSSES.includes(a.mtype);
         const bIsBoss = TARGET_BOSSES.includes(b.mtype);
