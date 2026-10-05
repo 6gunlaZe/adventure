@@ -624,67 +624,121 @@ function tryCurse() {
 }
 
 
-
 const NO_ABSORB = new Set(["pppompom", "oneeye", "nerfedmummy", "nerfedbat"]);
 const PRIORITY_BOSSES = new Set(["xmagefz", "xmagefi", "xmagex", "xmagen", "franky"]);
-const VIP_PLAYERS = new Set(["6gunlaZe", "nhiY", "LyThanhThu", "MuaBan","tienV"]);
+const VIP_PLAYERS = new Set(["6gunlaZe", "nhiY", "LyThanhThu", "MuaBan", "tienV"]);
+
+const EVENT_MONSTERS = new Set([
+    "mrpumpkin", "mrgreen",
+]);
 
 let lastAbsorbTime = 0;
+let lastEventCheckTime = 0;
 
 function tryAbsorb() {
     if (!character.party || smart.moving || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return;
-    if (Date.now() - lastAbsorbTime < 250) return;
+    
+    const now = Date.now();
+    if (now - lastAbsorbTime < 250) return;
 
-    let bestTarget = null;
-    let maxDanger = 0;
+    let eventMonster = null;
+    let priorityBoss = null;
+    
+    // Object lưu thông tin quái đang đánh từng đồng đội: { [mateName]: { count, magicCount, hasDying } }
+    const partyThreats = {};
 
-    // 1. Quét Boss nguy hiểm trước (Ưu tiên tuyệt đối)
-    const boss = Object.values(parent.entities).find(e => 
-        e && !e.dead && PRIORITY_BOSSES.has(e.mtype) && e.target && e.target !== character.name
-    );
+    // -------------------------------------------------------------
+    // QUÉT SINGLE-PASS: CHỈ DUYỆT MẢNG MONSTERS ĐÚNG 1 LẦN DÙY NHẤT
+    // -------------------------------------------------------------
+    for (let i = 0; i < monsters.length; i++) {
+        const e = monsters[i].entity;
+        if (!e || e.dead || !e.target) continue;
 
-    if (boss) {
-        const victim = get_player(boss.target);
+        const target = e.target;
+        const mtype = e.mtype;
+
+        // 1. Nhận diện Quái Event (ưu tiên tìm con đầu tiên)
+        if (!eventMonster && EVENT_MONSTERS.has(mtype) && target !== character.name) {
+            eventMonster = e;
+        }
+
+        // 2. Nhận diện Boss nguy hiểm
+        if (!priorityBoss && PRIORITY_BOSSES.has(mtype) && target !== character.name) {
+            priorityBoss = e;
+        }
+
+        // 3. Gom thống kê quái đánh Party (bỏ qua quái thuộc NO_ABSORB)
+        if (!NO_ABSORB.has(mtype)) {
+            let stats = partyThreats[target];
+            if (!stats) {
+                stats = { count: 0, magicCount: 0, hasDying: false };
+                partyThreats[target] = stats;
+            }
+
+            stats.count++;
+            if (e.damage_type === "magical") stats.magicCount++;
+
+            if (!stats.hasDying) {
+                const hpThreshold = e.max_hp >= 800000 ? 65000 : (e.max_hp >= 200000 ? 29000 : 15000);
+                if (e.hp < hpThreshold) stats.hasDying = true;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------
+    // XỬ LÝ THEO THỨ TỰ ƯU TIÊN
+    // -------------------------------------------------------------
+
+    // LOGIC 0: Quái Event
+    if (eventMonster) {
+        const isLowHp = eventMonster.hp < 300000;
+        const canCheckEvent = isLowHp || (now - lastEventCheckTime >= 4000);
+
+        if (canCheckEvent) {
+            if (!isLowHp) lastEventCheckTime = now;
+
+            const victim = get_player(eventMonster.target);
+            if (victim && !victim.rip && distance(character, victim) <= 240) {
+                use_skill("absorb", eventMonster.target);
+                lastAbsorbTime = now;
+                game_log(`🛡 Absorb Event (${eventMonster.mtype} - HP: ${eventMonster.hp})`);
+                return;
+            }
+        }
+    }
+
+    // LOGIC 1: Boss nguy hiểm
+    if (priorityBoss) {
+        const victim = get_player(priorityBoss.target);
         if (victim && !victim.rip && distance(character, victim) <= 240) {
-            use_skill("absorb", boss.target);
-            lastAbsorbTime = Date.now();
+            use_skill("absorb", priorityBoss.target);
+            lastAbsorbTime = now;
             return;
         }
     }
 
-    // 2. Tự động tính điểm nguy hiểm cho từng đồng đội trong Party
-    for (const p of partyEntities) {
-        const mate = p.entity;
+    // LOGIC 2: Tính điểm nguy hiểm cho Party (Chỉ duyệt danh sách đồng đội)
+    let bestTarget = null;
+    let maxDanger = 0;
+
+    for (let i = 0; i < partyEntities.length; i++) {
+        const mate = partyEntities[i].entity;
         if (!mate || mate.dead || mate.name === character.name) continue;
 
-        // Lọc tất cả quái đang đánh đồng đội này
-        const attackers = monsters.filter(m => 
-            m.entity.target === mate.name && !NO_ABSORB.has(m.entity.mtype)
-        );
+        const stats = partyThreats[mate.name];
+        if (!stats || stats.count === 0) continue;
 
-        if (!attackers.length) continue;
+        // Tính điểm nguy hiểm dựa trên thông tin đã gom sẵn
+        let dangerScore = stats.count * 10;
+        if (stats.hasDying) dangerScore += 500;
 
-        // Đếm riêng số lượng quái đánh phép (damage_type === "magical")
-        const magicCount = attackers.filter(m => m.entity.damage_type === "magical").length;
-
-        // Kiểm tra quái sắp chết dựa theo max_hp của từng con
-        const hasDyingMonster = attackers.some(m => {
-            const e = m.entity;
-            const hpThreshold = e.max_hp >= 800000 ? 65000 : (e.max_hp >= 200000 ? 29000 : 15000);
-            return e.hp < hpThreshold;
-        });
-        
-        // TÍNH ĐIỂM NGUY HIỂM:
-        let dangerScore = attackers.length * 10;
-        if (hasDyingMonster) dangerScore += 500;
-        
         let hpRatio = mate.hp / mate.max_hp;
-		if (mate.name == "haiz") hpRatio += 0.2;
-		
+        if (mate.name === "haiz") hpRatio += 0.2;
+
         if (VIP_PLAYERS.has(mate.name)) dangerScore += 7000;
         if (hpRatio < 0.7) dangerScore += 70;
         if (hpRatio < 0.3) dangerScore += 100;
-        if (magicCount >= 3) dangerScore += 100;
+        if (stats.magicCount >= 3) dangerScore += 100;
 
         if (dangerScore > maxDanger) {
             maxDanger = dangerScore;
@@ -692,13 +746,14 @@ function tryAbsorb() {
         }
     }
 
-    // 3. Thi triển Absorb (Chỉ hút khi mức độ nguy hiểm đạt từ 100 điểm trở lên)
+    // Thi triển Absorb nếu vượt ngưỡng 100
     if (bestTarget && maxDanger >= 100) {
         use_skill("absorb", bestTarget);
-        lastAbsorbTime = Date.now();
+        lastAbsorbTime = now;
         game_log(`🛡 Absorb ${bestTarget} (Danger: ${maxDanger})`);
     }
 }
+
 
 
 function tryDarkBlessing() {
