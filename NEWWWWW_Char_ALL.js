@@ -112,11 +112,10 @@ function scanAll() {
     for (const id in parent.entities) {
         const entity = parent.entities[id];
         if (!entity) continue;
-
         const dist = distance(character, entity);
 
         // MONSTER
-        if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && ALL_TARGET_MONSTERS.has(entity.mtype)) {
+        if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && ALL_TARGET_MONSTERS.has(entity.mtype)) {
 	
             if (WORLD_BOSSES.includes(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
