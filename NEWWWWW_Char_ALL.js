@@ -2753,6 +2753,9 @@ setInterval(() => {
 
 
 function sell_trash_items() {
+	
+if (character.name != "6gunlaZe") return
+	
     for (let i = 0; i < character.items.length; i++) {
         const item = character.items[i];
         if (!item) continue;
