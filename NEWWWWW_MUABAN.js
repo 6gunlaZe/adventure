@@ -484,7 +484,7 @@ function on_cm(sender, data) {
     // =========================================================================
     // 3. XỬ LÝ ĐƯA VÀO HÀNG CHỜ QUEUE (Các dịch vụ Merchant thông thường)
     // =========================================================================
-    if (!data?.command) return;
+    if (!data?.command || character.esize < 4 ) return;
 
     const config = SERVICES[data.command];
 
