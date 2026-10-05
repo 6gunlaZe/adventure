@@ -2293,7 +2293,7 @@ function on_cm(name, data) {
 // =============================================================================
 const EQUIPMENT_SETS = {
 
-    // ---- Cấu hình đồ cho Warrior
+    // ---- Cấu hình đồ cho Warrior offhand luôn đi chung với mainhand không thì sẽ lỗi nếu hiện tại đang đeo đồ cầm 2 tay 
     "haiz": {
         dame: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
@@ -2329,9 +2329,12 @@ const EQUIPMENT_SETS = {
 			
         ],
         luck: [
+			
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
+
         { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
-        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
 			
         ],
