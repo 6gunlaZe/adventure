@@ -1478,46 +1478,45 @@ setInterval(function() {
 // =========================================================
 // 1. WORLD BOSS HANDLING (TẬN DỤNG scanAll & BÁM SÁT TẦM ĐÁNH)
 // =========================================================
-const activeBoss = getActiveWorldBoss();
+// Cập nhật thực thể trước khi xử lý
+    scanAll();
 
-if (activeBoss) {
-    // Tận dụng entity từ activeBoss HOẶC mảng bossEntities của scanAll
-    const bossEntry = bossEntities.find(b => b.entity.mtype === activeBoss.id);
-    const bossEntity = activeBoss.entity || bossEntry?.entity;
+    const activeBoss = getActiveWorldBoss();
 
-    if (bossEntity && !bossEntity.dead) {
-        const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
-        const safeAttackRange = Math.max(20, character.range - 20);
+    if (activeBoss) {
+        const bossEntry = bossEntities.find(b => b.entity.mtype === activeBoss.id);
+        const bossEntity = activeBoss.entity || bossEntry?.entity;
 
-        if (dist > safeAttackRange) {
-            // Boss di chuyển ra xa -> Bám đuổi
-            if (can_move_to(bossEntity.x, bossEntity.y)) {
+        // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
+        if (bossEntity && !bossEntity.dead) {
+            const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
+            const safeAttackRange = Math.max(20, character.range - 20);
+
+            if (dist > safeAttackRange) {
+                if (can_move_to(bossEntity.x, bossEntity.y)) {
+                    if (smart.moving) stop("smart");
+                    move(
+                        character.x + (bossEntity.x - character.x) * 0.4,
+                        character.y + (bossEntity.y - character.y) * 0.4
+                    );
+                } else if (!smart.moving) {
+                    smart_move({ map: character.map, x: bossEntity.x, y: bossEntity.y });
+                }
+            } else {
                 if (smart.moving) stop("smart");
-                
-                // Nhích dần về phía Boss
-                move(
-                    character.x + (bossEntity.x - character.x) * 0.4,
-                    character.y + (bossEntity.y - character.y) * 0.4
-                );
-            } else if (!smart.moving) {
-                // SỬA TẠI ĐÂY: Truyền rõ map hiện tại cùng tọa độ x, y của Boss
-                smart_move({ map: character.map, x: bossEntity.x, y: bossEntity.y });
             }
-        } else {
-            // Đã nằm gọn trong tầm đánh -> Hủy di chuyển để xả skill
-            if (smart.moving) stop("smart");
+        } 
+        // Nếu Boss không xuất hiện trong tầm mắt, chỉ di chuyển nếu chưa tới đúng Map/Tọa độ
+        else if (!bossEntity) {
+            if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
+                farmingMoving = false;
+                noTargetTimer = null;
+                smart_move({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
+            }
         }
-    } else {
-        // Boss chưa vào tầm mắt -> Di chuyển theo tọa độ server.status
-        if (!smart.moving || smart.map !== activeBoss.map) {
-            farmingMoving = false;
-            noTargetTimer = null;
-            smart_move({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
-        }
-    }
 
-    return; // Ngắt hàm, không chạy logic Farm bên dưới
-}
+        return; 
+    }
 
 
 	
