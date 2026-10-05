@@ -1558,7 +1558,7 @@ setInterval(function() {
 // Kiểm tra lạc chỗ => quay về fram
 
    const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
-   if (timeSinceLastMonster < 10000) return
+   if (timeSinceLastMonster < 5000) return
 
 
     farmingMoving = true;
@@ -1567,13 +1567,6 @@ setInterval(function() {
             farmingMoving = false; 
         });
 }, 1000);
-
-
-
-// START FARM INITIAL
-smart_move(FARM_MAP)
-    .then(function() { farmingMoving = false; })
-    .catch(function() { farmingMoving = false; });
 
 
 
