@@ -408,6 +408,7 @@ const ENERGIZE_BUFFER = 200; //ngưỡng chống đầy
 
 function energizeParty() {
     if (is_on_cooldown("energize")) return;
+    if (ms_to_next_skill("attack") < 100) return false;
 
     // Dùng Math.max(1, ...) để luôn có ít nhất 1 MP cho đồng đội (lấy từ 500 MP dự phòng)
     const mageCanGive = Math.max(1, character.mp - ENERGIZE_RESERVE);
@@ -1310,6 +1311,58 @@ async function try_ATTACK_buff_Heal() {
 
 
 
+// =========================================================================
+// CONFIG NGƯỠNG MÁU TỐI ĐA ĐỂ DỨT ĐIỂM QUÁI BẰNG CBURST (Theo mtype)
+// Chỉ kích hoạt cho quái HỢP TÁC (cooperative) có tên trong danh sách này
+// =========================================================================
+const CBURST_HP_LIMITS = {
+    "jr": 1800,          // Máu <= 1800 là dứt điểm
+
+    // Quái không có tên ở đây -> Bỏ qua hoàn toàn
+};
+
+function tryCleanLowHP_cburst() {
+    if (!can_use("cburst") || is_on_cooldown("cburst")) return false;
+    if (ms_to_next_skill("attack") < 100) return false;
+
+    const range = G.skills["cburst"]?.range || character.range;
+
+    for (const m of monsters) {
+        const entity = m.entity;
+
+        // 1. KIỂM TRA CHẾ ĐỘ HỢP TÁC (COOPERATIVE)
+        const isCoop = entity.cooperative || G.monsters[entity.mtype]?.cooperative;
+        if (!isCoop) continue; // Không phải quái Hợp Tác -> Bỏ qua ngay lập tức!
+
+        // 2. KIỂM TRA TÊN QUÁI TRONG DANH SÁCH CONFIG
+        const maxHpThreshold = CBURST_HP_LIMITS[entity.mtype];
+        if (!maxHpThreshold) continue; 
+
+        // 3. Chặn khoảng cách & trạng thái
+        if (m.distance > range || entity.dead) continue;
+
+        // 4. Kiểm tra ngưỡng máu dứt điểm
+        if (entity.hp > 0 && entity.hp <= maxHpThreshold) {
+            const mpNeeded = Math.ceil(entity.hp * 2 + 20);
+
+            if (character.mp >= mpNeeded) {
+                try {
+                    use_skill("cburst", [[entity.id, mpNeeded]]);
+                    game_log(`💥 CBurst Coop Kill -> ${entity.mtype} (${Math.round(entity.hp)} HP) | MP: ${mpNeeded}`, "#FF00FF");
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+
+
+
 
 
 
@@ -2045,6 +2098,7 @@ async function skillLoop() {
 
                 case "mage":
                     energizeParty();
+					tryCleanLowHP_cburst();
 
 
                     if (await useAttack()) {
