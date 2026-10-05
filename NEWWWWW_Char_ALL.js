@@ -1345,7 +1345,7 @@ function tryCleanLowHP_cburst() {
         if (entity.hp > 0 && entity.hp <= maxHpThreshold) {
             const mpNeeded = Math.ceil(entity.hp * 2 + 20);
 
-            if (character.mp >= mpNeeded) {
+            if ( (character.mp - 200) >= mpNeeded) {
                 try {
                     use_skill("cburst", [[entity.id, mpNeeded]]);
                     game_log(`💥 CBurst Coop Kill -> ${entity.mtype} (${Math.round(entity.hp)} HP) | MP: ${mpNeeded}`, "#FF00FF");
