@@ -11,10 +11,13 @@ const EXCLUDE = new Set([
 ]);
 
 // Các quái đều phải thêm vào TARGET_MONSTERS mới có hiệu lực
-const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"]; 
+const TARGET_BOSSES = ["greenjr","jr","grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen","phoenix"];
+
+//HOẠT ĐỘNG SĂN CÁC BOSS SAU
+const WORLD_BOSSES = ["mrpumpkin", "mrgreen",];
 
 
 const FARM_LOCATIONS = {
@@ -59,7 +62,7 @@ const TRASH_ITEMS = [
 
 
 var loot_transfer = false;
-const MAX_SCAN_DISTANCE = 300;
+const MAX_SCAN_DISTANCE = 400;
 const MERCHANT_DISTANCE = 400;
 
 let monsters = [];
@@ -70,9 +73,11 @@ let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 let lastFarmMonsterSeen = Date.now();
+let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
+
+
 
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 // ============================================================
 // SCAN ALL
 // ============================================================
@@ -80,6 +85,7 @@ function scanAll() {
     monsters = [];
     partyEntities = [];
     fieldgens = [];
+    bossEntities = []; 
     merchant = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
@@ -97,6 +103,10 @@ function scanAll() {
         // MONSTER
         if (entity.type === "monster" && !entity.dead && dist <= MAX_SCAN_DISTANCE && TARGET_MONSTERS.includes(entity.mtype)) {
 
+            if (WORLD_BOSSES.includes(entity.mtype)) {
+                bossEntities.push({ entity: entity, distance: dist });
+            }
+			
             if (entity.mtype === "fieldgen0") {
                 fieldgens.push({ entity: entity, distance: dist });
                 continue;
@@ -1404,39 +1414,47 @@ function hasEngagedBoss(entity) {
     return false;
 }
 
-let currentBossTarget = null;
+
 
 function getActiveWorldBoss() {
     const status = server.status || parent?.S;
-    if (!status) {
-        currentBossTarget = null;
-        return null;
+
+    // =========================================================================
+    // ƯU TIÊN 1: CÓ BOSS Ở GẦN VÀ HP < 50% -> ĐÁNH NGAY ĐỂ DỨT ĐIỂM / "HÚP" LOOT
+    // =========================================================================
+    const lowHpBosses = bossEntities
+        .filter(b => (b.entity.hp / b.entity.max_hp) < 0.5)
+        .sort((a, b) => (a.entity.hp / a.entity.max_hp) - (b.entity.hp / b.entity.max_hp)); // Ưu tiên con ít % HP nhất
+
+    if (lowHpBosses.length > 0) {
+        const targetBoss = lowHpBosses[0].entity;
+        const bossStatus = status?.[targetBoss.mtype] || {};
+
+        return {
+            id: targetBoss.mtype,
+            map: bossStatus.map || character.map,
+            x: targetBoss.x,
+            y: targetBoss.y,
+            entity: targetBoss // Trả thẳng entity thực tế để xả skill luôn
+        };
     }
 
-    // Lấy entity của Boss hiện tại gần nhân vật
-    const currentEntity = currentBossTarget ? get_nearest_monster({ type: currentBossTarget }) : null;
+    // =========================================================================
+    // ƯU TIÊN 2: NẾU KHÔNG CÓ BOSS GẦN CẦN CẤP CỨU -> TÌM BẢNG DÂN THEO THỨ TỰ CẤU HÌNH
+    // =========================================================================
+    if (!status) return null;
 
-    // Kiểm tra xem đã thực sự chạm/đánh Boss này chưa
-    const isEngaged = hasEngagedBoss(currentEntity);
-
-    // Nếu ĐÃ ĐÁNH và Boss đó vẫn còn LIVE trên server -> Tiếp tục đánh cho xong
-    if (isEngaged && status[currentBossTarget]?.live) {
-        return { ...status[currentBossTarget], id: currentBossTarget };
+    for (const bossId of WORLD_BOSSES) {
+        const b = status[bossId];
+        if (b && b.live) {
+            return { ...b, id: bossId };
+        }
     }
 
-    // Nếu CHƯA ĐÁNH hit nào (hoặc Boss cũ đã chết) -> Tìm Boss theo thứ tự ưu tiên
-    if (status.mrpumpkin?.live) {
-        currentBossTarget = "mrpumpkin";
-        return { ...status.mrpumpkin, id: "mrpumpkin" };
-    }
-    if (status.mrgreen?.live) {
-        currentBossTarget = "mrgreen";
-        return { ...status.mrgreen, id: "mrgreen" };
-    }
-
-    currentBossTarget = null;
     return null;
 }
+
+
 
 // ============================================================
 // FARM MOVEMENT LOOP moveloop
@@ -1458,40 +1476,39 @@ setInterval(function() {
 
 
 // =========================================================
-// 1. WORLD BOSS HANDLING (BÁM SÁT & DUY TRÌ TẦM ĐÁNH)
+// 1. WORLD BOSS HANDLING (TẬN DỤNG scanAll & BÁM SÁT TẦM ĐÁNH)
 // =========================================================
 const activeBoss = getActiveWorldBoss();
 
 if (activeBoss) {
-    // Tìm entity Boss thực tế đang xuất hiện quanh nhân vật
-    const bossEntity = get_nearest_monster({ type: activeBoss.id });
+    // Tận dụng entity từ activeBoss HOẶC mảng bossEntities của scanAll
+    const bossEntry = bossEntities.find(b => b.entity.mtype === activeBoss.id);
+    const bossEntity = activeBoss.entity || bossEntry?.entity;
 
     if (bossEntity && !bossEntity.dead) {
-        const dist = distance(character, bossEntity);
-        // Trừ hao 20 unit để đứng lọt vào trong tầm đánh, tránh đứng sát mép bị hụt skill
+        const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
         const safeAttackRange = Math.max(20, character.range - 20);
 
         if (dist > safeAttackRange) {
             // Boss di chuyển ra xa -> Bám đuổi
             if (can_move_to(bossEntity.x, bossEntity.y)) {
-                // Nếu đường đi thẳng không vướng vật cản -> Dừng smart_move và move trực tiếp cho mượt
                 if (smart.moving) stop("smart");
                 
-                // Di chuyển nhích dần về phía Boss
+                // Nhích dần về phía Boss
                 move(
                     character.x + (bossEntity.x - character.x) * 0.4,
                     character.y + (bossEntity.y - character.y) * 0.4
                 );
             } else if (!smart.moving) {
-                // Nếu vướng địa hình -> Dùng smart_move để vòng qua vật cản
-                smart_move(bossEntity);
+                // SỬA TẠI ĐÂY: Truyền rõ map hiện tại cùng tọa độ x, y của Boss
+                smart_move({ map: character.map, x: bossEntity.x, y: bossEntity.y });
             }
         } else {
-            // Đã nằm gọn trong tầm đánh -> Hủy di chuyển để tập trung xả Skill
+            // Đã nằm gọn trong tầm đánh -> Hủy di chuyển để xả skill
             if (smart.moving) stop("smart");
         }
     } else {
-        // Boss chưa vào tầm mắt (hoặc đã chạy sang khu vực khác) -> Dùng server.status tìm đường tới
+        // Boss chưa vào tầm mắt -> Di chuyển theo tọa độ server.status
         if (!smart.moving || smart.map !== activeBoss.map) {
             farmingMoving = false;
             noTargetTimer = null;
@@ -1501,9 +1518,6 @@ if (activeBoss) {
 
     return; // Ngắt hàm, không chạy logic Farm bên dưới
 }
-
-
-
 
 
 	
