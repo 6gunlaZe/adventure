@@ -2062,6 +2062,9 @@ let temporalState = {
 function tryTemporalSurge() {
     if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving) return;
 
+   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
+   if (timeSinceLastMonster > 10000) return
+	
     // Reset khi đổi map
     if (character.map !== temporalState.lastMap) {
         temporalState.maxMonsters = 0;
