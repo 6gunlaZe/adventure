@@ -49,6 +49,7 @@ const IMPORTANT_ITEMS = [
 const shinyList = {
     "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
     "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+    "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
 };
 
 
@@ -210,7 +211,7 @@ var upgradeGroups = {
 	],
 	
 	group_basic07: [ // đồ rác
-		{ levels: [0,1,2], scroll: 0, offering: 0 },
+		{ levels: [1,2], scroll: 0, offering: 0 },
 		{ levels: [3,4,5,6],     scroll: 1, offering: 0 },
 		{ levels: [7],       scroll: 1, offering: 0 },
 		{ levels: [8],       scroll: 2, offering: 1 },
