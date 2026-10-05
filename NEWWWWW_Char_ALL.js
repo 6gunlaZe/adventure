@@ -29,12 +29,16 @@ const FARM_LOCATIONS = {
 };
 
 
+
 const CHAR_CONFIG = {
-    "Ynhi":     { monster: "targetron", slot: 27, solo: false, circle: true, radius: 40, elixir: "elixirluck" },
-    "6gunlaZe": { monster: "targetron", slot: 33, solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
-    "haiz":     { monster: "targetron", slot: 0, solo: false, circle: true, radius: 30, elixir: "pumpkinspice" },
-    "MuaBan":   { monster: "crab",      slot: 5, elixir: "elixirluck" }
+    "Ynhi": { slot: 27, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "6gunlaZe": { slot: 33, home: true, events: ["mrgreen"], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "haiz": { slot: 0, home: false, events: [""], solo: false, circle: true, radius: 30, elixir: "pumpkinspice" },
+    "nhiY": { slot: 12, home: false, events: ["mrpumpkin",], solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen",], elixir: "elixirluck" }
+	
 };
+
 
 
 
@@ -1843,24 +1847,59 @@ setInterval(() => {
 // ============================================================
 // PARTY & START CHARACTERS
 // ============================================================
-function startChars() {
-    // Chỉ Leader mới thực hiện
+// Lưu thời gian thực hiện hành động gần nhất cho từng nhân vật
+const charCooldowns = {};
+
+// Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (15 giây)
+const ACTION_COOLDOWN = 25000; 
+
+function manageChars() {
     if (character.name !== LEADER) return;
 
-    // Duyệt qua từng nhân vật trong cấu hình để kiểm tra và khởi chạy
+    const activeBoss = getActiveWorldBoss();
+    const currentEvent = activeBoss ? activeBoss.id : null;
+    const now = Date.now();
+
     for (const [charName, config] of Object.entries(CHAR_CONFIG)) {
-		if (charName === LEADER) continue;
-        if (!parent.party_list.includes(charName)) {
+        if (charName === LEADER) continue;
+
+        const isRunning = parent.party_list.includes(charName);
+        const shouldRun = currentEvent 
+            ? (config.events && config.events.includes(currentEvent)) 
+            : !!config.home;
+
+        // Kiểm tra xem nhân vật này có đang trong thời gian chờ (CD) hay không
+        const lastAction = charCooldowns[charName] || 0;
+        if (now - lastAction < ACTION_COOLDOWN) {
+            // Đang trong thời gian chờ xử lý từ lần gọi trước -> Bỏ qua
+            continue; 
+        }
+
+        if (shouldRun && !isRunning) {
+            // --- CẦN BẬT ---
+            console.log(`[Manager] Gọi nhân vật: ${charName} (Event: ${currentEvent || 'Home'})`);
+            
+            // Cập nhật Cooldown NGAY TRƯỚC KHI gọi hàm
+            charCooldowns[charName] = now; 
             start_character(charName, config.slot);
+
+        } else if (!shouldRun && isRunning) {
+            // --- CẦN TẮT ---
+            console.log(`[Manager] Dừng nhân vật: ${charName}`);
+            
+            // Cập nhật Cooldown NGAY TRƯỚC KHI gọi hàm
+            charCooldowns[charName] = now; 
+            stop_character(charName);
         }
     }
 }
 
-// Chạy ngay lần đầu
-startChars();
-
-// Sau đó kiểm tra lại mỗi 60 giây
-setInterval(startChars, 60000);
+// Chạy lần đầu sau 1 giây
+setTimeout(() => {
+    manageChars();
+    // Sau khi chạy xong lần đầu, bắt đầu lặp lại mỗi 3 giây
+    setInterval(manageChars, 3000);
+}, 1000);
 
 
 function on_party_request(n) {
@@ -1877,7 +1916,7 @@ setInterval(function() {
     } else if (character.party !== LEADER) {
         leave_party();
     }
-}, 2000);
+}, 1000);
 
 // AUTO RESPAWN
 setInterval(() => character.rip && respawn(), 50000);
