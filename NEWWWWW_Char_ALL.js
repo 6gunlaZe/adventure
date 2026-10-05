@@ -2134,7 +2134,10 @@ const EQUIPMENT_SETS = {
     "haiz": {
         dame: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+			
+        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -2148,7 +2151,10 @@ const EQUIPMENT_SETS = {
         mana: [
 			
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+			
+        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -2228,7 +2234,7 @@ const EQUIPMENT_SETS = {
 			
         ],
         mana: [
-        { itemName: "pouchbow", slot: "mainhand", level: 11, l: "l" },
+        { itemName: "pouchbow", slot: "mainhand", level: 12, l: "l" },
             { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 8, l: "l" },
