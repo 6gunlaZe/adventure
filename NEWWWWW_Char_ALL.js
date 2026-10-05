@@ -403,7 +403,7 @@ async function use_fan_of_knives() {
 }
 
 
-const ENERGIZE_RESERVE = 300; // mp giữ lại
+const ENERGIZE_RESERVE = 4000; // mp giữ lại
 const ENERGIZE_BUFFER = 200; //ngưỡng chống đầy
 
 function energizeParty() {
