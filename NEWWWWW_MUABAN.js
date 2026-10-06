@@ -25,7 +25,7 @@ const TRASH_ITEMS = [
 // ==========================================
 
 const ITEMS_TO_RETRIEVE = [
-    { name: "goldnugget", qty: 900 },
+    { name: "goldnugget", qty: 999 },
    // { name: "smoke", qty: 50 },
 ];
 
