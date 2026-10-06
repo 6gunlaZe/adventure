@@ -26,7 +26,7 @@ const TRASH_ITEMS = [
 
 const ITEMS_TO_RETRIEVE = [
     { name: "bronzeingot", qty: 100 },
-    { name: "smoke", qty: 50 },
+   // { name: "smoke", qty: 50 },
 ];
 
 const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ rút
@@ -392,7 +392,7 @@ const PONTY_EXTRA_ITEMS = [
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "glolipop", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mcape", "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
-  "snakefang", "smoke", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
+  "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
   "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil"
 ];
 
