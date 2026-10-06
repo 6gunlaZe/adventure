@@ -413,6 +413,9 @@ function energizeParty() {
     let fallbackTarget = null;
 
     for (const name of PARTY) {
+
+        if (name === character.name) continue;
+		
         const entry = partyEntities.find(p => p.entity.name === name);
         if (!entry) continue;
 
