@@ -695,7 +695,7 @@ function tryAbsorb() {
 
     // LOGIC 0: Quái Event
     if (eventMonster) {
-        const isLowHp = eventMonster.hp < 300000;
+        const isLowHp = eventMonster.hp < 170000;
         const canCheckEvent = isLowHp || (now - lastEventCheckTime >= 4000);
 
         if (canCheckEvent) {
