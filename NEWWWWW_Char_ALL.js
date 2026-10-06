@@ -1315,7 +1315,7 @@ async function try_ATTACK_buff_Heal() {
 // Chỉ kích hoạt cho quái HỢP TÁC (cooperative) có tên trong danh sách này
 // =========================================================================
 const CBURST_HP_LIMITS = {
-    "jr": 1800,          // Máu <= 1800 là dứt điểm
+    "jr": 1600,          // Máu <= 1600 là dứt điểm
 
     // Quái không có tên ở đây -> Bỏ qua hoàn toàn
 };
@@ -1324,41 +1324,48 @@ function tryCleanLowHP_cburst() {
     if (!can_use("cburst") || is_on_cooldown("cburst")) return false;
     if (ms_to_next_skill("attack") < 100) return false;
 
+    // Tầm đánh skill cburst
     const range = G.skills["cburst"]?.range || character.range;
+    const targets = [];
+    let totalMpNeeded = 0;
 
     for (const m of monsters) {
-        const entity = m.entity;
+        const entity = m.entity || m;
+        if (!entity || entity.dead || !entity.visible) continue;
 
-        // 1. KIỂM TRA CHẾ ĐỘ HỢP TÁC (COOPERATIVE)
-        const isCoop = entity.cooperative || G.monsters[entity.mtype]?.cooperative;
-        if (!isCoop) continue; // Không phải quái Hợp Tác -> Bỏ qua ngay lập tức!
-
-        // 2. KIỂM TRA TÊN QUÁI TRONG DANH SÁCH CONFIG
+        // 1. Kiểm tra cấu hình HP threshold
         const maxHpThreshold = CBURST_HP_LIMITS[entity.mtype];
-        if (!maxHpThreshold) continue; 
+        if (!maxHpThreshold) continue;
 
-        // 3. Chặn khoảng cách & trạng thái
-        if (m.distance > range || entity.dead) continue;
+        // 2. TẬN DỤNG KHOẢNG CÁCH CÓ SẴN (Thay cho parent.distance)
+        const dist = m.distance !== undefined ? m.distance : parent.distance(character, entity);
+        if (dist > range) continue;
 
-        // 4. Kiểm tra ngưỡng máu dứt điểm
+        // 3. Kiểm tra máu quái
         if (entity.hp > 0 && entity.hp <= maxHpThreshold) {
             const mpNeeded = Math.ceil(entity.hp * 2 + 20);
 
-            if ( (character.mp - 200) >= mpNeeded) {
-                try {
-                    use_skill("cburst", [[entity.id, mpNeeded]]);
-                    game_log(`💥 CBurst Coop Kill -> ${entity.mtype} (${Math.round(entity.hp)} HP) | MP: ${mpNeeded}`, "#FF00FF");
-                    return true;
-                } catch (e) {
-                    return false;
-                }
+            // Kiểm tra tổng MP còn đủ an toàn không
+            if ((character.mp - 200) >= (totalMpNeeded + mpNeeded)) {
+                targets.push([entity.id, mpNeeded]); // Truyền entity.id thay vì cả object entity
+                totalMpNeeded += mpNeeded;
             }
+        }
+    }
+
+    // Thực thi skill nếu tìm thấy ít nhất 1 mục tiêu
+    if (targets.length > 0) {
+        try {
+            use_skill("cburst", targets);
+            game_log(`💥 CBurst Clear ${targets.length} targets | MP: ${totalMpNeeded}`, "#FF00FF");
+            return true;
+        } catch (e) {
+            return false;
         }
     }
 
     return false;
 }
-
 
 
 
