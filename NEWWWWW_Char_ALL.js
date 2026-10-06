@@ -2193,11 +2193,31 @@ setInterval(() => {
 
 
 async function scare() {
-    if (character.hp < 4500 && !is_on_cooldown("scare")) {
+    if (is_on_cooldown("scare")) return;
+
+    // 2 Trường hợp kích hoạt Scare:
+    const isLowHP = character.hp < 4500;
+    const isAttackedWhileMoving = smart.moving && character.targets > 0;
+
+    // Nếu không thỏa mãn trường hợp nào -> Bỏ qua
+    if (!isLowHP && !isAttackedWhileMoving) return;
+
+    // Equip Jack-o'-Lantern nếu chưa đeo
+    if (character.slots.orb?.name !== "jacko") {
         const slot = character.items.findIndex(i => i?.name === "jacko");
-        if (slot < 0) return;
+        if (slot < 0) return; // Không tìm thấy Orb trong túi đồ
+
         await equip(slot);
+        await sleep(500); // Delay 500ms chờ server ghi nhận trang bị mới
+    }
+
+    // Thực thi Scare
+    try {
         await use("scare");
+        const reason = isLowHP ? "Máu thấp" : "Bị quái tấn công khi đang moving";
+        game_log(`🎃 Scare! (${reason})`, "#FFA500");
+    } catch (e) {
+        // Tránh văng lỗi do timing execution
     }
 }
 
