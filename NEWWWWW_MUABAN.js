@@ -23,9 +23,14 @@ const TRASH_ITEMS = [
 // ==========================================
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
-const ITEM_TO_RETRIEVE = "bronzeingot"; // ví dụ candy1 Thay tên đồ B vào đây, hiện tại tạm chưa có mục tiêu 
-const RETRIEVE_QTY = 100;             // Số lượng muốn rút (để 9999 để rút 1 ô max)
-const IDLE_TIME_LIMIT = 6000;        // 6s không hoạt động nâng cấp gì cả sẽ rút
+
+const ITEMS_TO_RETRIEVE = [
+    { name: "bronzeingot", qty: 100 },
+    { name: "smoke", qty: 50 },
+];
+
+const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ rút
+
 
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
@@ -2960,36 +2965,39 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 
 
 
-// Biến lưu thời gian hoạt động cuối cùng
+
+
 let lastActivityTime = Date.now();
 
 setInterval(async () => {
-    // 1. Chưa cấu hình món đồ cần rút -> Bỏ qua ngay
-    if (!ITEM_TO_RETRIEVE) return;
+    // 1. Kiểm tra cấu hình mảng
+    if (!ITEMS_TO_RETRIEVE || ITEMS_TO_RETRIEVE.length === 0) return;
 
-    // 2. Trong túi ĐÃ CÓ sẵn món đồ này rồi -> Reset thời gian rảnh và không rút thêm
-    const alreadyHasItem = character.items.some(i => i && i.name === ITEM_TO_RETRIEVE);
-    if (alreadyHasItem) {
-        lastActivityTime = Date.now();
-        return;
-    }
-
-    // 3. Nếu túi đồ KHÔNG đủ 17 ô trống hoặc không ở trạng thái mở sạp (!character.stand) -> Reset lại thời gian
+    // 2. Không đủ 17 ô trống hoặc chưa mở sạp (!character.stand) -> Reset thời gian
     if (character.esize < 17 || !character.stand) {
         lastActivityTime = Date.now();
         return;
     }
 
-    // 4. Nếu thời gian rảnh đã vượt mức cấu hình 
+    // 3. Tìm món ĐẦU TIÊN trong danh sách mà trong túi CHƯA CÓ
+    // Món nào có trong túi rồi sẽ bị bỏ qua (.find sẽ chuyển sang món tiếp theo)
+    const targetToRetrieve = ITEMS_TO_RETRIEVE.find(
+        target => !character.items.some(i => i && i.name === target.name)
+    );
+
+    // Nếu trong túi ĐÃ CÓ ĐỦ tất cả các món trong danh sách -> Reset thời gian rảnh
+    if (!targetToRetrieve) {
+        lastActivityTime = Date.now();
+        return;
+    }
+
+    // 4. Nếu tìm thấy món còn thiếu và đã đủ thời gian rảnh -> Tiến hành rút món đó
     if (Date.now() - lastActivityTime >= IDLE_TIME_LIMIT) {
-        // Reset ngay lập tức để tránh gọi đúp
-        lastActivityTime = Date.now(); 
+        lastActivityTime = Date.now(); // Reset tránh gọi đúp
 
-        // Gọi hàm rút đồ từ Bank
-        await retrieveFromBank(ITEM_TO_RETRIEVE, RETRIEVE_QTY);
+        await retrieveFromBank(targetToRetrieve.name, targetToRetrieve.qty);
 
-        // Reset lần nữa sau khi xong việc
-        lastActivityTime = Date.now(); 
+        lastActivityTime = Date.now();
     }
 }, 1000);
 
