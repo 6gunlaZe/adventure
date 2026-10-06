@@ -128,10 +128,8 @@ function scanAll() {
 			
             monsters.push({ entity: entity, distance: dist });
             
-            // ==========================================
-            // TÍCH HỢP CHECK FARM_MONSTER & ĐẾM GIỜ TẠI ĐÂY
-            // ==========================================
-            if (entity.mtype === FARM_MONSTER) {
+            // chắc chắn là đang fram thì phải siết check khoảng cách
+            if (entity.mtype === FARM_MONSTER && dist < character.range ) { 
                 lastFarmMonsterSeen = Date.now();
             }
             
