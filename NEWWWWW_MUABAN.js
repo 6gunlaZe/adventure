@@ -10,7 +10,7 @@ const TRASH_ITEMS = [
   "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
-  "firestaff", "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
+  "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
   "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","bowofthedead",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
@@ -34,7 +34,7 @@ const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ r
 
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","fireblade"];
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","firestaff"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, 
@@ -340,7 +340,7 @@ group_vip6: [
 var upgradeWhitelistVIPP = {
 	group_basic: ["ololipop","glolipop"],
 	group_basic00: ["cclaw111"],
-	group_basic01: ["firebow","fireblade"],	
+	group_basic01: ["firebow","fireblade","firestaff"],	
 	group_basic02: ["gcape","eslippers11","ecape"],	
 	group_basic03: ["mittens111","shield111",],	
 	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead1111","tshirt4"],
