@@ -1663,6 +1663,8 @@ setInterval(function() {
                     smart_move({ map: character.map, x: bossEntity.x, y: bossEntity.y });
                 }
             } else {
+				//đang ổn định đánh boss
+				mageMagiPort();
                 if (smart.moving) stop("smart");
             }
         } 
