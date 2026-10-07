@@ -1,5 +1,5 @@
 // ============================================================
-// CONFIG & STATE 
+// CONFIG & STATE  toggleCave()
 // ============================================================
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
@@ -49,7 +49,7 @@ const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
 const MODE = { FARM: "farm", OTHER: "other" };
 let mode = MODE.FARM;
-
+let isCaveMode = false;
 
 // Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUA BAN
 const TRASH_ITEMS = [
@@ -1644,7 +1644,7 @@ const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) /
 setInterval(function() {
 
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
-    if (character.cave) return;
+    if (character.cave || isCaveMode ) return;
 
 
 // =========================================================
@@ -2341,16 +2341,40 @@ function tryTemporalSurge() {
 }
 
 
+let leaderLoc = null; // Nơi lưu tọa độ realtime của Leader
+
 function on_cm(name, data) {
-    // Trường hợp data là chuỗi đơn giản
+    // 1. Trường hợp data là string
     if (typeof data === "string" && data === "TemporalTime") {
         temporalState.lastTime = Date.now();
         game_log(`📩 Đồng bộ Temporal từ ${name}`);
+        return;
     }
-    
-    // Trường hợp data là object (nếu sau này bạn mở rộng gửi thêm thông tin)
-    if (typeof data === "object" && data?.message === "TemporalTime") {
-        temporalState.lastTime = Date.now();
+
+    // 2. Trường hợp data là object
+    if (typeof data === "object" && data !== null) {
+        if (data.message === "TemporalTime") {
+            temporalState.lastTime = Date.now();
+        }
+
+        // Bắt tọa độ & trạng thái Cave Mode từ Leader gửi tới
+        if (data.type === "LeaderLoc" && name === LEADER) {
+            // Cập nhật vị trí Leader
+            leaderLoc = { 
+                x: Math.round(data.x), 
+                y: Math.round(data.y), 
+                map: data.map 
+            };
+
+            // Tự động đồng bộ trạng thái Cave Mode khi Leader thay đổi
+            if (typeof data.caveMode === "boolean" && isCaveMode !== data.caveMode) {
+                isCaveMode = data.caveMode;
+                game_log(
+                    `🔄 Sync Cave Mode: ${isCaveMode ? "ON 🟢" : "OFF 🔴"}`, 
+                    isCaveMode ? "#00FF00" : "#FF0000"
+                );
+            }
+        }
     }
 }
 
@@ -3017,5 +3041,71 @@ if (character.name != "6gunlaZe") return
 // Tự động gọi hàm sell_trash_items mỗi 4000ms (4 giây)
 setInterval(sell_trash_items, 4000);
 
+////////////////////////////////
+function broadcastLeaderLoc() {
+    if (character.name !== LEADER || !parent.party_list) return;
 
+    for (const name of parent.party_list) {
+        if (name === character.name) continue;
+        
+        send_cm(name, {
+            type: "LeaderLoc",
+            x: character.real_x,
+            y: character.real_y,
+            map: character.map,
+            caveMode: isCaveMode // Đính kèm trạng thái Cave Mode hiện tại của Leader
+        });
+    }
+}
+
+// Chạy vòng lặp phát tín hiệu (500ms)
+setInterval(broadcastLeaderLoc, 500);
+
+function caveModeFollow() {
+    if (!isCaveMode || character.name === LEADER) return;
+    
+    // Nếu đang dở smart_move (chạy xa) thì chờ chạy xong, tránh loạn lệnh
+    if (smart.moving) return;
+
+    // 1. Dùng SCAN_ALL: Kiểm tra xem Leader có đang trên màn hình không
+    const leaderEntry = partyEntities.find(p => p.entity.name === LEADER);
+
+    if (leaderEntry) {
+        // TRƯỜNG HỢP A: Leader đang trong tầm nhìn -> Áp sát mượt mà
+        const leaderEntity = leaderEntry.entity;
+        const dist = distance(character, leaderEntity);
+
+        if (dist > 150) {
+            // Tản ra quanh leader 20 pixel để tránh đè lên nhau
+            xmove(
+                leaderEntity.x + (Math.random() * 40 - 20), 
+                leaderEntity.y + (Math.random() * 40 - 20)
+            );
+        }
+    } else {
+        // TRƯỜNG HỢP B: Leader đã ngoài tầm nhìn (Khuất xa hoặc đổi Map)
+        // Lấy tọa độ từ Code Message để smart_move
+        if (leaderLoc) {
+            // Kiểm tra khác map, hoặc nếu cùng map nhưng khoảng cách > 300 thì mới gọi smart_move
+            // Không dùng distance() nếu khác map để tránh lỗi null
+            const isDifferentMap = character.map !== leaderLoc.map;
+            const isFarAway = !isDifferentMap && distance(character, leaderLoc) > 300;
+
+            if (isDifferentMap || isFarAway) {
+                // smart_move nhận thẳng object có {x, y, map} rất xịn
+                smart_move(leaderLoc);
+                game_log(`🏃‍♂️ Chạy theo ${LEADER} tới map: ${leaderLoc.map}`, "#00FFFF");
+            }
+        }
+    }
+}
+
+// Vòng lặp check cave
+setInterval(caveModeFollow, 250);
+
+// Gọi hàm này trên Leader để bật/tắt cho toàn bộ team
+function toggleCave() {
+    isCaveMode = !isCaveMode;
+    game_log(`👑 LEADER: Đã ${isCaveMode ? "BẬT" : "TẮT"} Cave Mode`, "#FFFF00");
+}
 
