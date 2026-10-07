@@ -2123,7 +2123,7 @@ async function skillLoop() {
                 case "rogue":
                     useRspeed(); 
                     
-                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
                     if (await use_fan_of_knives()) {
                         return setTimeout(skillLoop, 10); 
@@ -2132,7 +2132,7 @@ async function skillLoop() {
 
                 case "ranger":
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
-                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
                     trySuperShot(); 
 					tryHuntersMark();
                     
@@ -2169,7 +2169,7 @@ async function skillLoop() {
                 case "warrior":
 					if (await tryStomp()) return setTimeout(skillLoop, 10);
 					if (await tryHardshell()) return setTimeout(skillLoop, 10);
-                    if (!SAFE) break; // Chưa an toàn -> Bỏ qua combo
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
 					if (await tryCleave()) return setTimeout(skillLoop, 10);
 					if (await tryCharge()) return setTimeout(skillLoop, 10);
