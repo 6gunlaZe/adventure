@@ -3109,3 +3109,65 @@ function toggleCave() {
     game_log(`👑 LEADER: Đã ${isCaveMode ? "BẬT" : "TẮT"} Cave Mode`, "#FFFF00");
 }
 
+
+let last_cave_choice = null;
+
+// Từ khóa ưu tiên chọn đường Combat/Đánh nhau
+const CAV_COMBAT_KEYWORDS = [
+    "attack", "fight", "battle", "combat", "kill", "strike", "defeat",
+    "tấn công", "chiến đấu", "đánh", "giết"
+];
+
+character.on("cave", async (state) => {
+    const choice = state?.choice;
+    
+    // Guard Clauses: Bỏ qua nếu không có lựa chọn, đã giải quyết, hoặc đã chọn trước đó
+    if (!choice || choice.resolved || choice.id === last_cave_choice) return;
+
+    const options = choice.options || [];
+
+    // Lọc các option miễn phí (Gold = 0, Amber = 0) và chưa bị khóa
+    const validOptions = options.filter(o => 
+        o && !o.unavailable && Number(o.cost || 0) === 0 && Number(o.amber || 0) === 0
+    );
+
+    if (validOptions.length === 0) return;
+
+    const textOf = o => String(o.label || "").toLowerCase();
+
+    // 1. Ưu tiên 1: Chọn option chứa từ khóa Combat trực tiếp
+    let selected = validOptions.find(o => {
+        const text = textOf(o);
+        return CAV_COMBAT_KEYWORDS.some(word => text.includes(word));
+    });
+
+    // 2. Ưu tiên 2: "Save ... fight"
+    if (!selected) {
+        selected = validOptions.find(o => {
+            const text = textOf(o);
+            return text.includes("save") && (
+                text.includes("fight") || text.includes("battle") || 
+                text.includes("combat") || text.includes("chiến đấu")
+            );
+        });
+    }
+
+    // 3. Ưu tiên 3: Nếu không có lựa chọn đánh nhau -> Lấy option đầu tiên từ trên xuống
+    if (!selected) {
+        selected = validOptions[0];
+    }
+
+    // Đánh dấu đã xử lý ID này
+    last_cave_choice = choice.id;
+
+    // Thực thi reply trực tiếp trên từng Client
+    try {
+        await cave_reply(choice.id, selected.id);
+        game_log(`🏰 Auto Cave Choice: ${selected.label || selected.id}`, "#00FF00");
+    } catch (e) {
+        // Bỏ qua lỗi nếu reply bị timeout hoặc trùng tick
+    }
+});
+
+
+
