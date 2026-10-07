@@ -72,7 +72,7 @@ const autoBuyFromMerchItems = [
 	
     { name: "slice_nightberry", price: 320000 },
     { name: "slice_blueberry", price: 320000 },
-    { name: "slice_honey", price: 920000 },
+    { name: "slice_honey", price: 520000 },
     { name: "slice_citrus", price: 320000 },
     { name: "slice_strawberry", price: 320000 },
 	
