@@ -114,6 +114,7 @@ function scanAll() {
     for (const id in parent.entities) {
         const entity = parent.entities[id];
         if (!entity) continue;
+		if (entity.mtype == "cave_guard")continue;
         const dist = distance(character, entity);
 
         // MONSTER
@@ -172,7 +173,7 @@ function scanAll() {
 function selectTarget() {
     const validMonsters = monsters
         .map(m => m.entity)
-        .filter(entity =>  (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) && in_attack_range(entity) && entity.mtype != "cave_guard" );
+        .filter(entity =>  (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) && in_attack_range(entity) );
 
     if (validMonsters.length === 0) return null;
 
