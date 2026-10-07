@@ -1381,7 +1381,7 @@ function tryCleanLowHP_cburst() {
 
         // 3. Kiểm tra máu quái
         if (entity.hp > 0 && entity.hp <= maxHpThreshold) {
-            const mpNeeded = Math.ceil(entity.hp * 2 + 20);
+            const mpNeeded = Math.ceil(entity.hp * 2.1 + 20);
 
             // Kiểm tra tổng MP còn đủ an toàn không
             if ((character.mp - 200) >= (totalMpNeeded + mpNeeded)) {
