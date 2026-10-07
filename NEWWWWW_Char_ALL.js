@@ -1644,6 +1644,7 @@ const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) /
 setInterval(function() {
 
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
+    if (character.cave) return;
 
 
 // =========================================================
