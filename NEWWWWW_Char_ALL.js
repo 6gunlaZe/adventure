@@ -400,6 +400,31 @@ async function use_fan_of_knives() {
 }
 
 
+const MAGIPORT_EXCLUDE = new Set(["MuaBan"]);
+
+function mageMagiPort() {
+    if (character.ctype !== "mage" || !parent.party) return;
+    if (is_on_cooldown("magiport")) return;
+
+    const mpCost = G.skills.magiport?.mp || 900;
+    if (character.mp < mpCost + 100) return;
+
+    for (const name in parent.party) {
+        if (name === character.name || MAGIPORT_EXCLUDE.has(name)) continue;
+
+        // ÁP DỤNG SCAN_ALL: Kiểm tra bằng mảng đã cache thay vì gọi API get_player()
+        // Dùng .some() chạy cực nhanh để check xem đồng đội có đang ở gần (hiển thị) không
+        const isVisible = partyEntities.some(p => p.entity.name === name);
+
+        if (!isVisible) {
+            use_skill("magiport", name);
+            game_log(`🌀 MagiPort -> ${name}`, "#800080");
+            return; 
+        }
+    }
+}
+
+
 const ENERGIZE_RESERVE = 4000; // mp giữ lại
 const ENERGIZE_BUFFER = 200; //ngưỡng chống đầy
 
