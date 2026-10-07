@@ -400,6 +400,15 @@ async function use_fan_of_knives() {
 }
 
 
+function on_magiport(name) {
+    if (!parent.party[name]) return;
+    accept_magiport(name);
+    stop(); 
+    game_log(`🌀 Đã nhận MagiPort từ ${name}`, "#800080");
+}
+
+
+
 const MAGIPORT_EXCLUDE = new Set(["MuaBan"]);
 
 function mageMagiPort() {
