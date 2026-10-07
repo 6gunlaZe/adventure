@@ -2235,9 +2235,23 @@ setInterval(() => {
 async function scare() {
     if (is_on_cooldown("scare")) return;
 
-    // 2 Trường hợp kích hoạt Scare:
     const isLowHP = character.hp < 4500;
-    const isAttackedWhileMoving = smart.moving && character.targets > 0;
+    const isPriest = character.ctype === "priest";
+
+    // Tận dụng mảng partyEntities đã scan sẵn (0ms delay, không tốn CPU)
+    const hasTeammatesNearby = partyEntities.some(p => {
+        const entity = p.entity;
+        if (!entity || entity.name === character.name || entity.dead) return false;
+
+        // Dùng distance đã pre-calculate từ scan_all (fallback nếu thiếu)
+        const dist = p.distance ?? distance(character, entity);
+        return dist < 400;
+    });
+
+    // Logic Moving:
+    // - Priest (Tank): Đang moving + bị quái đánh + KHÔNG có đồng đội xung quanh
+    // - Class khác: Đang moving + bị quái đánh là scare ngay
+    const isAttackedWhileMoving = smart.moving && character.targets > 0 && (!isPriest || !hasTeammatesNearby);
 
     // Nếu không thỏa mãn trường hợp nào -> Bỏ qua
     if (!isLowHP && !isAttackedWhileMoving) return;
@@ -2254,16 +2268,14 @@ async function scare() {
     // Thực thi Scare
     try {
         await use("scare");
-        const reason = isLowHP ? "Máu thấp" : "Bị quái tấn công khi đang moving";
+        const reason = isLowHP ? "Máu thấp" : "Bị quái đánh khi solo moving";
         game_log(`🎃 Scare! (${reason})`, "#FFA500");
     } catch (e) {
-        // Tránh văng lỗi do timing execution
+        // Bỏ qua lỗi execution timing
     }
 }
 
 setInterval(scare, 400);
-
-
 
 // =========================
 // CONFIG & STATE: Temporal Surge
