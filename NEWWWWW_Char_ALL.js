@@ -104,7 +104,9 @@ function scanAll() {
     merchant = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
-    
+
+    if (character.cave && character.cave.paused) return;
+
     if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
         SAFE = true;
     }
@@ -115,7 +117,7 @@ function scanAll() {
         const dist = distance(character, entity);
 
         // MONSTER
-        if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && ALL_TARGET_MONSTERS.has(entity.mtype)) {
+        if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 	
             if (WORLD_BOSSES.includes(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
