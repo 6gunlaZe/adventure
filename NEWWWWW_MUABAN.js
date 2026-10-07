@@ -37,7 +37,7 @@ const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ r
 const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","firestaff"];
 
 //Danh sách đổi quà tự động
-const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, 
+const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, candy0: 1,
 				  gem0: 1, gem1: 1, gift0: 1, goldenegg: 1, leather: 40, lostearring: 1, mistletoe: 1, ornament: 20, seashell: 20, troll: 1, weaponbox: 1, xbox: 1 };
 
 // Danh sách các item KHÔNG ĐƯỢC RÚT TỪ BANK để chế (chỉ dùng nếu có sẵn trong túi)
