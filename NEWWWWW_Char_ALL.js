@@ -956,7 +956,7 @@ async function tryHardshell() {
 
 async function tryStomp() {
 
-    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 || isEquipping ) return false;
+    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 || isEquipping || character.esize < 1 ) return false;
 
     // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
     const mobsNearby50 = monsters.filter(m => m.distance <= 50);
@@ -1140,7 +1140,7 @@ async function tryWarcry() {
 async function tryCleave() {
 
     // Nhường nhịp cho attack
-    if (ms_to_next_skill("attack") < 100) return false;
+    if (ms_to_next_skill("attack") < 100 || character.esize < 1 ) return false;
 	
     // 1. Kiểm tra Cooldown, MP (Cleave tốn 720 MP) và trạng thái bận
     if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping ) return false;
