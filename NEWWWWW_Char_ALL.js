@@ -2385,6 +2385,47 @@ function on_cm(name, data) {
 // =============================================================================
 const EQUIPMENT_SETS = {
 
+    // ---- Cấu hình đồ cho mage
+    "nhiY": {
+        dame: [
+			
+        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+            { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "vattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "cearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
+        mana: [	
+        ],
+        luck: [
+			
+        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+
+        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "u"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
+            { itemName: "wshoes", slot: "shoes", level: 9, l: "l" },
+            { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+            { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+            { itemName: "wattire", slot: "chest", level: 6, l: "l" },
+            { itemName: "wbreeches", slot: "pants", level: 7, l: "l" },
+            { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" }
+        ],
+        def: [
+			
+		],
+        def_fire: []
+    },
+
+	
     // ---- Cấu hình đồ cho Warrior offhand luôn đi chung với mainhand không thì sẽ lỗi nếu hiện tại đang đeo đồ cầm 2 tay 
     "haiz": {
         dame: [
@@ -2818,6 +2859,40 @@ const GEAR_LOGIC = {
 	
     return "dame";
 },
+    // ---- Logic của Mage (nhiY) ----
+    "nhiY": function() {
+        let needNormalDef = false;
+        let needLuck = false;
+        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
+
+        let monsterDensity = 0;
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+			
+           if (dameMonsters.includes(e.mtype)) {
+               hasTargetForDame = true;
+           }
+			
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+            if (e.target || e.max_hp < 5000) monsterDensity++;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck) return "luck";
+        if (hasTargetForDame) return "dame";
+
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+       // if (monsterDensity >= 4) lastDefCheck = Date.now();
+       // if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+		
+        return "dame"; // Trạng thái mặc định
+    },
 
 
 	
