@@ -172,7 +172,7 @@ function scanAll() {
 function selectTarget() {
     const validMonsters = monsters
         .map(m => m.entity)
-        .filter(entity => TARGET_MONSTERS.includes(entity.mtype) && in_attack_range(entity));
+        .filter(entity =>  (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) && in_attack_range(entity));
 
     if (validMonsters.length === 0) return null;
 
