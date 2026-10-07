@@ -3147,7 +3147,7 @@ function broadcastLeaderLoc() {
 }
 
 // Chạy vòng lặp phát tín hiệu (500ms)
-setInterval(broadcastLeaderLoc, 500);
+setInterval(broadcastLeaderLoc, 2500);
 
 function caveModeFollow() {
     if (!isCaveMode || character.name === LEADER) return;
@@ -3189,7 +3189,7 @@ function caveModeFollow() {
 }
 
 // Vòng lặp check cave
-setInterval(caveModeFollow, 250);
+setInterval(caveModeFollow, 750);
 
 // Gọi hàm này trên Leader để bật/tắt cho toàn bộ team
 function toggleCave() {
