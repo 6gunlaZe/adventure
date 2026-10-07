@@ -2714,6 +2714,8 @@ function buyMissingItemsByLevel(itemPairs) {
 }
 
 // LOG NÂNG CẤP
+parent.socket.off("q_data");
+
 let lastStr = "";
 parent.socket.on("q_data", (event) => {
 
