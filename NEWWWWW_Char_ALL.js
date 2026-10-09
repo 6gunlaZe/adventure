@@ -1,5 +1,5 @@
 // ============================================================
-// CONFIG & STATE  toggleCave()
+// CONFIG & STATE 
 // ============================================================
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
@@ -3129,6 +3129,9 @@ if (character.name != "6gunlaZe") return
 setInterval(sell_trash_items, 4000);
 
 ////////////////////////////////
+// Tạm tắt vì chơi chế độ cave nên đi solo
+////////////////////////////////
+/*
 function broadcastLeaderLoc() {
     if (character.name !== LEADER || !parent.party_list) return;
 
@@ -3257,6 +3260,8 @@ character.on("cave", async (state) => {
 });
 
 
+*/
+
 
 
 
@@ -3267,7 +3272,7 @@ character.on("cave", async (state) => {
 
 
 // ============================================================
-// CONFIG & STATE  toggleCave()
+// CONFIG & STATE 
 // ============================================================
 
 
