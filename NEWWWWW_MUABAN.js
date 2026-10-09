@@ -52,7 +52,7 @@ const IMPORTANT_ITEMS = [
 //TỰ ĐỘNG  MAKE SHINY
 const shinyList = {
     "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
-    "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+   // "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
     "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
 };
 
@@ -170,9 +170,11 @@ var upgradeGroups = {
 		{ levels: [8],       scroll: 2, offering: 1 }
 	],
 	group_basic00: [ // đồ rác
-		{ levels: [1,2,3,4], scroll: 0, offering: 0 },
-		{ levels: [5,6,7],     scroll: 1, offering: 0 },
-		{ levels: [8],       scroll: 2, offering: 0 }
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
+		{ levels: [3,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],     scroll: 1, offering: 1 },
+		{ levels: [7],     scroll: 1, offering: 1 },
+		{ levels: [8],       scroll: 2, offering: 1 }
 	],
 	group_basic01: [ // đồ rác
 		{ levels: [0,1,2,3,4,5,6,], scroll: 1, offering: 0 },
@@ -337,8 +339,8 @@ group_vip6: [
 
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop","glolipop"],
-	group_basic00: ["cclaw111"],
+	group_basic: ["ololipop",],
+	group_basic00: ["glolipop"],
 	group_basic01: ["firebow","fireblade","firestaff"],	
 	group_basic02: ["gcape","eslippers11","ecape"],	
 	group_basic03: ["mittens111","shield111",],	
