@@ -114,7 +114,7 @@ function scanAll() {
     for (const id in parent.entities) {
         const entity = parent.entities[id];
         if (!entity) continue;
-		if (entity.mtype == "cave_guard")continue;
+		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc")continue;
         const dist = distance(character, entity);
 
         // MONSTER
