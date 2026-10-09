@@ -24,8 +24,8 @@ const TRASH_ITEMS = [
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
 const ITEMS_TO_RETRIEVE = [
-    { name: "goldnugget", qty: 999, minEsize: 5 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay
-    { name: "essenceoffire", qty: 100, minEsize: 26 },    // không quan trọng, rút khi thật sự dư time
+    { name: "goldnugget", qty: 999, minEsize: 1 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay
+    { name: "essenceoffire", qty: 50, minEsize: 26 },    // không quan trọng, rút khi thật sự dư time
     //{ name: "essenceoffire", qty: 50, minEsize: 17 },      // Bình thường: cần trống ít nhất 17 ô
 ];
 const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ rút
