@@ -34,7 +34,7 @@ const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ r
 
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","firestaff"];
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","pouchbow","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","fireblade"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, candy0: 1, marketparcel: 1,
