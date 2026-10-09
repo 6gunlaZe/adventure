@@ -2002,7 +2002,7 @@ setTimeout(() => {
 
 
 function on_party_request(n) {
-    if (character.name === LEADER && PARTY.includes(n) && n !== LEADER) {
+    if (character.name === LEADER && PARTY.includes(n) && n !== LEADER && !isCaveMode ) {
         accept_party_request(n);
     }
 }
