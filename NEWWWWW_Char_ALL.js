@@ -285,7 +285,7 @@ const REVERSE_3SHOT_MONSTERS = ["crab"];
 
 async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.5) return false;
-    if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
+    if (!character.cave && monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
         await useAttack();
         return false;
     }
@@ -1513,10 +1513,10 @@ async function useAttack() {
         if (targeted) currentTarget = targeted;
     }
     
-    if (!currentTarget || smart.moving) return false;
+    if (!currentTarget || (smart.moving && !character.cave) ) return false;
 
     // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
-    if (FARM_MONSTER != "crab" && !is_in_range(currentTarget)) {
+    if (!is_in_range(currentTarget)) {
         // Tránh tình trạng spam lệnh move liên tục gây khựng nhân vật
         if (!character.moving) {
             move(
@@ -1532,7 +1532,6 @@ async function useAttack() {
         currentTarget &&
         !smart.moving &&
         currentTarget.type === "monster" &&
-        (TARGET_MONSTERS.includes(currentTarget.mtype) || TARGET_BOSSES.includes(currentTarget.mtype)) &&
         is_in_range(currentTarget) &&
         ms_to_next_skill("attack") <= pingComp
     ) {
