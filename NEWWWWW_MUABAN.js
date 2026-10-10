@@ -2232,25 +2232,79 @@ setInterval(makeShiny, 500);
     // ============================================================
     // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (5 PHÚT)
     // ============================================================
+
 let lastIdleTime = Date.now();
 let storagePending = false;
 let storagePendingTime = 0;
+let fullInventoryStartTime = 0; // Biến đếm mốc thời gian túi đầy liên tục (160s)
 
 setInterval(() => {
     const now = Date.now();
 
-	sell_trash_items();
+    sell_trash_items();
 
+    // 0. Kiểm tra xem đã có job storage trong hàng đợi hoặc đang chạy service storage chưa
+    const hasStorageJob = queue1.some(
+        q => q.command === "storage" || q.command === "cleanup"
+    );
+    const isStorageRunning = service && (service.command === "storage" || service.command === "cleanup");
+
+    // Nếu đang chuẩn bị đi bank hoặc đang làm bank rồi thì KHÔNG đếm 160s nữa
+    if (hasStorageJob || isStorageRunning) {
+        fullInventoryStartTime = 0;
+    } else {
+        // --- KIỂM TRA BẮT BUỘC: Túi đầy liên tục >= 160 giây ---
+        const isFull = is_inventory_full() || character.esize < 3;
+        if (isFull) {
+            if (fullInventoryStartTime === 0) {
+                fullInventoryStartTime = now;
+                console.log("[MuaBan] AUTO: Phát hiện túi đầy, bắt đầu đếm giờ (160s)...");
+            } else if (now - fullInventoryStartTime >= 160 * 1000) {
+                console.log("[MuaBan] AUTO: Túi đầy liên tục 160s -> XÓA QUEUE, BẮT BUỘC STORAGE");
+                
+                // 1. Xóa sạch tất cả nhiệm vụ đang chờ trong hàng đợi
+                queue1.length = 0; 
+
+                // 2. Nếu nhân vật đang bận làm việc khác -> Ngắt và về nhà ngay lập tức
+                if (busy && typeof abort_service === "function") {
+                    abort_service("Túi đầy 160s - Bắt buộc ngắt để đi bank");
+                }
+
+                // 3. Đẩy nhiệm vụ storage vào đầu hàng đợi với độ ưu tiên tuyệt đối (99)
+                queue1.unshift({
+                    id: "auto_storage_" + now,
+                    sender: character.name,
+                    command: "storage",
+                    priority: 99, 
+                    target: "storage",
+                    createdAt: now
+                });
+
+                // 4. Reset trạng thái
+                fullInventoryStartTime = 0;
+                storagePending = false;
+                storagePendingTime = 0;
+                lastIdleTime = now;
+
+                process_queue();
+                return;
+            }
+        } else {
+            // Nếu túi vơi bớt trước 160s -> Reset bộ đếm
+            if (fullInventoryStartTime !== 0) {
+                console.log("[MuaBan] AUTO: Túi đã được dọn bớt -> Hủy đếm giờ 160s");
+            }
+            fullInventoryStartTime = 0;
+        }
+    }
+
+    // --- LUỒNG CŨ CỦA BẠN (GIỮ NGUYÊN 100%) ---
     if (busy) {
         lastIdleTime = now;
         storagePending = false;
         storagePendingTime = 0;
         return;
     }
-
-    const hasStorageJob = queue1.some(
-        q => q.command === "storage" || q.command === "cleanup"
-    );
 
     if (hasStorageJob) {
         storagePending = false;
@@ -2305,7 +2359,6 @@ setInterval(() => {
     process_queue();
 
 }, 1000);
-
 
 
 //////////////////////////////////////////////
