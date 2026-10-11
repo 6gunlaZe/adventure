@@ -3031,10 +3031,6 @@ let lastActivityTime = Date.now();
 
 setInterval(async () => {
 
-// Gọi hàm giửi maill mỗi 1s
-sendItemByMail('ololipop', 0);
-sendItemByMail('glolipop', 0);
-	
     // 1. Kiểm tra cấu hình mảng và điều kiện mở sạp
     if (!ITEMS_TO_RETRIEVE || ITEMS_TO_RETRIEVE.length === 0 || !character.stand) {
         lastActivityTime = Date.now();
@@ -3112,7 +3108,12 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
 }
 
 
-
+setInterval(async function() {
+    // Chạy lần lượt từng món, món 1 xong xuôi rồi mới đến món 2
+    await sendItemByMail('ololipop', 0);
+    await sendItemByMail('glolipop', 0);
+    
+}, 2000); // gọi liên tục mỗi 2s 
 
 
 
