@@ -3265,6 +3265,45 @@ character.on("cave", async (state) => {
 
 
 
+// 1. Hàm gom các ô item trùng nhau lại với nhau
+async function combineInventoryStacks() {
+    // Đợi 1 chút để dữ liệu nhân vật đồng bộ hoàn toàn khi mới vào game
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    for (let i = 0; i < character.items.length; i++) {
+        let itemA = character.items[i];
+        if (!itemA) continue;
+
+        let itemInfo = G.items[itemA.name];
+        // Bỏ qua nếu item không stack được (s <= 1) hoặc ô này đã đầy max stack
+        if (!itemInfo || !itemInfo.s || itemInfo.s <= 1) continue;
+        if ((itemA.q || 1) >= itemInfo.s) continue;
+
+        for (let j = i + 1; j < character.items.length; j++) {
+            let itemB = character.items[j];
+            if (!itemB) continue;
+
+            // Nếu cùng tên và cùng level thì gộp ô j vào ô i
+            if (itemB.name === itemA.name && (itemB.level || 0) === (itemA.level || 0)) {
+                await swap(j, i);
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                itemA = character.items[i];
+                if (!itemA || (itemA.q || 1) >= itemInfo.s) break;
+            }
+        }
+    }
+    game_log("Đã gộp xong túi đồ!");
+}
+
+// 2. Chạy tự động ngay khi vừa load vào game
+combineInventoryStacks();
+
+
+
+
+
+
 
 
 
