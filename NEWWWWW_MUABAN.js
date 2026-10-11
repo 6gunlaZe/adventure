@@ -3064,16 +3064,21 @@ setInterval(async () => {
 
 
 async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subject = 'keo mut', message = 'nice') {
-    // 0. Kiểm tra nếu trong túi có "goldnugget" hoặc "goldinot" thì return sớm ngay lập tức
-    const hasGoldItem = character.items.some(item => 
-        item && (item.name === 'goldnugget' || item.name === 'bronzeingot')
-    );
-    
-    if (hasGoldItem) {
-     //   game_log("Phát hiện goldnugget hoặc bronzeingot trong túi, hủy gửi mail!", "orange");
-        return false;
+
+
+    // 0. Chỉ kiểm tra goldnugget / bronzeingot NẾU KHÔNG PHẢI là 'glolipop'
+    if (targetName !== 'glolipop') {
+        const hasGoldItem = character.items.some(item => 
+            item && (item.name === 'goldnugget' || item.name === 'bronzeingot')
+        );
+        
+        if (hasGoldItem) {
+            return false;
+        }
     }
 
+
+	
     // 1. Tìm vị trí (slot index) của item thỏa mãn tên và level
     const slotIndex = character.items.findIndex(item => 
         item && 
