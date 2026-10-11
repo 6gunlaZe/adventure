@@ -3074,8 +3074,7 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
     );
     
     if (hasGoldItem) {
-        // Tùy chọn: có thể bật log hoặc bỏ trống nếu không muốn hiện thông báo rườm rà
-        // game_log("Phát hiện goldnugget hoặc goldinot trong túi, hủy gửi mail!", "orange");
+        game_log("Phát hiện goldnugget hoặc bronzeingot trong túi, hủy gửi mail!", "orange");
         return false;
     }
 
