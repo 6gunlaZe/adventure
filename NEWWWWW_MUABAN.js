@@ -3070,7 +3070,7 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
     );
     
     if (hasGoldItem) {
-        game_log("Phát hiện goldnugget hoặc bronzeingot trong túi, hủy gửi mail!", "orange");
+     //   game_log("Phát hiện goldnugget hoặc bronzeingot trong túi, hủy gửi mail!", "orange");
         return false;
     }
 
@@ -3083,7 +3083,7 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
 
     // Nếu không tìm thấy món phù hợp -> Báo log và dừng
     if (slotIndex === -1) {
-        game_log(`Không tìm thấy ${targetName} +${targetLevel} trong túi!`, "orange");
+     //   game_log(`Không tìm thấy ${targetName} +${targetLevel} trong túi!`, "orange");
         return false;
     }
 
