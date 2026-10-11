@@ -1953,7 +1953,7 @@ const charCooldowns = {};
 const ACTION_COOLDOWN = 25000; 
 
 function manageChars() {
-    if (character.name !== LEADER) return;
+    if (character.name !== LEADER || isCaveMode ) return;
 
     const activeBoss = getActiveWorldBoss();
     const currentEvent = activeBoss ? activeBoss.id : null;
