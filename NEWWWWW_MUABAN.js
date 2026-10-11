@@ -24,7 +24,7 @@ const TRASH_ITEMS = [
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
 const ITEMS_TO_RETRIEVE = [
-    { name: "goldnugget", qty: 999, minEsize: 1 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay
+    { name: "goldnugget", qty: 999, minEsize: 1999 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay, hiện tại đang hết hàng nên để 999
     { name: "essenceoffire", qty: 50, minEsize: 26 },    // không quan trọng, rút khi thật sự dư time
     //{ name: "essenceoffire", qty: 50, minEsize: 17 },      // Bình thường: cần trống ít nhất 17 ô
 ];
