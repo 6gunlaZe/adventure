@@ -3030,6 +3030,11 @@ async function retrieveFromBank(itemName, targetQuantity = 1, targetLevel = null
 let lastActivityTime = Date.now();
 
 setInterval(async () => {
+
+// Gọi hàm giửi maill mỗi 1s
+sendItemByMail('ololipop', 0);
+sendItemByMail('glolipop', 0);
+	
     // 1. Kiểm tra cấu hình mảng và điều kiện mở sạp
     if (!ITEMS_TO_RETRIEVE || ITEMS_TO_RETRIEVE.length === 0 || !character.stand) {
         lastActivityTime = Date.now();
@@ -3059,6 +3064,56 @@ setInterval(async () => {
         lastActivityTime = Date.now();
     }
 }, 1000);
+
+
+
+async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subject = 'keo mut', message = 'nice') {
+    // 0. Kiểm tra nếu trong túi có "goldnugget" hoặc "goldinot" thì return sớm ngay lập tức
+    const hasGoldItem = character.items.some(item => 
+        item && (item.name === 'goldnugget' || item.name === 'bronzeingot')
+    );
+    
+    if (hasGoldItem) {
+        // Tùy chọn: có thể bật log hoặc bỏ trống nếu không muốn hiện thông báo rườm rà
+        // game_log("Phát hiện goldnugget hoặc goldinot trong túi, hủy gửi mail!", "orange");
+        return false;
+    }
+
+    // 1. Tìm vị trí (slot index) của item thỏa mãn tên và level
+    const slotIndex = character.items.findIndex(item => 
+        item && 
+        item.name === targetName && 
+        (item.level || 0) === targetLevel
+    );
+
+    // Nếu không tìm thấy món phù hợp -> Báo log và dừng
+    if (slotIndex === -1) {
+        game_log(`Không tìm thấy ${targetName} +${targetLevel} trong túi!`, "orange");
+        return false;
+    }
+
+    // 2. Nếu món đồ chưa nằm ở ô số 0 -> Đổi vị trí về ô số 0
+    if (slotIndex !== 0) {
+        game_log(`Đang chuyển ${targetName} từ ô ${slotIndex} về ô 0...`);
+        await swap(slotIndex, 0);
+        
+        // Chờ 300ms để server cập nhật vị trí ô đồ
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    // 3. Tiến hành gửi mail đính kèm item ở ô 0
+    try {
+        await send_mail(recipient, subject, message, true);
+        game_log(`Đã gửi mail đính kèm ${targetName} +${targetLevel} thành công tới ${recipient}!`, "green");
+        return true;
+    } catch (e) {
+        game_log(`Lỗi khi gửi mail: ${e}`, "red");
+        return false;
+    }
+}
+
+
+
 
 
 
