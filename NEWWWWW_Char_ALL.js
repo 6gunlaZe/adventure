@@ -256,23 +256,37 @@ function useRspeed() {
 }
 
 
+
 const QUICK_DAGGERS = ["daggerofthedead", "vdagger"];
-const QUICK_FISTS = ["cclaw", "pclaw"];
+const QUICK_FISTS   = ["cclaw", "pclaw"];
 
-function useQuickAttack() {
-    // 1. Kiểm tra target hợp lệ và trong tầm đánh
-    if (!currentTarget || !parent.entities[currentTarget.id] || !is_in_range(currentTarget) || ms_to_next_skill("attack") < 300 ) return;
+async function useQuickAttack() {
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
 
-    // 2. Xác định kỹ năng theo vũ khí đang cầm ở tay chính (mainhand)
+    // 1. Kiểm tra target tồn tại thực tế và đủ tầm đánh
+    if (!currentTarget || !parent.entities[currentTarget.id] ) return false;
+
+    // 2. Phải có khoảng trống cooldown đòn đánh (> 400ms) để kẹp skill mà không mất nhịp đánh thường
+    if (ms_to_next_skill("attack") <= 400) return false;
+
+    // 3. Xác định kỹ năng theo vũ khí tay chính
     const mhName = character.slots.mainhand?.name;
     let quickSkill = null;
 
     if (QUICK_DAGGERS.includes(mhName)) quickSkill = "quickstab";
     else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
 
-    // 3. Thi triển kỹ năng nếu đủ MP và không bị hồi chiêu (cooldown)
-    if (quickSkill && !is_on_cooldown(quickSkill) && character.mp > 600) {
-        use_skill(quickSkill, currentTarget);
+    // 4. Kiểm tra điều kiện thi triển
+    if (!quickSkill || is_on_cooldown(quickSkill) || character.mp <= 600) return false;
+
+    // 5. Thi triển skill an toàn
+    try {
+        await use_skill(quickSkill, currentTarget);
+        game_log(`=> ${quickSkill} XXXX)}0`, "#00FFFF");
+        return true;
+    } catch (e) {
+        return false;
     }
 }
 
@@ -2116,9 +2130,9 @@ async function skillLoop() {
             switch (character.ctype) {
                 case "rogue":
                     useRspeed(); 
-                    
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
-
+					
+					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
                     if (await use_fan_of_knives()) {
                         return setTimeout(skillLoop, 10); 
                     }
