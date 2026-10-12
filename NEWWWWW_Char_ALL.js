@@ -2133,21 +2133,19 @@ async function skillLoop() {
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 					
 					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
-                    if (await use_fan_of_knives()) {
-                        return setTimeout(skillLoop, 10); 
-                    }
+					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
+
+
                     break;
 
                 case "ranger":
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
-                    trySuperShot(); 
-					tryHuntersMark();
-                    
-                    // Multi-shot (3shot/5shot) chung CD với Attack.
-                    if (await use_multi_shot()) {
-                        return setTimeout(skillLoop, 10);
-                    }
+
+					if (await trySuperShot()) return setTimeout(skillLoop, 10);
+					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
+					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
+
                     break;
 
                 case "mage":
