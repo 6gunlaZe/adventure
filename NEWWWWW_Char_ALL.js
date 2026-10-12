@@ -878,12 +878,6 @@ async function trySuperShot() {
     if (!currentTarget || smart.moving || attackBusy) return false;
     if (is_on_cooldown("supershot") || character.mp < 800) return false;
 
-    // Kiểm tra Healer (Priest) còn sống ở gần (trong tầm 300px)
-    const hasHealer = partyEntities.some(p => 
-        p.entity.ctype === "priest" && !p.entity.dead && p.distance <= 300
-    );
-
-    if (!hasHealer) return false;
     
         try {
             await use_skill("supershot", currentTarget);
