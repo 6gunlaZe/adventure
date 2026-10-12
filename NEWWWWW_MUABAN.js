@@ -3063,8 +3063,13 @@ setInterval(async () => {
 
 
 
-async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subject = 'keo mut', message = 'nice') {
+// Khai báo bộ đếm số thứ tự cho từng món đồ (lưu vĩnh viễn khi script chạy)
+let sendCounters = {
+    'ololipop': 0,
+    'glolipop': 0
+};
 
+async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', message = 'nice') {
 
     // 0. Chỉ kiểm tra goldnugget / bronzeingot NẾU KHÔNG PHẢI là 'glolipop'
     if (targetName !== 'glolipop') {
@@ -3077,8 +3082,6 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
         }
     }
 
-
-	
     // 1. Tìm vị trí (slot index) của item thỏa mãn tên và level
     const slotIndex = character.items.findIndex(item => 
         item && 
@@ -3086,9 +3089,8 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
         (item.level || 0) === targetLevel
     );
 
-    // Nếu không tìm thấy món phù hợp -> Báo log và dừng
+    // Nếu không tìm thấy món phù hợp -> Dừng
     if (slotIndex === -1) {
-     //   game_log(`Không tìm thấy ${targetName} +${targetLevel} trong túi!`, "orange");
         return false;
     }
 
@@ -3101,12 +3103,21 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
         await new Promise(resolve => setTimeout(resolve, 300));
     }
 
-    // 3. Tiến hành gửi mail đính kèm item ở ô 0
+    // 3. Tăng bộ đếm số thứ tự lên 1 mỗi khi chuẩn bị gửi thành công
+    sendCounters[targetName] = (sendCounters[targetName] || 0) + 1;
+    const countNumber = sendCounters[targetName];
+    
+    // Tạo subject theo định dạng: tênitem_sốthứtự (Ví dụ: ololipop_1, ololipop_2...)
+    const subject = `${targetName}_${countNumber}`;
+
+    // 4. Tiến hành gửi mail đính kèm item ở ô 0 với subject vừa tạo
     try {
         await send_mail(recipient, subject, message, true);
-        game_log(`Đã gửi mail đính kèm ${targetName} +${targetLevel} thành công tới ${recipient}!`, "green");
+        game_log(`Đã gửi mail đính kèm ${subject} thành công tới ${recipient}!`, "green");
         return true;
     } catch (e) {
+        // Nếu gửi thất bại, trừ lại bộ đếm để không bị trôi số thứ tự
+        sendCounters[targetName]--;
         game_log(`Lỗi khi gửi mail: ${e}`, "red");
         return false;
     }
@@ -3114,11 +3125,9 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', subje
 
 
 setInterval(async function() {
-    // Chạy lần lượt từng món, món 1 xong xuôi rồi mới đến món 2
+    // Chạy lần lượt từng món
     await sendItemByMail('ololipop', 0);
     await sendItemByMail('glolipop', 0);
     
-}, 2000); // gọi liên tục mỗi 2s 
-
-
+}, 2000);
 
