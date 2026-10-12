@@ -2823,12 +2823,16 @@ setInterval(sendNtfyStatus, 30 * 60 * 1000);
 // ============================================================
 // VÒNG LẶP ĐỘC LẬP: TỰ ĐỘNG CÂU CÁ (MỖI 5 PHÚT / LẦN)
 // ============================================================
+let scriptStart = Date.now(); 
 // Biến lưu thời điểm gửi lệnh câu cá gần nhất
 let lastFishingCheck = 0; 
 // Cấu hình thời gian chờ nghỉ thêm giữa các lần đi câu: 
 const FISHING_EXTRA_DELAY = 600 * 1000; 
 
 setInterval(() => {
+	
+    if (Date.now() - scriptStart < 30 * 60 * 1000) return; // chỉ hoạt động sau 30p khởi chạy
+	
     // 1. Nếu Merchant đang bận hoặc hàng chờ đang có việc -> Bỏ qua
     if (busy || queue1.length > 0 || character.esize < 7 ) return;
 
