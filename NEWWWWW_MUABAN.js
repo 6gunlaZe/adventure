@@ -69,13 +69,13 @@ const autoBuyFromMerchItems = [
     { name: "offeringp", price: 3600000 },
     { name: "monstertoken", price: 500005 },
 	
-    { name: "slice_nightberry", price: 320000 },
-    { name: "slice_blueberry", price: 320000 },
-    { name: "slice_honey", price: 520000 },
-    { name: "slice_citrus", price: 320000 },
-    { name: "slice_strawberry", price: 320000 },
+    { name: "slice_nightberry", price: 220000 },
+    { name: "slice_blueberry", price: 220000 },
+    { name: "slice_honey", price: 420000 },
+    { name: "slice_citrus", price: 220000 },
+    { name: "slice_strawberry", price: 220000 },
 	
-    { name: "ololipop", price: 1120000 },
+    { name: "ololipop", price: 520000 },
 ];
 
 
