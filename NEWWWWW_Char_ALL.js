@@ -2816,7 +2816,7 @@ const GEAR_LOGIC = {
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
 
 		
-        if ((chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) && glod_delay < 0 ) {
+        if (( (smart.moving && chestCount > 0)  || chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) && glod_delay < 0 ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
@@ -3007,7 +3007,7 @@ async function equipSet(setName) {
 
 
 function autoSwapEquipment() {
-    if (smart.moving || isEquipping) return;
+    if (isEquipping) return;
     const penaltycheck = ms_penalty_cd();
     if (penaltycheck > 2000) return;
 
