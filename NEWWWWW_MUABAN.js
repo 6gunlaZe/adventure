@@ -366,7 +366,7 @@ var upgradeWhitelistVIPP = {
 	group_vip4: ["candleward",],
 	group_vip5: ["reunionbow",],
 	group_vip6: ["paradequiver",],
-	group_Supervip: ["fury",],
+	group_Supervip: ["fury11",],
 
 	
 
