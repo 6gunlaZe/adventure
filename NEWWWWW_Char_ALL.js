@@ -2446,7 +2446,7 @@ const EQUIPMENT_SETS = {
     // ---- Cấu hình đồ cho Warrior offhand luôn đi chung với mainhand không thì sẽ lỗi nếu hiện tại đang đeo đồ cầm 2 tay 
     "haiz": {
         dame: [
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
         //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
@@ -2463,7 +2463,7 @@ const EQUIPMENT_SETS = {
         ],
         mana: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
         //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
@@ -2480,7 +2480,7 @@ const EQUIPMENT_SETS = {
         ],
         luck: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
         { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
 
         { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
@@ -2491,7 +2491,7 @@ const EQUIPMENT_SETS = {
 
         single: [
 
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
         { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
