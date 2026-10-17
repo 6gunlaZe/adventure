@@ -10,7 +10,7 @@ const TRASH_ITEMS = [
   "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
-  "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt",
+  "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape",
   "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","bowofthedead","cave_locktooth",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
@@ -344,7 +344,7 @@ var upgradeWhitelistVIPP = {
 	group_basic01: ["firebow","fireblade","firestaff"],	
 	group_basic02: ["gcape","eslippers11","ecape"],	
 	group_basic03: ["mittens111","shield111",],	
-	group_basic04: ["angelwings","froststaff","mcape","daggerofthedead1111","tshirt4"],
+	group_basic04: ["angelwings","froststaff","daggerofthedead1111","tshirt4"],
 	group_basic05: ["wingedboots"],	
 	group_basic06: ["pants","coat1111","blade11","helmet1111","waxe"],
 	group_basic07: ["pouchbow"],	
@@ -394,7 +394,7 @@ const PONTY_EXTRA_ITEMS = [
   "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "cape", "carrot", "cdarktristone", "confetti",
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "glolipop", "gslime", "harbringer", "ijx", "ink", "intbelt",
-  "mcape", "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
+  "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
   "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
   "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil"
 ];
