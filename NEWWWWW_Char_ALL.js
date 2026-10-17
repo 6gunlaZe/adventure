@@ -2746,7 +2746,12 @@ const GEAR_LOGIC = {
         }
 
         if (needNormalDef) return "def";
-        if (needLuck) return "luck";
+        if (needLuck){
+            setBooster('luckbooster');
+			return "luck";
+		}
+		setBooster('xpbooster');
+
         if (hasTargetForDame) return "dame";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
@@ -2867,7 +2872,12 @@ const GEAR_LOGIC = {
     }
 
     if (needNormalDef) return "def";
-    if (needLuck) return "luck";
+    if (needLuck){
+        setBooster('luckbooster');
+		return "luck";
+	}
+		setBooster('xpbooster');
+
     if (targetNow && SINGLE_MONSTERS.has(targetNow.mtype)) return "single";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
