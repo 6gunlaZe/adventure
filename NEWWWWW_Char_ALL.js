@@ -3337,6 +3337,8 @@ combineInventoryStacks();
 let lastTrackerUpdate = 0;
 
 function updateWorldBossTracker(bossEntity) {
+	 if (character.name !== LEADER) return;
+
     const now = Date.now();
 
     // 1. HP và lastSeen LUÔN CẬP NHẬT MỖI FRAME (Bắt chính xác khoảnh khắc Boss ngã xuống)
@@ -3414,6 +3416,8 @@ function updateWorldBossTracker(bossEntity) {
 
 // 2. Kiểm tra điều kiện Boss chết
 function checkWorldBossDeathStatus() {
+	 if (character.name !== LEADER) return;
+
     if (!activeBossTracker.mtype || activeBossTracker.reported) return;
 
     const isHpLow = activeBossTracker.lastHp <= 20000;
@@ -3426,11 +3430,7 @@ function checkWorldBossDeathStatus() {
 }
 
 function sendWorldBossNtfyReport(bossName, playersMap, finalHp) {
-    // 1. Kiểm tra Topic
-    if (!NTFY_TOPIC) {
-        game_log("❌ Chưa khai báo NTFY_TOPIC!", "#FF0000");
-        return;
-    }
+	 if (character.name !== LEADER) return;
 
     // 2. Chuyển đổi dữ liệu và sắp xếp
     const sortedList = Object.keys(playersMap).map(name => ({
