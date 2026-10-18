@@ -306,6 +306,43 @@ async function useQuickAttack() {
 }
 
 
+async function useInvisLogic() {
+    // 1. Kiểm tra điều kiện cơ bản (mp, cooldown, buff, movement)
+    if (is_on_cooldown("invis") || character.s?.invis || smart.moving) return false;
+
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    const inRange = currentTarget && is_in_range(currentTarget) && parent.entities[currentTarget.id];
+
+    // 2. Xác định 2 cờ logic
+    // LOGIC 1: Phòng thủ khẩn cấp (Máu <= 35% HP hoặc bị monster target)
+    const isHpLow = (character.hp / character.max_hp) <= 0.35;
+    const isUnderAttack = currentTarget && currentTarget.target === character.name;
+    const isDanger = isHpLow || isUnderAttack;
+
+    // LOGIC 2: Tấn công tối ưu (Có target trong tầm VÀ CD attack còn > 300ms)
+    const timeToNextAttack = ms_to_next_skill("attack");
+    const isAttackFar = inRange && (timeToNextAttack > 300);
+
+    // 3. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
+    if (isDanger || isAttackFar) {
+        try {
+            await use_skill("invis");
+            const reason = isDanger ? "PHÒNG THỦ" : "TẤN CÔNG";
+            game_log(`🥷 Invis (${reason})`, "#800080");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+
 
 
 
@@ -2147,6 +2184,7 @@ async function skillLoop() {
                     useRspeed(); 
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 					
+					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
 					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
 					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
 
