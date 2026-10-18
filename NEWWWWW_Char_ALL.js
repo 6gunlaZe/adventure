@@ -2878,7 +2878,7 @@ const EQUIPMENT_SETS = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
 			
 			
         ],
@@ -2892,7 +2892,7 @@ const EQUIPMENT_SETS = {
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
-        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
 			
 			
         ],
