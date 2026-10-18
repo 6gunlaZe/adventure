@@ -3330,103 +3330,131 @@ async function combineInventoryStacks() {
 // 2. Chạy tự động ngay khi vừa load vào game
 combineInventoryStacks();
 
-
-// 1. Lấy thẳng dữ liệu sẵn có của game, không tính toán
+let lastTrackerUpdate = 0; // Biến ghi nhớ lần cập nhật gần nhất
+// 1. Quét và lưu trữ bảng điểm của TẤT CẢ nhân vật xung quanh
 function updateWorldBossTracker(bossEntity) {
-	 if (character.name !== LEADER) return;
+	
+    const now = Date.now();
 
-    const coop = character.s && character.s.coop;
+    // Nếu chưa đủ 1,000ms (1 giây) kể từ lần cập nhật trước -> Bỏ qua, không làm gì cả
+    if (now - lastTrackerUpdate < 1000) return;
     
-    // Lấy trực tiếp v1 (p/v1) và v2 từ object game
-    const v1 = coop ? (coop.v1 || coop.p || 0) : 0;
-    const v2 = coop ? (coop.v2 || 0) : 0;
+    // Cập nhật lại mốc thời gian vừa chạy
+    lastTrackerUpdate = now;
 
-    if (activeBossTracker.mtype !== bossEntity.mtype) {
+	
+    const currentMap = {};
+
+    // Quét toàn bộ entities xung quanh (bao gồm cả bản thân nếu có đánh)
+    if (typeof parent !== "undefined" && parent.entities) {
+        for (const id in parent.entities) {
+            const ent = parent.entities[id];
+            if (ent && ent.type === "character" && ent.s && ent.s.coop) {
+                const coop = ent.s.coop;
+                const v1 = coop.p || coop.v1 || 0;
+                const v2 = coop.v2 || Math.pow(v1, 0.65);
+
+                if (v2 > 0) {
+                    currentMap[ent.name || ent.id] = {
+                        v1: Math.round(v1),
+                        v2: Math.round(v2)
+                    };
+                }
+            }
+        }
+    }
+
+    // Reset tracker nếu gặp Boss mới hoặc Boss hồi sinh
+    if (activeBossTracker.mtype !== bossEntity.mtype || bossEntity.hp > activeBossTracker.lastHp + 100000) {
         activeBossTracker = {
             mtype: bossEntity.mtype,
-            maxV1: v1,
-            maxV2: v2,
+            players: currentMap,
             lastHp: bossEntity.hp,
             lastSeen: Date.now(),
             reported: false
         };
     } else {
-        if (v2 > activeBossTracker.maxV2) activeBossTracker.maxV2 = v2;
-        if (v1 > activeBossTracker.maxV1) activeBossTracker.maxV1 = v1;
+        // Cập nhật điểm đỉnh (Peak Points) cho từng nhân vật
+        for (const name in currentMap) {
+            if (!activeBossTracker.players[name] || currentMap[name].v2 > activeBossTracker.players[name].v2) {
+                activeBossTracker.players[name] = currentMap[name];
+            }
+        }
         activeBossTracker.lastHp = bossEntity.hp;
         activeBossTracker.lastSeen = Date.now();
     }
 }
 
-// 2. Kiểm tra khi Boss máu <= 10k hoặc biến mất sau khi máu tụt thấp
+// 2. Kiểm tra điều kiện Boss chết
 function checkWorldBossDeathStatus() {
-	 if (character.name !== LEADER) return;
-
     if (!activeBossTracker.mtype || activeBossTracker.reported) return;
 
-    const isHpBelowThreshold = activeBossTracker.lastHp <= 10000;
-    const isDisappearedAfterLowHp = (Date.now() - activeBossTracker.lastSeen > 1000) && (activeBossTracker.lastHp < 50000);
+    const isHpLow = activeBossTracker.lastHp <= 20000;
+    const isDisappeared = (Date.now() - activeBossTracker.lastSeen > 3800) && (activeBossTracker.lastHp < 100000);
 
-    if (isHpBelowThreshold || isDisappearedAfterLowHp) {
-        if (activeBossTracker.maxV2 > 0 || activeBossTracker.maxV1 > 0) {
-            sendWorldBossNtfyReport(activeBossTracker.mtype, activeBossTracker.maxV1, activeBossTracker.maxV2, activeBossTracker.lastHp);
-        }
-        
+    if (isHpLow || isDisappeared) {
+        sendWorldBossNtfyReport(activeBossTracker.mtype, activeBossTracker.players, activeBossTracker.lastHp);
         activeBossTracker.reported = true;
-        setTimeout(resetWorldBossTracker, 2000);
     }
 }
 
-// 3. Gửi thông báo ntfy
-function sendWorldBossNtfyReport(bossName, v1Pts, v2Pts, finalHp) {
-	 if (character.name !== LEADER) return;
+function sendWorldBossNtfyReport(bossName, playersMap, finalHp) {
+    // 1. Kiểm tra Topic
+    if (!NTFY_TOPIC) {
+        game_log("❌ Chưa khai báo NTFY_TOPIC!", "#FF0000");
+        return;
+    }
+
+    // 2. Chuyển đổi dữ liệu và sắp xếp
+    const sortedList = Object.keys(playersMap).map(name => ({
+        name: name,
+        v1: playersMap[name].v1,
+        v2: playersMap[name].v2
+    })).sort((a, b) => b.v2 - a.v2);
+
+    if (sortedList.length === 0) return;
+
+    const totalV2 = sortedList.reduce((sum, p) => sum + p.v2, 0);
+
+    const reportLines = sortedList.map((p, idx) => {
+        const pct = totalV2 > 0 ? ((p.v2 / totalV2) * 100).toFixed(1) : "0.0";
+        return `${idx + 1}. ${p.name}: ${p.v2.toLocaleString()} pts (${pct}%)`;
+    }).join("\n");
 
     const serverStr = (typeof parent !== "undefined" && parent.server_region) 
         ? `${parent.server_region} ${parent.server_identifier}` 
         : "Unknown";
 
-    const title = `🏆 ${bossName.toUpperCase()} KILLED - ${serverStr}`;
+    const title = `${bossName.toUpperCase()} KILLED - ${serverStr}`;
     const message = 
-`Nhân vật: ${character.name}
-Boss: ${bossName}
-Máu cuối: ${finalHp.toLocaleString()} HP
-Server: ${serverStr}
+`Boss: ${bossName}
+Mau cuoi: ${finalHp.toLocaleString()} HP
+Tong nguoi: ${sortedList.length}
 
---- ĐÓNG GÓP COOP CAO NHẤT ---
-- Points Share (V2): ${v2Pts.toLocaleString()} pts
-- Raw Damage (V1): ${v1Pts.toLocaleString()}`;
+--- BANG COOP ---
+${reportLines}`;
 
-    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+    // 3. Gửi Fetch an toàn với mã hóa UTF-8
+    fetch(`https://ntfy.sh/${encodeURIComponent(NTFY_TOPIC)}`, {
         method: "POST",
         headers: {
             "Title": title,
             "Priority": "high",
-            "Tags": "skull,trophy"
+            "Tags": "trophy",
+            "Content-Type": "text/plain; charset=utf-8"
         },
         body: message
     })
     .then(r => {
-        if (r.ok) game_log(`✅ Đã gửi NTFY báo cáo ${bossName}!`, "#00FF00");
+        if (!r.ok) throw new Error(`HTTP Status ${r.status}`);
+        game_log(`✅ NTFY gởi thành công báo cáo ${bossName}!`, "#00FF00");
     })
-    .catch(e => game_log("NTFY ERROR: " + e, "#FF0000"));
+    .catch(e => {
+        // Chi tiết lỗi để dễ debug trong Console
+        game_log(`❌ Lỗi Fetch NTFY: ${e.message}`, "#FF0000");
+        console.error("NTFY Fetch Detail Error:", e);
+    });
 }
-
-// 4. Reset tracker
-function resetWorldBossTracker() {
-	 if (character.name !== LEADER) return;
-
-    activeBossTracker = {
-        mtype: null,
-        maxV1: 0,
-        maxV2: 0,
-        lastHp: 0,
-        lastSeen: 0,
-        reported: false
-    };
-}
-
-
-
 
 
 
