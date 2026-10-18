@@ -276,6 +276,9 @@ const QUICK_DAGGERS = ["daggerofthedead", "vdagger"];
 const QUICK_FISTS   = ["cclaw", "pclaw"];
 
 async function useQuickAttack() {
+
+    if (character.mp <= 700) return false;
+
     let targeted = get_targeted_monster();
     if (targeted) currentTarget = targeted;
 
@@ -293,7 +296,7 @@ async function useQuickAttack() {
     else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
 
     // 4. Kiểm tra điều kiện thi triển
-    if (!quickSkill || is_on_cooldown(quickSkill) || character.mp <= 600) return false;
+    if (!quickSkill || is_on_cooldown(quickSkill) ) return false;
 
     // 5. Thi triển skill an toàn
     try {
@@ -331,6 +334,52 @@ async function useInvisLogic() {
             await use_skill("invis");
             const reason = isDanger ? "PHÒNG THỦ" : "TẤN CÔNG";
             game_log(`🥷 Invis (${reason})`, "#800080");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+async function useMentalBurstLogic() {
+    // 1. Kiểm tra điều kiện cơ bản
+    if (is_on_cooldown("mentalburst")) return false;
+    if (character.mp < 180) return false; // Tốn 180 MP
+
+    // Yêu cầu chỉ số INT >= 64
+    if ((character.int || 0) < 64) return false;
+
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    // 2. Kiểm tra target tồn tại và trong tầm đánh của skill Mental Burst
+    if (!currentTarget || !parent.entities[currentTarget.id]) return false;
+    
+    // Skill có range_multiplier: 1.2 và range_bonus: 32 -> Dùng is_in_range với tên skill
+    if (!is_in_range(currentTarget, "mentalburst")) return false;
+
+    // 3. Tính toán 2 CỜ LOGIC
+    
+    // Ước lượng sát thương (Sát thương phép = character.attack * 0.6)
+    const estimatedDamage = (character.attack || 100) * 0.6 - 100;
+    
+    // LOGIC 1: Kết liễu dứt điểm quái để hồi lại MP (Last Hit)
+    const isKillable = currentTarget.hp <= estimatedDamage;
+
+    // LOGIC 2: Xả dame tối ưu nhịp đánh (MP dồi dào > 50% VÀ nhịp attack thường còn > 300ms)
+    const timeToNextAttack = ms_to_next_skill("attack");
+    const isMpRich = character.mp >= 380;
+    const isAttackFar = isMpRich && (timeToNextAttack > 200);
+
+    // 4. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
+    if (isKillable || isAttackFar) {
+        try {
+            await use_skill("mentalburst", currentTarget);
+            const reason = isKillable ? "LAST HIT (RECOVER MP)" : "BURST DAMAGE";
+            game_log(`🧠 Mental Burst (${reason})`, "#00FFFF");
             return true;
         } catch (e) {
             return false;
@@ -2183,7 +2232,9 @@ async function skillLoop() {
                 case "rogue":
                     useRspeed(); 
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+
 					
+					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
 					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
 					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
 					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
