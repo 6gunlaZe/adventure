@@ -2872,7 +2872,86 @@ const EQUIPMENT_SETS = {
             
         ],
         
-    }
+    },
+
+    // ---- Cấu hình đồ cho sát thủ
+    "LyThanhThu": {
+        dame: [
+			
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+			
+			
+        ],
+        Taymana: [
+        { itemName: "pouchbow", slot: "mainhand", level: 12, l: "l" },
+            { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+			
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+
+        { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
+        { itemName: "mpxgloves", slot: "gloves", level: 5, l: "l" },
+		
+        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
+
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "pants", slot: "pants", level: 10, l: "l" },
+			
+			
+        ],
+        luck: [
+			
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
+
+        { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+        { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+        { itemName: "wattire", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "wbreeches", slot: "pants", level: 7, l: "l" },
+
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
+			
+        ],
+        def: [],
+        def_fire: [],
+    },
+
+
+	
 };
 
 // =============================================================================
@@ -3082,6 +3161,40 @@ const GEAR_LOGIC = {
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
        // if (monsterDensity >= 4) lastDefCheck = Date.now();
        // if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+		
+        return "dame"; // Trạng thái mặc định
+    },
+    // ---- Logic của (LyThanhThu) ----
+    "LyThanhThu": function() {
+        let needNormalDef = false;
+        let needLuck = false;
+        let hasTargetHuman = false; // Cờ bật khi phát hiện quái hình người
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+			
+            // Check thuộc tính gốc từ dữ liệu Game (G)
+            if (G.monsters[e.mtype]?.humanoid) {
+            hasTargetHuman = true;
+            }
+			
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck){
+            setBooster('luckbooster');
+			return "luck";
+		}
+		setBooster('xpbooster');
+
+        if (hasTargetHuman) return "Taymana"; // 
+
 		
         return "dame"; // Trạng thái mặc định
     },
