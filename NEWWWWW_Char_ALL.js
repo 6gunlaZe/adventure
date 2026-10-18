@@ -1685,7 +1685,7 @@ setInterval(function() {
         // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
         if (bossEntity && !bossEntity.dead) {
             const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
-            const safeAttackRange = Math.max(20, character.range - 20);
+            const safeAttackRange = Math.max(30, character.range - 70);
 
             if (dist > safeAttackRange) {
                 if (can_move_to(bossEntity.x, bossEntity.y)) {
