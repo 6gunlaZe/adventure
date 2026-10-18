@@ -2878,71 +2878,41 @@ const EQUIPMENT_SETS = {
     "LyThanhThu": {
         dame: [
 			
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
-            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
-            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
-            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
-            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-            { itemName: "coat", slot: "chest", level: 10, l: "l" },
-            { itemName: "pants", slot: "pants", level: 11, l: "l" },
-			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-
-        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
-
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
         { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
-
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
-
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
         { itemName: "pants", slot: "pants", level: 10, l: "l" },
 			
 			
         ],
         Taymana: [
-        { itemName: "pouchbow", slot: "mainhand", level: 12, l: "l" },
-            { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
-            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
-            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
-            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
-            { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-			
-        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
-
         { itemName: "mpxamulet", slot: "amulet", level: 0, l: "l"},
         { itemName: "mpxgloves", slot: "gloves", level: 5, l: "l" },
-		
-        { itemName: "orbofdex", slot: "orb", level: 4, l: "l" },
-
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
-        { itemName: "coat", slot: "chest", level: 10, l: "l" },	    
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
         { itemName: "pants", slot: "pants", level: 10, l: "l" },
 			
 			
         ],
         luck: [
-			
         { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
+        { itemName: "cloverstud", slot: "earring2", level: 3, l: "l"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
-
         { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
         { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
         { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
         { itemName: "wattire", slot: "chest", level: 8, l: "l" },	    
         { itemName: "wbreeches", slot: "pants", level: 7, l: "l" },
-
         { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
 			
         ],
