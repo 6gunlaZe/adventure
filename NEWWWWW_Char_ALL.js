@@ -94,7 +94,16 @@ const ALL_TARGET_MONSTERS = new Set([
     ...TARGET_MONSTERS
 ]);
 
+const NTFY_TOPIC = "adventure_vip111118899"; 
 
+let activeBossTracker = {
+    mtype: null,
+    maxV1: 0,
+    maxV2: 0,
+    lastHp: 0,
+    lastSeen: 0,
+    reported: false
+};
 
 function scanAll() {
     monsters = [];
@@ -122,6 +131,8 @@ function scanAll() {
 	
             if (WORLD_BOSSES.includes(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
+                // [CẬP NHẬT 1]: Lấy trực tiếp điểm coop sẵn có từ game
+                updateWorldBossTracker(entity);
             }
 			
             if (entity.mtype === "fieldgen0") {
@@ -164,6 +175,10 @@ function scanAll() {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
     if (character.name === MERCHANT) merchant = character;
+	
+    // [CẬP NHẬT 2]: Kiểm tra trạng thái boss chết ở cuối hàm scanAll
+    checkWorldBossDeathStatus();
+	
 }
 
 
@@ -3316,7 +3331,99 @@ async function combineInventoryStacks() {
 combineInventoryStacks();
 
 
+// 1. Lấy thẳng dữ liệu sẵn có của game, không tính toán
+function updateWorldBossTracker(bossEntity) {
+	 if (character.name !== LEADER) return;
 
+    const coop = character.s && character.s.coop;
+    
+    // Lấy trực tiếp v1 (p/v1) và v2 từ object game
+    const v1 = coop ? (coop.v1 || coop.p || 0) : 0;
+    const v2 = coop ? (coop.v2 || 0) : 0;
+
+    if (activeBossTracker.mtype !== bossEntity.mtype) {
+        activeBossTracker = {
+            mtype: bossEntity.mtype,
+            maxV1: v1,
+            maxV2: v2,
+            lastHp: bossEntity.hp,
+            lastSeen: Date.now(),
+            reported: false
+        };
+    } else {
+        if (v2 > activeBossTracker.maxV2) activeBossTracker.maxV2 = v2;
+        if (v1 > activeBossTracker.maxV1) activeBossTracker.maxV1 = v1;
+        activeBossTracker.lastHp = bossEntity.hp;
+        activeBossTracker.lastSeen = Date.now();
+    }
+}
+
+// 2. Kiểm tra khi Boss máu <= 10k hoặc biến mất sau khi máu tụt thấp
+function checkWorldBossDeathStatus() {
+	 if (character.name !== LEADER) return;
+
+    if (!activeBossTracker.mtype || activeBossTracker.reported) return;
+
+    const isHpBelowThreshold = activeBossTracker.lastHp <= 10000;
+    const isDisappearedAfterLowHp = (Date.now() - activeBossTracker.lastSeen > 1000) && (activeBossTracker.lastHp < 50000);
+
+    if (isHpBelowThreshold || isDisappearedAfterLowHp) {
+        if (activeBossTracker.maxV2 > 0 || activeBossTracker.maxV1 > 0) {
+            sendWorldBossNtfyReport(activeBossTracker.mtype, activeBossTracker.maxV1, activeBossTracker.maxV2, activeBossTracker.lastHp);
+        }
+        
+        activeBossTracker.reported = true;
+        setTimeout(resetWorldBossTracker, 2000);
+    }
+}
+
+// 3. Gửi thông báo ntfy
+function sendWorldBossNtfyReport(bossName, v1Pts, v2Pts, finalHp) {
+	 if (character.name !== LEADER) return;
+
+    const serverStr = (typeof parent !== "undefined" && parent.server_region) 
+        ? `${parent.server_region} ${parent.server_identifier}` 
+        : "Unknown";
+
+    const title = `🏆 ${bossName.toUpperCase()} KILLED - ${serverStr}`;
+    const message = 
+`Nhân vật: ${character.name}
+Boss: ${bossName}
+Máu cuối: ${finalHp.toLocaleString()} HP
+Server: ${serverStr}
+
+--- ĐÓNG GÓP COOP CAO NHẤT ---
+- Points Share (V2): ${v2Pts.toLocaleString()} pts
+- Raw Damage (V1): ${v1Pts.toLocaleString()}`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+        method: "POST",
+        headers: {
+            "Title": title,
+            "Priority": "high",
+            "Tags": "skull,trophy"
+        },
+        body: message
+    })
+    .then(r => {
+        if (r.ok) game_log(`✅ Đã gửi NTFY báo cáo ${bossName}!`, "#00FF00");
+    })
+    .catch(e => game_log("NTFY ERROR: " + e, "#FF0000"));
+}
+
+// 4. Reset tracker
+function resetWorldBossTracker() {
+	 if (character.name !== LEADER) return;
+
+    activeBossTracker = {
+        mtype: null,
+        maxV1: 0,
+        maxV2: 0,
+        lastHp: 0,
+        lastSeen: 0,
+        reported: false
+    };
+}
 
 
 
