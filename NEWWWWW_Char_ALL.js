@@ -31,10 +31,11 @@ const FARM_LOCATIONS = {
 
 
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 27, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "elixirluck" },
-    "6gunlaZe": { slot: 33, home: true, events: ["mrgreen"], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "6gunlaZe": { slot: 3, home: true, events: ["mrgreen"], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
     "haiz": { slot: 0, home: false, events: [""], solo: false, circle: true, radius: 30, elixir: "pumpkinspice" },
-    "nhiY": { slot: 12, home: false, events: ["mrpumpkin",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+   // "nhiY": { slot: 3, home: false, events: ["mrpumpkin",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen",], elixir: "elixirluck" }
 	
 };
