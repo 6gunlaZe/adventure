@@ -1434,7 +1434,7 @@ function tryCleanLowHP_cburst() {
 
 
 const quaiA_Yeu = [
-    "rooster", "cutebee", "bigbird", "spider", "scorpion", "bscorpion", "gscorpion", "crabx", "mummy", "booboo", "rgoo", "bgoo", "wolfie", "jr", "goldenbat", "crabxx", "snowman", "wabbit",
+    "rooster", "cutebee", "bigbird", "spider", "scorpion", "bscorpion", "gscorpion", "crabx", "mummy", "booboo", "rgoo", "bgoo", "wolfie", "jr", "goldenbat", "crabxx", "snowman", "wabbit", "mrgreen", "mrpumpkin"
 ];
 
 const quaiB_Boss = [
@@ -1460,7 +1460,7 @@ async function tryzapper() {
 
     // 🛑 Đếm chính xác số quái thực tế đang target vào nhân vật từ mảng `monsters`
     const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
-    if (currentTargetsCount >= MAX_ZAP_TARGETS) return; // Đang tank quá ngưỡng -> Dừng Zap ngay
+    if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85 ) return; // Đang tank quá ngưỡng -> Dừng Zap ngay
 
     const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
     const isLeaderNear = leaderObj && leaderObj.distance < 250;
