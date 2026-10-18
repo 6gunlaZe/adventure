@@ -370,8 +370,22 @@ async function useMentalBurstLogic() {
     const isKillable = currentTarget.hp <= estimatedDamage;
 
     // LOGIC 2: Xả dame tối ưu nhịp đánh (MP dồi dào > 50% VÀ nhịp attack thường còn > 300ms)
+
+    // TÍNH MỐC MP YÊU CẦU DỰA TRÊN RESISTANCE CỦA TARGET
+    const targetRes = currentTarget.resistance || 0;
+    let requiredMp = 380; // Ngưỡng mặc định gốc
+
+    if (targetRes >= 400) {
+        requiredMp = 1500;
+    } else if (targetRes >= 300) {
+        requiredMp = 1200;
+    } else if (targetRes >= 200) {
+        requiredMp = 900;
+    }
+
+	
     const timeToNextAttack = ms_to_next_skill("attack");
-    const isMpRich = character.mp >= 380;
+    const isMpRich = character.mp >= requiredMp;
     const isAttackFar = isMpRich && (timeToNextAttack > 200);
 
     // 4. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
