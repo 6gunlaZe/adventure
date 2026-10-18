@@ -3330,22 +3330,28 @@ async function combineInventoryStacks() {
 // 2. Chạy tự động ngay khi vừa load vào game
 combineInventoryStacks();
 
-let lastTrackerUpdate = 0; // Biến ghi nhớ lần cập nhật gần nhất
-// 1. Quét và lưu trữ bảng điểm của TẤT CẢ nhân vật xung quanh
+// ============================================================
+// WORLD BOSS TRACKER - BẢO TOÀN ĐIỂM ĐỈNH & DELAY 1 GIÂY
+// ============================================================
+
+let lastTrackerUpdate = 0;
+
 function updateWorldBossTracker(bossEntity) {
-	
     const now = Date.now();
 
-    // Nếu chưa đủ 1,000ms (1 giây) kể từ lần cập nhật trước -> Bỏ qua, không làm gì cả
-    if (now - lastTrackerUpdate < 1000) return;
-    
-    // Cập nhật lại mốc thời gian vừa chạy
+    // 1. HP và lastSeen LUÔN CẬP NHẬT MỖI FRAME (Bắt chính xác khoảnh khắc Boss ngã xuống)
+    activeBossTracker.lastHp = bossEntity.hp;
+    activeBossTracker.lastSeen = now;
+
+    // 2. DELAY ĐÚNG 1 GIÂY (1000ms) CHO PHẦN QUÉT DANH SÁCH BẢNG ĐIỂM
+    if (now - lastTrackerUpdate < 1000 && activeBossTracker.mtype === bossEntity.mtype) {
+        return; // Chưa đủ 1s thì dừng, không thực hiện quét lại
+    }
     lastTrackerUpdate = now;
 
-	
     const currentMap = {};
 
-    // Quét toàn bộ entities xung quanh (bao gồm cả bản thân nếu có đánh)
+    // A. Quét người chơi xung quanh từ parent.entities
     if (typeof parent !== "undefined" && parent.entities) {
         for (const id in parent.entities) {
             const ent = parent.entities[id];
@@ -3354,7 +3360,7 @@ function updateWorldBossTracker(bossEntity) {
                 const v1 = coop.p || coop.v1 || 0;
                 const v2 = coop.v2 || Math.pow(v1, 0.65);
 
-                if (v2 > 0) {
+                if (v1 > 0 || v2 > 0) {
                     currentMap[ent.name || ent.id] = {
                         v1: Math.round(v1),
                         v2: Math.round(v2)
@@ -3364,24 +3370,45 @@ function updateWorldBossTracker(bossEntity) {
         }
     }
 
-    // Reset tracker nếu gặp Boss mới hoặc Boss hồi sinh
+    // B. Ép quét chính bản thân (vì parent.entities KHÔNG chứa character)
+    if (character && character.s && character.s.coop) {
+        const coop = character.s.coop;
+        const v1 = coop.p || coop.v1 || 0;
+        const v2 = coop.v2 || Math.pow(v1, 0.65);
+        if (v1 > 0 || v2 > 0) {
+            currentMap[character.name] = {
+                v1: Math.round(v1),
+                v2: Math.round(v2)
+            };
+        }
+    }
+
+    // C. Khởi tạo nếu gặp Boss mới HOẶC Cập nhật TÍCH LŨY điểm đỉnh
     if (activeBossTracker.mtype !== bossEntity.mtype || bossEntity.hp > activeBossTracker.lastHp + 100000) {
         activeBossTracker = {
             mtype: bossEntity.mtype,
             players: currentMap,
             lastHp: bossEntity.hp,
-            lastSeen: Date.now(),
+            lastSeen: now,
             reported: false
         };
     } else {
-        // Cập nhật điểm đỉnh (Peak Points) cho từng nhân vật
+        // TÍCH LŨY & LƯU GIỮ ĐIỂM ĐỈNH: Chỉ nâng điểm, KHÔNG BAO GIỜ XÓA TÊN
         for (const name in currentMap) {
-            if (!activeBossTracker.players[name] || currentMap[name].v2 > activeBossTracker.players[name].v2) {
-                activeBossTracker.players[name] = currentMap[name];
+            const newV1 = currentMap[name].v1;
+            const newV2 = currentMap[name].v2;
+
+            if (!activeBossTracker.players[name]) {
+                activeBossTracker.players[name] = { v1: newV1, v2: newV2 };
+            } else {
+                if (newV2 > activeBossTracker.players[name].v2) {
+                    activeBossTracker.players[name].v2 = newV2;
+                }
+                if (newV1 > activeBossTracker.players[name].v1) {
+                    activeBossTracker.players[name].v1 = newV1;
+                }
             }
         }
-        activeBossTracker.lastHp = bossEntity.hp;
-        activeBossTracker.lastSeen = Date.now();
     }
 }
 
