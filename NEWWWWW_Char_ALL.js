@@ -477,49 +477,91 @@ async function use_multi_shot() {
 
 
 
+let primaryBeltName = null;
+
 async function use_fan_of_knives() {
-    // 1. Kiểm tra tài nguyên và trạng thái sớm
-    if (attackBusy || character.hp / character.max_hp < 0.3 )return false;
-    if (character.mp < G.skills["fanofknives"].mp + 330) {
+    // 1. Ghi nhớ Belt chính nếu không phải knifebelt
+    if ( !primaryBeltName && character.slots.belt?.name && character.slots.belt.name !== "knifebelt") {
+        primaryBeltName = character.slots.belt.name;
+    }
+
+    // Hàm phụ trợ: Trả lại Belt cũ khi đánh thường
+    const revertToPrimaryBelt = async () => {
+        if (primaryBeltName && character.slots.belt?.name !== primaryBeltName) {
+            const slot = character.items.findIndex(i => i?.name === primaryBeltName);
+            if (slot >= 0) {
+                try { await equip(slot); } catch (e) {}
+            }
+        }
+    };
+
+    // 2. Kiểm tra tài nguyên & trạng thái sớm
+    if (attackBusy || character.hp / character.max_hp < 0.3) return false;
+
+    const requiredMp = (G.skills["fanofknives"]?.mp || 100) + 330;
+    if (character.mp < requiredMp) {
+        await revertToPrimaryBelt();
         await useAttack();
         return false;
     }
     
-    // 2. KIỂM TRA COOLDOWN & BÙ PING (Cực kỳ tiết kiệm CPU)
-    // Vì skill này chung mâm với đánh thường, ta check thời gian chờ của "attack" 
+    // 3. KIỂM TRA COOLDOWN & BÙ PING
     const pingComp = Math.max(10, character.ping / 10);
     if (ms_to_next_skill("attack") > pingComp) {
         return false; 
     }
 
-    // 3. Kiểm tra an toàn (Quái cấp cao cắn)
+    // 4. Kiểm tra an toàn (Quái cấp cao cắn)
     if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+
+    // Lọc cực nhanh mà KHÔNG tốn CPU tính lại distance
+    const inRangeEntities = monsters
+        .filter(m => m.distance <= 160)
+        .map(m => m.entity);
+
+    // CHỐT CHẶN QUÁI TRÂU: Phát hiện quái > 800,000 HP trong bán kính 160px -> Trả Belt cũ & Đánh thường
+    const hasBigBoss = inRangeEntities.some(e => (e.max_hp || 0) > 800000);
+    if (hasBigBoss) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+
+    // 6. Lọc quái nhỏ hợp lệ (Level <= 1)
+    const validMonsters = inRangeEntities.filter(e => e.level <= 1);
+
+    // Không đủ 3 quái nhỏ trong bán kính 160px -> Trả Belt cũ & Đánh thường
+    if (validMonsters.length < 3) {
+        await revertToPrimaryBelt();
         await useAttack();
         return false;
     }
 
     attackBusy = true;
     try {
-        // 4. Lọc quái hợp lệ
-        const validMonsters = monsters
-            .map(m => m.entity)
-            .filter(e => e.level <= 1 && is_in_range(e, "fanofknives"));
+        // 7. ĐỦ ĐIỀU KIỆN MỚI ĐỔI KNIFEBELT
+        if (character.slots.belt?.name !== "knifebelt") {
+            const slot = character.items.findIndex(i => i?.name === "knifebelt");
+            
+            if (slot < 0) {
+                await revertToPrimaryBelt();
+                await useAttack();
+                return false;
+            }
 
-        // TỐI ƯU CPU: Nếu không đủ 3 con thì nghỉ luôn, KHÔNG cần chạy hàm Sort nặng nề
-        if (validMonsters.length < 3){
-        await useAttack();
-            return false;
+            await equip(slot);
         }
-        // 5. Sắp xếp theo thứ tự ưu tiên (Leader 50px -> Debuff -> Aggro Party -> Max HP)
-        const sortedMonsters = sortMonstersByPriority(validMonsters);
 
-        // Lấy 5 quái tốt nhất
+        // 8. Sắp xếp ưu tiên và lấy tối đa 5 quái
+        const sortedMonsters = sortMonstersByPriority(validMonsters);
         const targets = sortedMonsters.slice(0, 5);
 
-        // 6. Tung chiêu và Ép xung Cooldown
+        // 9. Tung chiêu & Bù Ping Cooldown
         await use_skill("fanofknives", targets);
-        
-        // Bù Ping ngay lập tức cho thanh Cooldown đánh thường
         reduce_cooldown("attack", character.ping * 0.95);
         
         return true;
@@ -530,6 +572,11 @@ async function use_fan_of_knives() {
         attackBusy = false;
     }
 }
+
+
+
+
+
 
 
 function on_magiport(name) {
