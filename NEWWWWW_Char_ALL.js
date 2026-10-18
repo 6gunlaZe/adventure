@@ -163,7 +163,7 @@ function scanAll() {
                 merchant = entity;
             }
 
-            if (entity.ctype === "priest" && !entity.dead && dist <= 200 && character.party && entity.hp/entity.max_hp > 0.2 && character.hp/character.max_hp > 0.25) {
+            if (entity.ctype === "priest" && !entity.dead && dist <= 300 && character.party && entity.hp/entity.max_hp > 0.2 && character.hp/character.max_hp > 0.25) {
                 SAFE = true;
             }
         }
