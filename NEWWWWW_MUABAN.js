@@ -2230,7 +2230,7 @@ setInterval(makeShiny, 500);
 
 
     // ============================================================
-    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (5 PHÚT)
+    // TỰ ĐỘNG STORAGE KHI TÚI ĐẦY HOẶC IDLE LÂU (4 PHÚT)
     // ============================================================
 
 let lastIdleTime = Date.now();
@@ -2313,7 +2313,7 @@ setInterval(() => {
     }
 
     const inventoryFull = is_inventory_full() || character.esize < 3;
-    const idleStorage = now - lastIdleTime >= 5 * 60 * 1000;
+    const idleStorage = now - lastIdleTime >= 4 * 60 * 1000;
 
     // Chưa đủ điều kiện STORAGE
     if (!inventoryFull && !idleStorage) {
