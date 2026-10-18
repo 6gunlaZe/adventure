@@ -25,15 +25,15 @@ const TRASH_ITEMS = [
 // ==========================================
 const ITEMS_TO_RETRIEVE = [
     { name: "goldnugget", qty: 999, minEsize: 1999 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay, hiện tại đang hết hàng nên để 999
-    { name: "essenceoffire", qty: 50, minEsize: 26999 },    // không quan trọng, rút khi thật sự dư time
+    { name: "essenceoffire", qty: 60, minEsize: 26 },    // không quan trọng, rút khi thật sự dư time
     //{ name: "essenceoffire", qty: 50, minEsize: 17 },      // Bình thường: cần trống ít nhất 17 ô
 ];
 const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ rút
 
 
 
-// 1. Khai báo danh sách các món đồ ưu tiên chế tạo
-const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","fireblade"];
+// 1. Khai báo danh sách các món đồ ưu tiên chế tạo : fireblade
+const craftList = ["computer", "cloverstud","moonshardearring","carrotsword","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, candy0: 1, marketparcel: 1, candy1: 1,
@@ -53,7 +53,7 @@ const IMPORTANT_ITEMS = [
 const shinyList = {
     "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
    // "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
-    "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+   // "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
 };
 
 
