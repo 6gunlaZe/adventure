@@ -283,13 +283,10 @@ async function useQuickAttack() {
     let targeted = get_targeted_monster();
     if (targeted) currentTarget = targeted;
 
-    // 1. Kiểm tra target tồn tại thực tế và đủ tầm đánh
     if (!currentTarget || !parent.entities[currentTarget.id] ) return false;
 
-    // 2. Phải có khoảng trống cooldown đòn đánh (> 400ms) để kẹp skill mà không mất nhịp đánh thường
-    if (ms_to_next_skill("attack") <= 400) return false;
+    if (ms_to_next_skill("attack") <= 200) return false;
 
-    // 3. Xác định kỹ năng theo vũ khí tay chính
     const mhName = character.slots.mainhand?.name;
     let quickSkill = null;
 
@@ -350,19 +347,15 @@ async function useMentalBurstLogic() {
     if (is_on_cooldown("mentalburst")) return false;
     if (character.mp < 180) return false; // Tốn 180 MP
 
-    // Yêu cầu chỉ số INT >= 64
     if ((character.int || 0) < 64) return false;
 
     let targeted = get_targeted_monster();
     if (targeted) currentTarget = targeted;
 
-    // 2. Kiểm tra target tồn tại và trong tầm đánh của skill Mental Burst
     if (!currentTarget || !parent.entities[currentTarget.id]) return false;
     
-    // Skill có range_multiplier: 1.2 và range_bonus: 32 -> Dùng is_in_range với tên skill
     if (!is_in_range(currentTarget, "mentalburst")) return false;
 
-    // 3. Tính toán 2 CỜ LOGIC
     
     // Ước lượng sát thương (Sát thương phép = character.attack * 0.6)
     const estimatedDamage = (character.attack || 100) * 0.6 - 100;
@@ -370,9 +363,7 @@ async function useMentalBurstLogic() {
     // LOGIC 1: Kết liễu dứt điểm quái để hồi lại MP (Last Hit)
     const isKillable = currentTarget.hp <= estimatedDamage;
 
-    // LOGIC 2: Xả dame tối ưu nhịp đánh (MP dồi dào > 50% VÀ nhịp attack thường còn > 300ms)
 
-    // TÍNH MỐC MP YÊU CẦU DỰA TRÊN RESISTANCE CỦA TARGET
     const targetRes = currentTarget.resistance || 0;
     let requiredMp = 380; // Ngưỡng mặc định gốc
 
@@ -387,7 +378,7 @@ async function useMentalBurstLogic() {
 	
     const timeToNextAttack = ms_to_next_skill("attack");
     const isMpRich = character.mp >= requiredMp;
-    const isAttackFar = isMpRich && (timeToNextAttack > 200);
+    const isAttackFar = isMpRich && (timeToNextAttack > 100);
 
     // 4. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
     if (isKillable || isAttackFar) {
