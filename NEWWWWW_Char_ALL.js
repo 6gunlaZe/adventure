@@ -1145,14 +1145,10 @@ async function tryStomp() {
     );
     const cond4 = (FARM_MONSTER === "rimedjinn") && mobsNearby50.some(m => {
         const e = m.entity;
-        if (e.mtype === "rimedjinn" && e.target) {
-            const maxHp = e.max_hp || G.monsters[e.mtype]?.hp || e.hp;
-            const hpPct = (e.hp / maxHp) * 100;
-            return hpPct > 45 && hpPct < 50;
-        }
-        return false;
+        return e.mtype === "rimedjinn" && e.target && e.s?.rimeshell;
     });
 
+	
     if (!cond1 && !cond2 && !cond3 && !cond4) return false;
 
 	
