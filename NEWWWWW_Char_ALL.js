@@ -25,6 +25,8 @@ const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
     bat: { x: -194, y: -461, map: "cave" },
     targetron: { x: -512, y: -239, map: "uhills" },
+    rimedjinn: { x: 400, y: -1700, map: "winter_cove" },
+
 
 };
 
