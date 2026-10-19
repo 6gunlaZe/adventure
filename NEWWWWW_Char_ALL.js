@@ -25,17 +25,17 @@ const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
     bat: { x: -194, y: -461, map: "cave" },
     targetron: { x: -512, y: -239, map: "uhills" },
-    rimedjinn: { x: 400, y: -1700, map: "winter_cove" },
+    rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
 
 
 };
 
 
-
+// Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "elixirluck" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 20, elixir: "elixirluck" },
     "6gunlaZe": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
-    "haiz": { slot: 0, home: false, events: [""], solo: false, circle: true, radius: 30, elixir: "pumpkinspice" },
+    "haiz": { slot: 0, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen",], elixir: "elixirluck" }
@@ -45,7 +45,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "rimedjinn"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
@@ -1609,7 +1609,7 @@ async function tryzapper() {
     // 🎯 ƯU TIÊN 1: Quái B (Boss) -> Cần Leader ở gần + Chưa có target
     if (isLeaderNear) {
         const targetBoss = monsters.find(m => 
-            quaiB_Boss.includes(m.entity.mtype) && 
+            quaiB_Boss.includes(m.entity.mtype) && m.entity.mtype != "rimedjinn" &&
             !m.entity.target && 
             is_in_range(m.entity, "zapperzap")
         );
@@ -1630,6 +1630,41 @@ async function tryzapper() {
         await use_skill("zapperzap", targetWeak.entity);
         return;
     }
+
+    // =========================================================================
+    // 🎯 ƯU TIÊN 3: KIỂM TRA RIMEDJINN > 55% MÁU & ZAP QUÁI CHƯA TARGET MÁU TO NHẤT
+    // =========================================================================
+
+	if (FARM_MONSTER != "rimedjinn" || character.map != "winter_cove" ) return // chặn logic, chỉ đi xuống khi đang fram rimedjinn đúng map 
+    // 1. Kiểm tra xem có con Rimedjinn nào đang đánh Party và còn > 45% HP không
+    const hasStrongRimedjinn = monsters.some(m => {
+        const e = m.entity;
+        if (e.mtype === "rimedjinn" && PARTY.includes(e.target)) {
+            const maxHp = e.max_hp;
+            return (e.hp / maxHp) * 100 > 46;
+        }
+        return false;
+    });
+
+    // 2. Nếu không có con rimedjinn trâu nào đang quấy rối Party -> Tìm quái tự do máu to nhất để Zap kéo về
+    if (!hasStrongRimedjinn) {
+        const untargetedMobs = monsters.filter(m => {
+            const e = m.entity;
+            return (!e.target || e.target === "") && is_in_range(e, "zapperzap");
+        });
+
+        if (untargetedMobs.length > 0) {
+            // Sắp xếp theo máu từ cao xuống thấp
+            untargetedMobs.sort((a, b) => b.entity.hp - a.entity.hp);
+            
+            // Zap con chưa có target có máu lớn nhất
+            const targetBigMob = untargetedMobs[0];
+            lastZapTime = Date.now();
+            await use_skill("zapperzap", targetBigMob.entity);
+            return;
+        }
+    }
+
 }
 
 
@@ -2948,7 +2983,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
@@ -3002,7 +3037,7 @@ const GEAR_LOGIC = {
                 if (e.damage_type === "magical") hasMagical = true;
             }
 
-            if ((isTargetingMe && e.hp < 11000) || (isCoop && e.hp < 150000)) {
+            if ((isTargetingMe && e.hp < 11000) || (isCoop && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )) {
                 needLuck = true;
             }
         }
@@ -3072,7 +3107,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if (e.cooperative && e.hp < 350000)
+        if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
@@ -3113,7 +3148,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
@@ -3146,7 +3181,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < 350000) needLuck = true;
+            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
         }
 
