@@ -3089,8 +3089,8 @@ const GEAR_LOGIC = {
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
         // -------------------------
 
-        if (hasPhysical) return "def_phys";
-        if (hasMagical) return "def_mag";
+        if (hasPhysical) return "def_mixed";
+        if (hasMagical) return "def_mixed";
 
         // 6. Mặc định sang đồ Dame -> mix
         return "def_mixed";
