@@ -10,7 +10,7 @@ const TRASH_ITEMS = [
   "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
-  "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape",
+  "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
   "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","bowofthedead","cave_locktooth",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
@@ -384,7 +384,7 @@ const COMPOUND_RULES = [
     { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null },  ] },
     { items: ["keepsakependant","guestbook",], rules: [{ levels: [0,1], scroll: "cscroll1", offering: null },  ] },
     { items: ["jacko"], rules: [{ levels: [0,1], scroll: null, offering: null }, { levels: [2,3], scroll: "cscroll1", offering: null }, { levels: [4], scroll: "cscroll2", offering: "offeringp" },  ] },
-    { items: ["lantern"], rules: [{ levels: [0,], scroll: "cscroll2", offering: null }, { levels: [1,2], scroll: "cscroll2", offering: "offeringp" },  ] },
+    { items: ["lantern111"], rules: [{ levels: [0,], scroll: "cscroll2", offering: null }, { levels: [1,2], scroll: "cscroll2", offering: "offeringp" },  ] },
 
 ];
 
