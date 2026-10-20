@@ -1669,7 +1669,7 @@ async function tryzapper() {
         const e = m.entity;
         if (e.mtype === "rimedjinn" && PARTY.includes(e.target)) {
             const maxHp = e.max_hp;
-            return (e.hp / maxHp) * 100 > 76;
+            return (e.hp / maxHp) * 100 > 86;
         }
         return false;
     });
