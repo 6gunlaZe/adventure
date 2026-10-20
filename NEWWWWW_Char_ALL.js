@@ -35,7 +35,7 @@ const FARM_LOCATIONS = {
 const CHAR_CONFIG = {
     "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 20, elixir: "elixirluck" },
     "6gunlaZe": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
-    "haiz": { slot: 0, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
+    "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen",], elixir: "elixirluck" }
@@ -45,7 +45,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "rimedjinn"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
