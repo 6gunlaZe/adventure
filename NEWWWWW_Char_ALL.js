@@ -3047,7 +3047,7 @@ const GEAR_LOGIC = {
         if (hasTargetForDame) return "dame";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
-        if (monsterDensity >= 5) lastDefCheck = Date.now();
+        if (monsterDensity >= 4) lastDefCheck = Date.now();
         if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
 		
         if (monsterDensity >= 2) return "dame2";
