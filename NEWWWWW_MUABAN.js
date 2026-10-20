@@ -341,8 +341,8 @@ group_vip6: [
 var upgradeWhitelistVIPP = {
 	group_basic: ["ololipop",],
 	group_basic00: ["glolipop"],
-	group_basic01: ["firebow","fireblade","firestaff"],	
-	group_basic02: ["gcape","eslippers11","ecape"],	
+	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
+	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
 	group_basic04: ["angelwings","froststaff","daggerofthedead1111","tshirt4"],
 	group_basic05: ["wingedboots"],	
