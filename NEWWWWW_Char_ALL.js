@@ -1664,12 +1664,12 @@ async function tryzapper() {
     // =========================================================================
 
 	if (FARM_MONSTER != "rimedjinn" || character.map != "winter_cove" ) return // chặn logic, chỉ đi xuống khi đang fram rimedjinn đúng map 
-    // 1. Kiểm tra xem có con Rimedjinn nào đang đánh Party và còn > 45% HP không
+    // 1. Kiểm tra xem có con Rimedjinn nào đang đánh Party và còn > % HP không
     const hasStrongRimedjinn = monsters.some(m => {
         const e = m.entity;
         if (e.mtype === "rimedjinn" && PARTY.includes(e.target)) {
             const maxHp = e.max_hp;
-            return (e.hp / maxHp) * 100 > 66;
+            return (e.hp / maxHp) * 100 > 76;
         }
         return false;
     });
