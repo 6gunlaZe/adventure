@@ -213,6 +213,26 @@ function sortMonstersByPriority(monsterList) {
         const aIsSuper = SUPER_BOSSES.includes(a.mtype);
         const bIsSuper = SUPER_BOSSES.includes(b.mtype);
         if (aIsSuper !== bIsSuper) return aIsSuper ? -1 : 1;
+
+        // Chỉ check 0.1 và 0.2 khi biến FARM_MONSTER === "rimedjinn"
+        if (FARM_MONSTER === "rimedjinn") {
+            // 0.1. Ưu tiên: Quái rimedjinn đang có hiệu ứng rimeshell
+            const aRimeExp = a.mtype === "rimedjinn" && !!a.s?.rimeshell;
+            const bRimeExp = b.mtype === "rimedjinn" && !!b.s?.rimeshell;
+            if (aRimeExp !== bRimeExp) return aRimeExp ? -1 : 1;
+
+            // 0.2. Ưu tiên: Quái rimedjinn có máu từ 49% đến 55%
+            const checkRimeHp = (e) => {
+                if (e.mtype !== "rimedjinn") return false;
+                const maxHp = e.max_hp || G.monsters[e.mtype]?.hp || e.hp;
+                const hpPct = (e.hp / maxHp) * 100;
+                return hpPct >= 49 && hpPct <= 55;
+            };
+            const aRimeHp = checkRimeHp(a);
+            const bRimeHp = checkRimeHp(b);
+            if (aRimeHp !== bRimeHp) return aRimeHp ? -1 : 1;
+        }
+
 		
         // 1. Ưu tiên TUYỆT ĐỐI: Boss hoặc Quái hiếm
         const aIsBoss = TARGET_BOSSES.includes(a.mtype);
@@ -1147,7 +1167,7 @@ async function tryStomp() {
         const e = m.entity;
         const rimeExp = e.s?.rimeshell;
         
-        // Kiểm tra có rimeexposed và ms còn lại nhỏ hơn 1500ms (1.5 giây)
+        // Kiểm tra ms còn lại
         return e.mtype === "rimedjinn" && e.target && rimeExp && rimeExp.ms < 1000;
     });
 	
@@ -1649,7 +1669,7 @@ async function tryzapper() {
         const e = m.entity;
         if (e.mtype === "rimedjinn" && PARTY.includes(e.target)) {
             const maxHp = e.max_hp;
-            return (e.hp / maxHp) * 100 > 46;
+            return (e.hp / maxHp) * 100 > 66;
         }
         return false;
     });
