@@ -2861,7 +2861,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "covemantle", slot: "cape", level: 6, l: "l" },  
+        { itemName: "covemantle", slot: "cape", level: 7, l: "l" },  
 
         { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
@@ -2884,7 +2884,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "covemantle", slot: "cape", level: 6, l: "l" },  
+        { itemName: "covemantle", slot: "cape", level: 7, l: "l" },  
 
         { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
@@ -2909,7 +2909,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "covemantle", slot: "cape", level: 6, l: "l" },  
+        { itemName: "covemantle", slot: "cape", level: 7, l: "l" },  
 
         { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
@@ -2957,7 +2957,7 @@ const EQUIPMENT_SETS = {
         { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
-        { itemName: "covemantle", slot: "cape", level: 6, l: "l" },  
+        { itemName: "covemantle", slot: "cape", level: 7, l: "l" },  
 
         { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
