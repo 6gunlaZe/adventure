@@ -1143,11 +1143,13 @@ async function tryStomp() {
     const cond3 = mobsNearby50.length > 10 && ynhi && !ynhi.dead && (
         (ynhi.hp / ynhi.max_hp < 0.8) || (ynhi.mp / ynhi.max_mp < 0.8)
     );
-    const cond4 = (FARM_MONSTER === "rimedjinn") && mobsNearby50.some(m => {
+    const cond4 = (ad === "rimedjinn") && mobsNearby50.some(m => {
         const e = m.entity;
-        return e.mtype === "rimedjinn" && e.target && e.s?.rimeshell;
+        const rimeExp = e.s?.rimeshell;
+        
+        // Kiểm tra có rimeexposed và ms còn lại nhỏ hơn 1500ms (1.5 giây)
+        return e.mtype === "rimedjinn" && e.target && rimeExp && rimeExp.ms < 1000;
     });
-
 	
     if (!cond1 && !cond2 && !cond3 && !cond4) return false;
 
