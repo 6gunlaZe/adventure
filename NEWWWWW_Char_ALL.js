@@ -13,7 +13,7 @@ const EXCLUDE = new Set([
 // Các quái được phép tấn công gồm các phân loại sau
 const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
-const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire","rimedjinn"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
+const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -2669,10 +2669,7 @@ const EQUIPMENT_SETS = {
     "haiz": {
         dame: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
-			
-        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
-
+        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -2683,6 +2680,24 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
         ],
+		
+        dame2: [
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
+			
+        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+
+        ],
+		
         mana: [
 			
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
@@ -2779,7 +2794,7 @@ const EQUIPMENT_SETS = {
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 9, l: "l" },
             { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
-            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
             { itemName: "pants", slot: "pants", level: 11, l: "l" },
 			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
@@ -3177,7 +3192,8 @@ const GEAR_LOGIC = {
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
         if (monsterDensity >= 4) lastDefCheck = Date.now();
         if (character.hp > 8500 && (Date.now() - lastDefCheck < 5000)) return "mana";
-	
+        if (monsterDensity >= 2) return "dame2";
+
     return "dame";
 },
     // ---- Logic của Mage (nhiY) ----
