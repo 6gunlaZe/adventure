@@ -2852,7 +2852,7 @@ const EQUIPMENT_SETS = {
         { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
         { itemName: "intbelt", slot: "belt", level: 5, l: "l" },
 
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
         { itemName: "orbofint", slot: "orb", level: 3, l: "l" },	
@@ -2900,7 +2900,7 @@ const EQUIPMENT_SETS = {
         { itemName: "shield", slot: "offhand", level: 9, l: "l" },
         { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
 
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
@@ -2950,7 +2950,7 @@ const EQUIPMENT_SETS = {
         ],
         def_fire: [
 
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
 
         { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
