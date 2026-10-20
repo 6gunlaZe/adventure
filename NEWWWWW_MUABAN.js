@@ -364,7 +364,7 @@ var upgradeWhitelistVIPP = {
 	group_vip2: ["supermittens",],
 	group_vip3: ["harbringer","homecominghelm","homecomingcoat","homecomingcape",],
 	group_vip4: ["candleward",],
-	group_vip5: ["reunionbow",],
+	group_vip5: ["reunionbow","djinncrown"],
 	group_vip6: ["paradequiver",],
 	group_Supervip: ["fury11",],
 
