@@ -1927,7 +1927,7 @@ setInterval(function() {
     // GRAVEYARD RISING EVENT HANDLING
     const graveyardEvent = server?.status?.graveyard || parent?.S?.graveyard;
     if (graveyardEvent && graveyardEvent.live) {
-        const EVENT_CENTER = { map: "spookytown", x: 255, y: -1545 };
+        const EVENT_CENTER = { map: "spookytown", x: 252, y: -1477 };
         const distToEvent = (character.map === EVENT_CENTER.map) 
             ? distance(character, EVENT_CENTER) 
             : 99999;
