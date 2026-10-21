@@ -3116,6 +3116,7 @@ let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
 const LuotBoQua = 8;
 let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
 const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","franky",]; 
+const EXCLUDED_BIGGUY_TYPES = new Set(["gargoyle", "horseman","dragold","franky","mrpumpkin",]); 
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
@@ -3176,7 +3177,7 @@ const GEAR_LOGIC = {
                hasTargetForDame = true;
            }
 
-           if (e.max_hp > 800000) {
+           if (e.max_hp > 800000 && !EXCLUDED_BIGGUY_TYPES.has(e.mtype) ) {
                bigguy = true;
            }
 
