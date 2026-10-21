@@ -1950,6 +1950,36 @@ setInterval(function() {
 		return
     }
 
+    // HORSEMAN EVENT HANDLING
+    const horsemanEvent = server?.status?.horseman || parent?.S?.horseman;
+    if (horsemanEvent && horsemanEvent.live) {
+        const EVENT_MAP = "halloween";
+        const targetX = horsemanEvent.x;
+        const targetY = horsemanEvent.y;
+        
+        const distToEvent = (character.map === EVENT_MAP) 
+            ? distance(character, { x: targetX, y: targetY }) 
+            : 99999;
+
+        // Nếu chưa ở map halloween HOẶC ở halloween nhưng vị trí horseman ở quá xa (> 400 đơn vị)
+        if (character.map !== EVENT_MAP || distToEvent > 400) {
+            if (!smart.moving) {
+                farmingMoving = false;
+                if (character.map !== EVENT_MAP) {
+                    parent.socket.emit("join", { name: "horseman" });
+                } else {
+                    smart_move({ map: EVENT_MAP, x: targetX, y: targetY });
+                }
+            }
+            return;
+        }
+        
+        // Nếu đã ở trong halloween và ở gần vị trí horseman, dừng smart move để nhường cho code combat
+        if (smart.moving) stop("smart");
+        return;
+    }
+	
+
 
 
 	
