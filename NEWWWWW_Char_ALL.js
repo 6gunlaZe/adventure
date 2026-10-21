@@ -2552,7 +2552,8 @@ async function scare() {
         if (slot < 0) return; // Không tìm thấy Orb trong túi đồ
 
         await equip(slot);
-        await sleep(500); // Delay 500ms chờ server ghi nhận trang bị mới
+        await use("scare");
+        // await sleep(500); // Delay 500ms chờ server ghi nhận trang bị mới
     }
 
     // Thực thi Scare
