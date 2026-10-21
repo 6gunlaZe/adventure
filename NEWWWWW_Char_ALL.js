@@ -12,9 +12,10 @@ const EXCLUDE = new Set([
 
 // Các quái được phép tấn công gồm các phân loại sau
 const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
-const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
+const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
+						 "horseman","jackowalker","ghost",
 						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -3090,14 +3091,13 @@ let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
 let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
 const LuotBoQua = 8;
 let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
-const dameMonsters = ["mrpumpkin", "mrgreen",]; 
+const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","franky",]; 
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
         let needNormalDef = false;
         let needLuck = false;
-        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
 
         let monsterDensity = 0;
 
@@ -3105,9 +3105,6 @@ const GEAR_LOGIC = {
             const e = m.entity;
             if (m.distance > 300) continue;
 			
-           if (dameMonsters.includes(e.mtype)) {
-               hasTargetForDame = true;
-           }
 			
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
@@ -3123,8 +3120,6 @@ const GEAR_LOGIC = {
 			return "luck";
 		}
 		setBooster('xpbooster');
-
-        if (hasTargetForDame) return "dame";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
         if (monsterDensity >= 4) lastDefCheck = Date.now();
@@ -3168,7 +3163,7 @@ const GEAR_LOGIC = {
                 if (e.damage_type === "magical") hasMagical = true;
             }
 
-            if ((isTargetingMe && e.hp < 11000) || (isCoop && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )) {
+            if ( (isTargetingMe && e.hp < 11000 && (e.max_hp > 41000 || e.mtype == FARM_MONSTER ) ) || (isCoop && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )) {
                 needLuck = true;
             }
         }
