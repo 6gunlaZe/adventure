@@ -51,7 +51,7 @@ const IMPORTANT_ITEMS = [
 
 //TỰ ĐỘNG  MAKE SHINY
 const shinyList = {
-    "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+  //  "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
    // "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
    // "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
 };
@@ -338,8 +338,8 @@ group_vip6: [
 
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop",],
-	group_basic00: ["glolipop111",],
+	group_basic: ["ololipop1111",],
+	group_basic00: ["ololipop",],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
 	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
@@ -3129,7 +3129,7 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'NgoKhong', m
 
 setInterval(async function() {
     // Chạy lần lượt từng món
-    await sendItemByMail('ololipop', 0);
+   // await sendItemByMail('ololipop', 0);
    // await sendItemByMail('glolipop', 0);
     
 }, 2000);
