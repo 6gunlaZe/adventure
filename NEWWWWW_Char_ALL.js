@@ -1640,8 +1640,7 @@ async function tryzapper() {
     if (isLeaderNear) {
         const targetBoss = monsters.find(m => 
             quaiB_Boss.includes(m.entity.mtype) && m.entity.mtype != "rimedjinn" &&
-            !m.entity.target && 
-            is_in_range(m.entity, "zapperzap")
+            !m.entity.target
         );
         if (targetBoss) {
             lastZapTime = Date.now(); // Cập nhật mốc thời gian ngay trước/khi Zap
@@ -1652,8 +1651,7 @@ async function tryzapper() {
 
     // 🎯 ƯU TIÊN 2: Quái A (Yếu) -> Cứ đủ MP trong tầm là Zap
     const targetWeak = monsters.find(m => 
-        quaiA_Yeu.includes(m.entity.mtype) && 
-        is_in_range(m.entity, "zapperzap")
+        quaiA_Yeu.includes(m.entity.mtype)
     );
     if (targetWeak) {
         lastZapTime = Date.now(); 
@@ -1680,7 +1678,7 @@ async function tryzapper() {
     if (!hasStrongRimedjinn) {
         const untargetedMobs = monsters.filter(m => {
             const e = m.entity;
-            return (!e.target || e.target === "") && is_in_range(e, "zapperzap");
+            return (!e.target || e.target === "");
         });
 
         if (untargetedMobs.length > 0) {
