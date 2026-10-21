@@ -1047,6 +1047,27 @@ function should_store_item(item, kept_counts = {}) {
 // MuaBan IDLE UPGRADE INTEGRATION
 // ============================================================
 
+async function looplinhtinh() {
+    try {
+        // Viết logic hoặc gọi các hàm skill vào đây
+        // 1. Quản lý trạng thái nhân vật
+        if (character.stand && (character.moving || smart.moving)) {
+            close_stand();
+        }
+        if (character.mp > 2500 && (character.moving || smart.moving)) {
+        use_skill("mcourage");
+        }
+
+		
+    } catch (e) {}
+
+    // Nghỉ 300ms nếu không làm gì
+    setTimeout(loop, 300);
+}
+
+looplinhtinh();
+
+
 function find_item(filter) {
 	for (let i = 0; i < character.items.length; i++) {
 		if (filter(character.items[i])) return [i, character.items[i]];
@@ -1061,11 +1082,6 @@ function start_upgrade_loop() {
     stop_upgrade_loop(); // Đảm bảo dọn dẹp vòng lặp cũ trước khi tạo mới
     
     upgradeTimer = setInterval(() => {
-        // 1. Quản lý trạng thái nhân vật
-        if (character.stand && (character.moving || smart.moving)) {
-            close_stand();
-        }
-
         // 2. Các điều kiện chặn (Guard clauses) - Ngừng thực thi lệnh bên dưới nếu thỏa mãn
         if (character.map === "bank") return;
         // if (character.esize < 1) return;
