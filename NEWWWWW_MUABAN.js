@@ -162,17 +162,16 @@ let serviceTimer = null;
 
 // 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
 var upgradeGroups = {
-	group_basic: [ // đồ phổ thông
+	group_basic: [ // đồ shiny olilop
 		{ levels: [0,1,2], scroll: 1, offering: 0 },
 		{ levels: [3,4,5], scroll: 1, offering: 0 },
 		{ levels: [6],     scroll: 1, offering: 1 },
 		{ levels: [7],     scroll: 1, offering: 1 },
 		{ levels: [8],       scroll: 2, offering: 1 }
 	],
-	group_basic00: [ // đồ rác
+	group_basic00: [ // đồ rác olilop
 		{ levels: [0,1,2], scroll: 1, offering: 0 },
-		{ levels: [3,4,5], scroll: 1, offering: 0 },
-		{ levels: [6],     scroll: 1, offering: 1 },
+		{ levels: [3,4,5,6], scroll: 1, offering: 0 },
 		{ levels: [7],     scroll: 1, offering: 1 },
 		{ levels: [8],       scroll: 2, offering: 1 }
 	],
@@ -339,8 +338,8 @@ group_vip6: [
 
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop",],
-	group_basic00: ["glolipop"],
+	group_basic: ["ololipop111",],
+	group_basic00: ["glolipop","ololipop"],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
 	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
