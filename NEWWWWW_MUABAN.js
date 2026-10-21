@@ -3072,7 +3072,7 @@ let sendCounters = {
     'glolipop': 0
 };
 
-async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', message = 'nice') {
+async function sendItemByMail(targetName, targetLevel, recipient = 'NgoKhong', message = 'nice') {
 
     // 0. Chỉ kiểm tra goldnugget / bronzeingot NẾU KHÔNG PHẢI là 'glolipop'
     if (targetName !== 'glolipop') {
