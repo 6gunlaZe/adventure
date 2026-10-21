@@ -14,7 +14,8 @@ const EXCLUDE = new Set([
 const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen"];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
-const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
+const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy"
+						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
 //HOẠT ĐỘNG SĂN CÁC BOSS SAU
@@ -1919,8 +1920,39 @@ setInterval(function() {
     }
 
 
-	
+    // =========================================================
     // EVENT HANDLING
+
+
+    // GRAVEYARD RISING EVENT HANDLING
+    const graveyardEvent = server?.status?.graveyard || parent?.S?.graveyard;
+    if (graveyardEvent && graveyardEvent.live) {
+        const EVENT_CENTER = { map: "spookytown", x: 255, y: -1545 };
+        const distToEvent = (character.map === EVENT_CENTER.map) 
+            ? distance(character, EVENT_CENTER) 
+            : 99999;
+
+        // Nếu chưa ở map spookytown HOẶC ở spookytown nhưng đứng quá xa tâm sự kiện
+        if (character.map !== EVENT_CENTER.map || distToEvent > 250) {
+            if (!smart.moving) {
+                farmingMoving = false;
+                if (character.map !== EVENT_CENTER.map) {
+                    parent.socket.emit("join", { name: "graveyard" });
+                } else {
+                    smart_move(EVENT_CENTER);
+                }
+            }
+            return;
+        }
+        
+        // Nếu đã ở trong spookytown và ở gần tâm sự kiện, dừng smart move để nhường quyền cho code combat của bạn
+        if (smart.moving) stop("smart");
+		return
+    }
+
+
+
+	
     if (parent?.S?.goobrawl && checkcrabxx === 1) {
         if (character.map !== "goobrawl" && !smart.moving) parent.socket.emit("join", { name: "goobrawl" });
         if (character.map === "goobrawl") stop("smart");
