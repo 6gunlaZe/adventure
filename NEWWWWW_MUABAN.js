@@ -1062,7 +1062,7 @@ async function looplinhtinh() {
     } catch (e) {}
 
     // Nghỉ 300ms nếu không làm gì
-    setTimeout(loop, 300);
+    setTimeout(looplinhtinh, 300);
 }
 
 looplinhtinh();
