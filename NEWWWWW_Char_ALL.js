@@ -1983,7 +1983,7 @@ setInterval(function() {
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
     if (witchEvent && witchEvent.live) {
         // Cấu hình vị trí muốn đứng khi sự kiện Witchcipher diễn ra (bạn có thể thay đổi tùy ý)
-        const WITCH_SPOT = { map: "main", x: 1220, y: -13 }; 
+        const WITCH_SPOT = (character.name === LEADER) ? { map: "main", x: 1171, y: -40 } : { map: "main", x: 1069, y: -93 };
         
         const distToSpot = (character.map === WITCH_SPOT.map) 
             ? distance(character, WITCH_SPOT) 
