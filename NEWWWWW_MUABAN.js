@@ -163,7 +163,7 @@ let serviceTimer = null;
 // 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
 var upgradeGroups = {
 	group_basic: [ // đồ shiny olilop
-		{ levels: [0,1,2], scroll: 1, offering: 0 },
+		{ levels: [1,2], scroll: 1, offering: 0 },
 		{ levels: [3,4,5], scroll: 1, offering: 0 },
 		{ levels: [6],     scroll: 1, offering: 1 },
 		{ levels: [7],     scroll: 1, offering: 1 },
@@ -338,8 +338,8 @@ group_vip6: [
 
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop111",],
-	group_basic00: ["glolipop","ololipop"],
+	group_basic: ["ololipop",],
+	group_basic00: ["glolipop111",],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
 	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
@@ -392,7 +392,7 @@ const COMPOUND_RULES = [
 const PONTY_EXTRA_ITEMS = [
   "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "cape", "carrot", "cdarktristone", "confetti",
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
-  "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "glolipop", "gslime", "harbringer", "ijx", "ink", "intbelt",
+  "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
   "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
   "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil"
@@ -3129,7 +3129,7 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', messa
 
 setInterval(async function() {
     // Chạy lần lượt từng món
-   // await sendItemByMail('ololipop', 0);
+    await sendItemByMail('ololipop', 0);
    // await sendItemByMail('glolipop', 0);
     
 }, 2000);
