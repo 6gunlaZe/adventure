@@ -75,7 +75,7 @@ const autoBuyFromMerchItems = [
     { name: "slice_citrus", price: 220000 },
     { name: "slice_strawberry", price: 220000 },
 	
-    { name: "ololipop", price: 520000 },
+    { name: "ololipop", price: 220000 },
 ];
 
 
@@ -163,14 +163,14 @@ let serviceTimer = null;
 // 1️⃣ Khai báo rule cho từng nhóm (mẫu nâng cấp)
 var upgradeGroups = {
 	group_basic: [ // đồ phổ thông
-		{ levels: [1,2], scroll: 1, offering: 0 },
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
 		{ levels: [3,4,5], scroll: 1, offering: 0 },
 		{ levels: [6],     scroll: 1, offering: 1 },
 		{ levels: [7],     scroll: 1, offering: 1 },
 		{ levels: [8],       scroll: 2, offering: 1 }
 	],
 	group_basic00: [ // đồ rác
-		{ levels: [1,2], scroll: 1, offering: 0 },
+		{ levels: [0,1,2], scroll: 1, offering: 0 },
 		{ levels: [3,4,5], scroll: 1, offering: 0 },
 		{ levels: [6],     scroll: 1, offering: 1 },
 		{ levels: [7],     scroll: 1, offering: 1 },
@@ -3130,8 +3130,8 @@ async function sendItemByMail(targetName, targetLevel, recipient = 'oppa', messa
 
 setInterval(async function() {
     // Chạy lần lượt từng món
-    await sendItemByMail('ololipop', 0);
-    await sendItemByMail('glolipop', 0);
+   // await sendItemByMail('ololipop', 0);
+   // await sendItemByMail('glolipop', 0);
     
 }, 2000);
 
