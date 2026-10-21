@@ -15,7 +15,7 @@ const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đán
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
-						 "horseman","jackowalker","ghost",
+						 "horseman","jackowalker","ghost","spider","bigbird","scorpion",
 						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -1962,8 +1962,8 @@ setInterval(function() {
             ? distance(character, { x: targetX, y: targetY }) 
             : 99999;
 
-        // Nếu chưa ở map halloween HOẶC ở halloween nhưng vị trí horseman ở quá xa (> 400 đơn vị)
-        if (character.map !== EVENT_MAP || distToEvent > 400) {
+        // Nếu chưa ở map halloween HOẶC ở halloween nhưng vị trí horseman ở quá xa 
+        if (character.map !== EVENT_MAP || distToEvent > 300) {
             if (!smart.moving) {
                 farmingMoving = false;
                 if (character.map !== EVENT_MAP) {
@@ -1976,6 +1976,31 @@ setInterval(function() {
         }
         
         // Nếu đã ở trong halloween và ở gần vị trí horseman, dừng smart move để nhường cho code combat
+        if (smart.moving) stop("smart");
+        return;
+    }
+
+
+    // WITCHCIPHER EVENT HANDLING
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+    if (witchEvent && witchEvent.live) {
+        // Cấu hình vị trí muốn đứng khi sự kiện Witchcipher diễn ra (bạn có thể thay đổi tùy ý)
+        const WITCH_SPOT = { map: "main", x: 1220, y: -13 }; 
+        
+        const distToSpot = (character.map === WITCH_SPOT.map) 
+            ? distance(character, WITCH_SPOT) 
+            : 99999;
+
+        // Nếu chưa ở đúng map HOẶC đứng quá xa vị trí cấu hình (> 200 đơn vị) thì di chuyển tới đó
+        if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
+            if (!smart.moving) {
+                farmingMoving = false;
+                smart_move(WITCH_SPOT);
+            }
+            return;
+        }
+        
+        // Nếu đã đến nơi, dừng smart move để đứng yên tại chỗ theo ý muốn
         if (smart.moving) stop("smart");
         return;
     }
