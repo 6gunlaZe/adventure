@@ -13,7 +13,7 @@ const TRASH_ITEMS = [
   "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
   "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","bowofthedead","cave_locktooth","glolipop",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
-  "pstem", "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
+  "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
   "smoke", "smush", "snowball111", "snowflakes", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
   "swifty", "sword", "swordofthedead", "t2bow", "t2quiver", "talkingskull", "throwingstars","tombkey", "tshirt0", "tshirt1", "tshirt2", "tshirt3", "vboots", "vgloves", "vitring",
   "vitscroll", "wbasher", "wcap", "wbreeches", "wgloves", "whiteegg", "wshoes","wattire", "warmscarf", "xmace", "xmashat", "xmaspants", "xmasshoes", "xmassweater"
