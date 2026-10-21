@@ -3158,6 +3158,8 @@ const GEAR_LOGIC = {
     Ynhi: function() {
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
+		
+        let bigguy = false; // Cờ bật khi phát hiện quái boss - máu trâu
 
         let hasTargetForDame = false; // Cờ bật khi phát hiện quái
         let hasPhysical = false;
@@ -3172,6 +3174,10 @@ const GEAR_LOGIC = {
 
            if (dameMonsters.includes(e.mtype)) {
                hasTargetForDame = true;
+           }
+
+           if (e.max_hp > 800000) {
+               bigguy = true;
            }
 
             // Kiểm tra nếu quái có thuộc tính spawns (và mảng spawns có phần tử)
@@ -3214,7 +3220,7 @@ const GEAR_LOGIC = {
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
 
 		
-        if (( (smart.moving && chestCount > 0)  || chestCount > 10 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby)) && glod_delay < 0 ) {
+        if (( (smart.moving && chestCount > 0)  || chestCount > 20 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby && bigguy)) && glod_delay < 0 ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
