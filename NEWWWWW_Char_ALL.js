@@ -1445,49 +1445,51 @@ async function tryCleave() {
 
 
 async function tryAgitate() {
-    // Kiểm tra Cooldown, MP (Agitate tốn 420 MP) và trạng thái
-    if (is_on_cooldown("agitate") || character.mp < 1420) return false;
-    if (smart.moving ) return false;
+    // 1. Kiểm tra nhanh cơ bản
+    if (is_on_cooldown("agitate") || character.mp < 1020 || smart.moving) return false;
 
-    // Lấy tầm hoạt động của Agitate (mặc định 320px)
-    const AGITATE_RANGE = G.skills.agitate.range || 320 + 10;
+    const AGITATE_RANGE = (G.skills.agitate.range || 320) + 10;
+    
+    let pullableCount = 0;
+    let hasPorcupine = false;
+    let isWeakMobAttackingYnhi = false;
 
-    // Lấy tất cả quái trong tầm hút
-    const mobsInRange = monsters.filter(m => m.distance <= AGITATE_RANGE);
-    if (mobsInRange.length === 0) return false;
+    // 2. TỐI ƯU: Chỉ dùng 1 vòng lặp duy nhất để kiểm tra TOÀN BỘ điều kiện
+    for (let i = 0; i < monsters.length; i++) {
+        const m = monsters[i];
+        
+        // Bỏ qua quái ngoài tầm đánh ngay lập tức
+        if (m.distance > AGITATE_RANGE) continue;
 
-    // =========================================================================
-    // 1. ĐIỀU KIỆN TỪ CHỐI: CÓ PORCUPINE 
-    // (Bọn này phản sát thương, kéo 1 bầy về Cleave/Stomp là tự sát)
-    // =========================================================================
-    const hasPorcupine = mobsInRange.some(m => m.entity.mtype === "porcupine");
-    if (hasPorcupine) return false;
-
-    // =========================================================================
-    // 2. ĐIỀU KIỆN TỪ CHỐI: YNHI ĐANG XỬ LÝ QUÁI YẾU MÁU
-    // =========================================================================
-    const isWeakMobAttackingYnhi = mobsInRange.some(m => {
         const e = m.entity;
-        return e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000;
-    });
-    if (isWeakMobAttackingYnhi) return false;
 
-    // =========================================================================
-    // 3 & 4. ĐIỀU KIỆN CHẤP NHẬN: LỌC QUÁI SẼ BỊ HÚT: từ 2 con + trong danh sách + chưa nhắm vào ai
-    // =========================================================================
-    const mobsToPull = mobsInRange.filter(m => !m.entity.target);
-	
-    const allInTargetList = mobsToPull.every(m => TARGET_MONSTERS.includes(m.entity.mtype));
-    if (!allInTargetList) return false;
+        // Nếu có Porcupine -> Hủy ngay lập tức không cần kiểm tra tiếp!
+        if (e.mtype === "porcupine") {
+            hasPorcupine = true;
+            break; 
+        }
 
-    if (mobsToPull.length < 2) return false;
+        // Kiểm tra điều kiện Ynhi
+        if (e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000) {
+            isWeakMobAttackingYnhi = true;
+            break;
+        }
 
-    // =========================================================================
-    // THỰC THI SKILL
-    // =========================================================================
+        // Đếm quái hợp lệ có thể hút
+        if (!e.target && TARGET_MONSTERS.includes(e.mtype)) {
+            pullableCount++;
+        }
+    }
+
+    // 3. Từ chối nếu dính vi phạm
+    if (hasPorcupine || isWeakMobAttackingYnhi || pullableCount < 2) {
+        return false;
+    }
+
+    // 4. Bắn skill lập tức
     try {
         await use_skill("agitate");
-        game_log(`🌪️ Agitate hút ${mobsToPull.length} quái diện rộng!`, "#FF4500");
+        game_log(`🌪️ Agitate hút ${pullableCount} quái!`, "#FF4500");
         return true;
     } catch (e) {
         return false;
