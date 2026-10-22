@@ -126,7 +126,7 @@ function scanAll() {
 
     if (character.cave && character.cave.paused) return;
 
-    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live) ) {
+    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live  && witchEvent.phase === "gathering") ) {
         SAFE = true;
     }
 
@@ -1990,7 +1990,7 @@ setInterval(function() {
 
     // WITCHCIPHER EVENT HANDLING
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
-    if (witchEvent && witchEvent.live) {
+    if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
 
         // Danh sách tọa độ riêng cho từng nhân vật
         const WITCH_SPOTS = {
@@ -2299,7 +2299,7 @@ function manageChars() {
 
 	if (!currentEvent)
 	{
-       if (witchEvent)currentEvent = "witchcipher";
+       if (witchEvent && witchEvent.phase === "gathering" )currentEvent = "witchcipher";
 		
 	}
 
