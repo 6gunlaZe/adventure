@@ -1054,7 +1054,7 @@ async function looplinhtinh() {
         if (character.stand && (character.moving || smart.moving)) {
             close_stand();
         }
-        if (character.mp > 2500 && (character.moving || smart.moving)) {
+        if (character.mp > 2500 && !character.s.mcourage && (character.moving || smart.moving)) {
         use_skill("mcourage");
         }
 
