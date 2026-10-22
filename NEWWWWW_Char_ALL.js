@@ -2331,12 +2331,21 @@ function manageChars() {
             start_character(charName, config.slot);
 
         } else if (!shouldRun && isRunning) {
+
             // --- CẦN TẮT ---
-            console.log(`[Manager] Dừng nhân vật: ${charName}`);
+            console.log(`[Manager] Nhân vật ${charName} sẽ dừng sau 10s để loot đồ...`);
             
-            // Cập nhật Cooldown NGAY TRƯỚC KHI gọi hàm
+            // Cập nhật Cooldown NGAY TRƯỚC KHI tạo hẹn giờ (tránh vòng lặp 3s gọi trùng)
             charCooldowns[charName] = now; 
-            stop_character(charName);
+
+            // Hẹn 10 giây (10000 ms) sau mới tắt
+            setTimeout(() => {
+                if (parent.party_list.includes(charName)) {
+                    console.log(`[Manager] Dừng nhân vật: ${charName}`);
+                    stop_character(charName);
+                }
+            }, 10000);
+			
         }
     }
 }
