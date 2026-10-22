@@ -3116,7 +3116,6 @@ let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
 const LuotBoQua = 8;
 let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
 const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","franky",]; 
-const EXCLUDED_BIGGUY_TYPES = new Set(["gargoyle", "horseman","dragold","franky","mrpumpkin",]); 
 
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
@@ -3160,7 +3159,7 @@ const GEAR_LOGIC = {
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
 		
-        let bigguy = false; // Cờ bật khi phát hiện quái boss - máu trâu
+        let Tinyguy = false; // Cờ bật khi phát hiện quái boss yếu xung quanh
 
         let hasTargetForDame = false; // Cờ bật khi phát hiện quái
         let hasPhysical = false;
@@ -3177,8 +3176,8 @@ const GEAR_LOGIC = {
                hasTargetForDame = true;
            }
 
-           if (e.max_hp > 800000 && !EXCLUDED_BIGGUY_TYPES.has(e.mtype) ) {
-               bigguy = true;
+           if (e.max_hp < 41000) {
+               Tinyguy = true;
            }
 
             // Kiểm tra nếu quái có thuộc tính spawns (và mảng spawns có phần tử)
@@ -3221,7 +3220,7 @@ const GEAR_LOGIC = {
         const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
 
 		
-        if (( (smart.moving && chestCount > 0)  || chestCount > 20 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby && bigguy)) && glod_delay < 0 ) {
+        if (( (smart.moving && chestCount > 0)  || chestCount > 20 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby && !Tinyguy)) && glod_delay < 0 ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             return "gold";
         }
