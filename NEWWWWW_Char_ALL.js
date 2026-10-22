@@ -1226,87 +1226,86 @@ async function tryStomp() {
 
 
 async function tryTaunt() {
-    // 1. Chặn CD và MP (Taunt tốn 40 MP, tầm đánh mặc định 200px)
-    if (is_on_cooldown("taunt") || character.mp < 140) return false;
-    if (smart.moving) return false;
+    // 1. Chặn CD, MP và trạng thái di chuyển
+    if (is_on_cooldown("taunt") || character.mp < 140 || smart.moving) return false;
 
-    let targetToTaunt = null;
-    const tauntRange = 190; // Lấy chuẩn range từ data game (thường là 200)
-
-    // =========================================================================
-    // ƯU TIÊN 1: CỨU ĐỒNG ĐỘI HẤP HỐI (HP < 6000)
-    // =========================================================================
-    const endangeredNames = partyEntities.filter(p => {
+    const tauntRange = 190;
+    
+    // Tạo Set chứa tên đồng đội nguy cấp (O(1) lookup thay vì array.includes)
+    const endangeredNames = new Set();
+    for (let i = 0; i < partyEntities.length; i++) {
+        const p = partyEntities[i];
         const e = p.entity;
-        return e && !e.dead && e.name !== character.name && e.hp < 6000;
-    }).map(p => p.entity.name);
-
-    if (endangeredNames.length > 0) {
-        const threatsToParty = monsters.filter(m => {
-            const e = m.entity;
-            return m.distance <= tauntRange && endangeredNames.includes(e.target);
-        });
-
-        if (threatsToParty.length > 0) {
-            threatsToParty.sort((a, b) => {
-                const atkA = a.entity.attack || G.monsters[a.entity.mtype]?.attack || 0;
-                const atkB = b.entity.attack || G.monsters[b.entity.mtype]?.attack || 0;
-                return atkB - atkA;
-            });
-
-            targetToTaunt = threatsToParty[0].entity;
+        if (e && !e.dead && e.name !== character.name && e.hp < 6000) {
+            endangeredNames.add(e.name);
         }
     }
 
+    let bestThreat = null;
+    let maxThreatAttack = -1;
+    let monstersTargetingMeCount = 0;
+
+    let bestFarmMob = null;
+    let maxFarmHP = -1;
+
     // =========================================================================
-    // ƯU TIÊN 2: HÚT QUÁI FARM ĐANG ĐÁNH PARTY (Giới hạn tối đa 6 con đang tank)
+    // DUYỆT QUA MẢNG MONSTERS 1 LẦN DUY NHẤT (Single-pass loop)
     // =========================================================================
-    if (!targetToTaunt) {
-        const monstersTargetingMe = monsters.filter(m => m.entity.target === character.name).length;
+    for (let i = 0; i < monsters.length; i++) {
+        const m = monsters[i];
+        const e = m.entity;
+        if (!e) continue;
 
-        if (monstersTargetingMe < 6) {
-            const farmMobs = monsters.filter(m => {
-                const e = m.entity;
+        // Đếm số con đang đánh mình (phục vụ cho Ưu tiên 2)
+        if (e.target === character.name) {
+            monstersTargetingMeCount++;
+        }
 
-                // 1. Dùng m.distance thay cho is_in_range để tối ưu hiệu năng
-                if (m.distance > tauntRange) return false;
+        // Bỏ qua nếu ngoài tầm taunt
+        if (m.distance > tauntRange) continue;
 
-                // 2. Chưa nhắm vào Warrior
-                if (e.target === character.name) return false;
-
-                // 3. Phải đang nhắm vào thành viên trong Party của mình
-                if (!PARTY.includes(e.target)) return false;
-
-                // 4. Phải thuộc danh sách TARGET_MONSTERS
-                if (!TARGET_MONSTERS.includes(e.mtype)) return false;
-
-                // 5. Máu (HP) phải trên 40.000
-                if (e.hp <= 40000) return false;
-
-                // 6. Chỉ chọn quái gây sát thương vật lý
-                const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
-                return dmgType === "physical";
-            });
-
-            if (farmMobs.length > 0) {
-                // Sắp xếp quái theo lượng HP hiện tại (từ cao xuống thấp)
-                farmMobs.sort((a, b) => b.entity.hp - a.entity.hp);
-                
-                // Chọn con máu TRÂU NHẤT để hút
-                targetToTaunt = farmMobs[0].entity;
+        // --- ƯU TIÊN 1: Tìm quái đánh đồng đội nguy cấp (HP < 6000) có Attack cao nhất ---
+        if (endangeredNames.size > 0 && endangeredNames.has(e.target)) {
+            const atk = e.attack || (G.monsters[e.mtype] && G.monsters[e.mtype].attack) || 0;
+            if (atk > maxThreatAttack) {
+                maxThreatAttack = atk;
+                bestThreat = e;
+            }
+        }
+        
+        // --- ƯU TIÊN 2: Chuẩn bị cho farm mobs (nếu chưa có threat ưu tiên 1) ---
+        // Lọc nhanh các điều kiện cơ bản của farm mob
+        if (!bestThreat && e.target !== character.name && PARTY.includes(e.target)) {
+            if (TARGET_MONSTERS.includes(e.mtype) && e.hp > 40000) {
+                const dmgType = e.damage_type || (G.monsters[e.mtype] && G.monsters[e.mtype].damage_type) || "physical";
+                if (dmgType === "physical") {
+                    if (e.hp > maxFarmHP) {
+                        maxFarmHP = e.hp;
+                        bestFarmMob = e;
+                    }
+                }
             }
         }
     }
 
     // =========================================================================
-    // THỰC THI SKILL
+    // XỬ LÝ LỰA CHỌN VÀ THỰC THI
     // =========================================================================
+    
+    // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
+    let targetToTaunt = bestThreat;
+
+    // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
+    if (!targetToTaunt && monstersTargetingMeCount < 6) {
+        targetToTaunt = bestFarmMob;
+    }
+
     if (targetToTaunt) {
         try {
             await use_skill("taunt", targetToTaunt);
             game_log(`🧲 Taunted ${targetToTaunt.mtype} (Target: ${targetToTaunt.target || "None"}, HP: ${targetToTaunt.hp})`, "#AA00FF");
             return true;
-        } catch (e) {
+        } catch (err) {
             return false;
         }
     }
