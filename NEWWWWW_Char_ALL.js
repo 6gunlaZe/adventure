@@ -2295,7 +2295,7 @@ function manageChars() {
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 	
-    const currentEvent = activeBoss ? activeBoss.id : null;
+    let currentEvent = activeBoss ? activeBoss.id : null;
 
 	if (!currentEvent)
 	{
