@@ -3523,20 +3523,25 @@ let isLootingBatch = false;
 
 function autoLootAndBooster() {
     if (isLootingBatch) return;
-    if (character.name != "Ynhi" && healer) return;
 
     const chestIds = Object.keys(parent.chests || {});
-
+    if (chestIds.length === 0) return; // Không có rương thì bỏ qua luôn cho nhẹ
 	
-    if (character.name != "Ynhi" && !healer)
-	{
-        isLootingBatch = true;
-        setTimeout(() => {
-            chestIds.forEach(id => loot(id));
-            isLootingBatch = false;
-        }, 100);
-        return;		
-	}
+    // ==========================================
+    // 1. LOGIC CHO CÁC NHÂN VẬT KHÁC (Không phải Ynhi)
+    // ==========================================
+    if (character.name !== "Ynhi") {
+        // Nếu không thấy healer thì tiến hành loot
+        if (!healer) {
+            isLootingBatch = true;
+            setTimeout(() => {
+                chestIds.forEach(id => loot(id));
+                isLootingBatch = false;
+            }, 100);
+        }
+        return;
+    }
+
 
     // DÀNH RIÊNG CHO YNHI
     if (character.name === "Ynhi" && INTENDED_SET === "gold") {
@@ -3553,7 +3558,7 @@ function autoLootAndBooster() {
 
 }
 
-setInterval(autoLootAndBooster, 100);
+setInterval(autoLootAndBooster, 200);
 
 
 let leaderLastPos = { x: 0, y: 0, time: Date.now() };
