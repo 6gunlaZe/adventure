@@ -502,7 +502,7 @@ async function use_multi_shot() {
 
 
 
-let primaryBeltName = null;
+let primaryBeltName = "dexbelt";
 
 async function use_fan_of_knives() {
     // 1. Ghi nhớ Belt chính nếu không phải knifebelt
