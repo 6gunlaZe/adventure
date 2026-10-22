@@ -316,9 +316,9 @@ async function useQuickAttack() {
     let targeted = get_targeted_monster();
     if (targeted) currentTarget = targeted;
 
-    if (!currentTarget || !parent.entities[currentTarget.id] ) return false;
+    if (!currentTarget) return false;
 
-    if (ms_to_next_skill("attack") <= 100) return false;
+    if (ms_to_next_skill("attack") <= 50) return false;
 
     const mhName = character.slots.mainhand?.name;
     let quickSkill = null;
@@ -2484,11 +2484,9 @@ async function skillLoop() {
                 case "rogue":
                     useRspeed(); 
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
-
-					
-					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
 					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
 					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
+					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
 					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
 
 
