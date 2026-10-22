@@ -126,7 +126,7 @@ function scanAll() {
 
     if (character.cave && character.cave.paused) return;
 
-    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live  && witchEvent.phase === "gathering") ) {
+    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live  && witchEvent.phase === "gathering" && (Date.now() - lastFarmMonsterSeen) > 10000 ) ) {
         SAFE = true;
     }
 
