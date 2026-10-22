@@ -3548,7 +3548,7 @@ function autoLootAndBooster() {
     // ==========================================
     if (character.name !== "Ynhi") {
         // Nếu không thấy healer thì tiến hành loot
-        if (!healer) {
+        if (!healer || smart.moving) {
             isLootingBatch = true;
             setTimeout(() => {
                 chestIds.forEach(id => loot(id));
