@@ -2286,8 +2286,8 @@ setInterval(() => {
 // Lưu thời gian thực hiện hành động gần nhất cho từng nhân vật
 const charCooldowns = {};
 
-// Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (15 giây)
-const ACTION_COOLDOWN = 25000; 
+// Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (20 giây)
+const ACTION_COOLDOWN = 20000; 
 
 function manageChars() {
     if (character.name !== LEADER || isCaveMode ) return;
@@ -2324,27 +2324,31 @@ function manageChars() {
 
         if (shouldRun && !isRunning) {
             // --- CẦN BẬT ---
-            console.log(`[Manager] Gọi nhân vật: ${charName} (Event: ${currentEvent || 'Home'})`);
+            console.log(`[Manager] Gọi nhân vật sau 8s: ${charName} (Event: ${currentEvent || 'Home'})`);
             
             // Cập nhật Cooldown NGAY TRƯỚC KHI gọi hàm
             charCooldowns[charName] = now; 
+
+            // Hẹn sau
+            setTimeout(() => {
             start_character(charName, config.slot);
+            }, 8500);	
 
         } else if (!shouldRun && isRunning) {
 
             // --- CẦN TẮT ---
-            console.log(`[Manager] Nhân vật ${charName} sẽ dừng sau 10s để loot đồ...`);
+            console.log(`[Manager] Nhân vật ${charName} sẽ dừng sau 8s để loot đồ...`);
             
             // Cập nhật Cooldown NGAY TRƯỚC KHI tạo hẹn giờ (tránh vòng lặp 3s gọi trùng)
             charCooldowns[charName] = now; 
 
-            // Hẹn 10 giây (10000 ms) sau mới tắt
+            // Hẹn 8 giây sau mới tắt
             setTimeout(() => {
                 if (parent.party_list.includes(charName)) {
                     console.log(`[Manager] Dừng nhân vật: ${charName}`);
                     stop_character(charName);
                 }
-            }, 10000);
+            }, 8000);
 			
         }
     }
