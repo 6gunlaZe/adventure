@@ -15,7 +15,7 @@ const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đán
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
-						 "horseman","jackowalker","ghost","spider","bigbird","scorpion",
+						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie",
 						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -36,11 +36,11 @@ const FARM_LOCATIONS = {
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
     "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 20, elixir: "elixirluck" },
-    "6gunlaZe": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher"], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen",], elixir: "elixirluck" }
+    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen","witchcipher"], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher",], elixir: "elixirluck" }
 	
 };
 
@@ -118,10 +118,13 @@ function scanAll() {
     merchant = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+
+	
 
     if (character.cave && character.cave.paused) return;
 
-    if (IS_SOLO || (character.ctype === "priest" && !character.dead)) {
+    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live) ) {
         SAFE = true;
     }
 
@@ -1982,8 +1985,22 @@ setInterval(function() {
     // WITCHCIPHER EVENT HANDLING
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
     if (witchEvent && witchEvent.live) {
-        // Cấu hình vị trí muốn đứng khi sự kiện Witchcipher diễn ra (bạn có thể thay đổi tùy ý)
-        const WITCH_SPOT = (character.name === LEADER) ? { map: "main", x: 1171, y: -40 } : { map: "main", x: 1069, y: -93 };
+
+        // Danh sách tọa độ riêng cho từng nhân vật
+        const WITCH_SPOTS = {
+            "haiz": { map: "winterland", x: 80, y: -2015 },
+            "6gunlaZe": { map: "main", x: 1022, y: -120 },
+            "LyThanhThu": { map: "desertland", x: 424, y: -1418 },
+            // Thêm bao nhiêu nhân vật tùy ý ở đây...
+        };
+        
+        // Vị trí mặc định nếu nhân vật hiện tại không có tên trong danh sách trên
+        const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
+        
+        // Lấy tọa độ của nhân vật hiện tại (nếu ko có trong danh sách thì lấy mặc định)
+        const WITCH_SPOT = WITCH_SPOTS[character.name] || DEFAULT_SPOT;
+
+		
         
         const distToSpot = (character.map === WITCH_SPOT.map) 
             ? distance(character, WITCH_SPOT) 
@@ -2269,7 +2286,18 @@ function manageChars() {
     if (character.name !== LEADER || isCaveMode ) return;
 
     const activeBoss = getActiveWorldBoss();
+	
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+	
     const currentEvent = activeBoss ? activeBoss.id : null;
+
+	if (!currentEvent)
+	{
+       if (witchEvent)currentEvent = "witchcipher";
+		
+	}
+
+	
     const now = Date.now();
 
     for (const [charName, config] of Object.entries(CHAR_CONFIG)) {
