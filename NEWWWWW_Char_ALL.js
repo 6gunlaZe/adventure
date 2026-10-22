@@ -79,6 +79,7 @@ let monsters = [];
 let partyEntities = [];
 let fieldgens = []; 
 let merchant = null;
+let healer = null;
 let currentTarget = null;
 let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
@@ -116,6 +117,7 @@ function scanAll() {
     fieldgens = [];
     bossEntities = []; 
     merchant = null;
+	healer = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
@@ -169,6 +171,10 @@ function scanAll() {
             }
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
+            }
+			
+            if (entity.ctype === "priest") {
+                healer = entity;
             }
 
             if (entity.ctype === "priest" && !entity.dead && dist <= 300 && character.party && entity.hp/entity.max_hp > 0.2 && character.hp/character.max_hp > 0.25) {
@@ -3517,8 +3523,20 @@ let isLootingBatch = false;
 
 function autoLootAndBooster() {
     if (isLootingBatch) return;
-    if (character.name != "Ynhi") return
+    if (character.name != "Ynhi" && healer) return;
+
     const chestIds = Object.keys(parent.chests || {});
+
+	
+    if (character.name != "Ynhi" && !healer)
+	{
+        isLootingBatch = true;
+        setTimeout(() => {
+            chestIds.forEach(id => loot(id));
+            isLootingBatch = false;
+        }, 100);
+        return;		
+	}
 
     // DÀNH RIÊNG CHO YNHI
     if (character.name === "Ynhi" && INTENDED_SET === "gold") {
