@@ -1996,7 +1996,7 @@ setInterval(function() {
         // Danh sách tọa độ riêng cho từng nhân vật
         const WITCH_SPOTS = {
             "haiz": { map: "winterland", x: 80, y: -2015 },
-            "6gunlaZe": { map: "main", x: 1022, y: -120 },
+            "6gunlaZe": { map: "main", x: 970, y: -156 },
             "LyThanhThu": { map: "halloween", x: -555, y: -333 },
             // Thêm bao nhiêu nhân vật tùy ý ở đây...  
 
