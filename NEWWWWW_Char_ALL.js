@@ -318,7 +318,7 @@ async function useQuickAttack() {
 
     if (!currentTarget) return false;
 
-    if (ms_to_next_skill("attack") <= 50) return false;
+    if (ms_to_next_skill("attack") <= 150) return false;
 
     const mhName = character.slots.mainhand?.name;
     let quickSkill = null;
