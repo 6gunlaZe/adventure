@@ -1802,10 +1802,13 @@ async function useAttack() {
 // SCAN LOOP & COMBAT LOOP
 // ============================================================
 
+let hightAmor = false;
 
 setInterval(function() {
     scanAll();
     currentTarget = selectTarget();
+	hightAmor = (currentTarget?.armor ?? 0) > 200;
+	
     tryTemporalSurge();
 }, 100);
 
@@ -3156,12 +3159,15 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-      //  { itemName: "gloampendant", slot: "amulet", l: "l"},
+        { itemName: "mpxamulet", slot: "amulet", l: "l"},
         { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
         { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+
+        { itemName: "scorpionseal", slot: "ring1", l: "l"  },
+        { itemName: "cring", slot: "ring2", l: "l"  },
 			
 			
         ],
@@ -3170,17 +3176,19 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-      //  { itemName: "gloampendant", slot: "amulet", l: "l"},
+        { itemName: "mpxamulet", slot: "amulet", l: "l"},
         { itemName: "mpxgloves", slot: "gloves", level: 5, l: "l" },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
         { itemName: "fallen", slot: "pants", level: 8, l: "l" },
-			
+
+        { itemName: "scorpionseal", slot: "ring1", l: "l"  },
+        { itemName: "cring", slot: "ring2", l: "l"  },
 			
         ],
         luck: [
-      //  { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "cloverstud", slot: "earring2", level: 3, l: "l"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
         { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
@@ -3191,6 +3199,24 @@ const EQUIPMENT_SETS = {
         { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
 			
         ],
+
+        xuyengiap: [
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "gloampendant", slot: "amulet", l: "l"},
+        { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l"  },
+        { itemName: "suckerpunch", slot: "ring2", level: 1, l: "l"  },
+			
+        ],
+
         def: [],
         def_fire: [],
     },
@@ -3250,7 +3276,6 @@ const GEAR_LOGIC = {
     Ynhi: function() {
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
-		if (smart.moving) return "movebufff";
 		
         let Tinyguy = false; // Cờ bật khi phát hiện quái boss yếu xung quanh
 
@@ -3334,6 +3359,8 @@ const GEAR_LOGIC = {
 
         if (hasPhysical) return "def_mixed";
         if (hasMagical) return "def_mixed";
+
+		if (smart.moving) return "movebufff";
 
         // 6. Mặc định sang đồ Dame -> mix
         return "def_mixed";
@@ -3442,7 +3469,9 @@ const GEAR_LOGIC = {
 		}
 		setBooster('xpbooster');
 
-        if (hasTargetHuman) return "Taymana"; // 
+        if (hasTargetHuman) return "Taymana";
+		
+		if (hightAmor) return "xuyengiap";
 
 		
         return "dame"; // Trạng thái mặc định
