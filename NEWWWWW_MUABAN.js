@@ -7,7 +7,7 @@ const LEADER = "haiz";
 
 // Danh sách item rác sẽ tự động bán
 const TRASH_ITEMS = [
-  "bandages", "basher", "beewings", "blade1111", "broom11", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
+"basher", "beewings", "blade1111", "broom11", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
   "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
@@ -395,7 +395,7 @@ const PONTY_EXTRA_ITEMS = [
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
   "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
-  "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil"
+  "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil","bandages","pstem","scroll4","canopener","scorpionseal"
 ];
 
 // Giới hạn từng item mua của ponty
