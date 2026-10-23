@@ -3345,6 +3345,8 @@ const GEAR_LOGIC = {
 
 		setBooster('xpbooster');
 
+		if (smart.moving) return "movebufff";
+
         if (hasTargetForDame) return "dame";
         if (hasPhysical && hasMagical) return "def_mixed";
         if ( character.map == "uhills" ) return "def_mixed";
@@ -3360,7 +3362,6 @@ const GEAR_LOGIC = {
         if (hasPhysical) return "def_mixed";
         if (hasMagical) return "def_mixed";
 
-		if (smart.moving) return "movebufff";
 
         // 6. Mặc định sang đồ Dame -> mix
         return "def_mixed";
