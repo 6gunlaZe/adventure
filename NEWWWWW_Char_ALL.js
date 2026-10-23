@@ -4043,6 +4043,49 @@ ${reportLines}`;
 
 
 
+function sendNtfyStatus() {
+
+    if (character.name !== LEADER) return;
+	
+    const hp = Math.round(character.hp / character.max_hp * 100);
+    const mp = Math.round(character.mp / character.max_mp * 100);
+
+    const message =
+`
+Túi trống: ${character.esize}
+Ping: ${character.ping}ms`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+        method: "POST",
+        headers: {
+            "Title": character.name,
+            "Priority": "default"
+        },
+        body: message
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    })
+    .catch(e => game_log("NTFY ERROR: " + e));
+}
+
+// Gửi ngay khi bot chạy
+sendNtfyStatus();
+
+// Sau đó gửi mỗi 5 phút
+setInterval(sendNtfyStatus, 30 * 60 * 1000);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
