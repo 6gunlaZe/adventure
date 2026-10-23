@@ -7,7 +7,7 @@ const LEADER = "haiz";
 
 // Danh sách item rác sẽ tự động bán
 const TRASH_ITEMS = [
-  "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
+  "bandages", "basher", "beewings", "blade1111", "broom11", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
   "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
@@ -339,7 +339,7 @@ group_vip6: [
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
 	group_basic: ["ololipop1111",],
-	group_basic00: ["ololipop",],
+	group_basic00: ["ololipop","broom"],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
 	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
