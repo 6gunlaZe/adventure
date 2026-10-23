@@ -1351,78 +1351,84 @@ async function tryWarcry() {
 
 async function tryCleave() {
 
-    // Nhường nhịp cho attack
-    if (ms_to_next_skill("attack") < 100 || character.esize < 1 ) return false;
+// Nhường nhịp cho attack
+    if (ms_to_next_skill("attack") < 100 || character.esize < 1) return false;
 	
-    // 1. Kiểm tra Cooldown, MP (Cleave tốn 720 MP) và trạng thái bận
-    if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping ) return false;
+    // 1. Kiểm tra Cooldown, MP và trạng thái bận
+    if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping) return false;
     if (smart.moving) return false;
 
-    // 2. Lọc quái trong tầm thi triển Cleave (Range gốc 160 + 20px bù ping/hitbox)
+    // 2. Tầm thi triển Cleave
     const CLEAVE_RANGE_SAFE = (G.skills.cleave.range || 160) + 20; 
-    
-    // Tận dụng trực tiếp m.distance đã tính sẵn từ scanAll
-    const cleaveMobs = monsters.filter(m => m.distance <= CLEAVE_RANGE_SAFE);
-    if (cleaveMobs.length === 0) return false;
 
-    // =========================================================================
-    // CHỐT CHẶN MỞ KHÓA CLEAVE
-    // =========================================================================
-    // Chỉ mở khóa khi có ít nhất 1 quái: Đang nhắm vào Party HOẶC là Quái Hợp Tác
-    const isTriggered = cleaveMobs.some(m => {
-        const isTargetingParty = m.entity.target && PARTY.includes(m.entity.target);
-        const isCooperative = Boolean(m.entity.cooperative);
-        
-        return isTargetingParty || isCooperative;
-    });
+    // Biến đếm & Cờ kiểm tra (Chỉ dùng 1 vòng lặp duy nhất)
+    let totalCleaveMobs = 0;
+    let isTriggered = false;
+    let untargetedCount = 0;
+    let weakUntargetedCount = 0;
+    let strongUntargetedCount = 0;
+    let allStrongInTargetList = true;
 
-    // Không có "mồi châm" hợp lệ -> Dừng ngay, không xả Cleave
-    if (!isTriggered) return false;
-    // =========================================================================
+    for (const m of monsters) {
+        if (m.distance > CLEAVE_RANGE_SAFE) continue;
 
+        totalCleaveMobs++;
+        const e = m.entity;
+        const target = e.target;
 
-    // Tách quái chưa có target (quái mới/chưa bị thu hút)
-    const untargetedMobs = cleaveMobs.filter(m => !m.entity.target);
+        // 1. Check chốt chặn mở khóa (Chỉ cần 1 con thỏa mãn là bật cờ)
+        if (!isTriggered) {
+            if ((target && PARTY.includes(target)) || e.cooperative) {
+                isTriggered = true;
+            }
+        }
+
+        // 2. Phân loại quái chưa có Target
+        if (!target) {
+            untargetedCount++;
+            const maxHp = e.max_hp || 0;
+
+            if (maxHp < 10000) {
+                weakUntargetedCount++;
+            } else {
+                strongUntargetedCount++;
+                // Nếu có quái trâu không nằm trong TARGET_MONSTERS -> Đánh dấu ngay
+                if (allStrongInTargetList && !TARGET_MONSTERS.includes(e.mtype)) {
+                    allStrongInTargetList = false;
+                }
+            }
+        }
+    }
+
+    // BREAK EARLY: Không có quái trong tầm HOẶC không có mồi châm -> Thoát ngay!
+    if (totalCleaveMobs === 0 || !isTriggered) return false;
 
     // =========================================================================
     // ĐIỀU KIỆN AN TOÀN ĐỂ XẢ CLEAVE
     // =========================================================================
     let canCleave = false;
 
-    // TH 1: Tối ưu nhất - Tất cả quái trong tầm ĐÃ CÓ TARGET (không sợ kéo nhầm quái lạ)
-    if (untargetedMobs.length === 0) {
+    // TH 1: Tất cả quái trong tầm ĐÃ CÓ TARGET
+    if (untargetedCount === 0) {
         canCleave = true;
-    } else {
-        // TH 2: Có quái chưa có Target -> Xét các trường hợp ngoại lệ:
+    } 
+    // TH 2A: Tất cả quái chưa Target đều QUÁ YẾU (< 10.000 HP)
+    else if (weakUntargetedCount === untargetedCount) {
+        canCleave = true;
+    } 
+    // TH 2B: Có quái trâu chưa Target -> Xét HP Warrior & MP Priest
+    else if (character.hp > 10000 && allStrongInTargetList) {
 
-        // Ngoại lệ A: Tất cả quái chưa Target đều QUÁ YẾU (HP Max < 10.000) -> Xả thoải mái
-        const allUntargetedAreWeak = untargetedMobs.every(m => (m.entity.max_hp || 0) < 10000);
+        // Lấy MP của Ynhi ngay tại thời điểm thực sự cần dùng
+        const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
+        const ynhiMp = ynhiMember?.entity?.mp || 0;
 
-        if (allUntargetedAreWeak) {
+        const ignoreLimit = ynhiMp > 4500 ? 5 :
+                            ynhiMp > 3500 ? 3 :
+                            ynhiMp > 2500 ? 1 : 0;
+
+        if (strongUntargetedCount <= ignoreLimit && ignoreLimit > 0) {
             canCleave = true;
-        } 
-        // Ngoại lệ B: Máu Warrior đủ trâu (> 10.000 HP) -> Cho phép hút quái trong TARGET_MONSTERS
-        else if (character.hp > 10000) {
-
-            // Lấy MP hiện tại của Priest (Ynhi)
-            const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
-            const ynhiMp = ynhiMember?.entity?.mp || 0;
-
-            // Lượng quái trâu chưa target cho phép kéo thêm dựa vào MP của Ynhi
-            const ignoreLimit = ynhiMp > 4500 ? 5 :
-                                ynhiMp > 3500 ? 3 :
-                                ynhiMp > 2500 ? 1 : 0;
-
-            // Lọc ra danh sách quái trâu (HP Max >= 10.000) chưa có Target
-            const strongUntargeted = untargetedMobs.filter(m => (m.entity.max_hp || 0) >= 10000);
-
-            // Tất cả quái trâu chưa target phải thuộc danh sách TARGET_MONSTERS
-            const allInTargetList = strongUntargeted.every(m => TARGET_MONSTERS.includes(m.entity.mtype));
-
-            // Chỉ Cleave nếu quái hợp lệ và số lượng không vượt quá sức gánh Mana của Ynhi
-            if (allInTargetList && strongUntargeted.length <= ignoreLimit && ignoreLimit > 0) {
-                canCleave = true;
-            }
         }
     }
 
