@@ -3014,7 +3014,23 @@ const EQUIPMENT_SETS = {
             { itemName: "wbreeches", slot: "pants", level: 8, l: "l" },
             { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
         ],
-        def: [],
+        def: [
+
+        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+			
+		],
         heall: [
         { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
 		],
