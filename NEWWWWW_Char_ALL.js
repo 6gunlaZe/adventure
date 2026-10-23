@@ -1892,10 +1892,15 @@ setInterval(function() {
 
         // Danh sách tọa độ riêng cho từng nhân vật
         const WITCH_SPOTS = {
-            "haiz": { map: "winterland", x: 80, y: -2015 },
-            "6gunlaZe": { map: "main", x: 970, y: -156 },
-            "LyThanhThu": { map: "halloween", x: -555, y: -333 },
-            // Thêm bao nhiêu nhân vật tùy ý ở đây...  
+            "haiz": { map: "desertland", x: -819, y: -436 },
+            "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
+            "LyThanhThu": { map: "halloween", x: 250, y: -1227 },
+            // Thêm bao nhiêu nhân vật tùy ý ở đây... 
+			// rắn { map: "halloween", x: -555, y: -333 },  
+			// ghot { map: "halloween", x: 250, y: -1227 },
+			// nhện { map: "main", x: 970, y: -156 },
+			// trâu { map: "winterland", x: 80, y: -2015 },
+			// cây { map: "desertland", x: -819, y: -436 },
 
         };
         
