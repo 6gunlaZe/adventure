@@ -1487,6 +1487,7 @@ async function tryAgitate() {
         // Đếm quái hợp lệ có thể hút
         if (!e.target && TARGET_MONSTERS.includes(e.mtype)) {
             pullableCount++;
+			if (character.mp > 1500)pullableCount++; // tự động +1 nếu mana dư nhiều
         }
     }
 
