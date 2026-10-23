@@ -85,6 +85,7 @@ let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
 let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
 let lastFarmMonsterSeen = Date.now();
 let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
+let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
 
 
 
@@ -120,13 +121,22 @@ function scanAll() {
 	healer = null;
     SAFE = false; 
     hasLowHpAggroMonster = false; 
+	needLuckALL = false;
+	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
-	
+    // Biến kiểm tra điều kiện sự kiện Witch đang trong giai đoạn thu thập & quá 10s chưa thấy quái farm
+    const isWitchGathering = witchEvent && 
+                         witchEvent.live && 
+                         witchEvent.phase === "gathering" && 
+                         (Date.now() - lastFarmMonsterSeen) > 10000;
+	needLuckALL = isWitchGathering;
+
+
 
     if (character.cave && character.cave.paused) return;
 
-    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || (witchEvent && witchEvent.live  && witchEvent.phase === "gathering" && (Date.now() - lastFarmMonsterSeen) > 10000 ) ) {
+    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || isWitchGathering ) {
         SAFE = true;
     }
 
@@ -3190,7 +3200,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000)) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
@@ -3320,7 +3330,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000))
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
@@ -3362,7 +3372,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000))  needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
@@ -3395,7 +3405,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if (e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) needLuck = true;
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )  || (needLuckALL && e.hp < 3000)) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
         }
 
