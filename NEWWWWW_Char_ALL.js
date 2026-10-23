@@ -448,7 +448,7 @@ let attackBusy = false;
 const REVERSE_3SHOT_MONSTERS = ["crab"];
 
 async function use_multi_shot() {
-    if (attackBusy || (character.hp / character.max_hp) < 0.5) return false;
+    if (attackBusy || (character.hp / character.max_hp) < 0.3) return false;
     if (!character.cave && monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
         await useAttack();
         return false;
