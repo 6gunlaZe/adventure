@@ -1365,6 +1365,22 @@ async function tryCleave() {
     const cleaveMobs = monsters.filter(m => m.distance <= CLEAVE_RANGE_SAFE);
     if (cleaveMobs.length === 0) return false;
 
+    // =========================================================================
+    // CHỐT CHẶN MỞ KHÓA CLEAVE
+    // =========================================================================
+    // Chỉ mở khóa khi có ít nhất 1 quái: Đang nhắm vào Party HOẶC là Quái Hợp Tác
+    const isTriggered = cleaveMobs.some(m => {
+        const isTargetingParty = m.entity.target && PARTY.includes(m.entity.target);
+        const isCooperative = Boolean(m.entity.cooperative);
+        
+        return isTargetingParty || isCooperative;
+    });
+
+    // Không có "mồi châm" hợp lệ -> Dừng ngay, không xả Cleave
+    if (!isTriggered) return false;
+    // =========================================================================
+
+
     // Tách quái chưa có target (quái mới/chưa bị thu hút)
     const untargetedMobs = cleaveMobs.filter(m => !m.entity.target);
 
