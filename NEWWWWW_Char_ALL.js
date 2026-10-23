@@ -2528,15 +2528,15 @@ async function skillLoop() {
                     break;
                     
                 case "warrior":
-					if (await tryStomp()) return setTimeout(skillLoop, 10);
-					if (await tryHardshell()) return setTimeout(skillLoop, 10);
+					await tryStomp();
+					await tryHardshell();
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
-					if (await tryCleave()) return setTimeout(skillLoop, 10);
-					if (await tryCharge()) return setTimeout(skillLoop, 10);
-					if (await tryTaunt()) return setTimeout(skillLoop, 10);
-					if (await tryWarcry()) return setTimeout(skillLoop, 10);
-					if (await tryAgitate()) return setTimeout(skillLoop, 10);
+					await tryCleave();
+					await tryCharge();
+					await tryTaunt();
+					await tryWarcry();
+					await tryAgitate();
 					
                     if (await useAttack()) {
                         return setTimeout(skillLoop, 10);
