@@ -1883,6 +1883,50 @@ setInterval(function() {
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
     if (character.cave || isCaveMode ) return;
 
+// =========================================================
+// 0. EVENT HANDLING ƯU TIÊN CAO
+// =========================================================
+    // WITCHCIPHER EVENT HANDLING
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+    if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
+
+        // Danh sách tọa độ riêng cho từng nhân vật
+        const WITCH_SPOTS = {
+            "haiz": { map: "winterland", x: 80, y: -2015 },
+            "6gunlaZe": { map: "main", x: 970, y: -156 },
+            "LyThanhThu": { map: "halloween", x: -555, y: -333 },
+            // Thêm bao nhiêu nhân vật tùy ý ở đây...  
+
+        };
+        
+        // Vị trí mặc định nếu nhân vật hiện tại không có tên trong danh sách trên
+        const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
+        
+        // Lấy tọa độ của nhân vật hiện tại (nếu ko có trong danh sách thì lấy mặc định)
+        const WITCH_SPOT = WITCH_SPOTS[character.name] || DEFAULT_SPOT;
+
+		
+        
+        const distToSpot = (character.map === WITCH_SPOT.map) 
+            ? distance(character, WITCH_SPOT) 
+            : 99999;
+
+        // Nếu chưa ở đúng map HOẶC đứng quá xa vị trí cấu hình (> 200 đơn vị) thì di chuyển tới đó
+        if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
+            if (!smart.moving) {
+                farmingMoving = false;
+                smart_move(WITCH_SPOT);
+            }
+            return;
+        }
+        
+        // Nếu đã đến nơi, dừng smart move để đứng yên tại chỗ theo ý muốn
+        if (smart.moving) stop("smart");
+        return;
+    }
+
+
+	
 
 // =========================================================
 // 1. WORLD BOSS HANDLING (TẬN DỤNG scanAll & BÁM SÁT TẦM ĐÁNH)
@@ -1987,47 +2031,6 @@ setInterval(function() {
         if (smart.moving) stop("smart");
         return;
     }
-
-
-    // WITCHCIPHER EVENT HANDLING
-    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
-    if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
-
-        // Danh sách tọa độ riêng cho từng nhân vật
-        const WITCH_SPOTS = {
-            "haiz": { map: "winterland", x: 80, y: -2015 },
-            "6gunlaZe": { map: "main", x: 970, y: -156 },
-            "LyThanhThu": { map: "halloween", x: -555, y: -333 },
-            // Thêm bao nhiêu nhân vật tùy ý ở đây...  
-
-        };
-        
-        // Vị trí mặc định nếu nhân vật hiện tại không có tên trong danh sách trên
-        const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
-        
-        // Lấy tọa độ của nhân vật hiện tại (nếu ko có trong danh sách thì lấy mặc định)
-        const WITCH_SPOT = WITCH_SPOTS[character.name] || DEFAULT_SPOT;
-
-		
-        
-        const distToSpot = (character.map === WITCH_SPOT.map) 
-            ? distance(character, WITCH_SPOT) 
-            : 99999;
-
-        // Nếu chưa ở đúng map HOẶC đứng quá xa vị trí cấu hình (> 200 đơn vị) thì di chuyển tới đó
-        if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
-            if (!smart.moving) {
-                farmingMoving = false;
-                smart_move(WITCH_SPOT);
-            }
-            return;
-        }
-        
-        // Nếu đã đến nơi, dừng smart move để đứng yên tại chỗ theo ý muốn
-        if (smart.moving) stop("smart");
-        return;
-    }
-	
 
 
 
