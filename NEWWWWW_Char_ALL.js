@@ -2933,13 +2933,22 @@ const EQUIPMENT_SETS = {
         ],
 		
         def: [
+
+
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
-        { itemName: "vgloves", slot: "gloves", level: 8, l: "l" },
-        { itemName: "xhelmet", slot: "helmet", level: 8, l: "l" },
-        { itemName: "xarmor", slot: "chest", level: 8, l: "l" },
-        { itemName: "xpants", slot: "pants", level: 8, l: "l" },
+        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+			
+
 			
 		],
         def_fire: []
