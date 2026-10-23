@@ -2828,11 +2828,10 @@ Ping: ${character.ping}ms`;
     .catch(e => game_log("NTFY ERROR: " + e));
 }
 
-// Gửi ngay khi bot chạy
-sendNtfyStatus();
 
-// Sau đó gửi mỗi 5 phút
-setInterval(sendNtfyStatus, 30 * 60 * 1000);
+
+// Sau đó gửi mỗi 120 phút
+setInterval(sendNtfyStatus, 120 * 60 * 1000);
 
 
 // ============================================================
