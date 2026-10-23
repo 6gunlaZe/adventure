@@ -3113,7 +3113,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "gloampendant", slot: "amulet", l: "l"},
+      //  { itemName: "gloampendant", slot: "amulet", l: "l"},
         { itemName: "supermittens", slot: "gloves", level: 8, l: "l" },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
@@ -3127,7 +3127,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "gloampendant", slot: "amulet", l: "l"},
+      //  { itemName: "gloampendant", slot: "amulet", l: "l"},
         { itemName: "mpxgloves", slot: "gloves", level: 5, l: "l" },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
         { itemName: "fury", slot: "helmet", level: 8, l: "l" },
@@ -3137,7 +3137,7 @@ const EQUIPMENT_SETS = {
 			
         ],
         luck: [
-        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+      //  { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "cloverstud", slot: "earring2", level: 3, l: "l"  },
         { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
         { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
