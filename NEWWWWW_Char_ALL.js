@@ -2337,17 +2337,15 @@ const ACTION_COOLDOWN = 20000;
 function manageChars() {
     if (character.name !== LEADER || isCaveMode ) return;
 
-    const activeBoss = getActiveWorldBoss();
-	
-    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
-	
-    let currentEvent = activeBoss ? activeBoss.id : null;
 
-	if (!currentEvent)
-	{
-       if (witchEvent && witchEvent.phase === "gathering" )currentEvent = "witchcipher";
-		
-	}
+    const activeBoss = getActiveWorldBoss();
+    
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+    
+    // Ưu tiên witchcipher nếu thỏa mãn, ngược lại lấy activeBoss.id (nếu có), không thì là null
+    let currentEvent = (witchEvent && witchEvent.phase === "gathering") 
+        ? "witchcipher" 
+        : (activeBoss ? activeBoss.id : null);
 
 	
     const now = Date.now();
