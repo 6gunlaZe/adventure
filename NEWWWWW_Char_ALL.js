@@ -1912,6 +1912,7 @@ let farmingMoving = false;
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
 let farmAngle = 0;
 const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) / 3;
+let currentWitchSet = null; // Biến lưu bộ tọa độ witch
 // ----------------------------------
 
 setInterval(function() {
@@ -1919,18 +1920,50 @@ setInterval(function() {
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
     if (character.cave || isCaveMode ) return;
 
-// =========================================================
-// 0. EVENT HANDLING ƯU TIÊN CAO
-// =========================================================
+    // =========================================================
+    // 0. EVENT HANDLING ƯU TIÊN CAO
+    // =========================================================
     // WITCHCIPHER EVENT HANDLING
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+
+    // Nếu sự kiện chưa bắt đầu hoặc đã kết thúc, reset lại để lần sau random tiếp
+    if (!witchEvent || witchEvent.phase !== "gathering") {
+        currentWitchSet = null;
+    }
+
     if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
 
-        // Danh sách tọa độ riêng cho từng nhân vật
-        const WITCH_SPOTS = {
+
+
+    // Danh sách 4 bộ tọa độ theo tỉ lệ: 40% - 30% - 20% - 10%
+    const WITCH_SETS = [
+        // Bộ 1 (40%)
+        {
             "haiz": { map: "halloween", x: 250, y: -1227 },
             "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
-            "LyThanhThu": { map: "halloween", x: 250, y: -1227 },
+            "Ynhi": { map: "halloween", x: 250, y: -1227 }
+        },
+        // Bộ 2 (30%)
+        {
+            "haiz": { map: "halloween", x: -555, y: -333 },
+            "6gunlaZe": { map: "halloween", x: -555, y: -333 },
+            "Ynhi": { map: "halloween", x: -555, y: -333 }
+        },
+        // Bộ 3 (20%)
+        {
+            "haiz": { map: "main", x: 970, y: -156 },
+            "6gunlaZe": { map: "main", x: 970, y: -156 },
+            "Ynhi": { map: "main", x: 970, y: -156 }
+        },
+        // Bộ 4 (10%)
+        {
+            "haiz": { map: "winterland", x: 80, y: -2015 },
+            "6gunlaZe": { map: "winterland", x: 80, y: -2015 },
+            "Ynhi": { map: "winterland", x: 80, y: -2015 }
+        }
+    ];
+
+            // Danh sách tọa độ riêng cho từng nhân vật
             // Thêm bao nhiêu nhân vật tùy ý ở đây... 
 			// rắn { map: "halloween", x: -555, y: -333 },  
 			// ghot { map: "halloween", x: 250, y: -1227 },
@@ -1938,16 +1971,23 @@ setInterval(function() {
 			// trâu { map: "winterland", x: 80, y: -2015 },
 			// cây { map: "desertland", x: -819, y: -436 },
 
-        };
-        
-        // Vị trí mặc định nếu nhân vật hiện tại không có tên trong danh sách trên
-        const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
-        
-        // Lấy tọa độ của nhân vật hiện tại (nếu ko có trong danh sách thì lấy mặc định)
-        const WITCH_SPOT = WITCH_SPOTS[character.name] || DEFAULT_SPOT;
+    // Nếu chưa có bộ nào được chọn, tiến hành random theo tỉ lệ chuẩn
+    if (!currentWitchSet) {
+        const r = Math.random();
+        const setIndex = r < 0.4 ? 0 :  // 40%
+                         r < 0.7 ? 1 :  // 30% (từ 0.4 đến 0.7)
+                         r < 0.9 ? 2 :  // 20% (từ 0.7 đến 0.9)
+                                   3;   // 10% (từ 0.9 đến 1.0)
+        currentWitchSet = WITCH_SETS[setIndex];
+    }
 
-		
-        
+    // Vị trí mặc định nếu nhân vật hiện tại không có tên trong bộ
+    const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
+
+    // Lấy tọa độ của nhân vật hiện tại từ bộ đã random ra
+    const WITCH_SPOT = currentWitchSet[character.name] || DEFAULT_SPOT;
+
+
         const distToSpot = (character.map === WITCH_SPOT.map) 
             ? distance(character, WITCH_SPOT) 
             : 99999;
