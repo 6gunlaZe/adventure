@@ -1904,7 +1904,64 @@ function getActiveWorldBoss() {
 // ============================================================
 // FARM MOVEMENT LOOP moveloop
 // ============================================================
+            // Danh sách tọa độ riêng cho từng nhân vật
+            // Thêm bao nhiêu nhân vật tùy ý ở đây... 
+			// rắn { map: "halloween", x: -555, y: -333 },  
+			// ghot { map: "halloween", x: 250, y: -1227 },
+			// nhện { map: "main", x: 970, y: -156 },
+			// trâu { map: "winterland", x: 80, y: -2015 },
+			// heo { map: "winterland", x: 16, y: -1231 },
+			// cây { map: "desertland", x: -819, y: -436 },
 
+// 1. Danh sách 4 bộ tọa độ theo tỉ lệ: 40% - 30% - 20% - 10%
+const WITCH_SETS = [
+    // Bộ 1 (40%)
+    {
+        "haiz": { map: "halloween", x: 250, y: -1227 },
+        "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
+        "Ynhi": { map: "halloween", x: 250, y: -1227 }
+    },
+    // Bộ 2 (30%)
+    {
+        "haiz": { map: "halloween", x: 250, y: -1227 },
+        "6gunlaZe": { map: "main", x: 970, y: -156 },
+        "Ynhi": { map: "halloween", x: 250, y: -1227 }
+    },
+    // Bộ 3 (20%)
+    {
+        "haiz": { map: "winterland", x: 80, y: -2015 },
+        "6gunlaZe": { map: "winterland", x: 16, y: -1231 },
+        "Ynhi": { map: "winterland", x: 16, y: -1231 }
+    },
+    // Bộ 4 (10%)
+    {
+        "haiz": { map: "desertland", x: -819, y: -436 },
+        "6gunlaZe": { map: "desertland", x: -819, y: -436 },
+        "Ynhi": { map: "desertland", x: -819, y: -436 }
+    }
+];
+
+// 2. Hàm random theo hạt giống (seed)
+function seededRandom(seed) {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
+// 3. Tự động lấy bộ tọa độ đồng bộ theo NGÀY HÔM NAY (YYYYMMDD)
+function getDailyWitchSet() {
+    const now = new Date();
+    // Tạo seed từ Năm, Tháng, Ngày (Ví dụ: 20261025)
+    const timeSeed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+
+    // Random theo tỉ lệ 40% - 30% - 20% - 10%
+    const r = seededRandom(timeSeed);
+    const setIndex = r < 0.4 ? 0 :  // 40%
+                     r < 0.7 ? 1 :  // 30%
+                     r < 0.9 ? 2 :  // 20%
+                               3;   // 10%
+
+    return WITCH_SETS[setIndex];
+}
 
 let checkcrabxx = 0;
 let farmingMoving = false;
@@ -1933,53 +1990,9 @@ setInterval(function() {
 
     if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
 
-
-
-    // Danh sách 4 bộ tọa độ theo tỉ lệ: 40% - 30% - 20% - 10%
-    const WITCH_SETS = [
-        // Bộ 1 (40%)
-        {
-            "haiz": { map: "halloween", x: 250, y: -1227 },
-            "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
-            "Ynhi": { map: "halloween", x: 250, y: -1227 }
-        },
-        // Bộ 2 (30%)
-        {
-            "haiz": { map: "halloween", x: 250, y: -1227 },
-            "6gunlaZe": { map: "main", x: 970, y: -156 },
-            "Ynhi": { map: "halloween", x: 250, y: -1227 },
-        },
-        // Bộ 3 (20%)
-        {
-            "haiz": { map: "winterland", x: 80, y: -2015 },
-            "6gunlaZe": { map: "winterland", x: 16, y: -1231 },
-            "Ynhi": { map: "winterland", x: 16, y: -1231 },
-        },
-        // Bộ 4 (10%)
-        {
-            "haiz": { map: "desertland", x: -819, y: -436 },
-            "6gunlaZe": { map: "desertland", x: -819, y: -436 },
-            "Ynhi": { map: "desertland", x: -819, y: -436 },
-        }
-    ];
-
-            // Danh sách tọa độ riêng cho từng nhân vật
-            // Thêm bao nhiêu nhân vật tùy ý ở đây... 
-			// rắn { map: "halloween", x: -555, y: -333 },  
-			// ghot { map: "halloween", x: 250, y: -1227 },
-			// nhện { map: "main", x: 970, y: -156 },
-			// trâu { map: "winterland", x: 80, y: -2015 },
-			// heo { map: "winterland", x: 16, y: -1231 },
-			// cây { map: "desertland", x: -819, y: -436 },
-
-    // Nếu chưa có bộ nào được chọn, tiến hành random theo tỉ lệ chuẩn
+    // Nếu chưa có bộ nào được chọn, tiến hành random theo tỉ lệ chuẩn mỗi ngày
     if (!currentWitchSet) {
-        const r = Math.random();
-        const setIndex = r < 0.4 ? 0 :  // 40%
-                         r < 0.7 ? 1 :  // 30% (từ 0.4 đến 0.7)
-                         r < 0.9 ? 2 :  // 20% (từ 0.7 đến 0.9)
-                                   3;   // 10% (từ 0.9 đến 1.0)
-        currentWitchSet = WITCH_SETS[setIndex];
+        currentWitchSet = getDailyWitchSet();
     }
 
     // Vị trí mặc định nếu nhân vật hiện tại không có tên trong bộ
