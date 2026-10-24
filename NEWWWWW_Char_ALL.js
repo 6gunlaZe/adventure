@@ -35,11 +35,11 @@ const FARM_LOCATIONS = {
 
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 20, elixir: "cipherdraught" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher",], solo: false, circle: true, radius: 20, elixir: "cipherdraught" },
     "6gunlaZe": { slot: 3, home: true, events: ["witchcipher"], solo: false, circle: true, radius: 80, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen","witchcipher"], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher",], elixir: "elixirluck" }
 	
 };
