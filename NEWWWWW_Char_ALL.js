@@ -1945,21 +1945,21 @@ setInterval(function() {
         },
         // Bộ 2 (30%)
         {
-            "haiz": { map: "halloween", x: -555, y: -333 },
-            "6gunlaZe": { map: "halloween", x: -555, y: -333 },
-            "Ynhi": { map: "halloween", x: -555, y: -333 }
+            "haiz": { map: "halloween", x: 250, y: -1227 },
+            "6gunlaZe": { map: "main", x: 970, y: -156 },
+            "Ynhi": { map: "halloween", x: 250, y: -1227 },
         },
         // Bộ 3 (20%)
         {
-            "haiz": { map: "main", x: 970, y: -156 },
-            "6gunlaZe": { map: "main", x: 970, y: -156 },
-            "Ynhi": { map: "main", x: 970, y: -156 }
+            "haiz": { map: "winterland", x: 80, y: -2015 },
+            "6gunlaZe": { map: "winterland", x: 16, y: -1231 },
+            "Ynhi": { map: "winterland", x: 16, y: -1231 },
         },
         // Bộ 4 (10%)
         {
-            "haiz": { map: "winterland", x: 80, y: -2015 },
-            "6gunlaZe": { map: "winterland", x: 80, y: -2015 },
-            "Ynhi": { map: "winterland", x: 80, y: -2015 }
+            "haiz": { map: "desertland", x: -819, y: -436 },
+            "6gunlaZe": { map: "desertland", x: -819, y: -436 },
+            "Ynhi": { map: "desertland", x: -819, y: -436 },
         }
     ];
 
@@ -1969,6 +1969,7 @@ setInterval(function() {
 			// ghot { map: "halloween", x: 250, y: -1227 },
 			// nhện { map: "main", x: 970, y: -156 },
 			// trâu { map: "winterland", x: 80, y: -2015 },
+			// heo { map: "winterland", x: 16, y: -1231 },
 			// cây { map: "desertland", x: -819, y: -436 },
 
     // Nếu chưa có bộ nào được chọn, tiến hành random theo tỉ lệ chuẩn
