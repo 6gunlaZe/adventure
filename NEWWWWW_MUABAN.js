@@ -1646,7 +1646,7 @@ let isCraftingBusy = false;
 
 // 2. Chạy hàm kiểm tra chế đồ định kỳ (mỗi 2 giây check 1 lần)
 setInterval(async () => {
-    if (isCraftingBusy || character.rip || character.esize < 10 ) return;
+    if (isCraftingBusy || character.rip || character.esize < 4 ) return;
 
     isCraftingBusy = true;
     try {
@@ -2269,7 +2269,7 @@ setInterval(() => {
         fullInventoryStartTime = 0;
     } else {
         // --- KIỂM TRA BẮT BUỘC: Túi đầy liên tục >= 160 giây ---
-        const isFull = is_inventory_full() || character.esize < 3;
+        const isFull = is_inventory_full() || character.esize < 4;
         if (isFull) {
             if (fullInventoryStartTime === 0) {
                 fullInventoryStartTime = now;
@@ -2327,7 +2327,7 @@ setInterval(() => {
         return;
     }
 
-    const inventoryFull = is_inventory_full() || character.esize < 3;
+    const inventoryFull = is_inventory_full() || character.esize < 4;
     const idleStorage = now - lastIdleTime >= 4 * 60 * 1000;
 
     // Chưa đủ điều kiện STORAGE
@@ -2479,7 +2479,7 @@ setInterval(checkPonty, 30000);
 
 
 setInterval(() => {
-    if (character.q.exchange || character.esize < 5) return;
+    if (character.q.exchange || character.esize < 4) return;
 
     let first = -1;
 
@@ -2848,7 +2848,7 @@ setInterval(() => {
     if (Date.now() - scriptStart < 30 * 60 * 1000) return; // chỉ hoạt động sau 30p khởi chạy
 	
     // 1. Nếu Merchant đang bận hoặc hàng chờ đang có việc -> Bỏ qua
-    if (busy || queue1.length > 0 || character.esize < 7 ) return;
+    if (busy || queue1.length > 0 || character.esize < 11 ) return;
 
     // 2. Kiểm tra skill fishing có đang cooldown không
     if (is_on_cooldown("fishing")) return;
