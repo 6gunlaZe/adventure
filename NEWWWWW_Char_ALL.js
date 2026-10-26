@@ -3047,7 +3047,7 @@ const EQUIPMENT_SETS = {
     "6gunlaZe": {
         dame: [
 			
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -3065,7 +3065,7 @@ const EQUIPMENT_SETS = {
 
         dame2: [
 			
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
             { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -3114,7 +3114,7 @@ const EQUIPMENT_SETS = {
         ],
         def: [
 
-        { itemName: "firebow", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 9, l: "l" },
