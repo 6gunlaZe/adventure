@@ -441,9 +441,6 @@ async function useMentalBurstLogic() {
 
 
 
-
-
-
 let attackBusy = false;
 const REVERSE_3SHOT_MONSTERS = ["crab"];
 
@@ -469,10 +466,29 @@ async function use_multi_shot() {
         const allowUntargeted = (character.hp / character.max_hp) >= 0.7 && 
                                 (!Ynhi || (Ynhi.hp / Ynhi.max_hp) >= 0.5);
 
+        // Tạo Set chứa tên thành viên trong party để tra cứu cực nhanh O(1)
+        const partyNames = new Set(partyEntities.map(p => p.entity.name));
+
         // 2. Lọc & Sắp xếp danh sách quái
         let valid = monsters
             .map(m => m.entity)
-            .filter(e => e.level <= 1 && is_in_range(e, "3shot") && (allowUntargeted || !!e.target));
+            .filter(e => {
+                // Điều kiện cơ bản: Level <= 1 và trong tầm "3shot"
+                if (e.level > 1 || !is_in_range(e, "3shot")) return false;
+
+                // Nếu quái đã có target: Target đó bắt buộc phải trong party hoặc là quái hợp tác
+                if (e.target) {
+                    const isTargetInParty = partyNames.has(e.target);
+                    const isCoop = e.cooperative;
+                    if (!isTargetInParty && !isCoop) return false;
+                } 
+                // Nếu quái không có target: Phải thỏa mãn điều kiện an toàn allowUntargeted
+                else {
+                    if (!allowUntargeted) return false;
+                }
+
+                return true;
+            });
 
         valid = (character.ctype === "ranger" && REVERSE_3SHOT_MONSTERS.includes(FARM_MONSTER))
             ? valid.reverse()
@@ -481,9 +497,10 @@ async function use_multi_shot() {
         // 3. Chọn mục tiêu & Thi triển skill
         const targets = valid.slice(0, 5);
         if (targets.length < 2) {
-        await useAttack();
+            await useAttack();
             return false;
         }
+        
         // Ưu tiên 5shot nếu đủ mục tiêu và chiêu đã sẵn sàng
         let skill = "3shot";
         if (targets.length >= 4 && can5Shot) {
@@ -492,11 +509,11 @@ async function use_multi_shot() {
             return false; // Chỉ có 2-3 mục tiêu và 3shot lại đang hồi chiêu
         }
 
-        if (character.mp < G.skills[skill].mp + 300) //chỉ đủ mana để đánh thường
-        {
+        if (character.mp < G.skills[skill].mp + 300) { // chỉ đủ mana để đánh thường
             await useAttack();
             return false;
         }
+
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
         await use_skill(skill, targets);
         reduce_cooldown(skill, character.ping * 0.95);
