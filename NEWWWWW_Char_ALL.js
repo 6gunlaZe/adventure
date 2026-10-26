@@ -1955,7 +1955,7 @@ const WITCH_SETS = [
     // Bộ 1 (40%)
     {
         "haiz": { map: "halloween", x: 250, y: -1227 },
-        "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
+        "6gunlaZe": { map: "main", x: 970, y: -156 },
         "Ynhi": { map: "halloween", x: 250, y: -1227 }
     },
     // Bộ 2 (30%)
@@ -1993,8 +1993,8 @@ function getDailyWitchSet() {
     // Random theo tỉ lệ 40% - 30% - 20% - 10%
     const r = seededRandom(timeSeed);
     const setIndex = r < 0.4 ? 0 :  // 40%
-                     r < 0.7 ? 1 :  // 30%
-                     r < 0.9 ? 2 :  // 20%
+                     r < 0.6 ? 1 :  // 20%
+                     r < 0.9 ? 2 :  // 30%
                                3;   // 10%
 
     return WITCH_SETS[setIndex];
