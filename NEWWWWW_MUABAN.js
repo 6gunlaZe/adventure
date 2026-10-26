@@ -79,12 +79,13 @@ const autoBuyFromMerchItems = [
 ];
 
 
-// TỰ ĐỘNG BÁN NẾU SỐ LƯỢNG TRONG TÚI VƯỢT QUÁ => TRÁNH LAG
+// TỰ ĐỘNG BÁN NẾU SỐ LƯỢNG TRONG TÚI VƯỢT QUÁ => TRÁNH LAG 
 const ITEMS_TO_SELL = [
     ["bow", 1], 
     ["blade", 1], 
     ["snowball", 1],
     ["shoes", 1], 
+    ["rod", 1], 
     ["throwingstars", 5]
 ];
 // TỰ ĐỘNG MUA KHI BỊ DƯỚI SỐ LƯỢNG
