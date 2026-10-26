@@ -1904,6 +1904,43 @@ function getActiveWorldBoss() {
 // ============================================================
 // FARM MOVEMENT LOOP moveloop
 // ============================================================
+
+
+// Hàm trung gian bọc smart_move với try...catch và tự động về thành nếu lỗi
+let isSmartMoving = false; // Biến khóa trạng thái di chuyển
+
+async function safeSmartMove(destination) {
+    // 1. Nếu đang di chuyển smart rồi thì KHÔNG gọi thêm lệnh mới, hủy luôn
+    if (smart.moving || isSmartMoving) return false;
+
+    isSmartMoving = true;
+
+    try {
+        // Thực hiện smart_move và chờ kết quả
+        let result = await smart_move(destination);
+        
+        // Nếu di chuyển thành công
+        isSmartMoving = false;
+        return result;
+
+    } catch (error) {
+        // Chỉ chạy vào đây khi pathfinding thực sự THẤT BẠI (không tìm thấy đường, bị dính kẹt)
+        console.log("[SafeSmart] Không thể di chuyển tới đích -> Về thành.");
+        
+        stop("smart");
+        if (can_use("town")) {
+            await use_skill("town");
+        }
+        farmingMoving = false;
+        isSmartMoving = false;
+		
+        return false;
+    }
+}
+
+
+
+
             // Danh sách tọa độ riêng cho từng nhân vật
             // Thêm bao nhiêu nhân vật tùy ý ở đây... 
 			// rắn { map: "halloween", x: -555, y: -333 },  
@@ -2010,7 +2047,7 @@ setInterval(function() {
         if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
             if (!smart.moving) {
                 farmingMoving = false;
-                smart_move(WITCH_SPOT);
+                safeSmartMove(WITCH_SPOT);
             }
             return;
         }
@@ -2048,7 +2085,7 @@ setInterval(function() {
                         character.y + (bossEntity.y - character.y) * 0.4
                     );
                 } else if (!smart.moving) {
-                    smart_move({ map: character.map, x: bossEntity.x, y: bossEntity.y });
+                    safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
                 }
             } else {
 				//đang ổn định đánh boss
@@ -2060,7 +2097,7 @@ setInterval(function() {
         else if (!bossEntity) {
             if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
                 farmingMoving = false;
-                smart_move({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
+                safeSmartMove({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
             }
         }
 
@@ -2087,7 +2124,7 @@ setInterval(function() {
                 if (character.map !== EVENT_CENTER.map) {
                     parent.socket.emit("join", { name: "graveyard" });
                 } else {
-                    smart_move(EVENT_CENTER);
+                    safeSmartMove(EVENT_CENTER);
                 }
             }
             return;
@@ -2116,7 +2153,7 @@ setInterval(function() {
                 if (character.map !== EVENT_MAP) {
                     parent.socket.emit("join", { name: "horseman" });
                 } else {
-                    smart_move({ map: EVENT_MAP, x: targetX, y: targetY });
+                    safeSmartMove({ map: EVENT_MAP, x: targetX, y: targetY });
                 }
             }
             return;
@@ -2173,7 +2210,7 @@ setInterval(function() {
 
 
     farmingMoving = true;
-    smart_move(FARM_MAP)
+    safeSmartMove(FARM_MAP)
         .finally(() => { 
             farmingMoving = false; 
         });
