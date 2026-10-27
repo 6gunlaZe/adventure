@@ -3062,6 +3062,25 @@ const EQUIPMENT_SETS = {
 	
     // ---- Cấu hình đồ cho Ranger
     "6gunlaZe": {
+
+        damesolo: [
+			
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "candleboots", slot: "shoes", level: 4, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
+		
         dame: [
 			
         { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
@@ -3419,7 +3438,7 @@ const GEAR_LOGIC = {
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
         if (monsterDensity >= 4) lastDefCheck = Date.now();
-		if (needLuckALL) return "dame";
+		if (needLuckALL) return "damesolo";
         if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
 		
         if (monsterDensity >= 2) return "dame2";
