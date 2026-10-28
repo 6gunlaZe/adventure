@@ -22,6 +22,10 @@ const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stonewo
 //HOẠT ĐỘNG SĂN CÁC BOSS SAU
 const WORLD_BOSSES = ["mrpumpkin", "mrgreen",];
 
+//THEO DÕI ĐIỂM ĐÓNG GÓP - BẬT THÔNG BÁO CÁC BOSS SAU
+const TRACKER_BOSSES = ["mrpumpkin", "mrgreen","crabxx","icegolem","horseman","gargoyle","dragold","franky"];
+
+
 
 const FARM_LOCATIONS = {
     osnake: { x: -555, y: -333, map: "halloween" },
@@ -151,9 +155,12 @@ function scanAll() {
 	
             if (WORLD_BOSSES.includes(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
-                // [CẬP NHẬT 1]: Lấy trực tiếp điểm coop sẵn có từ game
+            }
+
+            if (TRACKER_BOSSES.includes(entity.mtype)) {
                 updateWorldBossTracker(entity);
             }
+			
 			
             if (entity.mtype === "fieldgen0") {
                 fieldgens.push({ entity: entity, distance: dist });
