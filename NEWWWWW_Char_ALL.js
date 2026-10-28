@@ -116,27 +116,33 @@ let activeBossTracker = {
     reported: false
 };
 
+
+
+// SIÊU TỐI ƯU
+const WORLD_BOSSES_SET = new Set(WORLD_BOSSES);
+const TRACKER_BOSSES_SET = new Set(TRACKER_BOSSES);
+const PARTY_SET = new Set(PARTY);
+const ALL_TARGET_MONSTERS_SET = ALL_TARGET_MONSTERS;
+
 function scanAll() {
-    monsters = [];
-    partyEntities = [];
-    fieldgens = [];
-    bossEntities = []; 
+    // [TỐI ƯU GC]: Tái sử dụng mảng cũ thay vì cấp phát ô nhớ mới mỗi tick, chống giật lag
+    monsters.length = 0;
+    partyEntities.length = 0;
+    fieldgens.length = 0;
+    bossEntities.length = 0;
+    
     merchant = null;
-	healer = null;
-    SAFE = false; 
-    hasLowHpAggroMonster = false; 
-	needLuckALL = false;
-	
+    healer = null;
+    SAFE = false;
+    hasLowHpAggroMonster = false;
+    needLuckALL = false;
+    
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
-
-    // Biến kiểm tra điều kiện sự kiện Witch đang trong giai đoạn thu thập & quá 10s chưa thấy quái farm
     const isWitchGathering = witchEvent && 
-                         witchEvent.live && 
-                         witchEvent.phase === "gathering" && 
-                         (Date.now() - lastFarmMonsterSeen) > 10000;
-	needLuckALL = isWitchGathering;
-
-
+                               witchEvent.live && 
+                               witchEvent.phase === "gathering" && 
+                               (Date.now() - lastFarmMonsterSeen) > 10000;
+    needLuckALL = isWitchGathering;
 
     if (character.cave && character.cave.paused) return;
 
@@ -144,57 +150,86 @@ function scanAll() {
         SAFE = true;
     }
 
+    const maxDistScan = Math.max(MAX_SCAN_DISTANCE, MERCHANT_DISTANCE);
+    
+    // [TỐI ƯU CACHE]: Cache trước tọa độ và thông số character để tăng tốc độ đọc biến
+    const charX = character.x;
+    const charY = character.y;
+    const charRange = character.range;
+    const charName = character.name;
+    const charCtype = character.ctype;
+    const charParty = character.party;
+
     for (const id in parent.entities) {
         const entity = parent.entities[id];
         if (!entity) continue;
-		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc")continue;
-        const dist = distance(character, entity);
+        if (entity.mtype === "cave_guard" || entity.mtype === "cave_npc") continue;
 
-        // MONSTER
-        if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
-	
-            if (WORLD_BOSSES.includes(entity.mtype)) {
-                bossEntities.push({ entity: entity, distance: dist });
-            }
+        const isMonster = entity.type === "monster";
+        const isCharacter = entity.type === "character";
 
-            if (TRACKER_BOSSES.includes(entity.mtype)) {
-                updateWorldBossTracker(entity);
-            }
-			
-			
-            if (entity.mtype === "fieldgen0") {
-                fieldgens.push({ entity: entity, distance: dist });
-                continue;
-            }
-			
-            monsters.push({ entity: entity, distance: dist });
-            
-            // chắc chắn là đang fram thì phải siết check khoảng cách
-            if (entity.mtype === FARM_MONSTER && dist < character.range ) { 
-                lastFarmMonsterSeen = Date.now();
-            }
-            
-            if (character.ctype == "priest" && entity.target === character.name && entity.hp < 15000) {
-                hasLowHpAggroMonster = true;
-            }
-            
+        // Lọc loại entity cơ bản
+        if (isMonster) {
+            if (entity.dead || !entity.visible) continue;
+            if (!ALL_TARGET_MONSTERS_SET.has(entity.mtype) && !character.cave) continue;
+        } else if (isCharacter) {
+            if (!PARTY_SET.has(entity.name)) continue;
+        } else {
             continue;
         }
 
-        // CHARACTER / PARTY
-        if (entity.type === "character" && PARTY.includes(entity.name)) {
+        // [TỐI ƯU AABB]: Kiểm tra khoảng cách hình chữ nhật (cực nhanh) trước khi gọi hàm distance nặng
+        const dx = entity.x - charX;
+        if (dx > maxDistScan || dx < -maxDistScan) continue;
+        const dy = entity.y - charY;
+        if (dy > maxDistScan || dy < -maxDistScan) continue;
+
+        // Chỉ gọi distance chính xác khi đã vượt qua màng lọc hình chữ nhật
+        const dist = distance(character, entity);
+        if (dist > maxDistScan) continue;
+
+        // XỬ LÝ MONSTER
+        if (isMonster) {
+            if (dist <= MAX_SCAN_DISTANCE) {
+                if (WORLD_BOSSES_SET.has(entity.mtype)) {
+                    bossEntities.push({ entity: entity, distance: dist });
+                }
+
+                if (TRACKER_BOSSES_SET.has(entity.mtype)) {
+                    updateWorldBossTracker(entity);
+                }
+                
+                if (entity.mtype === "fieldgen0") {
+                    fieldgens.push({ entity: entity, distance: dist });
+                    continue;
+                }
+                
+                monsters.push({ entity: entity, distance: dist });
+                
+                if (entity.mtype === FARM_MONSTER && dist < charRange) { 
+                    lastFarmMonsterSeen = Date.now();
+                }
+                
+                if (charCtype === "priest" && entity.target === charName && entity.hp < 15000) {
+                    hasLowHpAggroMonster = true;
+                }
+            }
+        } 
+        // XỬ LÝ CHARACTER / PARTY
+        else if (isCharacter) {
             if (dist <= MAX_SCAN_DISTANCE) {
                 partyEntities.push({ entity: entity, distance: dist, rspeed: entity.s?.rspeed });
             }
+            
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
             }
-			
+            
             if (entity.ctype === "priest") {
                 healer = entity;
             }
 
-            if (entity.ctype === "priest" && !entity.dead && dist <= entity.range && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
+            if (charCtype === "priest" && !entity.dead && dist <= entity.range && charParty && entity.hp / entity.max_hp > 0.25 && character.hp / character.max_hp > 0.25) {
                 SAFE = true;
             }
         }
@@ -202,15 +237,15 @@ function scanAll() {
 
     monsters.sort((a, b) => a.distance - b.distance); 
 
-    if (PARTY.includes(character.name)) {
+    if (PARTY_SET.has(charName)) {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
-    if (character.name === MERCHANT) merchant = character;
-	
-    // [CẬP NHẬT 2]: Kiểm tra trạng thái boss chết ở cuối hàm scanAll
+    if (charName === MERCHANT) merchant = character;
+    
     checkWorldBossDeathStatus();
-	
 }
+
+
 
 
 // ============================================================
