@@ -116,6 +116,10 @@ let activeBossTracker = {
     reported: false
 };
 
+const TRACKER_BOSSES_SET = new Set(TRACKER_BOSSES);
+const PARTY_SET = new Set(PARTY);
+const WORLD_BOSSES_SET = new Set(WORLD_BOSSES);
+
 function scanAll() {
     monsters = [];
     partyEntities = [];
@@ -147,17 +151,18 @@ function scanAll() {
     for (const id in parent.entities) {
         const entity = parent.entities[id];
         if (!entity) continue;
+		if (entity.dead || !entity.visible) continue;
 		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc")continue;
         const dist = distance(character, entity);
 
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 	
-            if (WORLD_BOSSES.includes(entity.mtype)) {
+            if (WORLD_BOSSES_SET.has(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
             }
 
-            if (TRACKER_BOSSES.includes(entity.mtype)) {
+            if (TRACKER_BOSSES_SET.has(entity.mtype)) {
                 updateWorldBossTracker(entity);
             }
 			
@@ -182,7 +187,7 @@ function scanAll() {
         }
 
         // CHARACTER / PARTY
-        if (entity.type === "character" && PARTY.includes(entity.name)) {
+        if (entity.type === "character" && PARTY_SET.has(entity.name)) {
             if (dist <= MAX_SCAN_DISTANCE) {
                 partyEntities.push({ entity: entity, distance: dist, rspeed: entity.s?.rspeed });
             }
@@ -202,7 +207,7 @@ function scanAll() {
 
     monsters.sort((a, b) => a.distance - b.distance); 
 
-    if (PARTY.includes(character.name)) {
+    if (PARTY_SET.has(character.name)) {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
     if (character.name === MERCHANT) merchant = character;
