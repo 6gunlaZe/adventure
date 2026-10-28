@@ -1338,7 +1338,6 @@ async function tryCleave() {
 	
     // 1. Kiểm tra Cooldown, MP (Cleave tốn 720 MP) và trạng thái bận
     if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping ) return false;
-    if (smart.moving) return false;
 
     // 2. Lọc quái trong tầm thi triển Cleave (Range gốc 160 + 20px bù ping/hitbox)
     const CLEAVE_RANGE_SAFE = (G.skills.cleave.range || 160) + 20; 
@@ -1742,7 +1741,7 @@ async function useAttack() {
         if (targeted) currentTarget = targeted;
     }
     
-    if (!currentTarget || (smart.moving && !character.cave) ) return false;
+    if (!currentTarget ) return false;
 
     // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
     if (!is_in_range(currentTarget)) {
@@ -1759,7 +1758,6 @@ async function useAttack() {
     // BÙ PING CHO ĐÁNH THƯỜNG
     if (
         currentTarget &&
-        !smart.moving &&
         currentTarget.type === "monster" &&
         is_in_range(currentTarget) &&
         ms_to_next_skill("attack") <= pingComp
