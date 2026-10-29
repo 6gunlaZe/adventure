@@ -395,7 +395,7 @@ const PONTY_EXTRA_ITEMS = [
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
-  "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens","stormfeather", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
+  "snakefang", "starkillers", "strbelt", "suckerpunch", "supermittens", "tshirt9", "vdagger", "vhammer", "vitearring", "voidthread",
   "weaponbox", "wbookhs", "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8","xarmor", "xgloves", "xhelmet","snakeoil","bandages","pstem","scroll4","canopener","scorpionseal"
 ];
 
