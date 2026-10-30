@@ -720,11 +720,11 @@ async function trySingleHeal() {
     const pingComp = Math.max(10, character.ping / 10);
     if (ms_to_next_skill("heal") > pingComp) return false;
 
-    // 2. Tính tỉ lệ hồi máu
-    let rateheal = 0.87;
+// 2. Tính tỉ lệ hồi máu (Tối ưu siêu tốc, giữ nguyên 100% logic ưu tiên)
+const rateheal = (character.map === "winter_instance") ? 0.97 : 
+                 (character.map === "uhills")          ? 0.945 : 
+                 (character.targets > 8)               ? 0.92  : 0.85;
 
-    if (character.targets > 5 || character.map == "uhills" || character.map == "winter_instance" ) rateheal = 0.97;
-    
 
     // Ví dụ: 0.3 nghĩa là hệ thống sẽ tự coi người này MẤT THÊM 30% máu khi đem ra so sánh
     const PRIORITY_BONUS = {
@@ -762,7 +762,7 @@ async function trySingleHeal() {
 
     // Nếu không có ai cần heal thì dừng lại
     if (!lowestMember){
-		if (rateheal < 0.9) await useAttack();
+		if (rateheal < 0.9 ||  character.hp / character.max_hp > 0.965) await useAttack();
         return false;
 	}
     // 4. Thực hiện Heal và Ép xung Cooldown ngay lập tức
