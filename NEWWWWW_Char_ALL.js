@@ -137,7 +137,7 @@ function scanAll() {
     const isWitchGathering = witchEvent && 
                          witchEvent.live && 
                          witchEvent.phase === "gathering" && 
-                         (Date.now() - lastFarmMonsterSeen) > 10000;
+                         (Date.now() - lastFarmMonsterSeen) > 20000;
 	needLuckALL = isWitchGathering;
 
 
@@ -200,7 +200,7 @@ function scanAll() {
                 healer = entity;
             }
 
-            if (entity.ctype === "priest" && !entity.dead && dist <= entity.range && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
+            if (entity.ctype === "priest" && !entity.dead && dist <= (entity.range - 10) && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
                 SAFE = true;
             }
         }
