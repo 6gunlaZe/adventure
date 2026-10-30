@@ -1738,9 +1738,14 @@ async function tryzapper() {
     const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
     if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85) return false; // Đang tank quá ngưỡng -> Dừng Zap ngay
 
+    const isMeLeader = character.name === LEADER;
     const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
-    const isLeaderNear = leaderObj && leaderObj.distance < 250;
 
+    // Nếu mình là leader -> true luôn; nếu không -> check khoảng cách
+    const isLeaderNear = isMeLeader || (leaderObj?.distance < 250);
+
+
+	
     // 🎯 ƯU TIÊN 1: Quái B (Boss) -> Cần Leader ở gần + Chưa có target
     if (isLeaderNear) {
         const targetBoss = monsters.find(m => 
