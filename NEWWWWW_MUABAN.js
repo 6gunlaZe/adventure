@@ -11,7 +11,7 @@ const TRASH_ITEMS = [
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
   "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
   "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
-  "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff","bowofthedead","cave_locktooth","glolipop",
+  "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","bowofthedead","cave_locktooth","glolipop",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
   "pumpkinspice", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
   "smoke", "smush", "snowball111", "snowflakes", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
@@ -282,12 +282,11 @@ var upgradeGroups = {
 		// { levels: [8], scroll: 2, offering: 1 },
 	],
 	
-	group_rare2: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
-		{ levels: [0,1,2,], scroll: 1, offering: 0 },
-		{ levels: [3,4,], scroll: 2, offering: 1 },
-		// { levels: [5,], scroll: 2, offering: 1 },
-		// { levels: [6,7,], scroll: 2, offering: 2 },
-		// { levels: [8], scroll: 3, offering: 2 },
+	group_rare2: [ 
+		 { levels: [0,1,2,3,4], scroll: 1, offering: 0 },
+	     { levels: [5,], scroll: 2, offering: 0 },
+		 { levels: [6,], scroll: 2, offering: 1 },
+		// { levels: [7,8], scroll: 2, offering: 2 },
 	],	
 	
 	
@@ -357,7 +356,7 @@ var upgradeWhitelistVIPP = {
 	group_weapon5: ["bataxe"],
 
 	group_rare1: ["handofmidas","hdagger","xboots","xgloves",],
-	group_rare2: ["sparkstaff111",],
+	group_rare2: ["sparkstaff",],
 	group_rare: ["xarmor111","t3bow","lmace"],
 	group_vip: ["vattire","vstaff"],
 	group_vip1: ["starkillers1111","vhammer111","vdagger","xhelmet"],
