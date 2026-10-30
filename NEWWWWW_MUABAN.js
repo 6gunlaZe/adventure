@@ -1114,8 +1114,6 @@ if (!busy && queue1.length === 0) {
 
 
 setInterval(function() {
-
-    use_hp_or_mp1()
 	
     if (character.name === LEADER) return;
 
@@ -1125,6 +1123,13 @@ setInterval(function() {
         leave_party();
     }
 }, 2000); // 2000ms = 2 giây chạy 1 lần
+
+
+
+setInterval(function() {
+    use_hp_or_mp1()
+}, 200); 
+
 
 
 
