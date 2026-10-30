@@ -720,11 +720,11 @@ async function trySingleHeal() {
     const pingComp = Math.max(10, character.ping / 10);
     if (ms_to_next_skill("heal") > pingComp) return false;
 
-// 2. Tính tỉ lệ hồi máu (Tối ưu siêu tốc, giữ nguyên 100% logic ưu tiên)
-const rateheal = (character.map === "winter_instance") ? 0.97 : 
-                 (character.map === "uhills")          ? 0.945 : 
-                 (character.targets > 8)               ? 0.92  : 0.85;
+    // 2. Tính tỉ lệ hồi máu
+    let rateheal = 0.87;
 
+    if (character.targets > 5 || character.map == "uhills" || character.map == "winter_instance" ) rateheal = 0.97;
+    
 
     // Ví dụ: 0.3 nghĩa là hệ thống sẽ tự coi người này MẤT THÊM 30% máu khi đem ra so sánh
     const PRIORITY_BONUS = {
@@ -762,7 +762,7 @@ const rateheal = (character.map === "winter_instance") ? 0.97 :
 
     // Nếu không có ai cần heal thì dừng lại
     if (!lowestMember){
-		if (rateheal < 0.9 ||  character.hp / character.max_hp > 0.965) await useAttack();
+		if (rateheal < 0.9) await useAttack();
         return false;
 	}
     // 4. Thực hiện Heal và Ép xung Cooldown ngay lập tức
@@ -775,12 +775,10 @@ const rateheal = (character.map === "winter_instance") ? 0.97 :
     return true; // Báo hiệu đã thực thi heal thành công
 }
 
-
-
 let delayParty = 0;
 
-async function tryPartyHeal() {
-    // 1. Kiểm tra MP và cooldown skill
+function tryPartyHeal() {
+    // 1. Check MP và cooldown skill
     if (character.mp <= 750 || is_on_cooldown("partyheal")) return false;
 
     // 2. Tìm % HP thấp nhất trong Party
@@ -800,14 +798,9 @@ async function tryPartyHeal() {
 
     // 3. MODE 0: Cứu nguy khẩn cấp cực độ (< 36% HP) -> Bơm ngay lập tức
     if (lowestHpRatio < 0.36) {
-        try {
-            await use_skill("partyheal");
-            delayParty = Date.now();
-            game_log(`💚 PartyHeal (Emergency) -> HP: ${(lowestHpRatio * 100).toFixed(1)}%`, "#00FF00");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        use_skill("partyheal");
+        delayParty = Date.now();
+        return true;
     }
 
     // Nhường nhịp cho attack nếu đang an toàn
@@ -828,22 +821,17 @@ async function tryPartyHeal() {
     // Nếu KHÔNG thỏa mãn bất kỳ điều kiện bơm máu nào -> requiredDelay vẫn là Infinity -> Bỏ qua
     if (requiredDelay === Infinity) return false;
 
-    // Nếu có điều kiện bơm máu VÀ có quái < 20k HP aggro -> ÉP DELAY VỀ 50
-    if (typeof hasLowHpAggroMonster !== 'undefined' && hasLowHpAggroMonster) {
+    // 🎯 SỬA CHỖ NÀY: Nếu có điều kiện bơm máu VÀ có quái < 20k HP aggro -> ÉP DELAY VỀ 50
+    if (hasLowHpAggroMonster) {
         requiredDelay = 50;
     }
 
     // 6. Thực thi bơm máu
     const now = Date.now();
     if (now > delayParty + requiredDelay) {
-        try {
-            await use_skill("partyheal");
-            delayParty = now;
-            game_log(`💚 PartyHeal -> HP: ${(lowestHpRatio * 100).toFixed(1)}%`, "#00FF00");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        use_skill("partyheal");
+        delayParty = now;
+        return true;
     }
 
     return false;
@@ -852,11 +840,11 @@ async function tryPartyHeal() {
 
 const EXTRA_CURSE_TARGETS = new Set(["franky", "icegolem", "crabxx", "bscorpion", "mrgreen", "mrpumpkin", "dragold"]);
 
-async function tryCurse() {
+function tryCurse() {
     // 1. Kiểm tra Priest, Cooldown & MP tối thiểu
     if (character.ctype !== "priest" || is_on_cooldown("curse") || character.mp < 2200) return false;
 
-    // Nhường nhịp cho attack
+    //Nhường nhịp cho attack
     if (ms_to_next_skill("attack") < 200) return false;
     
     const curseRange = G.skills.curse.range || 200;
@@ -874,7 +862,7 @@ async function tryCurse() {
         const mob = m.entity;
 
         // Bỏ qua nếu vượt tầm Curse hoặc quái đã bị dính Cursed
-        if (m.distance > curseRange || mob.s?.cursed || mob.type == "character") continue;
+        if (m.distance > curseRange || mob.s?.cursed || mob.type == "character" ) continue;
 
         const isExtraTarget = EXTRA_CURSE_TARGETS.has(mob.mtype);
         // Kiểm tra xem quái có đang target bất kỳ ai trong partyEntities không
@@ -899,7 +887,7 @@ async function tryCurse() {
 
         if (priority === 0) continue;
 
-        // --- LỰA CHỌN: ƯU TIÊN TẦNG CAO HƠN -> MÁU NHIỀU NHẤT ---
+        // --- LỰA CHỌN: UU TIÊN TẦNG CAO HƠN -> MÁU NHIỀU NHẤT ---
         if (priority > maxPriority || (priority === maxPriority && mob.hp > maxHp)) {
             maxPriority = priority;
             maxHp = mob.hp;
@@ -909,13 +897,9 @@ async function tryCurse() {
 
     // 3. Thi triển Curse
     if (bestTarget) {
-        try {
-            await use_skill("curse", bestTarget);
-            game_log("curse", "#00FFFF");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        use_skill("curse", bestTarget);
+		game_log("curse");
+        return true;
     }
 
     return false;
@@ -933,11 +917,11 @@ const EVENT_MONSTERS = new Set([
 let lastAbsorbTime = 0;
 let lastEventCheckTime = 0;
 
-async function tryAbsorb() {
-    if (!character.party || smart.moving || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return false;
+function tryAbsorb() {
+    if (!character.party || smart.moving || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return;
     
     const now = Date.now();
-    if (now - lastAbsorbTime < 250) return false;
+    if (now - lastAbsorbTime < 250) return;
 
     let eventMonster = null;
     let priorityBoss = null;
@@ -946,7 +930,7 @@ async function tryAbsorb() {
     const partyThreats = {};
 
     // -------------------------------------------------------------
-    // QUÉT SINGLE-PASS: CHỈ DUYỆT MẢNG MONSTERS ĐÚNG 1 LẦN DUY NHẤT
+    // QUÉT SINGLE-PASS: CHỈ DUYỆT MẢNG MONSTERS ĐÚNG 1 LẦN DÙY NHẤT
     // -------------------------------------------------------------
     for (let i = 0; i < monsters.length; i++) {
         const e = monsters[i].entity;
@@ -997,14 +981,10 @@ async function tryAbsorb() {
 
             const victim = get_player(eventMonster.target);
             if (victim && !victim.rip && distance(character, victim) <= 240) {
-                try {
-                    await use_skill("absorb", eventMonster.target);
-                    lastAbsorbTime = now;
-                    game_log(`🛡 Absorb Event (${eventMonster.mtype} - HP: ${eventMonster.hp})`, "#00FFFF");
-                    return true;
-                } catch (e) {
-                    return false;
-                }
+                use_skill("absorb", eventMonster.target);
+                lastAbsorbTime = now;
+                game_log(`🛡 Absorb Event (${eventMonster.mtype} - HP: ${eventMonster.hp})`);
+                return;
             }
         }
     }
@@ -1013,13 +993,9 @@ async function tryAbsorb() {
     if (priorityBoss) {
         const victim = get_player(priorityBoss.target);
         if (victim && !victim.rip && distance(character, victim) <= 240) {
-            try {
-                await use_skill("absorb", priorityBoss.target);
-                lastAbsorbTime = now;
-                return true;
-            } catch (e) {
-                return false;
-            }
+            use_skill("absorb", priorityBoss.target);
+            lastAbsorbTime = now;
+            return;
         }
     }
 
@@ -1054,22 +1030,15 @@ async function tryAbsorb() {
 
     // Thi triển Absorb nếu vượt ngưỡng 100
     if (bestTarget && maxDanger >= 100) {
-        try {
-            await use_skill("absorb", bestTarget);
-            lastAbsorbTime = now;
-            game_log(`🛡 Absorb ${bestTarget} (Danger: ${maxDanger})`, "#00FFFF");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        use_skill("absorb", bestTarget);
+        lastAbsorbTime = now;
+        game_log(`🛡 Absorb ${bestTarget} (Danger: ${maxDanger})`);
     }
-
-    return false;
 }
 
 
 
-async function tryDarkBlessing() {
+function tryDarkBlessing() {
     // 1. BẮT BỘC phải đang có target đánh thì mới xét tiếp (Tránh lãng phí MP khi đi ngang qua quái)
     if (!currentTarget) return false;
 
@@ -1089,13 +1058,8 @@ async function tryDarkBlessing() {
 
     // 5. Gom từ 3 quái trở lên -> Bật Aura
     if (nearbyMobsCount > 2) {
-        try {
-            await use_skill("darkblessing");
-            game_log("🌑 Dark Blessing Active", "#00FFFF");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        use_skill("darkblessing");
+        return true;
     }
 
     return false;
@@ -1725,18 +1689,21 @@ let lastZapTime = 0;
 let KSplayer = 0;
 
 async function tryzapper() {
-    if ((Date.now() - lastZapTime) < 350 && KSplayer == 0) return false;
-    if (character.rip || smart.moving || character.map === "spider_instance") return false;
-    if (is_on_cooldown("zapperzap")) return false;
 
-    if (character.mp < 5000 || character.hp < 15000) return false;
+    if ( (Date.now() - lastZapTime) < 350 && KSplayer == 0 ) return;
+    if (character.rip || smart.moving || character.map === "spider_instance") return;
+    if (is_on_cooldown("zapperzap")) return;
 
+    if (character.mp < 5000 || character.hp < 15000 ) return;
+
+	
     const hasZapper = character.slots.ring1?.name === "zapper" || character.slots.ring2?.name === "zapper";
-    if (!hasZapper) return false;
+    if (!hasZapper) return;
+
 
     // 🛑 Đếm chính xác số quái thực tế đang target vào nhân vật từ mảng `monsters`
     const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
-    if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85) return false; // Đang tank quá ngưỡng -> Dừng Zap ngay
+    if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85 ) return; // Đang tank quá ngưỡng -> Dừng Zap ngay
 
     const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
     const isLeaderNear = leaderObj && leaderObj.distance < 250;
@@ -1748,14 +1715,9 @@ async function tryzapper() {
             !m.entity.target
         );
         if (targetBoss) {
-            try {
-                lastZapTime = Date.now(); // Cập nhật mốc thời gian ngay trước/khi Zap
-                await use_skill("zapperzap", targetBoss.entity);
-                game_log(`⚡ Zapper Boss (${targetBoss.entity.mtype})`, "#00FFFF");
-                return true;
-            } catch (e) {
-                return false;
-            }
+            lastZapTime = Date.now(); // Cập nhật mốc thời gian ngay trước/khi Zap
+            await use_skill("zapperzap", targetBoss.entity);
+            return;
         }
     }
 
@@ -1764,22 +1726,16 @@ async function tryzapper() {
         quaiA_Yeu.includes(m.entity.mtype)
     );
     if (targetWeak) {
-        try {
-            lastZapTime = Date.now(); 
-            await use_skill("zapperzap", targetWeak.entity);
-            game_log(`⚡ Zapper Weak (${targetWeak.entity.mtype})`, "#00FFFF");
-            return true;
-        } catch (e) {
-            return false;
-        }
+        lastZapTime = Date.now(); 
+        await use_skill("zapperzap", targetWeak.entity);
+        return;
     }
 
     // =========================================================================
-    // 🎯 ƯU TIÊN 3: KIỂM TRA RIMEDJINN > 86% MÁU & ZAP QUÁI CHƯA TARGET MÁU TO NHẤT
+    // 🎯 ƯU TIÊN 3: KIỂM TRA RIMEDJINN > 55% MÁU & ZAP QUÁI CHƯA TARGET MÁU TO NHẤT
     // =========================================================================
 
-    if (FARM_MONSTER != "rimedjinn" || character.map != "winter_cove") return false; // chặn logic, chỉ đi xuống khi đang farm rimedjinn đúng map 
-
+	if (FARM_MONSTER != "rimedjinn" || character.map != "winter_cove" ) return // chặn logic, chỉ đi xuống khi đang fram rimedjinn đúng map 
     // 1. Kiểm tra xem có con Rimedjinn nào đang đánh Party và còn > % HP không
     const hasStrongRimedjinn = monsters.some(m => {
         const e = m.entity;
@@ -1803,19 +1759,14 @@ async function tryzapper() {
             
             // Zap con chưa có target có máu lớn nhất
             const targetBigMob = untargetedMobs[0];
-            try {
-                lastZapTime = Date.now();
-                await use_skill("zapperzap", targetBigMob.entity);
-                game_log(`⚡ Zapper Big Mob (${targetBigMob.entity.mtype} - HP: ${targetBigMob.entity.hp})`, "#00FFFF");
-                return true;
-            } catch (e) {
-                return false;
-            }
+            lastZapTime = Date.now();
+            await use_skill("zapperzap", targetBigMob.entity);
+            return;
         }
     }
 
-    return false;
 }
+
 
 // 📩  HÀM XIN ENT DESERTLAND (Đếm Ent từ `monsters`)
 function checkAndRequestEnt() {
@@ -2728,11 +2679,11 @@ async function skillLoop() {
                 case "priest":
 
 					if (await trySingleHeal()) return setTimeout(skillLoop, 10);
-					if (await tryPartyHeal()) return setTimeout(skillLoop, 10);
-					if (await tryCurse()) return setTimeout(skillLoop, 10);
-					if (await tryAbsorb()) return setTimeout(skillLoop, 10);
-					if (await tryDarkBlessing()) return setTimeout(skillLoop, 10);
-					if (await tryzapper()) return setTimeout(skillLoop, 10);
+                    tryPartyHeal();
+                    tryCurse();
+                    tryAbsorb();
+                    tryDarkBlessing();
+					tryzapper();
                     
                     break;
                     
