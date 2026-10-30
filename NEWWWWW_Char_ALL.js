@@ -190,6 +190,7 @@ function scanAll() {
         if (entity.type === "character" && PARTY_SET.has(entity.name)) {
             if (dist <= MAX_SCAN_DISTANCE) {
                 partyEntities.push({ entity: entity, distance: dist, rspeed: entity.s?.rspeed });
+                homeStuckTimes[entity.name] = Date.now();
             }
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
@@ -2504,7 +2505,8 @@ setInterval(() => {
 // ============================================================
 // Lưu thời gian thực hiện hành động gần nhất cho từng nhân vật
 const charCooldowns = {};
-
+const STUCK_THRESHOLD = 5 * 60 * 1000; // 5 phút
+const homeStuckTimes = {};
 // Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (20 giây)
 const ACTION_COOLDOWN = 20000; 
 
@@ -2532,6 +2534,25 @@ function manageChars() {
             ? (config.events && config.events.includes(currentEvent)) 
             : !!config.home;
 
+
+        // =========================================================
+        // CHỈ CHECK KHI ĐANG Ở HOME (ĐANG KHÔNG CÓ EVENT GÌ: !currentEvent) VÀ KHÔNG CÓ CẤU HÌNH MONSTER RIÊNG (ĐÁNH QUÁI KHÁC) - CHECK ĐẢM BẢO CÓ MẶT, TRÁNH LAG - TREO
+        // =========================================================
+        
+        if (!currentEvent && config.home && isRunning && !config.monster) {
+            // Kiểm tra xem đã lưu mốc thời gian chưa và thời gian vắng mặt có vượt quá 5 phút không
+            if (homeStuckTimes[charName] && (now - homeStuckTimes[charName] > STUCK_THRESHOLD)) {
+                console.log(`[Watchdog Home] ${charName} vắng mặt quá 5 phút ở nhà. Tiến hành restart...`);
+                charCooldowns[charName] = now;
+                delete homeStuckTimes[charName]; // Xóa mốc sau khi xử lý
+                stop_character(charName);
+                continue; // Bỏ qua đoạn bên dưới để chờ vòng sau reset
+            }
+        }
+        // =========================================================
+
+
+		
         // Kiểm tra xem nhân vật này có đang trong thời gian chờ (CD) hay không
         const lastAction = charCooldowns[charName] || 0;
         if (now - lastAction < ACTION_COOLDOWN) {
