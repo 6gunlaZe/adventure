@@ -2647,10 +2647,10 @@ async function skillLoop() {
                 case "rogue":
                     useRspeed(); 
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
-					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
-					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
-					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
 					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
+					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
+					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
+					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
 
 
                     break;
@@ -2658,10 +2658,10 @@ async function skillLoop() {
                 case "ranger":
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
 
 					if (await trySuperShot()) return setTimeout(skillLoop, 10);
 					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
-					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
 
                     break;
 
@@ -2677,32 +2677,27 @@ async function skillLoop() {
                     break;
                     
                 case "priest":
+
+					if (await trySingleHeal()) return setTimeout(skillLoop, 10);
                     tryPartyHeal();
                     tryCurse();
                     tryAbsorb();
                     tryDarkBlessing();
 					tryzapper();
                     
-                    // Tương tự, nếu Priest vừa buff máu mục tiêu đơn (chung CD đánh thường)
-                    if (await trySingleHeal()) {
-                        return setTimeout(skillLoop, 10);
-                    }
                     break;
                     
                 case "warrior":
-					await tryStomp();
-					await tryHardshell();
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
-					await tryCleave();
-					await tryCharge();
-					await tryTaunt();
-					await tryWarcry();
-					await tryAgitate();
-					
-                    if (await useAttack()) {
-                        return setTimeout(skillLoop, 10);
-                    }
+					if (await useAttack()) return setTimeout(skillLoop, 10);
+					if (await tryAgitate()) return setTimeout(skillLoop, 10);
+					if (await tryCleave()) return setTimeout(skillLoop, 10);
+					if (await tryStomp()) return setTimeout(skillLoop, 10);
+					if (await tryHardshell()) return setTimeout(skillLoop, 10);
+					if (await tryCharge()) return setTimeout(skillLoop, 10);
+					if (await tryTaunt()) return setTimeout(skillLoop, 10);
+					if (await tryWarcry()) return setTimeout(skillLoop, 10);
 
                     break;
                     
