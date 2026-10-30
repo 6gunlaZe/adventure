@@ -2728,11 +2728,11 @@ async function skillLoop() {
                 case "priest":
 
 					if (await trySingleHeal()) return setTimeout(skillLoop, 10);
-                    tryPartyHeal();
-                    tryCurse();
-                    tryAbsorb();
-                    tryDarkBlessing();
-					tryzapper();
+					if (await tryPartyHeal()) return setTimeout(skillLoop, 10);
+					if (await tryCurse()) return setTimeout(skillLoop, 10);
+					if (await tryAbsorb()) return setTimeout(skillLoop, 10);
+					if (await tryDarkBlessing()) return setTimeout(skillLoop, 10);
+					if (await tryzapper()) return setTimeout(skillLoop, 10);
                     
                     break;
                     
