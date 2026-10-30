@@ -935,7 +935,7 @@ let lastAbsorbTime = 0;
 let lastEventCheckTime = 0;
 
 async function tryAbsorb() {
-    if (!character.party || smart.moving || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return false;
+    if (!character.party || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return false;
     
     const now = Date.now();
     if (now - lastAbsorbTime < 250) return false;
