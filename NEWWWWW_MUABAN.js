@@ -24,9 +24,9 @@ const TRASH_ITEMS = [
 // CẤU HÌNH LẤY MÓN ĐỒ MỤC TIÊU RA KHỎI BANK KHI ĐANG RẢNH
 // ==========================================
 const ITEMS_TO_RETRIEVE = [
-    { name: "goldnugget", qty: 999, minEsize: 1999 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay, hiện tại đang hết hàng nên để 999
+    { name: "goldnugget", qty: 999, minEsize: 1 },  // Rất quan trọng: chỉ cần 1 ô trống là rút ngay, hiện tại đang hết hàng nên để 999
     { name: "essenceoffire", qty: 60, minEsize: 26 },    // không quan trọng, rút khi thật sự dư time
-    //{ name: "essenceoffire", qty: 50, minEsize: 17 },      // Bình thường: cần trống ít nhất 17 ô
+    { name: "bronzeingot", qty: 50, minEsize: 1 },      // Bình thường: cần trống ít nhất 17 ô
 ];
 const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ rút
 
@@ -51,7 +51,7 @@ const IMPORTANT_ITEMS = [
 
 //TỰ ĐỘNG  MAKE SHINY
 const shinyList = {
-  //  "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
+    "ololipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
    // "glolipop": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
    // "pouchbow": { maxLevel: 1, rules: { 0: { scroll: "scroll0", offering: null } } },
 };
@@ -338,8 +338,8 @@ group_vip6: [
 
 // 2️⃣ Gán item vào nhóm, các item bên dưới đều sẽ mua tự động tại ponty
 var upgradeWhitelistVIPP = {
-	group_basic: ["ololipop1111",],
-	group_basic00: ["ololipop","broom"],
+	group_basic: ["ololipop",],
+	group_basic00: ["ololipop111","broom"],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
 	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
 	group_basic03: ["mittens111","shield111",],	
