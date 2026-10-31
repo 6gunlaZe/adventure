@@ -940,6 +940,7 @@ async function tryAbsorb() {
     const now = Date.now();
     if (now - lastAbsorbTime < 250) return false;
 
+
     let eventMonster = null;
     let priorityBoss = null;
     
@@ -965,6 +966,7 @@ async function tryAbsorb() {
         if (!priorityBoss && PRIORITY_BOSSES.has(mtype) && target !== character.name) {
             priorityBoss = e;
         }
+
 
         // 3. Gom thống kê quái đánh Party (bỏ qua quái thuộc NO_ABSORB)
         if (!NO_ABSORB.has(mtype)) {
@@ -1062,6 +1064,39 @@ async function tryAbsorb() {
             return true;
         } catch (e) {
             return false;
+        }
+    }
+
+    // LOGIC CO-OP: Dùng skill lên người NGOÀI party bị quái nhắm nhiều nhất
+    const hasCoop = character.s && character.s.coop;
+    if (hasCoop) {
+        let mostTargetedOutsider = null;
+        let maxMonsterCount = 0;
+
+        for (const targetName in partyThreats) {
+            // Bỏ qua nếu tên đó nằm trong mảng PARTY của bạn
+            if (PARTY.includes(targetName)) continue;
+
+            const stats = partyThreats[targetName];
+            if (stats.count > maxMonsterCount) {
+                // Kiểm tra xem người ngoài này có tồn tại, còn sống và trong tầm đánh (<= 240) không
+                const outsider = get_player(targetName);
+                if (outsider && !outsider.rip && distance(character, outsider) <= 240) {
+                    maxMonsterCount = stats.count;
+                    mostTargetedOutsider = targetName;
+                }
+            }
+        }
+
+        if (mostTargetedOutsider) {
+            try {
+                await use_skill("absorb", mostTargetedOutsider);
+                lastAbsorbTime = now;
+                game_log(`🛡 Absorb Coop (Outsider: ${mostTargetedOutsider} - Count: ${maxMonsterCount})`, "#00FFFF");
+                return true;
+            } catch (e) {
+                return false;
+            }
         }
     }
 
