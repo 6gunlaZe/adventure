@@ -13,6 +13,7 @@ enter("crypt","");
 
 send_cm("haiz","framtay")
 
+start_character("LyThanhThu", 3);
 
 ///////////////////////////
 
