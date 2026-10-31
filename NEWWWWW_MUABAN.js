@@ -46,7 +46,7 @@ const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelo
 const IMPORTANT_ITEMS = [
         "scroll0", "scroll1", "scroll2","stand0","stand1","rod","marketparcel","cipherdraught",
         "cscroll0", "cscroll1", "cscroll2", "offeringp","anniversarygift",
-        "tracker", "computer", "supercomputer","bronzeingot111","essenceoffire","goldnugget111"
+        "tracker", "computer", "supercomputer","bronzeingot","essenceoffire","goldnugget"
     ];
 
 //TỰ ĐỘNG  MAKE SHINY
