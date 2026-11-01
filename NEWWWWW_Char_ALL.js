@@ -2903,7 +2903,7 @@ setInterval(() => {
 async function scare() {
     if (is_on_cooldown("scare")) return;
 
-    const isLowHP = character.hp < 4500;
+    const isLowHP = character.hp < 4500 && !vipBossTarget;
     const isPriest = character.ctype === "priest";
 
     // Tận dụng mảng partyEntities đã scan sẵn (0ms delay, không tốn CPU)
@@ -2919,10 +2919,12 @@ async function scare() {
     // Logic Moving:
     // - Priest (Tank): Đang moving + bị quái đánh + KHÔNG có đồng đội xung quanh
     // - Class khác: Đang moving + bị quái đánh là scare ngay
-    const isAttackedWhileMoving = smart.moving && character.targets > 0 && (!isPriest || !hasTeammatesNearby);
+    const isAttackedWhileMoving = !vipBossTarget && smart.moving && character.targets > 0 && (!isPriest || !hasTeammatesNearby);
+
+    const VIPandmob = vipBossTarget && character.targets > 1;
 
     // Nếu không thỏa mãn trường hợp nào -> Bỏ qua
-    if (!isLowHP && !isAttackedWhileMoving) return;
+    if (!isLowHP && !isAttackedWhileMoving && !VIPandmob) return;
 
     // Equip Jack-o'-Lantern nếu chưa đeo
     if (character.slots.orb?.name !== "jacko") {
