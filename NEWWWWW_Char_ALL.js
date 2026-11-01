@@ -2583,6 +2583,7 @@ function manageChars() {
         // =========================================================
         
         if (!currentEvent && config.home && isRunning && !config.monster) {
+			        if (charName === MERCHANT) continue;
             // Kiểm tra xem đã lưu mốc thời gian chưa và thời gian vắng mặt có vượt quá 5 phút không
             if (homeStuckTimes[charName] && (now - homeStuckTimes[charName] > STUCK_THRESHOLD)) {
                 console.log(`[Watchdog Home] ${charName} vắng mặt quá 5 phút ở nhà. Tiến hành restart...`);
