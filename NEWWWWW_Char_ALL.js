@@ -3572,7 +3572,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000)) needLuck = true;
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000)) needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
@@ -3709,7 +3709,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000))
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000))
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
@@ -3751,7 +3751,7 @@ const GEAR_LOGIC = {
             // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
             if (e.mtype === "xmagefi") return "def_fire"; 
 
-            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000))  needLuck = true;
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000))  needLuck = true;
             if (e.target === character.name && character.hp < 4500) needNormalDef = true;
             if (e.target || e.max_hp < 5000) monsterDensity++;
         }
