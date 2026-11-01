@@ -1662,7 +1662,7 @@ async function tryAgitate() {
 async function try_ATTACK_buff_Heal() {
     // 1. Chặn Cooldown đánh thường và MP tối thiểu
     if (is_on_cooldown("attack") || character.mp < 300) return false;
-
+    if (vipBossTarget) return false;
     const range = G.skills["3shot"]?.range || character.range;
     const candidates = [];
 
