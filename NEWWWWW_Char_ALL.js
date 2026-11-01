@@ -11,7 +11,7 @@ const EXCLUDE = new Set([
 ]);
 
 // Các quái được phép tấn công gồm các phân loại sau
-const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy"]; // các quái Siêu cấp ưu tiên đánh trước 
+const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy","paledino"]; // các quái Siêu cấp ưu tiên đánh trước 
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
@@ -80,6 +80,9 @@ const TRASH_ITEMS = [
 const FARM_vipbosss = {
     goldenbot: { x: -347, y: -183, map: "uhills", level: 15 },
     stompy: { x: 432, y: -2496, map: "winterland", level: 7 },
+    paledino: { x: -151, y: 725, map: "mforest", level: 15 },
+
+	
 };
 
 let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
