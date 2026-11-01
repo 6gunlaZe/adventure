@@ -11,11 +11,11 @@ const EXCLUDE = new Set([
 ]);
 
 // Các quái được phép tấn công gồm các phân loại sau
-const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
+const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy"]; // các quái Siêu cấp ưu tiên đánh trước 
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
-						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar",
+						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar","wolf",
 						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -32,6 +32,8 @@ const FARM_LOCATIONS = {
     bat: { x: -194, y: -461, map: "cave" },
     targetron: { x: -512, y: -239, map: "uhills" },
     rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
+    wolf: { x: 369, y: -2706, map: "winterland" },
+
 
 
 };
@@ -51,7 +53,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "wolf"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
@@ -76,10 +78,8 @@ const TRASH_ITEMS = [
 
 // DANH SÁCH VÀ VỊ TRÍ FRAM CÁC QUÁI VIP XUẤT HIỆN CỦA TỪNG BÃI FRAM 
 const FARM_vipbosss = {
-    osnake: { x: -555, y: -333, map: "halloween", level: 4 },
-    bat: { x: -194, y: -461, map: "cave", level: 4 },
-    targetron: { x: -512, y: -239, map: "uhills", level: 4 },
-    rimedjinn: { x: 422, y: -1700, map: "winter_cove", level: 4 }
+    goldenbot: { x: -555, y: -333, map: "halloween", level: 4 },
+    stompy: { x: 432, y: -2496, map: "winterland", level: 7 },
 };
 
 let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
