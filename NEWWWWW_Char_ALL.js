@@ -2028,31 +2028,39 @@ function getActiveWorldBoss() {
 // Hàm trung gian bọc smart_move với try...catch và tự động về thành nếu lỗi
 let isSmartMoving = false; // Biến khóa trạng thái di chuyển
 
+
 async function safeSmartMove(destination) {
-    // 1. Nếu đang di chuyển smart rồi thì KHÔNG gọi thêm lệnh mới, hủy luôn
     if (smart.moving || isSmartMoving) return false;
 
     isSmartMoving = true;
 
     try {
-        // Thực hiện smart_move và chờ kết quả
         let result = await smart_move(destination);
         
-        // Nếu di chuyển thành công
+        // QUAN TRỌNG: Nếu smart_move trả về false (không tìm được đường / kẹt đường)
+        if (result === false) {
+            game_log("[SafeSmart] Không thể tìm đường đi -> Ép dùng lệnh về thành.");
+            stop("smart");
+            if (can_use("town")) {
+				game_log("về thành 1");
+                await use_skill("town"); // Dùng skill town để thoát map ngay lập tức
+            } else {
+            game_log("[SafeSmart] lỗi 1");
+            }
+        }
+
         isSmartMoving = false;
         return result;
 
     } catch (error) {
-        // Chỉ chạy vào đây khi pathfinding thực sự THẤT BẠI (không tìm thấy đường, bị dính kẹt)
-        console.log("[SafeSmart] Không thể di chuyển tới đích -> Về thành.");
-        
+        game_log("[SafeSmart] Lỗi ngoại lệ khi di chuyển -> Về thành.");
         stop("smart");
         if (can_use("town")) {
+			game_log("về thành 2");
             await use_skill("town");
         }
         farmingMoving = false;
         isSmartMoving = false;
-		
         return false;
     }
 }
