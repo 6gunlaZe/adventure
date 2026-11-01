@@ -2904,7 +2904,7 @@ setInterval(() => {
 
 
 async function scare() {
-    if (is_on_cooldown("scare")) return;
+    if (is_on_cooldown("scare") || is_disabled(character) ) return;
 
     const isLowHP = character.hp < 4500 && !vipBossTarget;
     const isPriest = character.ctype === "priest";
