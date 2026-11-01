@@ -11,7 +11,7 @@ const EXCLUDE = new Set([
 ]);
 
 // Các quái được phép tấn công gồm các phân loại sau
-const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy","paledino"]; // các quái Siêu cấp ưu tiên đánh trước 
+const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy","paledino","mimic","manyeye","goldenbat"]; // các quái Siêu cấp ưu tiên đánh trước 
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
@@ -53,7 +53,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "wolf"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
@@ -78,11 +78,12 @@ const TRASH_ITEMS = [
 
 // DANH SÁCH VÀ VỊ TRÍ FRAM CÁC QUÁI VIP XUẤT HIỆN CỦA TỪNG BÃI FRAM 
 const FARM_vipbosss = {
-    goldenbot: { x: -347, y: -183, map: "uhills", level: 15 },
+    goldenbot: { x: -347, y: -183, map: "uhills", level: 18 },
     stompy: { x: 432, y: -2496, map: "winterland", level: 7 },
-    paledino: { x: -151, y: 725, map: "mforest", level: 15 },
-
-	
+    paledino: { x: -151, y: 725, map: "mforest", level: 12 },
+	goldenbat: { level: 37 },
+	mimic: { level: 8 },
+	manyeye: { level: 6 },
 };
 
 let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
@@ -4453,10 +4454,15 @@ function handleVipBossLogic() {
     const { entity, config } = vipBossTarget;
     const bossLevel = entity.level || 1;
 
-    // 1. Kiểm tra nếu chưa đứng đúng map hoặc vị trí định sẵn thì di chuyển đến tọa độ cấu hình
-    if (character.map !== config.map || distance(character, config) > 50) {
+    // Lấy vị trí đích: Ưu tiên dùng trong config, nếu không có thì lấy thẳng từ entity boss
+    const targetMap = config.map || entity.map;
+    const targetX = config.x !== undefined ? config.x : entity.real_x || entity.x;
+    const targetY = config.y !== undefined ? config.y : entity.real_y || entity.y;
+
+    // 1. Kiểm tra nếu chưa đứng đúng map hoặc vị trí định sẵn thì di chuyển đến
+    if (character.map !== targetMap || (targetX !== undefined && distance(character, { x: targetX, y: targetY }) > 50)) {
         if (!smart.moving) {
-            smart_move({ map: config.map, x: config.x, y: config.y });
+            smart_move({ map: targetMap, x: targetX, y: targetY });
         }
         return true; // Đang thực hiện di chuyển đến boss
     }
@@ -4467,23 +4473,18 @@ function handleVipBossLogic() {
         const isTargetingParty = entity.target && PARTY_SET.has(entity.target);
 
         if (!isTargetingParty) {
-            // Nếu chưa có mục tiêu đồng đội -> Đánh thường để thu hút aggro (giúp boss đánh mình cho tự sát tăng level)
+            // Nếu chưa có mục tiêu đồng đội -> Đánh thường để thu hút aggro
             if (can_attack(entity)) {
                 attack(entity);
             }
         } else {
-            // Nếu đang có mục tiêu là đồng đội thì KHÔNG đánh để nhường mục tiêu cho party
-            // Có thể đứng yên hoặc di chuyển né tránh nếu cần
+            // Đang nhắm vào đồng đội -> Đứng yên nhường mục tiêu
         }
         return true; // Đang xử lý tác vụ VIP boss
     }
 
     return false;
 }
-
-
-
-
 
 
 
