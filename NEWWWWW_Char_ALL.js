@@ -2828,6 +2828,7 @@ async function skillLoop() {
                     break;
                     
                 case "priest":
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
 					if (await trySingleHeal()) return setTimeout(skillLoop, 10);
 					if (await tryPartyHeal()) return setTimeout(skillLoop, 10);
