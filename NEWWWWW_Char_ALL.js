@@ -1902,7 +1902,7 @@ async function useAttack() {
         if (targeted) currentTarget = targeted;
     }
     
-    if (!currentTarget || (smart.moving && !character.cave) ) return false;
+    if (!currentTarget || (smart.moving) ) return false;
 
     // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
     if (!is_in_range(currentTarget)) {
