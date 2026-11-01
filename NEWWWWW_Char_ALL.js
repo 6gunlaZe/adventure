@@ -12,7 +12,7 @@ const EXCLUDE = new Set([
 
 // Các quái được phép tấn công gồm các phân loại sau
 const SUPER_BOSSES = ["greenjr","jr"]; // các quái Siêu cấp ưu tiên đánh trước 
-const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky",];  // các quái ưu tiên đánh trước
+const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire",]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
 						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar",
