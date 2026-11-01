@@ -74,6 +74,17 @@ const TRASH_ITEMS = [
   "vitscroll", "wbasher", "wcap", "wbreeches", "wgloves", "whiteegg", "wshoes","wattire", "warmscarf", "xmace", "xmashat", "xmaspants", "xmasshoes", "xmassweater"
 ];
 
+// DANH SÁCH VÀ VỊ TRÍ FRAM CÁC QUÁI VIP XUẤT HIỆN CỦA TỪNG BÃI FRAM 
+const FARM_vipbosss = {
+    osnake: { x: -555, y: -333, map: "halloween", level: 4 },
+    bat: { x: -194, y: -461, map: "cave", level: 4 },
+    targetron: { x: -512, y: -239, map: "uhills", level: 4 },
+    rimedjinn: { x: 422, y: -1700, map: "winter_cove", level: 4 }
+};
+
+let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
+
+
 
 var loot_transfer = false;
 const MAX_SCAN_DISTANCE = 400;
@@ -97,13 +108,16 @@ let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật l
 // ============================================================
 // SCAN ALL
 // ============================================================
-// Gộp TẤT CẢ 4 danh sách vào 1 Set duy nhất
+
+// Gộp TẤT CẢ danh sách vào 1 Set duy nhất
 const ALL_TARGET_MONSTERS = new Set([
     ...SUPER_BOSSES,
     ...TARGET_BOSSES,
-    ...SINGLE_MONSTERS, // Thêm cả SINGLE_MONSTERS vào đây
-    ...TARGET_MONSTERS
+    ...SINGLE_MONSTERS, 
+    ...TARGET_MONSTERS,
+    ...Object.keys(FARM_vipbosss) // <-- Dùng Object.keys() để lấy các tên quái trong FARM_vipbosss
 ]);
+
 
 const NTFY_TOPIC = "adventure_vip111118899"; 
 
@@ -130,6 +144,7 @@ function scanAll() {
     SAFE = false; 
     hasLowHpAggroMonster = false; 
 	needLuckALL = false;
+	vipBossTarget = null;
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
@@ -157,6 +172,18 @@ function scanAll() {
 
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
+
+
+            //Kiểm tra VIP Boss cần farm level
+            if (FARM_vipbosss[entity.mtype]) {
+                 const bossConfig = FARM_vipbosss[entity.mtype];
+                 const bossLevel = entity.level || 1; 
+
+                 // Nếu level boss chưa đạt mức yêu cầu
+                 if (bossLevel < bossConfig.level) vipBossTarget = { entity: entity, config: bossConfig, distance: dist };
+            }
+
+			
 	
             if (WORLD_BOSSES_SET.has(entity.mtype)) {
                 bossEntities.push({ entity: entity, distance: dist });
@@ -212,6 +239,8 @@ function scanAll() {
         partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
     if (character.name === MERCHANT) merchant = character;
+	
+    if (vipBossTarget) SAFE = false;
 	
     // [CẬP NHẬT 2]: Kiểm tra trạng thái boss chết ở cuối hàm scanAll
     checkWorldBossDeathStatus();
@@ -2310,6 +2339,9 @@ setInterval(function() {
     // FARM CHECK & DELAY SMART MOVE
     if (smart.moving || mode !== MODE.FARM || farmingMoving) return;
 
+    if (vipBossTarget) return;
+
+	
     // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
     const myConfig = CHAR_CONFIG[character.name] || {};
     const isCircleEnabled = myConfig.circle === true;
@@ -4405,7 +4437,39 @@ setInterval(sendNtfyStatus, 30 * 60 * 1000);
 
 
 
+function handleVipBossLogic() {
+    if (!vipBossTarget) return false; // Không có boss nào cần farm level thì bỏ qua
 
+    const { entity, config } = vipBossTarget;
+    const bossLevel = entity.level || 1;
+
+    // 1. Kiểm tra nếu chưa đứng đúng map hoặc vị trí định sẵn thì di chuyển đến tọa độ cấu hình
+    if (character.map !== config.map || distance(character, config) > 50) {
+        if (!smart.moving) {
+            smart_move({ map: config.map, x: config.x, y: config.y });
+        }
+        return true; // Đang thực hiện di chuyển đến boss
+    }
+
+    // 2. Đã ở gần vị trí / nhìn thấy boss:
+    if (entity && !entity.dead) {
+        // Kiểm tra xem boss có đang nhắm mục tiêu vào thành viên trong party hay không
+        const isTargetingParty = entity.target && PARTY_SET.has(entity.target);
+
+        if (!isTargetingParty) {
+            // Nếu chưa có mục tiêu đồng đội -> Đánh thường để thu hút aggro (giúp boss đánh mình cho tự sát tăng level)
+            if (can_attack(entity)) {
+                attack(entity);
+            }
+        } else {
+            // Nếu đang có mục tiêu là đồng đội thì KHÔNG đánh để nhường mục tiêu cho party
+            // Có thể đứng yên hoặc di chuyển né tránh nếu cần
+        }
+        return true; // Đang xử lý tác vụ VIP boss
+    }
+
+    return false;
+}
 
 
 
