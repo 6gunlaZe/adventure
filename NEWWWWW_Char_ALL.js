@@ -2336,9 +2336,11 @@ setInterval(function() {
         return;
     }
 
+
+	
     // FARM CHECK & DELAY SMART MOVE
     if (smart.moving || mode !== MODE.FARM || farmingMoving) return;
-
+    handleVipBossLogic();
     if (vipBossTarget) return;
 
 	
