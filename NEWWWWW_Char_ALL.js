@@ -3597,7 +3597,7 @@ const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","fr
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
-        if (vipBossTarget) return "dame";
+        if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
         let monsterTYPE = 0;
@@ -3642,6 +3642,7 @@ const GEAR_LOGIC = {
 
     // ---- Logic của Priest (Ynhi) ----
     Ynhi: function() {
+		if (vipBossTarget) return "luck_full";
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
         if (character.s?.burned) return "def_fire";
 		
@@ -3736,7 +3737,7 @@ const GEAR_LOGIC = {
     },
     // ---- Logic của haiz ----
 "haiz": function() {
-    if (vipBossTarget) return "dame";
+    if (vipBossTarget) return "luck";
     let needNormalDef = false;
     let needLuck = false;
     let monsterDensity = 0;
