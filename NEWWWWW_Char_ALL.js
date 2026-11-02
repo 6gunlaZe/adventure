@@ -87,6 +87,7 @@ const FARM_vipbosss = {
 };
 
 let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
+let Viecquantrong = false; // việc quan trọng sẽ chặn even
 
 
 
@@ -149,6 +150,7 @@ function scanAll() {
     hasLowHpAggroMonster = false; 
 	needLuckALL = false;
 	vipBossTarget = null;
+	Viecquantrong = false;
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
@@ -182,7 +184,7 @@ function scanAll() {
             if (FARM_vipbosss[entity.mtype]) {
                  const bossConfig = FARM_vipbosss[entity.mtype];
                  const bossLevel = entity.level || 1; 
-
+				 Viecquantrong = true;
                  // Nếu level boss chưa đạt mức yêu cầu
                  if (bossLevel < bossConfig.level) vipBossTarget = { entity: entity, config: bossConfig, distance: dist };
             }
