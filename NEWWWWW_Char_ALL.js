@@ -2065,7 +2065,7 @@ function getActiveWorldBoss() {
 
 
 async function safeSmartMove(destination) {
-    if (smart.moving) return false; // || isSmartMoving
+    if (smart.moving || character.c.town) return false; // || isSmartMoving
 
    // isSmartMoving = true;
 
