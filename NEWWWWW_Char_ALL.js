@@ -2176,6 +2176,9 @@ setInterval(function() {
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
     if (character.cave || isCaveMode ) return;
 
+if (!Viecquantrong)
+{
+	
     // =========================================================
     // 0. EVENT HANDLING ƯU TIÊN CAO
     // =========================================================
@@ -2342,7 +2345,7 @@ setInterval(function() {
         return;
     }
 
-
+}
 	
     // FARM CHECK & DELAY SMART MOVE
     if (smart.moving || mode !== MODE.FARM ) return; // || farmingMoving
