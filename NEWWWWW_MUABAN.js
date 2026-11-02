@@ -2455,13 +2455,13 @@ function secondhands_handler(event) {
         }
 
         game_log("Ponty mua: " + item.name);
-        if (character.esize > 10) parent.socket.emit("sbuy", { rid: item.rid });
+        if (character.esize > 0) parent.socket.emit("sbuy", { rid: item.rid });
     }
 }
 
 // Check Ponty
 function checkPonty() {
-    if (is_moving(character) || character.esize < 10 || character.gold < 15000000 ) return;
+    if (is_moving(character) || character.esize < 0 || character.gold < 15000000 ) return;
     if (character.map !== "main") return;
     if (distance(character, { x: 0, y: 0 }) >= 400) return;
 
