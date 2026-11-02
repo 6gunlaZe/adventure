@@ -2061,13 +2061,13 @@ function getActiveWorldBoss() {
 
 
 // Hàm trung gian bọc smart_move với try...catch và tự động về thành nếu lỗi
-let isSmartMoving = false; // Biến khóa trạng thái di chuyển
+// let isSmartMoving = false; // Biến khóa trạng thái di chuyển
 
 
 async function safeSmartMove(destination) {
-    if (smart.moving || isSmartMoving) return false;
+    if (smart.moving) return false; // || isSmartMoving
 
-    isSmartMoving = true;
+   // isSmartMoving = true;
 
     try {
         let result = await smart_move(destination);
@@ -2084,7 +2084,7 @@ async function safeSmartMove(destination) {
             }
         }
 
-        isSmartMoving = false;
+       // isSmartMoving = false;
         return result;
 
     } catch (error) {
@@ -2095,7 +2095,7 @@ async function safeSmartMove(destination) {
             await use_skill("town");
         }
        // farmingMoving = false;
-        isSmartMoving = false;
+      //  isSmartMoving = false;
         return false;
     }
 }
