@@ -2092,7 +2092,7 @@ async function safeSmartMove(destination) {
 			game_log("về thành 2");
             await use_skill("town");
         }
-        farmingMoving = false;
+       // farmingMoving = false;
         isSmartMoving = false;
         return false;
     }
@@ -2161,7 +2161,7 @@ function getDailyWitchSet() {
 }
 
 let checkcrabxx = 0;
-let farmingMoving = false;
+// let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
 let farmAngle = 0;
@@ -2206,7 +2206,7 @@ setInterval(function() {
         // Nếu chưa ở đúng map HOẶC đứng quá xa vị trí cấu hình (> 200 đơn vị) thì di chuyển tới đó
         if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
             if (!smart.moving) {
-                farmingMoving = false;
+              //  farmingMoving = false;
                 safeSmartMove(WITCH_SPOT);
             }
             return;
@@ -2256,7 +2256,7 @@ setInterval(function() {
         // Nếu Boss không xuất hiện trong tầm mắt, chỉ di chuyển nếu chưa tới đúng Map/Tọa độ
         else if (!bossEntity) {
             if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
-                farmingMoving = false;
+              //  farmingMoving = false;
                 safeSmartMove({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
             }
         }
@@ -2280,7 +2280,7 @@ setInterval(function() {
         // Nếu chưa ở map spookytown HOẶC ở spookytown nhưng đứng quá xa tâm sự kiện
         if (character.map !== EVENT_CENTER.map || distToEvent > 250) {
             if (!smart.moving) {
-                farmingMoving = false;
+               // farmingMoving = false;
                 if (character.map !== EVENT_CENTER.map) {
                     parent.socket.emit("join", { name: "graveyard" });
                 } else {
@@ -2309,7 +2309,7 @@ setInterval(function() {
         // Nếu chưa ở map halloween HOẶC ở halloween nhưng vị trí horseman ở quá xa 
         if (character.map !== EVENT_MAP || distToEvent > 300) {
             if (!smart.moving) {
-                farmingMoving = false;
+               // farmingMoving = false;
                 if (character.map !== EVENT_MAP) {
                     parent.socket.emit("join", { name: "horseman" });
                 } else {
@@ -2343,7 +2343,7 @@ setInterval(function() {
 
 	
     // FARM CHECK & DELAY SMART MOVE
-    if (smart.moving || mode !== MODE.FARM || farmingMoving) return;
+    if (smart.moving || mode !== MODE.FARM ) return; // || farmingMoving
     handleVipBossLogic();
     if (vipBossTarget) return;
 
@@ -2374,10 +2374,10 @@ setInterval(function() {
    if (timeSinceLastMonster < 5000) return
 
 
-    farmingMoving = true;
+   // farmingMoving = true;
     safeSmartMove(FARM_MAP)
         .finally(() => { 
-            farmingMoving = false; 
+           // farmingMoving = false; 
         });
 }, 1000);
 
