@@ -2609,6 +2609,8 @@ function manageChars() {
         ? "witchcipher" 
         : (activeBoss ? activeBoss.id : null);
 
+	if (Viecquantrong)currentEvent = null;
+
 	
     const now = Date.now();
 
