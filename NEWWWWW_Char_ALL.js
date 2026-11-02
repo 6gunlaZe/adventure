@@ -2710,7 +2710,7 @@ setInterval(() => character.rip && respawn(), 50000);
 let is_using_potion = false;
 
 function use_hp_or_mp1() {
-    if (is_using_potion || character.c.town ) return;
+    if (is_using_potion || character.c.town || vipBossTarget ) return;
 
     try {
         let skill;
