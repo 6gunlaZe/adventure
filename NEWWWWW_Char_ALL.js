@@ -4752,68 +4752,81 @@ const DUNGEON_WAYPOINTS = [
 ]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
 
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
+let isDoingDungeon = false;    // 🚩 Biến cờ ban đầu là false (rảnh), khi bận đi hầm sẽ tự động bật thành true
 
 async function handleDungeonKeyLogic() {
-    // 1. Kiểm tra key trong túi đồ trước
+    // --- BƯỚC 1: KIỂM TRA KEY TRƯỚC ---
+    const hasInventoryKey = locate_item("cryptkey") !== -1;
+    const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+
+    if (!hasInventoryKey && !hasBackupKey) {
+        currentWaypointIndex = 0;
+        isDoingDungeon = false; // Không có key -> Bot rảnh, tắt cờ để đi làm việc khác
+        return false; 
+    }
+
+    // --- GIAI ĐOẠN 3: Đã vào trong hầm ---
+    if (character.map === "crypt") {
+        isDoingDungeon = true; // Đang trong hầm -> Bật cờ bận
+
+        if (currentWaypointIndex < DUNGEON_WAYPOINTS.length) {
+            const dest = DUNGEON_WAYPOINTS[currentWaypointIndex];
+
+            if (character.map === dest.map && distance(character, dest) <= 25) {
+                currentWaypointIndex++;
+                return true;
+            }
+
+            if (!smart.moving) {
+                smart_move({ map: dest.map, x: dest.x, y: dest.y });
+            }
+            return true;
+        }
+
+        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset và tắt cờ
+        currentWaypointIndex = 0;
+        isDoingDungeon = false; 
+        return false; 
+    }
+
+    // --- GIAI ĐOẠN 1: Chưa vào hầm & ĐÃ CÓ KEY -> Di chuyển tới vị trí A (Cổng vào) ---
+    const targetMap = DUNGEON_ENTRY_SPOT.map;
+    const targetX = DUNGEON_ENTRY_SPOT.x;
+    const targetY = DUNGEON_ENTRY_SPOT.y;
+
+    if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
+        if (!smart.moving) {
+            smart_move({ map: targetMap, x: targetX, y: targetY });
+        }
+        isDoingDungeon = true; // Đang trên đường ra cổng -> Bật cờ bận
+        return true; 
+    }
+
+    // --- GIAI ĐOẠN 2: Đã tới vị trí A và có key -> Tiến hành vào hầm ---
     let keyIndex = locate_item("cryptkey");
     let currentKeyToUse = null;
 
     if (keyIndex !== -1) {
-        // Có sẵn key trong túi -> Dùng slot index trong túi
         currentKeyToUse = 1;
     } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
-        // Không có trong túi nhưng có key cũ đã lưu trong mảng -> Lấy ra 1 key đầu tiên và xóa khỏi mảng
         currentKeyToUse = cryptkeyCHECK.shift();
         console.log("⚠️ Hết key trong túi, sử dụng key đã lưu từ GitHub issues:", currentKeyToUse);
-		console.log("📌 Danh sách tất cả key còn lại trong mảng cryptkeyCHECK:", cryptkeyCHECK);
+        console.log("📌 Danh sách tất cả key còn lại trong mảng cryptkeyCHECK:", cryptkeyCHECK);
     } else {
-        // Hoàn toàn không có key ở cả 2 nơi
         currentWaypointIndex = 0;
-        console.log("⛔ Không tìm thấy key hợp lệ ở cả túi đồ lẫn danh sách lưu.");
+        isDoingDungeon = false;
         return false; 
     }
 
-    // 2. Kiểm tra nhân vật đang đứng ở map hầm ngục hay chưa
-    const isInDungeon = character.map === "crypt"; 
-
-    if (!isInDungeon) {
-        // --- GIAI ĐOẠN 1: Chưa vào hầm -> Di chuyển tới vị trí A (Cổng vào) ---
-        const targetMap = DUNGEON_ENTRY_SPOT.map;
-        const targetX = DUNGEON_ENTRY_SPOT.x;
-        const targetY = DUNGEON_ENTRY_SPOT.y;
-
-        if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
-            if (!smart.moving) {
-                smart_move({ map: targetMap, x: targetX, y: targetY });
-            }
-            return true; // Đang trên đường tới cổng
-        }
-
-        // --- GIAI ĐOẠN 2: Đã tới vị trí A -> Dùng lệnh vào map hầm ngục ---
-		if (currentKeyToUse == 1)enter("crypt")
-        else enter("crypt", currentKeyToUse);
-        
-        return true;
+    if (currentKeyToUse == 1) {
+        enter("crypt");
+    } else {
+        enter("crypt", currentKeyToUse);
     }
-
-    // --- GIAI ĐOẠN 3: Đã vào trong hầm -> Di chuyển tuần tự theo từng bước (Waypoints) ---
-    if (currentWaypointIndex < DUNGEON_WAYPOINTS.length) {
-        const dest = DUNGEON_WAYPOINTS[currentWaypointIndex];
-
-        if (character.map === dest.map && distance(character, dest) <= 25) {
-            currentWaypointIndex++;
-            return true;
-        }
-
-        if (!smart.moving) {
-            smart_move({ map: dest.map, x: dest.x, y: dest.y });
-        }
-        return true;
-    }
-
-    return false; // Đã hoàn tất toàn bộ các bước trong hầm
+    
+    isDoingDungeon = true; // Đang gọi lệnh vào hầm -> Bật cờ bận
+    return true;
 }
-
 
 
 
