@@ -2171,8 +2171,8 @@ const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) /
 let currentWitchSet = null; // Biến lưu bộ tọa độ witch
 // ----------------------------------
 
-setInterval(function() {
-
+setInterval(async function() {
+	
     if (typeof isLuringKane !== "undefined" && isLuringKane) return;
     if (character.cave || isCaveMode ) return;
 
@@ -2212,7 +2212,7 @@ if (!Viecquantrong)
         if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
             if (!smart.moving) {
               //  farmingMoving = false;
-                safeSmartMove(WITCH_SPOT);
+                await safeSmartMove(WITCH_SPOT);
             }
             return;
         }
@@ -2250,7 +2250,7 @@ if (!Viecquantrong)
                         character.y + (bossEntity.y - character.y) * 0.4
                     );
                 } else if (!smart.moving) {
-                    safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
+                    await safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
                 }
             } else {
 				//đang ổn định đánh boss
@@ -2262,7 +2262,7 @@ if (!Viecquantrong)
         else if (!bossEntity) {
             if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
               //  farmingMoving = false;
-                safeSmartMove({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
+                await safeSmartMove({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
             }
         }
 
@@ -2289,7 +2289,7 @@ if (!Viecquantrong)
                 if (character.map !== EVENT_CENTER.map) {
                     parent.socket.emit("join", { name: "graveyard" });
                 } else {
-                    safeSmartMove(EVENT_CENTER);
+                    await safeSmartMove(EVENT_CENTER);
                 }
             }
             return;
@@ -2318,7 +2318,7 @@ if (!Viecquantrong)
                 if (character.map !== EVENT_MAP) {
                     parent.socket.emit("join", { name: "horseman" });
                 } else {
-                    safeSmartMove({ map: EVENT_MAP, x: targetX, y: targetY });
+                    await safeSmartMove({ map: EVENT_MAP, x: targetX, y: targetY });
                 }
             }
             return;
@@ -2352,7 +2352,7 @@ if (!Viecquantrong)
     handleVipBossLogic();
     if (vipBossTarget) return;
 	
-    handleDungeonKeyLogic();
+    await handleDungeonKeyLogic();
     if (isDoingDungeon) return;
 
 
@@ -2384,7 +2384,7 @@ if (!Viecquantrong)
 
 
    // farmingMoving = true;
-    safeSmartMove(FARM_MAP)
+    await safeSmartMove(FARM_MAP)
         .finally(() => { 
            // farmingMoving = false; 
         });
