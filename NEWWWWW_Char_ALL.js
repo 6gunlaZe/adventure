@@ -4983,10 +4983,17 @@ if (character.map === "crypt") {
 }
 
 
+let solocrypt = false;
+
 // --- HÀM KIỂM TRA ĐỒNG ĐỘI QUA PARENT.PARTY VÀ PARTYENTITIES ---
 function areAllPartyMembersReady() {
-    // Nếu không có party hoặc party trống thì coi như sẵn sàng
-    if (!parent.party) return true;
+    // Nếu bật solo crypt và không có party -> Cho đi luôn
+    if (solocrypt && !parent.party) return true;
+    
+    // Nếu không có party (mà không bật solo) -> Chưa sẵn sàng
+    if (!parent.party) return false;
+
+    let readyMemberCount = 0; // Đếm số lượng đồng đội đã sẵn sàng (có mặt, sống, và khoảng cách <= 100)
 
     // Duyệt qua tất cả các thành viên hiện tại trong party của game
     for (const name in parent.party) {
@@ -4995,15 +5002,19 @@ function areAllPartyMembersReady() {
         // Tìm thành viên trong mảng partyEntities đã scan
         const memberEntity = partyEntities.find(p => p.entity.name === name);
 
-        // 🎯 Điều kiện: Phải tìm thấy, không bị chết (rip) VÀ khoảng cách đến character phải <= 100
-        if (!memberEntity || memberEntity.entity.rip || memberEntity.distance > 100) {
-            return false; // Chưa đủ người ở gần hoặc có người chưa vào kịp / đứng quá xa / bị chết
+        // 🎯 Điều kiện: Phải tìm thấy, KHÔNG bị rip, VÀ khoảng cách <= 100
+        if (memberEntity && !memberEntity.entity.rip && memberEntity.distance <= 100) {
+            readyMemberCount++; // Thỏa mãn thì tăng biến đếm lên
         }
     }
 
-    return true; // Tất cả đồng đội hợp lệ trong parent.party đã tụ họp sát bên cạnh (<= 100) và sống sót
-}
+    // Nếu số lượng đồng đội sẵn sàng đạt từ 2 trở lên -> Cho phép tiến hành xuất phát!
+    if (readyMemberCount >= 2) {
+        return true; 
+    }
 
+    return false; // Chưa đủ số lượng đồng đội ở gần (hoặc chưa login/chưa vào kịp)
+}
 
 
 
