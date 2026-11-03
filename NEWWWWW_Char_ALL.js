@@ -4789,7 +4789,7 @@ async function handleDungeonKeyLogic() {
                 // Gửi mã instance qua CM cho tất cả thành viên trong party
                 if (character.party) {
                     for (const memberName in parent.party) {
-                        if (memberName !== character.name) {
+                        if (memberName !== character.name && memberName !== MERCHANT) {
                             send_cm(memberName, { type: "DungeonInstance", instance: character.in });
                             game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${memberName}`);
                         }
@@ -4807,8 +4807,6 @@ async function handleDungeonKeyLogic() {
     // --- 2. NẾU ĐÃ Ở TRONG HẦM (CRYPT) ---
 if (character.map === "crypt") {
     isDoingDungeon = true; 
-
-    const isLeader = (character.name === LEADER);
 
     if (isLeader) {
         // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI ---
@@ -4848,20 +4846,13 @@ if (character.map === "crypt") {
         return false; 
     } 
     else {
-        // --- MEMBER: BÁM THEO LEADER ---
-// --- MEMBER: BÁM THEO LEADER HOẶC ĐUỔI THEO LEADERTARGET ---
+           // --- MEMBER: BÁM THEO LEADER HOẶC ĐUỔI THEO LEADERTARGET ---
             const leaderEntity = partyEntities.find(p => p.entity.name === LEADER);
 
             if (leaderEntity) {
                 // 🟢 THẤY LEADER TRONG TẦM NHÌN: Bám sát Leader
                 if (leaderEntity.distance > 80) {
-                    if (!smart.moving || distance(smart.target, leaderEntity.entity) > 30) {
-                        smart_move({ 
-                            map: leaderEntity.entity.map, 
-                            x: leaderEntity.entity.real_x, 
-                            y: leaderEntity.entity.real_y 
-                        });
-                    }
+                         if (!smart.moving)xmove( x: leaderEntity.entity.real_x ,  y: leaderEntity.entity.real_y);
                     return true;
                 } else {
                     if (smart.moving) stop("move");
