@@ -4767,9 +4767,15 @@ async function markIssueDone(keyTitle, key_auto1) {
 // Cấu hình các hằng số cần thiết (có thể đưa ra ngoài global scope)
 const DUNGEON_ENTRY_SPOT = { map: "cave", x: -195, y: -1298 }; // Tọa độ cổng vào hầm ngục (Vị trí A)
 const DUNGEON_WAYPOINTS = [
-    { map: "crypt", x: 50, y: 100 },
-    { map: "crypt", x: 200, y: 300 },
-    { map: "crypt", x: 450, y: 600 }
+    { map: "crypt", x: 0, y: -100 },
+    { map: "crypt", x: 0, y: -300 },
+    { map: "crypt", x: 50, y: -472 },
+    { map: "crypt", x: -200, y: -500 },
+    { map: "crypt", x: -200, y: -700 },
+    { map: "crypt", x: -200, y: -900 },
+
+
+	
 ]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
 
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
@@ -4840,9 +4846,26 @@ if (character.map === "crypt") {
         }
 
         // Leader hoàn tất hầm ngục -> Reset
+		await markIssueDone(character.in, myoke);
+
+        // --- CHECK LẠI 1 LẦN NỮA XEM CÒN KEY ĐỂ CHƠI TIẾP TỤC KHÔNG ---
+        const TRONGTUI = locate_item("cryptkey") !== -1;
+        const LUTRUKEY = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+
+        if (!TRONGTUI && !LUTRUKEY)isDoingDungeon = false; 
+		else isDoingDungeon = true; 
+		
         currentWaypointIndex = 0;
-        isDoingDungeon = false; 
         sharedDungeonInstance = null; 
+            // đã hoàn tất một hầm ngục, reset lại các nhân vật
+            for (const memberName in parent.party) {
+                if (memberName !== character.name && memberName !== MERCHANT) {
+                 stop_character(memberName);
+                }
+            }
+		
+        await smart_move({ map: "cave", x: -194, y: -1281 });
+		
         return false; 
     } 
     else {
