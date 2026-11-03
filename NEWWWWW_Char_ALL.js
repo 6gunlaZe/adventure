@@ -4834,6 +4834,15 @@ if (character.map === "crypt") {
             }
         }
 
+       // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP
+          if (!areAllPartyMembersReady()) {
+             if (smart.moving) {
+                 stop("move");
+             }
+             return true; 
+         }
+			
+
             if (character.map === dest.map && distance(character, dest) <= 25) {
                 currentWaypointIndex++;
                 return true;
@@ -4971,6 +4980,28 @@ if (character.map === "crypt") {
 
     isDoingDungeon = false;
     return false;
+}
+
+
+// --- HÀM KIỂM TRA ĐỒNG ĐỘI QUA PARENT.PARTY VÀ PARTYENTITIES ---
+function areAllPartyMembersReady() {
+    // Nếu không có party hoặc party trống thì coi như sẵn sàng
+    if (!parent.party) return true;
+
+    // Duyệt qua tất cả các thành viên hiện tại trong party của game
+    for (const name in parent.party) {
+        if (name === character.name || name === MERCHANT) continue;
+
+        // Tìm thành viên trong mảng partyEntities đã scan
+        const memberEntity = partyEntities.find(p => p.entity.name === name);
+
+        // 🎯 Điều kiện: Phải tìm thấy, không bị chết (rip) VÀ khoảng cách đến character phải <= 100
+        if (!memberEntity || memberEntity.entity.rip || memberEntity.distance > 100) {
+            return false; // Chưa đủ người ở gần hoặc có người chưa vào kịp / đứng quá xa / bị chết
+        }
+    }
+
+    return true; // Tất cả đồng đội hợp lệ trong parent.party đã tụ họp sát bên cạnh (<= 100) và sống sót
 }
 
 
