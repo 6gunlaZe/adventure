@@ -2351,6 +2351,10 @@ if (!Viecquantrong)
     if (smart.moving || mode !== MODE.FARM ) return; // || farmingMoving
     handleVipBossLogic();
     if (vipBossTarget) return;
+	
+    handleDungeonKeyLogic();
+    if (isDoingDungeon) return;
+
 
 	
     // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
