@@ -4760,14 +4760,19 @@ let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận �
 let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
 
 async function handleDungeonKeyLogic() {
+    const isLeader = (character.name === LEADER);
+
     // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
     if (enteringDungeon) {
         if (character.map === "crypt") {
-            // Đã load vào map crypt thành công -> Mở khóa cờ chờ
-			if (character.name == LEADER)ghichu(character.in, "run now", myoke);
+            // Đã load vào map crypt thành công
+            if (isLeader) {
+                // Leader tiến hành ghi chú instance ID lên GitHub
+                ghichu(character.in, "run now", myoke);
+            }
             enteringDungeon = false;
         } else {
-            // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận và không check key
+            // Vẫn đang chờ server đổi map -> Giữ cờ bận
             isDoingDungeon = true;
             return true;
         }
@@ -4797,56 +4802,89 @@ async function handleDungeonKeyLogic() {
         return false; 
     }
 
-    // --- 3. KIỂM TRA KEY TRƯỚC KHI ĐI RA CỔNG ---
-    const hasInventoryKey = locate_item("cryptkey") !== -1;
-    const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+    // ==========================================
+    // LOGIC RIÊNG CHO LEADER & MEMBER KHI Ở NGOÀI HẦM
+    // ==========================================
+    let targetInstanceKey = null;
 
-    if (!hasInventoryKey && !hasBackupKey) {
-        currentWaypointIndex = 0;
-        isDoingDungeon = false; // Không có key -> Tắt cờ bận để bot đi farm bãi thường
-        return false; 
-    }
+    if (isLeader) {
+        // --- CHỈ LEADER MỚI KIỂM TRA KEY & QUYẾT ĐỊNH MỞ CỬA ---
+        const hasInventoryKey = locate_item("cryptkey") !== -1;
+        const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
 
-    // --- 4. CHƯA VÀO HẦM & CÓ KEY -> DI CHUYỂN TỚI CỔNG (VỊ TRÍ A) ---
-    const targetMap = DUNGEON_ENTRY_SPOT.map;
-    const targetX = DUNGEON_ENTRY_SPOT.x;
-    const targetY = DUNGEON_ENTRY_SPOT.y;
-
-    if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
-        if (!smart.moving) {
-            smart_move({ map: targetMap, x: targetX, y: targetY });
+        if (!hasInventoryKey && !hasBackupKey) {
+            currentWaypointIndex = 0;
+            isDoingDungeon = false; 
+            return false; 
         }
-        isDoingDungeon = true; // Bật cờ bận khi đang chạy ra cổng
-        return true; 
-    }
 
-    // --- 5. ĐÃ TỚI CỔNG & CÓ KEY -> TIẾN HÀNH DÙNG KEY VÀO HẦM ---
-    let keyIndex = locate_item("cryptkey");
+        // Di chuyển tới cổng (Vị trí A)
+        const targetMap = DUNGEON_ENTRY_SPOT.map;
+        const targetX = DUNGEON_ENTRY_SPOT.x;
+        const targetY = DUNGEON_ENTRY_SPOT.y;
 
-    if (keyIndex !== -1) {
-        // Dùng key có sẵn trong túi
-        enteringDungeon = true; // Bật cờ khóa chờ chuyển map
-        isDoingDungeon = true;  // Bật cờ bận
-        enter("crypt");
-        return true;
-    } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
-        // Dùng key dự phòng từ GitHub
-        let backupKey = cryptkeyCHECK.shift(); // Lấy và xóa key khỏi mảng vì đã đứng sát cổng
-        enteringDungeon = true; // Bật cờ khóa chờ chuyển map
-        isDoingDungeon = true;  // Bật cờ bận
+        if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
+            if (!smart.moving) {
+                smart_move({ map: targetMap, x: targetX, y: targetY });
+            }
+            isDoingDungeon = true; 
+            return true; 
+        }
+
+        // Đã tới cổng -> Sử dụng key mở hầm
+        let keyIndex = locate_item("cryptkey");
+        if (keyIndex !== -1) {
+            enteringDungeon = true;
+            isDoingDungeon = true;
+            enter("crypt"); // Leader mở instance mới
+            return true;
+        } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
+            let backupKey = cryptkeyCHECK.shift();
+            enteringDungeon = true;
+            isDoingDungeon = true;
+            
+            console.log("⚠️ Leader sử dụng key dự phòng từ GitHub:", backupKey);
+            enter("crypt", backupKey); // Mở bằng key dự phòng
+            return true;
+        }
+
+    } else {
+        // --- MEMBER: CHỜ LEADER MỞ HẦM VÀ LẤY INSTANCE ID ---
+        // Cách nhận diện Leader đã vào hầm: Kiểm tra xem party leader có đang ở map "crypt" và có instance ID (`parent.party[LEADER]?.in` hoặc qua thông tin game truyền tới)
+        const leaderData = parent.party && parent.party[LEADER];
         
-        console.log("⚠️ Sử dụng key dự phòng từ GitHub issues:", backupKey);
-        console.log("📌 Danh sách key còn lại:", cryptkeyCHECK);
-        
-        enter("crypt", backupKey);
+        // Nếu Leader chưa vào hầm hoặc chưa có instance, Member đứng yên hoặc làm việc khác (hoặc đi ra cổng chờ sẵn)
+        if (!leaderData || leaderData.map !== "crypt" || !leaderData.in) {
+            isDoingDungeon = false;
+            return false; // Leader chưa mở hầm -> Member tự do farm bãi thường
+        }
+
+        // Khi Leader đã vào hầm và có instance ID (`leaderData.in`), Member tiến hành di chuyển ra cổng và vào chung
+        targetInstanceKey = leaderData.in;
+
+        const targetMap = DUNGEON_ENTRY_SPOT.map;
+        const targetX = DUNGEON_ENTRY_SPOT.x;
+        const targetY = DUNGEON_ENTRY_SPOT.y;
+
+        if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
+            if (!smart.moving) {
+                smart_move({ map: targetMap, x: targetX, y: targetY });
+            }
+            isDoingDungeon = true; 
+            return true; 
+        }
+
+        // Đã tới cổng -> Dùng mã instance ID của Leader để enter vào chung party
+        enteringDungeon = true;
+        isDoingDungeon = true;
+        console.log(`🤝 Member [${character.name}] đang vào chung hầm với Leader theo mã instance:`, targetInstanceKey);
+        enter("crypt", targetInstanceKey);
         return true;
     }
 
     isDoingDungeon = false;
     return false;
 }
-
-
 
 
 // ============================================================
