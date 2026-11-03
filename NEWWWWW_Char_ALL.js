@@ -4495,6 +4495,251 @@ function handleVipBossLogic() {
     return false;
 }
 
+//////////////////////////////////////////////////////////
+
+
+
+
+const urlBase = "https://api.github.com/repos/6gunlaZe/game/issues";
+const startFrom = new Date("2025-07-01"); 
+
+async function fetchRecentIssues(limit = 500) {
+  let allIssues = [];
+  let page = 1;
+  let done = false;
+
+  while (allIssues.length < limit && !done) {
+    const response = await fetch(
+      `${urlBase}?state=all&sort=created&direction=desc&per_page=100&page=${page}`
+    );
+
+    if (response.status === 422) {
+      console.warn("⚠️ Page vượt quá số trang tồn tại. Dừng vòng lặp.");
+      break;
+    }  
+
+    if (!response.ok) {
+      console.error("❌ Lỗi khi gọi API GitHub:", response.statusText);
+      return [];
+    }
+
+    const issues = await response.json();
+    if (issues.length === 0) break;
+
+    for (const issue of issues) {
+      const createdAt = new Date(issue.created_at);
+      if (createdAt < startFrom) continue;
+
+      allIssues.push(issue);
+      if (allIssues.length >= limit) {
+        done = true;
+        break;
+      }
+    }
+
+    if (issues.length < 100) break;
+    page++;
+  }
+
+  // Lọc trùng title, giữ bản có body dài nhất
+  const titleToIssue = new Map();
+  for (const issue of allIssues) {
+    const current = titleToIssue.get(issue.title);
+    const currentLength = current?.body?.length || 0;
+    const newLength = issue.body?.length || 0;
+    if (!current || newLength > currentLength) {
+      titleToIssue.set(issue.title, issue);
+    }
+  }
+
+  const uniqueIssues = Array.from(titleToIssue.values());
+  const now = new Date();
+  let Key = []; // Khai báo mảng chứa key hợp lệ
+
+  uniqueIssues.forEach(issue => {
+    const createdAt = new Date(issue.created_at);
+    const diffInDays = (now - createdAt) / (1000 * 60 * 60 * 24);
+    
+    // Vẫn giữ điều kiện kiểm tra thời gian trên 2.34 ngày để quái mạnh lên
+    if (diffInDays <= 2.3444) return;
+
+    const body = issue.body || "";
+
+    // 1. NẾU CÓ CHỮ "DONE" THÌ LOẠI
+    if (body.toUpperCase().includes("DONE")) {
+      return;
+    }
+
+    // 2. ĐẾM SỐ DÒNG, NẾU QUÁ 4 DÒNG THÌ LOẠI
+    const lines = body.split("\n");
+    const numberOfLines = lines.length;
+    if (numberOfLines > 4) {
+      return;
+    }
+
+    // Đạt điều kiện -> Thêm vào danh sách
+    Key.push({
+      title: issue.title,
+      issueNumber: issue.number
+    });
+    console.log(`✅ Thêm key: ${issue.title} | Số dòng: ${numberOfLines}`);
+  });
+
+  if (Key.length === 0) {
+    console.log("⛔ Không có issue nào đạt điều kiện.");
+  } else {
+    Key.reverse();
+    console.log("📌 Danh sách Key hợp lệ:", Key);
+  }
+
+  return Key;
+}
+
+
+
+let cryptkeyCHECK = await fetchRecentIssues(500);
+
+
+
+
+function ghichu(title, mess, key_auto1) {
+  const token = key_auto1; 
+  const repoOwner = '6gunlaZe'; 
+  const repoName = 'game'; 
+  const issueTitle = title;
+  const newLine = mess; 
+
+  fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(issueTitle)}+repo:${repoOwner}/${repoName}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.items.length === 0) {
+      // Nếu chưa có issue, tạo mới (POST)
+      fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `token ${token}`,
+        },
+        body: JSON.stringify({
+          title: issueTitle,
+          body: newLine, 
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('✨ Đã tạo Issue ghi nhận key mới:', data.title);
+      })
+      .catch(error => {
+        console.error('❌ Lỗi khi tạo Issue:', error);
+      });
+    } else {
+      // Nếu đã có issue, cập nhật nối thêm dòng log mới (PATCH)
+      const issueNumber = data.items[0].number; 
+      const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
+
+      fetch(issueUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      })
+      .then(response => response.json())
+      .then(issueData => {
+        const updatedBody = (issueData.body || '') + '\n' + newLine; 
+
+        fetch(issueUrl, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+          },
+          body: JSON.stringify({
+            title: issueData.title,
+            body: updatedBody, 
+          }),
+        })
+        .then(response => response.json())
+        .then(updatedData => {
+          console.log('📝 Đã cập nhật thêm nhật ký vào Issue:', updatedData.title);
+        })
+        .catch(error => {
+          console.error('❌ Lỗi khi cập nhật Issue:', error);
+        });
+      })
+      .catch(error => {
+        console.error('❌ Lỗi khi lấy nội dung issue:', error);
+      });
+    }
+  })
+  .catch(error => {
+    console.error('❌ Lỗi khi tìm kiếm issue:', error);
+  });
+}
+
+
+
+async function markIssueDone(keyTitle, key_auto1) {
+  const token = key_auto1;
+  const repoOwner = '6gunlaZe';
+  const repoName = 'game';
+
+  try {
+    // 1. Tìm issue dựa vào tên key (title) giống hệt hàm ghichu
+    const searchRes = await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(keyTitle)}+repo:${repoOwner}/${repoName}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+      },
+    });
+    const searchData = await searchRes.json();
+
+    if (searchData.items.length === 0) {
+      console.error(`❌ Không tìm thấy Issue nào mang key: ${keyTitle}`);
+      return;
+    }
+
+    // Lấy số issue tự động từ kết quả tìm kiếm
+    const issueNumber = searchData.items[0].number;
+    const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
+
+    // 2. Lấy nội dung body hiện tại của issue
+    const res = await fetch(issueUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+      },
+    });
+    const issueData = await res.json();
+    
+    // 3. Nối thêm chữ "DONE" vào cuối body
+    const updatedBody = (issueData.body || '') + '\nDONE';
+
+    // 4. Gửi PATCH để cập nhật
+    await fetch(issueUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `token ${token}`,
+      },
+      body: JSON.stringify({
+        body: updatedBody,
+      }),
+    });
+    
+    console.log(`🏁 Đã đánh dấu DONE thành công cho key: ${keyTitle}`);
+  } catch (error) {
+    console.error('❌ Lỗi khi đánh dấu DONE:', error);
+  }
+}
 
 
 
