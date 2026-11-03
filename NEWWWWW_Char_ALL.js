@@ -4764,6 +4764,7 @@ async function handleDungeonKeyLogic() {
     if (enteringDungeon) {
         if (character.map === "crypt") {
             // Đã load vào map crypt thành công -> Mở khóa cờ chờ
+			if (character.name == LEADER)ghichu(character.in, "run now", myoke);
             enteringDungeon = false;
         } else {
             // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận và không check key
