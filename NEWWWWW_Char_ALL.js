@@ -4618,7 +4618,7 @@ async function fetchRecentIssues(limit = 500) {
 
 
 
-let cryptkeyCHECK = await fetchRecentIssues(500);
+let cryptkeyCHECK = fetchRecentIssues(500);
 
 
 
@@ -4875,7 +4875,7 @@ if (character.map === "crypt") {
             if (leaderEntity) {
                 // 🟢 THẤY LEADER TRONG TẦM NHÌN: Bám sát Leader
                 if (leaderEntity.distance > 80) {
-                         if (!smart.moving)xmove( x: leaderEntity.entity.real_x ,  y: leaderEntity.entity.real_y);
+                         if (!smart.moving)xmove(leaderEntity.entity.real_x, leaderEntity.entity.real_y);
                     return true;
                 } else {
                     if (smart.moving) stop("move");
