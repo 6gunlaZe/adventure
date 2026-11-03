@@ -3045,6 +3045,8 @@ function tryTemporalSurge() {
 
 let sharedDungeonInstance = null; // 🔑 Biến lưu mã instance hầm ngục nhận từ Leader qua CM
 let leaderLoc = null; // Nơi lưu tọa độ realtime của Leader
+let lastLeaderTarget = null;         // Lưu thông tin điểm đến nhận từ Leader
+let lastProcessedTargetTime = 0;     // ⏱️ Lưu mốc time đã xử lý để tránh gọi smart_move lặp lại mỗi tick
 
 function on_cm(name, data) {
     // 1. Trường hợp data là string
@@ -3065,6 +3067,14 @@ function on_cm(name, data) {
             sharedDungeonInstance = data.instance;
             game_log(`🔑 Nhận mã Instance hầm từ Leader: ${sharedDungeonInstance}`, "#00FF00");
         }
+
+        // 📥 Nhận tọa độ từ Leader và lọc theo time mới
+        if (data.type === "LeaderTarget" && name === LEADER) {
+            if (!lastLeaderTarget || lastLeaderTarget.time !== data.time) {
+                lastLeaderTarget = { x: data.x, y: data.y, map: data.map, time: data.time };
+            }
+        }
+		
 
         // Bắt tọa độ & trạng thái Cave Mode từ Leader gửi tới
         if (data.type === "LeaderLoc" && name === LEADER) {
@@ -4795,11 +4805,30 @@ async function handleDungeonKeyLogic() {
     }
 
     // --- 2. NẾU ĐÃ Ở TRONG HẦM (CRYPT) ---
-    if (character.map === "crypt") {
-        isDoingDungeon = true; // Bật cờ bận khi ở trong hầm
+if (character.map === "crypt") {
+    isDoingDungeon = true; 
 
+    const isLeader = (character.name === LEADER);
+
+    if (isLeader) {
+        // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI ---
         if (currentWaypointIndex < DUNGEON_WAYPOINTS.length) {
             const dest = DUNGEON_WAYPOINTS[currentWaypointIndex];
+
+        // 📤 Gửi tọa độ kèm timestamp hiện tại cho party
+        if (character.party) {
+            for (const memberName in parent.party) {
+                if (memberName !== character.name && memberName !== MERCHANT) {
+                    send_cm(memberName, { 
+                        type: "LeaderTarget", 
+                        x: dest.x, 
+                        y: dest.y, 
+                        map: dest.map, 
+                        time: Date.now() // ⏱️ Mốc thời gian để nhận diện điểm đến mới
+                    });
+                }
+            }
+        }
 
             if (character.map === dest.map && distance(character, dest) <= 25) {
                 currentWaypointIndex++;
@@ -4812,12 +4841,47 @@ async function handleDungeonKeyLogic() {
             return true;
         }
 
-        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset waypoint, tắt cờ và xóa mã instance cũ
+        // Leader hoàn tất hầm ngục -> Reset
         currentWaypointIndex = 0;
         isDoingDungeon = false; 
-        sharedDungeonInstance = null; // Reset mã instance để chuẩn bị cho lượt sau
+        sharedDungeonInstance = null; 
         return false; 
-    }
+    } 
+    else {
+        // --- MEMBER: BÁM THEO LEADER ---
+// --- MEMBER: BÁM THEO LEADER HOẶC ĐUỔI THEO LEADERTARGET ---
+            const leaderEntity = partyEntities.find(p => p.entity.name === LEADER);
+
+            if (leaderEntity) {
+                // 🟢 THẤY LEADER TRONG TẦM NHÌN: Bám sát Leader
+                if (leaderEntity.distance > 80) {
+                    if (!smart.moving || distance(smart.target, leaderEntity.entity) > 30) {
+                        smart_move({ 
+                            map: leaderEntity.entity.map, 
+                            x: leaderEntity.entity.real_x, 
+                            y: leaderEntity.entity.real_y 
+                        });
+                    }
+                    return true;
+                } else {
+                    if (smart.moving) stop("move");
+                    return true;
+                }
+            } else {
+                // 🔴 KHÔNG THẤY LEADER (MẤT TẦM NHÌN): Dùng LeaderTarget qua CM nhưng CHỈ ĐI KHI CÓ TIME MỚI
+                if (lastLeaderTarget && lastLeaderTarget.time !== lastProcessedTargetTime) {
+                    lastProcessedTargetTime = lastLeaderTarget.time; // Cập nhật mốc time để khóa lại, không gọi lại ở các tick sau
+                    
+                    if (!smart.moving) {
+                        smart_move({ map: lastLeaderTarget.map, x: lastLeaderTarget.x, y: lastLeaderTarget.y });
+                        game_log(`🧭 Mất dấu Leader, đang smart_move tới điểm tin: (${lastLeaderTarget.x}, ${lastLeaderTarget.y})`, "#FFA500");
+                    }
+                }
+                return true;
+            }
+        }
+    
+}
 
     // ==========================================
     // LOGIC RIÊNG CHO LEADER & MEMBER KHI Ở NGOÀI HẦM
@@ -4894,6 +4958,10 @@ async function handleDungeonKeyLogic() {
     isDoingDungeon = false;
     return false;
 }
+
+
+
+
 
 // ============================================================
 // CONFIG & STATE 
