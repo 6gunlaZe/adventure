@@ -4756,22 +4756,25 @@ const DUNGEON_WAYPOINTS = [
 ]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
 
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
-let isDoingDungeon = false;    // 🚩 Biến cờ ban đầu là false (rảnh), khi bận đi hầm sẽ tự động bật thành true
+let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
+let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
 
 async function handleDungeonKeyLogic() {
-    // --- BƯỚC 1: KIỂM TRA KEY TRƯỚC ---
-    const hasInventoryKey = locate_item("cryptkey") !== -1;
-    const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
-
-    if (!hasInventoryKey && !hasBackupKey) {
-        currentWaypointIndex = 0;
-        isDoingDungeon = false; // Không có key -> Bot rảnh, tắt cờ để đi làm việc khác
-        return false; 
+    // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
+    if (enteringDungeon) {
+        if (character.map === "crypt") {
+            // Đã load vào map crypt thành công -> Mở khóa cờ chờ
+            enteringDungeon = false;
+        } else {
+            // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận và không check key
+            isDoingDungeon = true;
+            return true;
+        }
     }
 
-    // --- GIAI ĐOẠN 3: Đã vào trong hầm ---
+    // --- 2. NẾU ĐÃ Ở TRONG HẦM (CRYPT) ---
     if (character.map === "crypt") {
-        isDoingDungeon = true; // Đang trong hầm -> Bật cờ bận
+        isDoingDungeon = true; // Bật cờ bận khi ở trong hầm
 
         if (currentWaypointIndex < DUNGEON_WAYPOINTS.length) {
             const dest = DUNGEON_WAYPOINTS[currentWaypointIndex];
@@ -4787,13 +4790,23 @@ async function handleDungeonKeyLogic() {
             return true;
         }
 
-        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset và tắt cờ
+        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset waypoint và tắt cờ
         currentWaypointIndex = 0;
         isDoingDungeon = false; 
         return false; 
     }
 
-    // --- GIAI ĐOẠN 1: Chưa vào hầm & ĐÃ CÓ KEY -> Di chuyển tới vị trí A (Cổng vào) ---
+    // --- 3. KIỂM TRA KEY TRƯỚC KHI ĐI RA CỔNG ---
+    const hasInventoryKey = locate_item("cryptkey") !== -1;
+    const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+
+    if (!hasInventoryKey && !hasBackupKey) {
+        currentWaypointIndex = 0;
+        isDoingDungeon = false; // Không có key -> Tắt cờ bận để bot đi farm bãi thường
+        return false; 
+    }
+
+    // --- 4. CHƯA VÀO HẦM & CÓ KEY -> DI CHUYỂN TỚI CỔNG (VỊ TRÍ A) ---
     const targetMap = DUNGEON_ENTRY_SPOT.map;
     const targetX = DUNGEON_ENTRY_SPOT.x;
     const targetY = DUNGEON_ENTRY_SPOT.y;
@@ -4802,38 +4815,35 @@ async function handleDungeonKeyLogic() {
         if (!smart.moving) {
             smart_move({ map: targetMap, x: targetX, y: targetY });
         }
-        isDoingDungeon = true; // Đang trên đường ra cổng -> Bật cờ bận
+        isDoingDungeon = true; // Bật cờ bận khi đang chạy ra cổng
         return true; 
     }
 
-    // --- GIAI ĐOẠN 2: Đã tới vị trí A và có key -> Tiến hành vào hầm ---
+    // --- 5. ĐÃ TỚI CỔNG & CÓ KEY -> TIẾN HÀNH DÙNG KEY VÀO HẦM ---
     let keyIndex = locate_item("cryptkey");
-    let currentKeyToUse = null;
 
     if (keyIndex !== -1) {
-        currentKeyToUse = 1;
-    } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
-        currentKeyToUse = cryptkeyCHECK.shift();
-        console.log("⚠️ Hết key trong túi, sử dụng key đã lưu từ GitHub issues:", currentKeyToUse);
-        console.log("📌 Danh sách tất cả key còn lại trong mảng cryptkeyCHECK:", cryptkeyCHECK);
-    } else {
-        currentWaypointIndex = 0;
-        isDoingDungeon = false;
-        return false; 
-    }
-
-    if (currentKeyToUse == 1) {
+        // Dùng key có sẵn trong túi
+        enteringDungeon = true; // Bật cờ khóa chờ chuyển map
+        isDoingDungeon = true;  // Bật cờ bận
         enter("crypt");
-    } else {
-        enter("crypt", currentKeyToUse);
+        return true;
+    } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
+        // Dùng key dự phòng từ GitHub
+        let backupKey = cryptkeyCHECK.shift(); // Lấy và xóa key khỏi mảng vì đã đứng sát cổng
+        enteringDungeon = true; // Bật cờ khóa chờ chuyển map
+        isDoingDungeon = true;  // Bật cờ bận
+        
+        console.log("⚠️ Sử dụng key dự phòng từ GitHub issues:", backupKey);
+        console.log("📌 Danh sách key còn lại:", cryptkeyCHECK);
+        
+        enter("crypt", backupKey);
+        return true;
     }
-    
-    isDoingDungeon = true; // Đang gọi lệnh vào hầm -> Bật cờ bận
-    return true;
+
+    isDoingDungeon = false;
+    return false;
 }
-
-
-
 
 
 
