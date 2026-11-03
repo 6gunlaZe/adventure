@@ -3043,6 +3043,7 @@ function tryTemporalSurge() {
 }
 
 
+let sharedDungeonInstance = null; // 🔑 Biến lưu mã instance hầm ngục nhận từ Leader qua CM
 let leaderLoc = null; // Nơi lưu tọa độ realtime của Leader
 
 function on_cm(name, data) {
@@ -3057,6 +3058,12 @@ function on_cm(name, data) {
     if (typeof data === "object" && data !== null) {
         if (data.message === "TemporalTime") {
             temporalState.lastTime = Date.now();
+        }
+
+        // Bắt mã instance hầm ngục do Leader gửi tới
+        if (data.type === "DungeonInstance" && name === LEADER) {
+            sharedDungeonInstance = data.instance;
+            game_log(`🔑 Nhận mã Instance hầm từ Leader: ${sharedDungeonInstance}`, "#00FF00");
         }
 
         // Bắt tọa độ & trạng thái Cave Mode từ Leader gửi tới
@@ -4765,14 +4772,23 @@ async function handleDungeonKeyLogic() {
     // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
     if (enteringDungeon) {
         if (character.map === "crypt") {
-            // Đã load vào map crypt thành công
+            // Đã load vào map crypt thành công -> Mở khóa cờ chờ
             if (isLeader) {
-                // Leader tiến hành ghi chú instance ID lên GitHub
                 ghichu(character.in, "run now", myoke);
+                
+                // Gửi mã instance qua CM cho tất cả thành viên trong party
+                if (character.party) {
+                    for (const memberName in parent.party) {
+                        if (memberName !== character.name) {
+                            send_cm(memberName, { type: "DungeonInstance", instance: character.in });
+                            game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${memberName}`);
+                        }
+                    }
+                }
             }
             enteringDungeon = false;
         } else {
-            // Vẫn đang chờ server đổi map -> Giữ cờ bận
+            // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận
             isDoingDungeon = true;
             return true;
         }
@@ -4796,19 +4812,18 @@ async function handleDungeonKeyLogic() {
             return true;
         }
 
-        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset waypoint và tắt cờ
+        // Đã hoàn tất toàn bộ các bước trong hầm -> Xong việc, reset waypoint, tắt cờ và xóa mã instance cũ
         currentWaypointIndex = 0;
         isDoingDungeon = false; 
+        sharedDungeonInstance = null; // Reset mã instance để chuẩn bị cho lượt sau
         return false; 
     }
 
     // ==========================================
     // LOGIC RIÊNG CHO LEADER & MEMBER KHI Ở NGOÀI HẦM
     // ==========================================
-    let targetInstanceKey = null;
-
     if (isLeader) {
-        // --- CHỈ LEADER MỚI KIỂM TRA KEY & QUYẾT ĐỊNH MỞ CỬA ---
+        // --- CHỈ LEADER MỚI KIỂM TRA KEY & MỞ CỬA ---
         const hasInventoryKey = locate_item("cryptkey") !== -1;
         const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
 
@@ -4836,7 +4851,7 @@ async function handleDungeonKeyLogic() {
         if (keyIndex !== -1) {
             enteringDungeon = true;
             isDoingDungeon = true;
-            enter("crypt"); // Leader mở instance mới
+            enter("crypt");
             return true;
         } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
             let backupKey = cryptkeyCHECK.shift();
@@ -4844,24 +4859,18 @@ async function handleDungeonKeyLogic() {
             isDoingDungeon = true;
             
             console.log("⚠️ Leader sử dụng key dự phòng từ GitHub:", backupKey);
-            enter("crypt", backupKey); // Mở bằng key dự phòng
+            enter("crypt", backupKey);
             return true;
         }
 
     } else {
-        // --- MEMBER: CHỜ LEADER MỞ HẦM VÀ LẤY INSTANCE ID ---
-        // Cách nhận diện Leader đã vào hầm: Kiểm tra xem party leader có đang ở map "crypt" và có instance ID (`parent.party[LEADER]?.in` hoặc qua thông tin game truyền tới)
-        const leaderData = parent.party && parent.party[LEADER];
-        
-        // Nếu Leader chưa vào hầm hoặc chưa có instance, Member đứng yên hoặc làm việc khác (hoặc đi ra cổng chờ sẵn)
-        if (!leaderData || leaderData.map !== "crypt" || !leaderData.in) {
+        // --- MEMBER: CHỜ NHẬN MÃ INSTANCE QUA CM CỦA LEADER ---
+        if (!sharedDungeonInstance) {
             isDoingDungeon = false;
-            return false; // Leader chưa mở hầm -> Member tự do farm bãi thường
+            return false; // Chưa nhận được mã từ Leader -> Rảnh, đi farm bình thường
         }
 
-        // Khi Leader đã vào hầm và có instance ID (`leaderData.in`), Member tiến hành di chuyển ra cổng và vào chung
-        targetInstanceKey = leaderData.in;
-
+        // Đã có mã instance từ Leader -> Di chuyển ra cổng
         const targetMap = DUNGEON_ENTRY_SPOT.map;
         const targetX = DUNGEON_ENTRY_SPOT.x;
         const targetY = DUNGEON_ENTRY_SPOT.y;
@@ -4874,18 +4883,17 @@ async function handleDungeonKeyLogic() {
             return true; 
         }
 
-        // Đã tới cổng -> Dùng mã instance ID của Leader để enter vào chung party
+        // Đã tới cổng -> Dùng mã instance nhận được từ Leader để enter vào chung
         enteringDungeon = true;
         isDoingDungeon = true;
-        console.log(`🤝 Member [${character.name}] đang vào chung hầm với Leader theo mã instance:`, targetInstanceKey);
-        enter("crypt", targetInstanceKey);
+        console.log(`🤝 Member [${character.name}] vào chung hầm với mã:`, sharedDungeonInstance);
+        enter("crypt", sharedDungeonInstance);
         return true;
     }
 
     isDoingDungeon = false;
     return false;
 }
-
 
 // ============================================================
 // CONFIG & STATE 
