@@ -3760,13 +3760,16 @@ const GEAR_LOGIC = {
         if (hasPhysical && hasMagical) return "def_mixed";
         if ( character.map == "uhills" ) return "def_mixed";
 		
+
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
+        const defenseSets = ["def_mixed", "dame"]; // Các set phòng thủ hợp lệ của bạn
+		
         if (now - lastDefCheck < 5000) {
-            return currentSet || "def_mixed"; // Chưa đủ 5s -> giữ nguyên set hiện tại
+            return defenseSets.includes(currentSet) ? currentSet : "def_mixed"; 
         }
+		
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
-        // -------------------------
 
         if (hasPhysical) return "def_mixed";
         if (hasMagical) return "def_mixed";
