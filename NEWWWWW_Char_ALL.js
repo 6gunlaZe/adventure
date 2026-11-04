@@ -173,7 +173,8 @@ function scanAll() {
         const entity = parent.entities[id];
         if (!entity) continue;
 		if (entity.dead || !entity.visible) continue;
-		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc")continue;
+		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc") continue;
+		if (landau && entity.mtype == "a3") continue;
         const dist = distance(character, entity);
 
         // MONSTER
@@ -4799,7 +4800,7 @@ const DUNGEON_WAYPOINTS = [
 
 	
 ]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
-
+let landau = false;           // 🚩 Biến cờ báo hiệu đây là lần đi hầm ngục đầu tiên
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
 let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
 let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
@@ -4911,6 +4912,7 @@ if (character.map === "crypt") {
 		else isDoingDungeon = true; 
 		
         currentWaypointIndex = 0;
+		landau = false; 
         sharedDungeonInstance = null; 
             // đã hoàn tất một hầm ngục, reset lại các nhân vật
             for (const memberName in parent.party) {
@@ -4988,6 +4990,7 @@ if (character.map === "crypt") {
         if (keyIndex !== -1) {
             enteringDungeon = true;
             isDoingDungeon = true;
+			landau = true; 
             enter("crypt");
             return true;
         } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
