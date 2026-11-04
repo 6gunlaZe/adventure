@@ -4857,14 +4857,20 @@ if (character.map === "crypt") {
             }
         }
 
-         // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP
+         // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP   isAnyMemberLowHP
           if (!areAllPartyMembersReady()) {
              if (smart.moving) {
                  stop("move");
              }
              return true; 
          }
-
+          // logic thoát sớm khi yếu máu hoặc kẹt quái quá mạnh
+          if (isAnyMemberLowHP())
+		  {
+			  await markIssueDone(character.in, myoke);
+			  parent.api_call("disconnect_character", {name: "haiz"}); 
+		  }
+			
           // logic đánh boss
           if (currentTarget && !currentTarget.dead) {
               const dist = distance(character, currentTarget);
@@ -5068,6 +5074,44 @@ function areAllPartyMembersReady() {
 
     return false; // Chưa đủ số lượng đồng đội ở gần (hoặc chưa login/chưa vào kịp)
 }
+
+
+
+// --- HÀM KIỂM TRA XEM CÓ ĐỒNG ĐỘI (HOẶC CHÍNH MÌNH) NÀO MÁU DƯỚI 3000 KHÔNG ---
+function isAnyMemberLowHP() {
+    // 1. Kiểm tra máu của chính nhân vật hiện tại trước
+    if (character.hp < 3000) {
+        return true;
+    }
+
+    // Nếu không có party thì chỉ cần xét mỗi character là đủ
+    if (!parent.party) return false;
+
+    // 2. Duyệt qua tất cả các thành viên trong party
+    for (const name in parent.party) {
+        // Bỏ qua chính mình (đã check ở trên) hoặc merchant
+        if (name === character.name || name === MERCHANT) continue;
+
+        // Tìm thông tin thực tế của thành viên trong mảng partyEntities
+        const memberEntity = partyEntities.find(p => p.entity.name === name);
+
+        // Nếu tìm thấy thành viên, còn sống (!rip), và HP < 3000
+        if (memberEntity && !memberEntity.entity.rip && memberEntity.entity.hp < 3000) {
+            return true; // Phát hiện có người máu thấp dưới 3000
+        }
+
+        if (memberEntity.entity.rip) {
+            return true; // Phát hiện có người tèo
+        }
+		
+    }
+
+    return false; // Không có ai máu dưới 3000
+}
+
+
+
+
 
 
 
