@@ -2696,6 +2696,13 @@ setTimeout(() => {
 function on_party_request(n) {
     if (character.name === LEADER && PARTY.includes(n) && n !== LEADER && !isCaveMode ) {
         accept_party_request(n);
+
+		                // giửi kèm lệnh đi hầm ngục khi đã ở trong map
+		                if (n !== character.name && n !== MERCHANT && (character.map === "crypt") ) {
+                            send_cm(n, { type: "DungeonInstance", instance: character.in });
+                            game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${n}`);
+                        }
+		
     }
 }
 
