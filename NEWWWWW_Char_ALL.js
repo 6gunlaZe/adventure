@@ -3750,7 +3750,10 @@ const GEAR_LOGIC = {
 
 		setBooster('xpbooster');
 
-		if (smart.moving) return "movebufff";
+		if (smart.moving){
+			lastDefCheck = 0;
+			return "movebufff";
+		}
 
         if (hasTargetForDame) return "dame";
         if (hasPhysical && hasMagical) return "def_mixed";
