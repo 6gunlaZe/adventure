@@ -4841,14 +4841,38 @@ if (character.map === "crypt") {
             }
         }
 
-       // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP
+         // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP
           if (!areAllPartyMembersReady()) {
              if (smart.moving) {
                  stop("move");
              }
              return true; 
          }
-			
+
+          // logic đánh boss
+          if (currentTarget && !currentTarget.dead) {
+              const dist = distance(character, currentTarget);
+              const safeAttackRange = Math.max(30, character.range - 70);
+              if (dist < 150) {
+                  if (dist > safeAttackRange) {
+                      if (can_move_to(currentTarget.x, currentTarget.y)) {
+                          if (smart.moving) stop("smart");
+                          move(
+                              character.x + (currentTarget.x - character.x) * 0.4,
+                              character.y + (currentTarget.y - character.y) * 0.4
+                          );
+                      } else if (!smart.moving) {
+                          await safeSmartMove({ map: character.map, x: currentTarget.x, y: currentTarget.y });
+                      }
+                  } else {
+                      //đang ổn định đánh boss
+                      if (smart.moving) stop("smart");
+                  }
+                  return true; 
+              }
+          }
+
+
 
             if (character.map === dest.map && distance(character, dest) <= 25) {
                 currentWaypointIndex++;
