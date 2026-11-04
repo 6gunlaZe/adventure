@@ -4668,6 +4668,37 @@ const DUNGEON_WAYPOINTS = [
 
 	
 ]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
+
+
+const DUNGEON_WAYPOINTS1 = [
+    { map: "crypt", x: 0, y: -100 },
+    { map: "crypt", x: 0, y: -300 },
+    { map: "crypt", x: -50, y: -472 },
+    { map: "crypt", x: -200, y: -500 },
+    { map: "crypt", x: -200, y: -700 },
+    { map: "crypt", x: -200, y: -900 },
+    { map: "crypt", x: -127, y: -1082 },
+    { map: "crypt", x: 100, y: -1082 },
+    { map: "crypt", x: 350, y: -1082 },
+    { map: "crypt", x: 375, y: -1270 },
+    { map: "crypt", x: 600, y: -1480 },
+    { map: "crypt", x: 850, y: -1480 },
+    { map: "crypt", x: 1100, y: -1480 },
+    { map: "crypt", x: 1350, y: -1480 },
+    { map: "crypt", x: 1600, y: -1480 },
+    { map: "crypt", x: 1780, y: -1480 },
+    { map: "crypt", x: 1780, y: -1740 },
+    { map: "crypt", x: 1980, y: -1740 },
+    { map: "crypt", x: 2180, y: -1740 },
+    { map: "crypt", x: 2380, y: -1740 },
+    { map: "crypt", x: 2580, y: -1740 },
+    { map: "crypt", x: 2690, y: -1740 },
+
+]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
+
+
+
+
 let landau = false;           // 🚩 Biến cờ báo hiệu đây là lần đi hầm ngục đầu tiên
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
 let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
@@ -4706,9 +4737,13 @@ if (character.map === "crypt") {
     isDoingDungeon = true; 
 
     if (isLeader) {
+
+		//LỰA CHỌN ĐƯỜNG DẪN TÙY THEO LOGIC
+		const waypoints = landau ? DUNGEON_WAYPOINTS : DUNGEON_WAYPOINTS1;
+		
         // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI ---
-        if (currentWaypointIndex < DUNGEON_WAYPOINTS.length) {
-            const dest = DUNGEON_WAYPOINTS[currentWaypointIndex];
+        if (currentWaypointIndex < waypoints.length) {
+            const dest = waypoints[currentWaypointIndex];
 
         // 📤 Gửi tọa độ kèm timestamp hiện tại cho party
         if (character.party) {
