@@ -3681,7 +3681,7 @@ const GEAR_LOGIC = {
     Ynhi: function() {
 		if (vipBossTarget) return "luck_full";
         // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
-        if (character.s?.burned) return "def_fire";
+       // if (character.s?.burned) return "def_fire";
 		
         let Tinyguy = false; // Cờ bật khi phát hiện quái boss yếu xung quanh
 
@@ -3751,7 +3751,7 @@ const GEAR_LOGIC = {
 
 		setBooster('xpbooster');
 
-		if (smart.moving){
+		if (smart.moving && character.map != "crypt"){
 			lastDefCheck = 0;
 			return "movebufff";
 		}
@@ -4127,141 +4127,6 @@ if (character.name != "6gunlaZe") return
 }
 // Tự động gọi hàm sell_trash_items mỗi 4000ms (4 giây)
 setInterval(sell_trash_items, 4000);
-
-////////////////////////////////
-// Tạm tắt vì chơi chế độ cave nên đi solo
-////////////////////////////////
-/*
-function broadcastLeaderLoc() {
-    if (character.name !== LEADER || !parent.party_list) return;
-
-    for (const name of parent.party_list) {
-        if (name === character.name) continue;
-        
-        send_cm(name, {
-            type: "LeaderLoc",
-            x: character.real_x,
-            y: character.real_y,
-            map: character.map,
-            caveMode: isCaveMode // Đính kèm trạng thái Cave Mode hiện tại của Leader
-        });
-    }
-}
-
-// Chạy vòng lặp phát tín hiệu (500ms)
-setInterval(broadcastLeaderLoc, 2500);
-
-function caveModeFollow() {
-    if (!isCaveMode || character.name === LEADER) return;
-    
-    // Nếu đang dở smart_move (chạy xa) thì chờ chạy xong, tránh loạn lệnh
-    if (smart.moving) return;
-
-    // 1. Dùng SCAN_ALL: Kiểm tra xem Leader có đang trên màn hình không
-    const leaderEntry = partyEntities.find(p => p.entity.name === LEADER);
-
-    if (leaderEntry) {
-        // TRƯỜNG HỢP A: Leader đang trong tầm nhìn -> Áp sát mượt mà
-        const leaderEntity = leaderEntry.entity;
-        const dist = distance(character, leaderEntity);
-
-        if (dist > 150) {
-            // Tản ra quanh leader 20 pixel để tránh đè lên nhau
-            xmove(
-                leaderEntity.x + (Math.random() * 40 - 20), 
-                leaderEntity.y + (Math.random() * 40 - 20)
-            );
-        }
-    } else {
-        // TRƯỜNG HỢP B: Leader đã ngoài tầm nhìn (Khuất xa hoặc đổi Map)
-        // Lấy tọa độ từ Code Message để smart_move
-        if (leaderLoc) {
-            // Kiểm tra khác map, hoặc nếu cùng map nhưng khoảng cách > 300 thì mới gọi smart_move
-            // Không dùng distance() nếu khác map để tránh lỗi null
-            const isDifferentMap = character.map !== leaderLoc.map;
-            const isFarAway = !isDifferentMap && distance(character, leaderLoc) > 300;
-
-            if (isDifferentMap || isFarAway) {
-                // smart_move nhận thẳng object có {x, y, map} rất xịn
-                smart_move(leaderLoc);
-                game_log(`🏃‍♂️ Chạy theo ${LEADER} tới map: ${leaderLoc.map}`, "#00FFFF");
-            }
-        }
-    }
-}
-
-// Vòng lặp check cave
-setInterval(caveModeFollow, 750);
-
-// Gọi hàm này trên Leader để bật/tắt cho toàn bộ team
-function toggleCave() {
-    isCaveMode = !isCaveMode;
-    game_log(`👑 LEADER: Đã ${isCaveMode ? "BẬT" : "TẮT"} Cave Mode`, "#FFFF00");
-}
-
-
-let last_cave_choice = null;
-
-// Từ khóa ưu tiên chọn đường Combat/Đánh nhau
-const CAV_COMBAT_KEYWORDS = [
-    "attack", "fight", "battle", "combat", "kill", "strike", "defeat",
-    "tấn công", "chiến đấu", "đánh", "giết"
-];
-
-character.on("cave", async (state) => {
-    const choice = state?.choice;
-    
-    // Guard Clauses: Bỏ qua nếu không có lựa chọn, đã giải quyết, hoặc đã chọn trước đó
-    if (!choice || choice.resolved || choice.id === last_cave_choice) return;
-
-    const options = choice.options || [];
-
-    // Lọc các option miễn phí (Gold = 0, Amber = 0) và chưa bị khóa
-    const validOptions = options.filter(o => 
-        o && !o.unavailable && Number(o.cost || 0) === 0 && Number(o.amber || 0) === 0
-    );
-
-    if (validOptions.length === 0) return;
-
-    const textOf = o => String(o.label || "").toLowerCase();
-
-    // 1. Ưu tiên 1: Chọn option chứa từ khóa Combat trực tiếp
-    let selected = validOptions.find(o => {
-        const text = textOf(o);
-        return CAV_COMBAT_KEYWORDS.some(word => text.includes(word));
-    });
-
-    // 2. Ưu tiên 2: "Save ... fight"
-    if (!selected) {
-        selected = validOptions.find(o => {
-            const text = textOf(o);
-            return text.includes("save") && (
-                text.includes("fight") || text.includes("battle") || 
-                text.includes("combat") || text.includes("chiến đấu")
-            );
-        });
-    }
-
-    // 3. Ưu tiên 3: Nếu không có lựa chọn đánh nhau -> Lấy option đầu tiên từ trên xuống
-    if (!selected) {
-        selected = validOptions[0];
-    }
-
-    // Đánh dấu đã xử lý ID này
-    last_cave_choice = choice.id;
-
-    // Thực thi reply trực tiếp trên từng Client
-    try {
-        await cave_reply(choice.id, selected.id);
-        game_log(`🏰 Auto Cave Choice: ${selected.label || selected.id}`, "#00FF00");
-    } catch (e) {
-        // Bỏ qua lỗi nếu reply bị timeout hoặc trùng tick
-    }
-});
-
-
-*/
-
 
 
 
