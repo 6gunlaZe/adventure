@@ -4931,6 +4931,10 @@ if (character.map === "crypt") {
                     return true;
                 } else {
                     if (smart.moving) stop("move");
+					const angle = Math.random() * Math.PI * 2;
+                    const targetX = leaderEntity.entity.real_x + Math.cos(angle) * 20;
+                    const targetY = leaderEntity.entity.real_y + Math.sin(angle) * 20;
+                    xmove(targetX, targetY);
                     return true;
                 }
             } else {
