@@ -4773,7 +4773,7 @@ if (character.map === "crypt") {
         }
 
         // Leader hoàn tất hầm ngục -> Reset
-		await markIssueDone(character.in, myoke);
+		if (!landau) await markIssueDone(character.in, myoke);
 
         // --- CHECK LẠI 1 LẦN NỮA XEM CÒN KEY ĐỂ CHƠI TIẾP TỤC KHÔNG ---
         const TRONGTUI = locate_item("cryptkey") !== -1;
