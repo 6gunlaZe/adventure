@@ -4879,7 +4879,7 @@ if (character.map === "crypt") {
                  stop_character(memberName);
                 }
             }
-		
+		await use_skill("town"); 
         await smart_move({ map: "cave", x: -194, y: -1281 });
 		
         return false; 
