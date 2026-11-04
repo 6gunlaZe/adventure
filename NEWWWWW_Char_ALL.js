@@ -4751,9 +4751,9 @@ if (character.map === "crypt") {
                 if (memberName !== character.name && memberName !== MERCHANT) {
                     send_cm(memberName, { 
                         type: "LeaderTarget", 
-                        x: dest.x, 
-                        y: dest.y, 
-                        map: dest.map, 
+                        x: character.x, 
+                        y: character.y, 
+                        map: character.map, 
                         time: Date.now() // ⏱️ Mốc thời gian để nhận diện điểm đến mới
                     });
                 }
