@@ -4776,10 +4776,22 @@ const DUNGEON_ENTRY_SPOT = { map: "cave", x: -195, y: -1298 }; // Tọa độ c�
 const DUNGEON_WAYPOINTS = [
     { map: "crypt", x: 0, y: -100 },
     { map: "crypt", x: 0, y: -300 },
-    { map: "crypt", x: 50, y: -472 },
+    { map: "crypt", x: -50, y: -472 },
     { map: "crypt", x: -200, y: -500 },
     { map: "crypt", x: -200, y: -700 },
     { map: "crypt", x: -200, y: -900 },
+    { map: "crypt", x: -127, y: -1082 },
+    { map: "crypt", x: 100, y: -1082 },
+    { map: "crypt", x: 300, y: -1082 },
+    { map: "crypt", x: 500, y: -1082 },
+    { map: "crypt", x: 725, y: -1076 },
+    { map: "crypt", x: 725, y: -900 },
+    { map: "crypt", x: 905, y: -614 },
+    { map: "crypt", x: 961, y: -400 },
+    { map: "crypt", x: 1100, y: -400 },
+    { map: "crypt", x: 1300, y: -400 },
+    { map: "crypt", x: 1450, y: -475 },
+
 
 
 	
