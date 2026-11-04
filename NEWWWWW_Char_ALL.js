@@ -4945,7 +4945,7 @@ function areAllPartyMembersReady() {
 // --- HÀM KIỂM TRA XEM CÓ ĐỒNG ĐỘI (HOẶC CHÍNH MÌNH) NÀO MÁU DƯỚI 3000 KHÔNG ---
 function isAnyMemberLowHP() {
     // 1. Kiểm tra máu của chính nhân vật hiện tại trước
-    if (character.hp < 3000) {
+    if (character.hp < 3000 || character.rip) {
         return true;
     }
 
