@@ -4937,7 +4937,7 @@ if (character.map === "crypt") {
 
             if (leaderEntity) {
                 // 🟢 THẤY LEADER TRONG TẦM NHÌN: Bám sát Leader
-                if (leaderEntity.distance > 80) {
+                if (leaderEntity.distance > 40) {
                          if (!smart.moving)xmove(leaderEntity.entity.real_x, leaderEntity.entity.real_y);
                     return true;
                 } else {
