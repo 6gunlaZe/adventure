@@ -60,6 +60,7 @@ const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
 const MODE = { FARM: "farm", OTHER: "other" };
 let mode = MODE.FARM;
+let fram_bscorpion = false;
 let isCaveMode = false;
 
 // Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUA BAN
@@ -2615,6 +2616,8 @@ function manageChars() {
         : (activeBoss ? activeBoss.id : null);
 
 	if (Viecquantrong)currentEvent = null;
+	
+	if (fram_bscorpion)currentEvent = "bscorpion";
 
 	
     const now = Date.now();
@@ -2624,8 +2627,8 @@ function manageChars() {
 
         const isRunning = parent.party_list.includes(charName);
         const shouldRun = currentEvent 
-            ? (config.events && config.events.includes(currentEvent)) 
-            : !!config.home;
+            ? (config.events && config.events.includes(currentEvent))         // Nếu có sự kiện hiện tại: TRUE khi sự kiện đó nằm trong danh sách config.events
+            : !!config.home;                                                  // Nếu không có sự kiện: xác định dựa vào việc config.home có được cấu hình hay không
 
 
         // =========================================================
