@@ -4805,6 +4805,7 @@ let landau = false;           // 🚩 Biến cờ báo hiệu đây là lần đ
 let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
 let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
 let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
+let dungeonAttemptTime = 0;    // ⏱️ Thêm biến ghi nhận thời điểm bắt đầu gọi lệnh vào hầm
 
 async function handleDungeonKeyLogic() {
     const isLeader = (character.name === LEADER);
@@ -4828,6 +4829,16 @@ async function handleDungeonKeyLogic() {
             }
             enteringDungeon = false;
         } else {
+
+            // 🛡️ BỔ SUNG: Kiểm tra quá thời gian chờ (Ví dụ: quá 7 giây mà không vào được map crypt)
+            if (Date.now() - dungeonAttemptTime > 7000) {
+                game_log(`⚠️ Vào hầm thất bại hoặc quá hạn! Reset trạng thái kẹt.`, "#FF0000");
+				await markIssueDone(character.in, myoke);
+                enteringDungeon = false;
+                isDoingDungeon = false;
+                return false;
+            }
+			
             // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận
             isDoingDungeon = true;
             return true;
@@ -5000,6 +5011,7 @@ if (character.map === "crypt") {
         let keyIndex = locate_item("cryptkey");
         if (keyIndex !== -1) {
             enteringDungeon = true;
+			dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
             isDoingDungeon = true;
 			landau = true; 
             enter("crypt");
@@ -5007,6 +5019,7 @@ if (character.map === "crypt") {
         } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
             let backupKey = cryptkeyCHECK.shift();
             enteringDungeon = true;
+			dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
             isDoingDungeon = true;
             
             console.log("⚠️ Leader sử dụng key dự phòng từ GitHub:", backupKey);
@@ -5036,6 +5049,7 @@ if (character.map === "crypt") {
 
         // Đã tới cổng -> Dùng mã instance nhận được từ Leader để enter vào chung
         enteringDungeon = true;
+		dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
         isDoingDungeon = true;
         console.log(`🤝 Member [${character.name}] vào chung hầm với mã:`, sharedDungeonInstance);
         enter("crypt", sharedDungeonInstance);
