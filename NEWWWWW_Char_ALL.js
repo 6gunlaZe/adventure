@@ -176,12 +176,20 @@ function scanAll() {
 		if (entity.dead || !entity.visible) continue;
 		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc") continue;
 		if (landau && entity.mtype == "a3") continue;
+		
         const dist = distance(character, entity);
 
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 
+            if (fram_bscorpion && !entity.target) continue;
 
+            if (entity.mtype === "fieldgen0") {
+                fieldgens.push({ entity: entity, distance: dist });
+                continue;
+            }
+
+			
             //Kiểm tra VIP Boss cần farm level
             if (FARM_vipbosss[entity.mtype]) {
                  const bossConfig = FARM_vipbosss[entity.mtype];
@@ -201,11 +209,6 @@ function scanAll() {
                 updateWorldBossTracker(entity);
             }
 			
-			
-            if (entity.mtype === "fieldgen0") {
-                fieldgens.push({ entity: entity, distance: dist });
-                continue;
-            }
 			
             monsters.push({ entity: entity, distance: dist });
             
