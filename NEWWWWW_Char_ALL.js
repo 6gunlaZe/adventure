@@ -46,8 +46,8 @@ const CHAR_CONFIG = {
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }
-	
+    "MuaBan": { slot: fram_bscorpion ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }
+	// MuaBan tự động chuyển sang chế độ fram bscorpion khi cờ fram_bscorpion được bật
 };
 
 
@@ -60,10 +60,10 @@ const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
 const MODE = { FARM: "farm", OTHER: "other" };
 let mode = MODE.FARM;
-let fram_bscorpion = false;
+let fram_bscorpion = false;  // bật tắt chế độ fram solo quái bscorpion để cày primming
 let isCaveMode = false;
 
-// Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUA BAN
+// Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUABAN
 const TRASH_ITEMS = [
   "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead11111", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
@@ -229,6 +229,7 @@ function scanAll() {
             }
             if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
                 merchant = entity;
+				if (fram_bscorpion && dist < 150) SAFE = true;
             }
 			
             if (entity.ctype === "priest") {
