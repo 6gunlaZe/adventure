@@ -3190,7 +3190,6 @@ const EQUIPMENT_SETS = {
 		
         dame2: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
 
@@ -3208,7 +3207,6 @@ const EQUIPMENT_SETS = {
         mana: [
 			
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        //{ itemName: "vhammer", slot: "offhand", level: 9, l: "s" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
 
@@ -3225,13 +3223,28 @@ const EQUIPMENT_SETS = {
         luck: [
 			
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "mshield", slot: "offhand", level: 7, l: "l" },
-
-        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
-        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
-        { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" } 
+        { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" } 
 			
         ],
+
+        luck_full: [
+
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+	    { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+		
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
+        { itemName: "ringofluck", slot: "ring2", l: "s"  },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+
+            
+        ],
+		
 
         single: [
 
@@ -3496,28 +3509,28 @@ const EQUIPMENT_SETS = {
         ],
         luck_full: [
 
-	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
+	    { itemName: "mshield", slot: "offhand", l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "cloverstud", slot: "earring2", level: 3, l: "s"  },
-        { itemName: "cloverstud", slot: "earring1", level: 3, l: "l"  },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
 		
 	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
-        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
         { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
         { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
-        { itemName: "ringofluck", slot: "ring2", level: 0, l: "s"  },
+        { itemName: "ringofluck", slot: "ring2", l: "s"  },
             
         ],
         luck_def: [
 
-	    { itemName: "mshield", slot: "offhand", level: 8, l: "l" },
+	    { itemName: "mshield", slot: "offhand", l: "l" },
         { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "rabbitsfoot", slot: "orb", level: 3, l: "l" },
-        { itemName: "ringofluck", slot: "ring1", level: 0, l: "l"  },
-        { itemName: "cloverstud", slot: "earring2", level: 3, l: "s"  },
-        { itemName: "cloverstud", slot: "earring1", level: 3, l: "l"  },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
 		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
             
         ],
