@@ -2269,10 +2269,14 @@ if (!Viecquantrong)
             if (dist > safeAttackRange) {
                 if (can_move_to(bossEntity.x, bossEntity.y)) {
                     if (smart.moving) stop("smart");
+					if(character.name === LEADER) move(bossEntity.x, bossEntity.y);
+					else
+					{
                     move(
                         character.x + (bossEntity.x - character.x) * 0.4,
                         character.y + (bossEntity.y - character.y) * 0.4
                     );
+					}
                 } else if (!smart.moving) {
                     await safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
                 }
