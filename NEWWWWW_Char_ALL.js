@@ -2416,7 +2416,7 @@ if (!Viecquantrong)
         .finally(() => { 
            // farmingMoving = false; 
         });
-}, fram_bscorpion ? 350 : 500);
+}, fram_bscorpion ? 350 : 700);
 
 
 
