@@ -46,7 +46,7 @@ const CHAR_CONFIG = {
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 20, elixir: "pumpkinspice" },
    // "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher",], elixir: "elixirluck" }
+    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }
 	
 };
 
