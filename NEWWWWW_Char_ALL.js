@@ -3863,6 +3863,9 @@ const GEAR_LOGIC = {
     },
     // ---- Logic của haiz ----
 "haiz": function() {
+	
+    if (fram_bscorpion) return null;
+
     if (vipBossTarget) return "luck";
     let needNormalDef = false;
     let needLuck = false;
