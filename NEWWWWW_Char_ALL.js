@@ -2018,6 +2018,23 @@ function hasEngagedBoss(entity) {
 
 
 function getActiveWorldBoss() {
+
+
+
+    // =========================================================================
+    // ƯU TIÊN 0: ÉP SỰ KIỆN THỦ CÔNG QUA CỜ CẤU HÌNH
+    // =========================================================================
+    if (fram_bscorpion) {
+        return {
+            id: "bscorpion",
+            map: "desertland",
+            x: -420,
+            y: -1350,
+            entity: null // Không truyền entity thật để logic di chuyển/tìm quái ngoài map xử lý
+        };
+    }
+
+
     const status = server.status || parent?.S;
 
     // =========================================================================
