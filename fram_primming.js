@@ -3,7 +3,7 @@
 // ==========================================
 const CONFIG = {
     MONSTER_TYPE: "bscorpion",                        // Loại quái cần dụ
-    WAITING_SPOT: { map: "desertland", x: -422, y: -1114 }, // Tọa độ điểm chờ duy nhất
+    WAITING_SPOT: { map: "desertland", x: -405, y: -1246 }, // Tọa độ điểm chờ duy nhất
     KITE_CENTER:  { x: -405, y: -1246 },               // Tọa độ tâm B để kite vòng tròn
     
     // 🟢 TÁCH 2 NGƯỠNG ĐỘC LẬP THEO ĐÚNG Ý BÁC:
@@ -155,6 +155,8 @@ function use_hp_or_mp1() {
 	if (character.mp / character.max_mp < 0.2) skill = "use_mp";
 	else if (character.hp / character.max_hp < 0.6) skill = "use_hp";
 	else if (character.mp / character.max_mp < 0.9) skill = "use_mp";
+	else if (character.hp / character.max_hp < 0.9) skill = "use_hp";
+
 	if (!skill) return resolving_promise({ reason: "full", success: false, used: false });
 	last_potion = new Date();
 	return use_skill(skill);
