@@ -3185,13 +3185,19 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
 
+        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
         ],
 		
         dame2: [
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
 
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
@@ -3202,13 +3208,40 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
+        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
         ],
+
+
+        dame3: [
+			
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+        ],
+		
 		
         mana: [
 			
         { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
         { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
 
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
@@ -3218,6 +3251,10 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+
+        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
         ],
         luck: [
@@ -3242,6 +3279,13 @@ const EQUIPMENT_SETS = {
         { itemName: "ringofluck", slot: "ring2", l: "s"  },
         { itemName: "ringofluck", slot: "ring1", l: "l"  },
 
+        { itemName: "wshoes", slot: "shoes", l: "l" },
+        { itemName: "wcap", slot: "helmet", l: "l" },
+        { itemName: "wgloves", slot: "gloves", l: "l" },
+        { itemName: "wattire", slot: "chest", l: "l" },
+        { itemName: "wbreeches", slot: "pants", l: "l" },
+
+			
             
         ],
 		
@@ -3258,6 +3302,12 @@ const EQUIPMENT_SETS = {
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
 			
 		],
 		
