@@ -1,6 +1,8 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
+let fram_bscorpion = false;  // bật tắt chế độ fram solo quái bscorpion để cày primming
+
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
 const MERCHANT = "MuaBan";
@@ -60,7 +62,6 @@ const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
 
 const MODE = { FARM: "farm", OTHER: "other" };
 let mode = MODE.FARM;
-let fram_bscorpion = false;  // bật tắt chế độ fram solo quái bscorpion để cày primming
 let isCaveMode = false;
 
 // Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUABAN
