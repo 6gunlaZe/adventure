@@ -2416,7 +2416,7 @@ if (!Viecquantrong)
         .finally(() => { 
            // farmingMoving = false; 
         });
-}, 500);
+}, 400);
 
 
 
