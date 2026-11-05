@@ -22,7 +22,7 @@ const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stonewo
 
 
 //HOẠT ĐỘNG SĂN CÁC BOSS SAU
-const WORLD_BOSSES = ["mrpumpkin", "mrgreen",];
+const WORLD_BOSSES = ["mrpumpkin", "mrgreen","bscorpion"];
 
 //THEO DÕI ĐIỂM ĐÓNG GÓP - BẬT THÔNG BÁO CÁC BOSS SAU
 const TRACKER_BOSSES = ["mrpumpkin", "mrgreen","crabxx","icegolem","horseman","gargoyle","dragold","franky"];
@@ -2033,8 +2033,8 @@ function getActiveWorldBoss() {
         return {
             id: "bscorpion",
             map: "desertland",
-            x: -420,
-            y: -1350,
+            x: -405,
+            y: -1246,
             entity: null // Không truyền entity thật để logic di chuyển/tìm quái ngoài map xử lý
         };
     }
