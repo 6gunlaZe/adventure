@@ -7,9 +7,9 @@ const LEADER = "haiz";
 
 // Danh sách item rác sẽ tự động bán
 const TRASH_ITEMS = [
-"basher", "beewings", "blade1111", "broom11", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
+"basher", "beewings", "blade1111", "broom11", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe","homecominghelm","homecomingcoat","homecomingcape",
   "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
-  "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
+  "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers","candleward",
   "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt","mcape","lantern",
   "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","bowofthedead","cave_locktooth","glolipop",
   "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
@@ -361,10 +361,10 @@ var upgradeWhitelistVIPP = {
 	group_vip: ["vattire","vstaff"],
 	group_vip1: ["starkillers1111","vhammer111","vdagger","xhelmet"],
 	group_vip2: ["supermittens",],
-	group_vip3: ["harbringer","homecominghelm","homecomingcoat","homecomingcape",],
-	group_vip4: ["candleward",],
+	group_vip3: ["harbringer","homecominghelm1","homecomingcoat1","homecomingcape1",],
+	group_vip4: ["candleward1",],
 	group_vip5: ["reunionbow","djinncrown"],
-	group_vip6: ["paradequiver",],
+	group_vip6: ["paradequiver1",],
 	group_Supervip: ["fury11",],
 
 	
