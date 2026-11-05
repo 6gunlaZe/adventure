@@ -3239,6 +3239,13 @@ const EQUIPMENT_SETS = {
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
         ],
+
+        dame4: [
+			
+        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+
+        ],
 		
 		
         mana: [
@@ -3869,7 +3876,7 @@ const GEAR_LOGIC = {
     // ---- Logic của haiz ----
 "haiz": function() {
 	
-    if (fram_bscorpion) return null;
+    if (fram_bscorpion) return "dame4";
 
     if (vipBossTarget) return "luck";
     let needNormalDef = false;
