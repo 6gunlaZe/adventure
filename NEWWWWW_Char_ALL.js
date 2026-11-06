@@ -502,7 +502,7 @@ const REVERSE_3SHOT_MONSTERS = ["crab"];
 async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.3) return false;
     if (!character.cave && monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
-        await useAttack();
+        await useAdvancedAttack();
         return false;
     }
     // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
@@ -552,7 +552,7 @@ async function use_multi_shot() {
         // 3. Chọn mục tiêu & Thi triển skill
         const targets = valid.slice(0, 5);
         if (targets.length < 2) {
-            await useAttack();
+            await useAdvancedAttack();
             return false;
         }
         
@@ -565,7 +565,7 @@ async function use_multi_shot() {
         }
 
         if (character.mp < G.skills[skill].mp + 300) { // chỉ đủ mana để đánh thường
-            await useAttack();
+            await useAdvancedAttack();
             return false;
         }
 
@@ -2863,6 +2863,8 @@ async function skillLoop() {
                 case "ranger":
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+
+					ensure_equipped_batch(CUNG_DAME);
 					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
 
 					if (await trySuperShot()) return setTimeout(skillLoop, 10);
@@ -3737,6 +3739,9 @@ const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","fr
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
+		
+	    return null;
+
         if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
@@ -5165,6 +5170,15 @@ const DPS_SET = [
 ];
 
 
+const CUNG_DAME = [
+    [ item => item && item.name === "bowofthedead", "mainhand" ],
+];
+
+const CUNG_AOE = [
+    [ item => item && item.name === "pouchbow", "mainhand" ],
+];
+
+
 // 1. Hàm sleep phục vụ cho Promise.race
 // const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -5235,7 +5249,9 @@ async function useAdvancedAttack() {
                 sleep(character.ping * 4),
             ]);
 
-            // --- XỬ LÝ SET ĐỒ & CLEAVE ---
+            // --- XỬ LÝ SET ĐỒ CỦA haiz ---
+			if (character.name == "haiz")
+			{
             if (character.s.sugarrush == null) {
                 // Nếu đủ mana và sẵn sàng skill cleave
                 if (
@@ -5256,6 +5272,16 @@ async function useAdvancedAttack() {
             } else {
                // ensure_equipped_batch(SUGAR_LESSER_SET);  //ĐANG CÓ HIỆU ỨNG sugarrush => TỐI ƯU DAME
             }
+			}
+
+            // --- XỬ LÝ SET ĐỒ CỦA 6gunlaZe ---
+			if (character.name == "6gunlaZe")ensure_equipped_batch(CUNG_AOE);
+
+
+
+
+
+			
 
             // Đợi kết quả đòn đánh trả về từ Promise.race
             let result = await attackPromise;
