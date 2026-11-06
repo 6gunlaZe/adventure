@@ -2897,11 +2897,13 @@ async function skillLoop() {
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
 					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
-					else ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
+					if (await tryStomp()) return setTimeout(skillLoop, 10);
+
+					ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
 					
 					if (await tryAgitate()) return setTimeout(skillLoop, 10);
 					//if (await tryCleave()) return setTimeout(skillLoop, 10);
-					//if (await tryStomp()) return setTimeout(skillLoop, 10);
+					
 					if (await tryHardshell()) return setTimeout(skillLoop, 10);
 					if (await tryCharge()) return setTimeout(skillLoop, 10);
 					if (await tryTaunt()) return setTimeout(skillLoop, 10);
