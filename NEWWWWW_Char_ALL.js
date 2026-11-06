@@ -5241,10 +5241,10 @@ async function useAdvancedAttack() {
                     // Tháo offhand vì rìu là vũ khí 2 tay
                     parent.socket.emit('unequip', { slot: 'offhand' });
                     // Móc rìu ra tay chính và quạt
-                    ensure_equipped_batch([
+                    await ensure_equipped_batch([
                         [AXE_FILTER, 'mainhand']
                     ]);
-                    use_skill('cleave');
+                    await use_skill('cleave');
                     game_log("🪓 Quick-Swap Cleave", "#FF5555");
                 } else {
                 //    ensure_equipped_batch(SUGAR_SET);  //ĐỔI KẸO TẠO GIÚP TĂNG HIỆU ỨNG sugarrush
@@ -5258,12 +5258,12 @@ async function useAdvancedAttack() {
             
             if (result === undefined) {
                 // Nếu bị timeout (rớt gói tin) -> Trả về set DPS an toàn
-                ensure_equipped_batch(DPS_SET);
+                await ensure_equipped_batch(DPS_SET);
                 parent.resolve_deferred('attack', undefined);
             } else {
 
                 // ✅ Đánh thành công -> Trả về set DPS chuẩn để chuẩn bị cho nhịp đánh sau
-                ensure_equipped_batch(DPS_SET);
+                await ensure_equipped_batch(DPS_SET);
                 // Thành công -> Ép xung cooldown theo ping mạng
                 reduce_cooldown("attack", (character.ping ?? 0) * 0.95);
             }
