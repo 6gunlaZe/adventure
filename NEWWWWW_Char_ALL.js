@@ -502,7 +502,7 @@ const REVERSE_3SHOT_MONSTERS = ["crab"];
 async function use_multi_shot() {
     if (attackBusy || (character.hp / character.max_hp) < 0.3) return false;
     if (!character.cave && monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
-        await useAdvancedAttack();
+        await useAttack();
         return false;
     }
     // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
@@ -552,7 +552,7 @@ async function use_multi_shot() {
         // 3. Chọn mục tiêu & Thi triển skill
         const targets = valid.slice(0, 5);
         if (targets.length < 2) {
-            await useAdvancedAttack();
+            await useAttack();
             return false;
         }
         
@@ -565,15 +565,15 @@ async function use_multi_shot() {
         }
 
         if (character.mp < G.skills[skill].mp + 300) { // chỉ đủ mana để đánh thường
-            await useAdvancedAttack();
+            await useAttack();
             return false;
         }
 
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
-       // await use_skill(skill, targets);
-       // reduce_cooldown(skill, character.ping * 0.95);
+       await use_skill(skill, targets);
+       reduce_cooldown(skill, character.ping * 0.95);
 
-		await useAdvancedSkill(skill, targets, CUNG_AOE)
+		// await useAdvancedSkill(skill, targets, CUNG_AOE) // không được tăng aoe như mong đợi
         
         return true;
 
@@ -3743,8 +3743,6 @@ const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
 		
-	    return null;
-
         if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
@@ -3891,7 +3889,7 @@ const GEAR_LOGIC = {
     },
     // ---- Logic của haiz ----
 "haiz": function() {
-	return null;
+	
     if (fram_bscorpion) return "dame4";
 
     if (vipBossTarget) return "luck";
