@@ -5266,7 +5266,7 @@ async function useAdvancedAttack() {
                     use_skill('cleave');
                     game_log("🪓 Quick-Swap Cleave", "#FF5555");
                 } else {
-                    ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
+                    // ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
                 }
             } else {
                // ensure_equipped_batch(SUGAR_LESSER_SET);  //ĐANG CÓ HIỆU ỨNG sugarrush => TỐI ƯU DAME
