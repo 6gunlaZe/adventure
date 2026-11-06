@@ -5241,13 +5241,13 @@ async function useAdvancedAttack() {
                     // Tháo offhand vì rìu là vũ khí 2 tay
                     parent.socket.emit('unequip', { slot: 'offhand' });
                     // Móc rìu ra tay chính và quạt
-                    await ensure_equipped_batch([
+                    ensure_equipped_batch([
                         [AXE_FILTER, 'mainhand']
                     ]);
-                    await use_skill('cleave');
+                    use_skill('cleave');
                     game_log("🪓 Quick-Swap Cleave", "#FF5555");
                 } else {
-                //    ensure_equipped_batch(SUGAR_SET);  //ĐỔI KẸO TẠO GIÚP TĂNG HIỆU ỨNG sugarrush
+                    ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
                 }
             } else {
                // ensure_equipped_batch(SUGAR_LESSER_SET);  //ĐANG CÓ HIỆU ỨNG sugarrush => TỐI ƯU DAME
@@ -5257,13 +5257,8 @@ async function useAdvancedAttack() {
             let result = await attackPromise;
             
             if (result === undefined) {
-                // Nếu bị timeout (rớt gói tin) -> Trả về set DPS an toàn
-                await ensure_equipped_batch(DPS_SET);
                 parent.resolve_deferred('attack', undefined);
             } else {
-
-                // ✅ Đánh thành công -> Trả về set DPS chuẩn để chuẩn bị cho nhịp đánh sau
-                await ensure_equipped_batch(DPS_SET);
                 // Thành công -> Ép xung cooldown theo ping mạng
                 reduce_cooldown("attack", (character.ping ?? 0) * 0.95);
             }
