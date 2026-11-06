@@ -2896,10 +2896,10 @@ async function skillLoop() {
                 case "warrior":
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
-					if (await useAttack()) return setTimeout(skillLoop, 10);
+					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
 					if (await tryAgitate()) return setTimeout(skillLoop, 10);
-					if (await tryCleave()) return setTimeout(skillLoop, 10);
-					if (await tryStomp()) return setTimeout(skillLoop, 10);
+					//if (await tryCleave()) return setTimeout(skillLoop, 10);
+					//if (await tryStomp()) return setTimeout(skillLoop, 10);
 					if (await tryHardshell()) return setTimeout(skillLoop, 10);
 					if (await tryCharge()) return setTimeout(skillLoop, 10);
 					if (await tryTaunt()) return setTimeout(skillLoop, 10);
@@ -5128,10 +5128,154 @@ function isAnyMemberLowHP() {
     return false; // Không có ai máu dưới 3000
 }
 
+// ============================================================
+// ĐỔI ĐỒ NÂNG CAO THEO HIT ATTACK
+// ============================================================
 
 
 
+// 🪓 Bộ lọc mẫu cho từng món trang bị
+const AXE_FILTER = item => item && item.name === "bataxe";
+const SHIELD_FILTER = item => item && item.name === "mshield";
+const SWORD_FILTER = item => item && item.name === "sugarsword";
+const STINGER_FILTER = item => item && item.name === "stinger";
+const CHEST_FILTER = item => item && item.name === "coat";
 
+// 🎒 Các set đồ đã được mở rộng thành 3 dòng / set:
+
+const SUGAR_SET = [
+    [ SWORD_FILTER, "mainhand" ],
+    [ SHIELD_FILTER, "offhand" ],
+    [ CHEST_FILTER, "chest" ]
+];
+
+const SUGAR_LESSER_SET = [
+    [ STINGER_FILTER, "mainhand" ],
+    [ SHIELD_FILTER, "offhand" ],
+    [ CHEST_FILTER, "chest" ]
+];
+
+const DPS_SET = [
+    [ item => item && item.name === "vhammer", "mainhand" ],
+    [ item => item && item.name === "ololipop", "offhand" ]
+];
+
+
+// 1. Hàm sleep phục vụ cho Promise.race
+// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// 2. Hàm kiểm tra và đổi đồ hàng loạt (Quick-Swap)
+const ensure_equipped_batch = async (filters_and_slots) => {
+    let call = [];
+    for (let i = 0; i < filters_and_slots.length; i++) {
+        let [item_filter, slot] = filters_and_slots[i];
+        if (!item_filter(character.slots[slot])) {
+            const index = character.items.findIndex(item_filter);
+            if (index == -1) {
+                log('⚠️ Không tìm thấy item trong túi.');
+                break;
+            }
+
+            let temp = character.items[index];
+            character.items[index] = character.slots[slot];
+            character.slots[slot] = temp;
+            call.push({ num: index, slot: slot });
+        }
+    }
+    if (call.length == 0) {
+        return {};
+    }
+    // Dùng hàm equip_batch gốc của game để có thể await chờ server xác nhận
+    return await equip_batch(call);
+};
+
+
+async function useAdvancedAttack() {
+    // 1. Chốt chặn cooldown theo ping
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) return false;
+    
+    // 2. Kiểm tra an toàn target
+    if (currentTarget && (currentTarget.dead || !parent.entities[currentTarget.id])) {
+        currentTarget = null;
+    }
+
+    if (!currentTarget) {
+        let targeted = get_targeted_monster();
+        if (targeted) currentTarget = targeted;
+    }
+    
+    if (!currentTarget || smart.moving) return false;
+
+    // 3. Tiến lại gần nếu ngoài tầm đánh
+    if (!is_in_range(currentTarget)) {
+        if (!character.moving) {
+            move(
+                character.x + (currentTarget.x - character.x) / 2,
+                character.y + (currentTarget.y - character.y) / 2
+            );
+        }
+        return false;
+    }
+    
+    // 4. Tiến hành đánh và kết hợp chiến thuật Quick-Swap / Cleave
+    if (
+        !smart.moving &&
+        currentTarget.type === "monster" &&
+        is_in_range(currentTarget) 
+    ) {
+        try {
+            // Cuộc đua chống treo mạng (tối đa chờ 4 lần ping)
+            let attackPromise = Promise.race([
+                attack(currentTarget, true),
+                sleep(character.ping * 4),
+            ]);
+
+            // --- XỬ LÝ SET ĐỒ & CLEAVE ---
+            if (character.s.sugarrush == null) {
+                // Nếu đủ mana và sẵn sàng skill cleave
+                if (
+                    can_use('cleave', NOW) &&
+                    character.mp > 1200
+                ) {
+                    // Tháo offhand vì rìu là vũ khí 2 tay
+                    parent.socket.emit('unequip', { slot: 'offhand' });
+                    // Móc rìu ra tay chính và quạt
+                    ensure_equipped_batch([
+                        [AXE_FILTER, 'mainhand']
+                    ]);
+                    use_skill('cleave');
+                    game_log("🪓 Quick-Swap Cleave", "#FF5555");
+                } else {
+                //    ensure_equipped_batch(SUGAR_SET);  //ĐỔI KẸO TẠO GIÚP TĂNG HIỆU ỨNG sugarrush
+                }
+            } else {
+               // ensure_equipped_batch(SUGAR_LESSER_SET);  //ĐANG CÓ HIỆU ỨNG sugarrush => TỐI ƯU DAME
+            }
+
+            // Đợi kết quả đòn đánh trả về từ Promise.race
+            let result = await attackPromise;
+            
+            if (result === undefined) {
+                // Nếu bị timeout (rớt gói tin) -> Trả về set DPS an toàn
+                ensure_equipped_batch(DPS_SET);
+                parent.resolve_deferred('attack', undefined);
+            } else {
+
+                // ✅ Đánh thành công -> Trả về set DPS chuẩn để chuẩn bị cho nhịp đánh sau
+                ensure_equipped_batch(DPS_SET);
+                // Thành công -> Ép xung cooldown theo ping mạng
+                reduce_cooldown("attack", (character.ping ?? 0) * 0.95);
+            }
+
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
 
 
 
