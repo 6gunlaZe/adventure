@@ -167,7 +167,7 @@ function scanAll() {
 
     if (character.cave && character.cave.paused) return;
 
-    if (IS_SOLO || (character.ctype === "priest" && !character.dead) || isWitchGathering ) {
+    if (IS_SOLO || (character.ctype === "priest" && !character.rip) || isWitchGathering ) {
         SAFE = true;
     }
 
@@ -240,7 +240,7 @@ function scanAll() {
                 healer = entity;
             }
 
-            if (entity.ctype === "priest" && !entity.dead && dist <= (entity.range - 10) && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
+            if (entity.ctype === "priest" && !entity.rip && dist <= (entity.range - 10) && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
                 SAFE = true;
             }
         }
