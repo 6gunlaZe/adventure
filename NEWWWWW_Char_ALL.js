@@ -570,8 +570,10 @@ async function use_multi_shot() {
         }
 
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
-        await use_skill(skill, targets);
-        reduce_cooldown(skill, character.ping * 0.95);
+       // await use_skill(skill, targets);
+       // reduce_cooldown(skill, character.ping * 0.95);
+
+		await useAdvancedSkill(skill, targets, CUNG_AOE)
         
         return true;
 
@@ -5302,6 +5304,51 @@ async function useAdvancedAttack() {
 
     return false;
 }
+
+
+
+async function useAdvancedSkill(skill, targets, equipment_set = null) {
+    // 1. Chốt chặn cooldown theo ping
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill(skill) > pingComp) return false;
+    if (!can_use(skill)) return false;
+
+    try {
+        // 2. BẮN LỆNH SKILL VÀO PROMISE.RACE NGAY TỪ ĐẦU (Giống hệt attack)
+        let skillPromise = Promise.race([
+            use_skill(skill, targets),
+            sleep(character.ping * 4),
+        ]);
+
+        // 3. XỬ LÝ ĐỔI ĐỒ NGAY LẬP TỨC SAU ĐÓ (Không await để xả lệnh chớp nhoáng)
+        if (equipment_set) {
+            if (skill === 'cleave') {
+                parent.socket.emit('unequip', { slot: 'offhand' });
+            }
+            ensure_equipped_batch(equipment_set);
+        }
+
+        // 4. ĐỢI KẾT QUẢ SKILL TRẢ VỀ Ở CUỐI
+        let result = await skillPromise;
+
+        if (result === undefined) {
+            parent.resolve_deferred(skill, undefined);
+        } else {
+            // 5. ÉP XUNG COOLDOWN NGAY SAU KHI THÀNH CÔNG
+            reduce_cooldown(skill, (character.ping ?? 0) * 0.95);
+        }
+
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+
+
+
+
 
 
 
