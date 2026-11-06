@@ -570,10 +570,10 @@ async function use_multi_shot() {
         }
 
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
-       //await use_skill(skill, targets);
-       //reduce_cooldown(skill, character.ping * 0.95);
+       await use_skill(skill, targets);
+       reduce_cooldown(skill, character.ping * 0.95);
 
-		 await useAdvancedSkill(skill, targets, MANA_SET) // không được tăng aoe như mong đợi
+		// await useAdvancedSkill(skill, targets, MANA_SET) // không được tăng aoe như mong đợi
         
         return true;
 
@@ -2861,9 +2861,9 @@ async function skillLoop() {
                     break;
 
                 case "ranger":
+
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
-                    smartPredictiveEquip('attack', COAT_SET);
 					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
 					if (await trySuperShot()) return setTimeout(skillLoop, 10);
 					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
@@ -3752,7 +3752,6 @@ const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","fr
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
-		return null;
         if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
@@ -5363,54 +5362,6 @@ async function useAdvancedSkill(skill, targets, equipment_set = null) {
         return false;
     }
 }
-
-
-let isEquipScheduled = false;
-// Hàm dự đoán và lên lịch mặc đồ thông minh
-function smartPredictiveEquip(skill, targetSet) {
-    // Nếu đã lên lịch cho nhịp này rồi thì bỏ qua ngay lập tức
-    if (isEquipScheduled) return;
-
-    const msRemaining = ms_to_next_skill(skill);
-    
-    // Nếu thời gian hồi chiêu còn quá xa (> 2 giây), chưa cần làm gì để tiết kiệm tài nguyên
-    if (msRemaining > 2000) return;
-
-    const bestPing = (parent.pings && parent.pings.length > 0) ? Math.min(...parent.pings) : (character.ping || 100);
-    const safetyOffset = 25; // Trừ hao thời gian packet bay lên server
-    let timeToSwitch = msRemaining - bestPing - safetyOffset;
-
-    isEquipScheduled = true; // Đánh dấu đã khóa, không cho lên lịch chồng chéo
-
-    // Nếu thời gian <= 0 (skill đã sẵn sàng ngay lúc này) -> Đổi đồ ngay lập tức
-    if (timeToSwitch <= 0) {
-        ensure_equipped_batch(targetSet);
-        
-        // Mở khóa cờ sau khi skill đã thực thi xong
-        setTimeout(() => { 
-            isEquipScheduled = false; 
-        }, 400);
-        return;
-    }
-
-    // Nếu chưa đến lúc, hẹn đúng số mili-giây còn lại rồi mới mặc đồ
-    setTimeout(() => {
-        ensure_equipped_batch(targetSet);
-        
-        // Mở khóa cờ sau khi hoàn tất
-        setTimeout(() => { 
-            isEquipScheduled = false; 
-        }, 400);
-    }, timeToSwitch);
-}
-
-
-
-
-
-
-
-
 
 
 
