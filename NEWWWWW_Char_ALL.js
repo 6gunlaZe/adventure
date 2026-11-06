@@ -2864,8 +2864,9 @@ async function skillLoop() {
 					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
-					ensure_equipped_batch(CUNG_DAME);
 					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
+					ensure_equipped_batch(CUNG_DAME);
+
 
 					if (await trySuperShot()) return setTimeout(skillLoop, 10);
 					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
