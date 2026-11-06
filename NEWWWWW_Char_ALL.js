@@ -570,10 +570,10 @@ async function use_multi_shot() {
         }
 
         // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
-       await use_skill(skill, targets);
-       reduce_cooldown(skill, character.ping * 0.95);
+       //await use_skill(skill, targets);
+       //reduce_cooldown(skill, character.ping * 0.95);
 
-		// await useAdvancedSkill(skill, targets, CUNG_AOE) // không được tăng aoe như mong đợi
+		 await useAdvancedSkill(skill, targets, MANA_SET) // không được tăng aoe như mong đợi
         
         return true;
 
@@ -2867,7 +2867,7 @@ async function skillLoop() {
                     if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
 
 					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
-
+                    ensure_equipped_batch(COAT_SET);
 					if (await trySuperShot()) return setTimeout(skillLoop, 10);
 					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
 
@@ -3755,7 +3755,7 @@ const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","fr
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
-		
+		return null;
         if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
@@ -5194,6 +5194,14 @@ const CUNG_DAME = [
 
 const CUNG_AOE = [
     [ item => item && item.name === "pouchbow", "mainhand" ],
+];
+
+const MANA_SET = [
+    [ item => item && item.name === "tshirt9", "chest" ],
+];
+
+const COAT_SET = [
+    [ item => item && item.name === "coat", "chest" ],
 ];
 
 
