@@ -3255,14 +3255,14 @@ const EQUIPMENT_SETS = {
 			
        // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
        // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
-        { itemName: "tshirt7", slot: "chest", level: 10, l: "l" },
+        { itemName: "tshirt7", slot: "chest", l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
         { itemName: "fallen", slot: "pants", level: 8, l: "l" },
         { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
-        { itemName: "crookedkey", slot: "earring2", level: 4, l: "s"  },
-        { itemName: "crookedkey", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "crookedkey", slot: "earring2", l: "s"  },
+        { itemName: "crookedkey", slot: "earring1", l: "l"  },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
         { itemName: "bfangamulet", slot: "amulet", l: "l"},
