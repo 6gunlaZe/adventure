@@ -3879,7 +3879,7 @@ const GEAR_LOGIC = {
     },
     // ---- Logic của haiz ----
 "haiz": function() {
-	
+	return null;
     if (fram_bscorpion) return "dame4";
 
     if (vipBossTarget) return "luck";
