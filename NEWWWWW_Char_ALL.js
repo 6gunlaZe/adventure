@@ -3193,8 +3193,8 @@ const EQUIPMENT_SETS = {
     // ---- Cấu hình đồ cho Warrior offhand luôn đi chung với mainhand không thì sẽ lỗi nếu hiện tại đang đeo đồ cầm 2 tay 
     "haiz": {
         dame: [
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -3212,9 +3212,9 @@ const EQUIPMENT_SETS = {
         ],
 		
         dame2: [
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
-        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+       // { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
@@ -3235,8 +3235,8 @@ const EQUIPMENT_SETS = {
 
         dame3: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -3255,17 +3255,17 @@ const EQUIPMENT_SETS = {
 
         dame4: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
 
         ],
 		
 		
         mana: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
-        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+       // { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
@@ -3284,8 +3284,8 @@ const EQUIPMENT_SETS = {
         ],
         luck: [
 			
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "mshield", slot: "offhand", l: "l" },
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+      //  { itemName: "mshield", slot: "offhand", l: "l" },
         { itemName: "cloverstud", slot: "earring2", l: "s"  },
         { itemName: "cloverstud", slot: "earring1", l: "l"  },
         { itemName: "rabbitsfoot", slot: "orb", l: "l" } 
@@ -3294,8 +3294,8 @@ const EQUIPMENT_SETS = {
 
         luck_full: [
 
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-	    { itemName: "mshield", slot: "offhand", l: "l" },
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+	  //  { itemName: "mshield", slot: "offhand", l: "l" },
         { itemName: "rabbitsfoot", slot: "orb", l: "l" },
         { itemName: "cloverstud", slot: "earring2", l: "s"  },
         { itemName: "cloverstud", slot: "earring1", l: "l"  },
@@ -3317,8 +3317,8 @@ const EQUIPMENT_SETS = {
 
         single: [
 
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
-        { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+      //  { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
         { itemName: "coat", slot: "chest", level: 10, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
         { itemName: "fury", slot: "helmet", level: 9, l: "l" },
@@ -3352,9 +3352,9 @@ const EQUIPMENT_SETS = {
         def: [
 
 
-        { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
 			
-        { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+      //  { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
 
         { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
         { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
