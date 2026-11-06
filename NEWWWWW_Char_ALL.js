@@ -2902,7 +2902,7 @@ async function skillLoop() {
 					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
 					if (await tryStomp()) return setTimeout(skillLoop, 10);
 
-					ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
+					['dame', 'dame3', 'dame4', 'single'].includes(currentSet) ? ensure_equipped_batch(fire_SET) : ensure_equipped_batch(DPS_SET);
 					
 					if (await tryAgitate()) return setTimeout(skillLoop, 10);
 					//if (await tryCleave()) return setTimeout(skillLoop, 10);
@@ -5168,6 +5168,10 @@ const DPS_SET = [
     [ item => item && item.name === "ololipop", "offhand" ]
 ];
 
+const fire_SET = [
+    [ item => item && item.name === "vhammer", "mainhand" ],
+    [ item => item && item.name === "fireblade", "offhand" ]
+];
 
 const CUNG_DAME = [
     [ item => item && item.name === "bowofthedead", "mainhand" ],
