@@ -4511,7 +4511,7 @@ function handleVipBossLogic() {
 
 
 const urlBase = "https://api.github.com/repos/6gunlaZe/game/issues";
-const startFrom = new Date("2025-07-01"); 
+const startFrom = new Date("2026-11-07"); 
 
 async function fetchRecentIssues(limit = 500) {
   let allIssues = [];
