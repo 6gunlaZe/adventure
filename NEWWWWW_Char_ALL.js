@@ -3181,6 +3181,25 @@ const EQUIPMENT_SETS = {
         { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
 			
         ],
+
+        dame4: [
+			
+        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+            { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "vattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "cearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
+
+		
         mana: [	
         ],
         luck: [
@@ -3983,6 +4002,9 @@ const GEAR_LOGIC = {
 },
     // ---- Logic của Mage (nhiY) ----
     "nhiY": function() {
+
+		if (fram_bscorpion) return "dame4";
+
         let needNormalDef = false;
         let needLuck = false;
         let hasTargetForDame = false; // Cờ bật khi phát hiện quái
