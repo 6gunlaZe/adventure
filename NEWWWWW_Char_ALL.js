@@ -3184,7 +3184,7 @@ const EQUIPMENT_SETS = {
 
         dame4: [
 			
-        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "firestaff", slot: "mainhand", l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
             { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
