@@ -3476,7 +3476,23 @@ const EQUIPMENT_SETS = {
 			
         ],
 
+        dame4: [
+			
+        { itemName: "firebow", slot: "mainhand", l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
 
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
 		
         mana: [
         { itemName: "pouchbow", slot: "mainhand", level: 12, l: "l" },
@@ -3771,6 +3787,7 @@ const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","fr
 const GEAR_LOGIC = {
     // ---- Logic của Ranger (6gunlaZe) ----
     "6gunlaZe": function() {
+		if (fram_bscorpion) return "dame4";
         if (vipBossTarget) return "luck";
         let needNormalDef = false;
         let needLuck = false;
