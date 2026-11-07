@@ -2916,7 +2916,7 @@ async function skillLoop() {
 					if (FIRE_SET_NAMES.includes(currentSet) || (currentSet == null && fram_bscorpion) ) {
 						ensure_equipped_batch(fire_SET);
 					} else {
-						if(currentSet == "luck_full")ensure_equipped_batch(LUCK_SET);
+						if(currentSet == "luck_full")ensure_equipped_batch(LUCK_SET);  // nhớ đeo 2 nhẫn của Ynhi sang
 						else ensure_equipped_batch(DPS_SET);
 					}
 					
