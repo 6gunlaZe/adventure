@@ -2232,9 +2232,9 @@ function makeShiny() {
 
 // Hàm hỗ trợ tự động dùng Buff Merchant
 function applyMerchantBuff() {
-    if (can_use("massproductionpp") && character.level >= 60 && !character.s?.massproductionpp) {
+    if (character.level >= 60 && !character.s?.massproductionpp && character.mp >= 300) {
         use_skill("massproductionpp");
-    } else if (can_use("massproduction") && !character.s?.massproduction) {
+    } else if (!character.s?.massproduction) {
         use_skill("massproduction");
     }
 }
