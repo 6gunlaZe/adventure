@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = false;  // bật tắt chế độ fram solo quái bscorpion để cày primming
+let fram_bscorpion = true;  // bật tắt chế độ fram solo quái bscorpion để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 
 
