@@ -2,6 +2,8 @@
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
 let fram_bscorpion = false;  // bật tắt chế độ fram solo quái bscorpion để cày primming
+let bscorpionTarget = null; // Lưu thông tin quái bscorpion
+
 
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
@@ -152,6 +154,7 @@ function scanAll() {
     hasLowHpAggroMonster = false; 
 	needLuckALL = false;
 	vipBossTarget = null;
+	bscorpionTarget = null;
 	Viecquantrong = false;
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
@@ -190,7 +193,10 @@ function scanAll() {
                 continue;
             }
 
-			
+			if (fram_bscorpion && entity.mtype == "bscorpion"){
+				bscorpionTarget = entity;
+			}
+
             //Kiểm tra VIP Boss cần farm level
             if (FARM_vipbosss[entity.mtype]) {
                  const bossConfig = FARM_vipbosss[entity.mtype];
@@ -1450,6 +1456,8 @@ async function tryTaunt() {
     // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
     let targetToTaunt = bestThreat;
 
+	if (bscorpionTarget && bscorpionTarget.hp < 7000) targetToTaunt = bscorpionTarget;
+
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
         targetToTaunt = bestFarmMob;
@@ -1471,22 +1479,27 @@ async function tryTaunt() {
 
 
 async function tryWarcry() {
-    // 1. Kiểm tra Cooldown, MP (Warcry tốn 320 MP) và trạng thái bận
+    // 1. Kiểm tra Cooldown, MP tối thiểu và trạng thái bận
     if (is_on_cooldown("warcry") || character.mp < 520) return false;
     if (smart.moving) return false;
 
-    // 2. Kiểm tra điều kiện Buff:
-    // - CHƯA CÓ Warcry (!character.s?.warcry)
-    // - ĐÃ CÓ Dark Blessing từ Priest (character.s?.darkblessing)
+    // 2. Định nghĩa các trường hợp kích hoạt:
     const hasWarcry = !!character.s?.warcry;
     const hasDarkBlessing = !!character.s?.darkblessing;
 
-    if (hasWarcry || !hasDarkBlessing) return false;
+    // Trường hợp 1 (Cũ): Chưa có Warcry và đã có Dark Blessing
+    const isNormalCondition = (!hasWarcry && hasDarkBlessing);
+
+    // Trường hợp 2 (Mới): Có bscorpionTarget, HP > 300,000 và MP > 700
+    const isBscorpionCondition = (typeof bscorpionTarget !== 'undefined' && bscorpionTarget && bscorpionTarget.hp > 300000 && character.mp > 700);
+
+    // Nếu không thỏa mãn bất kỳ trường hợp nào thì thoát
+    if (!isNormalCondition && !isBscorpionCondition) return false;
 
     // 3. Thực thi Kỹ năng
     try {
         await use_skill("warcry");
-        game_log("📢 Warcry + Dark Blessing Combo!", "#FFD700");
+        game_log("📢 Warcry Triggered!", "#FFD700");
         return true;
     } catch (e) {
         return false;
