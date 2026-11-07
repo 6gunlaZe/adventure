@@ -2838,6 +2838,7 @@ potionLoop();
 
 
 
+const FIRE_SET_NAMES = ['dame', 'dame3', 'dame4', 'single'];
 
 
 
@@ -2899,7 +2900,12 @@ async function skillLoop() {
 					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
 					if (await tryStomp()) return setTimeout(skillLoop, 10);
 
-					['dame', 'dame3', 'dame4', 'single'].includes(currentSet) ? ensure_equipped_batch(fire_SET) : ensure_equipped_batch(DPS_SET);
+					if (FIRE_SET_NAMES.includes(currentSet)) {
+						ensure_equipped_batch(fire_SET);
+					} else {
+						if(currentSet == "")ensure_equipped_batch(LUCK_SET);
+						else ensure_equipped_batch(DPS_SET);
+					}
 					
 					if (await tryAgitate()) return setTimeout(skillLoop, 10);
 					//if (await tryCleave()) return setTimeout(skillLoop, 10);
@@ -3899,7 +3905,6 @@ const GEAR_LOGIC = {
     // ---- Logic của haiz ----
 "haiz": function() {
 	
-    if (fram_bscorpion) return "dame4";
 
     if (vipBossTarget) return "luck";
     let needNormalDef = false;
@@ -3918,7 +3923,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000))
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 5000) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
@@ -3928,10 +3933,14 @@ const GEAR_LOGIC = {
     if (needNormalDef) return "def";
     if (needLuck){
         setBooster('luckbooster');
+		if (fram_bscorpion) return "luck_full";
 		return "luck";
 	}
 		setBooster('xpbooster');
 
+    if (fram_bscorpion) return "dame4";
+
+	
     if (targetNow && SINGLE_MONSTERS.has(targetNow.mtype)) return "single";
 
         // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
@@ -5177,6 +5186,11 @@ const SUGAR_LESSER_SET = [
 const DPS_SET = [
     [ item => item && item.name === "vhammer", "mainhand" ],
     [ item => item && item.name === "ololipop", "offhand" ]
+];
+
+const LUCK_SET = [
+    [ item => item && item.name === "vhammer", "mainhand" ],
+    [ item => item && item.name === "mshield", "offhand" ]
 ];
 
 const fire_SET = [
