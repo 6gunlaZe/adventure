@@ -5211,6 +5211,12 @@ const fire_SET = [
     [ item => item && item.name === "fireblade", "offhand" ]
 ];
 
+const fire_SET = [
+    [ { name: "fireblade", l: "l" }, "mainhand" ], 
+    [ { name: "fireblade", l: "s" }, "offhand" ]             
+];
+
+
 const CUNG_DAME = [
     [ item => item && item.name === "bowofthedead", "mainhand" ],
 ];
@@ -5231,15 +5237,36 @@ const COAT_SET = [
 // 1. Hàm sleep phục vụ cho Promise.race
 // const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// 2. Hàm kiểm tra và đổi đồ hàng loạt (Quick-Swap)
+// 2. Hàm kiểm tra và đổi đồ hàng loạt (Chỉ check các thuộc tính có truyền vào)
 const ensure_equipped_batch = async (filters_and_slots) => {
     let call = [];
+    
     for (let i = 0; i < filters_and_slots.length; i++) {
-        let [item_filter, slot] = filters_and_slots[i];
-        if (!item_filter(character.slots[slot])) {
-            const index = character.items.findIndex(item_filter);
+        let [criteria, slot] = filters_and_slots[i];
+
+        // Hàm kiểm tra item
+        let matches = (item) => {
+            if (!item) return false;
+            
+            if (typeof criteria === 'function') {
+                return criteria(item);
+            } 
+            else if (typeof criteria === 'object' && criteria !== null) {
+                // Chỉ kiểm tra những key có mặt trong criteria (không có thì bỏ qua)
+                for (let key in criteria) {
+                    if (item[key] !== criteria[key]) return false;
+                }
+                return true;
+            }
+            return false;
+        };
+
+        // Kiểm tra xem slot hiện tại đã đúng item cần tìm chưa
+        if (!matches(character.slots[slot])) {
+            const index = character.items.findIndex(item => matches(item));
+            
             if (index == -1) {
-                log('⚠️ Không tìm thấy item trong túi.');
+                log(`⚠️ Không tìm thấy item phù hợp trong túi.`);
                 break;
             }
 
@@ -5249,10 +5276,11 @@ const ensure_equipped_batch = async (filters_and_slots) => {
             call.push({ num: index, slot: slot });
         }
     }
+
     if (call.length == 0) {
         return {};
     }
-    // Dùng hàm equip_batch gốc của game để có thể await chờ server xác nhận
+    
     return await equip_batch(call);
 };
 
