@@ -3154,3 +3154,24 @@ setInterval(async function() {
     
 }, 2000);
 
+
+
+setTimeout(() => {
+    if (!character.mainhand || character.mainhand.name !== "broom") {
+        for (let i = 0; i < character.items.length; i++) {
+            if (character.items[i] && character.items[i].name === "broom") {
+                parent.socket.emit("equip", { num: i });
+                break;
+            }
+        }
+    }
+}, 1500);
+
+
+
+
+
+
+
+
+
