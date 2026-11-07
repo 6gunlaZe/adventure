@@ -2900,10 +2900,10 @@ async function skillLoop() {
 					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
 					if (await tryStomp()) return setTimeout(skillLoop, 10);
 
-					if (FIRE_SET_NAMES.includes(currentSet)) {
+					if (FIRE_SET_NAMES.includes(currentSet) || (currentSet == null && fram_bscorpion) ) {
 						ensure_equipped_batch(fire_SET);
 					} else {
-						if(currentSet == "")ensure_equipped_batch(LUCK_SET);
+						if(currentSet == "luck_full")ensure_equipped_batch(LUCK_SET);
 						else ensure_equipped_batch(DPS_SET);
 					}
 					
