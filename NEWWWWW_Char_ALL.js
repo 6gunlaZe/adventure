@@ -45,13 +45,14 @@ const FARM_LOCATIONS = {
 
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher",], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
     "6gunlaZe": { slot: 3, home: true, events: ["witchcipher","bscorpion"], solo: false, circle: true, radius: 150, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
-    "nhiY": { slot: 3, home: false, events: ["mrpumpkin", "bscorpion" ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: fram_bscorpion ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }
-	// MuaBan tự động chuyển sang chế độ fram bscorpion khi cờ fram_bscorpion được bật
+    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
+
+   // "MuaBan": { slot: fram_bscorpion ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }  // mở khi solo haiz
 };
 
 
