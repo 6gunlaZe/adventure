@@ -5207,15 +5207,9 @@ const LUCK_SET = [
 ];
 
 const fire_SET = [
-    [ item => item && item.name === "vhammer", "mainhand" ],
-    [ item => item && item.name === "fireblade", "offhand" ]
-];
-
-const fire_SET = [
     [ { name: "fireblade", l: "l" }, "mainhand" ], 
     [ { name: "fireblade", l: "s" }, "offhand" ]             
 ];
-
 
 const CUNG_DAME = [
     [ item => item && item.name === "bowofthedead", "mainhand" ],
