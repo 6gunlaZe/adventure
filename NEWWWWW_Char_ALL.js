@@ -3918,6 +3918,7 @@ const GEAR_LOGIC = {
     // ---- Logic của haiz ----
 "haiz": function() {
 	
+	return null;
 
     if (vipBossTarget) return "luck";
     let needNormalDef = false;
@@ -3936,7 +3937,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 5000) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 8000) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
