@@ -1458,7 +1458,7 @@ async function tryTaunt() {
     // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
     let targetToTaunt = bestThreat;
 
-	if (bscorpionTarget && bscorpionTarget.hp < 10000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
+	if (bscorpionTarget && bscorpionTarget.hp < 7000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
@@ -3982,7 +3982,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 8000) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 6000) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
