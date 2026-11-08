@@ -3048,7 +3048,7 @@ let temporalState = {
 // LOGIC
 // =========================
 function tryTemporalSurge() {
-    if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving) return;
+    if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving || solobscorpion) return;
 
 	
     // Reset khi đổi map
