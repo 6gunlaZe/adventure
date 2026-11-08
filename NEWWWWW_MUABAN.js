@@ -33,7 +33,7 @@ const IDLE_TIME_LIMIT = 6000; // 6s không hoạt động nâng cấp gì sẽ r
 
 
 // 1. Khai báo danh sách các món đồ ưu tiên chế tạo : fireblade
-const craftList = ["gloampendant","computer", "cloverstud","moonshardearring","carrotsword","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","fireblade"];
+const craftList = ["gloampendant","computer", "cloverstud","moonshardearring","carrotsword","basketofeggs","emberseal","glacierseal","venomband","windbelt","mossheart","rod","fireblade","ratworkcoat"];
 
 //Danh sách đổi quà tự động
 const EXCHANGE = { anniversarygift: 1, armorbox: 1, basketofeggs: 1, brownenvelope: 1, candycane: 1, candypop: 10, candy0: 1, marketparcel: 1, candy1: 1,
@@ -341,7 +341,7 @@ var upgradeWhitelistVIPP = {
 	group_basic: ["ololipop",],
 	group_basic00: ["ololipop111","broom"],
 	group_basic01: ["firebow","fireblade","firestaff","cave_mothsteps","cave_counterweight"],	
-	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe"],	
+	group_basic02: ["gcape","eslippers11","ecape","cave_tunnelaxe","ratworkcoat"],	
 	group_basic03: ["mittens111","shield111",],	
 	group_basic04: ["angelwings","froststaff","daggerofthedead1111","tshirt4"],
 	group_basic05: ["wingedboots"],	
@@ -390,7 +390,7 @@ const COMPOUND_RULES = [
 
 // Item thêm thủ công mua ponty
 const PONTY_EXTRA_ITEMS = [
-  "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "cape", "carrot", "cdarktristone", "confetti",
+  "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "cape", "carrot", "cdarktristone", "confetti","ashleaf","rattail",
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
