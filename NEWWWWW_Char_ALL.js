@@ -2049,7 +2049,7 @@ function getActiveWorldBoss() {
         return {
             id: "bscorpion",
             map: "desertland",
-            x: -405,
+            x: character.name === "6gunlaZe" ? -425 : -405,
             y: -1246,
             entity: null // Không truyền entity thật để logic di chuyển/tìm quái ngoài map xử lý
         };
