@@ -2915,7 +2915,7 @@ async function skillLoop() {
 					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
 					if (await tryStomp()) return setTimeout(skillLoop, 10);
 
-					if (FIRE_SET_NAMES.includes(currentSet) || (currentSet == null && fram_bscorpion) ) {
+					if (FIRE_SET_NAMES.includes(INTENDED_SET)) {
 						ensure_equipped_batch(fire_SET);
 					} else {
 						if(INTENDED_SET == "luck_full")ensure_equipped_batch(LUCK_SET);  // nhớ đeo 2 nhẫn của Ynhi sang
