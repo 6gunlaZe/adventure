@@ -3937,8 +3937,8 @@ const GEAR_LOGIC = {
 			lastDefCheck = 0;
 			return "movebufff";
 		}
-
-        if (hasTargetForDame) return "dame";
+		
+        if (hasTargetForDame || fram_bscorpion) return "dame";
         if (hasPhysical && hasMagical) return "def_mixed";
         if ( character.map == "uhills" ) return "def_mixed";
 		
