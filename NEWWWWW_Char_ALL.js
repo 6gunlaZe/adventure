@@ -1458,7 +1458,7 @@ async function tryTaunt() {
     // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
     let targetToTaunt = bestThreat;
 
-	if (bscorpionTarget && bscorpionTarget.hp < 6000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
+	if (bscorpionTarget && bscorpionTarget.hp < 7000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
