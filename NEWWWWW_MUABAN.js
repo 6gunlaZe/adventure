@@ -1931,6 +1931,8 @@ function compound_itemsVIP() {
 	return true;
 }
 
+// 🛑 Bỏ qua các item có thuộc tính đặc biệt (p hoặc nằm trong mảng ps)
+let specialProps = ["superfast", "lucky"];
 
 function upgradeVIP_Idle() {
 	// Kiểm tra nếu Merchant đang bận làm service khác hoặc hàng chờ không trống
@@ -1961,8 +1963,14 @@ function upgradeVIP_Idle() {
 		// Chỉ upgrade nếu trong túi có ít nhất 2 món cùng tên
 		if ((itemCounts[c.name] || 0) < 2) continue;
 		
-		// Bỏ qua item bị khóa hoặc item đặc biệt
-		if (c.p1111 || c.l || c.s) continue;
+		// Bỏ qua item bị khóa
+		if (c.l || c.s || c.u) continue;
+		
+		// Kiểm tra nếu thuộc tính 'p' nằm trong danh sách đặc biệt
+		if (c.p && specialProps.includes(c.p)) continue;
+		
+		// Hoặc kiểm tra nếu mảng 'ps' chứa bất kỳ thuộc tính đặc biệt nào
+		if (Array.isArray(c.ps) && c.ps.some(prop => specialProps.includes(prop))) continue;
 
 		// Tìm nhóm phù hợp trong Whitelist
 		let group = Object.keys(upgradeWhitelistVIPP).find(groupName =>
