@@ -3,7 +3,7 @@
 // ============================================================
 let fram_bscorpion = true;  // bật tắt chế độ fram solo quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
-let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff
+let solobscorpion = true; // Bật lên khi chỉ cho haiz fram để lấy x3 buff
 
 
 
