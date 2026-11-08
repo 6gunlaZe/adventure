@@ -3068,7 +3068,13 @@ function tryTemporalSurge() {
         return;
     }
 
-    const gap = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.gap;
+    const character_CONFIG = CHAR_CONFIG[character.name];
+
+    // Kiểm tra xem nhân vật có tồn tại và có chứa FARM_MONSTER trong mảng events hay không
+    const hasEvent = character_CONFIG && character_CONFIG.events && character_CONFIG.events.includes("bscorpion");
+
+    // - Nếu FARM_MONSTER là "bscorpion" HOẶC nhân vật có tham gia sự kiện đó thì gap = 0, ngược lại lấy TEMPORAL_CONFIG.gap
+    const gap = (FARM_MONSTER === "bscorpion" || hasEvent) ? 0 : TEMPORAL_CONFIG.gap;
     const delay = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.delay;
 
     // Điều kiện xả skill khi số lượng quái sụt giảm mạnh
