@@ -1,8 +1,10 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = true;  // bật tắt chế độ fram solo quái bscorpion để cày primming
+let fram_bscorpion = true;  // bật tắt chế độ fram solo quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
+let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff
+
 
 
 const LEADER = "haiz";
@@ -42,17 +44,16 @@ const FARM_LOCATIONS = {
 
 };
 
-
+const SUKIEN_bscorpion = solobscorpion ? "bscorpion" : "khongcogi";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
-    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher","bscorpion"], solo: false, circle: true, radius: 150, elixir: "pumpkinspice" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 150, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
     "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
-
-   // "MuaBan": { slot: fram_bscorpion ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" }  // mở khi solo haiz
+    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
+	
 };
 
 
