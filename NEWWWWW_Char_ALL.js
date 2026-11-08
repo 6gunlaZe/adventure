@@ -5251,8 +5251,8 @@ const DPS_SET = [
 ];
 
 const LUCK_SET = [
-    [ item => item && item.name === "vhammer", "mainhand" ],
-    [ item => item && item.name === "mshield", "offhand" ]
+    [ { name: "fireblade", l: "l" }, "mainhand" ], 
+    [ { name: "mshield"}, "offhand" ]             
 ];
 
 const fire_SET = [
