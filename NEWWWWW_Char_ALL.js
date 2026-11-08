@@ -44,7 +44,7 @@ const FARM_LOCATIONS = {
 
 };
 
-const SUKIEN_bscorpion = solobscorpion ? "bscorpion" : "khongcogi";
+const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
     "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
