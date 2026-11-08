@@ -1457,7 +1457,7 @@ async function tryTaunt() {
     // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
     let targetToTaunt = bestThreat;
 
-	if (bscorpionTarget && bscorpionTarget.hp < 10000 && character.hp > 8000) targetToTaunt = bscorpionTarget;
+	if (bscorpionTarget && bscorpionTarget.hp < 10000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
@@ -3508,8 +3508,8 @@ const EQUIPMENT_SETS = {
 			
         { itemName: "cave_loaded_die", slot: "orb", l: "l" },
 
-        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
-        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "crookedkey", slot: "earring1", l: "s"  },
+        { itemName: "crookedkey", slot: "earring2", l: "l"  },
         { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
 			
         ],
