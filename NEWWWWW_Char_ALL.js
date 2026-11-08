@@ -3049,8 +3049,6 @@ let temporalState = {
 function tryTemporalSurge() {
     if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving) return;
 
-   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
-   if (timeSinceLastMonster > 10000) return
 	
     // Reset khi đổi map
     if (character.map !== temporalState.lastMap) {
@@ -3077,6 +3075,9 @@ function tryTemporalSurge() {
     const gap = (FARM_MONSTER === "bscorpion" || hasEvent) ? 0 : TEMPORAL_CONFIG.gap;
     const delay = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.delay;
 
+   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
+   if (timeSinceLastMonster > 10000 && gap > 0) return
+	
     // Điều kiện xả skill khi số lượng quái sụt giảm mạnh
     if (
         currentCount < temporalState.maxMonsters - gap &&
