@@ -5375,7 +5375,7 @@ async function useAdvancedAttack() {
             if (character.s.sugarrush == null) {
                 // Nếu đủ mana và sẵn sàng skill cleave
                 if (
-                    can_use('cleave') &&
+                    can_use('cleave') && (!character.slots.offhand || character.slots.offhand.name !== "mshield") &&
                     character.mp > 1200
                 ) {
                     // Tháo offhand vì rìu là vũ khí 2 tay
