@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = true;  // bật tắt chế độ fram solo quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
+let fram_bscorpion = true;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 let solobscorpion = true; // Bật lên khi chỉ cho haiz fram để lấy x3 buff
 
@@ -3982,7 +3982,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (fram_bscorpion && e.hp < 5000) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < 6500) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
