@@ -1278,7 +1278,7 @@ async function tryHardshell() {
         const e = m.entity;
 
         // Điều kiện 1: Phải ở trong bán kính 50 và đang nhắm vào MÌNH (character.name) kèm theo máu > 10000
-        if (m.distance > 50 || e.target !== character.name || e.hp < 10000) return false;
+        if (m.distance > 50 || e.target !== character.name || (e.hp < 10000 && (character.hp / character.max_hp) > 0.5 ) ) return false;
 
         // Điều kiện 2: Phải là quái tấn công vật lý (physical)
         const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
@@ -1458,7 +1458,7 @@ async function tryTaunt() {
     // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
     let targetToTaunt = bestThreat;
 
-	if (bscorpionTarget && bscorpionTarget.hp < 7000 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
+	if (bscorpionTarget && bscorpionTarget.hp < 8500 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
