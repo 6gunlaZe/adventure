@@ -1277,8 +1277,8 @@ async function tryHardshell() {
     const physicalThreats = monsters.filter(m => {
         const e = m.entity;
 
-        // Điều kiện 1: Phải ở trong bán kính 50 và đang nhắm vào MÌNH (character.name)
-        if (m.distance > 50 || e.target !== character.name) return false;
+        // Điều kiện 1: Phải ở trong bán kính 50 và đang nhắm vào MÌNH (character.name) kèm theo máu > 10000
+        if (m.distance > 50 || e.target !== character.name || e.hp > 10000) return false;
 
         // Điều kiện 2: Phải là quái tấn công vật lý (physical)
         const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
