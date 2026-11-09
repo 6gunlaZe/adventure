@@ -3937,7 +3937,7 @@ const GEAR_LOGIC = {
             const isTargetingMe = e.target === character.name;
             const isCoop = e.cooperative;
 
-            if (isTargetingMe && e.attack > 300) {
+            if (isTargetingMe && e.attack > 300 && m.distance < 150) {
                 if (e.damage_type === "physical") hasPhysical = true;
                 if (e.damage_type === "magical") hasMagical = true;
             }
