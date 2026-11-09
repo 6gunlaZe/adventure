@@ -2291,7 +2291,7 @@ if (!Viecquantrong)
         // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
         if (bossEntity && !bossEntity.dead) {
             const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
-            const safeAttackRange = Math.max(15, character.range - 70);
+            const safeAttackRange = Math.max(15, character.range - 60);
 
             if (dist > safeAttackRange) {
                 if (can_move_to(bossEntity.x, bossEntity.y)) {
@@ -2309,8 +2309,19 @@ if (!Viecquantrong)
                 }
             } else {
 				//đang ổn định đánh boss
-				mageMagiPort();
-                if (smart.moving) stop("smart");
+                 if (activeBoss.id === "bscorpion" && character.name === "6gun" && dist < 100) {
+                     // Gọi hàm và truyền dữ liệu vào cực kỳ gọn gàng
+                     const safePos = getSafePositionOnCircle(bossEntity, character, 120);
+                     if (safePos) {
+                         if (smart.moving) stop("smart");
+                         move(safePos.x, safePos.y);
+                     } else if (!smart.moving) {
+                         safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
+                     }
+                 } else {
+                     mageMagiPort();
+                     if (smart.moving) stop("smart");
+                 }				
             }
         } 
         // Nếu Boss không xuất hiện trong tầm mắt, chỉ di chuyển nếu chưa tới đúng Map/Tọa độ
@@ -5478,7 +5489,29 @@ async function useAdvancedSkill(skill, targets, equipment_set = null) {
 }
 
 
-
+/**
+ * Tìm vị trí đứng trên vòng tròn bán kính targetDist quanh boss, 
+ * ưu tiên góc gần nhân vật nhất và quét dần sang 2 bên nếu bị vướng.
+ */
+function getSafePositionOnCircle(boss, character, targetDist = 120) {
+    const currentAngle = Math.atan2(character.y - boss.y, character.x - boss.x);
+    
+    // Quét từ góc gần nhất (step = 0) lan dần sang 2 bên (tổng 12 bước, mỗi bước 15 độ)
+    for (let step = 0; step <= 12; step++) {
+        const angleOffset = step * (Math.PI / 12); 
+        const anglesToTest = step === 0 ? [currentAngle] : [currentAngle + angleOffset, currentAngle - angleOffset];
+        
+        for (const angle of anglesToTest) {
+            const testX = boss.x + targetDist * Math.cos(angle);
+            const testY = boss.y + targetDist * Math.sin(angle);
+            
+            if (can_move_to(testX, testY)) {
+                return { x: testX, y: testY };
+            }
+        }
+    }
+    return null; // Không tìm thấy chỗ trống hợp lệ
+}
 
 
 
