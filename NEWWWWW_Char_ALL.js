@@ -39,7 +39,7 @@ const FARM_LOCATIONS = {
     targetron: { x: -512, y: -239, map: "uhills" },
     rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
     wolf: { x: 369, y: -2706, map: "winterland" },
-    porcupine: { x: 369, y: -2706, map: "winterland" },
+    porcupine: { x: -799, y: 185, map: "desertland" },
 
 
 
