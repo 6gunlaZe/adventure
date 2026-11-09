@@ -3482,7 +3482,7 @@ const EQUIPMENT_SETS = {
 		
         dame: [
 			
-        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+        { itemName: "firebow", slot: "mainhand", l: "l" },
             { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
             { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
             { itemName: "fury", slot: "helmet", level: 9, l: "l" },
