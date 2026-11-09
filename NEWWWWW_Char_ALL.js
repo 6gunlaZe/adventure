@@ -1855,7 +1855,7 @@ async function tryzapper() {
     const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
 
     // Nếu mình là leader -> true luôn; nếu không -> check khoảng cách
-    const isLeaderNear = isMeLeader || ( !LEADERConfig.solo && leaderObj?.distance < 250);
+    const isLeaderNear = isMeLeader || (leaderObj?.distance < 250) || LEADERConfig.solo;
 
 
 
