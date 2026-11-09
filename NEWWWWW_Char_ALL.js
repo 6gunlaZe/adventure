@@ -26,7 +26,7 @@ const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stonewo
 
 
 //HOẠT ĐỘNG SĂN CÁC BOSS SAU
-const WORLD_BOSSES = ["mrpumpkin", "mrgreen","bscorpion"];
+const WORLD_BOSSES = ["mrpumpkin", "mrgreen",];
 
 //THEO DÕI ĐIỂM ĐÓNG GÓP - BẬT THÔNG BÁO CÁC BOSS SAU
 const TRACKER_BOSSES = ["mrpumpkin", "mrgreen","crabxx","icegolem","horseman","gargoyle","dragold","franky"];
