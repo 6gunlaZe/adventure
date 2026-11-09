@@ -3979,9 +3979,15 @@ const GEAR_LOGIC = {
     let needNormalDef = false;
     let needLuck = false;
     let monsterDensity = 0;
-
+    let burnDmg1_5s = 0;
+	
     const targetNow = get_targeted_monster();
 
+    if (bscorpionTarget && solobscorpion) {
+        let burn = bscorpionTarget.s?.burned;
+        burnDmg1_5s = burn ? (burn.intensity / burn.ms) * Math.min(burn.ms, 1500) : 0;
+    }
+	
     for (const m of monsters) {
         const e = m.entity;
         if (m.distance > 300) continue;
@@ -3992,7 +3998,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < 5500) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < (5500 + burnDmg1_5s) ) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
