@@ -1,7 +1,7 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = true;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
+let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
 
@@ -39,6 +39,7 @@ const FARM_LOCATIONS = {
     targetron: { x: -512, y: -239, map: "uhills" },
     rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
     wolf: { x: 369, y: -2706, map: "winterland" },
+    porcupine: { x: 369, y: -2706, map: "winterland" },
 
 
 
@@ -47,9 +48,9 @@ const FARM_LOCATIONS = {
 const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
-    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 150, elixir: "pumpkinspice" },
-    "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
+    "Ynhi": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen","witchcipher11", SUKIEN_bscorpion], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher11", SUKIEN_bscorpion], solo: true, circle: true, radius: 150, elixir: "pumpkinspice" },
+    "haiz": { slot: 3, home: false, events: [""], solo: true, circle: true, radius: 25, elixir: "pumpkinspice" },
     "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
@@ -59,7 +60,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "porcupine"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
@@ -4195,7 +4196,7 @@ async function equipSet(setName) {
 
 
 function autoSwapEquipment() {
-    if (isEquipping) return;
+    if (isEquipping || FARM_MONSTER == "porcupine" ) return;
     const penaltycheck = ms_penalty_cd();
     if (penaltycheck > 2000) return;
 
