@@ -1,9 +1,9 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = true;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
+let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
-let solobscorpion = true; // Bật lên khi chỉ cho haiz fram để lấy x3 buff
+let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false;
 
 
 
@@ -11,7 +11,7 @@ const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
 const MERCHANT = "MuaBan";
 const EXCLUDE = new Set([
-    "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti",
+    "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti","offeringp",
     "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2","handofmidas","basher","cipherdraught",
     "frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","cscroll0","cscroll1","scroll0","scroll1","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
