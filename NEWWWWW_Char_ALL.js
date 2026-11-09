@@ -940,16 +940,14 @@ async function tryCurse() {
         // --- KIỂM TRA ĐIỀU KIỆN ---
         if (isExtraTarget && character.mp >= 2200) {
             // Quái danh sách chọn thêm: MP >= 2200, Bỏ qua khoảng cách Leader
-            priority = 2;
+            priority = 3;
         } else if (isAttackingParty && character.mp >= 4200) {
             // Quái thường đang đánh Party: MP >= 4200
             const distToLeader = leaderEntity ? distance(leaderEntity, mob) : Infinity;
 
-            if (distToLeader <= 50) {
-                priority = 2; // Sát Leader (<= 50px)
-            } else {
-                priority = 1; // Đánh Party ở xa Leader (> 50px)
-            }
+            if (distToLeader <= 50)priority = 3; // Sát Leader (<= 50px)
+			else if (m.distance < 50 )priority = 2; // khoảng cách gần (<= 50px)
+			else priority = 1; // Đánh Party ở và xa
         }
 
         if (priority === 0) continue;
