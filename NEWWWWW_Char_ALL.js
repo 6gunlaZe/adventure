@@ -1459,6 +1459,16 @@ async function tryTaunt() {
     let targetToTaunt = bestThreat;
 
 	if (bscorpionTarget && bscorpionTarget.hp < 9500 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
+	
+if (bscorpionTarget && character.hp > 8000 && !healer) {
+    let burn = bscorpionTarget.s?.burned;
+    let burnDmg1_5s = burn ? (burn.intensity / burn.ms) * Math.min(burn.ms, 1500) : 0;
+    
+    if ((bscorpionTarget.hp - burnDmg1_5s) < 9500) {
+        targetToTaunt = bscorpionTarget;
+    }
+}
+	
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
     if (!targetToTaunt && monstersTargetingMeCount < 6) {
