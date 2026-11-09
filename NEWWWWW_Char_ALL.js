@@ -3647,7 +3647,27 @@ const EQUIPMENT_SETS = {
             
         ],
         def_mag: [
-            { itemName: "cupid", slot: "mainhand", level: 9, l: "l" } // Ví dụ đổi vũ khí bơm máu
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+			
+			
         ],
         def_mixed: [
 
@@ -3919,7 +3939,7 @@ const GEAR_LOGIC = {
             const isTargetingMe = e.target === character.name;
             const isCoop = e.cooperative;
 
-            if (isTargetingMe && e.attack > 200) {
+            if (isTargetingMe && e.attack > 300) {
                 if (e.damage_type === "physical") hasPhysical = true;
                 if (e.damage_type === "magical") hasMagical = true;
             }
@@ -3979,7 +3999,7 @@ const GEAR_LOGIC = {
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
 
         if (hasPhysical) return "def_mixed";
-        if (hasMagical) return "def_mixed";
+        if (hasMagical) return "def_mag";
 
 
         // 6. Mặc định sang đồ Dame -> mix
