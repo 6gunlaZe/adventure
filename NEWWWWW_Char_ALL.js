@@ -3988,7 +3988,7 @@ const GEAR_LOGIC = {
 
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
-        const defenseSets = ["def_mixed", "dame"]; // Các set phòng thủ hợp lệ của bạn
+        const defenseSets = ["def_mixed", "dame", "def_mag"]; // Các set phòng thủ hợp lệ của bạn
 		
         if (now - lastDefCheck < 5000) {
             return defenseSets.includes(currentSet) ? currentSet : "def_mixed"; 
