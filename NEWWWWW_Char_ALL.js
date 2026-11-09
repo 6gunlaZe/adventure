@@ -51,7 +51,7 @@ const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 const CHAR_CONFIG = {
     "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 25, elixir: "cipherdraught" },
     "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 150, elixir: "pumpkinspice" },
-    "haiz": { slot: 3, home: false, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
+    "haiz": { slot: 3, home: false, events: [""], solo: true, circle: true, radius: 25, elixir: "pumpkinspice" },
     "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
@@ -1845,13 +1845,24 @@ async function tryzapper() {
     const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
     if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85) return false; // Đang tank quá ngưỡng -> Dừng Zap ngay
 
+
+
+
+    // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
+    const LEADERConfig = CHAR_CONFIG[LEADER] || {};
+
     const isMeLeader = character.name === LEADER;
     const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
 
     // Nếu mình là leader -> true luôn; nếu không -> check khoảng cách
-    const isLeaderNear = isMeLeader || (leaderObj?.distance < 250);
+    const isLeaderNear = isMeLeader || ( !LEADERConfig.solo && leaderObj?.distance < 250);
 
 
+
+
+
+
+	
 	
     // 🎯 ƯU TIÊN 1: Quái B (Boss) -> Cần Leader ở gần + Chưa có target
     if (isLeaderNear) {
