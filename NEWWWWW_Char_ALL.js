@@ -3991,7 +3991,7 @@ const GEAR_LOGIC = {
         const defenseSets = ["def_mixed", "dame", "def_mag"]; // Các set phòng thủ hợp lệ của bạn
 		
         if (now - lastDefCheck < 5000) {
-            return defenseSets.includes(currentSet) ? currentSet : "def_mixed"; 
+            return defenseSets.includes(INTENDED_SET) ? INTENDED_SET : "def_mixed"; 
         }
 		
         lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
