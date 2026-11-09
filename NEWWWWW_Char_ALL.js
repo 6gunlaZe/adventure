@@ -40,6 +40,7 @@ const FARM_LOCATIONS = {
     rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
     wolf: { x: 369, y: -2706, map: "winterland" },
     porcupine: { x: -799, y: 185, map: "desertland" },
+    fireroamer: { x: 221, y: -824, map: "desertland" },
 
 
 
@@ -60,7 +61,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "fireroamer"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
