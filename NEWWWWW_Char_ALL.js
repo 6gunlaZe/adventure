@@ -2309,7 +2309,7 @@ if (!Viecquantrong)
                 }
             } else {
 				//đang ổn định đánh boss
-                 if (activeBoss.id === "bscorpion" && character.name === "6gun" && dist < 100) {
+                 if (activeBoss.id === "bscorpion" && character.name === "6gunlaZe" && dist < 100) {
                      // Gọi hàm và truyền dữ liệu vào cực kỳ gọn gàng
                      const safePos = getSafePositionOnCircle(bossEntity, character, 120);
                      if (safePos) {
