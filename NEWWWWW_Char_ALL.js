@@ -7,7 +7,7 @@ let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 
 
 
 
-const LEADER = "haiz";
+const LEADER = "Ynhi";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
 const MERCHANT = "MuaBan";
 const EXCLUDE = new Set([
