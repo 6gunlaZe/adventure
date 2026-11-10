@@ -2229,7 +2229,6 @@ let checkcrabxx = 0;
 // let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
-let farmAngle = 0;
 const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) / 3;
 let currentWitchSet = null; // Biến lưu bộ tọa độ witch
 // ----------------------------------
@@ -2423,26 +2422,33 @@ if (!Viecquantrong)
     if (isDoingDungeon) return;
 
 
-	
-    // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
+
+    // --- ĐỌC CONFIG CỦA NHÂN VẬT CHO LOGIC CHẠY VÒNG TRÒN ---
     const myConfig = CHAR_CONFIG[character.name] || {};
     const isCircleEnabled = myConfig.circle === true;
     const myRadius = myConfig.radius || 30; // Nếu không cài radius trong config, mặc định là 30
 
-    // --- LOGIC ĐI VÒNG TRÒN ---
+    // --- LOGIC ĐI VÒNG TRÒN (ĐÃ TỐI ƯU) ---
     if (isCircleEnabled && character.map === FARM_MAP.map && distance(character, FARM_MAP) < 300) {
-        farmAngle += ANGLE_STEP; 
-        if (farmAngle >= Math.PI * 2) farmAngle = 0; 
+        // Lấy góc hiện tại của nhân vật so với tâm FARM_MAP dựa trên tọa độ thực tế
+        let currentAngle = Math.atan2(character.y - FARM_MAP.y, character.x - FARM_MAP.x);
+        
+        // Điểm đích mới sẽ tiến lên một bước góc từ vị trí hiện tại của nhân vật
+        let targetAngle = currentAngle + ANGLE_STEP;
 
-        // Sử dụng myRadius thay vì FARM_RADIUS cố định
-        let nextX = FARM_MAP.x + myRadius * Math.cos(farmAngle);
-        let nextY = FARM_MAP.y + myRadius * Math.sin(farmAngle);
+        let nextX = FARM_MAP.x + myRadius * Math.cos(targetAngle);
+        let nextY = FARM_MAP.y + myRadius * Math.sin(targetAngle);
 
         if (can_move_to(nextX, nextY)) {
             move(nextX, nextY); 
         }
     }
     // --------------------------
+
+
+
+
+	
 
 // Kiểm tra lạc chỗ => quay về fram
 
