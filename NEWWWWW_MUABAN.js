@@ -3,7 +3,7 @@
 // send_mail('CrownMerch', '1000 mint', 'nice', true)
 
 const MERCHANT = "MuaBan";
-const LEADER = "haiz";
+const LEADER = "Ynhi";
 
 // Danh sách item rác sẽ tự động bán
 const TRASH_ITEMS = [
