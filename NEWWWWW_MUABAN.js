@@ -392,7 +392,7 @@ const COMPOUND_RULES = [
 
 // Item thêm thủ công mua ponty
 const PONTY_EXTRA_ITEMS = [
-  "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "cape", "carrot", "cdarktristone", "confetti","ashleaf","rattail",
+  "anniversarygift", "bataxe", "bcandle", "bfangamulet", "bwing","candy0", "candy1", "candycane", "carrot", "cdarktristone", "confetti","ashleaf","rattail",
   "crossbow", "cryptkey", "cshell", "dexbelt", "dexearring", "ectoplasm", "egg0","egg1", "egg2", "egg3", "egg4", "egg5", "egg6", "egg7", "egg8", "embercore",
   "essenceofether", "essenceofgreed", "fallen", "fireblade", "firecrackers", "fury","gcape", "gem0", "gslime", "harbringer", "ijx", "ink", "intbelt",
   "mistletoe", "ololipop", "ornament", "powerglove", "rabbitsfoot", "scythe","slice_blueberry", "slice_citrus", "slice_honey", "slice_nightberry", "slice_strawberry",
