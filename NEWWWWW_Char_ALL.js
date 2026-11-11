@@ -2229,7 +2229,7 @@ let checkcrabxx = 0;
 // let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
-const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) / 3;
+const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : (2 * Math.PI) / 7;
 let currentWitchSet = null; // Biến lưu bộ tọa độ witch
 // ----------------------------------
 
