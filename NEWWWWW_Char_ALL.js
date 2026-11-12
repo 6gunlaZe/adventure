@@ -7,7 +7,7 @@ let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 
 
 
 
-const LEADER = "Ynhi";
+const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
 const MERCHANT = "MuaBan";
 const EXCLUDE = new Set([
@@ -50,19 +50,19 @@ const FARM_LOCATIONS = {
 const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher11", SUKIEN_bscorpion], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
-    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher11", SUKIEN_bscorpion], solo: false, circle: true, radius: 120, elixir: "pumpkinspice" },
-    "haiz": { slot: 3, home: false, events: [""], solo: true, circle: true, radius: 25, elixir: "pumpkinspice" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 120, elixir: "pumpkinspice" },
+    "haiz": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
     "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: false, events: ["mrpumpkin", "mrgreen","witchcipher11","bscorpion"], elixir: "elixirluck" },
+    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
 	
 };
 
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "fireroamer"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
