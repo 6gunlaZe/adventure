@@ -4725,10 +4725,8 @@ async function fetchRecentIssues(limit = 500) {
     }
 
     // Đạt điều kiện -> Thêm vào danh sách
-    Key.push({
-      title: issue.title,
-      issueNumber: issue.number
-    });
+	Key.push(issue.title);
+	  
     console.log(`✅ Thêm key: ${issue.title} | Số dòng: ${numberOfLines}`);
   });
 
