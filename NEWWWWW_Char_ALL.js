@@ -4743,10 +4743,8 @@ async function fetchRecentIssues(limit = 500) {
 }
 
 
-
-let cryptkeyCHECK = fetchRecentIssues(500);
-
-
+let cryptkeyCHECK = null;
+if (character.name == LEADER)cryptkeyCHECK = fetchRecentIssues(500);
 
 
 function ghichu(title, mess, key_auto1) {
