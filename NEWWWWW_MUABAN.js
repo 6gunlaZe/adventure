@@ -421,6 +421,8 @@ const metalsByGrade = {
 // ============================================================
 // NHẬN CODE MESSAGE
 // ============================================================
+let sharedDungeonInstance = null; // 🔑 Biến lưu mã instance hầm ngục nhận từ Leader qua CM
+
 
 function on_cm(sender, data) {
     if (character.name !== MERCHANT) return;
@@ -461,6 +463,14 @@ function on_cm(sender, data) {
         game_log("Người gửi: " + sender + " | Lệnh: " + data.command);
         }
 
+        // Bắt mã instance hầm ngục do Leader gửi tới
+        if (data.type === "DungeonInstance" && name === LEADER) {
+            sharedDungeonInstance = data.instance;
+            game_log(`🔑 Nhận mã Instance hầm từ Leader: ${sharedDungeonInstance}`, "#00FF00");
+        }
+
+
+		
         // --- Logic hỗ trợ Xmage (Haiz gửi Object kèm mã character.in) ---
         if (name === "haiz" && data.command === "assist_xmage") {
             const targetPos = { map: "winterland", x: 1049, y: -2002 };
@@ -3179,6 +3189,30 @@ setTimeout(() => {
 
 
 
+// Hàm vòng lặp liên tục kiểm tra hầm ngục
+async function dungeonLoop() {
+    while (true) {
+        try {
+            // Kiểm tra nếu ở cave, gần tọa độ và có sharedDungeonInstance thì vào cửa
+            if (character.map == "cave" && distance(character, { x: -195, y: -1298 }) < 50 && sharedDungeonInstance) {
+                enter("crypt", sharedDungeonInstance);
+            }
+            
+            // Kiểm tra nếu lỡ kẹt ở crypt mà không đúng instance hoặc bị rớt ra ngoài
+            if (character.map == "crypt" && character.in != sharedDungeonInstance && !smart.moving) {
+                await smart_move({ map: "cave", x: -194, y: -1281 });
+            }
+        } catch (error) {
+            console.error("Lỗi dungeonLoop:", error);
+        }
+
+        // Chờ 1.5 giây (1500ms) rồi lặp lại để tránh spam tài nguyên
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    }
+}
+
+// Khởi chạy vòng lặp
+dungeonLoop();
 
 
 
