@@ -4742,8 +4742,26 @@ async function fetchRecentIssues(limit = 500) {
 }
 
 
-let cryptkeyCHECK = null;
-if (character.name == LEADER)cryptkeyCHECK = fetchRecentIssues(500);
+
+let cryptkeyCHECK = []; // Khởi tạo mặc định là mảng rỗng để an toàn
+let isKeyLoaded = false; // Cờ báo hiệu đã tải xong key từ GitHub chưa
+
+async function initKeySystem() {
+    if (character.name === LEADER) {
+        game_log("🔄 Đang kết nối GitHub tải danh sách key...");
+        cryptkeyCHECK = await fetchRecentIssues(500);
+        isKeyLoaded = true;
+        game_log(`✅ Tải key thành công! Tổng số key hợp lệ: ${cryptkeyCHECK.length}`);
+    } else {
+        isKeyLoaded = true; // Member không cần tải key từ GitHub
+    }
+}
+
+// Chạy hàm khởi tạo ngay khi script bắt đầu
+initKeySystem();
+
+
+
 
 
 function ghichu(title, mess, key_auto1) {
