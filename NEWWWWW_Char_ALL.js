@@ -2217,10 +2217,10 @@ function getDailyWitchSet() {
 
     // Random theo tỉ lệ 40% - 30% - 20% - 10%
     const r = seededRandom(timeSeed);
-    const setIndex = r < 0.4 ? 0 :  // 40%
-                     r < 0.6 ? 1 :  // 20%
-                     r < 0.9 ? 2 :  // 30%
-                               3;   // 10%
+    const setIndex = r < 0.1 ? 0 :  // 10%
+                     r < 0.2 ? 1 :  // 10%
+                     r < 0.6 ? 2 :  // 40%
+                               3;   // 40%
 
     return WITCH_SETS[setIndex];
 }
