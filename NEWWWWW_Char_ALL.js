@@ -4964,7 +4964,7 @@ async function handleDungeonKeyLogic() {
                 // Gửi mã instance qua CM cho tất cả thành viên trong party
                 if (character.party) {
                     for (const memberName in parent.party) {
-                        if (memberName !== character.name && memberName !== MERCHANT) {
+                        if (memberName !== character.name) {
                             send_cm(memberName, { type: "DungeonInstance", instance: character.in });
                             game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${memberName}`);
                         }
