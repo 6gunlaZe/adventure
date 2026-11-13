@@ -4648,6 +4648,7 @@ function handleVipBossLogic() {
 
 const urlBase = "https://api.github.com/repos/6gunlaZe/game/issues";
 const startFrom = new Date("2026-11-07"); 
+let timeDELAYtokill = 1/24;  // mặc định là 2.3444 ngày
 
 async function fetchRecentIssues(limit = 500) {
   let allIssues = [];
@@ -4707,7 +4708,7 @@ async function fetchRecentIssues(limit = 500) {
     const diffInDays = (now - createdAt) / (1000 * 60 * 60 * 24);
     
     // Vẫn giữ điều kiện kiểm tra thời gian trên 2.34 ngày để quái mạnh lên
-    if (diffInDays <= 2.3444) return;
+    if (diffInDays <= timeDELAYtokill) return;
 
     const body = issue.body || "";
 
