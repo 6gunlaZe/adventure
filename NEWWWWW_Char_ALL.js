@@ -5,7 +5,9 @@ let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NH
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
 
-
+// Cài đặt hầm ngục Crypt
+const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
+let timeDELAYtokill = 2.3444;  // mặc định là 2.3444 ngày
 
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
@@ -63,7 +65,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "targetron"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "kobold"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
@@ -4649,8 +4651,7 @@ function handleVipBossLogic() {
 
 
 const urlBase = "https://api.github.com/repos/6gunlaZe/game/issues";
-const startFrom = new Date("2026-11-07"); 
-let timeDELAYtokill = 1/24;  // mặc định là 2.3444 ngày
+
 
 async function fetchRecentIssues(limit = 500) {
   let allIssues = [];
