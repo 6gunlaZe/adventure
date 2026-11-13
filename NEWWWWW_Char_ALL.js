@@ -21,7 +21,7 @@ const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy","paledino","mimic","ma
 const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider",];  // các quái ưu tiên đánh trước
 const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire","bscorpion"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
 const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo",
-						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar","wolf","vbat","a7","a2","a3","a6","a8","fireroamer",
+						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar","wolf","vbat","a7","a2","a3","a6","a8","fireroamer","kobold","mimic",
 						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn"];
 
 
@@ -42,6 +42,7 @@ const FARM_LOCATIONS = {
     porcupine: { x: -799, y: 185, map: "desertland" },
     fireroamer: { x: 221, y: -824, map: "desertland" },
     plantoid: { x: -802, y: -341, map: "desertland" },
+    kobold: { x: 701, y: -509, map: "ucliffs" },
 
 
 
