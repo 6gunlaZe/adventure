@@ -44,7 +44,7 @@ const FARM_LOCATIONS = {
     porcupine: { x: -799, y: 185, map: "desertland" },
     fireroamer: { x: 221, y: -824, map: "desertland" },
     plantoid: { x: -802, y: -341, map: "desertland" },
-    kobold: { x: 618, y: -519, map: "ucliffs" },
+    kobold: { x: 537, y: -647, map: "ucliffs" },
 
 
 
