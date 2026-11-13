@@ -745,7 +745,7 @@ function service_full(req) {
     go_to_service(req, () => {
         const target = get_service_target();
         mluck_party();
-        if (target && target.name == "autocheck" )give_item(target.name, "confetti", 9999);
+        if (target && target.name == "Ynhi" )give_item(target.name, "cipherdraught", 9999);
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
 }
