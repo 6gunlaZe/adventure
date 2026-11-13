@@ -118,7 +118,7 @@ let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 
 let lastFarmMonsterSeen = Date.now();
 let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
 let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
-
+let Toltalmonster = 0;
 
 
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -164,6 +164,7 @@ function scanAll() {
 	vipBossTarget = null;
 	bscorpionTarget = null;
 	Viecquantrong = false;
+	Toltalmonster = 0;
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
@@ -193,6 +194,8 @@ function scanAll() {
 
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
+			
+			Toltalmonster++;
 
             if (fram_bscorpion && !entity.target && character.name == "haiz" ) continue;
 
@@ -1475,7 +1478,7 @@ if (bscorpionTarget && character.hp > 8000 && !healer) {
 	
 
     // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
-    if (!targetToTaunt && monstersTargetingMeCount < 6) {
+    if (!targetToTaunt && monstersTargetingMeCount < 6 && monstersTargetingMeCount < Toltalmonster/2) {
         targetToTaunt = bestFarmMob;
     }
 
