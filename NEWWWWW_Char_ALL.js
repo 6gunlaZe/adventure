@@ -44,7 +44,7 @@ const FARM_LOCATIONS = {
     porcupine: { x: -799, y: 185, map: "desertland" },
     fireroamer: { x: 221, y: -824, map: "desertland" },
     plantoid: { x: -802, y: -341, map: "desertland" },
-    kobold: { x: 701, y: -509, map: "ucliffs" },
+    kobold: { x: 618, y: -519, map: "ucliffs" },
 
 
 
@@ -54,7 +54,7 @@ const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
     "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
-    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 120, elixir: "pumpkinspice" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
     "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
