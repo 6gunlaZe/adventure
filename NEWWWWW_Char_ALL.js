@@ -3702,6 +3702,7 @@ const EQUIPMENT_SETS = {
         { itemName: "horsecapeg", slot: "cape", level: 9, l: "l" },  
         { itemName: "nightmarketsash", slot: "belt", l: "l" },
         { itemName: "goldring", slot: "ring1", l: "l"  },
+        { itemName: "goldring", slot: "ring2", l: "u"  },
 
             
         ],
