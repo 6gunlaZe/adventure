@@ -2677,7 +2677,7 @@ const charCooldowns = {};
 const STUCK_THRESHOLD = 5 * 60 * 1000; // 5 phút
 const homeStuckTimes = {};
 // Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (20 giây)
-const ACTION_COOLDOWN = 20000; 
+const ACTION_COOLDOWN = 15000; 
 
 function manageChars() {
     if (character.name !== LEADER || isCaveMode ) return;
