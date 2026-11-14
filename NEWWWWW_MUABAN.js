@@ -3214,8 +3214,7 @@ async function dungeonLoop() {
             console.error("Lỗi dungeonLoop:", error);
         }
 
-        // Chờ 1.5 giây (1500ms) rồi lặp lại để tránh spam tài nguyên
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 }
 
