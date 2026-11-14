@@ -1247,7 +1247,7 @@ async function trySuperShot() {
     if (targeted) currentTarget = targeted;
 
     if (!currentTarget || smart.moving || attackBusy) return false;
-    if (is_on_cooldown("supershot") || character.mp < 800) return false;
+    if (is_on_cooldown("supershot") || character.mp < 800 || currentTarget.mtype == "a3") return false;
 
     
         try {
