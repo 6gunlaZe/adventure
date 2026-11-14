@@ -3195,7 +3195,7 @@ async function dungeonLoop() {
     while (true) {
         try {
             // Kiểm tra nếu ở cave, gần tọa độ và có sharedDungeonInstance thì vào cửa
-            if (character.map == "cave" && distance(character, { x: -195, y: -1298 }) < 90 && sharedDungeonInstance) {
+            if (character.map == "cave" && distance(character, { x: -195, y: -1298 }) < 150 && sharedDungeonInstance) {
                 enter("crypt", sharedDungeonInstance);
             }
             
