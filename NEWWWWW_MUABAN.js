@@ -504,8 +504,15 @@ function on_cm(sender, data) {
     // =========================================================================
     // 3. XỬ LÝ ĐƯA VÀO HÀNG CHỜ QUEUE (Các dịch vụ Merchant thông thường)
     // =========================================================================
-    if (!data?.command || character.esize < 4 ) return;
+    if (!data?.command) return;
 
+    if (character.esize < 4) {
+        // Xóa tất cả lệnh "full" đang nằm trong hàng chờ queue1
+        queue1 = queue1.filter(q => q.command !== "full");
+        return;
+    }
+
+	
     const config = SERVICES[data.command];
 
     if (!config) {
