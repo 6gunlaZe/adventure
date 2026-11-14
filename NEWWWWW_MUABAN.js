@@ -756,6 +756,7 @@ function service_full(req) {
         const target = get_service_target();
         mluck_party();
         if (target && target.name == "Ynhi" )give_item(target.name, "cipherdraught", 9999);
+        if (target && target.name == "haiz" )give_item(target.name, "cryptkey", 50);
         setTimeout(() => finish_and_return(), CONFIG.SERVICE_DELAY);
     });
 }
