@@ -1652,6 +1652,7 @@ async function tryCleave() {
     }
 }
 
+const stopMonsters = ["porcupine", "greenfairy", "bluefairy", "redfairy"];
 
 async function tryAgitate() {
     // 1. Kiểm tra nhanh cơ bản
@@ -1673,7 +1674,7 @@ async function tryAgitate() {
         const e = m.entity;
 
         // Nếu có Porcupine -> Hủy ngay lập tức không cần kiểm tra tiếp!
-        if (e.mtype === "porcupine") {
+        if (stopMonsters.includes(e.mtype)) {
             hasPorcupine = true;
             break; 
         }
