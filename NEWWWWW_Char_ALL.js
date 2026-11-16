@@ -2076,6 +2076,10 @@ function hasEngagedBoss(entity) {
 }
 
 
+    // Khai báo các tọa độ ép cứng (luôn ghi đè dữ liệu server)
+    const OVERRIDE_BOSS_LOCATIONS = {
+        franky: { map: "level2w", x: 0, y: 12 } // Thay đổi x, y theo tọa độ đứng của bạn
+    };
 
 function getActiveWorldBoss() {
 
@@ -2125,7 +2129,12 @@ function getActiveWorldBoss() {
     for (const bossId of WORLD_BOSSES) {
         const b = status[bossId];
         if (b && b.live) {
-            return { ...b, id: bossId };
+            const override = OVERRIDE_BOSS_LOCATIONS[bossId] || {};
+            return {
+                ...b,
+                ...override, // Đặt sau ...b để luôn ghi đè map, x, y của server
+                id: bossId
+            };
         }
     }
 
