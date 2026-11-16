@@ -1652,7 +1652,7 @@ async function tryCleave() {
     }
 }
 
-const stopMonsters = ["porcupine", "greenfairy", "bluefairy", "redfairy"];
+const stopMonsters = ["odino", "porcupine", "greenfairy", "bluefairy", "redfairy"];
 
 async function tryAgitate() {
     // 1. Kiểm tra nhanh cơ bản
