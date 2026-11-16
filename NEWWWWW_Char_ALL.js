@@ -5582,7 +5582,7 @@ async function useAdvancedSkill(skill, targets, equipment_set = null) {
 
 
 
-
+// Hàm trợ giúp tìm các điểm cố định đã khai báo mà gần boss nhất
 function moveNearest(targetPos, spots) {
     if (!targetPos || !spots || spots.length === 0) return null;
 
