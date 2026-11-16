@@ -1839,7 +1839,7 @@ const quaiA_Yeu = [
 ];
 
 const quaiB_Boss = [
-    "stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin", "plantoid", "ent", "sparkbot", FARM_MONSTER, "vbat",
+    "stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin", "plantoid", "ent", "sparkbot", FARM_MONSTER, "vbat", "franky",
 ];
 
 const MAX_ZAP_TARGETS = 14; // Ngưỡng quái tối đa đang cắn mình
