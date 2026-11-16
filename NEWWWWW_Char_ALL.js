@@ -2076,6 +2076,13 @@ function hasEngagedBoss(entity) {
 }
 
 
+
+const spotsfranky = [
+    { x: 10, y: 15 }, 
+    { x: -96, y: -172 }, 
+    { x: -528, y: -172  },
+];
+
     // Khai báo các tọa độ ép cứng (luôn ghi đè dữ liệu server)
     const OVERRIDE_BOSS_LOCATIONS = {
         franky: { map: "level2w", x: 0, y: 12 } // Thay đổi x, y theo tọa độ đứng của bạn
@@ -2328,7 +2335,10 @@ if (!Viecquantrong)
         // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
         if (bossEntity && !bossEntity.dead) {
 			
-			if (activeBoss.id == "franky")return  // boss này không cần logic di chuyển
+			if (activeBoss.id == "franky"){
+				moveNearest(bossEntity, spotsfranky);
+				return  // boss này cần logic di chuyển riêng
+			}
 
             const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
             const safeAttackRange = Math.max(15, character.range - 60);
@@ -5570,11 +5580,7 @@ async function useAdvancedSkill(skill, targets, equipment_set = null) {
 
 
 
-const spotsfranky = [
-    { x: 10, y: 15 }, 
-    { x: -96, y: -172 }, 
-    { x: -528, y: -172  },
-];
+
 
 
 function moveNearest(targetPos, spots) {
@@ -5594,7 +5600,7 @@ function moveNearest(targetPos, spots) {
         }
     }
 
-    if (nearest && (character.x !== nearest.x || character.y !== nearest.y)) {
+    if (nearest && !smart.moving && (character.x !== nearest.x || character.y !== nearest.y)) {
         xmove(nearest.x, nearest.y);
     }
 
