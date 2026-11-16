@@ -13,7 +13,7 @@ const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
 const MERCHANT = "MuaBan";
 const EXCLUDE = new Set([
-    "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti",
+    "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti","spidersilk",
     "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2","handofmidas","basher","cipherdraught",
     "frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","tracker","crossbow","jacko","pouchbow","orbg"
 ]);
