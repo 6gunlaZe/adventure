@@ -1667,17 +1667,18 @@ async function tryAgitate() {
     // 2. TỐI ƯU: Chỉ dùng 1 vòng lặp duy nhất để kiểm tra TOÀN BỘ điều kiện
     for (let i = 0; i < monsters.length; i++) {
         const m = monsters[i];
-        
-        // Bỏ qua quái ngoài tầm đánh ngay lập tức
-        if (m.distance > AGITATE_RANGE) continue;
 
         const e = m.entity;
 
-        // Nếu có Porcupine -> Hủy ngay lập tức không cần kiểm tra tiếp!
+        // Nếu có Porcupine trong phạm vi check -> Hủy ngay lập tức không cần kiểm tra tiếp!
         if (stopMonsters.includes(e.mtype)) {
             hasPorcupine = true;
             break; 
         }
+		
+        // Bỏ qua quái ngoài tầm đánh ngay lập tức
+        if (m.distance > AGITATE_RANGE) continue;
+
 
         // Kiểm tra điều kiện Ynhi
         if (e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000) {
