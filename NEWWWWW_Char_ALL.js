@@ -5003,6 +5003,7 @@ async function handleDungeonKeyLogic() {
 				checkkey_now = null;
                 enteringDungeon = false;
                 isDoingDungeon = false;
+				lastFarmMonsterSeen = Date.now();
                 return false;
             }
 			
