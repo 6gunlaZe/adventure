@@ -5569,6 +5569,58 @@ async function useAdvancedSkill(skill, targets, equipment_set = null) {
 
 
 
+
+const spotsfranky = [
+    { x: 10, y: 15 }, 
+    { x: -96, y: -172 }, 
+    { x: -528, y: -172  },
+];
+
+
+function moveNearest(targetPos, spots) {
+    if (!targetPos || !spots || spots.length === 0) return null;
+
+    let nearest = spots[0];
+    let minDistSq = Infinity;
+
+    for (const spot of spots) {
+        const dx = spot.x - targetPos.x;
+        const dy = spot.y - targetPos.y;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq < minDistSq) {
+            minDistSq = distSq;
+            nearest = spot;
+        }
+    }
+
+    if (nearest && (character.x !== nearest.x || character.y !== nearest.y)) {
+        xmove(nearest.x, nearest.y);
+    }
+
+    return nearest;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ============================================================
 // CONFIG & STATE 
 // ============================================================
