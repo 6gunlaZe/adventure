@@ -2324,8 +2324,12 @@ if (!Viecquantrong)
         const bossEntry = bossEntities.find(b => b.entity.mtype === activeBoss.id);
         const bossEntity = activeBoss.entity || bossEntry?.entity;
 
+		
         // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
         if (bossEntity && !bossEntity.dead) {
+			
+			if (activeBoss.id == "franky")return  // boss này không cần logic di chuyển
+
             const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
             const safeAttackRange = Math.max(15, character.range - 60);
 
