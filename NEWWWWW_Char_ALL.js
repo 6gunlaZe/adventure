@@ -54,12 +54,12 @@ const FARM_LOCATIONS = {
 const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
 // Bình thường radius Ynhi - 40  // haiz 30
 const CHAR_CONFIG = {
-    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion, "franky"], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
     "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
     "haiz": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
-    "nhiY": { slot: 3, home: false, events: ["mrpumpkin", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
-    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion"], elixir: "elixirluck" },
+    "nhiY": { slot: 3, home: false, events: ["", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen", "franky",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion", "franky"], elixir: "elixirluck" },
 	
 };
 
