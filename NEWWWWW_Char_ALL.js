@@ -2407,9 +2407,12 @@ if (!Viecquantrong)
 
 
 	
-    if (parent?.S?.goobrawl && checkcrabxx === 1) {
-        if (character.map !== "goobrawl" && !smart.moving) parent.socket.emit("join", { name: "goobrawl" });
-        if (character.map === "goobrawl") stop("smart");
+    if (parent?.S?.goobrawl || server.status.goobrawl) {
+        if (character.map !== "goobrawl" && !smart.moving){
+			parent.socket.emit("join", { name: "goobrawl" });
+			join('goobrawl');
+		}
+        if (character.map === "goobrawl" && smart.moving) stop("smart");
         return;
     }
 
