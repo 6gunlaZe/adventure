@@ -4971,6 +4971,7 @@ let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại tron
 let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
 let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
 let dungeonAttemptTime = 0;    // ⏱️ Thêm biến ghi nhận thời điểm bắt đầu gọi lệnh vào hầm
+let checkkey_now = null;
 
 async function handleDungeonKeyLogic() {
     const isLeader = (character.name === LEADER);
@@ -4981,7 +4982,7 @@ async function handleDungeonKeyLogic() {
             // Đã load vào map crypt thành công -> Mở khóa cờ chờ
             if (isLeader) {
                 ghichu(character.in, "run now", myoke);
-                
+                checkkey_now = null;
                 // Gửi mã instance qua CM cho tất cả thành viên trong party
                 if (character.party) {
                     for (const memberName in parent.party) {
@@ -4995,10 +4996,11 @@ async function handleDungeonKeyLogic() {
             enteringDungeon = false;
         } else {
 
-            // 🛡️ BỔ SUNG: Kiểm tra quá thời gian chờ (Ví dụ: quá 7 giây mà không vào được map crypt)
+            // 🛡️ BỔ SUNG: Kiểm tra quá thời gian chờ (Ví dụ: quá 7 giây mà không vào được map crypt) có thể do key lỗi hoặc hết hạn do sever reset
             if (Date.now() - dungeonAttemptTime > 7000) {
                 game_log(`⚠️ Vào hầm thất bại hoặc quá hạn! Reset trạng thái kẹt.`, "#FF0000");
-				await markIssueDone(character.in, myoke);
+				await markIssueDone(checkkey_now || character.in, myoke);	
+				checkkey_now = null;
                 enteringDungeon = false;
                 isDoingDungeon = false;
                 return false;
@@ -5183,6 +5185,7 @@ if (character.map === "crypt") {
             return true;
         } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
             let backupKey = cryptkeyCHECK.shift();
+			checkkey_now = backupKey;
             enteringDungeon = true;
 			dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
             isDoingDungeon = true;
