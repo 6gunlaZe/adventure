@@ -1652,7 +1652,9 @@ async function tryCleave() {
     }
 }
 
-const stopMonsters = ["odino", "porcupine", "greenfairy", "bluefairy", "redfairy"];
+const stopMonsters = ["odino", "porcupine", "greenfairy", "bluefairy", "redfairy", "oneeye"];
+const NooMonsters = ["porcupine",];
+
 
 async function tryAgitate() {
     // 1. Kiểm tra nhanh cơ bản
@@ -1679,6 +1681,11 @@ async function tryAgitate() {
         // Bỏ qua quái ngoài tầm đánh ngay lập tức
         if (m.distance > AGITATE_RANGE) continue;
 
+		// Nếu có Porcupine trong phạm vi bãi fram mà trong tầm 
+        if (NooMonsters.includes(e.mtype)) {
+            hasPorcupine = true;
+            break; 
+        }
 
         // Kiểm tra điều kiện Ynhi
         if (e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000) {
