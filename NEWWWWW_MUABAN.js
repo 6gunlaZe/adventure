@@ -382,7 +382,7 @@ const COMPOUND_RULES = [
     { items: ["wbook0"], rules: [{ levels: [0, 1, 2, 3], scroll: "cscroll1", offering: null },  ] },
     { items: ["cloverstud","moonshardearring","windbelt"], rules: [{ levels: [0], scroll: null, offering: null }, { levels: [1], scroll: "cscroll1", offering: "offeringp" }, ] },
     { items: ["spookyamulet","ftrinket"], rules: [{ levels: [0, 1, 2,], scroll: "cscroll1", offering: null }, { levels: [3], scroll: "cscroll2", offering: "offeringp" },  ] },
-    { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null },  ] },
+    { items: ["mossheart"], rules: [{ levels: [0,], scroll: "cscroll1", offering: null }, { levels: [1,], scroll: "cscroll1", offering: "offeringp" },  ] },
     { items: ["keepsakependant","guestbook",], rules: [{ levels: [0,1], scroll: "cscroll1", offering: null },  ] },
     { items: ["jacko"], rules: [{ levels: [0,1], scroll: null, offering: null }, { levels: [2,3], scroll: "cscroll1", offering: null }, { levels: [4], scroll: "cscroll2", offering: "offeringp" },  ] },
     { items: ["lantern111"], rules: [{ levels: [0,], scroll: "cscroll2", offering: null }, { levels: [1,2], scroll: "cscroll2", offering: "offeringp" },  ] },
