@@ -4548,7 +4548,7 @@ function checkWorldBossDeathStatus() {
     if (!activeBossTracker.mtype || activeBossTracker.reported) return;
 
     const isHpLow = activeBossTracker.lastHp <= 20000;
-    const isDisappeared = (Date.now() - activeBossTracker.lastSeen > 3800) && (activeBossTracker.lastHp < 100000);
+    const isDisappeared = (Date.now() - activeBossTracker.lastSeen > 3800) && (activeBossTracker.lastHp < 300000);
 
     if (isHpLow || isDisappeared) {
         sendWorldBossNtfyReport(activeBossTracker.mtype, activeBossTracker.players, activeBossTracker.lastHp);
