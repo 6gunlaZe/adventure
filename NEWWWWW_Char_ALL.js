@@ -2503,7 +2503,7 @@ if (!Viecquantrong)
         .finally(() => { 
            // farmingMoving = false; 
         });
-}, fram_bscorpion ? 350 : 700);
+}, fram_bscorpion ? 200 : 700);
 
 
 
