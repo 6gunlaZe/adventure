@@ -198,7 +198,7 @@ function scanAll() {
 			
 			Toltalmonster++;
 
-            if (fram_bscorpion && !entity.target && entity.hp > 25000 && character.name == "haiz" ) continue;
+            if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
 
             if (entity.mtype === "fieldgen0") {
                 fieldgens.push({ entity: entity, distance: dist });
