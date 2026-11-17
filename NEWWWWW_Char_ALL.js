@@ -207,6 +207,7 @@ function scanAll() {
 
 			if (fram_bscorpion && entity.mtype == "bscorpion"){
 				bscorpionTarget = entity;
+                bossEntities.push({ entity: entity, distance: dist });
 			}
 
             //Kiểm tra VIP Boss cần farm level
