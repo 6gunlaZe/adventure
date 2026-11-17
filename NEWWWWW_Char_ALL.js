@@ -1469,7 +1469,7 @@ async function tryTaunt() {
 
 	if (bscorpionTarget && bscorpionTarget.hp < 9500 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
 	
-if (bscorpionTarget && character.hp > 8000 && !healer) {
+if (bscorpionTarget && character.hp > 8000 && !healer && bscorpionTarget.hp < 13500) {
     let burn = bscorpionTarget.s?.burned;
     let burnDmg1_5s = burn ? (burn.intensity / burn.ms) * Math.min(burn.ms, 1500) : 0;
     
@@ -4081,7 +4081,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < (5500 + burnDmg1_5s) ) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < Math.min(5500 + burnDmg1_5s, 9000) ) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
