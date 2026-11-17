@@ -4081,7 +4081,7 @@ const GEAR_LOGIC = {
         if (e.target === character.name && character.hp < 8500)
             needNormalDef = true;
 
-        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < Math.min(5500 + burnDmg1_5s, 9000) ) )
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < Math.min(5500 + burnDmg1_5s, 10500) ) )
             needLuck = true;
 
         if (e.target || e.max_hp < 5000)
