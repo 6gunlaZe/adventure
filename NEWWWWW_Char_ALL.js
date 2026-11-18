@@ -1,9 +1,9 @@
 // ============================================================
 // CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
 // ============================================================
-let fram_bscorpion = true;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
+let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
-let solobscorpion = true; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
+let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
 
 // Cài đặt hầm ngục Crypt
 const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
