@@ -3330,7 +3330,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
-        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
         { itemName: "suckerpunch", slot: "ring2", l: "s"  },
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
@@ -3351,7 +3351,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
-        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
         { itemName: "suckerpunch", slot: "ring2", l: "s"  },
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
@@ -3372,7 +3372,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
-        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
         { itemName: "suckerpunch", slot: "ring2", l: "s"  },
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
@@ -3417,7 +3417,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
 
-        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
         { itemName: "suckerpunch", slot: "ring2", l: "s"  },
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
@@ -3469,7 +3469,7 @@ const EQUIPMENT_SETS = {
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", l: "l" },
 
-        { itemName: "stramulet", slot: "amulet", l: "l"},
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
         { itemName: "suckerpunch", slot: "ring2", l: "s"  },
         { itemName: "suckerpunch", slot: "ring1", l: "l"  },
 			
