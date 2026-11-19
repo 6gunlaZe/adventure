@@ -2259,6 +2259,7 @@ function getDailyWitchSet() {
 }
 
 let checkcrabxx = 0;
+let time_make_rspeed = 0;
 // let farmingMoving = false;
 
 // --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
@@ -2491,9 +2492,12 @@ if (!Viecquantrong)
     }
     // --------------------------
 
-
-
-
+//Logic gọi LyThanhThu lên buff
+	if (character.name === LEADER && !character.s.rspeed && Toltalmonster < 5 && healer){
+		stop_character(healer.name);
+        start_character("LyThanhThu", 3);
+		time_make_rspeed = Date.now();
+	}
 	
 
 // Kiểm tra lạc chỗ => quay về fram
@@ -2777,6 +2781,9 @@ function manageChars() {
         }
 
         if (shouldRun && !isRunning) {
+			
+			if (now - time_make_rspeed < 50000 && charName == "Ynhi" && !character.s.rspeed) continue; //tạm hoãn gọi Ynhi chờ delay cho LyThanhThu xử lý
+			
             // --- CẦN BẬT ---
             console.log(`[Manager] Gọi nhân vật sau 8s: ${charName} (Event: ${currentEvent || 'Home'})`);
             
