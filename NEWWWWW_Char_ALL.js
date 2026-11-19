@@ -2493,7 +2493,8 @@ if (!Viecquantrong)
     // --------------------------
 
 //Logic gọi LyThanhThu lên buff
-	if (character.name === LEADER && !character.s.rspeed && Toltalmonster < 5 && healer){
+	const chestCount11 = Object.keys(parent.chests || {}).length;
+	if (character.name === LEADER && !character.s.rspeed && Toltalmonster < 8 && healer && chestCount11 == 0){
 		stop_character(healer.name);
         start_character("LyThanhThu", 3);
 		time_make_rspeed = Date.now();
