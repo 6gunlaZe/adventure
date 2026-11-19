@@ -2447,10 +2447,13 @@ if (!Viecquantrong)
         return;
     }
 
-    if (parent?.S?.crabxx && checkcrabxx === 1) {
+    if (parent?.S?.crabxx || server.status.crabxx ) {
         const crabxx = get_nearest_monster({ type: "crabxx" });
-        if (!crabxx && !smart.moving) parent.socket.emit("join", { name: "crabxx" });
-        if (crabxx && distance(character, crabxx) <= 200) stop("smart");
+        if (!crabxx && !smart.moving){
+			parent.socket.emit("join", { name: "crabxx" });
+			join('crabxx');
+		}
+        if (crabxx && distance(character, crabxx) > 250)xmove(crabxx.x, crabxx.y);
         return;
     }
 
