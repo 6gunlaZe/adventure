@@ -2741,6 +2741,8 @@ function manageChars() {
 
     for (const [charName, config] of Object.entries(CHAR_CONFIG)) {
         if (charName === LEADER) continue;
+        if (charName === "LyThanhThu" && !character.s.rspeed) continue;
+
 
         const isRunning = parent.party_list.includes(charName);
         const shouldRun = currentEvent 
