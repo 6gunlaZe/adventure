@@ -15,6 +15,8 @@ send_cm("haiz","framtay")
 
 start_character("Ynhi", 3);
 start_character("6gunlaZe", 3);
+start_character("LyThanhThu", 3);
+
 
 start_character("MuaBan", 5);
 
