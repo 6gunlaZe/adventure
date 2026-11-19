@@ -3517,7 +3517,7 @@ const EQUIPMENT_SETS = {
 
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
         ],
 		
@@ -3535,7 +3535,7 @@ const EQUIPMENT_SETS = {
 
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
         ],
 		
@@ -3553,7 +3553,7 @@ const EQUIPMENT_SETS = {
 
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
         ],
 
@@ -3571,7 +3571,7 @@ const EQUIPMENT_SETS = {
 
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
         ],
 
@@ -3591,7 +3591,7 @@ const EQUIPMENT_SETS = {
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
        // { itemName: "crookedkey", slot: "earring1", l: "s"  },
        // { itemName: "crookedkey", slot: "earring2", l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
         ],
 		
@@ -3608,7 +3608,7 @@ const EQUIPMENT_SETS = {
 			
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 
 			
         ],
@@ -3638,7 +3638,7 @@ const EQUIPMENT_SETS = {
 
         { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
         { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
-        { itemName: "dexamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
 			
 		],
         heall: [
