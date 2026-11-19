@@ -196,7 +196,7 @@ function scanAll() {
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 			
-			Toltalmonster++;
+			if (dist < 200)Toltalmonster++;
 
             if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
 
