@@ -5012,6 +5012,7 @@ let dungeonAttemptTime = 0;    // ⏱️ Thêm biến ghi nhận thời điểm 
 let checkkey_now = null;
 
 async function handleDungeonKeyLogic() {
+	return // tạm tắt chờ chuyển về EU I hoặc khi sever reset
     const isLeader = (character.name === LEADER);
 
     // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
