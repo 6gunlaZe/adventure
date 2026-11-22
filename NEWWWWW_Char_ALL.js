@@ -5374,7 +5374,7 @@ function isAnyMemberLowHP() {
 function isInDungeonDoneWindow() {
     if (!checkDonehamnguc) return false;
     const elapsed = Date.now() - checkDonehamnguc;
-    return elapsed > 4000 && elapsed < 30000;
+    return elapsed > 3600 && elapsed < 30000;
 }
 
 
