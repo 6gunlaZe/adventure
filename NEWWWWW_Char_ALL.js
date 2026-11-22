@@ -5163,7 +5163,8 @@ if (character.map === "crypt") {
             }
 		await use_skill("town"); 
         await smart_move({ map: "cave", x: -194, y: -1281 });
-		
+		lastFarmMonsterSeen = Date.now();
+
         return false; 
     } 
     else {
