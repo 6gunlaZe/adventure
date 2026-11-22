@@ -120,6 +120,7 @@ let lastFarmMonsterSeen = Date.now();
 let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
 let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
 let Toltalmonster = 0;
+let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm
 
 
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -204,6 +205,14 @@ function scanAll() {
                 fieldgens.push({ entity: entity, distance: dist });
                 continue;
             }
+
+            if ( (entity.mtype === "a4" || entity.mtype === "a6" || entity.mtype === "a8" ) && entity.level > 5 && dist < 300 && Date.now() - checkDonehamnguc > 30000) {
+            checkDonehamnguc = Date.now();
+			}
+            if (entity.mtype === "a3" && entity.hp < 10000 && dist < 200) {
+			checkDonehamnguc = Date.now();	
+			}
+			
 
 			if (fram_bscorpion && entity.mtype == "bscorpion"){
 				bscorpionTarget = entity;
@@ -5073,8 +5082,8 @@ if (character.map === "crypt") {
 		//LỰA CHỌN ĐƯỜNG DẪN TÙY THEO LOGIC
 		const waypoints = landau ? DUNGEON_WAYPOINTS : DUNGEON_WAYPOINTS1;
 		
-        // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI ---
-        if (currentWaypointIndex < waypoints.length) {
+        // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI --- Có thoát sớm nếu đủ điều kiên
+        if (currentWaypointIndex < waypoints.length || isInDungeonDoneWindow() ) {
             const dest = waypoints[currentWaypointIndex];
 
         // 📤 Gửi tọa độ kèm timestamp hiện tại cho party
@@ -5099,13 +5108,16 @@ if (character.map === "crypt") {
              }
              return true; 
          }
+
           // logic thoát sớm khi yếu máu hoặc kẹt quái quá mạnh
-          if (isAnyMemberLowHP())
-		  {
-			  await markIssueDone(character.in, myoke);
-			  parent.api_call("disconnect_character", {name: "haiz"}); 
-		  }
-			
+          if (isAnyMemberLowHP() )
+          {
+              try {
+                  await markIssueDone(character.in, myoke);
+              } catch (e) {}
+              parent.api_call("disconnect_character", {name: "haiz"}); 
+          }
+
           // logic đánh boss
           if (currentTarget && !currentTarget.dead) {
               const dist = distance(character, currentTarget);
@@ -5348,6 +5360,15 @@ function isAnyMemberLowHP() {
 
     return false; // Không có ai máu dưới 3000
 }
+
+// hàm kiểm tra đủ điều kiện thoát sớm
+function isInDungeonDoneWindow() {
+    if (!checkDonehamnguc) return false;
+    const elapsed = Date.now() - checkDonehamnguc;
+    return elapsed > 4000 && elapsed < 30000;
+}
+
+
 
 // ============================================================
 // ĐỔI ĐỒ NÂNG CAO THEO HIT ATTACK
