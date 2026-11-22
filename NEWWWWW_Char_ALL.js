@@ -120,6 +120,7 @@ let lastFarmMonsterSeen = Date.now();
 let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
 let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
 let Toltalmonster = 0;
+let ToltalENT = 0;
 let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm
 
 
@@ -167,6 +168,8 @@ function scanAll() {
 	bscorpionTarget = null;
 	Viecquantrong = false;
 	Toltalmonster = 0;
+	ToltalENT = 0;
+
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
@@ -198,6 +201,7 @@ function scanAll() {
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 			
             if (dist < 200) Toltalmonster += 1;
+            if (entity.mtype === "ent" && entity.hp > 2000000) ToltalENT += 1;
 
             if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
 
@@ -5659,17 +5663,33 @@ function moveNearest(targetPos, spots) {
 
 
 
+const LURE_COOLDOWN_MS = 180 * 1000; // 180s mới được gọi lại
+let lastLureSent = 0;
 
+setInterval(() => {
+    if (character.name !== "Ynhi") return;
+    if (character.rip || character.hp < 19000 || ToltalENT > 1) return;
+    if (FARM_MONSTER !== "plantoid") return;
 
+    const farmSpot = FARM_LOCATIONS[FARM_MONSTER];
+    if (!farmSpot || character.map !== farmSpot.map) return;
+    if (distance(character, farmSpot) >= 100) return;
 
+    const now = Date.now();
+    if (now - lastFarmMonsterSeen >= 2000) return;
+    if (now - lastLureSent < LURE_COOLDOWN_MS) return;
 
+    send_cm(MERCHANT, {
+        command: "lure",
+        name: character.name,
+        map: character.map,
+        x: character.x,
+        y: character.y
+    });
 
-
-
-
-
-
-
+    lastLureSent = now;
+    game_log(`[Client] đã giửi yêu cầu 'lure' tới ${MERCHANT}`);
+}, 10000);
 
 
 
