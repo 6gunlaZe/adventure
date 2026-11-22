@@ -361,7 +361,7 @@ var upgradeWhitelistVIPP = {
 	group_rare2: ["sparkstaff",],
 	group_rare: ["xarmor111","t3bow","lmace"],
 	group_vip: ["vattire","vstaff"],
-	group_vip1: ["starkillers1111","vhammer111","vdagger","xhelmet"],
+	group_vip1: ["starkillers1111","vhammer","vdagger","xhelmet"],
 	group_vip2: ["supermittens",],
 	group_vip3: ["harbringer","homecominghelm1","homecomingcoat1","homecomingcape1",],
 	group_vip4: ["candleward1",],
