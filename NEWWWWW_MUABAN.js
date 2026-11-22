@@ -323,7 +323,7 @@ var upgradeGroups = {
 group_vip5: [ 
 	{ levels: [0,1,2], scroll: 1, offering: 0 },
 	{ levels: [3,4,5], scroll: 2, offering: 0 },
-	{ levels: [6],     scroll: 2, offering: 1 },
+	{ levels: [6],     scroll: 2, offering: 0 },
 	//{ levels: [7],     scroll: 2, offering: 2 }
 ],
 group_vip6: [ 
