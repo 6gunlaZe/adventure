@@ -122,7 +122,7 @@ let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật l
 let Toltalmonster = 0;
 let ToltalENT = 0;
 let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm
-
+let cophandame = false;
 
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 // ============================================================
@@ -169,6 +169,7 @@ function scanAll() {
 	Viecquantrong = false;
 	Toltalmonster = 0;
 	ToltalENT = 0;
+	cophandame = false;
 
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
@@ -202,6 +203,8 @@ function scanAll() {
 			
             if (dist < 200) Toltalmonster += 1;
             if (entity.mtype === "ent" && entity.hp > 2000000) ToltalENT += 1;
+            if (entity.mtype === "porcupine" && dist < 200 && character.ctype == "warrior") cophandame = true;
+
 
             if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
 
@@ -285,7 +288,7 @@ function scanAll() {
     }
     if (character.name === MERCHANT) merchant = character;
 	
-    if (vipBossTarget) SAFE = false;
+    if (vipBossTarget || cophandame) SAFE = false;
 	
     // [CẬP NHẬT 2]: Kiểm tra trạng thái boss chết ở cuối hàm scanAll
     checkWorldBossDeathStatus();
