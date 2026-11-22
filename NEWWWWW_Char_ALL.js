@@ -121,7 +121,8 @@ let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
 let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
 let Toltalmonster = 0;
 let ToltalENT = 0;
-let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm
+let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm  
+let checkNguyHiemhamnguc = false;
 let cophandame = false;
 
 // const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -170,7 +171,7 @@ function scanAll() {
 	Toltalmonster = 0;
 	ToltalENT = 0;
 	cophandame = false;
-
+    checkNguyHiemhamnguc = false;
 	
     const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
 
@@ -213,8 +214,8 @@ function scanAll() {
                 continue;
             }
 
-            if ( (entity.mtype === "a4" || entity.mtype === "a6" || entity.mtype === "a8" ) && entity.level > 5 && dist < 300 && Date.now() - checkDonehamnguc > 30000) {
-            checkDonehamnguc = Date.now();
+            if ( (entity.mtype === "a4" || entity.mtype === "a6" || entity.mtype === "a8" ) && entity.level > 4 && dist < 200 ) {
+            checkNguyHiemhamnguc = true;
 			}
             if (entity.mtype === "a3" && entity.hp < 10000 && dist < 200) {
 			checkDonehamnguc = Date.now();	
@@ -5126,7 +5127,7 @@ if (character.map === "crypt") {
          }
 
           // logic thoát sớm khi yếu máu hoặc kẹt quái quá mạnh
-          if (isAnyMemberLowHP() )
+          if (isAnyMemberLowHP() || checkNguyHiemhamnguc)
           {
               try {
                   await markIssueDone(character.in, myoke);
@@ -5378,7 +5379,7 @@ function isAnyMemberLowHP() {
 }
 
 
-// hàm kiểm tra đủ điều kiện thoát sớm
+// hàm kiểm tra đủ điều kiện thoát sớm    
 function isInDungeonDoneWindow() {
     if (!checkDonehamnguc) return false;
     const elapsed = Date.now() - checkDonehamnguc;
