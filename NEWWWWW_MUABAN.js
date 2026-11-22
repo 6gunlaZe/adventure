@@ -270,13 +270,10 @@ var upgradeGroups = {
 	],
 	
 	group_weapon5: [ // vũ khí & trang bị tấn công
-		{ levels: [0,1,2,], scroll: 1, offering: 0 },
-		{ levels: [3,], scroll: 1, offering: 1 }, 
-		{ levels: [4],  scroll: 2, offering: 1 },  
-		{ levels: [5],  scroll: 2, offering: 1 }, // 66 
-	//	{ levels: [6],  scroll: 2, offering: 1 }, // 28
-	//	{ levels: [7,8],  scroll: 2, offering: 2 },  28 13
-	//	{ levels: [9],  scroll: 3, offering: 2 },  5.4
+		{ levels: [0,1,2,4,5], scroll: 1, offering: 0 },
+		{ levels: [6],  scroll: 2, offering: 0 },  
+	//	{ levels: [7],  scroll: 2, offering: 1 },  
+	//	{ levels: [9],  scroll: 2, offering: 2 },  
 
 	],
 	group_rare1: [ // đồ quý, phụ kiện hiếm // không dùng cho level cao vì cần phải "stacks" hủy bằng offeringp nữa mà để tăng rate
@@ -323,7 +320,7 @@ var upgradeGroups = {
 group_vip5: [ 
 	{ levels: [0,1,2], scroll: 1, offering: 0 },
 	{ levels: [3,4,5], scroll: 2, offering: 0 },
-	{ levels: [6],     scroll: 2, offering: 0 },
+	{ levels: [6],     scroll: 2, offering: 1 },
 	//{ levels: [7],     scroll: 2, offering: 2 }
 ],
 group_vip6: [ 
