@@ -1618,7 +1618,7 @@ async function tryCleave() {
     // =========================================================================
     
     // Nếu đang cầm sẵn Bataxe rồi thì quạt luôn
-    if (character.slots.mainhand?.name === "bataxe") {
+    if (character.slots.mainhand?.name === "cave_deepaxe") {
         try {
             await use_skill("cleave");
             game_log(`🪓 Cleave hit ${cleaveMobs.length} quái!`, "#FF5555");
@@ -1629,7 +1629,7 @@ async function tryCleave() {
     }
 
     // Tìm bataxe trong túi đồ
-    const bataxeSlot = character.items.findIndex(i => i?.name === "bataxe");
+    const bataxeSlot = character.items.findIndex(i => i?.name === "cave_deepaxe");
     if (bataxeSlot < 0) return false; // Không mang Bataxe trong túi
 
     try {
@@ -3479,7 +3479,7 @@ const EQUIPMENT_SETS = {
 		
         cleave: [
 
-        { itemName: "bataxe", slot: "mainhand", },
+        { itemName: "cave_deepaxe", slot: "mainhand", },
 
 			
         ],
@@ -5356,7 +5356,7 @@ function isAnyMemberLowHP() {
 
 
 // 🪓 Bộ lọc mẫu cho từng món trang bị
-const AXE_FILTER = item => item && item.name === "bataxe";
+const AXE_FILTER = item => item && item.name === "cave_deepaxe";
 const SHIELD_FILTER = item => item && item.name === "mshield";
 const SWORD_FILTER = item => item && item.name === "sugarsword";
 const STINGER_FILTER = item => item && item.name === "stinger";
