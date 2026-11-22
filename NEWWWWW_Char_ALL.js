@@ -5092,7 +5092,7 @@ if (character.map === "crypt") {
 		const waypoints = landau ? DUNGEON_WAYPOINTS : DUNGEON_WAYPOINTS1;
 		
         // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI --- Có thoát sớm nếu đủ điều kiên
-        if (currentWaypointIndex < waypoints.length || isInDungeonDoneWindow() ) {
+        if (currentWaypointIndex < waypoints.length && !isInDungeonDoneWindow() ) {
             const dest = waypoints[currentWaypointIndex];
 
         // 📤 Gửi tọa độ kèm timestamp hiện tại cho party
