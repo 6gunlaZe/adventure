@@ -3990,6 +3990,9 @@ const GEAR_LOGIC = {
         let needLuck = false;
         let hasSpawnMonsterNearby = false; // Cờ kiểm tra có quái có "spawns" ở gần hay không
 
+        const chestCount = Object.keys(parent.chests || {}).length;
+        const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
+		
         // 2. Duyệt quái xung quanh (tận dụng mảng monsters từ scanAll)
         for (const m of monsters) {
             const e = m.entity;
@@ -4023,8 +4026,17 @@ const GEAR_LOGIC = {
 
         // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
         if (needLuck && character.hp > 6000 && luckcheck < 1) {
+			if (timeSinceLastMonster < 15000) //nếu đang còn trong bãi fram thì tăng delay
+			{
 			glod_delay = 25;
-			luckcheck = LuotBoQua;
+			luckcheck = LuotBoQua;				
+			}
+			else
+			{
+			glod_delay = 2;
+			luckcheck = 1;	
+			}
+
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
             setBooster('luckbooster');
 			activeLuckSet = character.hp > 8000 ? "luck_full" : "luck_def";
@@ -4039,9 +4051,6 @@ const GEAR_LOGIC = {
         // Đồ Gold:
         // - Có > 10 rương
         // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
-        const chestCount = Object.keys(parent.chests || {}).length;
-        const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
-
 		
         if (( (smart.moving && chestCount > 0)  || chestCount > 20 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby && !Tinyguy)) && glod_delay < 0 ) {
             lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
