@@ -144,6 +144,7 @@ const SERVICES = {
     fishing: { priority: 20, target: "fishing", timeout: 300000, handler: service_fishing },
     compound: { priority: 20, target: "upgrade", timeout: 60000, handler: service_compound },
     craft: { priority: 20, target: "upgrade", timeout: 60000, handler: service_craft },
+    lure: { priority: 20, target: "player", timeout: 600000, handler: service_lure },
     gem: { priority: 10, target: "gem", timeout: 65000, handler: service_gem }
 };
 
@@ -3219,6 +3220,184 @@ async function dungeonLoop() {
 
 // Khởi chạy vòng lặp
 dungeonLoop();
+
+
+
+
+
+
+///////////LOGIC KÉO QUÁI ENT - GIAI ĐOẠN TEST
+
+const LURE_WAYPOINTS = [
+    { map: "desertland", x: -222, y: -1898 },
+    { map: "desertland", x: 5,    y: -1883 },
+    { map: "desertland", x: 218,  y: -1745 },
+    { map: "desertland", x: 199,  y: -1125 },
+    { map: "desertland", x: 85,   y: -1035 }, // điểm chốt quái lửa
+    { map: "desertland", x: -49,  y: -760  },
+    { map: "desertland", x: -207, y: -622  },
+    { map: "desertland", x: -476, y: -615  },
+    { map: "desertland", x: -723, y: -367  },
+];
+const LURE_AIM = { x: -79, y: -1007 };
+const LURE_CFG = {
+    maxDist: 200,
+    resumeDist: 145,
+    safeMult: 2.3,
+    panicBuf: 30,
+    maxRunMs: 4 * 60 * 1000,
+    mainWep: "broom",
+    offWep: "wbookhs",
+    gun: "dartgun",
+};
+
+let lureRunning = false;
+let lureEntId = null;
+let lureHitOnce = false;
+
+function findEnt() {
+    return Object.values(parent.entities)
+        .filter(e => e?.mtype === "ent" && !e.rip && (!e.target || e.target === character.name))
+        .sort((a, b) => a.level - b.level || distance(character, a) - distance(character, b))[0];
+}
+
+async function moveEdgeEnt(ent) {
+    const dx = LURE_AIM.x - ent.x, dy = LURE_AIM.y - ent.y;
+    const len = Math.hypot(dx, dy);
+    if (len) await move(ent.x + (dx / len) * character.range, ent.y + (dy / len) * character.range);
+}
+
+async function lureEnt(deadline) {
+    let ent = findEnt();
+    if (!ent) return false;
+
+    await moveEdgeEnt(ent);
+    lureHitOnce = false;
+
+    while (lureRunning && Date.now() < deadline) {
+        ent = parent.entities[ent.id];
+        if (!ent || ent.rip || (ent.target && ent.target !== character.name)) return false;
+
+        if (ent.target === character.name) {
+            lureEntId = ent.id;
+            return true;
+        }
+        if (!lureHitOnce && character.hp > 15000 && can_attack(ent)) {
+            await attack(ent);
+            lureHitOnce = true;
+        }
+        await sleep(250);
+    }
+    return false;
+}
+
+async function waitEnt(deadline) {
+    while (lureRunning && Date.now() < deadline) {
+        const ent = parent.entities[lureEntId];
+        if (!ent || ent.rip) return void (lureEntId = null);
+
+        const d = distance(character, ent);
+        if (d <= LURE_CFG.resumeDist || (d <= LURE_CFG.maxDist && ent.target === character.name)) return;
+        await sleep(100);
+    }
+}
+
+setInterval(() => {
+    if (!lureRunning || !lureEntId) return;
+    const ent = parent.entities[lureEntId];
+    if (!ent || ent.rip) return void (lureEntId = null);
+
+    const d = distance(character, ent);
+    const panic = ent.range + LURE_CFG.panicBuf;
+    const safe = ent.range * LURE_CFG.safeMult;
+
+    if (d <= panic) {
+        if (can_use("scare")) use_skill("scare")?.catch?.(() => {});
+        return;
+    }
+    if (d <= safe && d > panic + 40) {
+        if (can_use("scare") && character.hp > 5000 && can_attack(ent)) attack(ent);
+        return;
+    }
+    if (d > safe && can_attack(ent)) attack(ent);
+}, 50);
+
+async function swapWep(name) {
+    if (!name) return;
+    if (character.slots.mainhand?.name !== name) {
+        const slot = locate_item(name);
+        if (slot !== -1) await equip(slot);
+    }
+}
+
+function service_lure(req) {
+    const wp0 = LURE_WAYPOINTS[0];
+    req.map = wp0.map;
+    req.x = wp0.x;
+    req.y = wp0.y;
+    if (req.data) {
+        req.data.map = wp0.map;
+        req.data.x = wp0.x;
+        req.data.y = wp0.y;
+    }
+
+    go_to_service(req, async () => {
+        const deadline = Date.now() + LURE_CFG.maxRunMs;
+        lureRunning = true;
+        lureEntId = null;
+        lureHitOnce = false;
+
+        try {
+            await swapWep(LURE_CFG.gun);
+            if (distance(character, wp0) > 25) {
+                await smart_move(wp0);
+            }
+
+            if (!await lureEnt(deadline)) {
+                game_log("Không lấy được aggro Ent");
+                return;
+            }
+
+            for (let i = 1; i < LURE_WAYPOINTS.length && lureRunning && Date.now() < deadline; i++) {
+                const ent = parent.entities[lureEntId];
+                if (ent && !ent.rip && distance(character, ent) > LURE_CFG.maxDist) {
+                    await waitEnt(deadline);
+                }
+                await smart_move(LURE_WAYPOINTS[i]);
+            }
+            game_log("Hoàn thành lure Ent");
+        } finally {
+            lureRunning = false;
+            lureEntId = null;
+            lureHitOnce = false;
+
+            await swapWep(LURE_CFG.mainWep);
+            if (LURE_CFG.offWep && character.slots.offhand?.name !== LURE_CFG.offWep) {
+                const off = locate_item(LURE_CFG.offWep);
+                if (off !== -1) await equip(off);
+            }
+            await sleep(CONFIG.SERVICE_DELAY || 1000);
+            finish_and_return();
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
