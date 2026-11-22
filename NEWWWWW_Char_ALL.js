@@ -5370,13 +5370,17 @@ function isAnyMemberLowHP() {
     return false; // Không có ai máu dưới 3000
 }
 
+
 // hàm kiểm tra đủ điều kiện thoát sớm
 function isInDungeonDoneWindow() {
     if (!checkDonehamnguc) return false;
     const elapsed = Date.now() - checkDonehamnguc;
-    return elapsed > 3600 && elapsed < 30000;
+    if (elapsed > 3600 && elapsed < 30000) {
+        checkDonehamnguc = 0;
+        return true;
+    }
+    return false;
 }
-
 
 
 // ============================================================
