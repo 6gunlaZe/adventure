@@ -43,7 +43,7 @@ const FARM_LOCATIONS = {
     wolf: { x: 369, y: -2706, map: "winterland" },
     porcupine: { x: -799, y: 185, map: "desertland" },
     fireroamer: { x: 221, y: -824, map: "desertland" },
-    plantoid: { x: -802, y: -341, map: "desertland" },
+    plantoid: { x: -800, y: -400, map: "desertland" },
     kobold: { x: -263, y: -861, map: "ucliffs" },
     odino: { x: 5, y: 664, map: "mforest" },
 
