@@ -196,16 +196,19 @@ function scanAll() {
 		if (entity.dead || !entity.visible) continue;
 		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc") continue;
 		if (landau && entity.mtype == "a3") continue;
-		
+
         const dist = distance(character, entity);
+
+        if (entity.mtype === "porcupine" && dist < 200 && character.ctype == "warrior"){
+			cophandame = true;
+			continue;
+		}
 
         // MONSTER
         if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
 			
             if (dist < 200) Toltalmonster += 1;
             if (entity.mtype === "ent" && entity.hp > 2000000) ToltalENT += 1;
-            if (entity.mtype === "porcupine" && dist < 250 && character.ctype == "warrior") cophandame = true;
-
 
             if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
 
