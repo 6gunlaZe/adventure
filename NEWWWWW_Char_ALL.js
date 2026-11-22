@@ -204,7 +204,7 @@ function scanAll() {
 			
             if (dist < 200) Toltalmonster += 1;
             if (entity.mtype === "ent" && entity.hp > 2000000) ToltalENT += 1;
-            if (entity.mtype === "porcupine" && dist < 200 && character.ctype == "warrior") cophandame = true;
+            if (entity.mtype === "porcupine" && dist < 250 && character.ctype == "warrior") cophandame = true;
 
 
             if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
