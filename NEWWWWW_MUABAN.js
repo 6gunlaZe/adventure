@@ -333,7 +333,9 @@ group_vip6: [
 
 	
 	group_Supervip: [ // đồ quý, phụ kiện hiếm
-		{ levels: [0,1,2], scroll: 2, offering: 1 },
+		{ levels: [0], scroll: 2, offering: 0 },
+		{ levels: [1,2,], scroll: 2, offering: 1 },
+		{ levels: [3], scroll: 2, offering: 2 },
 	],
 	
 };
@@ -361,13 +363,13 @@ var upgradeWhitelistVIPP = {
 	group_rare2: ["sparkstaff",],
 	group_rare: ["xarmor111","t3bow","lmace"],
 	group_vip: ["vattire","vstaff"],
-	group_vip1: ["starkillers1111","vhammer","vdagger","xhelmet"],
+	group_vip1: ["starkillers1111","vdagger","xhelmet"],
 	group_vip2: ["supermittens",],
 	group_vip3: ["harbringer","homecominghelm1","homecomingcoat1","homecomingcape1",],
 	group_vip4: ["candleward1",],
 	group_vip5: ["reunionbow","djinncrown"],
 	group_vip6: ["paradequiver1",],
-	group_Supervip: ["fury11",],
+	group_Supervip: ["vhammer",],
 
 	
 
