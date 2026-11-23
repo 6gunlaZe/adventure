@@ -3387,6 +3387,137 @@ function service_lure(req) {
 
 
 
+/////////////// LOGIC EVEN witchcipher
+
+
+var NAMES = ["verdantspore", "frostscale", "embercoal", "gloomfeather"];
+
+function fits(cipher, n) {
+    return (parseInt(cipher.fit[n >> 2], 16) >> (n & 3)) & 1;
+}
+
+function count_matches(mixA, mixB) {
+    let right = 0;
+    for (let i = 0; i < 5; i++) {
+        if (mixA[i] === mixB[i]) right++;
+    }
+    return right;
+}
+
+function evaluate_mix_score(mix, cipher) {
+    let possible_secrets = [];
+    for (let n = 0; n < 1024; n++) {
+        if (fits(cipher, n)) {
+            let secret_mix = [0, 1, 2, 3, 4].map(function (i) { 
+                return NAMES[Math.floor(n / Math.pow(4, i)) % 4]; 
+            });
+            possible_secrets.push(secret_mix);
+        }
+    }
+    
+    if (possible_secrets.length === 0) return -999999;
+
+    let buckets = [0, 0, 0, 0, 0, 0];
+    let total_right = 0;
+
+    for (let i = 0; i < possible_secrets.length; i++) {
+        let r = count_matches(mix, possible_secrets[i]);
+        buckets[r]++;
+        total_right += r;
+    }
+
+    let max_worst_case = Math.max(...buckets); 
+    let avg_right = total_right / possible_secrets.length;
+
+    let score = -max_worst_case + (avg_right * 15);
+    return score;
+}
+
+function smart_next_mix(cipher) {
+    let best_mix = null;
+    let max_score = -99999;
+
+    for (var n = 0; n < 1024; n++) {
+        var mix = [0, 1, 2, 3, 4].map(function (i) { return NAMES[Math.floor(n / Math.pow(4, i)) % 4]; });
+        var have = NAMES.every(function (name) { return quantity(name) >= mix.filter(function (m) { return m == name; }).length; });
+        
+        if (have && fits(cipher, n)) {
+            let score = evaluate_mix_score(mix, cipher);
+            if (score > max_score) {
+                max_score = score;
+                best_mix = mix;
+            }
+        }
+    }
+    return best_mix;
+}
+
+
+var BREW_DELAY_MS = 5 * 60 * 1000; // Đếm 5 phút
+var brew_timer_id = null;
+var brew_timer_start = 0;
+
+function has_easy_win_chance(cipher) {
+    if (typeof cipher.possible === "number" && cipher.possible <= 6) return true;
+    if (Array.isArray(cipher.board) && cipher.board.some(function (e) { return e && e.right >= 4; })) return true;
+    return false;
+}
+
+async function witch_cipher_step() {
+    var cipher = server.status.witchcipher;
+    if (!cipher || !cipher.live || !character.witchcipher || smart.moving) return;
+    if (!character.witchcipher.mixes_left) return;
+
+    // 1. Lấy nguyên liệu từ bank ra sớm để sẵn sàng trong túi
+    for (const itemName of NAMES) {
+        if (locate_item(itemName) === -1) {
+            await retrieveFromBank(itemName, 10);
+        }
+    }
+
+    // Chặn nếu vẫn còn món nào chưa có trong túi
+    const hasAll = NAMES.every((itemName) => locate_item(itemName) !== -1);
+    if (!hasAll) return;
+
+    // 2. Bộ đếm 5 phút theo từng vòng, nhưng mở khóa sớm nếu có cơ hội dễ trúng
+    if (cipher.phase !== "brewing") return;
+    var round_key = cipher.id || "default_round";
+    if (brew_timer_id !== round_key) {
+        brew_timer_id = round_key;
+        brew_timer_start = Date.now();
+    }
+    var timer_done = (Date.now() - brew_timer_start) >= BREW_DELAY_MS;
+    if (!timer_done && !has_easy_win_chance(cipher)) return;
+
+    // 3. Đủ điều kiện thì pha chế
+    var mix = smart_next_mix(server.status.witchcipher);
+    if (mix) return await brew(mix);
+}
+
+
+
+// --- VÒNG LẶP TỰ ĐỘNG CHẠY LIÊN TỤC ---
+async function start_witch_cipher_loop() {
+    game_log("🤖 Bot Witch Cipher đã được bật!");
+    while (true) {
+        try {
+            await witch_cipher_step();
+        } catch (e) {
+            show_json(e);
+        }
+        // Chờ 200 ms trước khi check lại vòng tiếp theo (tránh spam server)
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+}
+
+start_witch_cipher_loop();
+
+
+
+
+
+
+
 
 
 
