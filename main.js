@@ -5525,7 +5525,7 @@ async function useAdvancedAttack() {
         if (targeted) currentTarget = targeted;
     }
     
-    if (!currentTarget || smart.moving) return false;
+    if (!currentTarget) return false;
 
     // 3. Tiến lại gần nếu ngoài tầm đánh
     if (!is_in_range(currentTarget)) {
