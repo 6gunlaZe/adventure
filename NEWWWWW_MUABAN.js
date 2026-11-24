@@ -3488,7 +3488,7 @@ async function witch_cipher_step() {
     }
     var timer_done = (Date.now() - brew_timer_start) >= BREW_DELAY_MS;
     if (!timer_done && !has_easy_win_chance(cipher)) return;
-
+    if(character.map != "main")smart_move("main"); //trở về main để ghép đồ
     // 3. Đủ điều kiện thì pha chế
     var mix = smart_next_mix(server.status.witchcipher);
     if (mix) return await brew(mix);
