@@ -7,7 +7,7 @@ let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 
 
 // Cài đặt hầm ngục Crypt
 const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
-let timeDELAYtokill = 2.3444;  // mặc định là 2.3444 ngày
+let timeDELAYtokill = 6.0444;  // mặc định là 2.3444 ngày
 
 const LEADER = "haiz";
 const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
