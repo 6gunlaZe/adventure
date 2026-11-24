@@ -1,363 +1,4746 @@
+// ============================================================
+// CONFIG & STATE const myoke = "ghp_111oW1afPpWjaXaWxKpNHIEitzFNeKXi72YWSLi111";
+// ============================================================
+let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
+let bscorpionTarget = null; // Lưu thông tin quái bscorpion
+let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
 
-let codemode = 0
+// Cài đặt hầm ngục Crypt
+const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
+let timeDELAYtokill = 2.3444;  // mặc định là 2.3444 ngày
 
-///////////////
-const botToken = '7892397096:AAH7nDreQHQ9fPcsMJNi8MIRwZEDPQzFPg1111111c'; // Thay YOUR_BOT_TOKEN bằng token của bạn
-// Các mẫu cú pháp (dễ dàng thay đổi tại đây)
-const syntaxExamples = [
-  { key: 'reset', value: '1' },
-  { key: 'fram', value: '1' },
-  { key: 'bank', value: '1' },
-  { key: 'crypt', value: '1' }
+const LEADER = "haiz";
+const PARTY = ["haiz", "6gunlaZe", "nhiY", "Ynhi","LyThanhThu","kxsights","MuaBan"];
+const MERCHANT = "MuaBan";
+const EXCLUDE = new Set([
+    "elixirfires","hotchocolate","elixirluck","hboots","cryptkey","hpot0","mpot0","hpot1","mpot1","luckbooster","goldbooster","xpbooster","pumpkinspice","confetti","spidersilk",
+    "elixirint0","elixirstr0","elixirdex0","elixirint1","elixirstr1","elixirdex1","elixirint2","elixirstr2","elixirdex2","handofmidas","basher","cipherdraught",
+    "frozenkey","spiderkey","poison","pants","coat","mittens","supermittens","snowball","xptome","tracker","crossbow","jacko","pouchbow","orbg"
+]);
+
+// Các quái được phép tấn công gồm các phân loại sau
+const SUPER_BOSSES = ["greenjr","jr","goldenbot","stompy","paledino","mimic","manyeye","goldenbat","a5","a4"]; // các quái Siêu cấp ưu tiên đánh trước 
+const TARGET_BOSSES = ["grinch","mrpumpkin","mrgreen","horseman","gargoyle","dragold","franky","spider", "crabxx",];  // các quái ưu tiên đánh trước
+const SINGLE_MONSTERS = new Set(["phoenix", "stompy", "mrgreen", "mvampire","bscorpion"]); // các quái áp dụng bộ trang bị đơn mục tiêu => chỉ có tác dụng với Haiz
+const TARGET_MONSTERS = ["osnake","snake","crab","rgoo","bgoo","poisio","stoneworm","bat","greenjr","jr","tortoise","sparkbot","targetron","goldenbot","grinch","gargoyle","ghoul","zombie","mummy","booboo", "crabx",
+						 "horseman","jackowalker","ghost","spider","bigbird","scorpion","gscorpion","wolfie","plantoid","boar","wolf","vbat","a7","a2","a3","a6","a8","fireroamer","kobold","mimic","odino", "ent",
+						 "xscorpion","mrpumpkin","mrgreen","phoenix","rimedjinn","paledino"];
+
+
+//HOẠT ĐỘNG SĂN CÁC BOSS SAU
+const WORLD_BOSSES = ["mrpumpkin", "mrgreen", "franky",];
+
+//THEO DÕI ĐIỂM ĐÓNG GÓP - BẬT THÔNG BÁO CÁC BOSS SAU
+const TRACKER_BOSSES = ["mrpumpkin", "mrgreen","crabxx","icegolem","horseman","gargoyle","dragold","franky"];
+
+
+
+const FARM_LOCATIONS = {
+    osnake: { x: -555, y: -333, map: "halloween" },
+    bat: { x: -194, y: -461, map: "cave" },
+    targetron: { x: -512, y: -239, map: "uhills" },
+    rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
+    wolf: { x: 369, y: -2706, map: "winterland" },
+    porcupine: { x: -799, y: 185, map: "desertland" },
+    fireroamer: { x: 221, y: -824, map: "desertland" },
+    plantoid: { x: -800, y: -400, map: "desertland" },
+    kobold: { x: -263, y: -861, map: "ucliffs" },
+    odino: { x: 5, y: 664, map: "mforest" },
+
+
+
+};
+
+const SUKIEN_bscorpion = solobscorpion ? "dangsolo" : "bscorpion";
+// Bình thường radius Ynhi - 40  // haiz 30
+const CHAR_CONFIG = {
+    "Ynhi": { slot: 3, home: true, events: ["mrpumpkin", "mrgreen","witchcipher", SUKIEN_bscorpion, "franky"], solo: false, circle: true, radius: 30, elixir: "cipherdraught" },
+    "6gunlaZe": { slot: 3, home: true, events: ["witchcipher", SUKIEN_bscorpion], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "haiz": { slot: 3, home: true, events: [""], solo: false, circle: true, radius: 25, elixir: "pumpkinspice" },
+    "nhiY": { slot: 3, home: false, events: ["", ], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "LyThanhThu": { slot: 3, home: false, events: ["mrpumpkin", "mrgreen", "franky",], solo: false, circle: true, radius: 40, elixir: "pumpkinspice" },
+    "MuaBan": { slot: (fram_bscorpion && solobscorpion) ? 7 : 5, home: true, events: ["mrpumpkin", "mrgreen","witchcipher","bscorpion", "franky"], elixir: "elixirluck" },
+	
+};
+
+
+
+
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "plantoid"; // => Phần còn lại là của LEADER haiz 
+const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
+
+const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
+
+const MODE = { FARM: "farm", OTHER: "other" };
+let mode = MODE.FARM;
+let isCaveMode = true;
+
+// Danh sách item rác sẽ tự động bán LƯU Ý NÊN CẬP NHẬT THƯỜNG XUYÊN THỦ CÔNG TỪ NHÂN VẬT MUABAN
+const TRASH_ITEMS = [
+  "bandages", "basher", "beewings", "blade1111", "broom", "bunnyelixir","cake", "candycandesword", "cape", "carrotsword", "carrotsword1111", "cave_reedscythe",
+  "cclaw", "coat", "coat1", "crabclaw", "cupid", "dagger", "daggerofthedead11111", "dstones", "eears", "ecape11", "eggnog","elixirdex0", "elixirdex1", "elixirdex2", "elixirint0", "elixirint1", "elixirint2",
+  "elixirpnres", "elixirstr0", "elixirstr1", "elixirstr2", "elixirvit0", "elixirvit1","elixirvit2", "epyjamas", "eslippers", "fieldgen0", "fireblade1111", "firecrackers",
+  "firestaff", "frankypants", "frogt", "gbow", "gloves", "gloves1", "gphelmet", "hammer","harmor", "hboots", "hgloves", "hhelmet", "hpamulet", "hpants", "hpbelt", "jacko",
+  "lantern", "lostearring", "lspores", "maceofthedead", "merry", "mittens", "mittens1111","helmet1","helmet","shield","sparkstaff",
+  "mushroomstaff", "oozingterror", "ornamentstaff", "pants", "pants1", "partyhat","pclaw", "phelmet", "pinkie", "pmace", "pmaceofthedead", "poker", "pouchbow111",
+  "pstem", "quiver", "rapier", "rednose", "reefglass", "rfangs", "ringsj","santasbelt", "seashell", "shoes", "shoes1", "skates", "skullamulet", "slimestaff",
+  "smoke111", "smush", "snowball111", "snowflakes", "spear", "spikedhelmet","sshield", "sstinger", "staffofthedead", "stinger", "svenom",
+  "swifty", "sword", "swordofthedead", "t2bow", "t2quiver", "talkingskull", "throwingstars","tombkey", "tshirt0", "tshirt1", "tshirt2", "tshirt3", "vboots", "vgloves", "vitring",
+  "vitscroll", "wbasher", "wcap", "wbreeches", "wgloves", "whiteegg", "wshoes","wattire", "warmscarf", "xmace", "xmashat", "xmaspants", "xmasshoes", "xmassweater"
 ];
 
-let lastUpdateId = 0;  // Biến để lưu trữ ID của bản cập nhật cuối cùng
-const messageTimeout = 10 * 1000; // 10 giây (tính bằng milliseconds)
-const initialDelay = 30 * 1000;  // 30 giây (tính bằng milliseconds)
-const callbackTimeout = 10 * 1000; // 10 giây cho thời gian nhấn nút
+// DANH SÁCH VÀ VỊ TRÍ FRAM CÁC QUÁI VIP XUẤT HIỆN CỦA TỪNG BÃI FRAM 
+const FARM_vipbosss = {
+    goldenbot: { x: -347, y: -183, map: "uhills", level: 18 },
+    stompy: { x: 432, y: -2496, map: "winterland", level: 7 },
+    paledino: { x: -151, y: 725, map: "mforest", level: 12 },
+	goldenbat: { level: 37 },
+	mimic: { level: 8 },
+	manyeye: { level: 6 },
+};
 
-let callbackQueryTimes = new Map();  // Lưu trữ thời gian nút callback query
+let vipBossTarget = null; // Lưu thông tin VIP boss cần farm level
+let Viecquantrong = false; // việc quan trọng sẽ chặn even
 
-// Hàm lấy các bản cập nhật từ Telegram
-async function getUpdates() {
-  const url = `https://api.telegram.org/bot${botToken}/getUpdates?offset=${lastUpdateId + 1}&timeout=30`;
 
-  console.log('Fetching updates...');  // Debug log: Đang gọi API
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    console.log('Data received:', data);  // Debug log: Xem dữ liệu trả về từ API
+var loot_transfer = false;
+const MAX_SCAN_DISTANCE = 400;
+const MERCHANT_DISTANCE = 400;
 
-    if (data.ok && data.result.length > 0) {
-      for (let update of data.result) {
-        lastUpdateId = update.update_id;
-        const message = update.message;
+let monsters = [];
+let partyEntities = [];
+let fieldgens = []; 
+let merchant = null;
+let healer = null;
+let currentTarget = null;
+let SAFE = false; // Biến trạng thái kiểm tra có Priest ở gần không
+let hasLowHpAggroMonster = false; // Biến cờ kiểm tra quái aggro dưới 20k HP sắp chết
+let lastFarmMonsterSeen = Date.now();
+let bossEntities = []; // Mảng chứa Boss thực tế quanh nhân vật
+let needLuckALL = false; // Biến cờ đang fram sự kiện có thể bật luck cho tất cả nhân vật
+let Toltalmonster = 0;
+let ToltalENT = 0;
+let checkDonehamnguc = 0; // Biến cờ xác định đã hoàn thành hầm ngục để thoát sớm  
+let checkNguyHiemhamnguc = false;
+let cophandame = false;
 
-        if (message) {
-          const messageTime = new Date(message.date * 1000);  // Convert timestamp to Date object
-          const currentTime = new Date();
-          const timeDiff = currentTime - messageTime;  // Tính sự chênh lệch thời gian (milliseconds)
+// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// ============================================================
+// SCAN ALL
+// ============================================================
 
-          // Chỉ xử lý tin nhắn nếu nó được gửi trong vòng 10 giây
-          if (timeDiff <= messageTimeout) {
-            console.log('Processing message:', message);  // Debug log: Xử lý tin nhắn
-            analyzeMessage(message.text, message.chat.id);
-          } else {
-            console.log('Message is too old. Skipping...');
-          }
-        } else if (update.callback_query) {
-          console.log('Processing callback query:', update.callback_query);  // Debug log: Xử lý callback query
-          handleCallbackQuery(update.callback_query);
+// Gộp TẤT CẢ danh sách vào 1 Set duy nhất
+const ALL_TARGET_MONSTERS = new Set([
+    ...SUPER_BOSSES,
+    ...TARGET_BOSSES,
+    ...SINGLE_MONSTERS, 
+    ...TARGET_MONSTERS,
+    ...Object.keys(FARM_vipbosss) // <-- Dùng Object.keys() để lấy các tên quái trong FARM_vipbosss
+]);
+
+
+const NTFY_TOPIC = "adventure_vip111118899"; 
+
+let activeBossTracker = {
+    mtype: null,
+    maxV1: 0,
+    maxV2: 0,
+    lastHp: 0,
+    lastSeen: 0,
+    reported: false
+};
+
+const TRACKER_BOSSES_SET = new Set(TRACKER_BOSSES);
+const PARTY_SET = new Set(PARTY);
+const WORLD_BOSSES_SET = new Set(WORLD_BOSSES);
+
+function scanAll() {
+    monsters = [];
+    partyEntities = [];
+    fieldgens = [];
+    bossEntities = []; 
+    merchant = null;
+	healer = null;
+    SAFE = false; 
+    hasLowHpAggroMonster = false; 
+	needLuckALL = false;
+	vipBossTarget = null;
+	bscorpionTarget = null;
+	Viecquantrong = false;
+	Toltalmonster = 0;
+	ToltalENT = 0;
+	cophandame = false;
+    checkNguyHiemhamnguc = false;
+	
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+
+    // Biến kiểm tra điều kiện sự kiện Witch đang trong giai đoạn thu thập & quá 10s chưa thấy quái farm
+    const isWitchGathering = witchEvent && 
+                         witchEvent.live && 
+                         witchEvent.phase === "gathering" && 
+                         (Date.now() - lastFarmMonsterSeen) > 20000;
+	needLuckALL = isWitchGathering;
+
+
+
+    if (character.cave && character.cave.paused) return;
+
+    if (IS_SOLO || (character.ctype === "priest" && !character.rip) || isWitchGathering ) {
+        SAFE = true;
+    }
+
+    for (const id in parent.entities) {
+        const entity = parent.entities[id];
+        if (!entity) continue;
+		if (entity.dead || !entity.visible) continue;
+		if (entity.mtype == "cave_guard" || entity.mtype == "cave_npc") continue;
+		if (landau && entity.mtype == "a3") continue;
+
+        const dist = distance(character, entity);
+
+        if (entity.mtype === "porcupine" && dist < 200 && character.ctype == "warrior"){
+			cophandame = true;
+			continue;
+		}
+
+        // MONSTER
+        if (entity.type === "monster" && entity.visible && !entity.dead && dist <= MAX_SCAN_DISTANCE && (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) ) {
+			
+            if (dist < 200) Toltalmonster += 1;
+            if (entity.mtype === "ent" && entity.hp > 2000000) ToltalENT += 1;
+
+            if (fram_bscorpion && !entity.target && entity.hp > 13000 && character.name == "haiz" ) continue;
+
+            if (entity.mtype === "fieldgen0") {
+                fieldgens.push({ entity: entity, distance: dist });
+                continue;
+            }
+
+            if ( (entity.mtype === "a4" || entity.mtype === "a6" || entity.mtype === "a8" ) && entity.level > 4 && dist < 200 ) {
+            checkNguyHiemhamnguc = true;
+			}
+            if (entity.mtype === "a3" && entity.hp < 10000 && dist < 200) {
+			checkDonehamnguc = Date.now();	
+			}
+			
+
+			if (fram_bscorpion && entity.mtype == "bscorpion"){
+				bscorpionTarget = entity;
+                bossEntities.push({ entity: entity, distance: dist });
+			}
+
+            //Kiểm tra VIP Boss cần farm level
+            if (FARM_vipbosss[entity.mtype]) {
+                 const bossConfig = FARM_vipbosss[entity.mtype];
+                 const bossLevel = entity.level || 1; 
+				 Viecquantrong = true;
+                 // Nếu level boss chưa đạt mức yêu cầu
+                 if (bossLevel < bossConfig.level) vipBossTarget = { entity: entity, config: bossConfig, distance: dist };
+            }
+
+			
+	
+            if (WORLD_BOSSES_SET.has(entity.mtype)) {
+                bossEntities.push({ entity: entity, distance: dist });
+            }
+
+            if (TRACKER_BOSSES_SET.has(entity.mtype)) {
+                updateWorldBossTracker(entity);
+            }
+			
+			
+            monsters.push({ entity: entity, distance: dist });
+            
+            // chắc chắn là đang fram thì phải siết check khoảng cách
+            if (entity.mtype === FARM_MONSTER && dist < character.range ) { 
+                lastFarmMonsterSeen = Date.now();
+            }
+            
+            if (character.ctype == "priest" && entity.target === character.name && entity.hp < 15000) {
+                hasLowHpAggroMonster = true;
+            }
+            
+            continue;
         }
-      }
+
+        // CHARACTER / PARTY
+        if (entity.type === "character" && PARTY_SET.has(entity.name)) {
+            if (dist <= MAX_SCAN_DISTANCE) {
+                partyEntities.push({ entity: entity, distance: dist, rspeed: entity.s?.rspeed });
+                homeStuckTimes[entity.name] = Date.now();
+            }
+            if (entity.name === MERCHANT && dist <= MERCHANT_DISTANCE) {
+                merchant = entity;
+				if (fram_bscorpion && dist < 150) SAFE = true;
+            }
+			
+            if (entity.ctype === "priest") {
+                healer = entity;
+            }
+
+            if (entity.ctype === "priest" && !entity.rip && dist <= (entity.range - 10) && character.party && entity.hp/entity.max_hp > 0.25 && character.hp/character.max_hp > 0.25) {
+                SAFE = true;
+            }
+        }
     }
-  } catch (error) {
-    console.error('Error:', error);
-  }
 
-  // Đợi một khoảng thời gian trước khi tiếp tục lấy các bản cập nhật tiếp theo
-  setTimeout(getUpdates, 2000);  // Gọi lại getUpdates sau 2 giây để tiếp tục nhận tin nhắn mới
-}
+    monsters.sort((a, b) => a.distance - b.distance); 
 
-// Hàm phân tích tin nhắn theo dạng (key, data)
-function analyzeMessage(text, chatId) {
-  if (text) {
-    const regex = /^\(([^,]+),\s*(.+)\)$/;  // Kiểm tra định dạng (key, data)
-    const match = text.match(regex);
-
-    if (match) {
-      const key = match[1].trim();
-      let data = match[2].trim();
-      if (!isNaN(data)) {
-        data = parseFloat(data);  // Nếu là số, chuyển thành số
-      }
-
-      console.log('Matched key:', key);  // Debug log: Xem key
-      console.log('Matched data:', data);  // Debug log: Xem data
-
-      performTask(key, data, chatId);
-      sendMessage(chatId, `Data received: ${key} = ${data}`);
-    } else {
-      // Chỉ gửi cú pháp mẫu khi người dùng nhập sai cú pháp
-      sendSyntaxExamples(chatId);
+    if (PARTY_SET.has(character.name)) {
+        partyEntities.push({ entity: character, distance: 0, rspeed: character.s?.rspeed });
     }
-  }
+    if (character.name === MERCHANT) merchant = character;
+	
+    if (vipBossTarget || cophandame) SAFE = false;
+	
+    // [CẬP NHẬT 2]: Kiểm tra trạng thái boss chết ở cuối hàm scanAll
+    checkWorldBossDeathStatus();
+	
 }
 
-// Hàm trả về các cú pháp mẫu
-function getSyntaxExamples() {
-  return syntaxExamples.map(example => `(${example.key}, ${example.value})`).join('\n');
+
+// ============================================================
+// SELECT TARGET
+// ============================================================
+function selectTarget() {
+    const validMonsters = monsters
+        .map(m => m.entity)
+        .filter(entity =>  (ALL_TARGET_MONSTERS.has(entity.mtype) || character.cave) );
+
+    if (validMonsters.length === 0) return null;
+
+    // Áp dụng hàm sort chung và lấy con đầu tiên
+    return sortMonstersByPriority(validMonsters)[0];
 }
 
-// Hàm gửi các ví dụ cú pháp đúng cho người dùng
-function sendSyntaxExamples(chatId) {
-  const text = `Bạn đã nhập sai cú pháp. Hãy thử một trong các cú pháp sau:\n\n` + getSyntaxExamples();
 
-  // Tạo các nút inline keyboard từ mảng syntaxExamples
-  const reply_markup = {
-    inline_keyboard: syntaxExamples.map(example => {
-      return [
-        { text: `Gửi (${example.key}, ${example.value})`, callback_data: `(${example.key}, ${example.value})` }
-      ];
-    })
-  };
 
-  sendMessage(chatId, text, reply_markup); // Gửi tin nhắn với inline keyboard
+// Hàm sắp xếp quái theo đúng tiêu chí ưu tiên của bạn
+function sortMonstersByPriority(monsterList) {
+    const leaderEntity = (character.name === LEADER) 
+        ? character 
+        : partyEntities.find(p => p.entity.name === LEADER)?.entity;
+
+    return [...monsterList].sort((a, b) => {
+
+        // 0. Ưu tiên TUYỆT ĐỐI NHẤT: Quái siêu cấp
+        const aIsSuper = SUPER_BOSSES.includes(a.mtype);
+        const bIsSuper = SUPER_BOSSES.includes(b.mtype);
+        if (aIsSuper !== bIsSuper) return aIsSuper ? -1 : 1;
+
+        // Chỉ check 0.1 và 0.2 khi biến FARM_MONSTER === "rimedjinn"
+        if (FARM_MONSTER === "rimedjinn") {
+            // 0.1. Ưu tiên: Quái rimedjinn đang có hiệu ứng rimeshell
+            const aRimeExp = a.mtype === "rimedjinn" && !!a.s?.rimeshell;
+            const bRimeExp = b.mtype === "rimedjinn" && !!b.s?.rimeshell;
+            if (aRimeExp !== bRimeExp) return aRimeExp ? -1 : 1;
+
+            // 0.2. Ưu tiên: Quái rimedjinn có máu từ 49% đến 55%
+            const checkRimeHp = (e) => {
+                if (e.mtype !== "rimedjinn") return false;
+                const maxHp = e.max_hp || G.monsters[e.mtype]?.hp || e.hp;
+                const hpPct = (e.hp / maxHp) * 100;
+                return hpPct >= 49 && hpPct <= 55;
+            };
+            const aRimeHp = checkRimeHp(a);
+            const bRimeHp = checkRimeHp(b);
+            if (aRimeHp !== bRimeHp) return aRimeHp ? -1 : 1;
+        }
+
+		
+        // 1. Ưu tiên TUYỆT ĐỐI: Boss hoặc Quái hiếm
+        const aIsBoss = TARGET_BOSSES.includes(a.mtype);
+        const bIsBoss = TARGET_BOSSES.includes(b.mtype);
+        if (aIsBoss !== bIsBoss) return aIsBoss ? -1 : 1;
+
+        // 2. Quái nằm trong bán kính 50px quanh Leader
+        if (leaderEntity) {
+            const aNearLeader = distance(a, leaderEntity) <= 50;
+            const bNearLeader = distance(b, leaderEntity) <= 50;
+            if (aNearLeader !== bNearLeader) return aNearLeader ? -1 : 1;
+        }
+
+        // 3. Ưu tiên Debuff: Quái bị "cursed" (Nguyền rủa)
+        const aCursed = !!a.s?.cursed;
+        const bCursed = !!b.s?.cursed;
+        if (aCursed !== bCursed) return aCursed ? -1 : 1;
+
+        // 4. Ưu tiên Debuff: Quái bị "marked" (Hunter's Mark)
+        const aMarked = !!a.s?.marked;
+        const bMarked = !!b.s?.marked;
+        if (aMarked !== bMarked) return aMarked ? -1 : 1;
+
+        // 5. Quái đang đánh Party
+        const aAttackingParty = PARTY.includes(a.target);
+        const bAttackingParty = PARTY.includes(b.target);
+        if (aAttackingParty !== bAttackingParty) return aAttackingParty ? -1 : 1;
+
+        // 6. Máu lớn nhất (HP cao hơn xếp trước)
+        if (a.hp !== b.hp) return b.hp - a.hp;
+
+        // 7. Gần bản thân hơn
+        return distance(character, a) - distance(character, b);
+    });
 }
 
-// Hàm gửi tin nhắn phản hồi (reply)
-function sendMessage(chatId, text, reply_markup = {}) {
-  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-  const payload = {
-    chat_id: chatId,
-    text: text,
-    reply_markup: reply_markup // Đảm bảo không gửi null
-  };
 
-  console.log('Sending message:', payload);  // Debug log: Xem payload
 
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
+function ms_to_next_skill(skill) {
+    const next_skill = parent.next_skill[skill]
+    if (next_skill == undefined) return 0
+    const ms = parent.next_skill[skill].getTime() - Date.now() - Math.min(...parent.pings) + 15;
+    return ms < 0 ? 0 : ms;
+}
+
+
+// ============================================================
+// RSPEED PARTY
+// ============================================================
+function useRspeed() {
+    if (is_on_cooldown("rspeed") || character.mp <= 500) return;
+
+    for (const member of partyEntities) {
+        if (!member.rspeed || member.rspeed.ms < 300000) {
+            use_skill("rspeed", member.entity);
+            return;
+        }
+    }
+}
+
+
+
+const QUICK_DAGGERS = ["daggerofthedead", "vdagger"];
+const QUICK_FISTS   = ["cclaw", "pclaw"];
+
+async function useQuickAttack() {
+
+    if (character.mp <= 700) return false;
+
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    if (!currentTarget) return false;
+
+    if (ms_to_next_skill("attack") <= 150) return false;
+
+    const mhName = character.slots.mainhand?.name;
+    let quickSkill = null;
+
+    if (QUICK_DAGGERS.includes(mhName)) quickSkill = "quickstab";
+    else if (QUICK_FISTS.includes(mhName)) quickSkill = "quickpunch";
+
+    // 4. Kiểm tra điều kiện thi triển
+    if (!quickSkill || is_on_cooldown(quickSkill) ) return false;
+
+    // 5. Thi triển skill an toàn
+    try {
+        await use_skill(quickSkill, currentTarget);
+        game_log(`=> ${quickSkill} XXXX)}0`, "#00FFFF");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+async function useInvisLogic() {
+    // 1. Kiểm tra điều kiện cơ bản (mp, cooldown, buff, movement)
+    if (is_on_cooldown("invis") || character.s?.invis || smart.moving) return false;
+
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    const inRange = currentTarget && is_in_range(currentTarget) && parent.entities[currentTarget.id];
+
+    // 2. Xác định 2 cờ logic
+    // LOGIC 1: Phòng thủ khẩn cấp (Máu <= 35% HP hoặc bị monster target)
+    const isHpLow = (character.hp / character.max_hp) <= 0.35;
+    const isUnderAttack = currentTarget && currentTarget.target === character.name;
+    const isDanger = isHpLow || isUnderAttack;
+
+    // LOGIC 2: Tấn công tối ưu (Có target trong tầm VÀ CD attack còn > 300ms)
+    const timeToNextAttack = ms_to_next_skill("attack");
+    const isAttackFar = inRange && (timeToNextAttack > 300);
+
+    // 3. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
+    if (isDanger || isAttackFar) {
+        try {
+            await use_skill("invis");
+            const reason = isDanger ? "PHÒNG THỦ" : "TẤN CÔNG";
+            game_log(`🥷 Invis (${reason})`, "#800080");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+async function useMentalBurstLogic() {
+    // 1. Kiểm tra điều kiện cơ bản
+    if (is_on_cooldown("mentalburst")) return false;
+    if (character.mp < 180) return false; // Tốn 180 MP
+
+    if ((character.int || 0) < 64) return false;
+
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    if (!currentTarget || !parent.entities[currentTarget.id]) return false;
+    
+    if (!is_in_range(currentTarget, "mentalburst")) return false;
+
+    
+    // Ước lượng sát thương (Sát thương phép = character.attack * 0.6)
+    const estimatedDamage = (character.attack || 100) * 0.6 - 100;
+    
+    // LOGIC 1: Kết liễu dứt điểm quái để hồi lại MP (Last Hit)
+    const isKillable = currentTarget.hp <= estimatedDamage;
+
+
+    const targetRes = currentTarget.resistance || 0;
+    let requiredMp = 380; // Ngưỡng mặc định gốc
+
+    if (targetRes >= 400) {
+        requiredMp = 1500;
+    } else if (targetRes >= 300) {
+        requiredMp = 1200;
+    } else if (targetRes >= 200) {
+        requiredMp = 900;
+    }
+
+	
+    const timeToNextAttack = ms_to_next_skill("attack");
+    const isMpRich = character.mp >= requiredMp;
+    const isAttackFar = isMpRich && (timeToNextAttack > 100);
+
+    // 4. Thi triển skill nếu thỏa mãn 1 trong 2 điều kiện
+    if (isKillable || isAttackFar) {
+        try {
+            await use_skill("mentalburst", currentTarget);
+            const reason = isKillable ? "LAST HIT (RECOVER MP)" : "BURST DAMAGE";
+            game_log(`🧠 Mental Burst (${reason})`, "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+
+let attackBusy = false;
+const REVERSE_3SHOT_MONSTERS = ["crab"];
+
+async function use_multi_shot() {
+    if (attackBusy || (character.hp / character.max_hp) < 0.3) return false;
+    if (!character.cave && monsters.some(m => m.entity.target === character.name && m.entity.level > 1)){
+        await useAttack();
+        return false;
+    }
+    // KIỂM TRA COOLDOWN (BÙ PING) TRƯỚC KHI TÌM QUÁI -> Cực kỳ tiết kiệm CPU
+    const pingComp = Math.max(10, character.ping / 10);
+    const can3Shot = ms_to_next_skill("3shot") <= pingComp;
+    const can5Shot = ms_to_next_skill("5shot") <= pingComp;
+    
+    // Nếu cả 2 chiêu đều đang cooldown -> Nghỉ luôn, khỏi tính toán
+    if (!can3Shot && !can5Shot) return false;
+
+    attackBusy = true;
+
+    try {
+        // 1. Kiểm tra an toàn: Máu mình >= 70% hoặc Ynhi gần đó >= 50%
+        const Ynhi = partyEntities.find(p => p.entity.name === "Ynhi" && !p.entity.dead)?.entity;
+        const allowUntargeted = (character.hp / character.max_hp) >= 0.7 && 
+                                (!Ynhi || (Ynhi.hp / Ynhi.max_hp) >= 0.5);
+
+        // Tạo Set chứa tên thành viên trong party để tra cứu cực nhanh O(1)
+        const partyNames = new Set(partyEntities.map(p => p.entity.name));
+
+        // 2. Lọc & Sắp xếp danh sách quái
+        let valid = monsters
+            .map(m => m.entity)
+            .filter(e => {
+                // Điều kiện cơ bản: Level <= 1 và trong tầm "3shot"
+                if (e.level > 1 || !is_in_range(e, "3shot")) return false;
+
+                // Nếu quái đã có target: Target đó bắt buộc phải trong party hoặc là quái hợp tác
+                if (e.target) {
+                    const isTargetInParty = partyNames.has(e.target);
+                    const isCoop = e.cooperative;
+                    if (!isTargetInParty && !isCoop) return false;
+                } 
+                // Nếu quái không có target: Phải thỏa mãn điều kiện an toàn allowUntargeted
+                else {
+                    if (!allowUntargeted) return false;
+                }
+
+                return true;
+            });
+
+        valid = (character.ctype === "ranger" && REVERSE_3SHOT_MONSTERS.includes(FARM_MONSTER))
+            ? valid.reverse()
+            : sortMonstersByPriority(valid);
+
+        // 3. Chọn mục tiêu & Thi triển skill
+        const targets = valid.slice(0, 5);
+        if (targets.length < 2) {
+            await useAttack();
+            return false;
+        }
+        
+        // Ưu tiên 5shot nếu đủ mục tiêu và chiêu đã sẵn sàng
+        let skill = "3shot";
+        if (targets.length >= 4 && can5Shot) {
+            skill = "5shot";
+        } else if (!can3Shot) {
+            return false; // Chỉ có 2-3 mục tiêu và 3shot lại đang hồi chiêu
+        }
+
+        if (character.mp < G.skills[skill].mp + 300) { // chỉ đủ mana để đánh thường
+            await useAttack();
+            return false;
+        }
+
+        // TUNG CHIÊU VÀ ÉP XUNG COOLDOWN NGAY LẬP TỨC
+       await use_skill(skill, targets);
+       reduce_cooldown(skill, character.ping * 0.95);
+
+		// await useAdvancedSkill(skill, targets, MANA_SET) // không được tăng aoe như mong đợi
+        
+        return true;
+
+    } catch (e) {
+        return false;
+    } finally {
+        attackBusy = false;
+    }
+}
+
+
+
+let primaryBeltName = "dexbelt";
+
+async function use_fan_of_knives() {
+    // 1. Ghi nhớ Belt chính nếu không phải knifebelt
+    if ( !primaryBeltName && character.slots.belt?.name && character.slots.belt.name !== "knifebelt") {
+        primaryBeltName = character.slots.belt.name;
+    }
+
+    // Hàm phụ trợ: Trả lại Belt cũ khi đánh thường
+    const revertToPrimaryBelt = async () => {
+        if (primaryBeltName && character.slots.belt?.name !== primaryBeltName) {
+            const slot = character.items.findIndex(i => i?.name === primaryBeltName);
+            if (slot >= 0) {
+                try { await equip(slot); } catch (e) {}
+            }
+        }
+    };
+
+    // 2. Kiểm tra tài nguyên & trạng thái sớm
+    if (attackBusy || character.hp / character.max_hp < 0.3) return false;
+
+    const requiredMp = (G.skills["fanofknives"]?.mp || 100) + 330;
+    if (character.mp < requiredMp) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+    
+    // 3. KIỂM TRA COOLDOWN & BÙ PING
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) {
+        return false; 
+    }
+
+    // 4. Kiểm tra an toàn (Quái cấp cao cắn)
+    if (monsters.some(m => m.entity.target === character.name && m.entity.level > 1)) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+
+    // Lọc cực nhanh mà KHÔNG tốn CPU tính lại distance
+    const inRangeEntities = monsters
+        .filter(m => m.distance <= 160)
+        .map(m => m.entity);
+
+    // CHỐT CHẶN QUÁI TRÂU: Phát hiện quái > 800,000 HP trong bán kính 160px -> Trả Belt cũ & Đánh thường
+    const hasBigBoss = inRangeEntities.some(e => (e.max_hp || 0) > 800000);
+    if (hasBigBoss) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+
+    // 6. Lọc quái nhỏ hợp lệ (Level <= 1)
+    const validMonsters = inRangeEntities.filter(e => e.level <= 1);
+
+    // Không đủ 3 quái nhỏ trong bán kính 160px -> Trả Belt cũ & Đánh thường
+    if (validMonsters.length < 3) {
+        await revertToPrimaryBelt();
+        await useAttack();
+        return false;
+    }
+
+    attackBusy = true;
+    try {
+        // 7. ĐỦ ĐIỀU KIỆN MỚI ĐỔI KNIFEBELT
+        if (character.slots.belt?.name !== "knifebelt") {
+            const slot = character.items.findIndex(i => i?.name === "knifebelt");
+            
+            if (slot < 0) {
+                await revertToPrimaryBelt();
+                await useAttack();
+                return false;
+            }
+
+            await equip(slot);
+        }
+
+        // 8. Sắp xếp ưu tiên và lấy tối đa 5 quái
+        const sortedMonsters = sortMonstersByPriority(validMonsters);
+        const targets = sortedMonsters.slice(0, 5);
+
+        // 9. Tung chiêu & Bù Ping Cooldown
+        await use_skill("fanofknives", targets);
+        reduce_cooldown("attack", character.ping * 0.95);
+        
+        return true;
+
+    } catch (e) {
+        return false;
+    } finally {
+        attackBusy = false;
+    }
+}
+
+
+
+
+
+
+
+function on_magiport(name) {
+    if (!parent.party[name]) return;
+    accept_magiport(name);
+    stop(); 
+    game_log(`🌀 Đã nhận MagiPort từ ${name}`, "#800080");
+}
+
+
+
+const MAGIPORT_EXCLUDE = new Set(["MuaBan"]);
+
+function mageMagiPort() {
+    if (character.ctype !== "mage" || !parent.party) return;
+    if (is_on_cooldown("magiport")) return;
+
+    const mpCost = G.skills.magiport?.mp || 900;
+    if (character.mp < mpCost + 100) return;
+
+    for (const name in parent.party) {
+        if (name === character.name || MAGIPORT_EXCLUDE.has(name)) continue;
+
+        // ÁP DỤNG SCAN_ALL: Kiểm tra bằng mảng đã cache thay vì gọi API get_player()
+        // Dùng .some() chạy cực nhanh để check xem đồng đội có đang ở gần (hiển thị) không
+        const isVisible = partyEntities.some(p => p.entity.name === name);
+
+        if (!isVisible) {
+            use_skill("magiport", name);
+            game_log(`🌀 MagiPort -> ${name}`, "#800080");
+            return; 
+        }
+    }
+}
+
+
+const ENERGIZE_RESERVE = 4000; // mp giữ lại
+const ENERGIZE_BUFFER = 200; //ngưỡng chống đầy
+
+function energizeParty() {
+    if (is_on_cooldown("energize")) return;
+    if (ms_to_next_skill("attack") < 100) return false;
+
+    // Dùng Math.max(1, ...) để luôn có ít nhất 1 MP cho đồng đội (lấy từ 500 MP dự phòng)
+    const mageCanGive = Math.max(1, character.mp - ENERGIZE_RESERVE);
+
+    let fallbackTarget = null;
+
+    for (const name of PARTY) {
+
+        if (name === character.name) continue;
+		
+        const entry = partyEntities.find(p => p.entity.name === name);
+        if (!entry) continue;
+
+        const target = entry.entity;
+        if (target.rip || !is_in_range(target, "energize")) continue;
+
+        if (!fallbackTarget) fallbackTarget = target;
+
+        const need = target.max_mp - ENERGIZE_BUFFER - target.mp;
+        if (need <= 0) continue;
+
+        use_skill("energize", target.name, Math.min(need, mageCanGive));
+        return;
+    }
+
+    // Nếu không ai thực sự thiếu MP, bơm 1 MP cho đồng đội hợp lệ đầu tiên
+    if (fallbackTarget) {
+        use_skill("energize", fallbackTarget.name, 1);
+    }
+}
+
+
+async function trySingleHeal() {
+    // 1. Kiểm tra Cooldown & Bù Ping sớm nhất có thể để tiết kiệm CPU
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("heal") > pingComp) return false;
+
+// 2. Tính tỉ lệ hồi máu (Tối ưu siêu tốc, giữ nguyên 100% logic ưu tiên)
+const rateheal = (character.map === "winter_instance") ? 0.97 : 
+                 (character.map === "uhills")          ? 0.945 : 
+                 (character.targets > 8)               ? 0.92  : 0.85;
+
+
+    // Ví dụ: 0.3 nghĩa là hệ thống sẽ tự coi người này MẤT THÊM 30% máu khi đem ra so sánh
+    const PRIORITY_BONUS = {
+        "Ynhi": 0.25, // Ưu tiên số 1 (Đánh lừa giảm 30% máu)
+        "6gunlaZe": 0.15     // Ưu tiên số 2 (Đánh lừa giảm 15% máu)
+    };
+
+    // 3. Tìm thành viên party cần heal có % HP thấp nhất trong tầm đánh
+    let lowestMember = null;
+    let lowestEffectiveHp = 999; // Dùng số lớn hẳn để tìm Min, không phụ thuộc vào rateheal nữa
+
+    for (const p of partyEntities) {
+        const member = p.entity;
+        if (!member || member.dead) continue;
+        
+        // Kiểm tra tầm đánh (range)
+        if (distance(character, member) > character.range) continue;
+
+        // Tính máu THẬT
+        const actualHpPercent = member.hp / member.max_hp;
+        
+        // ĐIỀU KIỆN GỐC: Vẫn phải đảm bảo máu THẬT dưới mức rateheal thì mới thèm xét bơm
+        if (actualHpPercent > rateheal) continue;
+
+        // TÍNH MÁU ẢO ĐỂ SO SÁNH CẠNH TRANH
+        const bonus = PRIORITY_BONUS[member.name] || 0; // Nếu không có tên trong danh sách thì bonus = 0
+        const effectiveHpPercent = actualHpPercent - bonus;
+
+        // Tìm người có máu ảo thấp nhất
+        if (effectiveHpPercent < lowestEffectiveHp) {
+            lowestEffectiveHp = effectiveHpPercent;
+            lowestMember = member;
+        }
+    }
+
+    // Nếu không có ai cần heal thì dừng lại
+    if (!lowestMember){
+		if (rateheal < 0.9 ||  character.hp / character.max_hp > 0.965) await useAttack();
+        return false;
+	}
+    // 4. Thực hiện Heal và Ép xung Cooldown ngay lập tức
+    heal(lowestMember).then(function() {
+        reduce_cooldown("heal", character.ping * 0.95);
+    }).catch(function(e) {
+        // Bắt lỗi im lặng nếu mục tiêu biến mất hoặc chết giữa chừng
+    });
+
+    return true; // Báo hiệu đã thực thi heal thành công
+}
+
+
+
+let delayParty = 0;
+
+async function tryPartyHeal() {
+    // 1. Kiểm tra MP và cooldown skill
+    if (character.mp <= 750 || is_on_cooldown("partyheal")) return false;
+
+    // 2. Tìm % HP thấp nhất trong Party
+    let lowestHpRatio = 1.0;
+    let hasAliveMember = false;
+
+    for (const p of partyEntities) {
+        const member = p.entity;
+        if (!member || member.dead) continue;
+        hasAliveMember = true;
+        
+        const ratio = member.hp / member.max_hp;
+        if (ratio < lowestHpRatio) lowestHpRatio = ratio;
+    }
+
+    if (!hasAliveMember) return false;
+
+    // 3. MODE 0: Cứu nguy khẩn cấp cực độ (< 36% HP) -> Bơm ngay lập tức
+    if (lowestHpRatio < 0.36) {
+        try {
+            await use_skill("partyheal");
+            delayParty = Date.now();
+            game_log(`💚 PartyHeal (Emergency) -> HP: ${(lowestHpRatio * 100).toFixed(1)}%`, "#00FF00");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Nhường nhịp cho attack nếu đang an toàn
+    if (ms_to_next_skill("attack") < 100) return false;
+
+    // 5. TÍNH TOÁN ĐIỀU KIỆN CẦN BƠM MÁU
+    const missingMp = character.max_mp - character.mp;
+    let requiredDelay = Infinity;
+
+    if (character.mp > 6000 && lowestHpRatio < 0.67 && lowestHpRatio > 0.5) requiredDelay = 400;
+    else if (missingMp < 1500 && lowestHpRatio < 0.83) requiredDelay = 300;
+    else if (missingMp < 600) requiredDelay = 200;
+    else if (lowestHpRatio < 0.65) {
+        const clamped = Math.max(0.33, Math.min(0.66, lowestHpRatio));
+        requiredDelay = 50 + (360 - 50) * ((clamped - 0.33) / (0.66 - 0.33));
+    }
+
+    // Nếu KHÔNG thỏa mãn bất kỳ điều kiện bơm máu nào -> requiredDelay vẫn là Infinity -> Bỏ qua
+    if (requiredDelay === Infinity) return false;
+
+    // Nếu có điều kiện bơm máu VÀ có quái < 20k HP aggro -> ÉP DELAY VỀ 50
+    if (typeof hasLowHpAggroMonster !== 'undefined' && hasLowHpAggroMonster) {
+        requiredDelay = 50;
+    }
+
+    // 6. Thực thi bơm máu
+    const now = Date.now();
+    if (now > delayParty + requiredDelay) {
+        try {
+            await use_skill("partyheal");
+            delayParty = now;
+            game_log(`💚 PartyHeal -> HP: ${(lowestHpRatio * 100).toFixed(1)}%`, "#00FF00");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+const EXTRA_CURSE_TARGETS = new Set(["franky", "icegolem", "crabxx", "bscorpion", "mrgreen", "mrpumpkin", "dragold"]);
+
+async function tryCurse() {
+    // 1. Kiểm tra Priest, Cooldown & MP tối thiểu
+    if (character.ctype !== "priest" || is_on_cooldown("curse") || character.mp < 2200) return false;
+
+    // Nhường nhịp cho attack
+    if (ms_to_next_skill("attack") < 200) return false;
+    
+    const curseRange = G.skills.curse.range || 200;
+
+    // Lấy entity của LEADER trực tiếp từ mảng partyEntities đã có sẵn
+    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
+    const leaderEntity = leaderObj ? leaderObj.entity : null;
+
+    let bestTarget = null;
+    let maxHp = -1;
+    let maxPriority = -1;
+
+    // 2. Duyệt trực tiếp mảng monsters từ scanAll()
+    for (const m of monsters) {
+        const mob = m.entity;
+
+        // Bỏ qua nếu vượt tầm Curse hoặc quái đã bị dính Cursed
+        if (m.distance > curseRange || mob.s?.cursed || mob.type == "character") continue;
+
+        const isExtraTarget = EXTRA_CURSE_TARGETS.has(mob.mtype);
+        // Kiểm tra xem quái có đang target bất kỳ ai trong partyEntities không
+        const isAttackingParty = partyEntities.some(p => p.entity.name === mob.target);
+
+        let priority = 0;
+
+        // --- KIỂM TRA ĐIỀU KIỆN ---
+        if (isExtraTarget && character.mp >= 2200) {
+            // Quái danh sách chọn thêm: MP >= 2200, Bỏ qua khoảng cách Leader
+            priority = 3;
+        } else if (isAttackingParty && character.mp >= 4200) {
+            // Quái thường đang đánh Party: MP >= 4200
+            const distToLeader = leaderEntity ? distance(leaderEntity, mob) : Infinity;
+
+            if (distToLeader <= 50)priority = 3; // Sát Leader (<= 50px)
+			else if (m.distance < 50 )priority = 2; // khoảng cách gần (<= 50px)
+			else priority = 1; // Đánh Party ở và xa
+        }
+
+        if (priority === 0) continue;
+
+        // --- LỰA CHỌN: ƯU TIÊN TẦNG CAO HƠN -> MÁU NHIỀU NHẤT ---
+        if (priority > maxPriority || (priority === maxPriority && mob.hp > maxHp)) {
+            maxPriority = priority;
+            maxHp = mob.hp;
+            bestTarget = mob;
+        }
+    }
+
+    // 3. Thi triển Curse
+    if (bestTarget) {
+        try {
+            await use_skill("curse", bestTarget);
+            game_log("curse", "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+const NO_ABSORB = new Set(["pppompom", "oneeye", "nerfedmummy", "nerfedbat"]);
+const PRIORITY_BOSSES = new Set(["xmagefz", "xmagefi", "xmagex", "xmagen", "franky"]);
+const VIP_PLAYERS = new Set(["6gunlaZe", "nhiY", "LyThanhThu", "MuaBan", "tienV"]);
+
+const EVENT_MONSTERS = new Set([
+    "mrpumpkin", "mrgreen",
+]);
+
+let lastAbsorbTime = 0;
+let lastEventCheckTime = 0;
+
+async function tryAbsorb() {
+    if (!character.party || character.hp < 3500 || character.mp < 800 || is_on_cooldown("absorb")) return false;
+    
+    const now = Date.now();
+    if (now - lastAbsorbTime < 250) return false;
+
+
+    let eventMonster = null;
+    let priorityBoss = null;
+    
+    // Object lưu thông tin quái đang đánh từng đồng đội: { [mateName]: { count, magicCount, hasDying } }
+    const partyThreats = {};
+
+    // -------------------------------------------------------------
+    // QUÉT SINGLE-PASS: CHỈ DUYỆT MẢNG MONSTERS ĐÚNG 1 LẦN DUY NHẤT
+    // -------------------------------------------------------------
+    for (let i = 0; i < monsters.length; i++) {
+        const e = monsters[i].entity;
+        if (!e || e.dead || !e.target) continue;
+
+        const target = e.target;
+        const mtype = e.mtype;
+
+        // 1. Nhận diện Quái Event (ưu tiên tìm con đầu tiên)
+        if (!eventMonster && EVENT_MONSTERS.has(mtype) && target !== character.name) {
+            eventMonster = e;
+        }
+
+        // 2. Nhận diện Boss nguy hiểm
+        if (!priorityBoss && PRIORITY_BOSSES.has(mtype) && target !== character.name) {
+            priorityBoss = e;
+        }
+
+
+        // 3. Gom thống kê quái đánh Party (bỏ qua quái thuộc NO_ABSORB)
+        if (!NO_ABSORB.has(mtype)) {
+            let stats = partyThreats[target];
+            if (!stats) {
+                stats = { count: 0, magicCount: 0, hasDying: false };
+                partyThreats[target] = stats;
+            }
+
+            stats.count++;
+            if (e.damage_type === "magical") stats.magicCount++;
+
+            if (!stats.hasDying) {
+                const hpThreshold = e.max_hp >= 800000 ? 65000 : (e.max_hp >= 200000 ? 29000 : 15000);
+                if (e.hp < hpThreshold) stats.hasDying = true;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------
+    // XỬ LÝ THEO THỨ TỰ ƯU TIÊN
+    // -------------------------------------------------------------
+
+    // LOGIC 0: Quái Event
+    if (eventMonster) {
+        const isLowHp = eventMonster.hp < 170000;
+        const canCheckEvent = isLowHp || (now - lastEventCheckTime >= 4000);
+
+        if (canCheckEvent) {
+            if (!isLowHp) lastEventCheckTime = now;
+
+            const victim = get_player(eventMonster.target);
+            if (victim && !victim.rip && distance(character, victim) <= 240) {
+                try {
+                    await use_skill("absorb", eventMonster.target);
+                    lastAbsorbTime = now;
+                    game_log(`🛡 Absorb Event (${eventMonster.mtype} - HP: ${eventMonster.hp})`, "#00FFFF");
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    // LOGIC 1: Boss nguy hiểm
+    if (priorityBoss) {
+        const victim = get_player(priorityBoss.target);
+        if (victim && !victim.rip && distance(character, victim) <= 240) {
+            try {
+                await use_skill("absorb", priorityBoss.target);
+                lastAbsorbTime = now;
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    }
+
+    // LOGIC 2: Tính điểm nguy hiểm cho Party (Chỉ duyệt danh sách đồng đội)
+    let bestTarget = null;
+    let maxDanger = 0;
+
+    for (let i = 0; i < partyEntities.length; i++) {
+        const mate = partyEntities[i].entity;
+        if (!mate || mate.dead || mate.name === character.name) continue;
+
+        const stats = partyThreats[mate.name];
+        if (!stats || stats.count === 0) continue;
+
+        // Tính điểm nguy hiểm dựa trên thông tin đã gom sẵn
+        let dangerScore = stats.count * 10;
+        if (stats.hasDying) dangerScore += 500;
+
+        let hpRatio = mate.hp / mate.max_hp;
+        if (mate.name === "haiz") hpRatio += 0.2;
+
+        if (VIP_PLAYERS.has(mate.name)) dangerScore += 7000;
+        if (hpRatio < 0.7) dangerScore += 70;
+        if (hpRatio < 0.3) dangerScore += 100;
+        if (stats.magicCount >= 3) dangerScore += 100;
+
+        if (dangerScore > maxDanger) {
+            maxDanger = dangerScore;
+            bestTarget = mate.name;
+        }
+    }
+
+    // Thi triển Absorb nếu vượt ngưỡng 100
+    if (bestTarget && maxDanger >= 100) {
+        try {
+            await use_skill("absorb", bestTarget);
+            lastAbsorbTime = now;
+            game_log(`🛡 Absorb ${bestTarget} (Danger: ${maxDanger})`, "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // LOGIC CO-OP: Dùng skill lên người NGOÀI party bị quái nhắm nhiều nhất
+    const hasCoop = character.s && character.s.coop;
+    if (hasCoop) {
+        let mostTargetedOutsider = null;
+        let maxMonsterCount = 0;
+
+        for (const targetName in partyThreats) {
+            // Bỏ qua nếu tên đó nằm trong mảng PARTY của bạn
+            if (PARTY.includes(targetName)) continue;
+
+            const stats = partyThreats[targetName];
+            if (stats.count > maxMonsterCount) {
+                // Kiểm tra xem người ngoài này có tồn tại, còn sống và trong tầm đánh (<= 240) không
+                const outsider = get_player(targetName);
+                if (outsider && !outsider.rip && distance(character, outsider) <= 240) {
+                    maxMonsterCount = stats.count;
+                    mostTargetedOutsider = targetName;
+                }
+            }
+        }
+
+        if (mostTargetedOutsider) {
+            try {
+                await use_skill("absorb", mostTargetedOutsider);
+                lastAbsorbTime = now;
+                game_log(`🛡 Absorb Coop (Outsider: ${mostTargetedOutsider} - Count: ${maxMonsterCount})`, "#00FFFF");
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+
+async function tryDarkBlessing() {
+    // 1. BẮT BỘC phải đang có target đánh thì mới xét tiếp (Tránh lãng phí MP khi đi ngang qua quái)
+    if (!currentTarget) return false;
+
+    // 2. Kiểm tra Priest, MP, Cooldown & Status buff
+    if (
+        character.ctype !== "priest" ||
+        character.mp <= 5200 ||
+        is_on_cooldown("darkblessing") ||
+        character.s?.darkblessing
+    ) return false;
+
+    // 3. Nếu target là bscorpion thì chỉ dùng khi nó > 200k HP
+    if (currentTarget.mtype === "bscorpion" && currentTarget.hp <= 200000) return false;
+
+    // 4. Đếm số quái trong bán kính 250px (dùng m.distance từ scanAll)
+    const nearbyMobsCount = monsters.filter(m => m.distance <= 250).length;
+
+    // 5. Gom từ 3 quái trở lên -> Bật Aura
+    if (nearbyMobsCount > 2) {
+        try {
+            await use_skill("darkblessing");
+            game_log("🌑 Dark Blessing Active", "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+async function tryHuntersMark() {
+    // 1. Chặn điều kiện cơ bản, map cấm và CD/MP
+    if (smart.moving) return false;
+    if (character.map === "winter_instance") return false;
+    if (is_on_cooldown("huntersmark") || character.mp < 540) return false;
+
+    // 2. Lọc mục tiêu từ mảng monsters (scanAll)
+    const validTargets = monsters.filter(m => {
+        const e = m.entity;
+        return (
+            m.distance <= character.range && // Trong tầm đánh
+            e.hp >= 40000 &&                 // HP tối thiểu 40.000
+            !e.s?.marked &&                  // 🟢 ĐÃ SỬA: Check !e.s?.marked (chưa bị dính Mark)
+            e.target                         // Quái đã có target
+        );
+    });
+
+    if (validTargets.length === 0) return false;
+
+    // 3. SẮP XẾP ƯU TIÊN: Quái dính Curse xếp đầu -> Nếu cùng trạng thái thì lấy HP cao hơn
+    validTargets.sort((a, b) => {
+        const aCursed = !!a.entity.s?.cursed;
+        const bCursed = !!b.entity.s?.cursed;
+
+        // Ưu tiên con bị Cursed lên trước
+        if (aCursed !== bCursed) {
+            return bCursed - aCursed; 
+        }
+
+        // Cùng Cursed (hoặc cùng chưa Cursed) -> Ưu tiên con trâu HP hơn
+        return b.entity.hp - a.entity.hp;
+    });
+
+    const target = validTargets[0].entity;
+
+    // 4. Thực thi skill
+    try {
+        await use_skill("huntersmark", target);
+        game_log(`🎯 Mark -> ${target.mtype} ${target.s?.cursed ? "☠️(Cursed)" : ""} (HP: ${Math.floor(target.hp)})`, "#00FFFF");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+async function trySuperShot() {
+    let targeted = get_targeted_monster();
+    if (targeted) currentTarget = targeted;
+
+    if (!currentTarget || smart.moving || attackBusy) return false;
+    if (is_on_cooldown("supershot") || character.mp < 800 || currentTarget.mtype == "a3") return false;
+
+    
+        try {
+            await use_skill("supershot", currentTarget);
+        game_log(`=>supershot>----=>`, "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    return false;
+}
+
+
+
+async function tryCharge() {
+    if (is_on_cooldown("charge")) return false;
+    if (!is_moving(character)) return false;
+
+    try {
+        await use_skill("charge");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+async function tryHardshell() {
+    if (is_on_cooldown("hardshell") || character.mp < 640) return false;
+    if (smart.moving) return false;
+
+
+    // 1. Lọc các quái VẬT LÝ đang NHẮM VÀO MÌNH và ở GẦN (<= 50px)
+    const physicalThreats = monsters.filter(m => {
+        const e = m.entity;
+
+        // Điều kiện 1: Phải ở trong bán kính 50 và đang nhắm vào MÌNH (character.name) kèm theo máu > 10000
+        if (m.distance > 50 || e.target !== character.name || (e.hp < 10000 && (character.hp / character.max_hp) > 0.5 ) ) return false;
+
+        // Điều kiện 2: Phải là quái tấn công vật lý (physical)
+        const dmgType = e.damage_type || G.monsters[e.mtype]?.damage_type || "physical";
+        return dmgType === "physical";
+    });
+
+    // Nếu không có con quái vật lý nào đang áp sát đập mình -> Bỏ qua
+    if (physicalThreats.length === 0) return false;
+
+    // 2. Kiểm tra điều kiện kích hoạt: Máu < 70% HOẶC có quái Dame to
+    const isHpLow = (character.hp / character.max_hp) < 0.7; // Máu dưới 70%
+    
+    const hasBigDame = physicalThreats.some(m => {
+        const e = m.entity;
+        const attackVal = e.attack || G.monsters[e.mtype]?.attack || 0;
+        return attackVal >= 1000; // Sát thương >= 1000
+    });
+
+    // Chỉ dùng khi Máu < 70% HOẶC có quái dame > 1000 đang đập
+    if (!isHpLow && !hasBigDame) return false;
+
+    // 3. Thực thi skill
+    try {
+        await use_skill("hardshell");
+        game_log("🛡️ Bật Hardshell (Áp sát + Dame to/Máu thấp)!", "#FFA500");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+
+async function tryStomp() {
+
+    if (is_on_cooldown("stomp") || character.map == "winter_instance" || character.mp < 170 || isEquipping || character.esize < 1 ) return false;
+
+    // --- 1. KIỂM TRA ĐIỀU KIỆN STOMP ---
+    const mobsNearby50 = monsters.filter(m => m.distance <= 50);
+    if (mobsNearby50.length === 0) return false;
+
+    const myHpPercent = character.hp / character.max_hp;
+    const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
+    const ynhi = ynhiMember?.entity;
+
+    // Nếu có buff Warcry (character.s?.warcry) -> hạ ngưỡng máu xuống 40% (0.4), ngược lại giữ 60% (0.6)
+    const hpThreshold = character.s?.warcry ? 0.4 : 0.6;
+
+    const hasLowHpMember = partyEntities.some(p => {
+        const e = p.entity;
+        return e && !e.dead && (e.hp / e.max_hp < hpThreshold);
+    });
+
+    const cond1 = myHpPercent < hpThreshold || hasLowHpMember;
+    const cond2 = ynhi && !ynhi.dead && ynhi.mp < 2000;
+    const cond3 = mobsNearby50.length > 10 && ynhi && !ynhi.dead && (
+        (ynhi.hp / ynhi.max_hp < 0.8) || (ynhi.mp / ynhi.max_mp < 0.8)
+    );
+    const cond4 = (FARM_MONSTER === "rimedjinn") && mobsNearby50.some(m => {
+        const e = m.entity;
+        const rimeExp = e.s?.rimeshell;
+        
+        // Kiểm tra ms còn lại
+        return e.mtype === "rimedjinn" && e.target && rimeExp && rimeExp.ms < 1000;
+    });
+	
+    if (!cond1 && !cond2 && !cond3 && !cond4) return false;
+
+	
+    // --- 2. XỬ LÝ SWAP VŨ KHÍ & DÙNG SKILL ---
+    // Nếu đang cầm basher sẵn rồi thì bổ luôn
+    if (character.slots.mainhand?.name === "basher") {
+        try {
+            await use_skill("stomp");
+            game_log(`💫 Stomp Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
+            return true;
+        } catch (e) { return false; }
+    }
+
+    // Nếu chưa cầm, tìm basher trong túi
+    const basherSlot = character.items.findIndex(i => i?.name === "basher");
+    if (basherSlot < 0) return false; // Không mang basher thì chịu
+
+
+    try {
+        // 1. Tháo offhand trước (nếu đang cầm đồ ở tay phụ)
+        if (character.slots.offhand) {
+            unequip("offhand");
+            await sleep(50); // chờ 1 vài tick ở đây nếu thấy game hay bị miss lệnh do gửi quá nhanh
+        }
+
+        await equipSet("stomp");        
+		
+        // 3. Bổ Stomp
+        await use_skill("stomp");  
+        game_log(`💫 Stomp (Quick-Swap) Choáng ${mobsNearby50.length} quái!`, "#FFFF00");
+        
+        // 4. Trả lại vũ khí chính lên tay (Basher chui lại vào basherSlot)
+        // equip(basherSlot);         
+
+        return true;
+    } catch (e) {
+        return false;
+    } finally {
+		
+    }
+}
+
+
+async function tryTaunt() {
+    // 1. Chặn CD, MP và trạng thái di chuyển
+    if (is_on_cooldown("taunt") || character.mp < 140 || smart.moving) return false;
+
+    const tauntRange = 190;
+    
+    // Tạo Set chứa tên đồng đội nguy cấp (O(1) lookup thay vì array.includes)
+    const endangeredNames = new Set();
+    for (let i = 0; i < partyEntities.length; i++) {
+        const p = partyEntities[i];
+        const e = p.entity;
+        if (e && !e.dead && e.name !== character.name && e.hp < 6000) {
+            endangeredNames.add(e.name);
+        }
+    }
+
+    let bestThreat = null;
+    let maxThreatAttack = -1;
+    let monstersTargetingMeCount = 0;
+
+    let bestFarmMob = null;
+    let maxFarmHP = -1;
+
+    // =========================================================================
+    // DUYỆT QUA MẢNG MONSTERS 1 LẦN DUY NHẤT (Single-pass loop)
+    // =========================================================================
+    for (let i = 0; i < monsters.length; i++) {
+        const m = monsters[i];
+        const e = m.entity;
+        if (!e) continue;
+
+        // Đếm số con đang đánh mình (phục vụ cho Ưu tiên 2)
+        if (e.target === character.name) {
+            monstersTargetingMeCount++;
+        }
+
+        // Bỏ qua nếu ngoài tầm taunt
+        if (m.distance > tauntRange) continue;
+
+        // --- ƯU TIÊN 1: Tìm quái đánh đồng đội nguy cấp (HP < 6000) có Attack cao nhất ---
+        if (endangeredNames.size > 0 && endangeredNames.has(e.target)) {
+            const atk = e.attack || (G.monsters[e.mtype] && G.monsters[e.mtype].attack) || 0;
+            if (atk > maxThreatAttack) {
+                maxThreatAttack = atk;
+                bestThreat = e;
+            }
+        }
+        
+        // --- ƯU TIÊN 2: Chuẩn bị cho farm mobs (nếu chưa có threat ưu tiên 1) ---
+        // Lọc nhanh các điều kiện cơ bản của farm mob
+        if (!bestThreat && e.target !== character.name && PARTY.includes(e.target)) {
+            if (TARGET_MONSTERS.includes(e.mtype) && e.hp > 40000) {
+                const dmgType = e.damage_type || (G.monsters[e.mtype] && G.monsters[e.mtype].damage_type) || "physical";
+                if (dmgType === "physical") {
+                    if (e.hp > maxFarmHP) {
+                        maxFarmHP = e.hp;
+                        bestFarmMob = e;
+                    }
+                }
+            }
+        }
+    }
+
+    // =========================================================================
+    // XỬ LÝ LỰA CHỌN VÀ THỰC THI
+    // =========================================================================
+    
+    // Nếu có quái đánh đồng đội sắp chết -> Ưu tiên cứu ngay lập tức
+    let targetToTaunt = bestThreat;
+
+	if (bscorpionTarget && bscorpionTarget.hp < 9500 && character.hp > 8000 && !healer) targetToTaunt = bscorpionTarget;
+	
+if (bscorpionTarget && character.hp > 8000 && !healer && bscorpionTarget.hp < 13500) {
+    let burn = bscorpionTarget.s?.burned;
+    let burnDmg1_5s = burn ? (burn.intensity / burn.ms) * Math.min(burn.ms, 1500) : 0;
+    
+    if ((bscorpionTarget.hp - burnDmg1_5s) < 9500) {
+        targetToTaunt = bscorpionTarget;
+    }
+}
+	
+
+    // Nếu không có ai nguy cấp, xét đến điều kiện farm mob (giới hạn < 6 con đang tank mình)
+    if (!targetToTaunt && monstersTargetingMeCount < 6 && monstersTargetingMeCount < Toltalmonster/2) {
+        targetToTaunt = bestFarmMob;
+    }
+
+    if (targetToTaunt) {
+        try {
+            await use_skill("taunt", targetToTaunt);
+            game_log(`🧲 Taunted ${targetToTaunt.mtype} (Target: ${targetToTaunt.target || "None"}, HP: ${targetToTaunt.hp})`, "#AA00FF");
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+async function tryWarcry() {
+    // 1. Kiểm tra Cooldown, MP tối thiểu và trạng thái bận
+    if (is_on_cooldown("warcry") || character.mp < 520) return false;
+    if (smart.moving) return false;
+
+    // 2. Định nghĩa các trường hợp kích hoạt:
+    const hasWarcry = !!character.s?.warcry;
+    const hasDarkBlessing = !!character.s?.darkblessing;
+
+    // Trường hợp 1 (Cũ): Chưa có Warcry và đã có Dark Blessing
+    const isNormalCondition = (!hasWarcry && hasDarkBlessing);
+
+    // Trường hợp 2 (Mới): Có bscorpionTarget, HP > 300,000 và MP > 700
+    const isBscorpionCondition = (typeof bscorpionTarget !== 'undefined' && bscorpionTarget && bscorpionTarget.hp > 300000 && character.mp > 700);
+
+    // Nếu không thỏa mãn bất kỳ trường hợp nào thì thoát
+    if (!isNormalCondition && !isBscorpionCondition) return false;
+
+    // 3. Thực thi Kỹ năng
+    try {
+        await use_skill("warcry");
+        game_log("📢 Warcry Triggered!", "#FFD700");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+async function tryCleave() {
+
+// Nhường nhịp cho attack
+    if (ms_to_next_skill("attack") < 100 || character.esize < 1) return false;
+	
+    // 1. Kiểm tra Cooldown, MP và trạng thái bận
+    if (is_on_cooldown("cleave") || character.mp < 1020 || isEquipping) return false;
+    if (smart.moving) return false;
+
+    // 2. Tầm thi triển Cleave
+    const CLEAVE_RANGE_SAFE = (G.skills.cleave.range || 160) + 20; 
+
+    // Biến đếm & Cờ kiểm tra (Chỉ dùng 1 vòng lặp duy nhất)
+    let totalCleaveMobs = 0;
+    let isTriggered = false;
+    let untargetedCount = 0;
+    let weakUntargetedCount = 0;
+    let strongUntargetedCount = 0;
+    let allStrongInTargetList = true;
+
+    for (const m of monsters) {
+        if (m.distance > CLEAVE_RANGE_SAFE) continue;
+
+        totalCleaveMobs++;
+        const e = m.entity;
+        const target = e.target;
+
+        // 1. Check chốt chặn mở khóa (Chỉ cần 1 con thỏa mãn là bật cờ)
+        if (!isTriggered) {
+            if ((target && PARTY.includes(target)) || e.cooperative) {
+                isTriggered = true;
+            }
+        }
+
+        // 2. Phân loại quái chưa có Target
+        if (!target) {
+            untargetedCount++;
+            const maxHp = e.max_hp || 0;
+
+            if (maxHp < 10000) {
+                weakUntargetedCount++;
+            } else {
+                strongUntargetedCount++;
+                // Nếu có quái trâu không nằm trong TARGET_MONSTERS -> Đánh dấu ngay
+                if (allStrongInTargetList && !TARGET_MONSTERS.includes(e.mtype)) {
+                    allStrongInTargetList = false;
+                }
+            }
+        }
+    }
+
+    // BREAK EARLY: Không có quái trong tầm HOẶC không có mồi châm -> Thoát ngay!
+    if (totalCleaveMobs === 0 || !isTriggered) return false;
+
+    // =========================================================================
+    // ĐIỀU KIỆN AN TOÀN ĐỂ XẢ CLEAVE
+    // =========================================================================
+    let canCleave = false;
+
+    // TH 1: Tất cả quái trong tầm ĐÃ CÓ TARGET
+    if (untargetedCount === 0) {
+        canCleave = true;
+    } 
+    // TH 2A: Tất cả quái chưa Target đều QUÁ YẾU (< 10.000 HP)
+    else if (weakUntargetedCount === untargetedCount) {
+        canCleave = true;
+    } 
+    // TH 2B: Có quái trâu chưa Target -> Xét HP Warrior & MP Priest
+    else if (character.hp > 10000 && allStrongInTargetList) {
+
+        // Lấy MP của Ynhi ngay tại thời điểm thực sự cần dùng
+        const ynhiMember = partyEntities.find(p => p.entity.name === "Ynhi");
+        const ynhiMp = ynhiMember?.entity?.mp || 0;
+
+        const ignoreLimit = ynhiMp > 4500 ? 5 :
+                            ynhiMp > 3500 ? 3 :
+                            ynhiMp > 2500 ? 1 : 0;
+
+        if (strongUntargetedCount <= ignoreLimit && ignoreLimit > 0) {
+            canCleave = true;
+        }
+    }
+
+    if (!canCleave) return false;
+
+    // =========================================================================
+    // XỬ LÝ QUICK-SWAP BATAXE & THỰC THI SKILL
+    // =========================================================================
+    
+    // Nếu đang cầm sẵn Bataxe rồi thì quạt luôn
+    if (character.slots.mainhand?.name === "cave_deepaxe") {
+        try {
+            await use_skill("cleave");
+            game_log(`🪓 Cleave hit ${cleaveMobs.length} quái!`, "#FF5555");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Tìm bataxe trong túi đồ
+    const bataxeSlot = character.items.findIndex(i => i?.name === "cave_deepaxe");
+    if (bataxeSlot < 0) return false; // Không mang Bataxe trong túi
+
+    try {
+        // 1. Tháo offhand (khiên/vũ khí phụ) vì Bataxe là đồ 2 tay
+        if (character.slots.offhand) {
+            unequip("offhand");
+        }
+
+        // 2. Móc Bataxe ra quạt Cleave
+        await equipSet("cleave");
+        await use_skill("cleave");
+        game_log(`🪓 Cleave (Quick-Swap) hit ${cleaveMobs.length} quái!`, "#FF5555");
+
+        // 3. Đổi lại vũ khí chính cũ
+        // equip(bataxeSlot);
+        return true;
+    } catch (e) {
+        return false;
+    } finally {
+
+    }
+}
+
+const stopMonsters = ["odino", "porcupine", "greenfairy", "bluefairy", "redfairy", "oneeye"];
+const NooMonsters = ["porcupine",];
+
+
+async function tryAgitate() {
+    // 1. Kiểm tra nhanh cơ bản
+    if (is_on_cooldown("agitate") || character.mp < 1020 || smart.moving) return false;
+
+    const AGITATE_RANGE = (G.skills.agitate.range || 320) + 10;
+    
+    let pullableCount = 0;
+    let hasPorcupine = false;
+    let isWeakMobAttackingYnhi = false;
+
+    // 2. TỐI ƯU: Chỉ dùng 1 vòng lặp duy nhất để kiểm tra TOÀN BỘ điều kiện
+    for (let i = 0; i < monsters.length; i++) {
+        const m = monsters[i];
+
+        const e = m.entity;
+
+        // Nếu có Porcupine trong phạm vi check -> Hủy ngay lập tức không cần kiểm tra tiếp!
+        if (stopMonsters.includes(e.mtype)) {
+            hasPorcupine = true;
+            break; 
+        }
+		
+        // Bỏ qua quái ngoài tầm đánh ngay lập tức
+        if (m.distance > AGITATE_RANGE) continue;
+
+		// Nếu có Porcupine trong phạm vi bãi fram mà trong tầm 
+        if (NooMonsters.includes(e.mtype)) {
+            hasPorcupine = true;
+            break; 
+        }
+
+        // Kiểm tra điều kiện Ynhi
+        if (e.target === "Ynhi" && e.hp < 25000 && (e.max_hp || 0) > 30000) {
+            isWeakMobAttackingYnhi = true;
+            break;
+        }
+
+        // Đếm quái hợp lệ có thể hút
+        if (!e.target && TARGET_MONSTERS.includes(e.mtype)) {
+            pullableCount++;
+			if (character.mp > 1500)pullableCount++; // tự động +1 nếu mana dư nhiều
+        }
+    }
+
+    // 3. Từ chối nếu dính vi phạm
+    if (hasPorcupine || isWeakMobAttackingYnhi || pullableCount < 2) {
+        return false;
+    }
+
+    // 4. Bắn skill lập tức
+    try {
+        await use_skill("agitate");
+        game_log(`🌪️ Agitate hút ${pullableCount} quái!`, "#FF4500");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+async function try_ATTACK_buff_Heal() {
+    // 1. Chặn Cooldown đánh thường và MP tối thiểu
+    if (is_on_cooldown("attack") || character.mp < 300) return false;
+    if (vipBossTarget) return false;
+    const range = G.skills["3shot"]?.range || character.range;
+    const candidates = [];
+
+    for (const p of partyEntities) {
+        if (p.entity.name !== character.name && !p.entity.dead && p.distance <= range) {
+            candidates.push({ entity: p.entity, hpRatio: p.entity.hp / p.entity.max_hp });
+        }
+    }
+
+    for (const f of fieldgens) {
+        if (!f.entity.dead && f.distance <= range) {
+            candidates.push({ entity: f.entity, hpRatio: f.entity.hp / f.entity.max_hp });
+        }
+    }
+
+    const criticalTargets = candidates.filter(c => c.hpRatio < 0.3);
+
+    if (criticalTargets.length === 0) return false;
+
+    criticalTargets.sort((a, b) => a.hpRatio - b.hpRatio);
+
+    // TRƯỜNG HỢP 1: Từ 2 người trở lên < 30% HP -> Dùng 3shot
+    if (criticalTargets.length >= 2 && !is_on_cooldown("3shot") && character.mp >= 400) {
+        await equipSet("heall");
+        const targets = criticalTargets.slice(0, 3).map(c => c.entity);
+
+        try {
+            await use_skill("3shot", targets);
+			reduce_cooldown("attack", character.ping * 0.95);
+            game_log(`💚 3Shot Heal applied on ${targets.length} targets (<30% HP)`, "#00FF00");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // TRƯỜNG HỢP 2: Có 1 người < 30% HP (hoặc 3shot đang CD) -> Attack đơn cấp cứu
+    const singleTarget = criticalTargets[0].entity;
+    await equipSet("heall");
+
+    try {
+        await attack(singleTarget);
+		reduce_cooldown("attack", character.ping * 0.95);
+        game_log(`💚 Single Heal target: ${singleTarget.name || singleTarget.mtype}`, "#00FF00");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+
+
+// =========================================================================
+// CONFIG NGƯỠNG MÁU TỐI ĐA ĐỂ DỨT ĐIỂM QUÁI BẰNG CBURST (Theo mtype)
+// Chỉ kích hoạt cho quái HỢP TÁC (cooperative) có tên trong danh sách này
+// =========================================================================
+const CBURST_HP_LIMITS = {
+    "jr": 1600,          // Máu <= 1600 là dứt điểm
+
+    // Quái không có tên ở đây -> Bỏ qua hoàn toàn
+};
+
+function tryCleanLowHP_cburst() {
+    if (!can_use("cburst") || is_on_cooldown("cburst")) return false;
+    if (ms_to_next_skill("attack") < 100) return false;
+
+    // Tầm đánh skill cburst
+    const range = G.skills["cburst"]?.range || character.range;
+    const targets = [];
+    let totalMpNeeded = 0;
+
+    for (const m of monsters) {
+        const entity = m.entity || m;
+        if (!entity || entity.dead || !entity.visible) continue;
+
+        // 1. Kiểm tra cấu hình HP threshold
+        const maxHpThreshold = CBURST_HP_LIMITS[entity.mtype];
+        if (!maxHpThreshold) continue;
+
+        // 2. TẬN DỤNG KHOẢNG CÁCH CÓ SẴN (Thay cho parent.distance)
+        const dist = m.distance !== undefined ? m.distance : parent.distance(character, entity);
+        if (dist > range) continue;
+
+        // 3. Kiểm tra máu quái
+        if (entity.hp > 0 && entity.hp <= maxHpThreshold) {
+            const mpNeeded = Math.ceil(entity.hp * 2.1 + 20);
+
+            // Kiểm tra tổng MP còn đủ an toàn không
+            if ((character.mp - 200) >= (totalMpNeeded + mpNeeded)) {
+                targets.push([entity.id, mpNeeded]); // Truyền entity.id thay vì cả object entity
+                totalMpNeeded += mpNeeded;
+            }
+        }
+    }
+
+    // Thực thi skill nếu tìm thấy ít nhất 1 mục tiêu
+    if (targets.length > 0) {
+        try {
+            use_skill("cburst", targets);
+            game_log(`💥 CBurst Clear ${targets.length} targets | MP: ${totalMpNeeded}`, "#FF00FF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+
+
+
+const quaiA_Yeu = [
+    "rooster", "cutebee", "bigbird", "spider", "scorpion", "bscorpion", "gscorpion", "crabx", "mummy", "booboo", "rgoo", "bgoo", "wolfie", "jr", "goldenbat", "crabxx", "snowman", "wabbit", "mrgreen", "mrpumpkin"
+];
+
+const quaiB_Boss = [
+    "stompy", "skeletor", "gbluepro", "ggreenpro", "gredpro", "gpurplepro", "xmagefz", "xmagefi", "xmagefn", "xmagex", "mrgreen", "mrpumpkin", "plantoid", "ent", "sparkbot", FARM_MONSTER, "vbat", "franky",
+];
+
+const MAX_ZAP_TARGETS = 14; // Ngưỡng quái tối đa đang cắn mình
+let lastZapTime = 0;
+let KSplayer = 0;
+
+async function tryzapper() {
+    if ((Date.now() - lastZapTime) < 350 && KSplayer == 0) return false;
+    if (character.rip || smart.moving || character.map === "spider_instance") return false;
+    if (is_on_cooldown("zapperzap")) return false;
+
+    if (character.mp < 5000 || character.hp < 15000) return false;
+
+    const hasZapper = character.slots.ring1?.name === "zapper" || character.slots.ring2?.name === "zapper";
+    if (!hasZapper) return false;
+
+    // 🛑 Đếm chính xác số quái thực tế đang target vào nhân vật từ mảng `monsters`
+    const currentTargetsCount = monsters.filter(m => m.entity.target === character.name).length;
+    if (currentTargetsCount >= MAX_ZAP_TARGETS && character.hp / character.max_hp < 0.85) return false; // Đang tank quá ngưỡng -> Dừng Zap ngay
+
+
+
+
+    // --- ĐỌC CONFIG CỦA NHÂN VẬT ---
+    const LEADERConfig = CHAR_CONFIG[LEADER] || {};
+
+    const isMeLeader = character.name === LEADER;
+    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
+
+    // Nếu mình là leader -> true luôn; nếu không -> check khoảng cách
+    const isLeaderNear = isMeLeader || (leaderObj?.distance < 250) || LEADERConfig.solo;
+
+
+
+
+
+
+	
+	
+    // 🎯 ƯU TIÊN 1: Quái B (Boss) -> Cần Leader ở gần + Chưa có target
+    if (isLeaderNear) {
+        const targetBoss = monsters.find(m => 
+            quaiB_Boss.includes(m.entity.mtype) && m.entity.mtype != "rimedjinn" &&
+            !m.entity.target
+        );
+        if (targetBoss) {
+            try {
+                lastZapTime = Date.now(); // Cập nhật mốc thời gian ngay trước/khi Zap
+                await use_skill("zapperzap", targetBoss.entity);
+                game_log(`⚡ Zapper Boss (${targetBoss.entity.mtype})`, "#00FFFF");
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    }
+
+    // 🎯 ƯU TIÊN 2: Quái A (Yếu) -> Cứ đủ MP trong tầm là Zap
+    const targetWeak = monsters.find(m => 
+        quaiA_Yeu.includes(m.entity.mtype)
+    );
+    if (targetWeak) {
+        try {
+            lastZapTime = Date.now(); 
+            await use_skill("zapperzap", targetWeak.entity);
+            game_log(`⚡ Zapper Weak (${targetWeak.entity.mtype})`, "#00FFFF");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // =========================================================================
+    // 🎯 ƯU TIÊN 3: KIỂM TRA RIMEDJINN > 86% MÁU & ZAP QUÁI CHƯA TARGET MÁU TO NHẤT
+    // =========================================================================
+
+    if (FARM_MONSTER != "rimedjinn" || character.map != "winter_cove") return false; // chặn logic, chỉ đi xuống khi đang farm rimedjinn đúng map 
+
+    // 1. Kiểm tra xem có con Rimedjinn nào đang đánh Party và còn > % HP không
+    const hasStrongRimedjinn = monsters.some(m => {
+        const e = m.entity;
+        if (e.mtype === "rimedjinn" && PARTY.includes(e.target)) {
+            const maxHp = e.max_hp;
+            return (e.hp / maxHp) * 100 > 86;
+        }
+        return false;
+    });
+
+    // 2. Nếu không có con rimedjinn trâu nào đang quấy rối Party -> Tìm quái tự do máu to nhất để Zap kéo về
+    if (!hasStrongRimedjinn) {
+        const untargetedMobs = monsters.filter(m => {
+            const e = m.entity;
+            return (!e.target || e.target === "");
+        });
+
+        if (untargetedMobs.length > 0) {
+            // Sắp xếp theo máu từ cao xuống thấp
+            untargetedMobs.sort((a, b) => b.entity.hp - a.entity.hp);
+            
+            // Zap con chưa có target có máu lớn nhất
+            const targetBigMob = untargetedMobs[0];
+            try {
+                lastZapTime = Date.now();
+                await use_skill("zapperzap", targetBigMob.entity);
+                game_log(`⚡ Zapper Big Mob (${targetBigMob.entity.mtype} - HP: ${targetBigMob.entity.hp})`, "#00FFFF");
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+const LURE_COOLDOWN_MS = 180 * 1000; // 180s mới được gọi lại
+let lastLureSent = 0;
+
+function checkAndRequestLureAndEnt() {
+    if (character.name !== "Ynhi") return;
+    if (character.rip || character.hp < 19000 || ToltalENT > 1) return;
+    if (FARM_MONSTER !== "plantoid") return;
+
+    const farmSpot = FARM_LOCATIONS[FARM_MONSTER];
+    if (!farmSpot || character.map !== farmSpot.map) return;
+    if (distance(character, farmSpot) >= 100) return;
+
+    const now = Date.now();
+    if (now - lastFarmMonsterSeen >= 2000) return;
+    if (now - lastLureSent < LURE_COOLDOWN_MS) return;
+
+    send_cm(MERCHANT, {
+        command: "lure",
+        name: character.name,
+        map: character.map,
+        x: character.x,
+        y: character.y
+    });
+
+    lastLureSent = now;
+    game_log(`[Client] đã giửi yêu cầu 'lure' tới ${MERCHANT}`);
+}
+
+
+async function useAttack() {
+    // CHỐT CHẶN COOLDOWN: Nếu chưa tới lượt đánh thì thoát luôn, không spam
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) return false;
+    
+    // CƠ CHẾ AN TOÀN: Xóa mục tiêu hiện tại nếu nó đã chết hoặc không còn tồn tại
+    if (currentTarget && (currentTarget.dead || !parent.entities[currentTarget.id])) {
+        currentTarget = null;
+    }
+
+    // ƯU TIÊN 1: Dùng currentTarget đang có sẵn
+    // ƯU TIÊN 2: Nếu không có thì mới lấy theo get_targeted_monster() của game
+    if (!currentTarget) {
+        let targeted = get_targeted_monster();
+        if (targeted) currentTarget = targeted;
+    }
+    
+    if (!currentTarget || (smart.moving) ) return false;
+
+    // DI CHUYỂN TỚI TARGET HOẶC TẤN CÔNG
+    if (!is_in_range(currentTarget)) {
+        // Tránh tình trạng spam lệnh move liên tục gây khựng nhân vật
+        if (!character.moving) {
+            move(
+                character.x + (currentTarget.x - character.x) / 2,
+                character.y + (currentTarget.y - character.y) / 2
+            );
+        }
+        return false; // Đang bận chạy lại gần, chưa chém được nên trả về false
+    }
+    
+    // BÙ PING CHO ĐÁNH THƯỜNG
+    if (
+        currentTarget &&
+        !smart.moving &&
+        currentTarget.type === "monster" &&
+        is_in_range(currentTarget) &&
+        ms_to_next_skill("attack") <= pingComp
+    ) {
+        // TẤN CÔNG VÀ ÉP XUNG COOLDOWN
+        try {
+            await attack(currentTarget);
+            reduce_cooldown("attack", character.ping * 0.95);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+
+
+// ============================================================
+// SCAN LOOP & COMBAT LOOP
+// ============================================================
+
+let hightAmor = false;
+
+setInterval(function() {
+    scanAll();
+    currentTarget = selectTarget();
+	hightAmor = (currentTarget?.armor ?? 0) > 200;
+	
+    tryTemporalSurge();
+}, 100);
+
+
+
+
+function hasEngagedBoss(entity) {
+    if (!entity || entity.dead) return false;
+
+    // 1. Kiểm tra trực tiếp target của nhân vật
+    if (character.target === entity.id) return true;
+
+    // 2. Kiểm tra thuộc tính cooperative
+    if (entity.cooperative) {
+        // Trường hợp 1: cooperative là Mảng (Array)
+        if (Array.isArray(entity.cooperative)) {
+            return entity.cooperative.includes(character.name) || entity.cooperative.includes(character.id);
+        }
+        // Trường hợp 2: cooperative là Object ({ "playerName": true })
+        if (typeof entity.cooperative === "object") {
+            return Boolean(entity.cooperative[character.name] || entity.cooperative[character.id]);
+        }
+    }
+
+    return false;
+}
+
+
+
+const spotsfranky = [
+    { x: 10, y: 15 }, 
+    { x: -96, y: -172 }, 
+    { x: -528, y: -172  },
+];
+
+    // Khai báo các tọa độ ép cứng (luôn ghi đè dữ liệu server)
+    const OVERRIDE_BOSS_LOCATIONS = {
+        franky: { map: "level2w", x: 0, y: 12 } // Thay đổi x, y theo tọa độ đứng của bạn
+    };
+
+function getActiveWorldBoss() {
+
+
+
+    // =========================================================================
+    // ƯU TIÊN 0: ÉP SỰ KIỆN THỦ CÔNG QUA CỜ CẤU HÌNH
+    // =========================================================================
+    if (fram_bscorpion) {
+        return {
+            id: "bscorpion",
+            map: "desertland",
+            x: character.name === "6gunlaZe" ? -425 : -405,
+            y: -1246,
+            entity: null // Không truyền entity thật để logic di chuyển/tìm quái ngoài map xử lý
+        };
+    }
+
+
+    const status = server.status || parent?.S;
+
+    // =========================================================================
+    // ƯU TIÊN 1: CÓ BOSS Ở GẦN VÀ HP < 50% -> ĐÁNH NGAY ĐỂ DỨT ĐIỂM / "HÚP" LOOT
+    // =========================================================================
+    const lowHpBosses = bossEntities
+        .filter(b => (b.entity.hp / b.entity.max_hp) < 0.5)
+        .sort((a, b) => (a.entity.hp / a.entity.max_hp) - (b.entity.hp / b.entity.max_hp)); // Ưu tiên con ít % HP nhất
+
+    if (lowHpBosses.length > 0) {
+        const targetBoss = lowHpBosses[0].entity;
+        const bossStatus = status?.[targetBoss.mtype] || {};
+
+        return {
+            id: targetBoss.mtype,
+            map: bossStatus.map || character.map,
+            x: targetBoss.x,
+            y: targetBoss.y,
+            entity: targetBoss // Trả thẳng entity thực tế để xả skill luôn
+        };
+    }
+
+    // =========================================================================
+    // ƯU TIÊN 2: NẾU KHÔNG CÓ BOSS GẦN CẦN CẤP CỨU -> TÌM BẢNG DÂN THEO THỨ TỰ CẤU HÌNH
+    // =========================================================================
+    if (!status) return null;
+
+    for (const bossId of WORLD_BOSSES) {
+        const b = status[bossId];
+        if (b && b.live) {
+            const override = OVERRIDE_BOSS_LOCATIONS[bossId] || {};
+            return {
+                ...b,
+                ...override, // Đặt sau ...b để luôn ghi đè map, x, y của server
+                id: bossId
+            };
+        }
+    }
+
+    return null;
+}
+
+
+
+// ============================================================
+// FARM MOVEMENT LOOP moveloop
+// ============================================================
+
+
+// Hàm trung gian bọc smart_move với try...catch và tự động về thành nếu lỗi
+// let isSmartMoving = false; // Biến khóa trạng thái di chuyển
+
+
+async function safeSmartMove(destination) {
+    if (smart.moving || character.c.town) return false; // || isSmartMoving
+
+   // isSmartMoving = true;
+
+    try {
+        let result = await smart_move(destination);
+        
+        // QUAN TRỌNG: Nếu smart_move trả về false (không tìm được đường / kẹt đường)
+        if (result === false) {
+            game_log("[SafeSmart] Không thể tìm đường đi -> Ép dùng lệnh về thành.");
+            stop("smart");
+            if (can_use("town")) {
+				game_log("về thành 1");
+                await use_skill("town"); // Dùng skill town để thoát map ngay lập tức
+            } else {
+            game_log("[SafeSmart] lỗi 1");
+            }
+        }
+
+       // isSmartMoving = false;
+        return result;
+
+    } catch (error) {
+        game_log("[SafeSmart] Lỗi ngoại lệ khi di chuyển -> Về thành.");
+        stop("smart");
+        if (can_use("town")) {
+			game_log("về thành 2");
+            await use_skill("town");
+        }
+       // farmingMoving = false;
+      //  isSmartMoving = false;
+        return false;
+    }
+}
+
+
+
+
+            // Danh sách tọa độ riêng cho từng nhân vật
+            // Thêm bao nhiêu nhân vật tùy ý ở đây... 
+			// rắn { map: "halloween", x: -555, y: -333 },  
+			// ghot { map: "halloween", x: 250, y: -1227 },
+			// nhện { map: "main", x: 970, y: -156 },
+			// trâu { map: "winterland", x: 80, y: -2015 },
+			// heo { map: "winterland", x: 16, y: -1231 },
+			// cây { map: "desertland", x: -819, y: -436 },
+
+// 1. Danh sách 4 bộ tọa độ theo tỉ lệ: 40% - 30% - 20% - 10%
+const WITCH_SETS = [
+    // Bộ 1 (40%)
+    {
+        "haiz": { map: "halloween", x: 250, y: -1227 },
+        "6gunlaZe": { map: "main", x: 970, y: -156 },
+        "Ynhi": { map: "halloween", x: 250, y: -1227 }
     },
-    body: JSON.stringify(payload)
-  })
-  .then(response => response.json())
-  .then(data => console.log('Message sent:', data))
-  .catch(error => console.error('Error sending message:', error));
+    // Bộ 2 (30%)
+    {
+        "haiz": { map: "halloween", x: 250, y: -1227 },
+        "6gunlaZe": { map: "main", x: 970, y: -156 },
+        "Ynhi": { map: "halloween", x: 250, y: -1227 }
+    },
+    // Bộ 3 (20%)
+    {
+        "haiz": { map: "winterland", x: 80, y: -2015 },
+        "6gunlaZe": { map: "winterland", x: 16, y: -1231 },
+        "Ynhi": { map: "winterland", x: 16, y: -1231 }
+    },
+    // Bộ 4 (10%)
+    {
+        "haiz": { map: "desertland", x: -819, y: -436 },
+        "6gunlaZe": { map: "desertland", x: -819, y: -436 },
+        "Ynhi": { map: "desertland", x: -819, y: -436 }
+    }
+];
+
+// 2. Hàm random theo hạt giống (seed)
+function seededRandom(seed) {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
 }
 
-// Hàm xử lý khi người dùng nhấn vào nút trong inline keyboard
-function handleCallbackQuery(callbackQuery) {
-  const chatId = callbackQuery.message.chat.id;
-  const text = callbackQuery.data;
+// 3. Tự động lấy bộ tọa độ đồng bộ theo NGÀY HÔM NAY (YYYYMMDD)
+function getDailyWitchSet() {
+    const now = new Date();
+    // Tạo seed từ Năm, Tháng, Ngày (Ví dụ: 20261025)
+    const timeSeed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
 
-  console.log('Handling callback query:', text);  // Debug log: Xử lý callback query
+    // Random theo tỉ lệ 40% - 30% - 20% - 10%
+    const r = seededRandom(timeSeed);
+    const setIndex = r < 0.1 ? 0 :  // 10%
+                     r < 0.2 ? 1 :  // 10%
+                     r < 0.6 ? 2 :  // 40%
+                               3;   // 40%
 
-  // Kiểm tra thời gian của callback query
-  const currentTime = new Date().getTime();
-  const timestamp = callbackQuery.message.date * 1000;  // Lấy thời gian tạo của message chứa callback query
-  const timeDiff = currentTime - timestamp;
+    return WITCH_SETS[setIndex];
+}
 
-  // Nếu thời gian quá lâu (10 giây), bỏ qua xử lý
-  if (timeDiff > callbackTimeout) {
-    console.log('Callback query expired. Skipping...');
-	        sendSyntaxExamples(chatId);
-    return;  // Bỏ qua callback query nếu thời gian quá lâu
-  }
+let checkcrabxx = 0;
+let time_make_rspeed = 0;
+// let farmingMoving = false;
 
-  // Nếu không quá lâu, thực hiện xử lý bình thường
-  const regex = /^\(([^,]+),\s*(.+)\)$/;  // Kiểm tra định dạng (key, data)
-  const match = text.match(regex);
+// --- BIẾN CHO VIỆC ĐI VÒNG TRÒN ---
+const ANGLE_STEP = character.name === '6gunlaZe' ? Math.PI / 4 : Math.PI / 7;
+let currentWitchSet = null; // Biến lưu bộ tọa độ witch
+// ----------------------------------
 
-  if (match) {
-    const key = match[1].trim();
-    let data = match[2].trim();
-    if (!isNaN(data)) {
-      data = parseFloat(data);  // Nếu là số, chuyển thành số
+setInterval(async function() {
+	loot();
+    if (typeof isLuringKane !== "undefined" && isLuringKane) return;
+    if (character.cave || isCaveMode ) return;
+
+if (!Viecquantrong)
+{
+	
+    // =========================================================
+    // 0. EVENT HANDLING ƯU TIÊN CAO
+    // =========================================================
+    // WITCHCIPHER EVENT HANDLING
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+
+    // Nếu sự kiện chưa bắt đầu hoặc đã kết thúc, reset lại để lần sau random tiếp
+    if (!witchEvent || witchEvent.phase !== "gathering") {
+        currentWitchSet = null;
     }
 
-    // Xử lý nhiệm vụ với key và data
-    performTask(key, data, chatId);
-    sendMessage(chatId, `Data received: ${key} = ${data}`);
-  } else {
-    sendMessage(chatId, 'Dữ liệu không hợp lệ!');
-  }
+    if (witchEvent && witchEvent.live && witchEvent.phase === "gathering") {
+
+    // Nếu chưa có bộ nào được chọn, tiến hành random theo tỉ lệ chuẩn mỗi ngày
+    if (!currentWitchSet) {
+        currentWitchSet = getDailyWitchSet();
+    }
+
+    // Vị trí mặc định nếu nhân vật hiện tại không có tên trong bộ
+    const DEFAULT_SPOT = { map: "main", x: 0, y: 0 }; 
+
+    // Lấy tọa độ của nhân vật hiện tại từ bộ đã random ra
+    const WITCH_SPOT = currentWitchSet[character.name] || DEFAULT_SPOT;
+
+
+        const distToSpot = (character.map === WITCH_SPOT.map) 
+            ? distance(character, WITCH_SPOT) 
+            : 99999;
+
+        // Nếu chưa ở đúng map HOẶC đứng quá xa vị trí cấu hình (> 200 đơn vị) thì di chuyển tới đó
+        if (character.map !== WITCH_SPOT.map || distToSpot > 200) {
+            if (!smart.moving) {
+              //  farmingMoving = false;
+                await safeSmartMove(WITCH_SPOT);
+            }
+            return;
+        }
+        
+        // Nếu đã đến nơi, dừng smart move để đứng yên tại chỗ theo ý muốn
+        if (smart.moving) stop("smart");
+        return;
+    }
+
+
+	
+
+// =========================================================
+// 1. WORLD BOSS HANDLING (TẬN DỤNG scanAll & BÁM SÁT TẦM ĐÁNH)
+// =========================================================
+// Cập nhật thực thể trước khi xử lý
+    scanAll();
+
+    const activeBoss = getActiveWorldBoss();
+
+    if (activeBoss) {
+        const bossEntry = bossEntities.find(b => b.entity.mtype === activeBoss.id);
+        const bossEntity = activeBoss.entity || bossEntry?.entity;
+
+		
+        // Nếu thấy Boss trong màn hình và Boss CÒN SỐNG
+        if (bossEntity && !bossEntity.dead) {
+			
+			if (activeBoss.id == "franky"){
+				moveNearest(bossEntity, spotsfranky);
+				return  // boss này cần logic di chuyển riêng
+			}
+
+            const dist = bossEntry ? bossEntry.distance : distance(character, bossEntity);
+            const safeAttackRange = Math.max(15, character.range - 60);
+
+            if (dist > safeAttackRange) {
+                if (can_move_to(bossEntity.x, bossEntity.y)) {
+                    if (smart.moving) stop("smart");
+					if(character.name === LEADER) move(bossEntity.x, bossEntity.y);
+					else
+					{
+                    move(
+                        character.x + (bossEntity.x - character.x) * 0.4,
+                        character.y + (bossEntity.y - character.y) * 0.4
+                    );
+					}
+                } else if (!smart.moving) {
+                    await safeSmartMove({ map: character.map, x: bossEntity.x, y: bossEntity.y });
+                }
+            } else {
+				//đang ổn định đánh boss
+                     mageMagiPort();
+                     if (smart.moving) stop("smart");			
+            }
+        } 
+        // Nếu Boss không xuất hiện trong tầm mắt, chỉ di chuyển nếu chưa tới đúng Map/Tọa độ
+        else if (!bossEntity) {
+            if (!smart.moving && (character.map !== activeBoss.map || distance(character, activeBoss) > 100)) {
+              //  farmingMoving = false;
+                await safeSmartMove({ map: activeBoss.map, x: activeBoss.x, y: activeBoss.y });
+            }
+        }
+
+        return; 
+    }
+
+
+    // =========================================================
+    // EVENT HANDLING
+
+
+    // GRAVEYARD RISING EVENT HANDLING
+    const graveyardEvent = server?.status?.graveyard || parent?.S?.graveyard;
+    if (graveyardEvent && graveyardEvent.live) {
+        const EVENT_CENTER = { map: "spookytown", x: 252, y: -1477 };
+        const distToEvent = (character.map === EVENT_CENTER.map) 
+            ? distance(character, EVENT_CENTER) 
+            : 99999;
+
+        // Nếu chưa ở map spookytown HOẶC ở spookytown nhưng đứng quá xa tâm sự kiện
+        if (character.map !== EVENT_CENTER.map || distToEvent > 250) {
+            if (!smart.moving) {
+               // farmingMoving = false;
+                if (character.map !== EVENT_CENTER.map) {
+                    parent.socket.emit("join", { name: "graveyard" });
+                } else {
+                    await safeSmartMove(EVENT_CENTER);
+                }
+            }
+            return;
+        }
+        
+        // Nếu đã ở trong spookytown và ở gần tâm sự kiện, dừng smart move để nhường quyền cho code combat của bạn
+        if (smart.moving) stop("smart");
+		return
+    }
+
+    // HORSEMAN EVENT HANDLING
+    const horsemanEvent = server?.status?.horseman || parent?.S?.horseman;
+    if (horsemanEvent && horsemanEvent.live) {
+        const EVENT_MAP = "halloween";
+        const targetX = horsemanEvent.x;
+        const targetY = horsemanEvent.y;
+        
+        const distToEvent = (character.map === EVENT_MAP) 
+            ? distance(character, { x: targetX, y: targetY }) 
+            : 99999;
+
+        // Nếu chưa ở map halloween HOẶC ở halloween nhưng vị trí horseman ở quá xa 
+        if (character.map !== EVENT_MAP || distToEvent > 300) {
+            if (!smart.moving) {
+               // farmingMoving = false;
+                if (character.map !== EVENT_MAP) {
+                    parent.socket.emit("join", { name: "horseman" });
+                } else {
+                    await safeSmartMove({ map: EVENT_MAP, x: targetX, y: targetY });
+                }
+            }
+            return;
+        }
+        
+        // Nếu đã ở trong halloween và ở gần vị trí horseman, dừng smart move để nhường cho code combat
+        if (smart.moving) stop("smart");
+        return;
+    }
+
+
+
+	
+    if (parent?.S?.goobrawl || server.status.goobrawl) {
+        if (character.map !== "goobrawl" && !smart.moving){
+			parent.socket.emit("join", { name: "goobrawl" });
+			join('goobrawl');
+		}
+        if (character.map === "goobrawl" && smart.moving) stop("smart");
+        return;
+    }
+
+    if (parent?.S?.crabxx || server.status.crabxx ) {
+        const crabxx = get_nearest_monster({ type: "crabxx" });
+        if (!crabxx && !smart.moving){
+			parent.socket.emit("join", { name: "crabxx" });
+			join('crabxx');
+		}
+        if (crabxx && distance(character, crabxx) > 250)xmove(crabxx.x, crabxx.y);
+        return;
+    }
+
+}
+	
+    // FARM CHECK & DELAY SMART MOVE
+    if (smart.moving || mode !== MODE.FARM ) return; // || farmingMoving
+    handleVipBossLogic();
+    if (vipBossTarget) return;
+	
+    await handleDungeonKeyLogic();
+    if (isDoingDungeon) return;
+
+
+
+    // --- ĐỌC CONFIG CỦA NHÂN VẬT CHO LOGIC CHẠY VÒNG TRÒN ---
+    const myConfig = CHAR_CONFIG[character.name] || {};
+    const isCircleEnabled = myConfig.circle === true;
+    const myRadius = myConfig.radius || 30; // Nếu không cài radius trong config, mặc định là 30
+
+    // --- LOGIC ĐI VÒNG TRÒN (ĐÃ TỐI ƯU) ---
+    if (isCircleEnabled && character.map === FARM_MAP.map && distance(character, FARM_MAP) < 300) {
+        // Lấy góc hiện tại của nhân vật so với tâm FARM_MAP dựa trên tọa độ thực tế
+        let currentAngle = Math.atan2(character.y - FARM_MAP.y, character.x - FARM_MAP.x);
+        
+        // Điểm đích mới sẽ tiến lên một bước góc từ vị trí hiện tại của nhân vật
+        let targetAngle = currentAngle + ANGLE_STEP;
+
+        let nextX = FARM_MAP.x + myRadius * Math.cos(targetAngle);
+        let nextY = FARM_MAP.y + myRadius * Math.sin(targetAngle);
+
+        if (can_move_to(nextX, nextY)) {
+            move(nextX, nextY); 
+        }
+    }
+    // --------------------------
+
+//Logic gọi LyThanhThu lên buff
+	const chestCount11 = Object.keys(parent.chests || {}).length;
+	if (character.name === LEADER && !character.s.rspeed && Toltalmonster < 8 && healer && chestCount11 == 0 && distance(character, healer) < 70 ){
+		stop_character(healer.name);
+        start_character("LyThanhThu", 3);
+		time_make_rspeed = Date.now();
+	}
+	
+// logic gọi hút quái
+   checkAndRequestLureAndEnt();
+
+	
+// Kiểm tra lạc chỗ => quay về fram
+
+   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
+   if (timeSinceLastMonster < 5000) return
+
+
+   // farmingMoving = true;
+    await safeSmartMove(FARM_MAP)
+        .finally(() => { 
+           // farmingMoving = false; 
+        });
+}, fram_bscorpion ? 200 : 700);
+
+
+
+
+let lastConfetti = 0;
+let lastKanePos = null;
+let stuckCheckTime = 0;
+let isLuringKane = false; 
+
+// Cờ đánh dấu nếu Kane đã đổi map/mất tích
+let kaneNotFoundOrGobi = false; 
+
+const FARM_SPOT = { x: -1173, y: -58, map: "main" }; 
+const KANE_ORIGIN = { x: -1011, y: 1681, map: "main", width: 20, height: 20 };
+
+setInterval(() => {
+
+    if (FARM_MONSTER != "crab" || character.name != "LyThanhThu" ) return
+    
+    // 0. Nếu đã xác định Kane mất tích/đổi map -> Bỏ qua toàn bộ logic dụ Kane
+    if (kaneNotFoundOrGobi) {
+        isLuringKane = false;
+        return;
+    }
+
+    const kane = Object.values(parent.entities).find(e =>
+        e.type === "npc" && e.npc === "citizen0" && e.name === "Kane"
+    );
+
+
+// 1. Kane đã về tới Bãi Farm VÀ sát nhân vật -> Xong nhiệm vụ
+if (kane && distance(kane, FARM_SPOT) <= 90 && distance(kane, character) <= 100) {
+    isLuringKane = false;
+    return;
 }
 
-// Hàm thực hiện nhiệm vụ (ví dụ: ghi lại dữ liệu hoặc thực hiện hành động khác)
-function performTask(key, data, chatId) {
-  console.log(`Nhiệm vụ thực hiện: key = ${key}, data = ${data}`);
+// 1.5. MẸO ĐƯỜNG CỤT: Kane đã đi lố lên phía TRÊN bãi farm (vùng 10h - 2h) -> Bỏ qua, không kéo nữa!
+if (kane && isKanePastFarmInDeadEnd(kane, FARM_SPOT)) {
+    // Có thể cho dừng dụ để quay lại farm bình thường
+    isLuringKane = false; 
+    return;
+}
+    
 
-  if (key === 'reset') {
-    console.log('Thực hiện reset!');
-	  parent.api_call("disconnect_character", {name: "haiz"});
-    sendMessage(chatId, 'Nhiệm vụ reset đã hoàn thành!');
-  } else if (key === 'fram') {
-    console.log('Thực hiện fram!');
-                respawn()
-	  send_cm("MuaBan", "full");
-	  sendMessage(chatId, 'Nhiệm vụ fram đã hoàn thành!');
-  } else if (key === 'bank') {
-    console.log('Thực hiện bank!');
-    sendMessage(chatId, 'Nhiệm vụ bank đã hoàn thành!');
-  } else if (key === 'crypt') {
-    console.log('Thực hiện crypt!');
-                codemode = 1
-	  	        Key.push(data); 
-	  sendMessage(chatId, 'Nhiệm vụ crypt đã hoàn thành!');
-  } else {
-    console.log('Không có nhiệm vụ xác định cho key:', key);  // Debug log: Kiểm tra trường hợp không có nhiệm vụ
-    sendMessage(chatId, `Không có nhiệm vụ xác định cho key: ${key}`);
-  }
+    // 2. Xử lý khi KHÔNG thấy Kane trong màn hình:
+    if (!kane) {
+        const distToOrigin = distance(character, KANE_ORIGIN);
+
+        // Nếu đã chạy đến sát tọa độ gốc (<= 50px) mà vẫn KHÔNG thấy Kane -> Kane đã đi map khác
+        if (distToOrigin <= 50) {
+            kaneNotFoundOrGobi = true; // Bỏ check Kane vĩnh viễn (cho đến khi reload script)
+            isLuringKane = false;
+            return;
+        }
+
+        // Nếu chưa tới tọa độ gốc -> Tiếp tục di chuyển lại KANE_ORIGIN để tìm
+        isLuringKane = true;
+        if (!character.moving && !smart.moving) {
+            xmove(KANE_ORIGIN.x, KANE_ORIGIN.y);
+        }
+        return;
+    }
+
+    // 3. Nếu ĐÃ THẤY Kane -> Tiến hành dụ Kane từng bước
+    isLuringKane = true;
+    const distToKane = distance(character, kane);
+
+    // Chạy lại gần Kane nếu ở quá xa
+    if (distToKane > 250) {
+        if (!character.moving && !smart.moving) {
+            const angle = Math.atan2(kane.y - character.y, kane.x - character.x);
+            const targetX = kane.x - Math.cos(angle) * 180;
+            const targetY = kane.y - Math.sin(angle) * 180;
+            
+            xmove(targetX, targetY);
+        }
+        return;
+    }
+
+    // Kiểm tra chống kẹt Kane
+    if (Date.now() - stuckCheckTime > 2000) {
+        if (lastKanePos && distance(kane, lastKanePos) < 5) {
+            const angle = Math.atan2(kane.y - character.y, kane.x - character.x);
+            move(character.x + Math.cos(angle) * 30, character.y + Math.sin(angle) * 30);
+        }
+        lastKanePos = { x: kane.x, y: kane.y, map: kane.map, width: kane.width, height: kane.height };
+        stuckCheckTime = Date.now();
+    }
+
+    // Kiểm tra Cooldown & ném Confetti
+    if (Date.now() - lastConfetti < 5000) return;
+
+    const slot = locate_item("confetti");
+    if (slot === -1) return;
+
+    throw_item(slot, character.x, character.y);
+    lastConfetti = Date.now();
+
+    // Lùi 1 bước về Bãi Farm
+    const angleToFarm = Math.atan2(FARM_SPOT.y - character.y, FARM_SPOT.x - character.x);
+    const nextX = character.x + Math.cos(angleToFarm) * 120;
+    const nextY = character.y + Math.sin(angleToFarm) * 120;
+
+    xmove(nextX, nextY);
+
+}, 800);
+
+
+// Hàm kiểm tra Kane đã vượt quá Bãi Farm và lọt vào góc cụt phía trên (10h -> 2h) chưa
+function isKanePastFarmInDeadEnd(kane, farmSpot) {
+    const dx = kane.x - farmSpot.x;
+    const dy = kane.y - farmSpot.y;
+    
+    // Tính góc giữa Kane và FARM_SPOT (kết quả từ -180 đến 180 độ)
+    const angleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
+    
+    // Nằm trong khoảng 9h (-180°) đến 2h (-30°) phía TRÊN bãi farm
+    return angleDeg >= -180 && angleDeg <= -30;
 }
 
-// Khởi động bot sau khi chờ 30 giây
-setTimeout(() => {
-  sendMessage(6708647498, 'Bot is now starting...!');
-	sendSyntaxExamples(6708647498);
-  getUpdates(); // Gọi hàm getUpdates lần đầu tiên
+// ============================================================
+// MERCHANT REQUEST COOLDOWN & REQUEST POTIONS
+// ============================================================
+const lastSent = { hp: 0, mp: 0, full: 0 };
+const COOLDOWN_MS = 60000;
+
+setInterval(() => {
+    if (character.rip) return;
+
+    const { esize, map, x, y, items, s } = character;
+    const now = Date.now();
+    let hp = 0, mp = 0;
+
+    const sendRequest = (command) => {
+        if (now - lastSent[command] < COOLDOWN_MS) return;
+
+        send_cm(MERCHANT, { command: command, name: character.name, map: map, x: x, y: y });
+        lastSent[command] = now;
+        console.log(`[Client] Requested '${command}' from ${MERCHANT}`);
+    };
+
+    if (esize < 6 || s?.mluck?.f !== MERCHANT) sendRequest("full");
+
+    for (const item of items) {
+        if (!item) continue;
+        if (item.name === "hpot1") hp += item.q ?? 1;
+        else if (item.name === "mpot1") mp += item.q ?? 1;
+    }
+
+    if (hp < 3000) sendRequest("hp");
+    if (mp < 6000) sendRequest("mp");
+}, 10000);
+
+// ============================================================
+// TRANSFER GOLD + ITEMS TO MERCHANT
+// ============================================================
+
+
+setInterval(() => {
+    const m = merchant;
+    let transferred = false;
+
+    // 1. Ưu tiên 1: Gửi cho Merchant chính (khi ở gần)
+    if (m && distance(character, m) <= MERCHANT_DISTANCE) {
+        if (character.gold) send_gold(m, character.gold);
+
+        for (let i = 0; i < 42; i++) {
+            const item = character.items[i];
+            if (item && !EXCLUDE.has(item.name) && !item.l && !item.s) {
+                send_item(m.id, i, item.q ?? 1);
+            }
+        }
+        transferred = true;
+    }
+
+    // 2. DỰ PHÒNG: Nếu túi đồ gần đầy (esize < 2), gửi cho 6gunlaZe
+    if (character.esize < 2 && character.name != "6gunlaZe") {
+        const backup = get_player("6gunlaZe"); // Tìm nhân vật 6gunlaZe xung quanh
+        
+        // Kiểm tra 6gunlaZe có ở gần (trong tầm MERCHANT_DISTANCE) và còn sống không
+        if (backup && !backup.dead && distance(character, backup) <= MERCHANT_DISTANCE) {
+            if (character.gold) send_gold(backup, character.gold);
+
+            for (let i = 0; i < 42; i++) {
+                const item = character.items[i];
+                if (item && !EXCLUDE.has(item.name) && !item.l && !item.s) {
+                    send_item(backup.id, i, item.q ?? 1);
+                }
+            }
+            transferred = true;
+        }
+    }
+
+    // Cập nhật trạng thái loot_transfer
+    loot_transfer = transferred;
 }, 2000);
 
 
 
 
 
-setTimeout(() => {
-if (codemode == 0){ 
-	load_code(7)
-	  sendMessage(6708647498, 'Bot is haiz fram!');
+// ============================================================
+// PARTY & START CHARACTERS
+// ============================================================
+// Lưu thời gian thực hiện hành động gần nhất cho từng nhân vật
+const charCooldowns = {};
+const STUCK_THRESHOLD = 5 * 60 * 1000; // 5 phút
+const homeStuckTimes = {};
+// Khoảng thời gian chờ giữa các lần gọi/tắt cùng 1 nhân vật (20 giây)
+const ACTION_COOLDOWN = 10000; 
 
-}
-	else if (codemode == 1) {
-		load_code(38)
-		  sendMessage(6708647498, 'Bot is crypt!');
-
-	}
-}, 13000); //chạy sau 13s, xác định xem là chơi kiểu gì
+function manageChars() {
+    if (character.name !== LEADER || isCaveMode ) return;
 
 
+    const activeBoss = getActiveWorldBoss();
+    
+    const witchEvent = server?.status?.witchcipher || parent?.S?.witchcipher;
+    
+    // Ưu tiên witchcipher nếu thỏa mãn, ngược lại lấy activeBoss.id (nếu có), không thì là null
+    let currentEvent = (witchEvent && witchEvent.phase === "gathering") 
+        ? "witchcipher" 
+        : (activeBoss ? activeBoss.id : null);
 
-let curenkey;
-let Key = [];
-let index = 0;
-let landau;
-let localkey;
-let lastLoggedKey = null; // Key cuối cùng đã ghi "tru 1 key"
+	if (Viecquantrong)currentEvent = null;
+	
+	if (fram_bscorpion)currentEvent = "bscorpion";
 
-setInterval(function () {
-    if (codemode != 1) return;
+	
+    const now = Date.now();
 
-    let member1 = get_player("6gunlaZe");
-    let member2 = get_player("Ynhi");
+    for (const [charName, config] of Object.entries(CHAR_CONFIG)) {
+        if (charName === LEADER) continue;
+        if (charName === "LyThanhThu" && !character.s.rspeed) continue;
 
-    if (
-        character.map == "cave" &&
-        distance(character, { x: -194, y: -1281 }) < 50 &&
-        member1 && member2 &&
-        distance(character, member1) < 50 &&
-        distance(character, member2) < 50
-    ) {
 
-        if (character.esize < 6) {
-            parent.api_call("disconnect_character", { name: "haiz" });
-        }
+        const isRunning = parent.party_list.includes(charName);
+        const shouldRun = currentEvent 
+            ? (config.events && config.events.includes(currentEvent))         // Nếu có sự kiện hiện tại: TRUE khi sự kiện đó nằm trong danh sách config.events
+            : !!config.home;                                                  // Nếu không có sự kiện: xác định dựa vào việc config.home có được cấu hình hay không
 
-        if (soluongitem("cryptkey") >= 1) {
-            enter("crypt");
-            landau = 1;
-            // Không cần reset lastLoggedKey
-        } else if (index < Key.length && character.map == "cave") {
-            enter("crypt", Key[index]);
-            game_log("Đăng nhập = " + Key[index]);
-            localkey = Key[index];
-            ghichu(localkey, "00", "");
-            Key.splice(index, 1);
-            landau = 0;
-        } else {
-            parent.api_call("disconnect_character", { name: "haiz" });
-        }
 
-        setTimeout(function () {
-            if (
-                character.map == "cave" &&
-                distance(character, { x: -194, y: -1281 }) < 50 &&
-                member1 && member2 &&
-                distance(character, member1) < 50 &&
-                distance(character, member2) < 50
-            ) {
-                ghichu(localkey, "16 không đăng nhập được", "");
-            } else if (character.map == "crypt") {
-                localkey = character.in; // Cập nhật localkey theo character.in
-                if (localkey !== lastLoggedKey) {
-                    ghichu(localkey, "tru 1 key", "");
-                    lastLoggedKey = localkey; // Đánh dấu key này đã được ghi
-                }
+        // =========================================================
+        // CHỈ CHECK KHI ĐANG Ở HOME (ĐANG KHÔNG CÓ EVENT GÌ: !currentEvent) VÀ KHÔNG CÓ CẤU HÌNH MONSTER RIÊNG (ĐÁNH QUÁI KHÁC) - CHECK ĐẢM BẢO CÓ MẶT, TRÁNH LAG - TREO
+        // =========================================================
+        
+        if (!currentEvent && config.home && isRunning && !config.monster) {
+			        if (charName === MERCHANT) continue;
+            // Kiểm tra xem đã lưu mốc thời gian chưa và thời gian vắng mặt có vượt quá 5 phút không
+            if (homeStuckTimes[charName] && (now - homeStuckTimes[charName] > STUCK_THRESHOLD)) {
+                console.log(`[Watchdog Home] ${charName} vắng mặt quá 5 phút ở nhà. Tiến hành restart...`);
+                charCooldowns[charName] = now;
+                delete homeStuckTimes[charName]; // Xóa mốc sau khi xử lý
+                stop_character(charName);
+                continue; // Bỏ qua đoạn bên dưới để chờ vòng sau reset
             }
-        }, 3000);
-    }
-}, 12000); // lặp lại mỗi 12s
+        }
+        // =========================================================
 
 
-
-
-function soluongitem(name)
-{
-	let sl = 0
-	//Iterate over every slot in our inventory.
-	for(var i = 0; i <= 41; i++)
-	{
-		var curSlot = character.items[i];
 		
-		//Does the item name match?
-		if(curSlot != null && curSlot.name == name)
-		{
-			sl += curSlot.q
-		}
-	}
-	
-	return sl
+        // Kiểm tra xem nhân vật này có đang trong thời gian chờ (CD) hay không
+        const lastAction = charCooldowns[charName] || 0;
+        if (now - lastAction < ACTION_COOLDOWN) {
+            // Đang trong thời gian chờ xử lý từ lần gọi trước -> Bỏ qua
+            continue; 
+        }
+
+        if (shouldRun && !isRunning) {
+			
+			if (now - time_make_rspeed < 50000 && charName == "Ynhi" && !character.s.rspeed) continue; //tạm hoãn gọi Ynhi chờ delay cho LyThanhThu xử lý
+			
+            // --- CẦN BẬT ---
+            console.log(`[Manager] Gọi nhân vật sau 8s: ${charName} (Event: ${currentEvent || 'Home'})`);
+            
+            // Cập nhật Cooldown NGAY TRƯỚC KHI gọi hàm
+            charCooldowns[charName] = now; 
+
+            // Hẹn sau
+            setTimeout(() => {
+            start_character(charName, config.slot);
+            }, 8500);	
+
+        } else if (!shouldRun && isRunning) {
+
+            // --- CẦN TẮT ---
+            console.log(`[Manager] Nhân vật ${charName} sẽ dừng sau 8s để loot đồ...`);
+            
+            // Cập nhật Cooldown NGAY TRƯỚC KHI tạo hẹn giờ (tránh vòng lặp 3s gọi trùng)
+            charCooldowns[charName] = now; 
+
+            // Hẹn 8 giây sau mới tắt
+            setTimeout(() => {
+                if (parent.party_list.includes(charName)) {
+                    console.log(`[Manager] Dừng nhân vật: ${charName}`);
+                    stop_character(charName);
+                }
+            }, 8000);
+			
+        }
+    }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////
-let isActive = true;
-
+// Chạy lần đầu sau 1 giây
 setTimeout(() => {
-  isActive = false; // Tắt hành động sau 20 giây
-  console.log('Bot stopped after 20 seconds');
-}, 20000); // Dừng hành động sau 20 giây
+    manageChars();
+    // Sau khi chạy xong lần đầu, bắt đầu lặp lại mỗi 3 giây
+    setInterval(manageChars, 3000);
+}, 1000);
 
-function hpp() {
-  if (isActive) {
-    console.log('Fetching updates...');
-    // Thực hiện các hành động cập nhật ở đây
-	  
-if (character.hp/character.max_hp< 0.8 && character.mp > 100 ) {
-   use_skill("use_hp");
-} 
-else if (character.mp/character.max_mp< 0.8) {
-	use_skill("use_mp");
+
+function on_party_request(n) {
+    if (character.name === LEADER && PARTY.includes(n) && n !== LEADER && !isCaveMode ) {
+        accept_party_request(n);
+
+		                // giửi kèm lệnh đi hầm ngục khi đã ở trong map
+		                if (n !== character.name && n !== MERCHANT && isDoingDungeon && (character.map === "crypt") ) {
+                            send_cm(n, { type: "DungeonInstance", instance: character.in });
+                            game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${n}`);
+                        }
+		
+    }
 }
-  else if (character.max_mp>character.mp)  use_skill("regen_mp");
-	
-	  
-    // Bạn có thể gọi lại getUpdates() nếu cần để cập nhật liên tục trong 20 giây
-    setTimeout(hpp, 300); 
-  } else {
-    console.log('Bot has stopped updating');
-  }
-}
-
-hpp(); // Bắt đầu thực hiện () ngay khi mở trang
-
-
 
 setInterval(function() {
- if (character.rip) { ///////auto hoi sinh
-	 framtay = 0
-    respawn();
-  }
-}, 420000);
+    if (character.name === LEADER) return;
+
+    if (!character.party) {
+        send_party_request(LEADER);
+    } else if (character.party !== LEADER) {
+        leave_party();
+    }
+}, 1000);
+
+// AUTO RESPAWN
+setInterval(() => character.rip && respawn(), 50000);
+
+// ============================================================
+// HP / MP POTION & SKILL LOOP
+// ============================================================
 
 
-//////////////////////////////////////////////////////
+
+let is_using_potion = false;
+
+function use_hp_or_mp1() {
+    if (is_using_potion || character.c.town || vipBossTarget ) return;
+
+    try {
+        let skill;
+
+        if (character.hp < 2100 && character.mp > 150) {
+            skill = "use_hp";
+        } else if (character.mp / character.max_mp < 0.9) {
+            skill = "use_mp";
+        } else if (character.mp / character.max_mp < 0.95 && character.targets > 0 ) {
+            skill = "use_mp";
+        } else if (character.hp / character.max_hp < 0.9) {
+            skill = "use_hp";
+        } else {
+            // Đã sửa: Không thỏa điều kiện nào (HP >= 90% và MP >= 95%) -> Bỏ qua không cắn
+            return;
+        }
+
+        is_using_potion = true;
+
+        use_skill(skill)
+            .then(() => {
+                const reduction = character.ping * 0.95;
+                
+                // Đồng bộ giảm Cooldown cho CẢ HAI kỹ năng
+                reduce_cooldown("use_hp", reduction);
+                reduce_cooldown("use_mp", reduction);
+                
+            })
+            .catch(() => {})
+            .finally(() => {
+                is_using_potion = false;
+            });
+
+    } catch (e) {
+        is_using_potion = false;
+    }
+}
+
+function potionLoop() {
+    let delay = 25;
+
+    try {
+        // Kiểm tra cooldown nhỏ nhất giữa HP và MP để đảm bảo tính chuẩn xác
+        const ms_hp = ms_to_next_skill("use_hp");
+        const ms_mp = ms_to_next_skill("use_mp");
+        const ms = Math.min(
+            isNaN(ms_hp) ? 0 : ms_hp, 
+            isNaN(ms_mp) ? 0 : ms_mp
+        );
+
+        if (ms < Math.max(10, character.ping / 10)) {
+            use_hp_or_mp1();
+        }
+
+        if (ms > 1600)      delay = 600;
+        else if (ms > 1200) delay = 500;
+        else if (ms > 800)  delay = 400;
+        else if (ms > 500)  delay = 300;
+        else if (ms > 300)  delay = 200;
+        else if (ms > 200)  delay = 140;
+        else if (ms > 100)  delay = 60;
+        else if (ms > 50)   delay = 30;
+        else if (ms > 25)   delay = 10;
+        else                delay = 25;
+
+    } catch (e) {
+        delay = 200;
+    }
+
+    setTimeout(potionLoop, delay);
+}
+
+potionLoop();
+
+
+
+
+const FIRE_SET_NAMES = ['dame', 'dame3', 'dame4', 'single'];
+
+
+
+async function skillLoop() {
+    let delay = 40; // Độ trễ chuẩn để quét liên tục mà không lag game
+
+    try {
+        // Chỉ chạy logic nếu nhân vật không bị khống chế/chết
+        if (!is_disabled(character)) {
+            
+            switch (character.ctype) {
+                case "rogue":
+                    useRspeed(); 
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+					if (await use_fan_of_knives()) return setTimeout(skillLoop, 10);
+					if (await useMentalBurstLogic()) return setTimeout(skillLoop, 10);
+					if (await useQuickAttack()) return setTimeout(skillLoop, 10);
+					if (await useInvisLogic()) return setTimeout(skillLoop, 10);
+
+
+                    break;
+
+                case "ranger":
+
+					if (await try_ATTACK_buff_Heal()) return setTimeout(skillLoop, 10);
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+					if (await use_multi_shot()) return setTimeout(skillLoop, 10);
+					if (await trySuperShot()) return setTimeout(skillLoop, 10);
+					if (await tryHuntersMark()) return setTimeout(skillLoop, 10);
+
+                    break;
+
+                case "mage":
+                    energizeParty();
+					tryCleanLowHP_cburst();
+
+
+                    if (await useAttack()) {
+                        return setTimeout(skillLoop, 10);
+                    }
+					
+                    break;
+                    
+                case "priest":
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+
+					if (await trySingleHeal()) return setTimeout(skillLoop, 10);
+					if (await tryPartyHeal()) return setTimeout(skillLoop, 10);
+					if (await tryCurse()) return setTimeout(skillLoop, 10);
+					if (await tryAbsorb()) return setTimeout(skillLoop, 10);
+					if (await tryDarkBlessing()) return setTimeout(skillLoop, 10);
+					if (await tryzapper()) return setTimeout(skillLoop, 10);
+                    
+                    break;
+                    
+                case "warrior":
+                    if (!SAFE && !character.cave) break; // Chưa an toàn -> Bỏ qua combo
+
+					if (await useAdvancedAttack()) return setTimeout(skillLoop, 10);
+					if (await tryStomp()) return setTimeout(skillLoop, 10);
+
+					if (FIRE_SET_NAMES.includes(INTENDED_SET)) {
+						ensure_equipped_batch(fire_SET);
+					} else {
+						if(INTENDED_SET == "luck_full")ensure_equipped_batch(LUCK_SET);  // nhớ đeo 2 nhẫn của Ynhi sang
+						else ensure_equipped_batch(DPS_SET);
+					}
+					
+					if (await tryAgitate()) return setTimeout(skillLoop, 10);
+					//if (await tryCleave()) return setTimeout(skillLoop, 10);
+					
+					if (await tryHardshell()) return setTimeout(skillLoop, 10);
+					if (await tryCharge()) return setTimeout(skillLoop, 10);
+					if (await tryTaunt()) return setTimeout(skillLoop, 10);
+					if (await tryWarcry()) return setTimeout(skillLoop, 10);
+
+                    break;
+                    
+            }
+
+        }
+    } catch (e) {
+        console.error("Lỗi trong skillLoop:", e);
+    }
+
+    // Đệ quy dự phòng để duy trì vòng lặp (cho các trường hợp không đánh, chỉ chạy hoặc chờ CD)
+    setTimeout(skillLoop, delay);
+}
+
+// Gọi hàm lần đầu tiên để kích hoạt vòng lặp
+skillLoop();
+
+
+
+function elixirUsage() {
+    try {
+        // Lấy config của nhân vật hiện tại
+        const config = CHAR_CONFIG[character.name];
+        if (!config) return;
+
+        // Ưu tiên lấy elixir từ config nhân vật, nếu không có sẽ mặc định là "pumpkinspice"
+        const targetElixir = config.elixir || "pumpkinspice";
+        const currentElixir = character.slots.elixir?.name;
+
+        if (currentElixir !== targetElixir) {
+            const itemSlot = locate_item(targetElixir);
+
+            if (itemSlot != null) {
+                use(itemSlot);
+            }
+        }
+    } catch (e) {
+        console.error("Error in elixirUsage:", e);
+    }
+}
+
+setInterval(elixirUsage, 20000);
+
+
+setInterval(() => {
+ if (character.name !== LEADER) return;
+    
+ parent.socket.emit("send_updates", {});
+}, 100000); 
+
+
+async function scare() {
+    if (is_on_cooldown("scare") || is_disabled(character) ) return;
+
+    const isLowHP = character.hp < 4500 && !vipBossTarget;
+    const isPriest = character.ctype === "priest";
+
+    // Tận dụng mảng partyEntities đã scan sẵn (0ms delay, không tốn CPU)
+    const hasTeammatesNearby = partyEntities.some(p => {
+        const entity = p.entity;
+        if (!entity || entity.name === character.name || entity.dead) return false;
+
+        // Dùng distance đã pre-calculate từ scan_all (fallback nếu thiếu)
+        const dist = p.distance ?? distance(character, entity);
+        return dist < 400;
+    });
+
+    // Logic Moving:
+    // - Priest (Tank): Đang moving + bị quái đánh + KHÔNG có đồng đội xung quanh
+    // - Class khác: Đang moving + bị quái đánh là scare ngay
+    const isAttackedWhileMoving = !vipBossTarget && smart.moving && character.targets > 0 && (!isPriest || !hasTeammatesNearby);
+
+    const VIPandmob = vipBossTarget && character.targets > 1;
+
+    // Nếu không thỏa mãn trường hợp nào -> Bỏ qua
+    if (!isLowHP && !isAttackedWhileMoving && !VIPandmob) return;
+
+    // Equip Jack-o'-Lantern nếu chưa đeo
+    if (character.slots.orb?.name !== "jacko") {
+        const slot = character.items.findIndex(i => i?.name === "jacko");
+        if (slot < 0) return; // Không tìm thấy Orb trong túi đồ
+
+        await equip(slot);
+        await use("scare");
+        // await sleep(500); // Delay 500ms chờ server ghi nhận trang bị mới
+    }
+
+    // Thực thi Scare
+    try {
+        await use("scare");
+        const reason = isLowHP ? "Máu thấp" : "Bị quái đánh khi solo moving";
+        game_log(`🎃 Scare! (${reason})`, "#FFA500");
+    } catch (e) {
+        // Bỏ qua lỗi execution timing
+    }
+}
+
+setInterval(scare, 400);
+
+// =========================
+// CONFIG & STATE: Temporal Surge
+// =========================
+const TEMPORAL_CONFIG = {
+    radius: 270,    // Bán kính quét quái
+    gap: 5,         // Hụt bao nhiêu con thì kích hoạt
+    delay: 200,     // Delay trước khi cast
+    cooldown: 10000 // Tối thiểu 10s giữa 2 lần
+};
+
+let temporalState = {
+    maxMonsters: 0,
+    lastMap: character.map,
+    lastTime: 0
+};
+
+// =========================
+// LOGIC
+// =========================
+function tryTemporalSurge() {
+    if (character.mp < 2000 || is_on_cooldown("temporalsurge") || smart.moving || solobscorpion) return;
+
+	
+    // Reset khi đổi map
+    if (character.map !== temporalState.lastMap) {
+        temporalState.maxMonsters = 0;
+        temporalState.lastMap = character.map;
+        return;
+    }
+
+    // Tận dụng luôn mảng monsters đã có sẵn từ scanAll() để đếm, cực kỳ nhẹ
+    const currentCount = monsters.filter(m => m.distance <= TEMPORAL_CONFIG.radius).length;
+
+    // Cập nhật mốc quái đông nhất
+    if (currentCount > temporalState.maxMonsters) {
+        temporalState.maxMonsters = currentCount;
+        return;
+    }
+
+    const character_CONFIG = CHAR_CONFIG[character.name];
+
+    // Kiểm tra xem nhân vật có tồn tại và có chứa FARM_MONSTER trong mảng events hay không
+    const hasEvent = character_CONFIG && character_CONFIG.events && character_CONFIG.events.includes("bscorpion");
+
+    // - Nếu FARM_MONSTER là "bscorpion" HOẶC nhân vật có tham gia sự kiện đó thì gap = 0, ngược lại lấy TEMPORAL_CONFIG.gap
+    const gap = (FARM_MONSTER === "bscorpion" || hasEvent) ? 0 : TEMPORAL_CONFIG.gap;
+    const delay = FARM_MONSTER === "bscorpion" ? 0 : TEMPORAL_CONFIG.delay;
+
+   const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
+   if (timeSinceLastMonster > 10000 && gap > 0) return
+	
+    // Điều kiện xả skill khi số lượng quái sụt giảm mạnh
+    if (
+        currentCount < temporalState.maxMonsters - gap &&
+        (character.mp / character.max_mp >= 0.7 || gap == 0) &&
+        Date.now() - temporalState.lastTime >= TEMPORAL_CONFIG.cooldown
+    ) {
+        const orbSlot = character.items.findIndex(i => i && i.name === "orboftemporal");
+        if (orbSlot === -1) return;
+
+        temporalState.lastTime = Date.now();
+        
+        // Gửi tín hiệu thông báo cho tất cả đồng đội trong Party
+        if (character.party) {
+            for (const name in parent.party) {
+                if (name !== character.name) {
+                    send_cm(name, "TemporalTime");
+                }
+            }
+        }
+        
+        setTimeout(() => {
+            if (is_on_cooldown("temporalsurge")) return;
+
+            equip(orbSlot);
+            use_skill("temporalsurge");
+            game_log("🔁 temporalsurge", "#AAAAFF");
+            equip(orbSlot);
+
+        }, delay);
+    }
+}
+
+
+let sharedDungeonInstance = null; // 🔑 Biến lưu mã instance hầm ngục nhận từ Leader qua CM
+let leaderLoc = null; // Nơi lưu tọa độ realtime của Leader
+let lastLeaderTarget = null;         // Lưu thông tin điểm đến nhận từ Leader
+let lastProcessedTargetTime = 0;     // ⏱️ Lưu mốc time đã xử lý để tránh gọi smart_move lặp lại mỗi tick
+
+function on_cm(name, data) {
+    // 1. Trường hợp data là string
+    if (typeof data === "string" && data === "TemporalTime") {
+        temporalState.lastTime = Date.now();
+        game_log(`📩 Đồng bộ Temporal từ ${name}`);
+        return;
+    }
+
+    // 2. Trường hợp data là object
+    if (typeof data === "object" && data !== null) {
+        if (data.message === "TemporalTime") {
+            temporalState.lastTime = Date.now();
+        }
+
+        // Bắt mã instance hầm ngục do Leader gửi tới
+        if (data.type === "DungeonInstance" && name === LEADER) {
+            sharedDungeonInstance = data.instance;
+            game_log(`🔑 Nhận mã Instance hầm từ Leader: ${sharedDungeonInstance}`, "#00FF00");
+        }
+
+        // 📥 Nhận tọa độ từ Leader và lọc theo time mới
+        if (data.type === "LeaderTarget" && name === LEADER) {
+            if (!lastLeaderTarget || lastLeaderTarget.time !== data.time) {
+                lastLeaderTarget = { x: data.x, y: data.y, map: data.map, time: data.time };
+            }
+        }
+		
+
+        // Bắt tọa độ & trạng thái Cave Mode từ Leader gửi tới
+        if (data.type === "LeaderLoc" && name === LEADER) {
+            // Cập nhật vị trí Leader
+            leaderLoc = { 
+                x: Math.round(data.x), 
+                y: Math.round(data.y), 
+                map: data.map 
+            };
+
+            // Tự động đồng bộ trạng thái Cave Mode khi Leader thay đổi
+            if (typeof data.caveMode === "boolean" && isCaveMode !== data.caveMode) {
+                isCaveMode = data.caveMode;
+                game_log(
+                    `🔄 Sync Cave Mode: ${isCaveMode ? "ON 🟢" : "OFF 🔴"}`, 
+                    isCaveMode ? "#00FF00" : "#FF0000"
+                );
+            }
+        }
+    }
+}
+
+
+// =============================================================================
+// 1. CẤU HÌNH BỘ TRANG BỊ THEO TÊN NHÂN VẬT (character.name)
+// =============================================================================
+const EQUIPMENT_SETS = {
+
+    // ---- Cấu hình đồ cho mage
+    "nhiY": {
+        dame: [
+			
+        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+            { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "vattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "cearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
+
+        dame4: [
+			
+        { itemName: "firestaff", slot: "mainhand", l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "helmet", slot: "helmet", level: 10, l: "l" },
+            { itemName: "mittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "vattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "starkillers", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "cearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+			
+        ],
+
+		
+        mana: [	
+        ],
+        luck: [
+			
+        { itemName: "oozingterror", slot: "mainhand", level: 9, l: "l" },
+
+        { itemName: "spookyamulet", slot: "amulet", level: 2, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "u"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
+            { itemName: "wshoes", slot: "shoes", level: 9, l: "l" },
+            { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+            { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+            { itemName: "wattire", slot: "chest", level: 6, l: "l" },
+            { itemName: "wbreeches", slot: "pants", level: 7, l: "l" },
+            { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" }
+        ],
+        def: [
+			
+		],
+        def_fire: []
+    },
+
+	
+    // ---- Cấu hình đồ cho Warrior offhand luôn đi chung với mainhand không thì sẽ lỗi nếu hiện tại đang đeo đồ cầm 2 tay 
+    "haiz": {
+        dame: [
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+        ],
+		
+        dame2: [
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+			
+       // { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+        ],
+
+
+        dame3: [
+			
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+        ],
+
+        dame4: [
+			
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+       // { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", l: "s"  },
+        { itemName: "cearring", slot: "earring1", l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+
+			
+
+        ],
+		
+		
+        mana: [
+			
+       // { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+			
+       // { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+        ],
+        luck: [
+			
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+      //  { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" } 
+			
+        ],
+
+        luck_full: [
+
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+	  //  { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+		
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
+        { itemName: "ringofluck", slot: "ring2", l: "s"  },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+
+        { itemName: "wshoes", slot: "shoes", l: "l" },
+        { itemName: "wcap", slot: "helmet", l: "l" },
+        { itemName: "wgloves", slot: "gloves", l: "l" },
+        { itemName: "wattire", slot: "chest", l: "l" },
+        { itemName: "wbreeches", slot: "pants", l: "l" },
+
+			
+            
+        ],
+		
+
+        single: [
+
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+      //  { itemName: "fireblade", slot: "offhand", level: 10, l: "l" },
+        { itemName: "coat", slot: "chest", level: 10, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", l: "l" },
+
+        { itemName: "bfangamulet", slot: "amulet", l: "l"},
+        { itemName: "suckerpunch", slot: "ring2", l: "s"  },
+        { itemName: "suckerpunch", slot: "ring1", l: "l"  },
+			
+			
+		],
+		
+        cleave: [
+
+        { itemName: "cave_deepaxe", slot: "mainhand", },
+
+			
+        ],
+        stomp: [
+
+        { itemName: "basher", slot: "mainhand", },
+
+			
+        ],
+		
+        def: [
+
+
+      //  { itemName: "vhammer", slot: "mainhand", level: 9, l: "u" },
+			
+      //  { itemName: "ololipop", slot: "offhand", level: 10, l: "l" },
+
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },
+        { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+        { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+        { itemName: "strbelt", slot: "belt", level: 5, l: "l" },
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+			
+
+			
+		],
+        def_fire: []
+    },
+	
+    // ---- Cấu hình đồ cho Ranger
+    "6gunlaZe": {
+
+
+        damesolo1vatly: [
+			
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "caravanbrigandine", slot: "chest", l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "vorb", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+        ],
+		
+        damesolo2phep: [
+			
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "candleboots", slot: "shoes", level: 4, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+        ],
+		
+        dame: [
+			
+        { itemName: "firebow", slot: "mainhand", l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+        ],
+
+        dame2: [
+			
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+        ],
+
+        dame4: [
+			
+        { itemName: "firebow", slot: "mainhand", l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+       // { itemName: "crookedkey", slot: "earring1", l: "s"  },
+       // { itemName: "crookedkey", slot: "earring2", l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+        ],
+		
+        mana: [
+        { itemName: "pouchbow", slot: "mainhand", level: 12, l: "l" },
+            { itemName: "alloyquiver", slot: "offhand", level: 9, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "tshirt9", slot: "chest", level: 8, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+			
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+
+			
+        ],
+        luck: [
+			
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 2, l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
+            { itemName: "wshoes", slot: "shoes", level: 8, l: "l" },
+            { itemName: "wcap", slot: "helmet", level: 9, l: "l" },
+            { itemName: "wgloves", slot: "gloves", level: 8, l: "l" },
+            { itemName: "wattire", slot: "chest", level: 8, l: "l" },
+            { itemName: "wbreeches", slot: "pants", level: 8, l: "l" },
+            { itemName: "rabbitsfoot", slot: "orb", level: 2, l: "l" }
+        ],
+        def: [
+
+        { itemName: "bowofthedead", slot: "mainhand", level: 10, l: "l" },
+            { itemName: "t2quiver", slot: "offhand", level: 8, l: "l" },
+            { itemName: "wingedboots", slot: "shoes", level: 9, l: "l" },
+            { itemName: "fury", slot: "helmet", level: 9, l: "l" },
+            { itemName: "supermittens", slot: "gloves", level: 9, l: "l" },
+            { itemName: "coat", slot: "chest", level: 10, l: "l" },
+            { itemName: "pants", slot: "pants", level: 11, l: "l" },
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "u"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "paleclaw", slot: "amulet", l: "l"},
+			
+		],
+        heall: [
+        { itemName: "cupid", slot: "mainhand", level: 9, l: "l" },
+		],
+        def_fire: []
+    },
+
+    // ---- Cấu hình đồ cho Priest (Ví dụ: Ynhi) ----
+    Ynhi: {
+        dame: [
+
+		{ itemName: "firestaff", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "exoarm", slot: "offhand", level: 2, l: "l" },
+        { itemName: "intbelt", slot: "belt", level: 5, l: "l" },
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "intamulet", slot: "amulet", level: 5, l: "l"},
+        { itemName: "orbofint", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mittens", slot: "gloves", level: 10, l: "l"  },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+
+        ],
+        def_phys: [
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "spikedhelmet", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+        def_mag: [
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+			
+			
+        ],
+        def_mixed: [
+
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "shield", slot: "offhand", level: 9, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "tigerstone", slot: "orb", level: 3, l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+        gold: [
+
+        { itemName: "handofmidas", slot: "gloves", level: 8 },  
+        { itemName: "horsecapeg", slot: "cape", level: 9, l: "l" },  
+        { itemName: "nightmarketsash", slot: "belt", l: "l" },
+        { itemName: "goldring", slot: "ring1", l: "l"  },
+        { itemName: "goldring", slot: "ring2", l: "u"  },
+        { itemName: "mimicgrin", slot: "orb", l: "l" },
+
+            
+        ],
+        luck_full: [
+
+	    { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+		
+	    { itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "spookyamulet", slot: "amulet", l: "l"},
+        { itemName: "intbelt", slot: "belt", level: 1, l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 5, l: "l"  },
+        { itemName: "ringofluck", slot: "ring2", l: "s"  },
+            
+        ],
+        luck_def: [
+
+	    { itemName: "mshield", slot: "offhand", l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", l: "l" },
+        { itemName: "ringofluck", slot: "ring1", l: "l"  },
+        { itemName: "cloverstud", slot: "earring2", l: "s"  },
+        { itemName: "cloverstud", slot: "earring1", l: "l"  },
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+            
+        ],
+        def_fire: [
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+
+        movebufff: [
+
+		{ itemName: "broom", slot: "mainhand", l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "jacko", slot: "orb", l: "l" },	
+		
+        { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
+        { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
+        { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
+
+        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+            
+        ],
+
+		
+        
+    },
+
+    // ---- Cấu hình đồ cho sát thủ
+    "LyThanhThu": {
+        dame: [
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "mpxamulet", slot: "amulet", l: "l"},
+        { itemName: "hexweavegloves", slot: "gloves", l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+
+        { itemName: "scorpionseal", slot: "ring1", l: "l"  },
+        { itemName: "cring", slot: "ring2", l: "l"  },
+			
+			
+        ],
+        Taymana: [
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "mpxamulet", slot: "amulet", l: "l"},
+        { itemName: "mpxgloves", slot: "gloves", l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+
+        { itemName: "scorpionseal", slot: "ring1", l: "l"  },
+        { itemName: "cring", slot: "ring2", l: "l"  },
+			
+        ],
+        luck: [
+        { itemName: "spookyamulet", slot: "amulet", level: 3, l: "l"},
+        { itemName: "cloverstud", slot: "earring2", level: 3, l: "l"  },
+        { itemName: "cloverstud", slot: "earring1", level: 2, l: "l"  },
+        { itemName: "wshoes", slot: "shoes", level: 8, l: "l"  },
+        { itemName: "wcap", slot: "helmet", level: 8, l: "l" },
+        { itemName: "wgloves", slot: "gloves", level: 9, l: "l" },
+        { itemName: "wattire", slot: "chest", level: 8, l: "l" },	    
+        { itemName: "wbreeches", slot: "pants", level: 7, l: "l" },
+        { itemName: "rabbitsfoot", slot: "orb", level: 1, l: "l" },
+			
+        ],
+
+        xuyengiap: [
+			
+        { itemName: "cave_loaded_die", slot: "orb", l: "l" },
+        { itemName: "dexearring", slot: "earring1", level: 4, l: "s"  },
+        { itemName: "dexearring", slot: "earring2", level: 4, l: "l"  },
+        { itemName: "gloampendant", slot: "amulet", l: "l"},
+        { itemName: "hexweavegloves", slot: "gloves", l: "l" },
+        { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
+        { itemName: "fury", slot: "helmet", level: 8, l: "l" },
+        { itemName: "tshirt9", slot: "chest", level: 7, l: "l" },	    
+        { itemName: "fallen", slot: "pants", level: 8, l: "l" },
+			
+        { itemName: "suckerpunch", slot: "ring1", level: 2, l: "l"  },
+        { itemName: "suckerpunch", slot: "ring2", level: 1, l: "l"  },
+			
+        ],
+
+        def: [],
+        def_fire: [],
+    },
+
+
+	
+};
+
+// =============================================================================
+// 2. LOGIC ĐIỀU KIỆN CHUYỂN SET CHO TỪNG NHÂN VẬT
+// =============================================================================
+let lastDefCheck = 0; // làm biến check giới hạn chuyển set phòng thủ mỗi 5s thôi chứ không đổi liên tục
+let luckcheck = 0; // bộ đệm kéo dài khi trang bị luck
+let glod_delay = 0; // bộ đệm kéo dài khi trang bị gold
+const LuotBoQua = 8;
+let activeLuckSet = ""; // Nhớ set Luck đã chọn để chống giật qua lại. Chống ping cao của sever
+const dameMonsters = ["mrpumpkin", "mrgreen","gargoyle","horseman","dragold","franky",]; 
+
+const GEAR_LOGIC = {
+    // ---- Logic của Ranger (6gunlaZe) ----
+    "6gunlaZe": function() {
+		if (fram_bscorpion) return "dame4";
+        if (vipBossTarget) return "luck";
+        let needNormalDef = false;
+        let needLuck = false;
+        let monsterTYPE = 0;
+        let monsterDensity = 0;
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+			
+            // Kiểm tra damage_type an toàn
+            if (["physical"].includes(e.damage_type)) monsterTYPE = 1; 
+            if (["magical"].includes(e.damage_type)) monsterTYPE = 2; 
+
+
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000)) needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+            if (e.target || e.max_hp < 5000) monsterDensity++;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck){
+            setBooster('luckbooster');
+			return "luck";
+		}
+		setBooster('xpbooster');
+
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+        if (monsterDensity >= 4) lastDefCheck = Date.now();
+		
+		if (needLuckALL && monsterTYPE == 1) return "damesolo1vatly";
+		if (needLuckALL && monsterTYPE == 2) return "damesolo2phep";
+
+        if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+		
+        if (monsterDensity >= 2) return "dame2";
+
+        return "dame"; // Trạng thái mặc định
+    },
+
+    // ---- Logic của Priest (Ynhi) ----
+    Ynhi: function() {
+		if (vipBossTarget) return "luck_full";
+        // 1. Bị thiêu đốt -> Chuyển ngay sang đồ kháng lửa
+       // if (character.s?.burned) return "def_fire";
+		
+        let Tinyguy = false; // Cờ bật khi phát hiện quái boss yếu xung quanh
+
+        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
+        let hasPhysical = false;
+        let hasMagical = false;
+        let needLuck = false;
+        let hasSpawnMonsterNearby = false; // Cờ kiểm tra có quái có "spawns" ở gần hay không
+
+        const chestCount = Object.keys(parent.chests || {}).length;
+        const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; // Giả sử lastFarmMonsterSeen là timestamp (ms)
+		
+        // 2. Duyệt quái xung quanh (tận dụng mảng monsters từ scanAll)
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+
+           if (dameMonsters.includes(e.mtype)) {
+               hasTargetForDame = true;
+           }
+
+           if (e.max_hp < 41000) {
+               Tinyguy = true;
+           }
+
+            // Kiểm tra nếu quái có thuộc tính spawns (và mảng spawns có phần tử)
+            if (e.spawns && Array.isArray(e.spawns) && e.spawns.length > 0) {
+                hasSpawnMonsterNearby = true;
+            }
+
+            const isTargetingMe = e.target === character.name;
+            const isCoop = e.cooperative;
+
+            if (isTargetingMe && e.attack > 300 && m.distance < 150) {
+                if (e.damage_type === "physical") hasPhysical = true;
+                if (e.damage_type === "magical") hasMagical = true;
+            }
+
+            if ( (isTargetingMe && e.hp < 11000 && (e.max_hp > 41000 || e.mtype == FARM_MONSTER ) ) || (isCoop && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )) {
+                needLuck = true;
+            }
+        }
+
+        // Đồ Luck (2 bậc theo HP), chỉ vào khi máu thật sự đủ
+        if (needLuck && character.hp > 6000 && luckcheck < 1) {
+			if (timeSinceLastMonster < 15000) //nếu đang còn trong bãi fram thì tăng delay
+			{
+			glod_delay = 25;
+			luckcheck = LuotBoQua;				
+			}
+			else
+			{
+			glod_delay = 2;
+			luckcheck = 1;	
+			}
+
+            lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
+            setBooster('luckbooster');
+			activeLuckSet = character.hp > 8000 ? "luck_full" : "luck_def";
+            return activeLuckSet
+        }
+
+        luckcheck--;
+        glod_delay--;
+
+        if (luckcheck > -1) return activeLuckSet
+		
+        // Đồ Gold:
+        // - Có > 10 rương
+        // - Hoặc có rương VÀ lastFarmMonsterSeen > 10s VÀ không có quái có spawns ở gần
+		
+        if (( (smart.moving && chestCount > 0)  || chestCount > 20 || (chestCount > 0 && timeSinceLastMonster > 10000 && !hasSpawnMonsterNearby && !Tinyguy)) && glod_delay < 0 ) {
+            lastDefCheck = 0; // Reset để khi hết set ưu tiên thì sẽ đánh giá lại set thủ ngay lập tức
+            return "gold";
+        }
+
+		setBooster('xpbooster');
+
+		if (smart.moving && character.map != "crypt"){
+			lastDefCheck = 0;
+			return "movebufff";
+		}
+		
+        if (hasTargetForDame || fram_bscorpion) return "dame";
+        if (hasPhysical && hasMagical) return "def_mixed";
+        if ( character.map == "uhills" ) return "def_mixed";
+		
+
+        // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
+        const now = Date.now();
+        const defenseSets = ["def_mixed", "dame", "def_mag"]; // Các set phòng thủ hợp lệ của bạn
+		
+        if (now - lastDefCheck < 5000) {
+            return defenseSets.includes(INTENDED_SET) ? INTENDED_SET : "def_mixed"; 
+        }
+		
+        lastDefCheck = now; // Đã đủ 5s -> cập nhật mốc thời gian mới
+
+        if (hasPhysical) return "def_mixed";
+        if (hasMagical) return "def_mag";
+
+
+        // 6. Mặc định sang đồ Dame -> mix
+        return "def_mixed";
+    },
+    // ---- Logic của haiz ----
+"haiz": function() {
+	
+    if (vipBossTarget) return "luck";
+    let needNormalDef = false;
+    let needLuck = false;
+    let monsterDensity = 0;
+    let burnDmg1_5s = 0;
+	
+    const targetNow = get_targeted_monster();
+
+    if (bscorpionTarget && solobscorpion) {
+        let burn = bscorpionTarget.s?.burned;
+        burnDmg1_5s = burn ? (burn.intensity / burn.ms) * Math.min(burn.ms, 1500) : 0;
+    }
+	
+    for (const m of monsters) {
+        const e = m.entity;
+        if (m.distance > 300) continue;
+
+        // Ưu tiên số 1
+        if (e.mtype === "xmagefi") return "def_fire";
+
+        if (e.target === character.name && character.hp < 8500)
+            needNormalDef = true;
+
+        if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000) || (solobscorpion && bscorpionTarget && e.hp < Math.min(5500 + burnDmg1_5s, 10500) ) )
+            needLuck = true;
+
+        if (e.target || e.max_hp < 5000)
+            monsterDensity++;
+    }
+
+    if (needNormalDef) return "def";
+    if (needLuck){
+        setBooster('luckbooster');
+		if (fram_bscorpion) return "luck_full";
+		return "luck";
+	}
+		setBooster('xpbooster');
+
+    if (fram_bscorpion) return "dame4";
+
+	
+    if (targetNow && SINGLE_MONSTERS.has(targetNow.mtype)) return "single";
+
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+        if (monsterDensity >= 4) lastDefCheck = Date.now();
+        if (character.hp > 8500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+        if (monsterDensity >= 2) return "dame2";
+
+    return "dame";
+},
+    // ---- Logic của Mage (nhiY) ----
+    "nhiY": function() {
+
+		if (fram_bscorpion) return "dame4";
+
+        let needNormalDef = false;
+        let needLuck = false;
+        let hasTargetForDame = false; // Cờ bật khi phát hiện quái
+
+        let monsterDensity = 0;
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+			
+           if (dameMonsters.includes(e.mtype)) {
+               hasTargetForDame = true;
+           }
+			
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) ) || (needLuckALL && e.hp < 3000 && e.max_hp > 63000))  needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+            if (e.target || e.max_hp < 5000) monsterDensity++;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck) return "luck";
+        if (hasTargetForDame) return "dame";
+
+        // Giữ Mana 5s nếu quái rớt từ 4 xuống 3
+       // if (monsterDensity >= 4) lastDefCheck = Date.now();
+       // if (character.hp > 5500 && (Date.now() - lastDefCheck < 5000)) return "mana";
+		
+        return "dame"; // Trạng thái mặc định
+    },
+    // ---- Logic của (LyThanhThu) ----
+    "LyThanhThu": function() {
+        let needNormalDef = false;
+        let needLuck = false;
+        let hasTargetHuman = false; // Cờ bật khi phát hiện quái hình người
+
+        for (const m of monsters) {
+            const e = m.entity;
+            if (m.distance > 300) continue;
+			
+            // Check thuộc tính gốc từ dữ liệu Game (G)
+            if (G.monsters[e.mtype]?.humanoid) {
+            hasTargetHuman = true;
+            }
+			
+            // Xmagefi ưu tiên số 1 -> Return sớm tiết kiệm CPU
+            if (e.mtype === "xmagefi") return "def_fire"; 
+
+            if ((e.cooperative && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )  || (needLuckALL && e.hp < 3000)) needLuck = true;
+            if (e.target === character.name && character.hp < 4500) needNormalDef = true;
+        }
+
+        if (needNormalDef) return "def";
+        if (needLuck){
+            setBooster('luckbooster');
+			return "luck";
+		}
+		setBooster('xpbooster');
+
+        if (hasTargetHuman) return "Taymana";
+		
+		if (hightAmor) return "xuyengiap";
+
+		
+        return "dame"; // Trạng thái mặc định
+    },
+
+
+	
+    
+};
+
+// =============================================================================
+// 3. CORE SWAP ENGINE (Gửi Socket Batch & Quản lý State)
+// =============================================================================
+let isEquipping = false;
+let currentSet = ""; // Lưu cờ Set hiện tại
+let INTENDED_SET = "";
+
+async function equipSet(setName) {
+    // 1. Kiểm tra an toàn cơ bản
+    if (isEquipping) return;
+
+    // 2. Lấy cấu hình đồ theo Tên Nhân Vật
+    const charSets = EQUIPMENT_SETS[character.name];
+    if (!charSets) return;
+
+    const setItems = charSets[setName];
+    if (!setItems || setItems.length === 0) {
+        currentSet = setName;
+        return;
+    }
+
+    // Hàm helper giúp check xem 1 item trong game có khớp với cấu hình không
+    const isItemMatch = (gameItem, configItem) => {
+        if (!gameItem) return false;
+        if (gameItem.name !== configItem.itemName) return false;
+        
+        // Nếu config có set level (khác undefined và khác 'x') thì mới đem ra so sánh
+        if (configItem.level !== undefined && configItem.level !== 'x' && gameItem.level !== configItem.level) {
+            return false;
+        }
+        
+        // Tương tự với thuộc tính 'l' (lock, letter, etc.)
+        if (configItem.l !== undefined && configItem.l !== 'x' && gameItem.l !== configItem.l) {
+            return false;
+        }
+
+        return true;
+    };
+
+    // 3. Phân loại: Món nào ĐÃ MẶC và Món nào CẦN MẶC
+    const validItems = [];
+    let isFullyEquipped = true;
+
+    for (const item of setItems) {
+        const equipped = character.slots[item.slot];
+        
+        // Kiểm tra xem trang bị trên người có khớp với yêu cầu không
+        if (isItemMatch(equipped, item)) {
+            continue; // Đã mặc đúng món này, chuyển sang món tiếp theo
+        }
+
+        // Nếu chưa mặc đúng, đánh dấu là Set chưa hoàn chỉnh
+        isFullyEquipped = false;
+
+        // Tìm món đồ trong túi đồ (inventory)
+        const invIndex = character.items.findIndex(i => isItemMatch(i, item));
+
+        if (invIndex !== -1) {
+            validItems.push({ num: invIndex, slot: item.slot });
+        }
+    }
+
+    // 4. Nếu ĐÃ MẶC ĐỦ TẤT CẢ -> Cập nhật currentSet và kết thúc
+    if (isFullyEquipped) {
+        if (currentSet !== setName) {
+            currentSet = setName;
+            game_log(`⚙ [${character.name}] Switched to [${setName.toUpperCase()}]`, "#4BFF4B");
+        }
+        return;
+    }
+
+    // 5. Gửi batch đổi đồ nếu tìm thấy món trong túi
+    if (validItems.length > 0) {
+        isEquipping = true;
+        try {
+            parent.socket.emit("equip_batch", validItems);
+            await parent.push_deferred("equip_batch");
+        } catch (e) {
+            console.error("equipBatch Error:", e);
+        } finally {
+            isEquipping = false;
+        }
+    }
+}
+
+// =============================================================================
+// 4. HÀM ĐIỀU PHỐI (VÒNG LẶP)
+// =============================================================================
+
+
+function autoSwapEquipment() {
+    if (isEquipping || FARM_MONSTER == "porcupine" ) return;
+    const penaltycheck = ms_penalty_cd();
+    if (penaltycheck > 2000) return;
+
+    const getTargetSet = GEAR_LOGIC[character.name];
+    if (!getTargetSet) return; 
+
+    // Lưu lại ý định thay đồ vào biến toàn cục
+    INTENDED_SET = getTargetSet();
+    
+    equipSet(INTENDED_SET);
+}
+
+
+setInterval(autoSwapEquipment, 100);
+
+
+
+const BOOSTER_TYPES = ["xpbooster", "luckbooster", "goldbooster"];
+
+function setBooster(targetName) {
+    const item0 = character.items[0];
+
+    // 1. Nếu ô 0 trống, hoặc vật phẩm ở ô 0 KHÔNG phải booster -> Bỏ qua luôn
+    if (!item0 || !BOOSTER_TYPES.includes(item0.name)) return;
+
+    // 2. Nếu ô 0 ĐÃ LÀ đúng loại booster cần tìm -> Dừng, không gửi lệnh (0 Penalty)
+    if (item0.name === targetName) return;
+
+    // 3. Đang là booster loại khác -> Gọi shift để biến đổi nó
+    shift(0, targetName);
+}
+
+
+let isLootingBatch = false;
+
+function autoLootAndBooster() {
+    if (isLootingBatch) return;
+
+    const chestIds = Object.keys(parent.chests || {});
+    if (chestIds.length === 0) return; // Không có rương thì bỏ qua luôn cho nhẹ
+	
+    // ==========================================
+    // 1. LOGIC CHO CÁC NHÂN VẬT KHÁC (Không phải Ynhi)
+    // ==========================================
+    if (character.name !== "Ynhi") {
+        // Nếu không thấy healer thì tiến hành loot
+        if (!healer || smart.moving) {
+            isLootingBatch = true;
+            setTimeout(() => {
+                chestIds.forEach(id => loot(id));
+                isLootingBatch = false;
+            }, 100);
+        }
+        return;
+    }
+
+
+    // DÀNH RIÊNG CHO YNHI
+    if (character.name === "Ynhi" && INTENDED_SET === "gold") {
+        setBooster('goldbooster');
+        if (character.slots.gloves?.name !== "handofmidas") return;
+
+        isLootingBatch = true;
+        setTimeout(() => {
+            chestIds.forEach(id => loot(id));
+            isLootingBatch = false;
+        }, 100);
+        return;
+    }
+
+}
+
+setInterval(autoLootAndBooster, 200);
+
+
+let leaderLastPos = { x: 0, y: 0, time: Date.now() };
+
+function monitorAndResetLeader() {
+
+    if (character.name !== LEADER) return;
+
+    if (character.rip) return;
+
+    const now = Date.now();
+    const moveDist = distance(character, leaderLastPos);
+
+    // Đếm quái xung quanh bản thân (character) từ mảng monsters đã scan
+    const monstersAroundLeader = monsters.filter(m => 
+        distance(character, m.entity) <= (character.range || 100)
+    ).length;
+
+    const isLeaderLonely = (monstersAroundLeader === 0);
+
+    // Nếu có di chuyển hoặc xung quanh có quái -> Cập nhật lại vị trí & mốc thời gian
+    if (moveDist > 10 || !isLeaderLonely) {
+        leaderLastPos = { x: character.x, y: character.y, time: now };
+    }
+
+    const isLeaderStandingStill = (now - leaderLastPos.time) >= 30000;
+    const hardreset = (now - leaderLastPos.time) >= 90000;
+
+
+    // 🛑 Đủ điều kiện đứng yên 90s + trống quái -> Tự ngắt kết nối để reload
+    if (isLeaderStandingStill && isLeaderLonely && hardreset) {
+        parent.api_call("disconnect_character", { name: character.name });
+        leaderLastPos.time = now; // Reset mốc tránh gọi API dồn dập
+    }
+}
+
+setInterval(monitorAndResetLeader, 5000); // Check reset Leader
+
+
+let game_start_time = Date.now();
+function ms_penalty_cd() {
+    const ms = character?.s?.penalty_cd?.ms ?? 0;
+    return ms < 0 ? 0 : ms;
+}
+
+setInterval(() => {
+    const penalty = ms_penalty_cd();
+    const elapsed_minutes = ((Date.now() - game_start_time) / 60000).toFixed(1);
+
+    game_log(`penalty: ${penalty} | run: ${elapsed_minutes} min | Ping: ${character.ping}`);
+}, 5000);
+
+
+function sell_trash_items() {
+	
+if (character.name != "6gunlaZe") return
+	
+    for (let i = 0; i < character.items.length; i++) {
+        const item = character.items[i];
+        if (!item) continue;
+
+        // Kiểm tra vật phẩm thuộc danh sách rác và không bị khóa (locked)
+        if (TRASH_ITEMS.includes(item.name) && !item.l && !item.s && (item.level ?? 0) <= 0) {
+            sell(i, item.q ?? 1);
+        }
+    }
+}
+// Tự động gọi hàm sell_trash_items mỗi 4000ms (4 giây)
+setInterval(sell_trash_items, 4000);
+
+
+
+// 1. Hàm gom các ô item trùng nhau lại với nhau
+async function combineInventoryStacks() {
+    // Đợi 1 chút để dữ liệu nhân vật đồng bộ hoàn toàn khi mới vào game
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    for (let i = 0; i < character.items.length; i++) {
+        let itemA = character.items[i];
+        if (!itemA) continue;
+
+        let itemInfo = G.items[itemA.name];
+        // Bỏ qua nếu item không stack được (s <= 1) hoặc ô này đã đầy max stack
+        if (!itemInfo || !itemInfo.s || itemInfo.s <= 1) continue;
+        if ((itemA.q || 1) >= itemInfo.s) continue;
+
+        for (let j = i + 1; j < character.items.length; j++) {
+            let itemB = character.items[j];
+            if (!itemB) continue;
+
+            // Nếu cùng tên và cùng level thì gộp ô j vào ô i
+            if (itemB.name === itemA.name && (itemB.level || 0) === (itemA.level || 0)) {
+                await swap(j, i);
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                itemA = character.items[i];
+                if (!itemA || (itemA.q || 1) >= itemInfo.s) break;
+            }
+        }
+    }
+    game_log("Đã gộp xong túi đồ!");
+}
+
+// 2. Chạy tự động ngay khi vừa load vào game
+combineInventoryStacks();
+
+// ============================================================
+// WORLD BOSS TRACKER - BẢO TOÀN ĐIỂM ĐỈNH & DELAY 1 GIÂY
+// ============================================================
+
+let lastTrackerUpdate = 0;
+
+function updateWorldBossTracker(bossEntity) {
+	 if (character.name !== LEADER) return;
+
+    const now = Date.now();
+
+    // 1. HP và lastSeen LUÔN CẬP NHẬT MỖI FRAME (Bắt chính xác khoảnh khắc Boss ngã xuống)
+    activeBossTracker.lastHp = bossEntity.hp;
+    activeBossTracker.lastSeen = now;
+
+    // 2. DELAY ĐÚNG 1 GIÂY (1000ms) CHO PHẦN QUÉT DANH SÁCH BẢNG ĐIỂM
+    if (now - lastTrackerUpdate < 1000 && activeBossTracker.mtype === bossEntity.mtype) {
+        return; // Chưa đủ 1s thì dừng, không thực hiện quét lại
+    }
+    lastTrackerUpdate = now;
+
+    const currentMap = {};
+
+    // A. Quét người chơi xung quanh từ parent.entities
+    if (typeof parent !== "undefined" && parent.entities) {
+        for (const id in parent.entities) {
+            const ent = parent.entities[id];
+            if (ent && ent.type === "character" && ent.s && ent.s.coop) {
+                const coop = ent.s.coop;
+                const v1 = coop.p || coop.v1 || 0;
+                const v2 = coop.v2 || Math.pow(v1, 0.65);
+
+                if (v1 > 0 || v2 > 0) {
+                    currentMap[ent.name || ent.id] = {
+                        v1: Math.round(v1),
+                        v2: Math.round(v2)
+                    };
+                }
+            }
+        }
+    }
+
+    // B. Ép quét chính bản thân (vì parent.entities KHÔNG chứa character)
+    if (character && character.s && character.s.coop) {
+        const coop = character.s.coop;
+        const v1 = coop.p || coop.v1 || 0;
+        const v2 = coop.v2 || Math.pow(v1, 0.65);
+        if (v1 > 0 || v2 > 0) {
+            currentMap[character.name] = {
+                v1: Math.round(v1),
+                v2: Math.round(v2)
+            };
+        }
+    }
+
+    // C. Khởi tạo nếu gặp Boss mới HOẶC Cập nhật TÍCH LŨY điểm đỉnh
+    if (activeBossTracker.mtype !== bossEntity.mtype || bossEntity.hp > activeBossTracker.lastHp + 100000) {
+        activeBossTracker = {
+            mtype: bossEntity.mtype,
+            players: currentMap,
+            lastHp: bossEntity.hp,
+            lastSeen: now,
+            reported: false
+        };
+    } else {
+        // TÍCH LŨY & LƯU GIỮ ĐIỂM ĐỈNH: Chỉ nâng điểm, KHÔNG BAO GIỜ XÓA TÊN
+        for (const name in currentMap) {
+            const newV1 = currentMap[name].v1;
+            const newV2 = currentMap[name].v2;
+
+            if (!activeBossTracker.players[name]) {
+                activeBossTracker.players[name] = { v1: newV1, v2: newV2 };
+            } else {
+                if (newV2 > activeBossTracker.players[name].v2) {
+                    activeBossTracker.players[name].v2 = newV2;
+                }
+                if (newV1 > activeBossTracker.players[name].v1) {
+                    activeBossTracker.players[name].v1 = newV1;
+                }
+            }
+        }
+    }
+}
+
+// 2. Kiểm tra điều kiện Boss chết
+function checkWorldBossDeathStatus() {
+	 if (character.name !== LEADER) return;
+
+    if (!activeBossTracker.mtype || activeBossTracker.reported) return;
+
+    const isHpLow = activeBossTracker.lastHp <= 20000;
+    const isDisappeared = (Date.now() - activeBossTracker.lastSeen > 3800) && (activeBossTracker.lastHp < 300000);
+
+    if (isHpLow || isDisappeared) {
+        sendWorldBossNtfyReport(activeBossTracker.mtype, activeBossTracker.players, activeBossTracker.lastHp);
+        activeBossTracker.reported = true;
+    }
+}
+
+function sendWorldBossNtfyReport(bossName, playersMap, finalHp) {
+	 if (character.name !== LEADER) return;
+
+    // 2. Chuyển đổi dữ liệu và sắp xếp
+    const sortedList = Object.keys(playersMap).map(name => ({
+        name: name,
+        v1: playersMap[name].v1,
+        v2: playersMap[name].v2
+    })).sort((a, b) => b.v2 - a.v2);
+
+    if (sortedList.length === 0) return;
+
+    const totalV2 = sortedList.reduce((sum, p) => sum + p.v2, 0);
+
+    const reportLines = sortedList.map((p, idx) => {
+        const pct = totalV2 > 0 ? ((p.v2 / totalV2) * 100).toFixed(1) : "0.0";
+        return `${idx + 1}. ${p.name}: ${p.v2.toLocaleString()} pts (${pct}%)`;
+    }).join("\n");
+
+    const serverStr = (typeof parent !== "undefined" && parent.server_region) 
+        ? `${parent.server_region} ${parent.server_identifier}` 
+        : "Unknown";
+
+    const title = `${bossName.toUpperCase()} KILLED - ${serverStr}`;
+    const message = 
+`Boss: ${bossName}
+Mau cuoi: ${finalHp.toLocaleString()} HP
+Tong nguoi: ${sortedList.length}
+
+--- BANG COOP ---
+${reportLines}`;
+
+    // 3. Gửi Fetch an toàn với mã hóa UTF-8
+    fetch(`https://ntfy.sh/${encodeURIComponent(NTFY_TOPIC)}`, {
+        method: "POST",
+        headers: {
+            "Title": title,
+            "Priority": "high",
+            "Tags": "trophy",
+            "Content-Type": "text/plain; charset=utf-8"
+        },
+        body: message
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP Status ${r.status}`);
+        game_log(`✅ NTFY gởi thành công báo cáo ${bossName}!`, "#00FF00");
+    })
+    .catch(e => {
+        // Chi tiết lỗi để dễ debug trong Console
+        game_log(`❌ Lỗi Fetch NTFY: ${e.message}`, "#FF0000");
+        console.error("NTFY Fetch Detail Error:", e);
+    });
+}
+
+
+
+function sendNtfyStatus() {
+
+    if (character.name !== LEADER) return;
+	
+    const hp = Math.round(character.hp / character.max_hp * 100);
+    const mp = Math.round(character.mp / character.max_mp * 100);
+
+    const message =
+`
+Túi trống: ${character.esize}
+Ping: ${character.ping}ms`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+        method: "POST",
+        headers: {
+            "Title": character.name,
+            "Priority": "default"
+        },
+        body: message
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    })
+    .catch(e => game_log("NTFY ERROR: " + e));
+}
+
+// Gửi ngay khi bot chạy
+sendNtfyStatus();
+
+// Sau đó gửi mỗi 5 phút
+setInterval(sendNtfyStatus, 30 * 60 * 1000);
+
+
+
+
+function handleVipBossLogic() {
+    if (!vipBossTarget) return false; // Không có boss nào cần farm level thì bỏ qua
+
+    const { entity, config } = vipBossTarget;
+    const bossLevel = entity.level || 1;
+
+    // Lấy vị trí đích: Ưu tiên dùng trong config, nếu không có thì lấy thẳng từ entity boss
+    const targetMap = config.map || entity.map;
+    const targetX = config.x !== undefined ? config.x : entity.real_x || entity.x;
+    const targetY = config.y !== undefined ? config.y : entity.real_y || entity.y;
+
+    // 1. Kiểm tra nếu chưa đứng đúng map hoặc vị trí định sẵn thì di chuyển đến
+    if (character.map !== targetMap || (targetX !== undefined && distance(character, { x: targetX, y: targetY }) > 50)) {
+        if (!smart.moving) {
+            smart_move({ map: targetMap, x: targetX, y: targetY });
+        }
+        return true; // Đang thực hiện di chuyển đến boss
+    }
+
+    // 2. Đã ở gần vị trí / nhìn thấy boss:
+    if (entity && !entity.dead) {
+        // Kiểm tra xem boss có đang nhắm mục tiêu vào thành viên trong party hay không
+        const isTargetingParty = entity.target && PARTY_SET.has(entity.target);
+
+        if (!isTargetingParty) {
+            // Nếu chưa có mục tiêu đồng đội -> Đánh thường để thu hút aggro
+            if (can_attack(entity)) {
+                attack(entity);
+            }
+        } else {
+            // Đang nhắm vào đồng đội -> Đứng yên nhường mục tiêu
+        }
+        return true; // Đang xử lý tác vụ VIP boss
+    }
+
+    return false;
+}
+
+//////////////////////////////////////////////////////////
+
+
+
 
 const urlBase = "https://api.github.com/repos/6gunlaZe/game/issues";
-const startFrom = new Date("2025-07-01"); // ⚠️ Chỉ lấy từ tháng 6/2024 trở lại
+
 
 async function fetchRecentIssues(limit = 500) {
   let allIssues = [];
@@ -365,23 +4748,18 @@ async function fetchRecentIssues(limit = 500) {
   let done = false;
 
   while (allIssues.length < limit && !done) {
-const response = await fetch(
-  `${urlBase}?state=all&sort=created&direction=desc&per_page=100&page=${page}`
-);
+    const response = await fetch(
+      `${urlBase}?state=all&sort=created&direction=desc&per_page=100&page=${page}`
+    );
 
+    if (response.status === 422) {
+      console.warn("⚠️ Page vượt quá số trang tồn tại. Dừng vòng lặp.");
+      break;
+    }  
 
-	
-  // 👉 Thêm kiểm tra 422 ngay tại đây
-  if (response.status === 422) {
-	console.log("🔍 Fetching page", page);
-    console.warn("⚠️ Page vượt quá số trang tồn tại. Dừng vòng lặp.");
-    break;
-  }  
-	  
-	  
     if (!response.ok) {
       console.error("❌ Lỗi khi gọi API GitHub:", response.statusText);
-      return;
+      return [];
     }
 
     const issues = await response.json();
@@ -389,11 +4767,7 @@ const response = await fetch(
 
     for (const issue of issues) {
       const createdAt = new Date(issue.created_at);
-
-      if (createdAt < startFrom) {
-      //  console.log(`⏩ [Page ${page}] Bỏ qua (quá cũ): ${issue.title} | ${createdAt.toISOString().split("T")[0]}`);
-        continue;
-      }
+      if (createdAt < startFrom) continue;
 
       allIssues.push(issue);
       if (allIssues.length >= limit) {
@@ -406,9 +4780,7 @@ const response = await fetch(
     page++;
   }
 
- // console.log("📊 Số issue còn lại sau lọc theo ngày:", allIssues.length);
-
-  // ✅ Lọc trùng title, giữ bản có body dài nhất
+  // Lọc trùng title, giữ bản có body dài nhất
   const titleToIssue = new Map();
   for (const issue of allIssues) {
     const current = titleToIssue.get(issue.title);
@@ -421,171 +4793,75 @@ const response = await fetch(
 
   const uniqueIssues = Array.from(titleToIssue.values());
   const now = new Date();
+  let Key = []; // Khai báo mảng chứa key hợp lệ
 
   uniqueIssues.forEach(issue => {
     const createdAt = new Date(issue.created_at);
-
     const diffInDays = (now - createdAt) / (1000 * 60 * 60 * 24);
-    if (diffInDays <= 2.3444) {
-    //  console.log(`⏳ Bỏ qua (mới tạo 3 ngày): ${issue.title} - ${diffInDays.toFixed(1)} ngày trước`);
-      return;
-    }
+    
+    // Vẫn giữ điều kiện kiểm tra thời gian trên 2.34 ngày để quái mạnh lên
+    if (diffInDays <= timeDELAYtokill) return;
 
     const body = issue.body || "";
-    const lines = body.split("\n");
-    const numberOfLines = lines.length;
 
-    const numberMatches = body.match(/\d+(\.\d+)?/g);
-    const numbers = numberMatches ? numberMatches.map(Number) : [];
-
-    const countZero = numbers.filter(n => n === 0).length;
-    if (countZero > 10) {
-   // console.log(`🚫 Bỏ qua (quá nhiều số 0): ${issue.title} - ${countZero} lần`);
+    // 1. NẾU CÓ CHỮ "DONE" THÌ LOẠI
+    if (body.toUpperCase().includes("DONE")) {
       return;
     }
 
-    const A = numbers.length > 0 ? Math.max(...numbers) : 0;
-
-    let B = 0;
-    const positionsMap = {};
-    numbers.forEach((num, idx) => {
-      if (!positionsMap[num]) positionsMap[num] = [];
-      positionsMap[num].push(idx);
-    });
-
-    for (const num in positionsMap) {
-      const positions = positionsMap[num];
-      if (positions.length >= 2) {
-        let segments = 1;
-        for (let i = 1; i < positions.length; i++) {
-          if (positions[i] !== positions[i - 1] + 1) segments++;
-        }
-        B += segments;
-      }
+    // 2. ĐẾM SỐ DÒNG, NẾU QUÁ 4 DÒNG THÌ LOẠI
+    const lines = body.split("\n");
+    const numberOfLines = lines.length;
+    if (numberOfLines > 4) {
+      return;
     }
 
-    const C = A + B;
-
-    if (C < 12 || (numberOfLines < 10 && A < 11)) {
-      Key.push(issue.title);
-     console.log(`✅ Thêm: ${issue.title} | Ngày tạo: ${createdAt.toISOString().split("T")[0]} | Dòng: ${numberOfLines} | A: ${A} | B: ${B} | C: ${C}`);
-    } else {
-  //    console.log(`🚫 Loại: ${issue.title} | C = ${C} quá lớn, dòng = ${numberOfLines}, A = ${A}`);
-    }
+    // Đạt điều kiện -> Thêm vào danh sách
+	Key.push(issue.title);
+	  
+    console.log(`✅ Thêm key: ${issue.title} | Số dòng: ${numberOfLines}`);
   });
 
-if (Key.length === 0) {
-  console.log("⛔ Không có issue nào đạt điều kiện.");
-} else {
-  Key.reverse();  // Đảo ngược mảng Key tại chỗ
-  console.log("📌 Danh sách Key:", Key);
+  if (Key.length === 0) {
+    console.log("⛔ Không có issue nào đạt điều kiện.");
+  } else {
+    Key.reverse();
+    console.log("📌 Danh sách Key hợp lệ:", Key);
+  }
+
+  return Key;
 }
 
-}
-
-fetchRecentIssues();
 
 
+let cryptkeyCHECK = []; // Khởi tạo mặc định là mảng rỗng để an toàn
+let isKeyLoaded = false; // Cờ báo hiệu đã tải xong key từ GitHub chưa
 
-
-///////////////////////////////////////
-////////////////////////////////////// Hẹn giờ săn hầm ngục (có delay kiểm tra Key)
-
-console.log("⏳ Đợi 11.5 giây để kiểm tra điều kiện...");
-
-setTimeout(() => {
-    let now1 = new Date();
-
-    let region1 = server.region;
-    let serverIden1 = server.id;
-
-    // Điều kiện kiểm tra
-    let timeValid =
-    (now1.getHours() >= 13 && now1.getHours() < 22) ||
-    (now1.getHours() >= 0 && now1.getHours() < 4)  ||
-    (now1.getHours() >= 7 && now1.getHours() < 10);
-	
-    let enoughKeys = soluongitem("cryptkey") >= 1 || Key.length > 0;
-    let enoughEnergy = character.esize > 7;
-    let correctRegion = region1 == "US";
-    let correctServer = serverIden1 == "II";
-
-    console.log("========== Kiểm Tra Hẹn Giờ Săn Hầm Ngục ==========");
-    console.log("Thời gian hiện tại: ", now1.toLocaleString());
-    console.log("Thời gian hợp lệ: ", timeValid ? "✔️ Đúng giờ" : "❌ Không đúng giờ");
-    console.log("Số lượng khóa đủ: ", enoughKeys ? "✔️ Có đủ" : "❌ Không đủ" + Key.length);
-    console.log("Esize đủ: ", enoughEnergy ? "✔️ Đủ > 7" : "❌ Không đủ");
-    console.log("Khu vực đúng: ", correctRegion ? "✔️ EU" : `❌ Sai (${region1})`);
-    console.log("Server đúng: ", correctServer ? "✔️ I" : `❌ Sai (${serverIden1})`);
-
-    if (timeValid && enoughKeys && enoughEnergy && correctRegion && correctServer) {
-        console.log("👉 Điều kiện thỏa mãn, bật codemode = 1 (săn hầm ngục)");
-        codemode = 1;
+async function initKeySystem() {
+    if (character.name === LEADER) {
+        game_log("🔄 Đang kết nối GitHub tải danh sách key...");
+        cryptkeyCHECK = await fetchRecentIssues(500);
+        isKeyLoaded = true;
+        game_log(`✅ Tải key thành công! Tổng số key hợp lệ: ${cryptkeyCHECK.length}`);
     } else {
-        console.log("⛔ Điều kiện KHÔNG thỏa mãn, không bật codemode");
-    }
-}, 11500); // delay 2000ms = 2 giây
-
-
-
-
-
-
-
-
-
-function elixirUsage() {
-    try {
-        let elixir = character.slots.elixir?.name;
-        let requiredElixir =  "candypop";
-
-        // Use the required elixir if it's not currently equipped
-		if ( get_nearest_monster({ type: "xmagefi" }) )
-		{
-		    let item2 = locate_item("elixirfires");
-            if (elixir != "elixirfires" && item2 ) {
-                use(item2);
-            }
-		}
-		else if (character.map == "winter_instance" && !get_nearest_monster({ type: "xmagefi" }))
-		{
-		    let item1 = locate_item("hotchocolate");
-            if (elixir != "hotchocolate" && item1) {
-                use(item1);
-            }
-		}
-        else if (elixir !== requiredElixir && elixir != "pumpkinspice") {
-            let item = locate_item("pumpkinspice");
-            if (item) {
-                use(item);
-            }
-        }
-
-    } catch (e) {
-        console.error("Error in elixirUsage function:", e);
+        isKeyLoaded = true; // Member không cần tải key từ GitHub
     }
 }
 
-setInterval(elixirUsage, 2000); // chạy elixirUsage mỗi 2s
-
-
-
-
-
-
+// Chạy hàm khởi tạo ngay khi script bắt đầu
+initKeySystem();
 
 
 
 
 
 function ghichu(title, mess, key_auto1) {
-  const token = key_auto1;  // Thay bằng token của bạn
-  const repoOwner = '6gunlaZe';  // Tên người sở hữu repo
-  const repoName = 'game';  // Tên repository
+  const token = key_auto1; 
+  const repoOwner = '6gunlaZe'; 
+  const repoName = 'game'; 
   const issueTitle = title;
-  const newLine = mess;  // Nội dung dòng mới cần thêm vào
+  const newLine = mess; 
 
-  // Tìm kiếm các issue có tiêu đề trùng với title trong repository cụ thể
   fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(issueTitle)}+repo:${repoOwner}/${repoName}`, {
     method: 'GET',
     headers: {
@@ -596,7 +4872,7 @@ function ghichu(title, mess, key_auto1) {
   .then(response => response.json())
   .then(data => {
     if (data.items.length === 0) {
-      // Nếu không tìm thấy issue với tiêu đề này, tạo mới issue
+      // Nếu chưa có issue, tạo mới (POST)
       fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues`, {
         method: 'POST',
         headers: {
@@ -605,22 +4881,21 @@ function ghichu(title, mess, key_auto1) {
         },
         body: JSON.stringify({
           title: issueTitle,
-          body: newLine,  // Thêm nội dung dòng mới vào body
+          body: newLine, 
         }),
       })
       .then(response => response.json())
       .then(data => {
-        console.log('Issue mới đã được tạo:', data);
+        console.log('✨ Đã tạo Issue ghi nhận key mới:', data.title);
       })
       .catch(error => {
-        console.error('Lỗi khi tạo Issue:', error);
+        console.error('❌ Lỗi khi tạo Issue:', error);
       });
     } else {
-      // Nếu đã tồn tại issue, thêm dòng mới vào body của issue đầu tiên tìm được
-      const issueNumber = data.items[0].number;  // Lấy số của issue đầu tiên
+      // Nếu đã có issue, cập nhật nối thêm dòng log mới (PATCH)
+      const issueNumber = data.items[0].number; 
       const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
 
-      // Lấy nội dung hiện tại của issue
       fetch(issueUrl, {
         method: 'GET',
         headers: {
@@ -630,10 +4905,8 @@ function ghichu(title, mess, key_auto1) {
       })
       .then(response => response.json())
       .then(issueData => {
-        // Kiểm tra nếu issueData.body có giá trị, nếu không thì khởi tạo giá trị mới
-        const updatedBody = (issueData.body || '') + '\n' + newLine; // Thêm dòng mới vào cuối body
+        const updatedBody = (issueData.body || '') + '\n' + newLine; 
 
-        // Cập nhật lại nội dung của issue
         fetch(issueUrl, {
           method: 'PATCH',
           headers: {
@@ -641,305 +4914,768 @@ function ghichu(title, mess, key_auto1) {
             'Authorization': `token ${token}`,
           },
           body: JSON.stringify({
-            title: issueData.title, // Giữ nguyên tiêu đề
-            body: updatedBody,  // Cập nhật nội dung của issue
+            title: issueData.title,
+            body: updatedBody, 
           }),
         })
         .then(response => response.json())
         .then(updatedData => {
-          console.log('Issue đã được cập nhật:', updatedData);
+          console.log('📝 Đã cập nhật thêm nhật ký vào Issue:', updatedData.title);
         })
         .catch(error => {
-          console.error('Lỗi khi cập nhật Issue:', error);
+          console.error('❌ Lỗi khi cập nhật Issue:', error);
         });
       })
       .catch(error => {
-        console.error('Lỗi khi lấy nội dung issue:', error);
+        console.error('❌ Lỗi khi lấy nội dung issue:', error);
       });
     }
   })
   .catch(error => {
-    console.error('Lỗi khi tìm kiếm issue:', error);
+    console.error('❌ Lỗi khi tìm kiếm issue:', error);
   });
 }
 
 
 
+async function markIssueDone(keyTitle, key_auto1) {
+  const token = key_auto1;
+  const repoOwner = '6gunlaZe';
+  const repoName = 'game';
 
-//////////////////////////////////////////////////
-/////////////////////////////////////////////////
+  try {
+    // 1. Tìm issue dựa vào tên key (title) giống hệt hàm ghichu
+    const searchRes = await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(keyTitle)}+repo:${repoOwner}/${repoName}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+      },
+    });
+    const searchData = await searchRes.json();
 
-
-
-
-
-var lastcc = 0;
-init_ccmeter();
-function init_ccmeter() {
-	let $ = parent.$;
-	let statbars = $('#bottommid');
-	statbars.find('#ccmeter').remove();
-	let ccmeter = $('<div id="ccmeter"></div>').css({
-		fontSize: '15px',
-		color: 'white',
-		textAlign: 'center',
-		display: 'table',
-		width: "50%",
-		margin: "0 auto"
-	});
-	let ccmeter_content = $('<div id="ccmetercontent"></div>')
-	.html("<div><div id='ccmeterfill'></div></div>")
-	.css({
-		display: 'table-cell',
-		verticalAlign: 'middle',
-		background: 'green',
-		border: 'solid gray',
-		borderWidth: '4px 4px 0px, 4px',
-		height: '15px',
-		color: '#FFD700',
-		textAlign: 'center',
-		width: "100%",
-	})
-	.appendTo(ccmeter);
-	statbars.children().first().after(ccmeter);
-	update_ccmeter();
-}
-function update_ccmeter()
-{
-	let $ = parent.$;
-	var fillAmount = ((character.cc/180)*100).toFixed(0);
-	$("#ccmeterfill").css({
-		background: 'red',
-		height: '15px',
-		color: '#FFD700',
-		textAlign: 'center',
-		width: fillAmount + "%",
-	});
-}
-//Clean out an pre-existing listeners
-if (parent.prev_handlersccmeter) {
-    for (let [event, handler] of parent.prev_handlersccmeter) {
-      parent.socket.removeListener(event, handler);
+    if (searchData.items.length === 0) {
+      console.error(`❌ Không tìm thấy Issue nào mang key: ${keyTitle}`);
+      return;
     }
-}
-parent.prev_handlersccmeter = [];
-//handler pattern shamelessly stolen from JourneyOver
-function register_ccmeterhandler(event, handler) 
-{
-    parent.prev_handlersccmeter.push([event, handler]);
-    parent.socket.on(event, handler);
-};
-function ccmeter_playerhandler(event){
-	if(event.cc != lastcc)
-	{
-		update_ccmeter();
-		lastcc = event.cc;
-	}
-}
-register_ccmeterhandler("player", ccmeter_playerhandler);
 
+    // Lấy số issue tự động từ kết quả tìm kiếm
+    const issueNumber = searchData.items[0].number;
+    const issueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
 
-////////////////////////////
-/////////////////////////////////
-
-/************************************************
- * PARTY DAMAGE BAR - MEMORY OPTIMIZED
- ************************************************/
-(function () {
-    const G = (typeof parent !== 'undefined' && parent.entities) ? parent : window;
-    if (!G || !G.entities) return;
-
-    const $ = G.$;
-    const UI_ID = "monster_damage_container";
-    const TOGGLE_ID = "dmg_bar_toggle";
-    const BAR_ID = "monster_damage_bar";
-    const HP_TEXT_ID = "monster_hp_info";
-    const DETAILS_ID = "monster_damage_details";
-    const COLORS = ["#ff5555","#55ff55","#5599ff","#ffaa00","#aa66ff","#00ffff","#e67e22","#f1c40f"];
-
-
-	
-	
-	
-	
-	if (!G.party_damage_data) G.party_damage_data = {}; 
-    const DAMAGE = G.party_damage_data;
+    // 2. Lấy nội dung body hiện tại của issue
+    const res = await fetch(issueUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+      },
+    });
+    const issueData = await res.json();
     
-    // 1. THIẾT LẬP MẶC ĐỊNH LÀ TẮT
-    let UI_ENABLED = false; 
+    // 3. Nối thêm chữ "DONE" vào cuối body
+    const updatedBody = (issueData.body || '') + '\nDONE';
 
-    function initUI() {
-        $(`#${UI_ID}, #${TOGGLE_ID}`).remove();
+    // 4. Gửi PATCH để cập nhật
+    await fetch(issueUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `token ${token}`,
+      },
+      body: JSON.stringify({
+        body: updatedBody,
+      }),
+    });
+    
+    console.log(`🏁 Đã đánh dấu DONE thành công cho key: ${keyTitle}`);
+  } catch (error) {
+    console.error('❌ Lỗi khi đánh dấu DONE:', error);
+  }
+}
 
-        // Nút bấm khởi tạo ở trạng thái OFF (Viền đỏ, Chữ OFF)
-        $("body").append(`
-            <div id="${TOGGLE_ID}" style="
-                position:fixed; 
-                top:180px; 
-                right:10px; 
-                width:50px; 
-                height:50px; 
-                background:rgba(0,0,0,0.85); 
-                border:3px solid #ff5555; 
-                border-radius:50%; 
-                color:#fff; 
-                display:flex; 
-                align-items:center; 
-                justify-content:center; 
-                cursor:pointer; 
-                z-index:10000; 
-                pointer-events:all; 
-                font-weight:bold; 
-                font-size:25px; 
-                user-select:none;
-                box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            ">OFF</div>
-        `);
 
-        // Bảng UI chính khởi tạo ở trạng thái ẨN (display:none)
-        $("body").append(`
-            <div id="${UI_ID}" style="
-                display:none; 
-                position:fixed; 
-                top:12px; 
-                left:50%; 
-                transform:translateX(-50%); 
-                width:85%; 
-                max-width:900px; 
-                background:rgba(0,0,0,0.9); 
-                border:2px solid #444; 
-                border-radius:10px; 
-                padding:12px; 
-                z-index:9999; 
-                pointer-events:none; 
-                font-family:sans-serif;
-            ">
-                <div id="${HP_TEXT_ID}" style="text-align:center; font-size:14px; font-weight:bold; color:#fff; margin-bottom:10px;"></div>
-                <div style="height:12px; background:#111; border-radius:6px; overflow:hidden; display:flex; border:1px solid #333; margin-bottom:12px;">
-                    <div id="${BAR_ID}" style="display:flex; width:100%; height:100%;"></div>
-                </div>
-                <div id="${DETAILS_ID}" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; font-size:11px;"></div>
-            </div>
-        `);
 
-        // Xử lý sự kiện click để chuyển đổi ON/OFF
-        $(`#${TOGGLE_ID}`).click(() => {
-            UI_ENABLED = !UI_ENABLED;
-            $(`#${UI_ID}`).toggle(UI_ENABLED);
-            $(`#${TOGGLE_ID}`).css("border-color", UI_ENABLED ? "#55ff55" : "#ff5555");
-            $(`#${TOGGLE_ID}`).text(UI_ENABLED ? "DMG" : "OFF");
-        });
+// Cấu hình các hằng số cần thiết (có thể đưa ra ngoài global scope)
+const DUNGEON_ENTRY_SPOT = { map: "cave", x: -195, y: -1298 }; // Tọa độ cổng vào hầm ngục (Vị trí A)
+const DUNGEON_WAYPOINTS = [
+    { map: "crypt", x: 0, y: -100 },
+    { map: "crypt", x: 0, y: -300 },
+    { map: "crypt", x: -50, y: -472 },
+    { map: "crypt", x: -200, y: -500 },
+    { map: "crypt", x: -200, y: -700 },
+    { map: "crypt", x: -200, y: -900 },
+    { map: "crypt", x: -127, y: -1082 },
+    { map: "crypt", x: 100, y: -1082 },
+    { map: "crypt", x: 300, y: -1082 },
+    { map: "crypt", x: 500, y: -1082 },
+    { map: "crypt", x: 725, y: -1076 },
+    { map: "crypt", x: 725, y: -900 },
+    { map: "crypt", x: 905, y: -614 },
+    { map: "crypt", x: 961, y: -400 },
+    { map: "crypt", x: 1100, y: -400 },
+    { map: "crypt", x: 1300, y: -400 },
+    { map: "crypt", x: 1450, y: -475 },
+
+
+
+	
+]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
+
+
+const DUNGEON_WAYPOINTS1 = [
+    { map: "crypt", x: 0, y: -100 },
+    { map: "crypt", x: 0, y: -300 },
+    { map: "crypt", x: -50, y: -472 },
+    { map: "crypt", x: -200, y: -500 },
+    { map: "crypt", x: -200, y: -700 },
+    { map: "crypt", x: -200, y: -900 },
+    { map: "crypt", x: -127, y: -1082 },
+    { map: "crypt", x: 100, y: -1082 },
+    { map: "crypt", x: 350, y: -1082 },
+    { map: "crypt", x: 375, y: -1270 },
+    { map: "crypt", x: 600, y: -1480 },
+    { map: "crypt", x: 850, y: -1480 },
+    { map: "crypt", x: 1100, y: -1480 },
+    { map: "crypt", x: 1350, y: -1480 },
+    { map: "crypt", x: 1600, y: -1480 },
+    { map: "crypt", x: 1780, y: -1480 },
+    { map: "crypt", x: 1780, y: -1740 },
+    { map: "crypt", x: 1980, y: -1740 },
+    { map: "crypt", x: 2180, y: -1740 },
+    { map: "crypt", x: 2380, y: -1740 },
+    { map: "crypt", x: 2580, y: -1740 },
+    { map: "crypt", x: 2690, y: -1740 },
+
+]; // Danh sách các bước di chuyển tuần tự bên trong hầm ngục
+
+
+
+
+let landau = false;           // 🚩 Biến cờ báo hiệu đây là lần đi hầm ngục đầu tiên
+let currentWaypointIndex = 0; // Theo dõi bước di chuyển hiện tại trong hầm
+let isDoingDungeon = false;    // 🚩 Biến cờ báo hiệu bot đang bận đi hầm ngục (mặc định ban đầu là false)
+let enteringDungeon = false;   // Cờ khóa trạng thái chống lag chuyển map
+let dungeonAttemptTime = 0;    // ⏱️ Thêm biến ghi nhận thời điểm bắt đầu gọi lệnh vào hầm
+let checkkey_now = null;
+
+async function handleDungeonKeyLogic() {
+    const isLeader = (character.name === LEADER);
+
+    // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
+    if (enteringDungeon) {
+        if (character.map === "crypt") {
+            // Đã load vào map crypt thành công -> Mở khóa cờ chờ
+            if (isLeader) {
+                ghichu(character.in, "run now", myoke);
+                checkkey_now = null;
+                // Gửi mã instance qua CM cho tất cả thành viên trong party
+                if (character.party) {
+                    for (const memberName in parent.party) {
+                        if (memberName !== character.name) {
+                            send_cm(memberName, { type: "DungeonInstance", instance: character.in });
+                            game_log(`📤 Đã gửi mã Instance [${character.in}] tới ${memberName}`);
+                        }
+                    }
+                }
+            }
+            enteringDungeon = false;
+        } else {
+
+            // 🛡️ BỔ SUNG: Kiểm tra quá thời gian chờ (Ví dụ: quá 7 giây mà không vào được map crypt) có thể do key lỗi hoặc hết hạn do sever reset
+            if (Date.now() - dungeonAttemptTime > 7000) {
+                game_log(`⚠️ Vào hầm thất bại hoặc quá hạn! Reset trạng thái kẹt.`, "#FF0000");
+				await markIssueDone(checkkey_now || character.in, myoke);	
+				checkkey_now = null;
+                enteringDungeon = false;
+                isDoingDungeon = false;
+				lastFarmMonsterSeen = Date.now();
+                return false;
+            }
+			
+            // Vẫn đang trong thời gian chờ server đổi map -> Giữ cờ bận
+            isDoingDungeon = true;
+            return true;
+        }
     }
-	
-	
-	
 
-    function getParty() {
-        let p = [character.name];
-        if (G.party_list) p = p.concat(G.party_list);
-        return [...new Set(p)];
+    // --- 2. NẾU ĐÃ Ở TRONG HẦM (CRYPT) ---
+if (character.map === "crypt") {
+    isDoingDungeon = true; 
+
+    if (isLeader) {
+
+		//LỰA CHỌN ĐƯỜNG DẪN TÙY THEO LOGIC
+		const waypoints = landau ? DUNGEON_WAYPOINTS : DUNGEON_WAYPOINTS1;
+		
+        // --- LEADER: CHẠY WAYPOINTS VÀ GỬI TỌA ĐỘ CHO ĐỒNG ĐỘI --- Có thoát sớm nếu đủ điều kiên
+        if (currentWaypointIndex < waypoints.length && !isInDungeonDoneWindow() ) {
+            const dest = waypoints[currentWaypointIndex];
+
+        // 📤 Gửi tọa độ kèm timestamp hiện tại cho party
+        if (character.party) {
+            for (const memberName in parent.party) {
+                if (memberName !== character.name && memberName !== MERCHANT) {
+                    send_cm(memberName, { 
+                        type: "LeaderTarget", 
+                        x: character.x, 
+                        y: character.y, 
+                        map: character.map, 
+                        time: Date.now() // ⏱️ Mốc thời gian để nhận diện điểm đến mới
+                    });
+                }
+            }
+        }
+
+         // 🛑 ĐỨNG CHỜ ĐỒNG ĐỘI VÀO ĐỦ RỒI MỚI CHẠY TIẾP   isAnyMemberLowHP
+          if (!areAllPartyMembersReady()) {
+             if (smart.moving) {
+                 stop("move");
+             }
+             return true; 
+         }
+
+          // logic thoát sớm khi yếu máu hoặc kẹt quái quá mạnh
+          if (isAnyMemberLowHP() || checkNguyHiemhamnguc)
+          {
+              try {
+                  await markIssueDone(character.in, myoke);
+              } catch (e) {}
+              parent.api_call("disconnect_character", {name: "haiz"}); 
+          }
+
+          // logic đánh boss
+          if (currentTarget && !currentTarget.dead) {
+              const dist = distance(character, currentTarget);
+              const safeAttackRange = Math.max(30, character.range - 70);
+              if (dist < 150) {
+                  if (dist > safeAttackRange) {
+                      if (can_move_to(currentTarget.x, currentTarget.y)) {
+                          if (smart.moving) stop("smart");
+                          move(
+                              character.x + (currentTarget.x - character.x) * 0.4,
+                              character.y + (currentTarget.y - character.y) * 0.4
+                          );
+                      } else if (!smart.moving) {
+                          await safeSmartMove({ map: character.map, x: currentTarget.x, y: currentTarget.y });
+                      }
+                  } else {
+                      //đang ổn định đánh boss
+                      if (smart.moving) stop("smart");
+                  }
+                  return true; 
+              }
+          }
+
+
+
+            if (character.map === dest.map && distance(character, dest) <= 25) {
+                currentWaypointIndex++;
+                return true;
+            }
+
+            if (!smart.moving) {
+                smart_move({ map: dest.map, x: dest.x, y: dest.y });
+            }
+            return true;
+        }
+
+        // Leader hoàn tất hầm ngục -> Reset
+		if (!landau) await markIssueDone(character.in, myoke);
+
+        // --- CHECK LẠI 1 LẦN NỮA XEM CÒN KEY ĐỂ CHƠI TIẾP TỤC KHÔNG ---
+        const TRONGTUI = locate_item("cryptkey") !== -1;
+        const LUTRUKEY = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+
+        if (!TRONGTUI && !LUTRUKEY)isDoingDungeon = false; 
+		else isDoingDungeon = true; 
+		
+        currentWaypointIndex = 0;
+		landau = false; 
+        sharedDungeonInstance = null; 
+            // đã hoàn tất một hầm ngục, reset lại các nhân vật
+            for (const memberName in parent.party) {
+                if (memberName !== character.name && memberName !== MERCHANT) {
+                 stop_character(memberName);
+                }
+            }
+		await use_skill("town"); 
+        await smart_move({ map: "cave", x: -194, y: -1281 });
+		lastFarmMonsterSeen = Date.now();
+
+        return false; 
+    } 
+    else {
+           // --- MEMBER: BÁM THEO LEADER HOẶC ĐUỔI THEO LEADERTARGET ---
+            const leaderEntity = partyEntities.find(p => p.entity.name === LEADER);
+
+            if (leaderEntity) {
+                // 🟢 THẤY LEADER TRONG TẦM NHÌN: Bám sát Leader
+                if (leaderEntity.distance > 40) {
+                         if (!smart.moving)xmove(leaderEntity.entity.real_x, leaderEntity.entity.real_y);
+                    return true;
+                } else {
+                    if (smart.moving) stop("move");
+					const angle = Math.random() * Math.PI * 2;
+                    const targetX = leaderEntity.entity.real_x + Math.cos(angle) * 20;
+                    const targetY = leaderEntity.entity.real_y + Math.sin(angle) * 20;
+                    xmove(targetX, targetY);
+                    return true;
+                }
+            } else {
+                // 🔴 KHÔNG THẤY LEADER (MẤT TẦM NHÌN): Dùng LeaderTarget qua CM nhưng CHỈ ĐI KHI CÓ TIME MỚI
+                if (lastLeaderTarget && lastLeaderTarget.time !== lastProcessedTargetTime) {
+                    lastProcessedTargetTime = lastLeaderTarget.time; // Cập nhật mốc time để khóa lại, không gọi lại ở các tick sau
+                    
+                    if (!smart.moving) {
+                        smart_move({ map: lastLeaderTarget.map, x: lastLeaderTarget.x, y: lastLeaderTarget.y });
+                        game_log(`🧭 Mất dấu Leader, đang smart_move tới điểm tin: (${lastLeaderTarget.x}, ${lastLeaderTarget.y})`, "#FFA500");
+                    }
+                }
+                return true;
+            }
+        }
+    
+}
+
+    // ==========================================
+    // LOGIC RIÊNG CHO LEADER & MEMBER KHI Ở NGOÀI HẦM
+    // ==========================================
+    if (isLeader) {
+        // --- CHỈ LEADER MỚI KIỂM TRA KEY & MỞ CỬA ---
+        const hasInventoryKey = locate_item("cryptkey") !== -1;
+        const hasBackupKey = cryptkeyCHECK && cryptkeyCHECK.length > 0;
+
+        if (!hasInventoryKey && !hasBackupKey) {
+            currentWaypointIndex = 0;
+            isDoingDungeon = false; 
+            return false; 
+        }
+
+        // Di chuyển tới cổng (Vị trí A)
+        const targetMap = DUNGEON_ENTRY_SPOT.map;
+        const targetX = DUNGEON_ENTRY_SPOT.x;
+        const targetY = DUNGEON_ENTRY_SPOT.y;
+
+        if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
+            if (!smart.moving) {
+                smart_move({ map: targetMap, x: targetX, y: targetY });
+            }
+            isDoingDungeon = true; 
+            return true; 
+        }
+
+        // Đã tới cổng -> Sử dụng key mở hầm
+        let keyIndex = locate_item("cryptkey");
+        if (keyIndex !== -1) {
+            enteringDungeon = true;
+			dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
+            isDoingDungeon = true;
+			landau = true; 
+            enter("crypt");
+            return true;
+        } else if (cryptkeyCHECK && cryptkeyCHECK.length > 0) {
+            let backupKey = cryptkeyCHECK.shift();
+			checkkey_now = backupKey;
+            enteringDungeon = true;
+			dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
+            isDoingDungeon = true;
+            
+            console.log("⚠️ Leader sử dụng key dự phòng từ GitHub:", backupKey);
+            enter("crypt", backupKey);
+            return true;
+        }
+
+    } else {
+        // --- MEMBER: CHỜ NHẬN MÃ INSTANCE QUA CM CỦA LEADER ---
+        if (!sharedDungeonInstance) {
+            isDoingDungeon = false;
+            return false; // Chưa nhận được mã từ Leader -> Rảnh, đi farm bình thường
+        }
+
+        // Đã có mã instance từ Leader -> Di chuyển ra cổng
+        const targetMap = DUNGEON_ENTRY_SPOT.map;
+        const targetX = DUNGEON_ENTRY_SPOT.x;
+        const targetY = DUNGEON_ENTRY_SPOT.y;
+
+        if (character.map !== targetMap || distance(character, { x: targetX, y: targetY }) > 30) {
+            if (!smart.moving) {
+                smart_move({ map: targetMap, x: targetX, y: targetY });
+            }
+            isDoingDungeon = true; 
+            return true; 
+        }
+
+        // Đã tới cổng -> Dùng mã instance nhận được từ Leader để enter vào chung
+        enteringDungeon = true;
+		dungeonAttemptTime = Date.now(); // ⏱️ Ghi nhận mốc thời gian bắt đầu gọi enter
+        isDoingDungeon = true;
+        console.log(`🤝 Member [${character.name}] vào chung hầm với mã:`, sharedDungeonInstance);
+        enter("crypt", sharedDungeonInstance);
+        return true;
     }
 
-    function onHit(data) {
+    isDoingDungeon = false;
+    return false;
+}
+
+
+let solocrypt = false;
+
+// --- HÀM KIỂM TRA ĐỒNG ĐỘI QUA PARENT.PARTY VÀ PARTYENTITIES ---
+function areAllPartyMembersReady() {
+    // Nếu bật solo crypt và không có party -> Cho đi luôn
+    if (solocrypt && !parent.party) return true;
+    
+    // Nếu không có party (mà không bật solo) -> Chưa sẵn sàng
+    if (!parent.party) return false;
+
+    let readyMemberCount = 0; // Đếm số lượng đồng đội đã sẵn sàng (có mặt, sống, và khoảng cách <= 100)
+
+    // Duyệt qua tất cả các thành viên hiện tại trong party của game
+    for (const name in parent.party) {
+        if (name === character.name || name === MERCHANT) continue;
+
+        // Tìm thành viên trong mảng partyEntities đã scan
+        const memberEntity = partyEntities.find(p => p.entity.name === name);
+
+        // 🎯 Điều kiện: Phải tìm thấy, KHÔNG bị rip, VÀ khoảng cách <= 100
+        if (memberEntity && !memberEntity.entity.rip && memberEntity.distance <= 100) {
+            readyMemberCount++; // Thỏa mãn thì tăng biến đếm lên
+        }
+    }
+
+    // Nếu số lượng đồng đội sẵn sàng đạt từ 2 trở lên -> Cho phép tiến hành xuất phát!
+    if (readyMemberCount >= 2) {
+        return true; 
+    }
+
+    return false; // Chưa đủ số lượng đồng đội ở gần (hoặc chưa login/chưa vào kịp)
+}
+
+
+
+// --- HÀM KIỂM TRA XEM CÓ ĐỒNG ĐỘI (HOẶC CHÍNH MÌNH) NÀO MÁU DƯỚI 3000 KHÔNG ---
+function isAnyMemberLowHP() {
+    // 1. Kiểm tra máu của chính nhân vật hiện tại trước
+    if (character.hp < 3000 || character.rip) {
+        return true;
+    }
+
+    // Nếu không có party thì chỉ cần xét mỗi character là đủ
+    if (!parent.party) return false;
+
+    // 2. Duyệt qua tất cả các thành viên trong party
+    for (const name in parent.party) {
+        // Bỏ qua chính mình (đã check ở trên) hoặc merchant
+        if (name === character.name || name === MERCHANT) continue;
+
+        // Tìm thông tin thực tế của thành viên trong mảng partyEntities
+        const memberEntity = partyEntities.find(p => p.entity.name === name);
+
+        // Nếu tìm thấy thành viên, còn sống (!rip), và HP < 3000
+        if (memberEntity && !memberEntity.entity.rip && memberEntity.entity.hp < 3000) {
+            return true; // Phát hiện có người máu thấp dưới 3000
+        }
+
+        if (memberEntity.entity.rip) {
+            return true; // Phát hiện có người tèo
+        }
+		
+    }
+
+    return false; // Không có ai máu dưới 3000
+}
+
+
+// hàm kiểm tra đủ điều kiện thoát sớm    
+function isInDungeonDoneWindow() {
+    if (!checkDonehamnguc) return false;
+    const elapsed = Date.now() - checkDonehamnguc;
+    if (elapsed > 3600 && elapsed < 30000) {
+        checkDonehamnguc = 0;
+        return true;
+    }
+    return false;
+}
+
+
+// ============================================================
+// ĐỔI ĐỒ NÂNG CAO THEO HIT ATTACK
+// ============================================================
+
+
+
+// 🪓 Bộ lọc mẫu cho từng món trang bị
+const AXE_FILTER = item => item && item.name === "cave_deepaxe";
+const SHIELD_FILTER = item => item && item.name === "mshield";
+const SWORD_FILTER = item => item && item.name === "sugarsword";
+const STINGER_FILTER = item => item && item.name === "stinger";
+const CHEST_FILTER = item => item && item.name === "coat";
+
+// 🎒 Các set đồ đã được mở rộng thành 3 dòng / set:
+
+const SUGAR_SET = [
+    [ SWORD_FILTER, "mainhand" ],
+    [ SHIELD_FILTER, "offhand" ],
+    [ CHEST_FILTER, "chest" ]
+];
+
+const SUGAR_LESSER_SET = [
+    [ STINGER_FILTER, "mainhand" ],
+    [ SHIELD_FILTER, "offhand" ],
+    [ CHEST_FILTER, "chest" ]
+];
+
+const DPS_SET = [
+    [ item => item && item.name === "vhammer", "mainhand" ],
+    [ item => item && item.name === "ololipop", "offhand" ]
+];
+
+const LUCK_SET = [
+    [ { name: "fireblade", l: "l" }, "mainhand" ], 
+    [ { name: "mshield"}, "offhand" ]             
+];
+
+const fire_SET = [
+    [ { name: "fireblade", l: "l" }, "mainhand" ], 
+    [ { name: "fireblade", l: "s" }, "offhand" ]             
+];
+
+const CUNG_DAME = [
+    [ item => item && item.name === "bowofthedead", "mainhand" ],
+];
+
+const CUNG_AOE = [
+    [ item => item && item.name === "pouchbow", "mainhand" ],
+];
+
+const MANA_SET = [
+    [ item => item && item.name === "tshirt9", "chest" ],
+];
+
+const COAT_SET = [
+    [ item => item && item.name === "coat", "chest" ],
+];
+
+
+// 1. Hàm sleep phục vụ cho Promise.race
+// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// 2. Hàm kiểm tra và đổi đồ hàng loạt (Chỉ check các thuộc tính có truyền vào)
+const ensure_equipped_batch = async (filters_and_slots) => {
+    let call = [];
+    
+    for (let i = 0; i < filters_and_slots.length; i++) {
+        let [criteria, slot] = filters_and_slots[i];
+
+        // Hàm kiểm tra item
+        let matches = (item) => {
+            if (!item) return false;
+            
+            if (typeof criteria === 'function') {
+                return criteria(item);
+            } 
+            else if (typeof criteria === 'object' && criteria !== null) {
+                // Chỉ kiểm tra những key có mặt trong criteria (không có thì bỏ qua)
+                for (let key in criteria) {
+                    if (item[key] !== criteria[key]) return false;
+                }
+                return true;
+            }
+            return false;
+        };
+
+        // Kiểm tra xem slot hiện tại đã đúng item cần tìm chưa
+        if (!matches(character.slots[slot])) {
+            const index = character.items.findIndex(item => matches(item));
+            
+            if (index == -1) {
+                log(`⚠️ Không tìm thấy item phù hợp trong túi.`);
+                break;
+            }
+
+            let temp = character.items[index];
+            character.items[index] = character.slots[slot];
+            character.slots[slot] = temp;
+            call.push({ num: index, slot: slot });
+        }
+    }
+
+    if (call.length == 0) {
+        return {};
+    }
+    
+    return await equip_batch(call);
+};
+
+
+async function useAdvancedAttack() {
+    // 1. Chốt chặn cooldown theo ping
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill("attack") > pingComp) return false;
+    
+    // 2. Kiểm tra an toàn target
+    if (currentTarget && (currentTarget.dead || !parent.entities[currentTarget.id])) {
+        currentTarget = null;
+    }
+
+    if (!currentTarget) {
+        let targeted = get_targeted_monster();
+        if (targeted) currentTarget = targeted;
+    }
+    
+    if (!currentTarget || smart.moving) return false;
+
+    // 3. Tiến lại gần nếu ngoài tầm đánh
+    if (!is_in_range(currentTarget)) {
+        if (!character.moving) {
+            move(
+                character.x + (currentTarget.x - character.x) / 2,
+                character.y + (currentTarget.y - character.y) / 2
+            );
+        }
+        return false;
+    }
+    
+    // 4. Tiến hành đánh và kết hợp chiến thuật Quick-Swap / Cleave
+    if (
+        !smart.moving &&
+        currentTarget.type === "monster" &&
+        is_in_range(currentTarget) 
+    ) {
         try {
-            const targetId = data.actor || data.id; 
-            const sourceId = data.target || data.hid;
-            const targetEntity = G.entities[targetId];
-            if (!sourceId || !targetId || !targetEntity || targetEntity.type !== "monster") return;
+            // Cuộc đua chống treo mạng (tối đa chờ 4 lần ping)
+            let attackPromise = Promise.race([
+                attack(currentTarget, true),
+                sleep(character.ping * 4),
+            ]);
 
-            let attackerName = (sourceId === character.id) ? character.name : (G.entities[sourceId] ? G.entities[sourceId].name : null);
-            if (!attackerName || !getParty().includes(attackerName)) return;
-
-            let dmg = (data.damage || 0) + (data.adr || 0) || data.amount || 0;
-            if (dmg <= 0 || data.heal) return;
-
-            if (!DAMAGE[targetId]) DAMAGE[targetId] = { lastUpdate: Date.now(), totals: {}, history: {} };
-            let entry = DAMAGE[targetId];
-            entry.lastUpdate = Date.now();
-            entry.totals[attackerName] = (entry.totals[attackerName] || 0) + dmg;
-
-            // TỐI ƯU: Chỉ tính DPS cho quái > 1 triệu máu
-            if (targetEntity.max_hp >= 1000000) {
-                if (!entry.history[attackerName]) entry.history[attackerName] = [];
-                const now = Date.now();
-                entry.history[attackerName].push({ t: now, d: dmg });
-                
-                // TỐI ƯU: Dọn dẹp mảng history ngay lập tức để tránh phình to RAM
-                // Chỉ giữ lại data trong vòng 30 giây gần nhất
-                if (entry.history[attackerName].length > 10) { 
-                    entry.history[attackerName] = entry.history[attackerName].filter(h => now - h.t <= 30000);
+            // --- XỬ LÝ SET ĐỒ CỦA haiz ---
+			if (character.name == "haiz")
+			{
+            if (character.s.sugarrush == null) {
+                // Nếu đủ mana và sẵn sàng skill cleave
+                if (
+                    can_use('cleave') && (!character.slots.offhand || character.slots.offhand.name !== "mshield") &&
+                    character.mp > 1200
+                ) {
+                    // Tháo offhand vì rìu là vũ khí 2 tay
+                    parent.socket.emit('unequip', { slot: 'offhand' });
+                    // Móc rìu ra tay chính và quạt
+                    ensure_equipped_batch([
+                        [AXE_FILTER, 'mainhand']
+                    ]);
+                    use_skill('cleave');
+                    game_log("🪓 Quick-Swap Cleave", "#FF5555");
+                } else {
+                    // ensure_equipped_batch(DPS_SET); // nếu skill đang hồi => trở về set dame bình thường
                 }
+            } else {
+               // ensure_equipped_batch(SUGAR_LESSER_SET);  //ĐANG CÓ HIỆU ỨNG sugarrush => TỐI ƯU DAME
             }
-        } catch (e) {}
-    }
+			}
 
-    function renderUI() {
-        if (!UI_ENABLED) return;
-        const targetId = character.target;
-        const m = G.entities[targetId];
-        if (!targetId || !m || m.type !== "monster") { $(`#${UI_ID}`).hide(); return; }
-        $(`#${UI_ID}`).show();
+            // --- XỬ LÝ SET ĐỒ CỦA 6gunlaZe ---
+			if (character.name == "6gunlaZe")ensure_equipped_batch(CUNG_AOE);
 
-        const now = Date.now();
-        const data = DAMAGE[targetId] || { totals: {}, history: {} };
-        let totalDmgAll = Object.values(data.totals).reduce((a, b) => a + b, 0);
 
-        let targetEnt = G.entities[m.target] || (m.target === character.id ? character : null);
-        $(`#${HP_TEXT_ID}`).html(`<span style="color:#f1c40f">${m.mtype.toUpperCase()}</span> | <span style="color:#ff5555">${m.hp.toLocaleString()}</span> / ${m.max_hp.toLocaleString()} | <span style="color:#bbb">Target: <span style="color:${targetEnt ? '#ff4444' : '#aaa'}">${targetEnt ? targetEnt.name : 'None'}</span></span>`);
 
-        $(`#${BAR_ID}`).empty();
-        $(`#${DETAILS_ID}`).empty();
 
-        if (totalDmgAll > 0) {
-            Object.keys(data.totals).sort((a, b) => data.totals[b] - data.totals[a]).forEach((p, i) => {
-                const totalDmg = data.totals[p];
-                const pct = (totalDmg / totalDmgAll * 100).toFixed(1);
-                const color = COLORS[i % COLORS.length];
 
-                let dpsText = "";
-                if (data.history[p]) {
-                    const rollingDmg = data.history[p].filter(h => now - h.t <= 30000).reduce((s, h) => s + h.d, 0);
-                    dpsText = `<div style="color:#00ff00; font-size:10px;">DPS: ${Math.round(rollingDmg / 30).toLocaleString()}</div>`;
-                }
+			
 
-                let pEnt = (p === character.name) ? character : Object.values(G.entities).find(e => e && e.name === p);
-                let hpPct = pEnt ? (pEnt.hp / pEnt.max_hp * 100) : 0;
-                let mpPct = pEnt ? (pEnt.mp / pEnt.max_mp * 100) : 0;
+            // Đợi kết quả đòn đánh trả về từ Promise.race
+            let result = await attackPromise;
+            
+            if (result === undefined) {
+                parent.resolve_deferred('attack', undefined);
+            } else {
+                // Thành công -> Ép xung cooldown theo ping mạng
+                reduce_cooldown("attack", (character.ping ?? 0) * 0.95);
+            }
 
-                $(`#${BAR_ID}`).append(`<div style="width:${pct}%; background:${color}; height:100%;"></div>`);
-                $(`#${DETAILS_ID}`).append(`
-                    <div style="min-width:140px; background:rgba(255,255,255,0.05); padding:6px; border-radius:4px; border-left: 3px solid ${color};">
-                        <div style="font-weight:bold; color:${color}; display:flex; justify-content:space-between;"><span>${p}</span><span>${pct}%</span></div>
-                        <div style="color:#eee; font-size:10px; margin: 2px 0;">Total: ${Math.round(totalDmg).toLocaleString()}</div>
-                        ${dpsText}
-                        <div style="width:100%; height:3px; background:#222; margin-top:4px; margin-bottom:2px;"><div style="width:${hpPct}%; height:100%; background:#ff3333;"></div></div>
-                        <div style="width:100%; height:3px; background:#222;"><div style="width:${mpPct}%; height:100%; background:#3366ff;"></div></div>
-                    </div>`);
-            });
+            return true;
+        } catch (e) {
+            return false;
         }
     }
 
-    G.socket.off("hit", onHit);
-    G.socket.on("hit", onHit);
+    return false;
+}
 
-    // TỐI ƯU: Cơ chế dọn rác bộ nhớ nghiêm ngặt
-    setInterval(() => {
-        const now = Date.now();
-        for (let id in DAMAGE) {
-            // Xóa dữ liệu nếu: Quái không còn tồn tại, hoặc Quái đã chết, hoặc không có tương tác trong 40 giây
-            if (!G.entities[id] || G.entities[id].hp < 1 || (now - DAMAGE[id].lastUpdate > 40000)) {
-                delete DAMAGE[id]; 
+
+
+async function useAdvancedSkill(skill, targets, equipment_set = null) {
+    // 1. Chốt chặn cooldown theo ping
+    const pingComp = Math.max(10, character.ping / 10);
+    if (ms_to_next_skill(skill) > pingComp) return false;
+    if (!can_use(skill)) return false;
+
+    try {
+        // 2. BẮN LỆNH SKILL VÀO PROMISE.RACE NGAY TỪ ĐẦU (Giống hệt attack)
+        let skillPromise = Promise.race([
+            use_skill(skill, targets),
+            sleep(character.ping * 4),
+        ]);
+
+        // 3. XỬ LÝ ĐỔI ĐỒ NGAY LẬP TỨC SAU ĐÓ (Không await để xả lệnh chớp nhoáng)
+        if (equipment_set) {
+            if (skill === 'cleave') {
+                parent.socket.emit('unequip', { slot: 'offhand' });
             }
+            ensure_equipped_batch(equipment_set);
         }
-    }, 5000); // Kiểm tra mỗi 5 giây để tiết kiệm CPU
 
-    initUI();
-    setInterval(renderUI, 250); // Tăng lên 250ms (4 lần/giây) để mượt mà mà vẫn nhẹ máy
-})();
+        // 4. ĐỢI KẾT QUẢ SKILL TRẢ VỀ Ở CUỐI
+        let result = await skillPromise;
+
+        if (result === undefined) {
+            parent.resolve_deferred(skill, undefined);
+        } else {
+            // 5. ÉP XUNG COOLDOWN NGAY SAU KHI THÀNH CÔNG
+            reduce_cooldown(skill, (character.ping ?? 0) * 0.95);
+        }
+
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 
-//////////////////////////////////////
-////////////////////////////////////
 
 
 
+
+// Hàm trợ giúp tìm các điểm cố định đã khai báo mà gần boss nhất
+function moveNearest(targetPos, spots) {
+    if (!targetPos || !spots || spots.length === 0) return null;
+
+    let nearest = spots[0];
+    let minDistSq = Infinity;
+
+    for (const spot of spots) {
+        const dx = spot.x - targetPos.x;
+        const dy = spot.y - targetPos.y;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq < minDistSq) {
+            minDistSq = distSq;
+            nearest = spot;
+        }
+    }
+
+    if (nearest && !smart.moving && (character.x !== nearest.x || character.y !== nearest.y)) {
+        xmove(nearest.x, nearest.y);
+    }
+
+    return nearest;
+}
+
+
+
+
+// ============================================================
+// CONFIG & STATE 
+// ============================================================
