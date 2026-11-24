@@ -1976,31 +1976,34 @@ async function tryzapper() {
     return false;
 }
 
-// 📩  HÀM XIN ENT DESERTLAND (Đếm Ent từ `monsters`)
-function checkAndRequestEnt() {
 
-    const leaderObj = partyEntities.find(p => p.entity.name === LEADER);
-    const isLeaderNear = leaderObj && leaderObj.distance < 250;
+const LURE_COOLDOWN_MS = 180 * 1000; // 180s mới được gọi lại
+let lastLureSent = 0;
 
-    // Lọc đếm Ent từ mảng monsters đã scan
-    const entCount = monsters.filter(m => m.entity.mtype === "ent" && m.entity.hp > 1200000).length;
+function checkAndRequestLureAndEnt() {
+    if (character.name !== "Ynhi") return;
+    if (character.rip || character.hp < 19000 || ToltalENT > 1) return;
+    if (FARM_MONSTER !== "plantoid") return;
 
-    if (
-        isLeaderNear &&
-        character.hp / character.max_hp > 0.75 &&
-        entCount <= 1 &&
-        character.map === "desertland" &&
-        !smart.moving &&
-        (FARM_MONSTER === "fireroamer" || FARM_MONSTER === "plantoid") &&
-        character.targets > 6 &&
-        !parent.S?.franky &&
-        !parent.S?.crabxx
-    ) {
-        send_cm("MuaBan", "ent");
-    }
+    const farmSpot = FARM_LOCATIONS[FARM_MONSTER];
+    if (!farmSpot || character.map !== farmSpot.map) return;
+    if (distance(character, farmSpot) >= 100) return;
+
+    const now = Date.now();
+    if (now - lastFarmMonsterSeen >= 2000) return;
+    if (now - lastLureSent < LURE_COOLDOWN_MS) return;
+
+    send_cm(MERCHANT, {
+        command: "lure",
+        name: character.name,
+        map: character.map,
+        x: character.x,
+        y: character.y
+    });
+
+    lastLureSent = now;
+    game_log(`[Client] đã giửi yêu cầu 'lure' tới ${MERCHANT}`);
 }
-
-setInterval(checkAndRequestEnt, 30000);    // Check xin Ent mỗi 30s
 
 
 async function useAttack() {
@@ -2520,7 +2523,10 @@ if (!Viecquantrong)
 		time_make_rspeed = Date.now();
 	}
 	
+// logic gọi hút quái
+   checkAndRequestLureAndEnt();
 
+	
 // Kiểm tra lạc chỗ => quay về fram
 
    const timeSinceLastMonster = Date.now() - lastFarmMonsterSeen; 
@@ -5666,39 +5672,6 @@ function moveNearest(targetPos, spots) {
 
     return nearest;
 }
-
-
-
-
-const LURE_COOLDOWN_MS = 180 * 1000; // 180s mới được gọi lại
-let lastLureSent = 0;
-
-setInterval(() => {
-    if (character.name !== "Ynhi") return;
-    if (character.rip || character.hp < 19000 || ToltalENT > 1) return;
-    if (FARM_MONSTER !== "plantoid") return;
-
-    const farmSpot = FARM_LOCATIONS[FARM_MONSTER];
-    if (!farmSpot || character.map !== farmSpot.map) return;
-    if (distance(character, farmSpot) >= 100) return;
-
-    const now = Date.now();
-    if (now - lastFarmMonsterSeen >= 2000) return;
-    if (now - lastLureSent < LURE_COOLDOWN_MS) return;
-
-    send_cm(MERCHANT, {
-        command: "lure",
-        name: character.name,
-        map: character.map,
-        x: character.x,
-        y: character.y
-    });
-
-    lastLureSent = now;
-    game_log(`[Client] đã giửi yêu cầu 'lure' tới ${MERCHANT}`);
-}, 10000);
-
-
 
 
 
