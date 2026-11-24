@@ -333,7 +333,7 @@ group_vip6: [
 	group_Supervip: [ // đồ quý, phụ kiện hiếm
 		{ levels: [0], scroll: 2, offering: 0 },
 		{ levels: [1,2,], scroll: 2, offering: 1 },
-		{ levels: [3], scroll: 2, offering: 2 },
+		//{ levels: [3], scroll: 2, offering: 2 },
 	],
 	
 };
