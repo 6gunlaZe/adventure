@@ -1984,7 +1984,7 @@ let lastLureSent = 0;
 function checkAndRequestLureAndEnt() {
     if (character.name !== "Ynhi") return;
     if (character.rip || character.hp < 19000 || ToltalENT > 1) return;
-    if (FARM_MONSTER !== "plantoid") return;
+    if (FARM_MONSTER !== "plantoid" && FARM_MONSTER !== "fireroamer") return;
 
     const farmSpot = FARM_LOCATIONS[FARM_MONSTER];
     if (!farmSpot || character.map !== farmSpot.map) return;
