@@ -3234,11 +3234,11 @@ const LURE_WAYPOINTS = [
     { map: "desertland", x: 5,    y: -1883 },
     { map: "desertland", x: 218,  y: -1745 },
     { map: "desertland", x: 199,  y: -1125 },
-    { map: "desertland", x: 85,   y: -1035 }, // điểm chốt quái lửa
-    { map: "desertland", x: -49,  y: -760  },
-    { map: "desertland", x: -207, y: -622  },
-    { map: "desertland", x: -476, y: -615  },
-    { map: "desertland", x: -723, y: -367  },
+    { map: "desertland", x: 85,   y: -1035 }, // điểm chốt quái lửa fireroamer
+ //   { map: "desertland", x: -49,  y: -760  },
+ //   { map: "desertland", x: -207, y: -622  },
+ //   { map: "desertland", x: -476, y: -615  },
+ //   { map: "desertland", x: -723, y: -367  },  // điểm chốt quái ENT
 ];
 const LURE_AIM = { x: -79, y: -1007 };
 const LURE_CFG = {
