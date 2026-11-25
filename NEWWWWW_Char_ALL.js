@@ -4,6 +4,8 @@
 let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NHƯ 1 EVEN THỦ CÔNG) để cày primming
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
+ 
+let severHOME = false;  //HIỆN TẠI HOME LÀ EU I // lưu trạng thái để tránh đi hầm ngục crypt nhiều sever khác nhau ngoài EU I, trừ khi máy chủ game reset cứng.
 
 // Cài đặt hầm ngục Crypt
 const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
@@ -5060,6 +5062,9 @@ let dungeonAttemptTime = 0;    // ⏱️ Thêm biến ghi nhận thời điểm 
 let checkkey_now = null;
 
 async function handleDungeonKeyLogic() {
+	
+	if (!severHOME) return;
+	
     const isLeader = (character.name === LEADER);
 
     // --- 1. NẾU ĐANG TRONG QUÁ TRÌNH CHỜ VÀO HẦM (TRÁNH LAG CHUYỂN MAP) ---
