@@ -3820,21 +3820,22 @@ const EQUIPMENT_SETS = {
         ],
         def_fire: [
 
-        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
 
-        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
-        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
-        { itemName: "orba", slot: "orb", level: 4, l: "l"},	    
+        { itemName: "orba", slot: "orb", l: "l"},	    
         { itemName: "wbookhs", slot: "offhand", level: 3, l: "l" },
-        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
         { itemName: "covemantle", slot: "cape", level: 8, l: "l" },  
-
+		{ itemName: "lmace", slot: "mainhand", level: 9, l: "l" },
+        { itemName: "vattire", slot: "chest", level: 9, l: "l" },
+        { itemName: "sbelt", slot: "belt", level: 3, l: "l" },
+        { itemName: "djinncrown", slot: "helmet", level: 8, l: "l" },
+        { itemName: "t2intamulet", slot: "amulet", level: 3, l: "l"},
         { itemName: "mpxgloves", slot: "gloves", level: 6, l: "l" },
         { itemName: "cearring", slot: "earring2", level: 4, l: "s"  },
         { itemName: "cearring", slot: "earring1", level: 4, l: "l"  },
         { itemName: "wingedboots", slot: "shoes", level: 9, l: "l"  },
-        { itemName: "cring", slot: "ring1", level: 5, l: "l"  },
+        { itemName: "ringsj", slot: "ring1", level: 6, l: "l"  },
         { itemName: "zapper", slot: "ring2", level: 1, l: "l"  },
+
             
         ],
 
@@ -4007,6 +4008,7 @@ const GEAR_LOGIC = {
         let hasPhysical = false;
         let hasMagical = false;
         let needLuck = false;
+		let fireboss = false;
         let hasSpawnMonsterNearby = false; // Cờ kiểm tra có quái có "spawns" ở gần hay không
 
         const chestCount = Object.keys(parent.chests || {}).length;
@@ -4037,6 +4039,8 @@ const GEAR_LOGIC = {
                 if (e.damage_type === "physical") hasPhysical = true;
                 if (e.damage_type === "magical") hasMagical = true;
             }
+
+			if (character.s?.burned) fireboss = true;
 
             if ( (isTargetingMe && e.hp < 11000 && (e.max_hp > 41000 || e.mtype == FARM_MONSTER ) ) || (isCoop && e.hp < Math.max(10000, Math.min(e.max_hp * 0.02, 250000)) )) {
                 needLuck = true;
@@ -4083,6 +4087,7 @@ const GEAR_LOGIC = {
 			return "movebufff";
 		}
 		
+		if (fireboss) return "def_fire";
         if (hasTargetForDame || fram_bscorpion) return "dame";
         if (hasPhysical && hasMagical) return "def_mixed";
         if ( character.map == "uhills" ) return "def_mixed";
@@ -4090,7 +4095,7 @@ const GEAR_LOGIC = {
 
         // Đồ phòng thủ khi bị quái mạnh đánh có delay 5s
         const now = Date.now();
-        const defenseSets = ["def_mixed", "dame", "def_mag"]; // Các set phòng thủ hợp lệ của bạn
+        const defenseSets = ["def_mixed", "dame", "def_mag", "def_fire"]; // Các set phòng thủ hợp lệ của bạn
 		
         if (now - lastDefCheck < 5000) {
             return defenseSets.includes(INTENDED_SET) ? INTENDED_SET : "def_mixed"; 
