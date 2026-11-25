@@ -94,7 +94,6 @@ const TRASH_ITEMS = [
 // DANH SÁCH VÀ VỊ TRÍ FRAM CÁC QUÁI VIP XUẤT HIỆN CỦA TỪNG BÃI FRAM 
 const FARM_vipbosss = {
     goldenbot: { x: -347, y: -183, map: "uhills", level: 18 },
-    stompy: { x: 432, y: -2496, map: "winterland", level: 7 },
     paledino: { x: -151, y: 725, map: "mforest", level: 12 },
 	goldenbat: { level: 37 },
 	mimic: { level: 8 },
