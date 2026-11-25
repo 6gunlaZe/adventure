@@ -882,8 +882,8 @@ async function tryPartyHeal() {
 
     if (!hasAliveMember) return false;
 
-    // 3. MODE 0: Cứu nguy khẩn cấp cực độ (< 36% HP) -> Bơm ngay lập tức
-    if (lowestHpRatio < 0.36) {
+    // 3. MODE 0: Cứu nguy khẩn cấp cực độ (< 40% HP) -> Bơm ngay lập tức
+    if (lowestHpRatio < 0.40 && ms_to_next_skill("attack") > 50) {
         try {
             await use_skill("partyheal");
             delayParty = Date.now();
