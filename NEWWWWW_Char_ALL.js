@@ -42,7 +42,7 @@ const FARM_LOCATIONS = {
     bat: { x: -194, y: -461, map: "cave" },
     targetron: { x: -512, y: -239, map: "uhills" },
     rimedjinn: { x: 422, y: -1700, map: "winter_cove" },
-    wolf: { x: 369, y: -2706, map: "winterland" },
+    wolf: { x: 386, y: -2741, map: "winterland" },
     porcupine: { x: -799, y: 185, map: "desertland" },
     fireroamer: { x: 221, y: -824, map: "desertland" },
     plantoid: { x: -800, y: -400, map: "desertland" },
@@ -68,7 +68,7 @@ const CHAR_CONFIG = {
 
 
 
-const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "plantoid"; // => Phần còn lại là của LEADER haiz 
+const FARM_MONSTER = CHAR_CONFIG[character.name]?.monster || "wolf"; // => Phần còn lại là của LEADER haiz 
 const IS_SOLO = CHAR_CONFIG[character.name]?.solo ?? false; // Lấy trạng thái solo của acc hiện tại
 
 const FARM_MAP = FARM_LOCATIONS[FARM_MONSTER] || FARM_MONSTER;
