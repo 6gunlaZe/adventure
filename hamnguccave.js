@@ -5540,7 +5540,6 @@ async function useAdvancedAttack() {
     
     // 4. Tiến hành đánh và kết hợp chiến thuật Quick-Swap / Cleave
     if (
-        !smart.moving &&
         currentTarget.type === "monster" &&
         is_in_range(currentTarget) 
     ) {
