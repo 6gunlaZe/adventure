@@ -61,7 +61,7 @@ const shinyList = {
 const autoSellToMerchItems = [
     { name: "tombkey", price: 2300000 },
     { name: "platinumingot", price: 799000000 },
-    { name: "vhammer", price: 199900000 },
+   // { name: "vhammer", price: 399900000 },
     { name: "alloyquiver", price: 990000 },
 	
 ];
