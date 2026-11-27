@@ -508,11 +508,9 @@ function on_cm(sender, data) {
     if (!data?.command) return;
 
     if (character.esize < 4) {
-        // Xóa tất cả lệnh "full" đang nằm trong hàng chờ queue1
-        queue1 = queue1.filter(q => q.command !== "full");
-        return;
+    queue1 = queue1.filter(q => q.command !== "full");
+    if (data.command === "full") return;
     }
-
 	
     const config = SERVICES[data.command];
 
