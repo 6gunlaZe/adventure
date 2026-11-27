@@ -5,7 +5,7 @@ let fram_bscorpion = false;  // bật tắt chế độ fram quái bscorpion (NH
 let bscorpionTarget = null; // Lưu thông tin quái bscorpion
 let solobscorpion = false; // Bật lên khi chỉ cho haiz fram để lấy x3 buff false; true
  
-let severHOME = false;  //HIỆN TẠI HOME LÀ EU I // lưu trạng thái để tránh đi hầm ngục crypt nhiều sever khác nhau ngoài EU I, trừ khi máy chủ game reset cứng.
+let severHOME = true;  //HIỆN TẠI HOME LÀ EU I // lưu trạng thái để tránh đi hầm ngục crypt nhiều sever khác nhau ngoài EU I, trừ khi máy chủ game reset cứng.
 
 // Cài đặt hầm ngục Crypt
 const startFrom = new Date("2026-11-07");  // Mốc thời gian lựa chọn key 
