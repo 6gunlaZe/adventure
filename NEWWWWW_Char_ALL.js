@@ -2237,14 +2237,14 @@ async function safeSmartMove(destination) {
 const WITCH_SETS = [
     // Bộ 1 (40%)
     {
-        "haiz": { map: "halloween", x: 250, y: -1227 },
-        "6gunlaZe": { map: "main", x: 970, y: -156 },
+        "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
+        "haiz": { map: "main", x: 970, y: -156 },
         "Ynhi": { map: "halloween", x: 250, y: -1227 }
     },
     // Bộ 2 (30%)
     {
-        "haiz": { map: "halloween", x: 250, y: -1227 },
-        "6gunlaZe": { map: "main", x: 970, y: -156 },
+        "6gunlaZe": { map: "halloween", x: 250, y: -1227 },
+        "haiz": { map: "main", x: 970, y: -156 },
         "Ynhi": { map: "halloween", x: 250, y: -1227 }
     },
     // Bộ 3 (20%)
@@ -2273,12 +2273,12 @@ function getDailyWitchSet() {
     // Tạo seed từ Năm, Tháng, Ngày (Ví dụ: 20261025)
     const timeSeed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
 
-    // Random theo tỉ lệ 40% - 30% - 20% - 10%
+    // Random theo tỉ lệ bộ 1-> 4 : 10% - 30% - 40% - 20%
     const r = seededRandom(timeSeed);
-    const setIndex = r < 0.1 ? 0 :  // 10%
-                     r < 0.2 ? 1 :  // 10%
-                     r < 0.6 ? 2 :  // 40%
-                               3;   // 40%
+    const setIndex = r < 0.1 ? 0 :  
+                     r < 0.4 ? 1 :  
+                     r < 0.8 ? 2 :  
+                               3;   
 
     return WITCH_SETS[setIndex];
 }
