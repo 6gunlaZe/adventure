@@ -508,9 +508,17 @@ function on_cm(sender, data) {
     if (!data?.command) return;
 
     if (character.esize < 4) {
-    queue1 = queue1.filter(q => q.command !== "full");
-    if (data.command === "full") return;
+    const blockedCommands = ["full", "hp", "mp"];
+    // Xóa các lệnh full, hp, mp đang nằm trong hàng chờ queue1
+    queue1 = queue1.filter(q => !blockedCommands.includes(q.command));
+    
+    // Nếu lệnh mới gửi tới nằm trong danh sách bị chặn thì bỏ qua
+    if (blockedCommands.includes(data.command)) {
+        return;
     }
+    }
+
+	
 	
     const config = SERVICES[data.command];
 
