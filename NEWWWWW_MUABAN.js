@@ -328,6 +328,12 @@ group_vip6: [
 	{ levels: [0,1,2,3], scroll: 1, offering: 0 },
 	{ levels: [4,5], scroll: 2, offering: 0 },
 ],
+group_vip7: [ 
+	{ levels: [1,2], scroll: 2, offering: 0 },
+	{ levels: [3,4,5], scroll: 2, offering: 1 },
+	//{ levels: [6],     scroll: 2, offering: 2 },
+],
+	
 
 	
 	group_Supervip: [ // đồ quý, phụ kiện hiếm
@@ -367,6 +373,7 @@ var upgradeWhitelistVIPP = {
 	group_vip4: ["candleward1",],
 	group_vip5: ["reunionbow","djinncrown"],
 	group_vip6: ["paradequiver1",],
+	group_vip7: ["covemantle",],
 	group_Supervip: ["vhammer",],
 
 	
